@@ -1,4 +1,6 @@
 import { TransformError } from "../execution/errors.js";
+import { emitLifecycle, } from "../execution/lifecycle-events.js";
+import { startWorkflowStage } from "../execution/start-stage.js";
 import { createDefaultPipeline } from "../pipeline/default-pipeline.js";
 import { collectWorktreeTrace, modelChangedFiles } from "../pipeline/worktree-trace.js";
 import { acquireWorktreeLock } from "./worktree-lock.js";
@@ -6,16 +8,19 @@ export class Transformer {
     workspaceRoot;
     pipeline;
     now;
+    onLifecycle;
     constructor(options) {
         this.workspaceRoot = options.workspaceRoot;
         this.pipeline = resolvePipeline(options);
         this.now = options.now ?? (() => new Date());
+        this.onLifecycle = options.onLifecycle;
     }
     async run(executionFqn) {
         const lock = await acquireWorktreeLock(this.workspaceRoot, executionFqn);
         const context = {
             workspaceRoot: this.workspaceRoot,
             now: this.now,
+            ...(this.onLifecycle ? { onLifecycle: this.onLifecycle } : {}),
         };
         try {
             const prepared = await this.pipeline.prepare.run(executionFqn, context);
@@ -26,17 +31,117 @@ export class Transformer {
         }
     }
     async runAfterPrepare(prepared, context) {
+        emitLifecycle(this.onLifecycle, {
+            kind: "transformationStatus",
+            status: "Running",
+            fqn: prepared.started.runningFqn,
+        });
+        let last;
+        for (let stageIndex = 0; stageIndex < prepared.stageCount; stageIndex++) {
+            const scoped = { ...prepared, stageIndex };
+            last = await this.runStage(scoped, context);
+            if (last.outcome === "failed") {
+                break;
+            }
+        }
+        if (!last) {
+            throw new TransformError("execution", "ModelTransformation has no Stages to execute");
+        }
+        const result = await this.pipeline.finalize.run(last, context);
+        emitLifecycle(this.onLifecycle, {
+            kind: "transformationStatus",
+            status: result.status,
+            fqn: result.terminalFqn,
+        });
+        emitLifecycle(this.onLifecycle, {
+            kind: "transformationComplete",
+            status: result.status,
+            terminalFqn: result.terminalFqn,
+        });
+        return result;
+    }
+    async runStage(prepared, context) {
+        const { stageIndex, stageCount } = prepared;
+        const fqn = prepared.started.runningFqn;
+        startWorkflowStage(context.workspaceRoot, prepared.started, stageIndex, context.now());
+        emitLifecycle(this.onLifecycle, {
+            kind: "stageStatus",
+            stageIndex,
+            stageCount,
+            status: "Running",
+            fqn,
+        });
         let executed;
+        let executeEnded = false;
+        let reflectStarted = false;
+        let reflectEnded = false;
         try {
+            emitLifecycle(this.onLifecycle, {
+                kind: "stageExecuteStart",
+                stageIndex,
+                stageCount,
+                fqn,
+            });
             executed = await this.pipeline.execute.run(prepared, context);
+            executeEnded = true;
+            emitLifecycle(this.onLifecycle, {
+                kind: "stageExecuteEnd",
+                stageIndex,
+                stageCount,
+                fqn,
+            });
+            emitLifecycle(this.onLifecycle, {
+                kind: "stageReflectStart",
+                stageIndex,
+                stageCount,
+                fqn,
+            });
+            reflectStarted = true;
             const reflected = await this.pipeline.reflect.run(executed, context);
+            reflectEnded = true;
+            emitLifecycle(this.onLifecycle, {
+                kind: "stageReflectEnd",
+                stageIndex,
+                stageCount,
+                fqn,
+            });
             const persisted = await this.pipeline.persist.run(reflected, context);
-            return await this.pipeline.finalize.run(persisted, context);
+            emitLifecycle(this.onLifecycle, {
+                kind: "stageStatus",
+                stageIndex,
+                stageCount,
+                status: persisted.outcome === "failed" ? "Failed" : "Succeeded",
+                fqn,
+            });
+            return persisted;
         }
         catch (error) {
+            if (!executeEnded) {
+                emitLifecycle(this.onLifecycle, {
+                    kind: "stageExecuteEnd",
+                    stageIndex,
+                    stageCount,
+                    fqn,
+                });
+            }
+            if (reflectStarted && !reflectEnded) {
+                emitLifecycle(this.onLifecycle, {
+                    kind: "stageReflectEnd",
+                    stageIndex,
+                    stageCount,
+                    fqn,
+                });
+            }
             const failed = failedReflection(prepared, executed, context, error);
             const persisted = await this.pipeline.persist.run(failed, context);
-            return await this.pipeline.finalize.run(persisted, context);
+            emitLifecycle(this.onLifecycle, {
+                kind: "stageStatus",
+                stageIndex,
+                stageCount,
+                status: "Failed",
+                fqn,
+            });
+            return persisted;
         }
     }
 }
@@ -79,6 +184,9 @@ export async function runTransformation(options) {
     }
     if (options.now) {
         transformerOptions.now = options.now;
+    }
+    if (options.onLifecycle) {
+        transformerOptions.onLifecycle = options.onLifecycle;
     }
     const transformer = new Transformer(transformerOptions);
     try {

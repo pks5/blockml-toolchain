@@ -22,10 +22,12 @@
     # Finalize Execution
 
     Set completedAt and status, then relocate the running ModelTransformation to
-    `_transform.succeeded` or `_transform.failed`. After that relocation, commit.
+    `_transform.succeeded` or `_transform.failed`. `Succeeded` only when every
+    Stage succeeded. After that relocation, commit.
 
     Default implementation is deterministic. Runs after every started execution,
-    including Execute, Reflect, or Persist failure. TS: pipeline/finalize.ts.
+    including a failed Stage. Does not write feedback, changedFiles, or
+    exception onto the ModelTransformation. TS: pipeline/finalize.ts.
   </documentation>
 
   <references>

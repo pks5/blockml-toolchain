@@ -2,14 +2,13 @@ import { finalizeExecution } from "../execution/complete.js";
 export function createFinalizeStage() {
     return {
         async run(persisted, context) {
-            const stage = persisted.outcome === "failed" ? "failed" : "succeeded";
-            const finalized = finalizeExecution(context.workspaceRoot, persisted.started, context.now(), stage);
+            const finalized = finalizeExecution(context.workspaceRoot, persisted.started, context.now());
             return {
-                success: persisted.outcome !== "failed",
+                success: finalized.stage !== "failed",
                 pendingFqn: persisted.pendingFqn,
                 runningFqn: persisted.started.runningFqn,
                 terminalFqn: finalized.terminalFqn,
-                status: stage === "succeeded" ? "Succeeded" : "Failed",
+                status: finalized.stage === "succeeded" ? "Succeeded" : "Failed",
                 sequence: persisted.started.sequence,
                 executionId: persisted.started.executionId,
                 ...(persisted.exceptionMessage !== undefined

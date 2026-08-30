@@ -37,7 +37,17 @@
         <workflow:Stage>
           <status>Pending</status>
           <task>
-            <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.Poem.bml that contains a random poem. For each execution create a new poem." />
+            <composition>
+              <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.Poem.bml that contains a random poem. For each execution create a new poem." />
+            </composition>
+          </task>
+        </workflow:Stage>
+        <workflow:Stage>
+          <status>Pending</status>
+          <task>
+            <composition>
+              <workflow:InstructionTask instructions="Translate the poem in org.blockml.bml.workspace.playground.Poem.bml to chinese." />
+            </composition>
           </task>
         </workflow:Stage>
       </composition>

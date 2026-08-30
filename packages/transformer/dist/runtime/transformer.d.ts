@@ -1,5 +1,6 @@
 import type { TransformationAgent } from "../agent/transformation-agent.js";
 import type { ReflectionAgent } from "../agent/reflection-agent.js";
+import { type TransformLifecycleListener } from "../execution/lifecycle-events.js";
 import type { TransformPipeline, TransformRunResult } from "../pipeline/types.js";
 export type { TransformRunResult };
 export interface TransformerOptions {
@@ -8,14 +9,17 @@ export interface TransformerOptions {
     reflectAgent?: ReflectionAgent;
     pipeline?: Partial<TransformPipeline>;
     now?: () => Date;
+    onLifecycle?: TransformLifecycleListener;
 }
 export declare class Transformer {
     private readonly workspaceRoot;
     private readonly pipeline;
     private readonly now;
+    private readonly onLifecycle;
     constructor(options: TransformerOptions);
     run(executionFqn: string): Promise<TransformRunResult>;
     private runAfterPrepare;
+    private runStage;
 }
 export interface RunTransformationOptions {
     workspaceRoot: string;
@@ -24,6 +28,7 @@ export interface RunTransformationOptions {
     reflectAgent?: ReflectionAgent;
     pipeline?: Partial<TransformPipeline>;
     now?: () => Date;
+    onLifecycle?: TransformLifecycleListener;
 }
 export type RunTransformationResult = (TransformRunResult & {
     success: true;

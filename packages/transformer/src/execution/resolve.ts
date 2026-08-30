@@ -9,11 +9,15 @@ import { parseExecutionFqn } from "./lifecycle.js";
 import {
   getExecutionId,
   getPropertyLiteral,
+  getStageInstances,
+  getStageStatus,
   getStatus,
   hasAggregationComposition,
   hasPropertyValue,
-  hasTaskComposition,
+  hasStageProperty,
   isModelTransformation,
+  stageHasAggregation,
+  stageHasTask,
 } from "./properties.js";
 
 export interface ResolvedExecution {
@@ -32,7 +36,14 @@ const FORBIDDEN_PROPERTIES = [
   "sequence",
   "feedback",
 ] as const;
-const FORBIDDEN_AGGREGATIONS = ["changedFiles", "exception"] as const;
+const FORBIDDEN_AGGREGATIONS = ["task", "changedFiles", "exception"] as const;
+const STAGE_FORBIDDEN_PROPERTIES = [
+  "startedAt",
+  "baseCommit",
+  "completedAt",
+  "feedback",
+] as const;
+const STAGE_FORBIDDEN_AGGREGATIONS = ["changedFiles", "exception"] as const;
 
 export function resolvePendingExecution(
   executionFqn: string,
@@ -81,11 +92,44 @@ export function resolvePendingExecutionInRegistry(
 }
 
 function assertPendingContract(fqn: string, block: BlockDefinition): void {
-  if (!hasTaskComposition(block)) {
+  const stages = getStageInstances(block);
+  if (stages.length === 0) {
     throw new TransformError(
       "resolve",
-      `${fqn} has no configured task aggregation`,
+      `${fqn} has no configured stages aggregation`,
     );
+  }
+  for (let index = 0; index < stages.length; index++) {
+    const stage = stages[index]!;
+    if (!stageHasTask(stage)) {
+      throw new TransformError(
+        "resolve",
+        `${fqn} Stage ${index + 1} has no configured task aggregation`,
+      );
+    }
+    const stageStatus = getStageStatus(stage);
+    if (stageStatus !== undefined && stageStatus !== "Pending") {
+      throw new TransformError(
+        "resolve",
+        `${fqn} Stage ${index + 1} must have status=Pending before it can be started`,
+      );
+    }
+    for (const name of STAGE_FORBIDDEN_PROPERTIES) {
+      if (hasStageProperty(stage, name)) {
+        throw new TransformError(
+          "resolve",
+          `${fqn} Stage ${index + 1} must not have ${name} set while pending`,
+        );
+      }
+    }
+    for (const name of STAGE_FORBIDDEN_AGGREGATIONS) {
+      if (stageHasAggregation(stage, name)) {
+        throw new TransformError(
+          "resolve",
+          `${fqn} Stage ${index + 1} must not have ${name} set while pending`,
+        );
+      }
+    }
   }
   if (getStatus(block) !== "Pending") {
     throw new TransformError(

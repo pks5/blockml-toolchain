@@ -1,4 +1,5 @@
 import { persistReflection } from "../execution/persist.js";
+import { formatDateTimeProperty } from "../execution/lifecycle.js";
 export function createNoopPersistStage() {
     return {
         async run(reflected) {
@@ -11,8 +12,11 @@ export function createPersistStage() {
         async run(reflected, context) {
             persistReflection(context.workspaceRoot, {
                 started: reflected.started,
+                stageIndex: reflected.stageIndex,
                 changedFiles: reflected.changedFiles,
                 feedback: reflected.feedback,
+                outcome: reflected.outcome,
+                completedAtIso: formatDateTimeProperty(context.now()),
                 ...(reflected.exceptionMessage !== undefined
                     ? { exceptionMessage: reflected.exceptionMessage }
                     : {}),

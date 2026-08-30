@@ -6,6 +6,7 @@ import {
   setCompletedAt,
   setStatus,
   modelTransformationHasCompletedAt,
+  allStagesSucceeded,
 } from "./properties.js";
 import {
   applyExecutionIdentity,
@@ -27,7 +28,6 @@ export function finalizeExecution(
   workspaceRoot: string,
   started: StartedExecution,
   now: Date,
-  stage: TerminalLifecycleStage,
 ): FinalizedExecution {
   const { document, registry } = loadRunningExecution(workspaceRoot, started);
   const forked = forkBom(document);
@@ -35,7 +35,9 @@ export function finalizeExecution(
   if (modelTransformationHasCompletedAt(registry)) {
     setCompletedAt(forked.block, completedAtIso);
   }
-  setStatus(forked.block, stage === "succeeded" ? "Succeeded" : "Failed");
+  const succeeded = allStagesSucceeded(forked.block);
+  const stage: TerminalLifecycleStage = succeeded ? "succeeded" : "failed";
+  setStatus(forked.block, succeeded ? "Succeeded" : "Failed");
 
   const runningFilePath = forked.source.filePath;
   const terminalFqn = applyExecutionIdentity(forked, {

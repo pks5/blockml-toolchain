@@ -16,6 +16,8 @@ export { resolvePendingExecution } from "./execution/resolve.js";
 export { startExecution } from "./execution/start.js";
 export { persistReflection } from "./execution/persist.js";
 export { finalizeExecution } from "./execution/complete.js";
+export { startWorkflowStage } from "./execution/start-stage.js";
+export { formatTransformLifecycle, emitLifecycle, } from "./execution/lifecycle-events.js";
 export { SequenceAllocator } from "./execution/sequence.js";
 export { parseExecutionFqn, generateExecutionName, padSequence, formatNameTimestamp, formatDateTimeProperty, } from "./execution/lifecycle.js";
 export { MODEL_TRANSFORMATION_FQN } from "./execution/constants.js";

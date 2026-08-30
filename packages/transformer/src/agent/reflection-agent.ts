@@ -3,6 +3,7 @@ import type { ExecutionTrace } from "../pipeline/types.js";
 export interface ReflectRequest {
   workspaceRoot: string;
   executionFqn: string;
+  stageIndex: number;
   trace: ExecutionTrace;
 }
 

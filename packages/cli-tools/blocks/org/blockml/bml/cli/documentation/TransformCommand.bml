@@ -33,25 +33,32 @@
     EXECUTION-FQN is the FQN of a ModelTransformation under
     {library}._transform.pending. Tasks are not accepted directly.
 
-    The transformer takes an exclusive worktree lock, then runs Prepare,
-    Execute, Reflect, Persist, and Finalize. Default Prepare/Finalize are
+    The transformer takes an exclusive worktree lock, then prepares the
+    ModelTransformation and runs each workflow Stage in order: persist
+    Stage Running, Execute its Task in an isolated agent process, Reflect,
+    Persist results onto that Stage. Default Prepare/Finalize are
     deterministic. Default Execute is a TransformationAgent (Claude Code)
     that changes BML only. Default Reflect is a second Claude worker
     (read-only; changedFiles + feedback). Default Persist writes those
-    fields into the running ModelTransformation. On success Finalize relocates
-    the Block to _transform.succeeded. On a started execution that fails,
-    Finalize relocates the Block to _transform.failed with a BML
-    exception and exits non-zero.
+    fields onto the Stage. Finalize relocates to _transform.succeeded only
+    when every Stage succeeded; otherwise _transform.failed and a non-zero
+    exit. A failed Stage aborts the rest.
+
+    Lifecycle lines (ModelTransformation and Stage status, execute/reflect
+    start and done) always print so progress is visible without --verbose.
 
     Only one transform may run at a time in the same Git worktree. A second
     call fails immediately (exit 2) with no wait. Different worktrees may
     run in parallel.
 
-    --verbose streams the agent session live (thinking, tools, text).
+    --verbose streams additional agent-session detail (thinking, tools, text).
+    It does not control the lifecycle lines.
 
-    The worktree must be clean at start (exit 2 otherwise). Prepare records
-    baseCommit from HEAD and commits the running relocation. Execute commits
-    model changes. Finalize commits the succeeded or failed relocation.
+    The worktree must be clean at start and before each Stage (exit 2
+    otherwise). Prepare records baseCommit from HEAD and commits the
+    running relocation. Each Stage commits Running first, then commits
+    model changes with the Stage terminal state. Finalize commits the
+    succeeded or failed relocation.
 
     Pending-contract violations never start the execution (exit 2).]]></documentation>
   <references>

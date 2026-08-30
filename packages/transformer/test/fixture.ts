@@ -29,6 +29,10 @@ export function gitHead(dir: string): string {
   return gitOrThrow(dir, ["rev-parse", "HEAD"]).trim();
 }
 
+export function gitParent(dir: string): string {
+  return gitOrThrow(dir, ["rev-parse", "HEAD^"]).trim();
+}
+
 export function gitLogSubjects(dir: string): string[] {
   const stdout = gitOrThrow(dir, ["log", "--pretty=%s"]);
   return stdout.trim().length === 0 ? [] : stdout.trim().split("\n");
@@ -69,11 +73,28 @@ export function pendingExecutionXml(opts: {
   name: string;
   executionId?: string;
   extraRefs?: string;
+  stageInstructions?: readonly string[];
 }): string {
   const executionId = opts.executionId ?? EXECUTION_ID;
   const refs = opts.extraRefs
     ? `  <references>\n${opts.extraRefs}\n  </references>\n`
     : "";
+  const instructions = opts.stageInstructions ?? ["Do the task."];
+  const stages = instructions
+    .map(
+      (text) =>
+        [
+          `        <workflow:Stage>`,
+          `          <status>Pending</status>`,
+          `          <task>`,
+          `            <composition>`,
+          `              <workflow:InstructionTask instructions="${text}" />`,
+          `            </composition>`,
+          `          </task>`,
+          `        </workflow:Stage>`,
+        ].join("\n"),
+    )
+    .join("\n");
   return [
     `<block xmlns="http://blockml.org/bml"`,
     ` xmlns:core="org.blockml.bml.core"`,
@@ -97,11 +118,11 @@ export function pendingExecutionXml(opts: {
     `    </createdAt>`,
     `  </properties>`,
     `  <aggregations>`,
-    `    <task override="true">`,
+    `    <stages override="true">`,
     `      <composition>`,
-    `        <workflow:InstructionTask instructions="Do the task." />`,
+    stages,
     `      </composition>`,
-    `    </task>`,
+    `    </stages>`,
     `  </aggregations>`,
     `</block>`,
     ``,
@@ -129,11 +150,18 @@ export function historyExecutionXml(opts: {
     `    <sequence override="true"><value>${opts.sequence}</value></sequence>`,
     `  </properties>`,
     `  <aggregations>`,
-    `    <task override="true">`,
+    `    <stages override="true">`,
     `      <composition>`,
-    `        <workflow:InstructionTask instructions="Already ran." />`,
+    `        <workflow:Stage>`,
+    `          <status>Pending</status>`,
+    `          <task>`,
+    `            <composition>`,
+    `              <workflow:InstructionTask instructions="Already ran." />`,
+    `            </composition>`,
+    `          </task>`,
+    `        </workflow:Stage>`,
     `      </composition>`,
-    `    </task>`,
+    `    </stages>`,
     `  </aggregations>`,
     `</block>`,
     ``,

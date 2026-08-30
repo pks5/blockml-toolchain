@@ -1,9 +1,11 @@
 import type { StartedExecution } from "../execution/start.js";
 import type { TerminalExecutionStatus } from "../execution/constants.js";
+import type { TransformLifecycleListener } from "../execution/lifecycle-events.js";
 
 export interface StageContext {
   workspaceRoot: string;
   now: () => Date;
+  onLifecycle?: TransformLifecycleListener;
 }
 
 export interface TransformStage<Input, Output> {
@@ -13,6 +15,11 @@ export interface TransformStage<Input, Output> {
 export interface PreparedExecution {
   pendingFqn: string;
   started: StartedExecution;
+  stageCount: number;
+}
+
+export interface StageBoundExecution extends PreparedExecution {
+  stageIndex: number;
 }
 
 export interface ExecutionTrace {
@@ -22,7 +29,7 @@ export interface ExecutionTrace {
   changedFiles: readonly string[];
 }
 
-export interface ExecutedWork extends PreparedExecution {
+export interface ExecutedWork extends StageBoundExecution {
   trace: ExecutionTrace;
 }
 
@@ -50,7 +57,7 @@ export interface TransformRunResult {
 
 export interface TransformPipeline {
   prepare: TransformStage<string, PreparedExecution>;
-  execute: TransformStage<PreparedExecution, ExecutedWork>;
+  execute: TransformStage<StageBoundExecution, ExecutedWork>;
   reflect: TransformStage<ExecutedWork, Reflection>;
   persist: TransformStage<Reflection, PersistedExecution>;
   finalize: TransformStage<PersistedExecution, TransformRunResult>;

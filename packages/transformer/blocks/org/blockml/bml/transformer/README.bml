@@ -25,25 +25,29 @@
     org.blockml.bml.transformer.capability.*.
 
     The TypeScript engine executes ModelTransformation instances via
-    `blockml transform EXECUTION-FQN`. Transformer.run sequences five
-    stages: Prepare, Execute, Reflect, Persist, Finalize. Default Prepare
-    and Finalize are deterministic. Default Execute is a TransformationAgent
-    that changes BML model source only (not ModelTransformation / _transform/).
+    `blockml transform EXECUTION-FQN`. Transformer.run prepares the
+    execution, then runs each `workflow:Stage` in order: persist Stage
+    Running, Execute its Task in an isolated agent process, Reflect,
+    Persist results onto that Stage, commit. Default Prepare and Finalize
+    are deterministic. Default Execute is a TransformationAgent that
+    changes BML model source only (not ModelTransformation / _transform/).
     Default Reflect is a second Claude worker (read-only; changedFiles +
-    feedback). Default Persist is a deterministic writer of those fields
-    onto the running ModelTransformation. After a started execution, Finalize
-    always relocates the Block to `_transform.succeeded` or
-    `_transform.failed` from the Success/Exception contract — never from
-    agent text. Prepare requires a clean Git worktree, records `baseCommit`,
-    and commits the running relocation; Execute commits model changes;
-    Finalize commits the terminal relocation. Transformation intelligence
-    lives in the model, not in the engine.
+    feedback). Default Persist writes those fields onto the Stage that
+    just ran. After a started execution, Finalize relocates the Block to
+    `_transform.succeeded` only when every Stage succeeded, otherwise
+    `_transform.failed`. A failed Stage aborts the rest. Prepare requires
+    a clean Git worktree, records `baseCommit`, and commits the running
+    relocation. Each Stage commits Running first (recovery boundary), then
+    commits model changes together with the Stage terminal state. Finalize
+    commits the terminal relocation. Transformation intelligence lives in
+    the model, not in the engine.
   </documentation>
 
   <references>
     <see type="transformerdocumentation:ArchitectureOverview" relation="ReadFirst" />
     <see type="transformercap:RunTransformation" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
+    <see type="workflow:Stage" relation="SeeAlso" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:CompositeTask" relation="SeeAlso" />
     <see type="workflow:Prerequisite" relation="SeeAlso" />

@@ -20,8 +20,8 @@
   <is>The BlockML Transformer package library catalog</is>
 
   <documentation>
-    Canonical transformer specification for BlockML — five-stage process
-    over ModelTransformation and workflow types. TypeScript in
+    Canonical transformer specification for BlockML — sequential
+    workflow Stages over ModelTransformation. TypeScript in
     packages/transformer/src/ implements this library. Membership is defined
     exclusively by this blocks list.
   </documentation>
@@ -67,6 +67,7 @@
         <workflow:Prerequisite />
         <workflow:PrerequisiteNotMetException />
         <workflow:Rule />
+        <workflow:Stage />
         <workflow:Task />
         <transformercap:ExecuteTask />
         <transformercap:FinalizeExecution />

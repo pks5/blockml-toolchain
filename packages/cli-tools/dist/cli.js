@@ -578,7 +578,7 @@ async function executeCli(argv, cwd, options = {}) {
             const agent = options.transformAgent ?? defaultTransformAgent(verbose);
             const reflectAgent = options.reflectAgent ??
                 (options.transformAgent ? undefined : defaultReflectAgent(verbose));
-            const code = await runTransform(parsed.executionFqn, cwd, lines, USAGE, agent, reflectAgent);
+            const code = await runTransform(parsed.executionFqn, cwd, lines, USAGE, agent, reflectAgent, options.onOutputLine);
             return { code, lines };
         }
         if (parsed.command !== "compile") {
@@ -611,8 +611,16 @@ export function isCliEntry(argv1, modulePath) {
     }
 }
 if (isCliEntry(process.argv[1], fileURLToPath(import.meta.url))) {
-    const { code, lines } = await executeCli(process.argv.slice(2), process.cwd());
-    writeCliOutput(lines);
+    let streamed = false;
+    const { code, lines } = await executeCli(process.argv.slice(2), process.cwd(), {
+        onOutputLine: (line) => {
+            streamed = true;
+            writeCliOutput([line]);
+        },
+    });
+    if (!streamed) {
+        writeCliOutput(lines);
+    }
     process.exitCode = code;
 }
 //# sourceMappingURL=cli.js.map

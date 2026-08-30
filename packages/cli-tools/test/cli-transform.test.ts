@@ -29,11 +29,18 @@ function pendingXml(name: string): string {
     `    </createdAt>`,
     `  </properties>`,
     `  <aggregations>`,
-    `    <task override="true">`,
+    `    <stages override="true">`,
     `      <composition>`,
-    `        <workflow:InstructionTask instructions="Do the task." />`,
+    `        <workflow:Stage>`,
+    `          <status>Pending</status>`,
+    `          <task>`,
+    `            <composition>`,
+    `              <workflow:InstructionTask instructions="Do the task." />`,
+    `            </composition>`,
+    `          </task>`,
+    `        </workflow:Stage>`,
     `      </composition>`,
-    `    </task>`,
+    `    </stages>`,
     `  </aggregations>`,
     `</block>`,
     ``,
@@ -116,6 +123,9 @@ describe("blockml transform CLI", () => {
     );
     expect(code).toBe(1);
     expect(stderr).toMatch(/claude failed/);
+    expect(stderr).toMatch(/Stage 1\/1 Running/);
+    expect(stderr).toMatch(/Stage 1\/1 execute start/);
+    expect(stderr).toMatch(/ModelTransformation Failed/);
     expect(
       existsSync(join(TMP, "blocks/com/example/model/_transform/pending/JokeTest.bml")),
     ).toBe(false);
@@ -132,5 +142,28 @@ describe("blockml transform CLI", () => {
       },
     });
     expect(code).toBe(2);
+  });
+
+  it("prints Stage lifecycle lines without --verbose on success", async () => {
+    const { code, stderr } = await runCli(
+      ["transform", `${LIBRARY}._transform.pending.JokeTest`],
+      TMP,
+      {
+        transformAgent: {
+          async execute() {
+            return { success: true };
+          },
+        },
+      },
+    );
+    expect(code).toBe(0);
+    expect(stderr).toMatch(/ModelTransformation Running/);
+    expect(stderr).toMatch(/Stage 1\/1 Running/);
+    expect(stderr).toMatch(/Stage 1\/1 execute start/);
+    expect(stderr).toMatch(/Stage 1\/1 execute done/);
+    expect(stderr).toMatch(/Stage 1\/1 Succeeded/);
+    expect(stderr).toMatch(/ModelTransformation Succeeded/);
+    expect(stderr).toMatch(/Transformed /);
+    expect(stderr).not.toMatch(/--verbose/);
   });
 });

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { type CliOutputLine } from "./cli-style.js";
 import type { ReflectionAgent, TransformationAgent } from "@blockml/transformer";
 export interface ParsedArgs {
     command?: string;
@@ -21,6 +22,7 @@ export interface ParsedArgs {
 export interface CliRunOptions {
     transformAgent?: TransformationAgent;
     reflectAgent?: ReflectionAgent;
+    onOutputLine?: (line: CliOutputLine) => void;
 }
 interface PrintableDiagnostic {
     severity: string;

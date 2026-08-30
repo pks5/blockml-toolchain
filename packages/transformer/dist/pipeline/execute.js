@@ -1,18 +1,17 @@
 import { TransformError } from "../execution/errors.js";
 import { collectWorktreeTrace, modelChangedFiles } from "./worktree-trace.js";
-import { commitWorktree } from "./git.js";
 export function createExecuteStage(agent) {
     return {
         async run(prepared, context) {
             const agentResult = await agent.execute({
                 workspaceRoot: context.workspaceRoot,
                 executionFqn: prepared.started.runningFqn,
+                stageIndex: prepared.stageIndex,
             });
             if (!agentResult.success) {
                 throw new TransformError("execution", agentResult.error || "Transformation agent failed");
             }
             const worktree = collectWorktreeTrace(context.workspaceRoot);
-            commitWorktree(context.workspaceRoot, `transform(execute): ${prepared.started.generatedName}`);
             return {
                 ...prepared,
                 trace: {

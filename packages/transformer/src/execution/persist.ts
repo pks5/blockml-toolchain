@@ -1,43 +1,61 @@
 import type { BomDocument } from "@blockml/bom";
 import { forkBom } from "@blockml/framework";
 import { TYPE_PACKAGE_FQN } from "./constants.js";
+import { TransformError } from "./errors.js";
 import { persistDocument } from "./relocate.js";
 import { loadRunningExecution } from "./load-running.js";
-import { setChangedFiles, setException, setFeedback } from "./properties.js";
+import {
+  getStageInstance,
+  setStageChangedFiles,
+  setStageCompletedAt,
+  setStageException,
+  setStageFeedback,
+  setStageStatus,
+} from "./properties.js";
 import type { StartedExecution } from "./start.js";
+import { commitWorktree } from "../pipeline/git.js";
 
 export interface PersistReflectionInput {
   started: StartedExecution;
+  stageIndex: number;
   changedFiles: readonly string[];
   feedback: string | undefined;
   exceptionMessage?: string;
+  outcome: "succeeded" | "failed";
+  completedAtIso: string;
 }
 
 export function persistReflection(
   workspaceRoot: string,
   input: PersistReflectionInput,
 ): void {
-  const hasException = input.exceptionMessage !== undefined;
-  if (
-    input.changedFiles.length === 0 &&
-    input.feedback === undefined &&
-    !hasException
-  ) {
-    return;
-  }
   const { document } = loadRunningExecution(workspaceRoot, input.started);
   const forked = forkBom(document);
+  const stage = getStageInstance(forked.block, input.stageIndex);
+  if (!stage) {
+    throw new TransformError(
+      "execution",
+      `Running ModelTransformation has no Stage at index ${input.stageIndex}`,
+    );
+  }
   if (input.feedback !== undefined) {
-    setFeedback(forked.block, input.feedback);
+    setStageFeedback(stage, input.feedback);
   }
   if (input.changedFiles.length > 0) {
     ensureTypeNamespace(forked);
-    setChangedFiles(forked.block, input.changedFiles);
+    setStageChangedFiles(stage, input.changedFiles);
   }
   if (input.exceptionMessage !== undefined) {
-    setException(forked.block, input.exceptionMessage);
+    setStageException(stage, input.exceptionMessage);
   }
+  setStageStatus(stage, input.outcome === "failed" ? "Failed" : "Succeeded");
+  setStageCompletedAt(stage, input.completedAtIso);
   persistDocument(forked);
+  commitWorktree(
+    workspaceRoot,
+    `transform(stage): ${input.started.generatedName} #${input.stageIndex + 1}`,
+    { required: true },
+  );
 }
 
 function ensureTypeNamespace(document: BomDocument): void {

@@ -28,6 +28,7 @@ export function createReflectStage(
       const result = await agent.reflect({
         workspaceRoot: context.workspaceRoot,
         executionFqn: executed.started.runningFqn,
+        stageIndex: executed.stageIndex,
         trace: executed.trace,
       });
       if (!result.success) {

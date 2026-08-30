@@ -14,28 +14,26 @@
   <name>ModelTransformation</name>
   <type>workflow:ModelTransformation</type>
   <baseType>core:Block</baseType>
-  <is>A recorded transformation of the model by a workflow Task</is>
+  <is>A recorded transformation of the model by sequential workflow Stages</is>
 
   <documentation>
-    One transformation of the model driven by a Task.
+    One transformation of the model driven by sequential `workflow:Stage`
+    instances. Each Stage runs one Task in an isolated agent process.
 
     * `status` — lifecycle state (`workflow:ExecutionStatus`). Matches the
       `_transform` package: Pending, Running, Succeeded, Failed.
+      `Succeeded` only when every Stage succeeded.
     * `startedAt` / `completedAt` — the execution interval.
     * `baseCommit` — Git HEAD commit when this execution started. Set only
       after Prepare confirms a clean worktree and sets `status=Running`.
-    * `task` — the Task that ran.
-    * `changedFiles` — workspace-relative paths modified during this execution
-      (`type:FilePathEntity[]`).
-    * `exception` — present if and only if `status` is Failed.
-    * Persist writes `changedFiles` and `feedback` onto this Block while it is still running.
+    * `stages` — the Stages of this execution, in order. Feedback,
+      `changedFiles`, and `exception` live on each Stage, not on this Block.
   </documentation>
 
   <references>
+    <see type="workflow:Stage" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
-    <see type="core:Exception" relation="SeeAlso" />
-    <see type="type:FilePathEntity" relation="SeeAlso" />
   </references>
 
   <properties>
@@ -43,7 +41,7 @@
       <documentation>Globally unique identifier of this execution.</documentation>
     </executionId>
     <sequence type="type:Integer">
-      <documentation>Which execution within the model this task was applied to.</documentation>
+      <documentation>Which execution within the model this transformation was applied to.</documentation>
     </sequence>
     <status type="workflow:ExecutionStatus">
       <documentation>Lifecycle state of this execution.</documentation>

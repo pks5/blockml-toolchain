@@ -21,11 +21,13 @@
   <documentation>
     # Execute Task
 
-    Receive the running ModelTransformation and the repository. Change BML model
-    source to perform the Task. After the agent returns, commit model changes
-    (skip the commit when the worktree has nothing to commit).
+    Receive the running ModelTransformation and the repository. Perform the
+    Task of the currently Running Stage in a new isolated agent process.
+    Change BML model source so that Task is done. Do not commit; Persist
+    commits model changes together with the Stage terminal state.
 
-    - Must not write ModelTransformation metadata or any file under _transform/.
+    - Must not write ModelTransformation metadata (including Stages) or any
+      file under _transform/.
     - Default Claude implementation: Edit on *.bml only; deny _transform/
       and node_modules/; Bash limited to npx blockml.
     - TS: pipeline/execute.ts.

@@ -2,24 +2,24 @@ import type { TransformationAgent } from "../agent/transformation-agent.js";
 import { TransformError } from "../execution/errors.js";
 import type {
   ExecutedWork,
-  PreparedExecution,
+  StageBoundExecution,
   StageContext,
   TransformStage,
 } from "./types.js";
 import { collectWorktreeTrace, modelChangedFiles } from "./worktree-trace.js";
-import { commitWorktree } from "./git.js";
 
 export function createExecuteStage(
   agent: TransformationAgent,
-): TransformStage<PreparedExecution, ExecutedWork> {
+): TransformStage<StageBoundExecution, ExecutedWork> {
   return {
     async run(
-      prepared: PreparedExecution,
+      prepared: StageBoundExecution,
       context: StageContext,
     ): Promise<ExecutedWork> {
       const agentResult = await agent.execute({
         workspaceRoot: context.workspaceRoot,
         executionFqn: prepared.started.runningFqn,
+        stageIndex: prepared.stageIndex,
       });
       if (!agentResult.success) {
         throw new TransformError(
@@ -28,10 +28,6 @@ export function createExecuteStage(
         );
       }
       const worktree = collectWorktreeTrace(context.workspaceRoot);
-      commitWorktree(
-        context.workspaceRoot,
-        `transform(execute): ${prepared.started.generatedName}`,
-      );
       return {
         ...prepared,
         trace: {

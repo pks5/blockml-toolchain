@@ -1,7 +1,7 @@
 {
   "name": "@blockml/transformer",
   "version": "0.8.1",
-  "description": "BlockML transformer — five-stage ModelTransformation pipeline",
+  "description": "BlockML transformer — sequential workflow Stages on a ModelTransformation",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",

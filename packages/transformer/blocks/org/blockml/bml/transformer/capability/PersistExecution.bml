@@ -16,17 +16,19 @@
   <name>PersistExecution</name>
   <type>transformercap:PersistExecution</type>
   <baseType>core:Capability</baseType>
-  <is>Process stage [4] — write reflection into the running ModelTransformation</is>
+  <is>Process stage [4] — write reflection into the current Stage</is>
 
   <documentation>
     # Persist Execution
 
-    Write `changedFiles`, `feedback`, and on failure the BML exception into
-    the running ModelTransformation. Must not relocate the Block.
+    Write `changedFiles`, `feedback`, `status`, `completedAt`, and on
+    failure the BML exception into the current `workflow:Stage`. Then
+    commit model changes together with that Stage terminal state. Must
+    not relocate the ModelTransformation and must not write those fields
+    onto the ModelTransformation.
 
-    Default implementation is a deterministic BOM writer. Skips I/O when
-    `changedFiles` is empty, `feedback` is absent, and no exception is present.
-    TS: pipeline/persist.ts and execution/persist.ts.
+    Default implementation is a deterministic BOM writer. Always writes
+    Stage status. TS: pipeline/persist.ts and execution/persist.ts.
   </documentation>
 
   <references>
@@ -34,14 +36,15 @@
     <see type="transformercap:ReflectOnExecution" relation="SeeAlso" />
     <see type="transformercap:FinalizeExecution" relation="SeeAlso" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
+    <see type="workflow:Stage" relation="SeeAlso" />
   </references>
 
   <properties>
     <changedFiles type="type:Text[]">
-      <documentation>Workspace-relative paths persisted as FilePathEntity children of ModelTransformation.changedFiles. (required)</documentation>
+      <documentation>Workspace-relative paths persisted as FilePathEntity children of Stage.changedFiles. (required)</documentation>
     </changedFiles>
     <feedback type="type:Text">
-      <documentation>Text to persist onto ModelTransformation.feedback. (optional)</documentation>
+      <documentation>Text to persist onto Stage.feedback. (optional)</documentation>
     </feedback>
   </properties>
 

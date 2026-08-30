@@ -39,6 +39,7 @@ describe("ClaudeCodeAgent", () => {
     const result = await agent.execute({
       workspaceRoot: TMP,
       executionFqn: runningFqn,
+      stageIndex: 0,
     });
     expect(result).toEqual({ success: true, stdout: "ok", stderr: "" });
     expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe(DEFAULT_AGENTS_MD);
@@ -59,9 +60,10 @@ describe("ClaudeCodeAgent", () => {
     expect(captured?.args).not.toContain("Bash");
     expect(captured?.args).not.toContain("--verbose");
     expect(captured?.live).toBeUndefined();
-    const prompt = buildClaudeExecutionPrompt(runningFqn);
+    const prompt = buildClaudeExecutionPrompt(runningFqn, 0);
     expect(prompt).toContain(runningFqn);
-    expect(prompt).toContain("Execute stage");
+    expect(prompt).toContain("Execute step");
+    expect(prompt).toContain("Running Stage");
     expect(prompt).toContain("Change BML model source");
     expect(prompt).toContain("Do not modify the ModelTransformation block");
     expect(prompt).toContain("_transform/");
@@ -79,6 +81,7 @@ describe("ClaudeCodeAgent", () => {
     await agent.execute({
       workspaceRoot: TMP,
       executionFqn: "com.example.model._transform.running.X",
+      stageIndex: 0,
     });
     expect(captured?.live).toBe(true);
     expect(captured?.args).toContain("--verbose");
@@ -106,6 +109,7 @@ describe("ClaudeCodeAgent", () => {
     const result = await agent.execute({
       workspaceRoot: TMP,
       executionFqn: "com.example.model._transform.running.X",
+      stageIndex: 0,
     });
     expect(result.success).toBe(false);
     if (!result.success) {

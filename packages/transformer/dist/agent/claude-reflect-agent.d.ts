@@ -8,7 +8,7 @@ export interface ClaudeReflectAgentOptions {
     verbose?: boolean;
     permissions?: ClaudeTransformPermissions;
 }
-export declare function buildClaudeReflectPrompt(executionFqn: string, trace: ExecutionTrace): string;
+export declare function buildClaudeReflectPrompt(executionFqn: string, stageIndex: number, trace: ExecutionTrace): string;
 export declare function parseReflectionOutput(stdout: string): {
     changedFiles: string[];
     feedback: string;

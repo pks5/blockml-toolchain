@@ -118,7 +118,7 @@ describe("Transformer pipeline", () => {
     expect(running).toContain(
       '<type:FilePathEntity value="model.bml" />',
     );
-    expect(running).toContain(">ok</value>");
+    expect(running).toContain(">ok</feedback>");
   });
 
   it("keeps persisted changedFiles and feedback after finalize", async () => {
@@ -149,7 +149,7 @@ describe("Transformer pipeline", () => {
     expect(succeeded).toContain(
       '<type:FilePathEntity value="model.bml" />',
     );
-    expect(succeeded).toContain(">ok</value>");
+    expect(succeeded).toContain(">ok</feedback>");
     expect(succeeded).not.toContain(`_transform/running/${generated}`);
   });
 

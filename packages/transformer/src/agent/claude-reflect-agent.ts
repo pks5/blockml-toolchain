@@ -22,21 +22,23 @@ export interface ClaudeReflectAgentOptions {
 
 export function buildClaudeReflectPrompt(
   executionFqn: string,
+  stageIndex: number,
   trace: ExecutionTrace,
 ): string {
   const changed =
     trace.changedFiles.length > 0
       ? trace.changedFiles.map((path) => `- ${path}`).join("\n")
       : "(none detected from git)";
+  const stageNumber = stageIndex + 1;
   return [
-    "You are the Reflect stage of a BlockML transformer pipeline.",
+    "You are the Reflect step of a BlockML transformer pipeline.",
     "",
-    "The Execute stage has finished this running ModelTransformation:",
+    `The Execute step has finished Stage ${stageNumber} of this running ModelTransformation:`,
     "",
     executionFqn,
     "",
     "You must NOT change the model, ModelTransformation, or any other files.",
-    "Read only. Produce changedFiles and feedback.",
+    "Read only. Produce changedFiles and feedback for this Stage only.",
     "",
     "Git-detected changed files:",
     changed,
@@ -94,7 +96,11 @@ export class ClaudeReflectAgent implements ReflectionAgent {
 
   async reflect(request: ReflectRequest): Promise<ReflectResult> {
     const agents = ensureAgentsMarkdown(request.workspaceRoot);
-    const prompt = buildClaudeReflectPrompt(request.executionFqn, request.trace);
+    const prompt = buildClaudeReflectPrompt(
+      request.executionFqn,
+      request.stageIndex,
+      request.trace,
+    );
     const args = [
       "-p",
       prompt,

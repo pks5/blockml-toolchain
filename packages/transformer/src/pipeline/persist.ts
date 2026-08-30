@@ -1,4 +1,5 @@
 import { persistReflection } from "../execution/persist.js";
+import { formatDateTimeProperty } from "../execution/lifecycle.js";
 import type {
   PersistedExecution,
   Reflection,
@@ -25,8 +26,11 @@ export function createPersistStage(): TransformStage<Reflection, PersistedExecut
     ): Promise<PersistedExecution> {
       persistReflection(context.workspaceRoot, {
         started: reflected.started,
+        stageIndex: reflected.stageIndex,
         changedFiles: reflected.changedFiles,
         feedback: reflected.feedback,
+        outcome: reflected.outcome,
+        completedAtIso: formatDateTimeProperty(context.now()),
         ...(reflected.exceptionMessage !== undefined
           ? { exceptionMessage: reflected.exceptionMessage }
           : {}),

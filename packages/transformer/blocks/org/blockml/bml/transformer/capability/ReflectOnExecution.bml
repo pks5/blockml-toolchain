@@ -20,8 +20,9 @@
   <documentation>
     # Reflect on Execution
 
-    Read Execute output (trace and git diff) and produce changedFiles and
-    feedback. Must not change the model.
+    Read Execute output (trace and git diff) for the current Stage and
+    produce changedFiles and feedback. Must not change the model. Runs in
+    a new isolated agent process per Stage.
 
     - Default: Claude Worker #2 (read-only: Read/Glob/Grep; Edit/Write/Bash denied).
     - Tests without a reflectAgent keep a no-op (empty changedFiles).

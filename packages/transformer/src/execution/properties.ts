@@ -1,6 +1,9 @@
 import type {
   AggregationDefinition,
   BlockDefinition,
+  BlockInstance,
+  BlockInstanceNode,
+  CompositionNode,
   LiteralValue,
   PropertyDefinition,
 } from "@blockml/bom";
@@ -13,6 +16,7 @@ import {
   FILE_PATH_TYPE_FQN,
   INTEGER_TYPE_FQN,
   MODEL_TRANSFORMATION_FQN,
+  STAGE_FQN,
   TEXT_TYPE_FQN,
   type ExecutionStatusId,
 } from "./constants.js";
@@ -31,6 +35,182 @@ export function isModelTransformation(
 
 export function hasTaskComposition(block: BlockDefinition): boolean {
   return hasAggregationComposition(block, "task");
+}
+
+export function getStageInstances(block: BlockDefinition): BlockInstance[] {
+  const aggregation = block.members.find(
+    (member): member is AggregationDefinition =>
+      member.kind === "aggregation" && member.name === "stages",
+  );
+  if (!aggregation?.composition) {
+    return [];
+  }
+  return aggregation.composition.children
+    .filter((child): child is BlockInstanceNode => child.kind === "blockInstance")
+    .map((child) => child.instance)
+    .filter((instance) => instance.typeFqn === STAGE_FQN);
+}
+
+export function getStageInstance(
+  block: BlockDefinition,
+  stageIndex: number,
+): BlockInstance | undefined {
+  return getStageInstances(block)[stageIndex];
+}
+
+export function stageHasTask(instance: BlockInstance): boolean {
+  return stageHasAggregation(instance, "task");
+}
+
+export function stageHasAggregation(
+  instance: BlockInstance,
+  name: string,
+): boolean {
+  const aggregation = instance.aggregationCompositions?.find(
+    (entry) => entry.aggregationName === name,
+  );
+  return (aggregation?.composition.children.length ?? 0) > 0;
+}
+
+export function hasStageProperty(instance: BlockInstance, name: string): boolean {
+  const value = instance.memberValues[name];
+  if (!value) {
+    return false;
+  }
+  if (value.kind === "literal") {
+    return value.value !== undefined && value.value !== "";
+  }
+  return true;
+}
+
+export function getStagePropertyLiteral(
+  instance: BlockInstance,
+  name: string,
+): unknown | undefined {
+  const value = instance.memberValues[name];
+  if (value?.kind === "literal") {
+    return value.value;
+  }
+  return undefined;
+}
+
+export function getStageStatus(instance: BlockInstance): string | undefined {
+  const value = getStagePropertyLiteral(instance, "status");
+  if (typeof value !== "string") {
+    return undefined;
+  }
+  const separator = value.lastIndexOf("::");
+  return separator >= 0 ? value.slice(separator + 2) : value;
+}
+
+export function allStagesSucceeded(block: BlockDefinition): boolean {
+  const stages = getStageInstances(block);
+  if (stages.length === 0) {
+    return false;
+  }
+  return stages.every((stage) => getStageStatus(stage) === "Succeeded");
+}
+
+function setStageMember(
+  instance: BlockInstance,
+  name: string,
+  typeFqn: string,
+  value: unknown,
+  authoredPlacement: "element" | "attribute" = "element",
+): void {
+  instance.memberValues[name] = {
+    kind: "literal",
+    value,
+    typeFqn,
+    authoredPlacement,
+  };
+}
+
+export function setStageStatus(
+  instance: BlockInstance,
+  status: ExecutionStatusId,
+): void {
+  // `status` is a reserved metadata element name on composition instances;
+  // persist it as an attribute so it round-trips through parse.
+  setStageMember(instance, "status", EXECUTION_STATUS_FQN, status, "attribute");
+}
+
+function upsertInstanceAggregation(
+  instance: BlockInstance,
+  aggregationName: string,
+  children: CompositionNode[],
+): void {
+  const next = {
+    aggregationName,
+    composition: { aggregationName, children },
+  };
+  const existing = [...(instance.aggregationCompositions ?? [])];
+  const index = existing.findIndex((entry) => entry.aggregationName === aggregationName);
+  if (index >= 0) {
+    existing[index] = next;
+  } else {
+    existing.push(next);
+  }
+  instance.aggregationCompositions = existing;
+}
+
+export function setStageStartedAt(instance: BlockInstance, iso: string): void {
+  setStageMember(instance, "startedAt", DATETIME_TYPE_FQN, iso);
+}
+
+export function setStageBaseCommit(instance: BlockInstance, commit: string): void {
+  setStageMember(instance, "baseCommit", TEXT_TYPE_FQN, commit);
+}
+
+export function setStageCompletedAt(instance: BlockInstance, iso: string): void {
+  setStageMember(instance, "completedAt", DATETIME_TYPE_FQN, iso);
+}
+
+export function setStageFeedback(instance: BlockInstance, feedback: string): void {
+  setStageMember(instance, "feedback", TEXT_TYPE_FQN, feedback);
+}
+
+export function setStageChangedFiles(
+  instance: BlockInstance,
+  paths: readonly string[],
+): void {
+  upsertInstanceAggregation(
+    instance,
+    "changedFiles",
+    paths.map((path) => ({
+      kind: "blockInstance" as const,
+      instance: {
+        typeFqn: FILE_PATH_ENTITY_FQN,
+        memberValues: {
+          value: {
+            kind: "literal" as const,
+            value: path,
+            typeFqn: FILE_PATH_TYPE_FQN,
+            authoredPlacement: "attribute" as const,
+          },
+        },
+      },
+    })),
+  );
+}
+
+export function setStageException(instance: BlockInstance, message: string): void {
+  upsertInstanceAggregation(instance, "exception", [
+    {
+      kind: "blockInstance",
+      instance: {
+        typeFqn: EXECUTION_EXCEPTION_FQN,
+        memberValues: {
+          message: {
+            kind: "literal",
+            value: message,
+            typeFqn: TEXT_TYPE_FQN,
+            authoredPlacement: "element",
+          },
+        },
+      },
+    },
+  ]);
 }
 
 export function hasAggregationComposition(

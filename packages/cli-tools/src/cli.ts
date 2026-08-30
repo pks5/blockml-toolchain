@@ -85,6 +85,7 @@ export interface ParsedArgs {
 export interface CliRunOptions {
   transformAgent?: TransformationAgent;
   reflectAgent?: ReflectionAgent;
+  onOutputLine?: (line: CliOutputLine) => void;
 }
 
 interface PrintableDiagnostic {
@@ -848,6 +849,7 @@ async function executeCli(
         USAGE,
         agent,
         reflectAgent,
+        options.onOutputLine,
       );
       return { code, lines };
     }
@@ -888,7 +890,15 @@ export function isCliEntry(argv1: string | undefined, modulePath: string): boole
 }
 
 if (isCliEntry(process.argv[1], fileURLToPath(import.meta.url))) {
-  const { code, lines } = await executeCli(process.argv.slice(2), process.cwd());
-  writeCliOutput(lines);
+  let streamed = false;
+  const { code, lines } = await executeCli(process.argv.slice(2), process.cwd(), {
+    onOutputLine: (line) => {
+      streamed = true;
+      writeCliOutput([line]);
+    },
+  });
+  if (!streamed) {
+    writeCliOutput(lines);
+  }
   process.exitCode = code;
 }

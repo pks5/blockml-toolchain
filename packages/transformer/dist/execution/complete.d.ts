@@ -6,5 +6,5 @@ export interface FinalizedExecution {
     completedAtIso: string;
     stage: TerminalLifecycleStage;
 }
-export declare function finalizeExecution(workspaceRoot: string, started: StartedExecution, now: Date, stage: TerminalLifecycleStage): FinalizedExecution;
+export declare function finalizeExecution(workspaceRoot: string, started: StartedExecution, now: Date): FinalizedExecution;
 //# sourceMappingURL=complete.d.ts.map

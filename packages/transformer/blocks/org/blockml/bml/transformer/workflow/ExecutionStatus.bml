@@ -14,20 +14,28 @@
   <name>ExecutionStatus</name>
   <type>workflow:ExecutionStatus</type>
   <baseType>type:EnumType</baseType>
-  <is>The lifecycle state of a ModelTransformation</is>
+  <is>The lifecycle state of a ModelTransformation or Stage</is>
 
   <documentation>
-    Closed set of states a `workflow:ModelTransformation` can be in. The
-    `_transform` package of the Block matches this value:
+    Closed set of states a `workflow:ModelTransformation` or
+    `workflow:Stage` can be in.
+
+    On a ModelTransformation the `_transform` package of the Block matches
+    this value:
 
     * `Pending` — created, not yet started (`_transform.pending`).
     * `Running` — currently executing (`_transform.running`).
     * `Failed` — finished unsuccessfully (`_transform.failed`).
     * `Succeeded` — finished successfully (`_transform.succeeded`).
+
+    A Stage uses the same values. Its `Running` state is persisted and
+    committed before the Stage's Task runs (recovery boundary). A Stage
+    `Failed` aborts the remaining Stages and fails the transformation.
   </documentation>
 
   <references>
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
+    <see type="workflow:Stage" relation="SeeAlso" />
     <see type="type:EnumType" relation="Extends" />
   </references>
 

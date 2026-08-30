@@ -19,6 +19,7 @@ import {
   failingAgent,
   gitHead,
   gitLogSubjects,
+  gitParent,
   historyExecutionXml,
   pendingExecutionXml,
   pendingFqn,
@@ -266,7 +267,139 @@ describe("Transformer lifecycle", () => {
     expect(succeeded).toContain(`<value>${headBefore}</value>`);
     expect(gitLogSubjects(TMP)).toEqual([
       `transform(succeeded): ${generated}`,
-      `transform(execute): ${generated}`,
+      `transform(stage): ${generated} #1`,
+      `transform(stage-start): ${generated} #1`,
+      `transform(start): ${generated}`,
+      "fixture",
+    ]);
+  });
+
+  it("persists Stage Running and baseCommit before the agent runs", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const runningPath = join(
+      TMP,
+      `blocks/com/example/model/_transform/running/${generated}.bml`,
+    );
+    let observedHead: string | undefined;
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: {
+        async execute() {
+          observedHead = gitHead(TMP);
+          const running = readFileSync(runningPath, "utf8");
+          expect(running).toContain('status="Running"');
+          const parent = gitParent(TMP);
+          expect(running).toContain(`<baseCommit>${parent}</baseCommit>`);
+          return { success: true };
+        },
+      },
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(true);
+    expect(observedHead).toBeDefined();
+  });
+
+  it("runs every Stage in an isolated execute call and stops after a failure", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        stageInstructions: ["First stage task.", "Second stage task."],
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const calls: number[] = [];
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: {
+        async execute(request) {
+          calls.push(request.stageIndex);
+          if (request.stageIndex === 0) {
+            return { success: false, exitCode: 1, error: "stage one failed" };
+          }
+          return { success: true };
+        },
+      },
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(false);
+    expect(calls).toEqual([0]);
+    const failed = readFileSync(
+      join(TMP, `blocks/com/example/model/_transform/failed/${generated}.bml`),
+      "utf8",
+    );
+    expect(failed).toContain("stage one failed");
+    expect(failed).toContain('status="Failed"');
+    expect(failed).toContain("Second stage task.");
+    expect(gitLogSubjects(TMP)).toEqual([
+      `transform(failed): ${generated}`,
+      `transform(stage): ${generated} #1`,
+      `transform(stage-start): ${generated} #1`,
+      `transform(start): ${generated}`,
+      "fixture",
+    ]);
+  });
+
+  it("succeeds only when every Stage succeeds and emits lifecycle events", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        stageInstructions: ["First stage task.", "Second stage task."],
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const events: string[] = [];
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: {
+        async execute(request) {
+          events.push(`execute:${request.stageIndex}`);
+          return { success: true };
+        },
+      },
+      onLifecycle: (event) => {
+        events.push(
+          event.kind === "transformationStatus" || event.kind === "stageStatus"
+            ? `${event.kind}:${event.status}`
+            : event.kind,
+        );
+      },
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(true);
+    expect(result.status).toBe("Succeeded");
+    expect(events).toEqual([
+      "transformationStatus:Running",
+      "stageStatus:Running",
+      "stageExecuteStart",
+      "execute:0",
+      "stageExecuteEnd",
+      "stageReflectStart",
+      "stageReflectEnd",
+      "stageStatus:Succeeded",
+      "stageStatus:Running",
+      "stageExecuteStart",
+      "execute:1",
+      "stageExecuteEnd",
+      "stageReflectStart",
+      "stageReflectEnd",
+      "stageStatus:Succeeded",
+      "transformationStatus:Succeeded",
+      "transformationComplete",
+    ]);
+    expect(gitLogSubjects(TMP)).toEqual([
+      `transform(succeeded): ${generated}`,
+      `transform(stage): ${generated} #2`,
+      `transform(stage-start): ${generated} #2`,
+      `transform(stage): ${generated} #1`,
+      `transform(stage-start): ${generated} #1`,
       `transform(start): ${generated}`,
       "fixture",
     ]);
