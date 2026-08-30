@@ -45,6 +45,7 @@
     <see type="workflow:PrerequisiteNotMetException" relation="SeeAlso" />
     <see type="workflow:Criterion" relation="SeeAlso" />
     <see type="workflow:ExecutionException" relation="SeeAlso" />
+    <see type="workflow:ExecutionStatus" relation="SeeAlso" />
     <see type="workflow:Rule" relation="SeeAlso" />
     <see type="workflow:InstructionRule" relation="SeeAlso" />
     <see type="workflow:InstructionTask" relation="SeeAlso" />

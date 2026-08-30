@@ -17,13 +17,19 @@
   <is>A recorded execution of a workflow Task</is>
 
   <documentation>
-    One execution of a Task against the model. startedAt and completedAt mark
-    the interval; task is the Task that ran; Persist writes changedFiles and
-    feedback onto this Block while it is still running.
+    One execution of a Task against the model.
+
+    * `status` — lifecycle state (`workflow:ExecutionStatus`).
+    * `startedAt` / `completedAt` — the execution interval.
+    * `task` — the Task that ran.
+    * `exception` — a thrown Exception when the execution failed.
+    * Persist writes `changedFiles` and `feedback` onto this Block while it is still running.
   </documentation>
 
   <references>
     <see type="workflow:Task" relation="SeeAlso" />
+    <see type="workflow:ExecutionStatus" relation="SeeAlso" />
+    <see type="core:Exception" relation="SeeAlso" />
   </references>
 
   <properties>
@@ -33,6 +39,9 @@
     <sequence type="type:Integer">
       <documentation>Which execution within the model this task was applied to.</documentation>
     </sequence>
+    <status type="workflow:ExecutionStatus">
+      <documentation>Lifecycle state of this execution.</documentation>
+    </status>
     <createdAt type="type:DateTime">
       <documentation>When this execution was created.</documentation>
     </createdAt>
@@ -54,6 +63,9 @@
     <task type="workflow:Task">
       <documentation>The Task that was executed.</documentation>
     </task>
+    <exception type="core:Exception">
+      <documentation>The Exception thrown during this execution, if any.</documentation>
+    </exception>
   </aggregations>
 
 </block>

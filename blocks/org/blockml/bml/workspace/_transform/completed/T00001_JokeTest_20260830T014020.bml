@@ -26,6 +26,9 @@
     <sequence override="true" type="org.blockml.bml.type.Integer">
       <value>1</value>
     </sequence>
+    <status override="true" type="org.blockml.bml.transformer.workflow.ExecutionStatus">
+      <value>Succeeded</value>
+    </status>
     <startedAt override="true" type="org.blockml.bml.type.DateTime">
       <value>2026-08-30T01:40:20</value>
     </startedAt>

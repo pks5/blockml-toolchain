@@ -60,6 +60,7 @@
         <workflow:CompositeTask />
         <workflow:Criterion />
         <workflow:ExecutionException />
+        <workflow:ExecutionStatus />
         <workflow:InstructionRule />
         <workflow:InstructionTask />
         <workflow:Prerequisite />

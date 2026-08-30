@@ -1,0 +1,44 @@
+<!--
+  Transformer Workflow — ExecutionStatus
+  FQN: org.blockml.bml.transformer.workflow.ExecutionStatus
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:workflow="org.blockml.bml.transformer.workflow">
+
+  <name>ExecutionStatus</name>
+  <type>workflow:ExecutionStatus</type>
+  <baseType>type:EnumType</baseType>
+  <is>The lifecycle state of a TaskExecution</is>
+
+  <documentation>
+    Closed set of states a `workflow:TaskExecution` can be in.
+
+    * `Pending` — created, not yet started.
+    * `Running` — currently executing.
+    * `Failed` — finished unsuccessfully.
+    * `Succeeded` — finished successfully.
+  </documentation>
+
+  <references>
+    <see type="workflow:TaskExecution" relation="SeeAlso" />
+    <see type="type:EnumType" relation="Extends" />
+  </references>
+
+  <aggregations>
+    <values>
+      <composition>
+        <workflow:ExecutionStatus bml:id="Pending" />
+        <workflow:ExecutionStatus bml:id="Running" />
+        <workflow:ExecutionStatus bml:id="Failed" />
+        <workflow:ExecutionStatus bml:id="Succeeded" />
+      </composition>
+    </values>
+  </aggregations>
+
+</block>

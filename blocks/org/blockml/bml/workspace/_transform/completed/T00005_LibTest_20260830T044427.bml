@@ -1,0 +1,94 @@
+<!--Workspace pending transform — JokeTest
+  FQN: org.blockml.bml.workspace._transform.completed.T00001_JokeTest_20260830T014020-->
+<block xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:completed="org.blockml.bml.workspace._transform.completed"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
+
+  <name>
+    T00005_LibTest_20260830T044427
+  </name>
+  <type>
+    completed:T00005_LibTest_20260830T044427
+  </type>
+  <baseType>
+    workflow:TaskExecution
+  </baseType>
+  <is>
+    A pending TaskExecution that creates a playground Joke block
+  </is>
+  <properties>
+    <executionId override="true">
+      <value>d8cf3cb9-5380-4524-8242-a136405fc51b</value>
+    </executionId>
+    <createdAt override="true" type="org.blockml.bml.type.DateTime">
+      <value>2026-08-30T01:40:20</value>
+    </createdAt>
+    <sequence override="true" type="org.blockml.bml.type.Integer">
+      <value>5</value>
+    </sequence>
+    <status override="true" type="org.blockml.bml.transformer.workflow.ExecutionStatus">
+      <value>Succeeded</value>
+    </status>
+    <startedAt override="true" type="org.blockml.bml.type.DateTime">
+      <value>2026-08-30T04:44:27</value>
+    </startedAt>
+    <feedback override="true" type="org.blockml.bml.type.Text">
+      <value>Execute created a 6-block library domain model in package org.blockml.bml.workspace.playground.library, matching the requested task. Only playground/library/ files were added; the pending->running move of the TaskExecution is normal pipeline lifecycle, not an errant model edit.
+
+Structure: Library is the aggregate root owning books, members, authors and borrowings via &lt;aggregations> (so Borrowing is managed library state, not a property of Book/Member - requirement met). Book.authors and Borrowing.member/Borrowing.book are non-owning &lt;associations> typed InstanceReference(T)[] / InstanceReference(T); Author and Member are owned only by Library, so authors/members outlive books and can be shared (requirement met). AvailabilityStatus is an EnumType with Available/Borrowed members. Every important block has concise &lt;documentation>.
+
+Convention check against the effective model (@blockml/core, @machineblocks/core): property syntax (&lt;title type="type:Text">&lt;documentation>...) matches mbt:Connector; enum values composition matches mbt:Gender/Direction; association type shape matches def:AssociationDefinition rules (InstanceReference(T) or InstanceReference(T)[], T extends core:Block - satisfied). Package has no Library.bml catalog registration, consistent with the sibling playground/Joke.bml precedent (loose playground files).
+
+Potential issues to review:
+1. baseType choice. Book/Member/Author/Borrowing/Library extend core:Block directly. core:Block is abstract and documents 'not used directly as a composition instance type'; core:Entity is the documented branch for 'Blocks that represent instances with identity in composition or aggregation. Domain blocks ... extend Entity' (and @machineblocks domain Block extends core:Entity). If validation rejects extending core:Block for instantiable domain types, switch these five to core:Entity.
+2. Cardinality semantics only partially enforced. 'A book has one or more authors' and 'a borrowing connects exactly one member and one book' are expressed as 0..n / 0..1 associations plus prose; BlockML associations cannot express 1..1 / 1..n, so the mandatory-minimum is documentation-only. 'A book can only be borrowed by one member at a time' (uniqueness of the active borrowing per book) is likewise prose in Book/Borrowing docs, not a constraint. Consider whether a Constraint sub-type should back these rules.
+3. Book has both a status property (AvailabilityStatus) and the implied borrowing link - these can drift out of sync; nothing keeps status=Borrowed iff an active Borrowing references the book.
+
+Validation NOT re-run: this Reflect stage is read-only and Bash is disabled, and Execute's own stdout in the pipeline log is truncated, so I cannot confirm `npx blockml validate` passed. Recommend the next stage run `npx blockml validate` (and `--all` since node_modules types are referenced) before completing.</value>
+    </feedback>
+    <changedFiles override="true" type="org.blockml.bml.type.Text">
+      <value>blocks/org/blockml/bml/workspace/playground/library/AvailabilityStatus.bml</value>
+      <value>blocks/org/blockml/bml/workspace/playground/library/Author.bml</value>
+      <value>blocks/org/blockml/bml/workspace/playground/library/Book.bml</value>
+      <value>blocks/org/blockml/bml/workspace/playground/library/Member.bml</value>
+      <value>blocks/org/blockml/bml/workspace/playground/library/Borrowing.bml</value>
+      <value>blocks/org/blockml/bml/workspace/playground/library/Library.bml</value>
+    </changedFiles>
+    <completedAt override="true" type="org.blockml.bml.type.DateTime">
+      <value>2026-08-30T04:50:25</value>
+    </completedAt>
+  </properties>
+  <aggregations>
+    <task override="true">
+      <composition>
+        <workflow:InstructionTask>
+          <instructions>Create a small library domain model in package `org.blockml.bml.workspace.playground.library`.
+
+The model shall represent a library that manages books and registered members.
+
+A book has a title, an ISBN, and an availability status. A book can have one or more authors.
+
+A member has a name and a unique member number.
+
+Model the concept of borrowing explicitly. A borrowing connects a member with a book and records when the book was borrowed and when it is due.
+
+The model shall express the following rules and semantics through appropriate BlockML structures:
+
+* A book can only be borrowed by one member at a time.
+* A member can have multiple active borrowings.
+* Authors exist independently of books and may have written multiple books.
+* A borrowing belongs to the library's managed state and is not merely a property of a book or member.
+
+Choose appropriate blocks, types, properties, associations, and aggregations based on the semantics of the domain.
+
+Add concise documentation to the important blocks explaining their purpose.
+
+The resulting model must be valid BlockML.</instructions>
+        </workflow:InstructionTask>
+      </composition>
+    </task>
+  </aggregations>
+</block>

@@ -1,0 +1,35 @@
+<!--
+  Workspace Playground — Library domain — Member
+  FQN: org.blockml.bml.workspace.playground.library.Member
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:library="org.blockml.bml.workspace.playground.library">
+
+  <name>Member</name>
+  <type>library:Member</type>
+  <baseType>core:Block</baseType>
+  <is>A person registered with the library who may borrow books</is>
+
+  <documentation>
+    A registered member identified by a unique `memberNumber`. Members are owned
+    by `library:Library.members`. A member may hold several active
+    `library:Borrowing` instances at the same time — each borrowing under
+    `library:Library.borrowings` points back at exactly one member.
+  </documentation>
+
+  <properties>
+    <name type="type:Text">
+      <documentation>Full name of the member.</documentation>
+    </name>
+    <memberNumber type="type:Text">
+      <documentation>Library-assigned identifier, unique across all members.</documentation>
+    </memberNumber>
+  </properties>
+
+</block>
