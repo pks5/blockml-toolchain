@@ -1,0 +1,73 @@
+<!--
+  Transformer Workflow — Stage
+  FQN: org.blockml.bml.transformer.workflow.Stage
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>Stage</name>
+  <type>workflow:Stage</type>
+  <baseType>core:Block</baseType>
+  <is>An isolated part of a ModelTransformation</is>
+
+  <documentation>
+    An isolated part of a ModelTransformation.
+
+    A Stage runs in its own agent process. It owns `feedback` and
+    `changedFiles` independently of other Stages in the same transformation.
+
+    * `status` — lifecycle state (`workflow:ExecutionStatus`).
+    * `startedAt` / `completedAt` — the interval of this Stage.
+    * `baseCommit` — Git HEAD commit when this Stage started.
+    * `task` — the Task that ran in this Stage.
+    * `feedback` — Stage-local feedback from its agent process.
+    * `changedFiles` — workspace-relative paths modified during this Stage
+      (`type:FilePathEntity[]`).
+    * `exception` — present if and only if `status` is Failed.
+  </documentation>
+
+  <references>
+    <see type="workflow:ModelTransformation" relation="SeeAlso" />
+    <see type="workflow:Task" relation="SeeAlso" />
+    <see type="workflow:ExecutionStatus" relation="SeeAlso" />
+    <see type="core:Exception" relation="SeeAlso" />
+    <see type="type:FilePathEntity" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <status type="workflow:ExecutionStatus">
+      <documentation>Lifecycle state of this Stage.</documentation>
+    </status>
+    <startedAt type="type:DateTime">
+      <documentation>When this Stage started.</documentation>
+    </startedAt>
+    <baseCommit type="type:Text">
+      <documentation>Git HEAD commit when this Stage started.</documentation>
+    </baseCommit>
+    <completedAt type="type:DateTime">
+      <documentation>When this Stage finished.</documentation>
+    </completedAt>
+    <feedback type="type:Text">
+      <documentation>Feedback from this Stage's agent process.</documentation>
+    </feedback>
+  </properties>
+
+  <aggregations>
+    <task type="workflow:Task">
+      <documentation>The Task that ran in this Stage.</documentation>
+    </task>
+    <changedFiles type="type:FilePathEntity[]">
+      <documentation>Workspace-relative paths modified during this Stage.</documentation>
+    </changedFiles>
+    <exception type="core:Exception">
+      <documentation>The Exception thrown during this Stage, if any.</documentation>
+    </exception>
+  </aggregations>
+
+</block>
