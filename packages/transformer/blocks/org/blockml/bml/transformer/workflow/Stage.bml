@@ -41,6 +41,9 @@
   </references>
 
   <properties>
+    <name type="type:Text">
+      <documentation>Name of this Stage.</documentation>
+    </name>
     <status type="workflow:ExecutionStatus">
       <documentation>Lifecycle state of this Stage.</documentation>
     </status>

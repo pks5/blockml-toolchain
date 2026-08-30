@@ -37,6 +37,9 @@
   </references>
 
   <properties>
+    <description type="type:Text">
+      <documentation>Description of this transformation.</documentation>
+    </description>
     <executionId type="type:Text">
       <documentation>Globally unique identifier of this execution.</documentation>
     </executionId>
