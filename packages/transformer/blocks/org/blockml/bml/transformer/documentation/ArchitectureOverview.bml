@@ -1,0 +1,74 @@
+<!--
+  Transformer Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.transformer.documentation.ArchitectureOverview
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:transformercap="org.blockml.bml.transformer.capability"
+  xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation"
+  xmlns:workflow="org.blockml.bml.transformer.workflow">
+
+  <name>ArchitectureOverview</name>
+  <type>transformerdocumentation:ArchitectureOverview</type>
+  <baseType>core:Documentation</baseType>
+  <is>Five-stage transformer process and module map</is>
+
+  <documentation><![CDATA[
+    Entry: transformercap:RunTransformation (Transformer.run). Exclusive
+    worktree lock around stages [1]–[5]. The orchestrator only sequences
+    stages; it does not implement them.
+
+    Lifecycle locations of workflow:TaskExecution (pending / running /
+    completed) are not these process stages.
+
+    A stage implementation may be deterministic, an agent, or mixed. The
+    pipeline contract stays the same when an implementation is swapped.
+
+    [1] Prepare Execution — transformercap:PrepareExecution
+        Default: deterministic. Resolve a pending TaskExecution, assign
+        sequence and startedAt, relocate to _transform.running.
+
+    [2] Execute Task — transformercap:ExecuteTask
+        Default: TransformationAgent (Claude Code at the CLI). Receives
+        the running execution and the repository. May change BML model
+        source. Must not write TaskExecution metadata or files under
+        _transform/. Claude default: Edit(**/*.bml), deny
+        Edit(**/_transform/**) and Edit(**/node_modules/**), Bash
+        limited to npx blockml.
+
+    [3] Reflect on Execution — transformercap:ReflectOnExecution
+        Default: Claude Worker #2. Must not change the model. Receives the
+        Execute trace (stdout plus git diff) and returns changedFiles and
+        feedback. Claude default: Read/Glob/Grep only; deny Edit, Write,
+        and Bash. Tests without a reflectAgent keep a no-op.
+
+    [4] Persist Execution — transformercap:PersistExecution
+        Default: deterministic. Reloads the running TaskExecution and
+        writes changedFiles and feedback. Must not relocate the Block.
+        Skips I/O when both are empty.
+
+    [5] Finalize Execution — transformercap:FinalizeExecution
+        Default: deterministic. Sets completedAt and relocates running to
+        completed. On Execute failure this stage does not run; the Block
+        stays in running and the lock is released.
+
+    TypeScript:
+    • runtime/transformer.ts → transformercap:RunTransformation
+    • pipeline/prepare.ts → transformercap:PrepareExecution
+    • pipeline/execute.ts → transformercap:ExecuteTask
+    • pipeline/reflect.ts → transformercap:ReflectOnExecution
+    • pipeline/persist.ts → transformercap:PersistExecution
+    • pipeline/finalize.ts → transformercap:FinalizeExecution
+  ]]></documentation>
+
+  <references>
+    <see type="transformercap:RunTransformation" relation="Defines" />
+    <see type="workflow:TaskExecution" relation="SeeAlso" />
+    <see type="workflow:Task" relation="SeeAlso" />
+  </references>
+
+</block>

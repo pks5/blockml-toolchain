@@ -10,7 +10,7 @@ import { diagnosticKind, formatCliOutput, pushLines, writeCliOutput, } from "./c
 import { loadConfig } from "./load-config.js";
 import { projectLibraryPackageDirs, projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
 import { runSearch } from "./run-search.js";
-import { defaultTransformAgent, runTransform } from "./run-transform.js";
+import { defaultReflectAgent, defaultTransformAgent, runTransform } from "./run-transform.js";
 import { writeOutputFiles } from "./write-output.js";
 const USAGE = "Usage: blockml compile <target> [--out dir] [--src dir] [--libraries a,b]\n" +
     "       blockml compile fatblock [--include a,b] [--out dir] [--per-package]\n" +
@@ -574,8 +574,11 @@ async function executeCli(argv, cwd, options = {}) {
             return { code, lines };
         }
         if (parsed.command === "transform") {
-            const agent = options.transformAgent ?? defaultTransformAgent(parsed.verbose === true);
-            const code = await runTransform(parsed.executionFqn, cwd, lines, USAGE, agent);
+            const verbose = parsed.verbose === true;
+            const agent = options.transformAgent ?? defaultTransformAgent(verbose);
+            const reflectAgent = options.reflectAgent ??
+                (options.transformAgent ? undefined : defaultReflectAgent(verbose));
+            const code = await runTransform(parsed.executionFqn, cwd, lines, USAGE, agent, reflectAgent);
             return { code, lines };
         }
         if (parsed.command !== "compile") {

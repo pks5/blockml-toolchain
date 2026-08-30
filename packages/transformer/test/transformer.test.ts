@@ -184,13 +184,17 @@ describe("Transformer lifecycle", () => {
     ).toBe(false);
   });
 
-  it("depends on the generic agent abstraction rather than ClaudeCodeAgent", () => {
+  it("orchestrates pipeline stages rather than calling ClaudeCodeAgent", () => {
     const source = readFileSync(
       join(import.meta.dirname, "../src/runtime/transformer.ts"),
       "utf8",
     );
     expect(source).not.toContain("ClaudeCodeAgent");
-    expect(source).toContain("TransformationAgent");
+    expect(source).toContain("this.pipeline.prepare.run");
+    expect(source).toContain("this.pipeline.execute.run");
+    expect(source).toContain("this.pipeline.reflect.run");
+    expect(source).toContain("this.pipeline.persist.run");
+    expect(source).toContain("this.pipeline.finalize.run");
     expect(ClaudeCodeAgent.name).toBe("ClaudeCodeAgent");
   });
 });

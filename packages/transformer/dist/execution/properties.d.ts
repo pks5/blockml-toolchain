@@ -6,8 +6,11 @@ export declare function getPropertyLiteral(block: BlockDefinition, name: string)
 export declare function getExecutionId(block: BlockDefinition): string | undefined;
 export declare function getSequence(block: BlockDefinition): number | undefined;
 export declare function setOverrideProperty(block: BlockDefinition, name: string, typeFqn: string, value: unknown): void;
+export declare function setOverridePropertyList(block: BlockDefinition, name: string, typeFqn: string, values: readonly unknown[]): void;
 export declare function setSequence(block: BlockDefinition, sequence: number): void;
 export declare function setStartedAt(block: BlockDefinition, iso: string): void;
 export declare function setCompletedAt(block: BlockDefinition, iso: string): void;
+export declare function setFeedback(block: BlockDefinition, feedback: string): void;
+export declare function setChangedFiles(block: BlockDefinition, paths: readonly string[]): void;
 export declare function taskExecutionHasCompletedAt(registry: TypeRegistry): boolean;
 //# sourceMappingURL=properties.d.ts.map

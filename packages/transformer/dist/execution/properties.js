@@ -1,5 +1,5 @@
 import { collectBaseTypeChain } from "@blockml/framework";
-import { DATETIME_TYPE_FQN, INTEGER_TYPE_FQN, TASK_EXECUTION_FQN, } from "./constants.js";
+import { DATETIME_TYPE_FQN, INTEGER_TYPE_FQN, TASK_EXECUTION_FQN, TEXT_TYPE_FQN, } from "./constants.js";
 export function isTaskExecution(block, registry) {
     if (block.type === TASK_EXECUTION_FQN || block.baseType === TASK_EXECUTION_FQN) {
         return true;
@@ -44,7 +44,32 @@ export function setOverrideProperty(block, name, typeFqn, value) {
         value: literal,
         values: [{ namespace: "", value: literal }],
     };
-    const existing = block.members.findIndex((member) => member.kind === "property" && member.name === name);
+    upsertProperty(block, property);
+}
+export function setOverridePropertyList(block, name, typeFqn, values) {
+    const entries = values.map((value) => {
+        const literal = {
+            kind: "literal",
+            value,
+            typeFqn,
+            authoredPlacement: "element",
+        };
+        return { namespace: "", value: literal };
+    });
+    const property = {
+        kind: "property",
+        name,
+        override: true,
+        typeFqn,
+        values: [...entries],
+    };
+    if (entries[0]) {
+        property.value = entries[0].value;
+    }
+    upsertProperty(block, property);
+}
+function upsertProperty(block, property) {
+    const existing = block.members.findIndex((member) => member.kind === "property" && member.name === property.name);
     if (existing >= 0) {
         block.members[existing] = property;
         return;
@@ -65,6 +90,12 @@ export function setStartedAt(block, iso) {
 }
 export function setCompletedAt(block, iso) {
     setOverrideProperty(block, "completedAt", DATETIME_TYPE_FQN, iso);
+}
+export function setFeedback(block, feedback) {
+    setOverrideProperty(block, "feedback", TEXT_TYPE_FQN, feedback);
+}
+export function setChangedFiles(block, paths) {
+    setOverridePropertyList(block, "changedFiles", TEXT_TYPE_FQN, paths);
 }
 export function taskExecutionHasCompletedAt(registry) {
     const type = registry.get(TASK_EXECUTION_FQN)?.block;

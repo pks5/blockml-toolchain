@@ -1,21 +1,17 @@
 import type { TransformationAgent } from "../agent/transformation-agent.js";
-import { type StartedExecution } from "../execution/start.js";
+import type { ReflectionAgent } from "../agent/reflection-agent.js";
+import type { TransformPipeline, TransformRunResult } from "../pipeline/types.js";
+export type { TransformRunResult };
 export interface TransformerOptions {
     workspaceRoot: string;
-    agent: TransformationAgent;
+    agent?: TransformationAgent;
+    reflectAgent?: ReflectionAgent;
+    pipeline?: Partial<TransformPipeline>;
     now?: () => Date;
-}
-export interface TransformRunResult {
-    success: true;
-    pendingFqn: string;
-    runningFqn: string;
-    completedFqn: string;
-    sequence: number;
-    executionId: string | undefined;
 }
 export declare class Transformer {
     private readonly workspaceRoot;
-    private readonly agent;
+    private readonly pipeline;
     private readonly now;
     constructor(options: TransformerOptions);
     run(executionFqn: string): Promise<TransformRunResult>;
@@ -23,7 +19,9 @@ export declare class Transformer {
 export interface RunTransformationOptions {
     workspaceRoot: string;
     executionFqn: string;
-    agent: TransformationAgent;
+    agent?: TransformationAgent;
+    reflectAgent?: ReflectionAgent;
+    pipeline?: Partial<TransformPipeline>;
     now?: () => Date;
 }
 export type RunTransformationResult = (TransformRunResult & {
@@ -34,5 +32,5 @@ export type RunTransformationResult = (TransformRunResult & {
     error: string;
 };
 export declare function runTransformation(options: RunTransformationOptions): Promise<RunTransformationResult>;
-export type { StartedExecution };
+export type { StartedExecution } from "../execution/start.js";
 //# sourceMappingURL=transformer.d.ts.map

@@ -7,6 +7,7 @@ import {
   ensureAgentsMarkdown,
 } from "../src/agent/claude-code-agent.js";
 import { DEFAULT_AGENTS_MD } from "../src/agent/default-agents.js";
+import { CLAUDE_EXECUTE_PERMISSIONS } from "../src/agent/claude-permissions.js";
 
 const TMP = join(import.meta.dirname, ".tmp-claude-agent");
 
@@ -39,7 +40,7 @@ describe("ClaudeCodeAgent", () => {
       workspaceRoot: TMP,
       executionFqn: runningFqn,
     });
-    expect(result).toEqual({ success: true });
+    expect(result).toEqual({ success: true, stdout: "ok", stderr: "" });
     expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe(DEFAULT_AGENTS_MD);
     expect(captured?.cwd).toBe(TMP);
     expect(captured?.command).toBe("claude");
@@ -48,11 +49,22 @@ describe("ClaudeCodeAgent", () => {
     expect(captured?.args).toContain("--permission-mode");
     expect(captured?.args).toContain("bypassPermissions");
     expect(captured?.args).toContain("--allowedTools");
-    expect(captured?.args).toContain("Write");
-    expect(captured?.args).toContain("Bash");
+    expect(captured?.args).toContain("Edit(**/*.bml)");
+    expect(captured?.args).toContain("Bash(npx blockml *)");
+    expect(captured?.args).toContain("--disallowedTools");
+    for (const tool of CLAUDE_EXECUTE_PERMISSIONS.disallowedTools ?? []) {
+      expect(captured?.args).toContain(tool);
+    }
+    expect(captured?.args).not.toContain("Write");
+    expect(captured?.args).not.toContain("Bash");
     expect(captured?.args).not.toContain("--verbose");
     expect(captured?.live).toBeUndefined();
-    expect(buildClaudeExecutionPrompt(runningFqn)).toContain(runningFqn);
+    const prompt = buildClaudeExecutionPrompt(runningFqn);
+    expect(prompt).toContain(runningFqn);
+    expect(prompt).toContain("Execute stage");
+    expect(prompt).toContain("Change BML model source");
+    expect(prompt).toContain("Do not modify the TaskExecution block");
+    expect(prompt).toContain("_transform/");
   });
 
   it("streams a verbose Claude session with stream-json", async () => {

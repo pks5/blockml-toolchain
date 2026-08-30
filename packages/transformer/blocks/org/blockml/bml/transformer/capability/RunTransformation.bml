@@ -1,0 +1,44 @@
+<!--
+  Transformer Capability — RunTransformation
+  FQN: org.blockml.bml.transformer.capability.RunTransformation
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:transformercap="org.blockml.bml.transformer.capability"
+  xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation">
+
+  <name>RunTransformation</name>
+  <type>transformercap:RunTransformation</type>
+  <baseType>core:Capability</baseType>
+  <is>Orchestrate transformer stages [1]–[5]</is>
+
+  <documentation>
+    Public engine entry. Acquires the worktree lock, then runs Prepare,
+    Execute, Reflect, Persist, and Finalize in order. Does not implement
+    any stage. TS: Transformer.run / runTransformation.
+  </documentation>
+
+  <references>
+    <see type="transformerdocumentation:ArchitectureOverview" relation="SeeAlso" />
+    <see type="transformercap:PrepareExecution" relation="SeeAlso" />
+    <see type="transformercap:ExecuteTask" relation="SeeAlso" />
+    <see type="transformercap:ReflectOnExecution" relation="SeeAlso" />
+    <see type="transformercap:PersistExecution" relation="SeeAlso" />
+    <see type="transformercap:FinalizeExecution" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <executionFqn type="type:Text">
+      <documentation>Pending TaskExecution FQN under _transform.pending. (required)</documentation>
+    </executionFqn>
+    <completedFqn type="type:Text">
+      <documentation>Completed TaskExecution FQN after Finalize succeeds. (required)</documentation>
+    </completedFqn>
+  </properties>
+
+</block>

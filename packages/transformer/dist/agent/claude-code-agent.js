@@ -1,20 +1,27 @@
 import { spawn } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { claudePermissionCliArgs } from "./claude-permissions.js";
+import { CLAUDE_EXECUTE_PERMISSIONS, claudePermissionCliArgs, } from "./claude-permissions.js";
 import { ClaudeLiveFormatter } from "./claude-stream.js";
 import { DEFAULT_AGENTS_MD } from "./default-agents.js";
 export function buildClaudeExecutionPrompt(executionFqn) {
     return [
-        "Execute the Task defined by this TaskExecution:",
+        "You are the Execute stage of a BlockML transformer pipeline.",
+        "",
+        "Perform the Task referenced by this running TaskExecution:",
         "",
         executionFqn,
         "",
-        "Use the BlockML model, installed libraries, Search, validation tooling,",
-        "repository contents, and other available context to understand and perform",
-        "the Task.",
+        "Read the TaskExecution only to learn which Task to perform.",
+        "Change BML model source so the Task is done. Change nothing else.",
         "",
-        "Only perform the Task described by the execution.",
+        "Do not modify the TaskExecution block.",
+        "Do not write files under any _transform/ directory.",
+        "Do not set changedFiles, feedback, completedAt, or move the execution",
+        "between pending, running, and completed.",
+        "",
+        "Use the BlockML model, installed libraries, Search, validation tooling,",
+        "and repository contents to understand and perform the Task.",
     ].join("\n");
 }
 export function ensureAgentsMarkdown(workspaceRoot) {
@@ -28,10 +35,12 @@ export class ClaudeCodeAgent {
     command;
     runProcess;
     verbose;
+    permissions;
     constructor(options = {}) {
         this.command = options.command ?? "claude";
-        this.runProcess = options.runProcess ?? defaultClaudeProcessRunner;
+        this.runProcess = options.runProcess ?? runClaudeProcess;
         this.verbose = options.verbose === true;
+        this.permissions = options.permissions ?? CLAUDE_EXECUTE_PERMISSIONS;
     }
     async execute(request) {
         const agents = ensureAgentsMarkdown(request.workspaceRoot);
@@ -41,7 +50,7 @@ export class ClaudeCodeAgent {
             prompt,
             "--append-system-prompt",
             agents,
-            ...claudePermissionCliArgs(),
+            ...claudePermissionCliArgs(this.permissions),
         ];
         if (this.verbose) {
             args.push("--verbose", "--output-format", "stream-json", "--include-partial-messages");
@@ -57,7 +66,7 @@ export class ClaudeCodeAgent {
         try {
             const result = await this.runProcess(processRequest);
             if (result.exitCode === 0) {
-                return { success: true };
+                return { success: true, stdout: result.stdout, stderr: result.stderr };
             }
             const detail = [result.stderr, result.stdout].filter(Boolean).join("\n").trim();
             return {
@@ -75,7 +84,7 @@ export class ClaudeCodeAgent {
         }
     }
 }
-function defaultClaudeProcessRunner(request) {
+export function runClaudeProcess(request) {
     return new Promise((resolve, reject) => {
         const child = spawn(request.command, request.args, {
             cwd: request.cwd,

@@ -33,10 +33,13 @@
     EXECUTION-FQN is the FQN of a TaskExecution under
     {library}._transform.pending. Tasks are not accepted directly.
 
-    The transformer takes an exclusive worktree lock, then resolves the
-    execution, assigns sequence and startedAt, relocates it to
-    _transform.running, invokes a TransformationAgent (Claude Code by default),
-    and on success relocates the same Block to _transform.completed.
+    The transformer takes an exclusive worktree lock, then runs Prepare,
+    Execute, Reflect, Persist, and Finalize. Default Prepare/Finalize are
+    deterministic. Default Execute is a TransformationAgent (Claude Code)
+    that changes BML only. Default Reflect is a second Claude worker
+    (read-only; changedFiles + feedback). Default Persist writes those
+    fields into the running TaskExecution. On success Finalize relocates
+    the Block to _transform.completed.
 
     Only one transform may run at a time in the same Git worktree. A second
     call fails immediately (exit 2) with no wait. Different worktrees may

@@ -1,0 +1,46 @@
+<!--
+  Transformer Capability — ReflectOnExecution
+  FQN: org.blockml.bml.transformer.capability.ReflectOnExecution
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:transformercap="org.blockml.bml.transformer.capability"
+  xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation">
+
+  <name>ReflectOnExecution</name>
+  <type>transformercap:ReflectOnExecution</type>
+  <baseType>core:Capability</baseType>
+  <is>Process stage [3] — observe Execute output without changing the model</is>
+
+  <documentation>
+    # Reflect on Execution
+
+    Read Execute output (trace and git diff) and produce changedFiles and
+    feedback. Must not change the model.
+
+    - Default: Claude Worker #2 (read-only: Read/Glob/Grep; Edit/Write/Bash denied).
+    - Tests without a reflectAgent keep a no-op (empty changedFiles).
+    - TS: pipeline/reflect.ts.
+  </documentation>
+
+  <references>
+    <see type="transformerdocumentation:ArchitectureOverview" relation="SeeAlso" />
+    <see type="transformercap:ExecuteTask" relation="SeeAlso" />
+    <see type="transformercap:PersistExecution" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <changedFiles type="type:Text[]">
+      <documentation>Paths modified during Execute. (required)</documentation>
+    </changedFiles>
+    <feedback type="type:Text">
+      <documentation>Reflection feedback. Absent when the no-op default is used. (optional)</documentation>
+    </feedback>
+  </properties>
+
+</block>

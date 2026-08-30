@@ -1,6 +1,8 @@
 import {
   ClaudeCodeAgent,
+  ClaudeReflectAgent,
   runTransformation,
+  type ReflectionAgent,
   type TransformationAgent,
 } from "@blockml/transformer";
 import { pushLines, type CliOutputLine } from "./cli-style.js";
@@ -11,6 +13,7 @@ export async function runTransform(
   lines: CliOutputLine[],
   usage: string,
   agent: TransformationAgent,
+  reflectAgent?: ReflectionAgent,
 ): Promise<number> {
   const fqn = executionFqn?.trim() ?? "";
   if (!fqn) {
@@ -23,6 +26,7 @@ export async function runTransform(
     workspaceRoot: rootDir,
     executionFqn: fqn,
     agent,
+    ...(reflectAgent ? { reflectAgent } : {}),
   });
 
   if (!result.success) {
@@ -39,4 +43,11 @@ export function defaultTransformAgent(verbose = false): TransformationAgent {
     return new ClaudeCodeAgent({ verbose: true });
   }
   return new ClaudeCodeAgent();
+}
+
+export function defaultReflectAgent(verbose = false): ReflectionAgent {
+  if (verbose) {
+    return new ClaudeReflectAgent({ verbose: true });
+  }
+  return new ClaudeReflectAgent();
 }

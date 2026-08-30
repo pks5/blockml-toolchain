@@ -1,0 +1,46 @@
+<!--
+  Transformer Capability — FinalizeExecution
+  FQN: org.blockml.bml.transformer.capability.FinalizeExecution
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:transformercap="org.blockml.bml.transformer.capability"
+  xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation"
+  xmlns:workflow="org.blockml.bml.transformer.workflow">
+
+  <name>FinalizeExecution</name>
+  <type>transformercap:FinalizeExecution</type>
+  <baseType>core:Capability</baseType>
+  <is>Process stage [5] — complete the TaskExecution lifecycle</is>
+
+  <documentation>
+    Set completedAt and relocate the running TaskExecution to
+    _transform.completed. Default implementation is deterministic. On
+    Execute, Reflect, or Persist failure this stage does not run. TS:
+    pipeline/finalize.ts.
+  </documentation>
+
+  <references>
+    <see type="transformerdocumentation:ArchitectureOverview" relation="SeeAlso" />
+    <see type="transformercap:PersistExecution" relation="SeeAlso" />
+    <see type="workflow:TaskExecution" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <runningFqn type="type:Text">
+      <documentation>Running TaskExecution FQN to finalize. (required)</documentation>
+    </runningFqn>
+    <completedFqn type="type:Text">
+      <documentation>Completed TaskExecution FQN after relocation. (required)</documentation>
+    </completedFqn>
+    <completedAt type="type:DateTime">
+      <documentation>When this execution finished. (required)</documentation>
+    </completedAt>
+  </properties>
+
+</block>

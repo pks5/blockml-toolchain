@@ -1,7 +1,11 @@
 import { spawn } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { claudePermissionCliArgs } from "./claude-permissions.js";
+import {
+  CLAUDE_EXECUTE_PERMISSIONS,
+  claudePermissionCliArgs,
+  type ClaudeTransformPermissions,
+} from "./claude-permissions.js";
 import { ClaudeLiveFormatter } from "./claude-stream.js";
 import { DEFAULT_AGENTS_MD } from "./default-agents.js";
 import type {
@@ -31,19 +35,27 @@ export interface ClaudeCodeAgentOptions {
   command?: string;
   runProcess?: ClaudeProcessRunner;
   verbose?: boolean;
+  permissions?: ClaudeTransformPermissions;
 }
 
 export function buildClaudeExecutionPrompt(executionFqn: string): string {
   return [
-    "Execute the Task defined by this TaskExecution:",
+    "You are the Execute stage of a BlockML transformer pipeline.",
+    "",
+    "Perform the Task referenced by this running TaskExecution:",
     "",
     executionFqn,
     "",
-    "Use the BlockML model, installed libraries, Search, validation tooling,",
-    "repository contents, and other available context to understand and perform",
-    "the Task.",
+    "Read the TaskExecution only to learn which Task to perform.",
+    "Change BML model source so the Task is done. Change nothing else.",
     "",
-    "Only perform the Task described by the execution.",
+    "Do not modify the TaskExecution block.",
+    "Do not write files under any _transform/ directory.",
+    "Do not set changedFiles, feedback, completedAt, or move the execution",
+    "between pending, running, and completed.",
+    "",
+    "Use the BlockML model, installed libraries, Search, validation tooling,",
+    "and repository contents to understand and perform the Task.",
   ].join("\n");
 }
 
@@ -59,11 +71,13 @@ export class ClaudeCodeAgent implements TransformationAgent {
   private readonly command: string;
   private readonly runProcess: ClaudeProcessRunner;
   private readonly verbose: boolean;
+  private readonly permissions: ClaudeTransformPermissions;
 
   constructor(options: ClaudeCodeAgentOptions = {}) {
     this.command = options.command ?? "claude";
-    this.runProcess = options.runProcess ?? defaultClaudeProcessRunner;
+    this.runProcess = options.runProcess ?? runClaudeProcess;
     this.verbose = options.verbose === true;
+    this.permissions = options.permissions ?? CLAUDE_EXECUTE_PERMISSIONS;
   }
 
   async execute(request: AgentExecutionRequest): Promise<AgentExecutionResult> {
@@ -74,7 +88,7 @@ export class ClaudeCodeAgent implements TransformationAgent {
       prompt,
       "--append-system-prompt",
       agents,
-      ...claudePermissionCliArgs(),
+      ...claudePermissionCliArgs(this.permissions),
     ];
     if (this.verbose) {
       args.push(
@@ -97,7 +111,7 @@ export class ClaudeCodeAgent implements TransformationAgent {
     try {
       const result = await this.runProcess(processRequest);
       if (result.exitCode === 0) {
-        return { success: true };
+        return { success: true, stdout: result.stdout, stderr: result.stderr };
       }
       const detail = [result.stderr, result.stdout].filter(Boolean).join("\n").trim();
       return {
@@ -115,7 +129,7 @@ export class ClaudeCodeAgent implements TransformationAgent {
   }
 }
 
-function defaultClaudeProcessRunner(
+export function runClaudeProcess(
   request: ClaudeProcessRequest,
 ): Promise<ClaudeProcessResult> {
   return new Promise((resolve, reject) => {

@@ -36,9 +36,9 @@ import {
 import { loadConfig, type BomConfig } from "./load-config.js";
 import { projectLibraryPackageDirs, projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
 import { runSearch } from "./run-search.js";
-import { defaultTransformAgent, runTransform } from "./run-transform.js";
+import { defaultReflectAgent, defaultTransformAgent, runTransform } from "./run-transform.js";
 import { writeOutputFiles } from "./write-output.js";
-import type { TransformationAgent } from "@blockml/transformer";
+import type { ReflectionAgent, TransformationAgent } from "@blockml/transformer";
 
 const USAGE =
   "Usage: blockml compile <target> [--out dir] [--src dir] [--libraries a,b]\n" +
@@ -84,6 +84,7 @@ export interface ParsedArgs {
 
 export interface CliRunOptions {
   transformAgent?: TransformationAgent;
+  reflectAgent?: ReflectionAgent;
 }
 
 interface PrintableDiagnostic {
@@ -835,8 +836,19 @@ async function executeCli(
     }
 
     if (parsed.command === "transform") {
-      const agent = options.transformAgent ?? defaultTransformAgent(parsed.verbose === true);
-      const code = await runTransform(parsed.executionFqn, cwd, lines, USAGE, agent);
+      const verbose = parsed.verbose === true;
+      const agent = options.transformAgent ?? defaultTransformAgent(verbose);
+      const reflectAgent =
+        options.reflectAgent ??
+        (options.transformAgent ? undefined : defaultReflectAgent(verbose));
+      const code = await runTransform(
+        parsed.executionFqn,
+        cwd,
+        lines,
+        USAGE,
+        agent,
+        reflectAgent,
+      );
       return { code, lines };
     }
 

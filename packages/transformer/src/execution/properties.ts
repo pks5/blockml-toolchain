@@ -9,6 +9,7 @@ import {
   DATETIME_TYPE_FQN,
   INTEGER_TYPE_FQN,
   TASK_EXECUTION_FQN,
+  TEXT_TYPE_FQN,
 } from "./constants.js";
 
 export function isTaskExecution(
@@ -79,8 +80,40 @@ export function setOverrideProperty(
     value: literal,
     values: [{ namespace: "", value: literal }],
   };
+  upsertProperty(block, property);
+}
+
+export function setOverridePropertyList(
+  block: BlockDefinition,
+  name: string,
+  typeFqn: string,
+  values: readonly unknown[],
+): void {
+  const entries = values.map((value) => {
+    const literal: LiteralValue = {
+      kind: "literal",
+      value,
+      typeFqn,
+      authoredPlacement: "element",
+    };
+    return { namespace: "", value: literal };
+  });
+  const property: PropertyDefinition = {
+    kind: "property",
+    name,
+    override: true,
+    typeFqn,
+    values: [...entries],
+  };
+  if (entries[0]) {
+    property.value = entries[0].value;
+  }
+  upsertProperty(block, property);
+}
+
+function upsertProperty(block: BlockDefinition, property: PropertyDefinition): void {
   const existing = block.members.findIndex(
-    (member) => member.kind === "property" && member.name === name,
+    (member) => member.kind === "property" && member.name === property.name,
   );
   if (existing >= 0) {
     block.members[existing] = property;
@@ -105,6 +138,17 @@ export function setStartedAt(block: BlockDefinition, iso: string): void {
 
 export function setCompletedAt(block: BlockDefinition, iso: string): void {
   setOverrideProperty(block, "completedAt", DATETIME_TYPE_FQN, iso);
+}
+
+export function setFeedback(block: BlockDefinition, feedback: string): void {
+  setOverrideProperty(block, "feedback", TEXT_TYPE_FQN, feedback);
+}
+
+export function setChangedFiles(
+  block: BlockDefinition,
+  paths: readonly string[],
+): void {
+  setOverridePropertyList(block, "changedFiles", TEXT_TYPE_FQN, paths);
 }
 
 export function taskExecutionHasCompletedAt(registry: TypeRegistry): boolean {

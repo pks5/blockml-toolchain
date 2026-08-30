@@ -9,6 +9,8 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:transformer="org.blockml.bml.transformer"
+  xmlns:transformercap="org.blockml.bml.transformer.capability"
+  xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
   <name>README</name>
@@ -19,17 +21,24 @@
   <documentation>
     The @blockml/transformer package owns the BlockML transformer library
     (org.blockml.bml.transformer.*). Workflow types live in
-    org.blockml.bml.transformer.workflow.*.
+    org.blockml.bml.transformer.workflow.*. Process stages live in
+    org.blockml.bml.transformer.capability.*.
 
     The TypeScript engine executes TaskExecution instances via
-    `blockml transform EXECUTION-FQN`. It resolves a pending execution,
-    moves it to running, delegates to a TransformationAgent, and on success
-    relocates the same Block to completed. Transformation intelligence
-    lives in the model, not in the engine.
+    `blockml transform EXECUTION-FQN`. Transformer.run sequences five
+    stages: Prepare, Execute, Reflect, Persist, Finalize. Default Prepare
+    and Finalize are deterministic. Default Execute is a TransformationAgent
+    that changes BML model source only (not TaskExecution / _transform/).
+    Default Reflect is a second Claude worker (read-only; changedFiles +
+    feedback). Default Persist is a deterministic writer of those fields
+    onto the running TaskExecution. Transformation intelligence lives in
+    the model, not in the engine.
   </documentation>
 
   <references>
-    <see type="workflow:Task" relation="ReadFirst" />
+    <see type="transformerdocumentation:ArchitectureOverview" relation="ReadFirst" />
+    <see type="transformercap:RunTransformation" relation="SeeAlso" />
+    <see type="workflow:Task" relation="SeeAlso" />
     <see type="workflow:TaskExecution" relation="SeeAlso" />
     <see type="workflow:CompositeTask" relation="SeeAlso" />
     <see type="workflow:Prerequisite" relation="SeeAlso" />

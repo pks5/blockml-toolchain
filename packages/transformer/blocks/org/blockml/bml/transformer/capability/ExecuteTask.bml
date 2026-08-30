@@ -1,0 +1,49 @@
+<!--
+  Transformer Capability — ExecuteTask
+  FQN: org.blockml.bml.transformer.capability.ExecuteTask
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:transformercap="org.blockml.bml.transformer.capability"
+  xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation"
+  xmlns:workflow="org.blockml.bml.transformer.workflow">
+
+  <name>ExecuteTask</name>
+  <type>transformercap:ExecuteTask</type>
+  <baseType>core:Capability</baseType>
+  <is>Process stage [2] — perform the Task against the model</is>
+
+  <documentation>
+    # Execute Task
+
+    Receive the running TaskExecution and the repository. Change BML model
+    source to perform the Task.
+
+    - Must not write TaskExecution metadata or any file under _transform/.
+    - Default Claude implementation: Edit on *.bml only; deny _transform/
+      and node_modules/; Bash limited to npx blockml.
+    - TS: pipeline/execute.ts.
+  </documentation>
+
+  <references>
+    <see type="transformerdocumentation:ArchitectureOverview" relation="SeeAlso" />
+    <see type="transformercap:PrepareExecution" relation="SeeAlso" />
+    <see type="transformercap:ReflectOnExecution" relation="SeeAlso" />
+    <see type="workflow:Task" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <runningFqn type="type:Text">
+      <documentation>Running TaskExecution FQN from Prepare. (required)</documentation>
+    </runningFqn>
+    <workspaceRoot type="type:Text">
+      <documentation>Repository root this stage may modify. (required)</documentation>
+    </workspaceRoot>
+  </properties>
+
+</block>

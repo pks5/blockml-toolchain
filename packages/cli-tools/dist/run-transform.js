@@ -1,6 +1,6 @@
-import { ClaudeCodeAgent, runTransformation, } from "@blockml/transformer";
+import { ClaudeCodeAgent, ClaudeReflectAgent, runTransformation, } from "@blockml/transformer";
 import { pushLines } from "./cli-style.js";
-export async function runTransform(executionFqn, rootDir, lines, usage, agent) {
+export async function runTransform(executionFqn, rootDir, lines, usage, agent, reflectAgent) {
     const fqn = executionFqn?.trim() ?? "";
     if (!fqn) {
         pushLines(lines, "Specify a TaskExecution FQN.", "error");
@@ -11,6 +11,7 @@ export async function runTransform(executionFqn, rootDir, lines, usage, agent) {
         workspaceRoot: rootDir,
         executionFqn: fqn,
         agent,
+        ...(reflectAgent ? { reflectAgent } : {}),
     });
     if (!result.success) {
         pushLines(lines, result.error, "error");
@@ -24,5 +25,11 @@ export function defaultTransformAgent(verbose = false) {
         return new ClaudeCodeAgent({ verbose: true });
     }
     return new ClaudeCodeAgent();
+}
+export function defaultReflectAgent(verbose = false) {
+    if (verbose) {
+        return new ClaudeReflectAgent({ verbose: true });
+    }
+    return new ClaudeReflectAgent();
 }
 //# sourceMappingURL=run-transform.js.map

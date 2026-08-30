@@ -17,9 +17,9 @@
   <is>A recorded execution of a workflow Task</is>
 
   <documentation>
-    One execution of a Task against the model. startedAt and finishedAt mark the
-    interval; task is the Task that ran; changedFiles lists paths modified during
-    the execution.
+    One execution of a Task against the model. startedAt and completedAt mark
+    the interval; task is the Task that ran; Persist writes changedFiles and
+    feedback onto this Block while it is still running.
   </documentation>
 
   <references>
@@ -42,15 +42,18 @@
     <completedAt type="type:DateTime">
       <documentation>When this execution finished.</documentation>
     </completedAt>
+    <feedback type="type:Text">
+      <documentation>Feedback from the task execution.</documentation>
+    </feedback>
+    <changedFiles type="type:Text[]">
+      <documentation>Workspace-relative filesystem paths modified during this execution.</documentation>
+    </changedFiles>
   </properties>
 
   <aggregations>
     <task type="workflow:Task">
       <documentation>The Task that was executed.</documentation>
     </task>
-    <changedFiles type="type:FilePathEntity[]">
-      <documentation>Filesystem paths modified during this execution.</documentation>
-    </changedFiles>
   </aggregations>
 
 </block>

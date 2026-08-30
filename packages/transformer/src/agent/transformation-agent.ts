@@ -4,7 +4,7 @@ export interface AgentExecutionRequest {
 }
 
 export type AgentExecutionResult =
-  | { success: true }
+  | { success: true; stdout?: string; stderr?: string }
   | { success: false; exitCode: number; error: string };
 
 export interface TransformationAgent {

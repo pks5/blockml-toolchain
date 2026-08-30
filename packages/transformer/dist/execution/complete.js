@@ -1,16 +1,11 @@
-import { bootstrapFullProjectRegistry, forkBom } from "@blockml/framework";
-import { formatDateTimeProperty, parseExecutionFqn } from "./lifecycle.js";
-import { getExecutionId, setCompletedAt, taskExecutionHasCompletedAt, } from "./properties.js";
+import { forkBom } from "@blockml/framework";
+import { formatDateTimeProperty } from "./lifecycle.js";
+import { loadRunningExecution } from "./load-running.js";
+import { setCompletedAt, taskExecutionHasCompletedAt, } from "./properties.js";
 import { applyExecutionIdentity, persistDocument, removeFile, rewriteInboundReferences, } from "./relocate.js";
-import { TransformError } from "./errors.js";
 export function completeExecution(workspaceRoot, started, now) {
-    const { registry } = bootstrapFullProjectRegistry({ rootDir: workspaceRoot });
-    const running = registry.get(started.runningFqn) ??
-        findRunningByExecutionId(registry, started.libraryFqn, started.executionId);
-    if (!running) {
-        throw new TransformError("execution", `Running TaskExecution ${started.runningFqn} was not found after agent execution`);
-    }
-    const forked = forkBom(running);
+    const { document, registry } = loadRunningExecution(workspaceRoot, started);
+    const forked = forkBom(document);
     const completedAtIso = formatDateTimeProperty(now);
     if (taskExecutionHasCompletedAt(registry)) {
         setCompletedAt(forked.block, completedAtIso);
@@ -31,21 +26,5 @@ export function completeExecution(workspaceRoot, started, now) {
         completedFilePath: forked.source.filePath,
         completedAtIso,
     };
-}
-function findRunningByExecutionId(registry, libraryFqn, executionId) {
-    if (!executionId) {
-        return undefined;
-    }
-    for (const fqn of registry.keys()) {
-        const parsed = parseExecutionFqn(fqn);
-        if (!parsed || parsed.libraryFqn !== libraryFqn || parsed.stage !== "running") {
-            continue;
-        }
-        const document = registry.get(fqn);
-        if (document && getExecutionId(document.block) === executionId) {
-            return document;
-        }
-    }
-    return undefined;
 }
 //# sourceMappingURL=complete.js.map

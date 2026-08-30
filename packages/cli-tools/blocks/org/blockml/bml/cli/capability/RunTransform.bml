@@ -29,14 +29,15 @@
   <documentation>
     # Execute blockml transform command
 
-    Resolves a pending TaskExecution, transitions it to running, invokes a
-    TransformationAgent, and on success relocates the same Block to completed.
-    Acquire an exclusive worktree lock first. If a transform is already running
-    in this worktree, exit 2 immediately (no wait). Resolve/config/busy →
-    exit 2. Agent/execution failure → exit 1 (execution remains in running;
-    lock is released). Missing FQN → exit 2.
+    Runs the five-stage transformer pipeline (Prepare, Execute, Reflect,
+    Persist, Finalize) for a pending TaskExecution. The CLI supplies Claude
+    Code workers for Execute and Reflect. Acquire an exclusive worktree
+    lock first. If a transform is already running in this worktree, exit 2
+    immediately (no wait). Resolve/config/busy → exit 2. Execute or Reflect
+    failure → exit 1 (execution remains in running; lock is released).
+    Missing FQN → exit 2.
 
-    --verbose streams the Claude Code session live to the terminal (thinking,
+    --verbose streams each Claude Code session live to the terminal (thinking,
     tool calls, assistant text). Claude-specific; the Transformer API stays generic.
   </documentation>
 

@@ -4,6 +4,8 @@ export interface AgentExecutionRequest {
 }
 export type AgentExecutionResult = {
     success: true;
+    stdout?: string;
+    stderr?: string;
 } | {
     success: false;
     exitCode: number;

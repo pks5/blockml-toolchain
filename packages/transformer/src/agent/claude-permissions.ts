@@ -1,12 +1,16 @@
 /**
- * Claude Code permissions for transform executions.
+ * Claude Code permissions for transformer stages.
  *
- * This is the only place to change what a non-interactive transform session
- * may do. `ClaudeCodeAgent` turns this object into CLI flags.
+ * Execute may change BML model source. It must not write TaskExecution
+ * files under `_transform/`. Bash is limited to the BlockML CLI.
+ *
+ * Reflect is read-only: Read/Glob/Grep only. Edit, Write, and Bash are denied.
+ *
+ * Path rules use `Edit(...)`. That specifier also covers Write.
+ * `Write(path)` is ignored by Claude Code.
  *
  * `-p` cannot answer permission prompts. `bypassPermissions` is the
- * unattended mode. To tighten later, switch `permissionMode` to `acceptEdits`
- * and rely on `allowedTools` as the allowlist.
+ * unattended mode; deny rules still apply.
  */
 export type ClaudePermissionMode =
   | "default"
@@ -18,27 +22,40 @@ export type ClaudePermissionMode =
 
 export interface ClaudeTransformPermissions {
   permissionMode: ClaudePermissionMode;
-  allowedTools: string[];
+  allowedTools: readonly string[];
+  disallowedTools?: readonly string[];
 }
 
-export const CLAUDE_TRANSFORM_PERMISSIONS: ClaudeTransformPermissions = {
+export const CLAUDE_EXECUTE_PERMISSIONS: ClaudeTransformPermissions = {
   permissionMode: "bypassPermissions",
   allowedTools: [
     "Read",
-    "Write",
-    "Edit",
     "Glob",
     "Grep",
-    "Bash",
+    "Edit(**/*.bml)",
+    "Bash(npx blockml *)",
   ],
+  disallowedTools: ["Edit(**/_transform/**)", "Edit(**/node_modules/**)"],
 };
 
+export const CLAUDE_REFLECT_PERMISSIONS: ClaudeTransformPermissions = {
+  permissionMode: "bypassPermissions",
+  allowedTools: ["Read", "Glob", "Grep"],
+  disallowedTools: ["Edit", "Write", "Bash"],
+};
+
+/** Alias of CLAUDE_EXECUTE_PERMISSIONS for existing imports. */
+export const CLAUDE_TRANSFORM_PERMISSIONS = CLAUDE_EXECUTE_PERMISSIONS;
+
 export function claudePermissionCliArgs(
-  permissions: ClaudeTransformPermissions = CLAUDE_TRANSFORM_PERMISSIONS,
+  permissions: ClaudeTransformPermissions = CLAUDE_EXECUTE_PERMISSIONS,
 ): string[] {
   const args: string[] = ["--permission-mode", permissions.permissionMode];
   for (const tool of permissions.allowedTools) {
     args.push("--allowedTools", tool);
+  }
+  for (const tool of permissions.disallowedTools ?? []) {
+    args.push("--disallowedTools", tool);
   }
   return args;
 }

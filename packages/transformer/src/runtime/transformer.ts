@@ -1,60 +1,47 @@
 import type { TransformationAgent } from "../agent/transformation-agent.js";
+import type { ReflectionAgent } from "../agent/reflection-agent.js";
 import { TransformError } from "../execution/errors.js";
-import { completeExecution } from "../execution/complete.js";
-import { resolvePendingExecution } from "../execution/resolve.js";
-import { startExecution, type StartedExecution } from "../execution/start.js";
+import { createDefaultPipeline } from "../pipeline/default-pipeline.js";
+import type {
+  StageContext,
+  TransformPipeline,
+  TransformRunResult,
+} from "../pipeline/types.js";
 import { acquireWorktreeLock } from "./worktree-lock.js";
+
+export type { TransformRunResult };
 
 export interface TransformerOptions {
   workspaceRoot: string;
-  agent: TransformationAgent;
+  agent?: TransformationAgent;
+  reflectAgent?: ReflectionAgent;
+  pipeline?: Partial<TransformPipeline>;
   now?: () => Date;
-}
-
-export interface TransformRunResult {
-  success: true;
-  pendingFqn: string;
-  runningFqn: string;
-  completedFqn: string;
-  sequence: number;
-  executionId: string | undefined;
 }
 
 export class Transformer {
   private readonly workspaceRoot: string;
-  private readonly agent: TransformationAgent;
+  private readonly pipeline: TransformPipeline;
   private readonly now: () => Date;
 
   constructor(options: TransformerOptions) {
     this.workspaceRoot = options.workspaceRoot;
-    this.agent = options.agent;
+    this.pipeline = resolvePipeline(options);
     this.now = options.now ?? (() => new Date());
   }
 
   async run(executionFqn: string): Promise<TransformRunResult> {
     const lock = await acquireWorktreeLock(this.workspaceRoot, executionFqn);
+    const context: StageContext = {
+      workspaceRoot: this.workspaceRoot,
+      now: this.now,
+    };
     try {
-      const resolved = resolvePendingExecution(executionFqn, this.workspaceRoot);
-      const started = startExecution(resolved, this.now());
-      const agentResult = await this.agent.execute({
-        workspaceRoot: this.workspaceRoot,
-        executionFqn: started.runningFqn,
-      });
-      if (!agentResult.success) {
-        throw new TransformError(
-          "execution",
-          agentResult.error || "Transformation agent failed",
-        );
-      }
-      const completed = completeExecution(this.workspaceRoot, started, this.now());
-      return {
-        success: true,
-        pendingFqn: executionFqn,
-        runningFqn: started.runningFqn,
-        completedFqn: completed.completedFqn,
-        sequence: started.sequence,
-        executionId: started.executionId,
-      };
+      const prepared = await this.pipeline.prepare.run(executionFqn, context);
+      const executed = await this.pipeline.execute.run(prepared, context);
+      const reflected = await this.pipeline.reflect.run(executed, context);
+      const persisted = await this.pipeline.persist.run(reflected, context);
+      return await this.pipeline.finalize.run(persisted, context);
     } finally {
       await lock.release();
     }
@@ -64,7 +51,9 @@ export class Transformer {
 export interface RunTransformationOptions {
   workspaceRoot: string;
   executionFqn: string;
-  agent: TransformationAgent;
+  agent?: TransformationAgent;
+  reflectAgent?: ReflectionAgent;
+  pipeline?: Partial<TransformPipeline>;
   now?: () => Date;
 }
 
@@ -77,8 +66,16 @@ export async function runTransformation(
 ): Promise<RunTransformationResult> {
   const transformerOptions: TransformerOptions = {
     workspaceRoot: options.workspaceRoot,
-    agent: options.agent,
   };
+  if (options.agent) {
+    transformerOptions.agent = options.agent;
+  }
+  if (options.reflectAgent) {
+    transformerOptions.reflectAgent = options.reflectAgent;
+  }
+  if (options.pipeline) {
+    transformerOptions.pipeline = options.pipeline;
+  }
   if (options.now) {
     transformerOptions.now = options.now;
   }
@@ -102,4 +99,33 @@ export async function runTransformation(
   }
 }
 
-export type { StartedExecution };
+function resolvePipeline(options: TransformerOptions): TransformPipeline {
+  if (options.agent) {
+    return {
+      ...createDefaultPipeline(options.agent, options.reflectAgent),
+      ...options.pipeline,
+    };
+  }
+  const pipeline = options.pipeline;
+  if (
+    pipeline?.prepare &&
+    pipeline.execute &&
+    pipeline.reflect &&
+    pipeline.persist &&
+    pipeline.finalize
+  ) {
+    return {
+      prepare: pipeline.prepare,
+      execute: pipeline.execute,
+      reflect: pipeline.reflect,
+      persist: pipeline.persist,
+      finalize: pipeline.finalize,
+    };
+  }
+  throw new TransformError(
+    "resolve",
+    "Transformer requires an agent or a complete pipeline",
+  );
+}
+
+export type { StartedExecution } from "../execution/start.js";

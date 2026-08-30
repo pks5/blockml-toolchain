@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import type { TransformationAgent } from "@blockml/transformer";
+import type { ReflectionAgent, TransformationAgent } from "@blockml/transformer";
 export interface ParsedArgs {
     command?: string;
     target?: string;
@@ -20,6 +20,7 @@ export interface ParsedArgs {
 }
 export interface CliRunOptions {
     transformAgent?: TransformationAgent;
+    reflectAgent?: ReflectionAgent;
 }
 interface PrintableDiagnostic {
     severity: string;

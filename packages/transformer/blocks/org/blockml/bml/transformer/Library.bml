@@ -10,6 +10,8 @@
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:transformer="org.blockml.bml.transformer"
+  xmlns:transformercap="org.blockml.bml.transformer.capability"
+  xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
   <name>Library</name>
@@ -18,7 +20,9 @@
   <is>The BlockML Transformer package library catalog</is>
 
   <documentation>
-    Canonical transformer specification for BlockML. Membership is defined
+    Canonical transformer specification for BlockML — five-stage process
+    over TaskExecution and workflow types. TypeScript in
+    packages/transformer/src/ implements this library. Membership is defined
     exclusively by this blocks list.
   </documentation>
 
@@ -63,6 +67,13 @@
         <workflow:Rule />
         <workflow:Task />
         <workflow:TaskExecution />
+        <transformercap:ExecuteTask />
+        <transformercap:FinalizeExecution />
+        <transformercap:PersistExecution />
+        <transformercap:PrepareExecution />
+        <transformercap:ReflectOnExecution />
+        <transformercap:RunTransformation />
+        <transformerdocumentation:ArchitectureOverview />
       </composition>
     </blocks>
   </aggregations>
