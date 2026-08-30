@@ -60,21 +60,12 @@
     <completedAt type="type:DateTime">
       <documentation>When this execution finished.</documentation>
     </completedAt>
-    <feedback type="type:Text">
-      <documentation>Feedback from the task execution.</documentation>
-    </feedback>
   </properties>
 
   <aggregations>
-    <task type="workflow:Task">
-      <documentation>The Task that was executed.</documentation>
-    </task>
-    <changedFiles type="type:FilePathEntity[]">
-      <documentation>Workspace-relative filesystem paths modified during this execution.</documentation>
-    </changedFiles>
-    <exception type="core:Exception">
-      <documentation>The Exception thrown during this execution, if any.</documentation>
-    </exception>
+    <stages type="workflow:Stage[]">
+      <documentation>The stages that ran in this execution.</documentation>
+    </stages>
   </aggregations>
 
 </block>
