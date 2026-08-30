@@ -5,14 +5,14 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:pending="org.blockml.bml.workspace._transform.pending"
+  xmlns:running="org.blockml.bml.workspace._transform.running"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
   <name>
-    PoemTest
+    T00001_PoemTest_20260830T232831
   </name>
   <type>
-    pending:PoemTest
+    running:T00001_PoemTest_20260830T232831
   </type>
   <baseType>
     workflow:ModelTransformation
@@ -25,17 +25,25 @@
       <value>eda93728-afb2-401d-a35c-0dc31b9932a4</value>
     </executionId>
     <status override="true" type="workflow:ExecutionStatus">
-      <value>Pending</value>
+      <value>Running</value>
     </status>
     <createdAt override="true" type="type:DateTime">
       <value>2026-08-30T01:40:20</value>
     </createdAt>
+    <sequence override="true" type="type:Integer">
+      <value>1</value>
+    </sequence>
+    <startedAt override="true" type="type:DateTime">
+      <value>2026-08-30T23:28:31</value>
+    </startedAt>
+    <baseCommit override="true" type="type:Text">
+      <value>8713c384c4980f4624dd858b73dec3e889a415fe</value>
+    </baseCommit>
   </properties>
   <aggregations>
     <stages override="true">
       <composition>
         <workflow:Stage>
-          <status>Pending</status>
           <task>
             <composition>
               <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.Poem.bml that contains a random poem. For each execution create a new poem." />
@@ -43,7 +51,6 @@
           </task>
         </workflow:Stage>
         <workflow:Stage>
-          <status>Pending</status>
           <task>
             <composition>
               <workflow:InstructionTask instructions="Translate the poem in org.blockml.bml.workspace.playground.Poem.bml to chinese." />
