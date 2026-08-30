@@ -9,8 +9,9 @@ export interface ParsedExecutionFqn {
   fqn: string;
 }
 
-const EXECUTION_FQN =
-  /^(.+)\._transform\.(pending|running|completed)\.([^.]+)$/;
+const EXECUTION_FQN = new RegExp(
+  `^(.+)\\._transform\\.(${LIFECYCLE_STAGES.join("|")})\\.([^.]+)$`,
+);
 
 export function isLifecycleStage(value: string): value is LifecycleStage {
   return (LIFECYCLE_STAGES as readonly string[]).includes(value);
@@ -82,7 +83,7 @@ export function executionFilePath(
   name: string,
 ): string {
   const replaced = currentPath.replace(
-    /\/_transform\/(pending|running|completed)\/[^/]+\.bml$/,
+    new RegExp(`/_transform/(${LIFECYCLE_STAGES.join("|")})/[^/]+\\.bml$`),
     `/_transform/${stage}/${name}.bml`,
   );
   if (replaced !== currentPath) {

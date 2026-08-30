@@ -47,6 +47,12 @@ export function pendingExecutionXml(opts: {
     `    <executionId override="true">`,
     `      <value>${executionId}</value>`,
     `    </executionId>`,
+    `    <status override="true" type="org.blockml.bml.transformer.workflow.ExecutionStatus">`,
+    `      <value>Pending</value>`,
+    `    </status>`,
+    `    <createdAt override="true" type="org.blockml.bml.type.DateTime">`,
+    `      <value>2026-08-30T01:17:02</value>`,
+    `    </createdAt>`,
     `  </properties>`,
     `  <aggregations>`,
     `    <task override="true">`,
@@ -62,7 +68,7 @@ export function pendingExecutionXml(opts: {
 
 export function historyExecutionXml(opts: {
   name: string;
-  stage: "running" | "completed";
+  stage: "running" | "succeeded" | "failed";
   executionId: string;
   sequence: number;
 }): string {

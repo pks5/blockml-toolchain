@@ -1,8 +1,5 @@
 import { TransformError } from "../execution/errors.js";
-import { collectWorktreeTrace } from "./worktree-trace.js";
-function isTransformLifecyclePath(path) {
-    return path.includes("/_transform/") || path.startsWith("_transform/");
-}
+import { collectWorktreeTrace, modelChangedFiles } from "./worktree-trace.js";
 export function createExecuteStage(agent) {
     return {
         async run(prepared, context) {
@@ -20,7 +17,7 @@ export function createExecuteStage(agent) {
                     stdout: agentResult.stdout ?? "",
                     stderr: agentResult.stderr ?? "",
                     diff: worktree.diff,
-                    changedFiles: worktree.changedFiles.filter((path) => !isTransformLifecyclePath(path)),
+                    changedFiles: modelChangedFiles(worktree.changedFiles),
                 },
             };
         },

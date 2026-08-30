@@ -31,10 +31,13 @@ export async function runTransform(
 
   if (!result.success) {
     pushLines(lines, result.error, "error");
+    if (result.terminalFqn) {
+      pushLines(lines, result.terminalFqn, "error");
+    }
     return result.exitCode;
   }
 
-  pushLines(lines, `Transformed ${result.completedFqn}`, "success");
+  pushLines(lines, `Transformed ${result.terminalFqn}`, "success");
   return 0;
 }
 

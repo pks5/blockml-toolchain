@@ -27,6 +27,9 @@ export function createPersistStage(): TransformStage<Reflection, PersistedExecut
         started: reflected.started,
         changedFiles: reflected.changedFiles,
         feedback: reflected.feedback,
+        ...(reflected.exceptionMessage !== undefined
+          ? { exceptionMessage: reflected.exceptionMessage }
+          : {}),
       });
       return { ...reflected };
     },

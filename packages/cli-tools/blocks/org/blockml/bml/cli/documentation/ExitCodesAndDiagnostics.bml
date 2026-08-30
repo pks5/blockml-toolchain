@@ -36,7 +36,7 @@
     Printed first. Then a status line:
     validate — Validation succeeded|failed. Tested N block(s), M with errors, W warning(s), R recommendation(s).
     compile — Compilation succeeded. Wrote …  |  Compilation failed with K error(s).
-    transform — Transformed COMPLETED-FQN  |  resolve/config error (exit 2) or agent failure (exit 1).
+    transform — Transformed SUCCEEDED-FQN  |  resolve/config error (exit 2) or failed execution (exit 1, FAILED-FQN).
     Uncaught exception — Internal CLI error: message (exit 2; no stack dump).
     runCli joins uncolored lines with newlines in CliResult.stderr.
     Direct bin entry uses WriteCliOutput (CLI24): red error, yellow warning,

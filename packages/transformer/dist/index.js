@@ -15,7 +15,7 @@ export { acquireWorktreeLock, transformLockPath, TRANSFORM_LOCK_STALE_MS, } from
 export { resolvePendingExecution } from "./execution/resolve.js";
 export { startExecution } from "./execution/start.js";
 export { persistReflection } from "./execution/persist.js";
-export { completeExecution } from "./execution/complete.js";
+export { finalizeExecution } from "./execution/complete.js";
 export { SequenceAllocator } from "./execution/sequence.js";
 export { parseExecutionFqn, generateExecutionName, padSequence, formatNameTimestamp, formatDateTimeProperty, } from "./execution/lifecycle.js";
 export { TASK_EXECUTION_FQN } from "./execution/constants.js";

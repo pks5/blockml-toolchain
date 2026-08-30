@@ -17,12 +17,13 @@
   <is>The lifecycle state of a TaskExecution</is>
 
   <documentation>
-    Closed set of states a `workflow:TaskExecution` can be in.
+    Closed set of states a `workflow:TaskExecution` can be in. The
+    `_transform` package of the Block matches this value:
 
-    * `Pending` — created, not yet started.
-    * `Running` — currently executing.
-    * `Failed` — finished unsuccessfully.
-    * `Succeeded` — finished successfully.
+    * `Pending` — created, not yet started (`_transform.pending`).
+    * `Running` — currently executing (`_transform.running`).
+    * `Failed` — finished unsuccessfully (`_transform.failed`).
+    * `Succeeded` — finished successfully (`_transform.succeeded`).
   </documentation>
 
   <references>

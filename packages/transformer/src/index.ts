@@ -78,7 +78,7 @@ export {
 export { resolvePendingExecution } from "./execution/resolve.js";
 export { startExecution } from "./execution/start.js";
 export { persistReflection } from "./execution/persist.js";
-export { completeExecution } from "./execution/complete.js";
+export { finalizeExecution } from "./execution/complete.js";
 export { SequenceAllocator } from "./execution/sequence.js";
 export {
   parseExecutionFqn,

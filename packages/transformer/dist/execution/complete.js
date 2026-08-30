@@ -1,30 +1,32 @@
 import { forkBom } from "@blockml/framework";
 import { formatDateTimeProperty } from "./lifecycle.js";
 import { loadRunningExecution } from "./load-running.js";
-import { setCompletedAt, taskExecutionHasCompletedAt, } from "./properties.js";
+import { setCompletedAt, setStatus, taskExecutionHasCompletedAt, } from "./properties.js";
 import { applyExecutionIdentity, persistDocument, removeFile, rewriteInboundReferences, } from "./relocate.js";
-export function completeExecution(workspaceRoot, started, now) {
+export function finalizeExecution(workspaceRoot, started, now, stage) {
     const { document, registry } = loadRunningExecution(workspaceRoot, started);
     const forked = forkBom(document);
     const completedAtIso = formatDateTimeProperty(now);
     if (taskExecutionHasCompletedAt(registry)) {
         setCompletedAt(forked.block, completedAtIso);
     }
+    setStatus(forked.block, stage === "succeeded" ? "Succeeded" : "Failed");
     const runningFilePath = forked.source.filePath;
-    const completedFqn = applyExecutionIdentity(forked, {
+    const terminalFqn = applyExecutionIdentity(forked, {
         libraryFqn: started.libraryFqn,
-        stage: "completed",
+        stage,
         name: started.generatedName,
     });
-    rewriteInboundReferences(registry, started.runningFqn, completedFqn, runningFilePath);
+    rewriteInboundReferences(registry, started.runningFqn, terminalFqn, runningFilePath);
     persistDocument(forked);
     if (runningFilePath !== forked.source.filePath) {
         removeFile(runningFilePath);
     }
     return {
-        completedFqn,
-        completedFilePath: forked.source.filePath,
+        terminalFqn,
+        terminalFilePath: forked.source.filePath,
         completedAtIso,
+        stage,
     };
 }
 //# sourceMappingURL=complete.js.map

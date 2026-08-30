@@ -39,7 +39,9 @@
     that changes BML only. Default Reflect is a second Claude worker
     (read-only; changedFiles + feedback). Default Persist writes those
     fields into the running TaskExecution. On success Finalize relocates
-    the Block to _transform.completed.
+    the Block to _transform.succeeded. On a started execution that fails,
+    Finalize relocates the Block to _transform.failed with a BML
+    exception and exits non-zero.
 
     Only one transform may run at a time in the same Git worktree. A second
     call fails immediately (exit 2) with no wait. Different worktrees may
@@ -47,7 +49,7 @@
 
     --verbose streams the agent session live (thinking, tools, text).
 
-    Failed agent execution leaves the Block in running and exits non-zero.]]></documentation>
+    Pending-contract violations never start the execution (exit 2).]]></documentation>
   <references>
     <see type="clidocumentation:Commands" relation="SeeAlso" />
     <see type="clicap:RunTransform" relation="SeeAlso" />

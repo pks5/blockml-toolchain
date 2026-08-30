@@ -15,6 +15,7 @@ export declare class Transformer {
     private readonly now;
     constructor(options: TransformerOptions);
     run(executionFqn: string): Promise<TransformRunResult>;
+    private runAfterPrepare;
 }
 export interface RunTransformationOptions {
     workspaceRoot: string;
@@ -25,11 +26,14 @@ export interface RunTransformationOptions {
     now?: () => Date;
 }
 export type RunTransformationResult = (TransformRunResult & {
+    success: true;
     exitCode: 0;
 }) | {
     success: false;
     exitCode: number;
     error: string;
+    terminalFqn?: string;
+    status?: TransformRunResult["status"];
 };
 export declare function runTransformation(options: RunTransformationOptions): Promise<RunTransformationResult>;
 export type { StartedExecution } from "../execution/start.js";

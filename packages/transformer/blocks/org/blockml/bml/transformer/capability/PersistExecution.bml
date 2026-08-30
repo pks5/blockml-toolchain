@@ -19,9 +19,13 @@
   <is>Process stage [4] — write reflection into the running TaskExecution</is>
 
   <documentation>
-    Write changedFiles and feedback into the running TaskExecution. Must
-    not relocate the Block. Default implementation is a deterministic BOM
-    writer. Skips I/O when changedFiles is empty and feedback is absent.
+    # Persist Execution
+
+    Write `changedFiles`, `feedback`, and on failure the BML exception into
+    the running TaskExecution. Must not relocate the Block.
+
+    Default implementation is a deterministic BOM writer. Skips I/O when
+    `changedFiles` is empty, `feedback` is absent, and no exception is present.
     TS: pipeline/persist.ts and execution/persist.ts.
   </documentation>
 

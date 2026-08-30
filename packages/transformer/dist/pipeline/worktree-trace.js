@@ -1,5 +1,11 @@
 import { spawnSync } from "node:child_process";
 import { resolve } from "node:path";
+export function isTransformLifecyclePath(path) {
+    return path.includes("/_transform/") || path.startsWith("_transform/");
+}
+export function modelChangedFiles(paths) {
+    return paths.filter((path) => !isTransformLifecyclePath(path));
+}
 export function collectWorktreeTrace(workspaceRoot) {
     const empty = { diff: "", changedFiles: [] };
     const toplevel = git(workspaceRoot, ["rev-parse", "--show-toplevel"]);

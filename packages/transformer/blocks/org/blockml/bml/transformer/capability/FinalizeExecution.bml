@@ -19,10 +19,10 @@
   <is>Process stage [5] — complete the TaskExecution lifecycle</is>
 
   <documentation>
-    Set completedAt and relocate the running TaskExecution to
-    _transform.completed. Default implementation is deterministic. On
-    Execute, Reflect, or Persist failure this stage does not run. TS:
-    pipeline/finalize.ts.
+    Set completedAt and status, then relocate the running TaskExecution to
+    _transform.succeeded or _transform.failed. Default implementation is
+    deterministic. Runs after every started execution, including Execute,
+    Reflect, or Persist failure. TS: pipeline/finalize.ts.
   </documentation>
 
   <references>
@@ -35,9 +35,12 @@
     <runningFqn type="type:Text">
       <documentation>Running TaskExecution FQN to finalize. (required)</documentation>
     </runningFqn>
-    <completedFqn type="type:Text">
-      <documentation>Completed TaskExecution FQN after relocation. (required)</documentation>
-    </completedFqn>
+    <terminalFqn type="type:Text">
+      <documentation>Succeeded or failed TaskExecution FQN after relocation. (required)</documentation>
+    </terminalFqn>
+    <status type="workflow:ExecutionStatus">
+      <documentation>Terminal status Succeeded or Failed. (required)</documentation>
+    </status>
     <completedAt type="type:DateTime">
       <documentation>When this execution finished. (required)</documentation>
     </completedAt>

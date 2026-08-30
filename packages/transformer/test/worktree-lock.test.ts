@@ -100,9 +100,9 @@ describe("worktree transform lock", () => {
       workspaceRoot: TMP,
       agent: failingAgent("agent failed"),
     });
-    await expect(failing.run(pendingFqn("TaskA"))).rejects.toMatchObject({
-      kind: "execution",
-    });
+    const result = await failing.run(pendingFqn("TaskA"));
+    expect(result.success).toBe(false);
+    expect(result.status).toBe("Failed");
     writePending(TMP, "TaskB");
     const next = await new Transformer({
       workspaceRoot: TMP,

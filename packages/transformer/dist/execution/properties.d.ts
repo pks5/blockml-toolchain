@@ -1,16 +1,22 @@
 import type { BlockDefinition } from "@blockml/bom";
 import { type TypeRegistry } from "@blockml/framework";
+import { type ExecutionStatusId } from "./constants.js";
 export declare function isTaskExecution(block: BlockDefinition, registry: TypeRegistry): boolean;
 export declare function hasTaskComposition(block: BlockDefinition): boolean;
+export declare function hasAggregationComposition(block: BlockDefinition, name: string): boolean;
+export declare function hasPropertyValue(block: BlockDefinition, name: string): boolean;
 export declare function getPropertyLiteral(block: BlockDefinition, name: string): unknown | undefined;
 export declare function getExecutionId(block: BlockDefinition): string | undefined;
 export declare function getSequence(block: BlockDefinition): number | undefined;
+export declare function getStatus(block: BlockDefinition): string | undefined;
 export declare function setOverrideProperty(block: BlockDefinition, name: string, typeFqn: string, value: unknown): void;
 export declare function setOverridePropertyList(block: BlockDefinition, name: string, typeFqn: string, values: readonly unknown[]): void;
 export declare function setSequence(block: BlockDefinition, sequence: number): void;
+export declare function setStatus(block: BlockDefinition, status: ExecutionStatusId): void;
 export declare function setStartedAt(block: BlockDefinition, iso: string): void;
 export declare function setCompletedAt(block: BlockDefinition, iso: string): void;
 export declare function setFeedback(block: BlockDefinition, feedback: string): void;
 export declare function setChangedFiles(block: BlockDefinition, paths: readonly string[]): void;
+export declare function setException(block: BlockDefinition, message: string): void;
 export declare function taskExecutionHasCompletedAt(registry: TypeRegistry): boolean;
 //# sourceMappingURL=properties.d.ts.map

@@ -31,8 +31,11 @@
     that changes BML model source only (not TaskExecution / _transform/).
     Default Reflect is a second Claude worker (read-only; changedFiles +
     feedback). Default Persist is a deterministic writer of those fields
-    onto the running TaskExecution. Transformation intelligence lives in
-    the model, not in the engine.
+    onto the running TaskExecution. After a started execution, Finalize
+    always relocates the Block to `_transform.succeeded` or
+    `_transform.failed` from the Success/Exception contract — never from
+    agent text. Transformation intelligence lives in the model, not in
+    the engine.
   </documentation>
 
   <references>

@@ -1,8 +1,10 @@
 import { forkBom } from "@blockml/framework";
+import type { TerminalLifecycleStage } from "./constants.js";
 import { formatDateTimeProperty } from "./lifecycle.js";
 import { loadRunningExecution } from "./load-running.js";
 import {
   setCompletedAt,
+  setStatus,
   taskExecutionHasCompletedAt,
 } from "./properties.js";
 import {
@@ -13,40 +15,44 @@ import {
 } from "./relocate.js";
 import type { StartedExecution } from "./start.js";
 
-export interface CompletedExecution {
-  completedFqn: string;
-  completedFilePath: string;
+export interface FinalizedExecution {
+  terminalFqn: string;
+  terminalFilePath: string;
   completedAtIso: string;
+  stage: TerminalLifecycleStage;
 }
 
-export function completeExecution(
+export function finalizeExecution(
   workspaceRoot: string,
   started: StartedExecution,
   now: Date,
-): CompletedExecution {
+  stage: TerminalLifecycleStage,
+): FinalizedExecution {
   const { document, registry } = loadRunningExecution(workspaceRoot, started);
   const forked = forkBom(document);
   const completedAtIso = formatDateTimeProperty(now);
   if (taskExecutionHasCompletedAt(registry)) {
     setCompletedAt(forked.block, completedAtIso);
   }
+  setStatus(forked.block, stage === "succeeded" ? "Succeeded" : "Failed");
 
   const runningFilePath = forked.source.filePath;
-  const completedFqn = applyExecutionIdentity(forked, {
+  const terminalFqn = applyExecutionIdentity(forked, {
     libraryFqn: started.libraryFqn,
-    stage: "completed",
+    stage,
     name: started.generatedName,
   });
 
-  rewriteInboundReferences(registry, started.runningFqn, completedFqn, runningFilePath);
+  rewriteInboundReferences(registry, started.runningFqn, terminalFqn, runningFilePath);
   persistDocument(forked);
   if (runningFilePath !== forked.source.filePath) {
     removeFile(runningFilePath);
   }
 
   return {
-    completedFqn,
-    completedFilePath: forked.source.filePath,
+    terminalFqn,
+    terminalFilePath: forked.source.filePath,
     completedAtIso,
+    stage,
   };
 }

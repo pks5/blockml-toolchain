@@ -1,4 +1,5 @@
 import type { TypeRegistry } from "@blockml/framework";
+import { SEQUENCE_STAGES } from "./constants.js";
 import { getSequence } from "./properties.js";
 import { parseExecutionFqn } from "./lifecycle.js";
 
@@ -6,7 +7,8 @@ import { parseExecutionFqn } from "./lifecycle.js";
  * Assigns the next library-scoped execution sequence.
  *
  * Reads the highest `sequence` already present under
- * `<library>._transform.running` and `<library>._transform.completed`.
+ * `<library>._transform.running`, `_transform.succeeded`, and
+ * `_transform.failed`. Pending executions are ignored.
  * A file lock can wrap `nextSequence` later without changing callers.
  */
 export class SequenceAllocator {
@@ -17,7 +19,7 @@ export class SequenceAllocator {
       if (!parsed || parsed.libraryFqn !== libraryFqn) {
         continue;
       }
-      if (parsed.stage !== "running" && parsed.stage !== "completed") {
+      if (!(SEQUENCE_STAGES as readonly string[]).includes(parsed.stage)) {
         continue;
       }
       const document = registry.get(fqn);

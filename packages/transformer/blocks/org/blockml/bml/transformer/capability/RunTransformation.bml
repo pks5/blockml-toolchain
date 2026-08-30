@@ -36,9 +36,9 @@
     <executionFqn type="type:Text">
       <documentation>Pending TaskExecution FQN under _transform.pending. (required)</documentation>
     </executionFqn>
-    <completedFqn type="type:Text">
-      <documentation>Completed TaskExecution FQN after Finalize succeeds. (required)</documentation>
-    </completedFqn>
+    <terminalFqn type="type:Text">
+      <documentation>Succeeded or failed TaskExecution FQN after Finalize. (required)</documentation>
+    </terminalFqn>
   </properties>
 
 </block>

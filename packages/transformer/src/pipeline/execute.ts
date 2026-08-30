@@ -6,11 +6,7 @@ import type {
   StageContext,
   TransformStage,
 } from "./types.js";
-import { collectWorktreeTrace } from "./worktree-trace.js";
-
-function isTransformLifecyclePath(path: string): boolean {
-  return path.includes("/_transform/") || path.startsWith("_transform/");
-}
+import { collectWorktreeTrace, modelChangedFiles } from "./worktree-trace.js";
 
 export function createExecuteStage(
   agent: TransformationAgent,
@@ -37,7 +33,7 @@ export function createExecuteStage(
           stdout: agentResult.stdout ?? "",
           stderr: agentResult.stderr ?? "",
           diff: worktree.diff,
-          changedFiles: worktree.changedFiles.filter((path) => !isTransformLifecyclePath(path)),
+          changedFiles: modelChangedFiles(worktree.changedFiles),
         },
       };
     },

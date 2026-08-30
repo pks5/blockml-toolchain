@@ -1,17 +1,17 @@
 <!--Workspace pending transform — JokeTest
-  FQN: org.blockml.bml.workspace._transform.completed.T00001_JokeTest_20260830T014020-->
+  FQN: org.blockml.bml.workspace._transform.succeeded.T00001_JokeTest_20260830T014020-->
 <block xmlns="http://blockml.org/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
-  xmlns:completed="org.blockml.bml.workspace._transform.completed"
+  xmlns:succeeded="org.blockml.bml.workspace._transform.succeeded"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
   <name>
     T00005_LibTest_20260830T044427
   </name>
   <type>
-    completed:T00005_LibTest_20260830T044427
+    succeeded:T00005_LibTest_20260830T044427
   </type>
   <baseType>
     workflow:TaskExecution

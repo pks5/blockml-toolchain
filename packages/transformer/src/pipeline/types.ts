@@ -1,4 +1,5 @@
 import type { StartedExecution } from "../execution/start.js";
+import type { TerminalExecutionStatus } from "../execution/constants.js";
 
 export interface StageContext {
   workspaceRoot: string;
@@ -25,20 +26,26 @@ export interface ExecutedWork extends PreparedExecution {
   trace: ExecutionTrace;
 }
 
+export type ExecutionOutcome = "succeeded" | "failed";
+
 export interface Reflection extends ExecutedWork {
   changedFiles: readonly string[];
   feedback: string | undefined;
+  outcome: ExecutionOutcome;
+  exceptionMessage?: string;
 }
 
 export interface PersistedExecution extends Reflection {}
 
 export interface TransformRunResult {
-  success: true;
+  success: boolean;
   pendingFqn: string;
   runningFqn: string;
-  completedFqn: string;
+  terminalFqn: string;
+  status: TerminalExecutionStatus;
   sequence: number;
   executionId: string | undefined;
+  error?: string;
 }
 
 export interface TransformPipeline {

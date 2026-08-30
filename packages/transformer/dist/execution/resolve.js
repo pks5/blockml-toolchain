@@ -2,7 +2,15 @@ import { bootstrapFullProjectRegistry, } from "@blockml/framework";
 import { TASK_EXECUTION_FQN } from "./constants.js";
 import { TransformError } from "./errors.js";
 import { parseExecutionFqn } from "./lifecycle.js";
-import { hasTaskComposition, isTaskExecution } from "./properties.js";
+import { getExecutionId, getPropertyLiteral, getStatus, hasAggregationComposition, hasPropertyValue, hasTaskComposition, isTaskExecution, } from "./properties.js";
+const REQUIRED_PRESENT = ["executionId", "createdAt"];
+const FORBIDDEN_PROPERTIES = [
+    "startedAt",
+    "completedAt",
+    "sequence",
+    "feedback",
+    "changedFiles",
+];
 export function resolvePendingExecution(executionFqn, workspaceRoot) {
     const { registry } = bootstrapFullProjectRegistry({ rootDir: workspaceRoot });
     return resolvePendingExecutionInRegistry(executionFqn, registry);
@@ -19,9 +27,7 @@ export function resolvePendingExecutionInRegistry(executionFqn, registry) {
     if (!isTaskExecution(document.block, registry)) {
         throw new TransformError("resolve", `${executionFqn} is not a ${TASK_EXECUTION_FQN}`);
     }
-    if (!hasTaskComposition(document.block)) {
-        throw new TransformError("resolve", `${executionFqn} has no configured task aggregation`);
-    }
+    assertPendingContract(executionFqn, document.block);
     return {
         fqn: executionFqn,
         libraryFqn: parsed.libraryFqn,
@@ -29,5 +35,33 @@ export function resolvePendingExecutionInRegistry(executionFqn, registry) {
         document,
         registry,
     };
+}
+function assertPendingContract(fqn, block) {
+    if (!hasTaskComposition(block)) {
+        throw new TransformError("resolve", `${fqn} has no configured task aggregation`);
+    }
+    if (getStatus(block) !== "Pending") {
+        throw new TransformError("resolve", `${fqn} must have status=Pending before it can be started`);
+    }
+    if (!getExecutionId(block)) {
+        throw new TransformError("resolve", `${fqn} must have executionId set before it can be started`);
+    }
+    const createdAt = getPropertyLiteral(block, "createdAt");
+    if (typeof createdAt !== "string" || createdAt.length === 0) {
+        throw new TransformError("resolve", `${fqn} must have createdAt set before it can be started`);
+    }
+    for (const name of REQUIRED_PRESENT) {
+        if (!hasPropertyValue(block, name)) {
+            throw new TransformError("resolve", `${fqn} must have ${name} set before it can be started`);
+        }
+    }
+    for (const name of FORBIDDEN_PROPERTIES) {
+        if (hasPropertyValue(block, name)) {
+            throw new TransformError("resolve", `${fqn} must not have ${name} set while pending`);
+        }
+    }
+    if (hasAggregationComposition(block, "exception")) {
+        throw new TransformError("resolve", `${fqn} must not have exception set while pending`);
+    }
 }
 //# sourceMappingURL=resolve.js.map

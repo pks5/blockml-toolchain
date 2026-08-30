@@ -13,6 +13,9 @@ export function createPersistStage() {
                 started: reflected.started,
                 changedFiles: reflected.changedFiles,
                 feedback: reflected.feedback,
+                ...(reflected.exceptionMessage !== undefined
+                    ? { exceptionMessage: reflected.exceptionMessage }
+                    : {}),
             });
             return { ...reflected };
         },

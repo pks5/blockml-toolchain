@@ -1,6 +1,6 @@
 import { dirname, join } from "node:path";
 import { LIFECYCLE_STAGES, TRANSFORM_SEGMENT } from "./constants.js";
-const EXECUTION_FQN = /^(.+)\._transform\.(pending|running|completed)\.([^.]+)$/;
+const EXECUTION_FQN = new RegExp(`^(.+)\\._transform\\.(${LIFECYCLE_STAGES.join("|")})\\.([^.]+)$`);
 export function isLifecycleStage(value) {
     return LIFECYCLE_STAGES.includes(value);
 }
@@ -46,7 +46,7 @@ export function generateExecutionName(sequence, originalName, startedAt) {
     return `T${padSequence(sequence)}_${safe}_${formatNameTimestamp(startedAt)}`;
 }
 export function executionFilePath(currentPath, stage, name) {
-    const replaced = currentPath.replace(/\/_transform\/(pending|running|completed)\/[^/]+\.bml$/, `/_transform/${stage}/${name}.bml`);
+    const replaced = currentPath.replace(new RegExp(`/_transform/(${LIFECYCLE_STAGES.join("|")})/[^/]+\\.bml$`), `/_transform/${stage}/${name}.bml`);
     if (replaced !== currentPath) {
         return replaced;
     }

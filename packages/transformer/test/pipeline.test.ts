@@ -59,6 +59,7 @@ describe("Transformer pipeline", () => {
               ...executed,
               changedFiles: ["model.bml"],
               feedback: "ok",
+              outcome: "succeeded" as const,
             };
           },
         },
@@ -82,6 +83,7 @@ describe("Transformer pipeline", () => {
               ...executed,
               changedFiles: ["model.bml"],
               feedback: "ok",
+              outcome: "succeeded" as const,
             };
           },
         },
@@ -91,7 +93,8 @@ describe("Transformer pipeline", () => {
               success: true as const,
               pendingFqn: pendingFqn("JokeTest"),
               runningFqn: `com.example.model._transform.running.${generated}`,
-              completedFqn: `com.example.model._transform.completed.${generated}`,
+              terminalFqn: `com.example.model._transform.succeeded.${generated}`,
+              status: "Succeeded" as const,
               sequence: 1,
               executionId: "fixture",
             };
@@ -108,7 +111,7 @@ describe("Transformer pipeline", () => {
     expect(existsSync(runningPath)).toBe(true);
     expect(
       existsSync(
-        join(TMP, `blocks/com/example/model/_transform/completed/${generated}.bml`),
+        join(TMP, `blocks/com/example/model/_transform/succeeded/${generated}.bml`),
       ),
     ).toBe(false);
     const running = readFileSync(runningPath, "utf8");
@@ -129,6 +132,7 @@ describe("Transformer pipeline", () => {
               ...executed,
               changedFiles: ["model.bml"],
               feedback: "ok",
+              outcome: "succeeded" as const,
             };
           },
         },
@@ -136,13 +140,13 @@ describe("Transformer pipeline", () => {
       now: () => FIXED_NOW,
     });
     await transformer.run(pendingFqn("JokeTest"));
-    const completed = readFileSync(
-      join(TMP, `blocks/com/example/model/_transform/completed/${generated}.bml`),
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_transform/succeeded/${generated}.bml`),
       "utf8",
     );
-    expect(completed).toContain("model.bml");
-    expect(completed).toContain(">ok</value>");
-    expect(completed).not.toContain(`_transform/running/${generated}`);
+    expect(succeeded).toContain("model.bml");
+    expect(succeeded).toContain(">ok</value>");
+    expect(succeeded).not.toContain(`_transform/running/${generated}`);
   });
 
   it("does not write changedFiles or feedback when reflection is empty", async () => {
@@ -154,17 +158,18 @@ describe("Transformer pipeline", () => {
       now: () => FIXED_NOW,
     });
     await transformer.run(pendingFqn("JokeTest"));
-    const completed = readFileSync(
-      join(TMP, `blocks/com/example/model/_transform/completed/${generated}.bml`),
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_transform/succeeded/${generated}.bml`),
       "utf8",
     );
-    expect(completed).not.toContain("<changedFiles");
-    expect(completed).not.toContain("<feedback");
+    expect(succeeded).not.toContain("<changedFiles");
+    expect(succeeded).not.toContain("<feedback");
   });
 
-  it("does not run reflect, persist, or finalize when execute fails", async () => {
+  it("skips reflect and still persists and finalizes when execute fails", async () => {
     writePending();
     const order: string[] = [];
+    const generated = "T00001_JokeTest_20260830T011702";
     const transformer = new Transformer({
       workspaceRoot: TMP,
       pipeline: tracingPipeline(
@@ -177,10 +182,25 @@ describe("Transformer pipeline", () => {
       ),
       now: () => FIXED_NOW,
     });
-    await expect(transformer.run(pendingFqn("JokeTest"))).rejects.toThrow(
-      /execute failed/,
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(false);
+    expect(result.status).toBe("Failed");
+    expect(result.error).toMatch(/execute failed/);
+    expect(order).toEqual(["prepare", "execute", "persist", "finalize"]);
+    const failedPath = join(
+      TMP,
+      `blocks/com/example/model/_transform/failed/${generated}.bml`,
     );
-    expect(order).toEqual(["prepare", "execute"]);
+    expect(existsSync(failedPath)).toBe(true);
+    const failed = readFileSync(failedPath, "utf8");
+    expect(failed).toContain("execute failed");
+    expect(failed).toContain("<exception");
+    expect(failed).toContain(">Failed</value>");
+    expect(
+      existsSync(
+        join(TMP, `blocks/com/example/model/_transform/running/${generated}.bml`),
+      ),
+    ).toBe(false);
   });
 
   it("rejects construction without an agent or a complete pipeline", () => {
@@ -214,9 +234,10 @@ describe("Transformer pipeline", () => {
     expect(received?.changedFiles).toEqual([]);
   });
 
-  it("does not run persist or finalize when reflect fails", async () => {
+  it("still persists and finalizes when reflect fails", async () => {
     writePending();
     const order: string[] = [];
+    const generated = "T00001_JokeTest_20260830T011702";
     const base = createDefaultPipeline(successfulAgent(), {
       async reflect() {
         return { success: false, exitCode: 1, error: "reflect failed" };
@@ -258,8 +279,15 @@ describe("Transformer pipeline", () => {
       },
       now: () => FIXED_NOW,
     });
-    await expect(transformer.run(pendingFqn("JokeTest"))).rejects.toThrow(/reflect failed/);
-    expect(order).toEqual(["prepare", "execute", "reflect"]);
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(false);
+    expect(result.status).toBe("Failed");
+    expect(order).toEqual(["prepare", "execute", "reflect", "persist", "finalize"]);
+    expect(
+      existsSync(
+        join(TMP, `blocks/com/example/model/_transform/failed/${generated}.bml`),
+      ),
+    ).toBe(true);
   });
 });
 

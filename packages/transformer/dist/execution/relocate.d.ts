@@ -1,6 +1,6 @@
 import type { BomDocument } from "@blockml/bom";
 import { type TypeRegistry } from "@blockml/framework";
-import type { LifecycleStage } from "./constants.js";
+import { type LifecycleStage } from "./constants.js";
 export interface RelocateIdentity {
     libraryFqn: string;
     stage: LifecycleStage;

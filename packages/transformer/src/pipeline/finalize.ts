@@ -1,4 +1,4 @@
-import { completeExecution } from "../execution/complete.js";
+import { finalizeExecution } from "../execution/complete.js";
 import type {
   PersistedExecution,
   StageContext,
@@ -15,18 +15,24 @@ export function createFinalizeStage(): TransformStage<
       persisted: PersistedExecution,
       context: StageContext,
     ): Promise<TransformRunResult> {
-      const completed = completeExecution(
+      const stage = persisted.outcome === "failed" ? "failed" : "succeeded";
+      const finalized = finalizeExecution(
         context.workspaceRoot,
         persisted.started,
         context.now(),
+        stage,
       );
       return {
-        success: true,
+        success: persisted.outcome !== "failed",
         pendingFqn: persisted.pendingFqn,
         runningFqn: persisted.started.runningFqn,
-        completedFqn: completed.completedFqn,
+        terminalFqn: finalized.terminalFqn,
+        status: stage === "succeeded" ? "Succeeded" : "Failed",
         sequence: persisted.started.sequence,
         executionId: persisted.started.executionId,
+        ...(persisted.exceptionMessage !== undefined
+          ? { error: persisted.exceptionMessage }
+          : {}),
       };
     },
   };

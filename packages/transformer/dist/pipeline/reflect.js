@@ -6,6 +6,7 @@ export function createNoopReflectStage() {
                 ...executed,
                 changedFiles: [],
                 feedback: undefined,
+                outcome: "succeeded",
             };
         },
     };
@@ -28,6 +29,7 @@ export function createReflectStage(agent) {
                 ...executed,
                 changedFiles,
                 feedback: result.feedback,
+                outcome: "succeeded",
             };
         },
     };

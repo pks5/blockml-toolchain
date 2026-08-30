@@ -1,8 +1,10 @@
+import type { TerminalLifecycleStage } from "./constants.js";
 import type { StartedExecution } from "./start.js";
-export interface CompletedExecution {
-    completedFqn: string;
-    completedFilePath: string;
+export interface FinalizedExecution {
+    terminalFqn: string;
+    terminalFilePath: string;
     completedAtIso: string;
+    stage: TerminalLifecycleStage;
 }
-export declare function completeExecution(workspaceRoot: string, started: StartedExecution, now: Date): CompletedExecution;
+export declare function finalizeExecution(workspaceRoot: string, started: StartedExecution, now: Date, stage: TerminalLifecycleStage): FinalizedExecution;
 //# sourceMappingURL=complete.d.ts.map

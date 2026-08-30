@@ -15,9 +15,12 @@ export async function runTransform(executionFqn, rootDir, lines, usage, agent, r
     });
     if (!result.success) {
         pushLines(lines, result.error, "error");
+        if (result.terminalFqn) {
+            pushLines(lines, result.terminalFqn, "error");
+        }
         return result.exitCode;
     }
-    pushLines(lines, `Transformed ${result.completedFqn}`, "success");
+    pushLines(lines, `Transformed ${result.terminalFqn}`, "success");
     return 0;
 }
 export function defaultTransformAgent(verbose = false) {

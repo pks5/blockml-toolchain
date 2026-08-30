@@ -7,9 +7,12 @@ import type {
 import { collectBaseTypeChain, type TypeRegistry } from "@blockml/framework";
 import {
   DATETIME_TYPE_FQN,
+  EXECUTION_EXCEPTION_FQN,
+  EXECUTION_STATUS_FQN,
   INTEGER_TYPE_FQN,
   TASK_EXECUTION_FQN,
   TEXT_TYPE_FQN,
+  type ExecutionStatusId,
 } from "./constants.js";
 
 export function isTaskExecution(
@@ -25,11 +28,32 @@ export function isTaskExecution(
 }
 
 export function hasTaskComposition(block: BlockDefinition): boolean {
-  const task = block.members.find(
+  return hasAggregationComposition(block, "task");
+}
+
+export function hasAggregationComposition(
+  block: BlockDefinition,
+  name: string,
+): boolean {
+  const aggregation = block.members.find(
     (member): member is AggregationDefinition =>
-      member.kind === "aggregation" && member.name === "task",
+      member.kind === "aggregation" && member.name === name,
   );
-  return (task?.composition?.children.length ?? 0) > 0;
+  return (aggregation?.composition?.children.length ?? 0) > 0;
+}
+
+export function hasPropertyValue(block: BlockDefinition, name: string): boolean {
+  const member = block.members.find(
+    (entry): entry is PropertyDefinition =>
+      entry.kind === "property" && entry.name === name,
+  );
+  if (!member) {
+    return false;
+  }
+  if (member.value !== undefined) {
+    return true;
+  }
+  return (member.values?.length ?? 0) > 0;
 }
 
 export function getPropertyLiteral(
@@ -58,6 +82,15 @@ export function getExecutionId(block: BlockDefinition): string | undefined {
 export function getSequence(block: BlockDefinition): number | undefined {
   const value = getPropertyLiteral(block, "sequence");
   return typeof value === "number" && Number.isFinite(value) ? value : undefined;
+}
+
+export function getStatus(block: BlockDefinition): string | undefined {
+  const value = getPropertyLiteral(block, "status");
+  if (typeof value !== "string") {
+    return undefined;
+  }
+  const separator = value.lastIndexOf("::");
+  return separator >= 0 ? value.slice(separator + 2) : value;
 }
 
 export function setOverrideProperty(
@@ -128,8 +161,26 @@ function upsertProperty(block: BlockDefinition, property: PropertyDefinition): v
   block.members.splice(insertAt, 0, property);
 }
 
+function upsertAggregation(
+  block: BlockDefinition,
+  aggregation: AggregationDefinition,
+): void {
+  const existing = block.members.findIndex(
+    (member) => member.kind === "aggregation" && member.name === aggregation.name,
+  );
+  if (existing >= 0) {
+    block.members[existing] = aggregation;
+    return;
+  }
+  block.members.push(aggregation);
+}
+
 export function setSequence(block: BlockDefinition, sequence: number): void {
   setOverrideProperty(block, "sequence", INTEGER_TYPE_FQN, sequence);
+}
+
+export function setStatus(block: BlockDefinition, status: ExecutionStatusId): void {
+  setOverrideProperty(block, "status", EXECUTION_STATUS_FQN, status);
 }
 
 export function setStartedAt(block: BlockDefinition, iso: string): void {
@@ -149,6 +200,35 @@ export function setChangedFiles(
   paths: readonly string[],
 ): void {
   setOverridePropertyList(block, "changedFiles", TEXT_TYPE_FQN, paths);
+}
+
+export function setException(block: BlockDefinition, message: string): void {
+  const aggregation: AggregationDefinition = {
+    kind: "aggregation",
+    name: "exception",
+    override: true,
+    authoredInAggregationsSection: true,
+    composition: {
+      aggregationName: "exception",
+      children: [
+        {
+          kind: "blockInstance",
+          instance: {
+            typeFqn: EXECUTION_EXCEPTION_FQN,
+            memberValues: {
+              message: {
+                kind: "literal",
+                value: message,
+                typeFqn: TEXT_TYPE_FQN,
+                authoredPlacement: "element",
+              },
+            },
+          },
+        },
+      ],
+    },
+  };
+  upsertAggregation(block, aggregation);
 }
 
 export function taskExecutionHasCompletedAt(registry: TypeRegistry): boolean {

@@ -19,9 +19,14 @@
   <is>Process stage [1] — create a running TaskExecution</is>
 
   <documentation>
-    Resolve a pending TaskExecution, assign sequence and startedAt, relocate
-    it to _transform.running. Default implementation is deterministic.
-    TS: pipeline/prepare.ts.
+    # Prepare Execution
+
+    1. Validate the pending contract: `status=Pending`, `task`, `executionId`,
+       and `createdAt` must be set; start/finish fields must be absent.
+    2. Assign `sequence` and `startedAt`, set `status=Running`.
+    3. Relocate the Block to `_transform.running`.
+
+    Default implementation is deterministic. TS: pipeline/prepare.ts.
   </documentation>
 
   <references>

@@ -23,14 +23,17 @@
     stages; it does not implement them.
 
     Lifecycle locations of workflow:TaskExecution (pending / running /
-    completed) are not these process stages.
+    succeeded / failed) are not these process stages. status on the Block
+    matches the package: Pending, Running, Succeeded, Failed.
 
     A stage implementation may be deterministic, an agent, or mixed. The
     pipeline contract stays the same when an implementation is swapped.
 
     [1] Prepare Execution — transformercap:PrepareExecution
-        Default: deterministic. Resolve a pending TaskExecution, assign
-        sequence and startedAt, relocate to _transform.running.
+        Default: deterministic. Validate the pending contract (status=
+        Pending, task, executionId, createdAt; no start/finish fields),
+        assign sequence and startedAt, set status=Running, relocate to
+        _transform.running. If the contract is violated, do not start.
 
     [2] Execute Task — transformercap:ExecuteTask
         Default: TransformationAgent (Claude Code at the CLI). Receives
@@ -44,17 +47,20 @@
         Default: Claude Worker #2. Must not change the model. Receives the
         Execute trace (stdout plus git diff) and returns changedFiles and
         feedback. Claude default: Read/Glob/Grep only; deny Edit, Write,
-        and Bash. Tests without a reflectAgent keep a no-op.
+        and Bash. Tests without a reflectAgent keep a no-op. Skipped when
+        Execute throws; feedback never decides Succeeded vs Failed.
 
     [4] Persist Execution — transformercap:PersistExecution
         Default: deterministic. Reloads the running TaskExecution and
-        writes changedFiles and feedback. Must not relocate the Block.
-        Skips I/O when both are empty.
+        writes changedFiles, feedback, and on failure a BML exception.
+        Must not relocate the Block. Skips I/O when all of those are empty.
 
     [5] Finalize Execution — transformercap:FinalizeExecution
-        Default: deterministic. Sets completedAt and relocates running to
-        completed. On Execute failure this stage does not run; the Block
-        stays in running and the lock is released.
+        Default: deterministic. Always runs after a started execution.
+        Success: status=Succeeded, completedAt, no exception, relocate
+        running to succeeded. Failure: status=Failed, completedAt,
+        exception present, relocate running to failed. Technical errors
+        become workflow:ExecutionException.
 
     TypeScript:
     • runtime/transformer.ts → transformercap:RunTransformation

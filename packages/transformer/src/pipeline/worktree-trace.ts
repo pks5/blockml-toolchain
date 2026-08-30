@@ -1,6 +1,14 @@
 import { spawnSync } from "node:child_process";
 import { resolve } from "node:path";
 
+export function isTransformLifecyclePath(path: string): boolean {
+  return path.includes("/_transform/") || path.startsWith("_transform/");
+}
+
+export function modelChangedFiles(paths: readonly string[]): string[] {
+  return paths.filter((path) => !isTransformLifecyclePath(path));
+}
+
 export interface WorktreeTrace {
   diff: string;
   changedFiles: readonly string[];

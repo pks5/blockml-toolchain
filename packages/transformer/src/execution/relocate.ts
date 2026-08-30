@@ -3,7 +3,7 @@ import { forkBom, rootFqnByFilePath, type TypeRegistry } from "@blockml/framewor
 import { serialize } from "@blockml/serializer";
 import { mkdirSync, unlinkSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
-import type { LifecycleStage } from "./constants.js";
+import { LIFECYCLE_STAGES, type LifecycleStage } from "./constants.js";
 import {
   executionFilePath,
   executionFqn,
@@ -33,18 +33,14 @@ export function applyExecutionIdentity(
   document.source.filePath = nextPath;
 
   const bindings = { ...(document.source.namespaceBindings ?? {}) };
-  for (const stage of ["pending", "running", "completed"] as const) {
+  for (const stage of LIFECYCLE_STAGES) {
     delete bindings[stage];
   }
   for (const [prefix, uri] of Object.entries(bindings)) {
-    if (uri === lifecyclePackageFqn(identity.libraryFqn, "pending")) {
-      delete bindings[prefix];
-    }
-    if (uri === lifecyclePackageFqn(identity.libraryFqn, "running")) {
-      delete bindings[prefix];
-    }
-    if (uri === lifecyclePackageFqn(identity.libraryFqn, "completed")) {
-      delete bindings[prefix];
+    for (const stage of LIFECYCLE_STAGES) {
+      if (uri === lifecyclePackageFqn(identity.libraryFqn, stage)) {
+        delete bindings[prefix];
+      }
     }
   }
   bindings[identity.stage] = nextPackage;

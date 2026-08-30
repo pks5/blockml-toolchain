@@ -33,9 +33,10 @@
     Persist, Finalize) for a pending TaskExecution. The CLI supplies Claude
     Code workers for Execute and Reflect. Acquire an exclusive worktree
     lock first. If a transform is already running in this worktree, exit 2
-    immediately (no wait). Resolve/config/busy → exit 2. Execute or Reflect
-    failure → exit 1 (execution remains in running; lock is released).
-    Missing FQN → exit 2.
+    immediately (no wait). Resolve/config/busy → exit 2. After a started
+    execution, Finalize always relocates to succeeded (exit 0) or failed
+    (exit 1, BML exception recorded). Pending-contract violations do not
+    start (exit 2). Missing FQN → exit 2.
 
     --verbose streams each Claude Code session live to the terminal (thinking,
     tool calls, assistant text). Claude-specific; the Transformer API stays generic.

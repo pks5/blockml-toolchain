@@ -69,12 +69,12 @@ describe("sequence allocation", () => {
     expect(result.sequence).toBe(1);
   });
 
-  it("increments from existing running and completed sequences", async () => {
+  it("increments from existing running and succeeded sequences", async () => {
     writeProject(TMP, {
-      "blocks/com/example/model/_transform/completed/T00007_Prior_20260101T000000.bml":
+      "blocks/com/example/model/_transform/succeeded/T00007_Prior_20260101T000000.bml":
         historyExecutionXml({
           name: "T00007_Prior_20260101T000000",
-          stage: "completed",
+          stage: "succeeded",
           executionId: "aaaaaaaa-0000-4000-8000-000000000007",
           sequence: 7,
         }),
@@ -105,7 +105,7 @@ describe("Transformer lifecycle", () => {
     rmSync(TMP, { recursive: true, force: true });
   });
 
-  it("moves pending to running then completed, preserving executionId and references", async () => {
+  it("moves pending to running then succeeded, preserving executionId and references", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
@@ -126,9 +126,10 @@ describe("Transformer lifecycle", () => {
     expect(result.runningFqn).toBe(
       `com.example.model._transform.running.${generated}`,
     );
-    expect(result.completedFqn).toBe(
-      `com.example.model._transform.completed.${generated}`,
+    expect(result.terminalFqn).toBe(
+      `com.example.model._transform.succeeded.${generated}`,
     );
+    expect(result.status).toBe("Succeeded");
     expect(calls).toEqual([result.runningFqn]);
 
     expect(
@@ -139,27 +140,29 @@ describe("Transformer lifecycle", () => {
         join(TMP, `blocks/com/example/model/_transform/running/${generated}.bml`),
       ),
     ).toBe(false);
-    const completedPath = join(
+    const succeededPath = join(
       TMP,
-      `blocks/com/example/model/_transform/completed/${generated}.bml`,
+      `blocks/com/example/model/_transform/succeeded/${generated}.bml`,
     );
-    expect(existsSync(completedPath)).toBe(true);
-    const completed = readFileSync(completedPath, "utf8");
-    expect(completed).toContain(EXECUTION_ID);
-    expect(completed).toContain("<value>1</value>");
-    expect(completed).toContain(formatDateTimeProperty(FIXED_NOW));
-    expect(completed).toContain("workflow:InstructionTask");
+    expect(existsSync(succeededPath)).toBe(true);
+    const succeeded = readFileSync(succeededPath, "utf8");
+    expect(succeeded).toContain(EXECUTION_ID);
+    expect(succeeded).toContain("<value>1</value>");
+    expect(succeeded).toContain(formatDateTimeProperty(FIXED_NOW));
+    expect(succeeded).toContain("workflow:InstructionTask");
+    expect(succeeded).toContain(">Succeeded</value>");
+    expect(succeeded).not.toContain("<exception");
 
     const referrerPath = join(TMP, "blocks/com/example/model/Referrer.bml");
     const referrer = readFileSync(referrerPath, "utf8");
     expect(referrer).not.toContain("pending:JokeTest");
     const parsedReferrer = parse(referrer, { filePath: referrerPath });
     expect(parsedReferrer.document?.block.references?.[0]?.type).toBe(
-      result.completedFqn,
+      result.terminalFqn,
     );
   });
 
-  it("does not mark an execution completed when the agent fails", async () => {
+  it("relocates a failed agent execution to failed with an exception", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
@@ -171,17 +174,27 @@ describe("Transformer lifecycle", () => {
       agent: failingAgent("claude exited 1"),
       now: () => FIXED_NOW,
     });
-    await expect(transformer.run(pendingFqn("JokeTest"))).rejects.toThrow(/claude exited 1/);
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(false);
+    expect(result.status).toBe("Failed");
+    expect(result.error).toMatch(/claude exited 1/);
+    expect(result.terminalFqn).toBe(
+      `com.example.model._transform.failed.${generated}`,
+    );
     expect(
       existsSync(
         join(TMP, `blocks/com/example/model/_transform/running/${generated}.bml`),
       ),
-    ).toBe(true);
-    expect(
-      existsSync(
-        join(TMP, `blocks/com/example/model/_transform/completed/${generated}.bml`),
-      ),
     ).toBe(false);
+    const failedPath = join(
+      TMP,
+      `blocks/com/example/model/_transform/failed/${generated}.bml`,
+    );
+    expect(existsSync(failedPath)).toBe(true);
+    const failed = readFileSync(failedPath, "utf8");
+    expect(failed).toContain(">Failed</value>");
+    expect(failed).toContain("<exception");
+    expect(failed).toContain("claude exited 1");
   });
 
   it("orchestrates pipeline stages rather than calling ClaudeCodeAgent", () => {

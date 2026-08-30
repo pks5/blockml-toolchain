@@ -1,5 +1,5 @@
 import { collectBaseTypeChain } from "@blockml/framework";
-import { DATETIME_TYPE_FQN, INTEGER_TYPE_FQN, TASK_EXECUTION_FQN, TEXT_TYPE_FQN, } from "./constants.js";
+import { DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, INTEGER_TYPE_FQN, TASK_EXECUTION_FQN, TEXT_TYPE_FQN, } from "./constants.js";
 export function isTaskExecution(block, registry) {
     if (block.type === TASK_EXECUTION_FQN || block.baseType === TASK_EXECUTION_FQN) {
         return true;
@@ -7,8 +7,21 @@ export function isTaskExecution(block, registry) {
     return collectBaseTypeChain(block, registry).some((entry) => entry.type === TASK_EXECUTION_FQN);
 }
 export function hasTaskComposition(block) {
-    const task = block.members.find((member) => member.kind === "aggregation" && member.name === "task");
-    return (task?.composition?.children.length ?? 0) > 0;
+    return hasAggregationComposition(block, "task");
+}
+export function hasAggregationComposition(block, name) {
+    const aggregation = block.members.find((member) => member.kind === "aggregation" && member.name === name);
+    return (aggregation?.composition?.children.length ?? 0) > 0;
+}
+export function hasPropertyValue(block, name) {
+    const member = block.members.find((entry) => entry.kind === "property" && entry.name === name);
+    if (!member) {
+        return false;
+    }
+    if (member.value !== undefined) {
+        return true;
+    }
+    return (member.values?.length ?? 0) > 0;
 }
 export function getPropertyLiteral(block, name) {
     const member = block.members.find((entry) => entry.kind === "property" && entry.name === name);
@@ -28,6 +41,14 @@ export function getExecutionId(block) {
 export function getSequence(block) {
     const value = getPropertyLiteral(block, "sequence");
     return typeof value === "number" && Number.isFinite(value) ? value : undefined;
+}
+export function getStatus(block) {
+    const value = getPropertyLiteral(block, "status");
+    if (typeof value !== "string") {
+        return undefined;
+    }
+    const separator = value.lastIndexOf("::");
+    return separator >= 0 ? value.slice(separator + 2) : value;
 }
 export function setOverrideProperty(block, name, typeFqn, value) {
     const literal = {
@@ -82,8 +103,19 @@ function upsertProperty(block, property) {
     }
     block.members.splice(insertAt, 0, property);
 }
+function upsertAggregation(block, aggregation) {
+    const existing = block.members.findIndex((member) => member.kind === "aggregation" && member.name === aggregation.name);
+    if (existing >= 0) {
+        block.members[existing] = aggregation;
+        return;
+    }
+    block.members.push(aggregation);
+}
 export function setSequence(block, sequence) {
     setOverrideProperty(block, "sequence", INTEGER_TYPE_FQN, sequence);
+}
+export function setStatus(block, status) {
+    setOverrideProperty(block, "status", EXECUTION_STATUS_FQN, status);
 }
 export function setStartedAt(block, iso) {
     setOverrideProperty(block, "startedAt", DATETIME_TYPE_FQN, iso);
@@ -96,6 +128,34 @@ export function setFeedback(block, feedback) {
 }
 export function setChangedFiles(block, paths) {
     setOverridePropertyList(block, "changedFiles", TEXT_TYPE_FQN, paths);
+}
+export function setException(block, message) {
+    const aggregation = {
+        kind: "aggregation",
+        name: "exception",
+        override: true,
+        authoredInAggregationsSection: true,
+        composition: {
+            aggregationName: "exception",
+            children: [
+                {
+                    kind: "blockInstance",
+                    instance: {
+                        typeFqn: EXECUTION_EXCEPTION_FQN,
+                        memberValues: {
+                            message: {
+                                kind: "literal",
+                                value: message,
+                                typeFqn: TEXT_TYPE_FQN,
+                                authoredPlacement: "element",
+                            },
+                        },
+                    },
+                },
+            ],
+        },
+    };
+    upsertAggregation(block, aggregation);
 }
 export function taskExecutionHasCompletedAt(registry) {
     const type = registry.get(TASK_EXECUTION_FQN)?.block;

@@ -14,6 +14,7 @@ export function createNoopReflectStage(): TransformStage<ExecutedWork, Reflectio
         ...executed,
         changedFiles: [],
         feedback: undefined,
+        outcome: "succeeded",
       };
     },
   };
@@ -43,6 +44,7 @@ export function createReflectStage(
         ...executed,
         changedFiles,
         feedback: result.feedback,
+        outcome: "succeeded",
       };
     },
   };

@@ -2,6 +2,7 @@ import { forkBom, rootFqnByFilePath } from "@blockml/framework";
 import { serialize } from "@blockml/serializer";
 import { mkdirSync, unlinkSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
+import { LIFECYCLE_STAGES } from "./constants.js";
 import { executionFilePath, executionFqn, lifecyclePackageFqn, parseExecutionFqn, } from "./lifecycle.js";
 import { TransformError } from "./errors.js";
 export function applyExecutionIdentity(document, identity) {
@@ -14,18 +15,14 @@ export function applyExecutionIdentity(document, identity) {
     document.block.type = nextFqn;
     document.source.filePath = nextPath;
     const bindings = { ...(document.source.namespaceBindings ?? {}) };
-    for (const stage of ["pending", "running", "completed"]) {
+    for (const stage of LIFECYCLE_STAGES) {
         delete bindings[stage];
     }
     for (const [prefix, uri] of Object.entries(bindings)) {
-        if (uri === lifecyclePackageFqn(identity.libraryFqn, "pending")) {
-            delete bindings[prefix];
-        }
-        if (uri === lifecyclePackageFqn(identity.libraryFqn, "running")) {
-            delete bindings[prefix];
-        }
-        if (uri === lifecyclePackageFqn(identity.libraryFqn, "completed")) {
-            delete bindings[prefix];
+        for (const stage of LIFECYCLE_STAGES) {
+            if (uri === lifecyclePackageFqn(identity.libraryFqn, stage)) {
+                delete bindings[prefix];
+            }
         }
     }
     bindings[identity.stage] = nextPackage;

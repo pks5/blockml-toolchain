@@ -1,6 +1,6 @@
 import { forkBom } from "@blockml/framework";
 import { formatDateTimeProperty, generateExecutionName } from "./lifecycle.js";
-import { getExecutionId, setSequence, setStartedAt } from "./properties.js";
+import { getExecutionId, setSequence, setStartedAt, setStatus } from "./properties.js";
 import {
   applyExecutionIdentity,
   persistDocument,
@@ -36,6 +36,7 @@ export function startExecution(
   const executionId = getExecutionId(forked.block);
 
   setSequence(forked.block, sequence);
+  setStatus(forked.block, "Running");
   setStartedAt(forked.block, startedAtIso);
 
   const runningFqn = applyExecutionIdentity(forked, {

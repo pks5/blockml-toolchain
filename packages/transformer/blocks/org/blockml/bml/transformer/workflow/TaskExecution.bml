@@ -19,10 +19,11 @@
   <documentation>
     One execution of a Task against the model.
 
-    * `status` — lifecycle state (`workflow:ExecutionStatus`).
+    * `status` — lifecycle state (`workflow:ExecutionStatus`). Matches the
+      `_transform` package: Pending, Running, Succeeded, Failed.
     * `startedAt` / `completedAt` — the execution interval.
     * `task` — the Task that ran.
-    * `exception` — a thrown Exception when the execution failed.
+    * `exception` — present if and only if `status` is Failed.
     * Persist writes `changedFiles` and `feedback` onto this Block while it is still running.
   </documentation>
 
