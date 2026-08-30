@@ -1,4 +1,4 @@
-export const TASK_EXECUTION_FQN = "org.blockml.bml.transformer.workflow.TaskExecution";
+export const MODEL_TRANSFORMATION_FQN = "org.blockml.bml.transformer.workflow.ModelTransformation";
 export const EXECUTION_STATUS_FQN = "org.blockml.bml.transformer.workflow.ExecutionStatus";
 export const EXECUTION_EXCEPTION_FQN = "org.blockml.bml.transformer.workflow.ExecutionException";
 export const INTEGER_TYPE_FQN = "org.blockml.bml.type.Integer";

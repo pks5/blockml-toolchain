@@ -70,7 +70,7 @@ describe("Transformer pipeline", () => {
     expect(reflected).toBe(true);
   });
 
-  it("writes reflection into the running TaskExecution without relocating", async () => {
+  it("writes reflection into the running ModelTransformation without relocating", async () => {
     writePending();
     const generated = "T00001_JokeTest_20260830T011702";
     const transformer = new Transformer({

@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { bootstrapFullProjectRegistry } from "@blockml/framework";
 import { TransformError } from "../src/execution/errors.js";
 import { resolvePendingExecution } from "../src/execution/resolve.js";
-import { TASK_EXECUTION_FQN } from "../src/execution/constants.js";
+import { MODEL_TRANSFORMATION_FQN } from "../src/execution/constants.js";
 import {
   LIBRARY,
   pendingExecutionXml,
@@ -25,7 +25,7 @@ describe("resolvePendingExecution", () => {
     rmSync(TMP, { recursive: true, force: true });
   });
 
-  it("resolves a valid pending TaskExecution", () => {
+  it("resolves a valid pending ModelTransformation", () => {
     writeProject(TMP, {
       "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
@@ -35,10 +35,10 @@ describe("resolvePendingExecution", () => {
     expect(resolved.fqn).toBe(pendingFqn("JokeTest"));
     expect(resolved.libraryFqn).toBe(LIBRARY);
     expect(resolved.originalName).toBe("JokeTest");
-    expect(resolved.document.block.baseType).toBe(TASK_EXECUTION_FQN);
+    expect(resolved.document.block.baseType).toBe(MODEL_TRANSFORMATION_FQN);
   });
 
-  it("rejects a non-TaskExecution FQN", () => {
+  it("rejects a non-ModelTransformation FQN", () => {
     writeProject(TMP, {
       "blocks/com/example/model/Other.bml": plainBlockXml("Other"),
     });

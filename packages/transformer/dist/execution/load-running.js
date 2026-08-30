@@ -7,7 +7,7 @@ export function loadRunningExecution(workspaceRoot, started) {
     const document = registry.get(started.runningFqn) ??
         findRunningByExecutionId(registry, started.libraryFqn, started.executionId);
     if (!document) {
-        throw new TransformError("execution", `Running TaskExecution ${started.runningFqn} was not found`);
+        throw new TransformError("execution", `Running ModelTransformation ${started.runningFqn} was not found`);
     }
     return { document, registry };
 }

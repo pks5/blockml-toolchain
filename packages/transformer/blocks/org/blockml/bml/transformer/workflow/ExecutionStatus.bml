@@ -14,10 +14,10 @@
   <name>ExecutionStatus</name>
   <type>workflow:ExecutionStatus</type>
   <baseType>type:EnumType</baseType>
-  <is>The lifecycle state of a TaskExecution</is>
+  <is>The lifecycle state of a ModelTransformation</is>
 
   <documentation>
-    Closed set of states a `workflow:TaskExecution` can be in. The
+    Closed set of states a `workflow:ModelTransformation` can be in. The
     `_transform` package of the Block matches this value:
 
     * `Pending` — created, not yet started (`_transform.pending`).
@@ -27,7 +27,7 @@
   </documentation>
 
   <references>
-    <see type="workflow:TaskExecution" relation="SeeAlso" />
+    <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="type:EnumType" relation="Extends" />
   </references>
 

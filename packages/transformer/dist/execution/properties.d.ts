@@ -1,7 +1,7 @@
 import type { BlockDefinition } from "@blockml/bom";
 import { type TypeRegistry } from "@blockml/framework";
 import { type ExecutionStatusId } from "./constants.js";
-export declare function isTaskExecution(block: BlockDefinition, registry: TypeRegistry): boolean;
+export declare function isModelTransformation(block: BlockDefinition, registry: TypeRegistry): boolean;
 export declare function hasTaskComposition(block: BlockDefinition): boolean;
 export declare function hasAggregationComposition(block: BlockDefinition, name: string): boolean;
 export declare function hasPropertyValue(block: BlockDefinition, name: string): boolean;
@@ -18,5 +18,5 @@ export declare function setCompletedAt(block: BlockDefinition, iso: string): voi
 export declare function setFeedback(block: BlockDefinition, feedback: string): void;
 export declare function setChangedFiles(block: BlockDefinition, paths: readonly string[]): void;
 export declare function setException(block: BlockDefinition, message: string): void;
-export declare function taskExecutionHasCompletedAt(registry: TypeRegistry): boolean;
+export declare function modelTransformationHasCompletedAt(registry: TypeRegistry): boolean;
 //# sourceMappingURL=properties.d.ts.map

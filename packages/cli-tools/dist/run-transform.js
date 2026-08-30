@@ -3,7 +3,7 @@ import { pushLines } from "./cli-style.js";
 export async function runTransform(executionFqn, rootDir, lines, usage, agent, reflectAgent) {
     const fqn = executionFqn?.trim() ?? "";
     if (!fqn) {
-        pushLines(lines, "Specify a TaskExecution FQN.", "error");
+        pushLines(lines, "Specify a ModelTransformation FQN.", "error");
         pushLines(lines, usage, "info");
         return 2;
     }

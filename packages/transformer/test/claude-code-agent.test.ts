@@ -63,7 +63,7 @@ describe("ClaudeCodeAgent", () => {
     expect(prompt).toContain(runningFqn);
     expect(prompt).toContain("Execute stage");
     expect(prompt).toContain("Change BML model source");
-    expect(prompt).toContain("Do not modify the TaskExecution block");
+    expect(prompt).toContain("Do not modify the ModelTransformation block");
     expect(prompt).toContain("_transform/");
   });
 

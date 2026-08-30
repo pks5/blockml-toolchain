@@ -87,4 +87,4 @@ export {
   formatNameTimestamp,
   formatDateTimeProperty,
 } from "./execution/lifecycle.js";
-export { TASK_EXECUTION_FQN } from "./execution/constants.js";
+export { MODEL_TRANSFORMATION_FQN } from "./execution/constants.js";

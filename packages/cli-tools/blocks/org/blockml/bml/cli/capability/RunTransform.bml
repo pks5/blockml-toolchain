@@ -30,7 +30,7 @@
     # Execute blockml transform command
 
     Runs the five-stage transformer pipeline (Prepare, Execute, Reflect,
-    Persist, Finalize) for a pending TaskExecution. The CLI supplies Claude
+    Persist, Finalize) for a pending ModelTransformation. The CLI supplies Claude
     Code workers for Execute and Reflect. Acquire an exclusive worktree
     lock first. If a transform is already running in this worktree, exit 2
     immediately (no wait). Resolve/config/busy → exit 2. After a started

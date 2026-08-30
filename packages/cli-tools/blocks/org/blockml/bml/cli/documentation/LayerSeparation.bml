@@ -35,7 +35,7 @@
 
     @blockml/framework — bootstrapTypeRegistry, TypeRegistry. CLI wraps as bootstrapProjectTypeRegistry.
 
-    @blockml/transformer — five-stage TaskExecution pipeline. CLI wraps as RunTransform and supplies default Execute and Reflect agents.
+    @blockml/transformer — five-stage ModelTransformation pipeline. CLI wraps as RunTransform and supplies default Execute and Reflect agents.
 
     Target packages (@blockml/blockdoc-target, xsd-target, fatblock-target) — RenderTarget impls
     and targetOptions types. CLI registers via bootstrapTargets; does not own render algorithms.

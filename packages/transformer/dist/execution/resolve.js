@@ -1,8 +1,8 @@
 import { bootstrapFullProjectRegistry, } from "@blockml/framework";
-import { TASK_EXECUTION_FQN } from "./constants.js";
+import { MODEL_TRANSFORMATION_FQN } from "./constants.js";
 import { TransformError } from "./errors.js";
 import { parseExecutionFqn } from "./lifecycle.js";
-import { getExecutionId, getPropertyLiteral, getStatus, hasAggregationComposition, hasPropertyValue, hasTaskComposition, isTaskExecution, } from "./properties.js";
+import { getExecutionId, getPropertyLiteral, getStatus, hasAggregationComposition, hasPropertyValue, hasTaskComposition, isModelTransformation, } from "./properties.js";
 const REQUIRED_PRESENT = ["executionId", "createdAt"];
 const FORBIDDEN_PROPERTIES = [
     "startedAt",
@@ -18,14 +18,14 @@ export function resolvePendingExecution(executionFqn, workspaceRoot) {
 export function resolvePendingExecutionInRegistry(executionFqn, registry) {
     const parsed = parseExecutionFqn(executionFqn);
     if (!parsed || parsed.stage !== "pending") {
-        throw new TransformError("resolve", `Execution FQN must be a TaskExecution under <library>._transform.pending, got ${executionFqn}`);
+        throw new TransformError("resolve", `Execution FQN must be a ModelTransformation under <library>._transform.pending, got ${executionFqn}`);
     }
     const document = registry.get(executionFqn);
     if (!document) {
         throw new TransformError("resolve", `No block found for FQN ${executionFqn}`);
     }
-    if (!isTaskExecution(document.block, registry)) {
-        throw new TransformError("resolve", `${executionFqn} is not a ${TASK_EXECUTION_FQN}`);
+    if (!isModelTransformation(document.block, registry)) {
+        throw new TransformError("resolve", `${executionFqn} is not a ${MODEL_TRANSFORMATION_FQN}`);
     }
     assertPendingContract(executionFqn, document.block);
     return {

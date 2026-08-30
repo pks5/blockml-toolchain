@@ -21,7 +21,7 @@
 
   <documentation>
     Canonical transformer specification for BlockML — five-stage process
-    over TaskExecution and workflow types. TypeScript in
+    over ModelTransformation and workflow types. TypeScript in
     packages/transformer/src/ implements this library. Membership is defined
     exclusively by this blocks list.
   </documentation>
@@ -63,11 +63,11 @@
         <workflow:ExecutionStatus />
         <workflow:InstructionRule />
         <workflow:InstructionTask />
+        <workflow:ModelTransformation />
         <workflow:Prerequisite />
         <workflow:PrerequisiteNotMetException />
         <workflow:Rule />
         <workflow:Task />
-        <workflow:TaskExecution />
         <transformercap:ExecuteTask />
         <transformercap:FinalizeExecution />
         <transformercap:PersistExecution />

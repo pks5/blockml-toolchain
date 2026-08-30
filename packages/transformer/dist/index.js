@@ -18,5 +18,5 @@ export { persistReflection } from "./execution/persist.js";
 export { finalizeExecution } from "./execution/complete.js";
 export { SequenceAllocator } from "./execution/sequence.js";
 export { parseExecutionFqn, generateExecutionName, padSequence, formatNameTimestamp, formatDateTimeProperty, } from "./execution/lifecycle.js";
-export { TASK_EXECUTION_FQN } from "./execution/constants.js";
+export { MODEL_TRANSFORMATION_FQN } from "./execution/constants.js";
 //# sourceMappingURL=index.js.map

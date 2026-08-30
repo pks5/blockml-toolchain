@@ -30,7 +30,7 @@
   <documentation><![CDATA[Syntax:
     blockml transform EXECUTION-FQN [--verbose]
 
-    EXECUTION-FQN is the FQN of a TaskExecution under
+    EXECUTION-FQN is the FQN of a ModelTransformation under
     {library}._transform.pending. Tasks are not accepted directly.
 
     The transformer takes an exclusive worktree lock, then runs Prepare,
@@ -38,7 +38,7 @@
     deterministic. Default Execute is a TransformationAgent (Claude Code)
     that changes BML only. Default Reflect is a second Claude worker
     (read-only; changedFiles + feedback). Default Persist writes those
-    fields into the running TaskExecution. On success Finalize relocates
+    fields into the running ModelTransformation. On success Finalize relocates
     the Block to _transform.succeeded. On a started execution that fails,
     Finalize relocates the Block to _transform.failed with a BML
     exception and exits non-zero.

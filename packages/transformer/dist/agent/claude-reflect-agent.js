@@ -8,11 +8,11 @@ export function buildClaudeReflectPrompt(executionFqn, trace) {
     return [
         "You are the Reflect stage of a BlockML transformer pipeline.",
         "",
-        "The Execute stage has finished this running TaskExecution:",
+        "The Execute stage has finished this running ModelTransformation:",
         "",
         executionFqn,
         "",
-        "You must NOT change the model, TaskExecution, or any other files.",
+        "You must NOT change the model, ModelTransformation, or any other files.",
         "Read only. Produce changedFiles and feedback.",
         "",
         "Git-detected changed files:",
@@ -28,7 +28,7 @@ export function buildClaudeReflectPrompt(executionFqn, trace) {
         '{ "changedFiles": ["relative/path.bml"], "feedback": "summary" }',
         "",
         "changedFiles must be workspace-relative paths Execute actually modified.",
-        "Do not include _transform/ TaskExecution files unless Execute wrongly",
+        "Do not include _transform/ ModelTransformation files unless Execute wrongly",
         "touched them; mention that in feedback if so.",
     ].join("\n");
 }

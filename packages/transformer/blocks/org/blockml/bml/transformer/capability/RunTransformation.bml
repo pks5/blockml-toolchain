@@ -34,10 +34,10 @@
 
   <properties>
     <executionFqn type="type:Text">
-      <documentation>Pending TaskExecution FQN under _transform.pending. (required)</documentation>
+      <documentation>Pending ModelTransformation FQN under _transform.pending. (required)</documentation>
     </executionFqn>
     <terminalFqn type="type:Text">
-      <documentation>Succeeded or failed TaskExecution FQN after Finalize. (required)</documentation>
+      <documentation>Succeeded or failed ModelTransformation FQN after Finalize. (required)</documentation>
     </terminalFqn>
   </properties>
 

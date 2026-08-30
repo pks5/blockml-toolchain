@@ -1,7 +1,7 @@
 /**
  * Claude Code permissions for transformer stages.
  *
- * Execute may change BML model source. It must not write TaskExecution
+ * Execute may change BML model source. It must not write ModelTransformation
  * files under `_transform/`. Bash is limited to the BlockML CLI.
  *
  * Reflect is read-only: Read/Glob/Grep only. Edit, Write, and Bash are denied.

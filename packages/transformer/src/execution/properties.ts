@@ -10,20 +10,20 @@ import {
   EXECUTION_EXCEPTION_FQN,
   EXECUTION_STATUS_FQN,
   INTEGER_TYPE_FQN,
-  TASK_EXECUTION_FQN,
+  MODEL_TRANSFORMATION_FQN,
   TEXT_TYPE_FQN,
   type ExecutionStatusId,
 } from "./constants.js";
 
-export function isTaskExecution(
+export function isModelTransformation(
   block: BlockDefinition,
   registry: TypeRegistry,
 ): boolean {
-  if (block.type === TASK_EXECUTION_FQN || block.baseType === TASK_EXECUTION_FQN) {
+  if (block.type === MODEL_TRANSFORMATION_FQN || block.baseType === MODEL_TRANSFORMATION_FQN) {
     return true;
   }
   return collectBaseTypeChain(block, registry).some(
-    (entry) => entry.type === TASK_EXECUTION_FQN,
+    (entry) => entry.type === MODEL_TRANSFORMATION_FQN,
   );
 }
 
@@ -231,8 +231,8 @@ export function setException(block: BlockDefinition, message: string): void {
   upsertAggregation(block, aggregation);
 }
 
-export function taskExecutionHasCompletedAt(registry: TypeRegistry): boolean {
-  const type = registry.get(TASK_EXECUTION_FQN)?.block;
+export function modelTransformationHasCompletedAt(registry: TypeRegistry): boolean {
+  const type = registry.get(MODEL_TRANSFORMATION_FQN)?.block;
   if (!type) {
     return true;
   }

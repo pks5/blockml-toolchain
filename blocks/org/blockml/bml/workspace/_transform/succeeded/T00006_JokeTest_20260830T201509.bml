@@ -14,10 +14,10 @@
     succeeded:T00006_JokeTest_20260830T201509
   </type>
   <baseType>
-    workflow:TaskExecution
+    workflow:ModelTransformation
   </baseType>
   <is>
-    A pending TaskExecution that creates a playground Joke block
+    A pending ModelTransformation that creates a playground Joke block
   </is>
   <properties>
     <executionId override="true">
@@ -36,7 +36,7 @@
       <value>2026-08-30T20:15:09</value>
     </startedAt>
     <feedback override="true" type="org.blockml.bml.type.Text">
-      <value>Execute satisfied the task (create/update org.blockml.bml.workspace.playground.Joke.bml with a new joke). The only task-related edit is blocks/org/blockml/bml/workspace/playground/Joke.bml: the &lt;documentation> body was replaced from the previous 'developer go broke / used up all their cache' joke with 'Why do programmers prefer dark mode? Because light attracts bugs.' Block identity, baseType (core:Documentation), name/type, and structure are unchanged — a minimal, in-place content change consistent with prior JokeTest executions. All other paths in the git diff (packages/cli-tools/**, packages/transformer/**, deleted _transform/completed/T00001–T00005 files) were already present as uncommitted working-tree changes in the pre-execution git status snapshot and are unrelated to this run; Execute did not touch them. Execute did not wrongly modify any _transform/ TaskExecution file — the pending→running relocation of T00006 is normal pipeline lifecycle. Minor pre-existing cosmetic issue (not caused by Execute, not fixed here since Reflect is read-only): the running T00006 file's header comment still reads 'FQN: org.blockml.bml.workspace._transform.succeeded.T00001_JokeTest_20260830T014020', a stale copy-paste from a template. Validation was not run in this read-only stage; recommend the next stage run `npx blockml validate` to confirm the Joke block still validates.</value>
+      <value>Execute satisfied the task (create/update org.blockml.bml.workspace.playground.Joke.bml with a new joke). The only task-related edit is blocks/org/blockml/bml/workspace/playground/Joke.bml: the &lt;documentation> body was replaced from the previous 'developer go broke / used up all their cache' joke with 'Why do programmers prefer dark mode? Because light attracts bugs.' Block identity, baseType (core:Documentation), name/type, and structure are unchanged — a minimal, in-place content change consistent with prior JokeTest executions. All other paths in the git diff (packages/cli-tools/**, packages/transformer/**, deleted _transform/completed/T00001–T00005 files) were already present as uncommitted working-tree changes in the pre-execution git status snapshot and are unrelated to this run; Execute did not touch them. Execute did not wrongly modify any _transform/ ModelTransformation file — the pending→running relocation of T00006 is normal pipeline lifecycle. Minor pre-existing cosmetic issue (not caused by Execute, not fixed here since Reflect is read-only): the running T00006 file's header comment still reads 'FQN: org.blockml.bml.workspace._transform.succeeded.T00001_JokeTest_20260830T014020', a stale copy-paste from a template. Validation was not run in this read-only stage; recommend the next stage run `npx blockml validate` to confirm the Joke block still validates.</value>
     </feedback>
     <changedFiles override="true" type="org.blockml.bml.type.Text">
       <value>blocks/org/blockml/bml/workspace/playground/Joke.bml</value>

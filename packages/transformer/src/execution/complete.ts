@@ -5,7 +5,7 @@ import { loadRunningExecution } from "./load-running.js";
 import {
   setCompletedAt,
   setStatus,
-  taskExecutionHasCompletedAt,
+  modelTransformationHasCompletedAt,
 } from "./properties.js";
 import {
   applyExecutionIdentity,
@@ -31,7 +31,7 @@ export function finalizeExecution(
   const { document, registry } = loadRunningExecution(workspaceRoot, started);
   const forked = forkBom(document);
   const completedAtIso = formatDateTimeProperty(now);
-  if (taskExecutionHasCompletedAt(registry)) {
+  if (modelTransformationHasCompletedAt(registry)) {
     setCompletedAt(forked.block, completedAtIso);
   }
   setStatus(forked.block, stage === "succeeded" ? "Succeeded" : "Failed");

@@ -14,10 +14,10 @@
     succeeded:T00004_JokeTest_20260830T021409
   </type>
   <baseType>
-    workflow:TaskExecution
+    workflow:ModelTransformation
   </baseType>
   <is>
-    A pending TaskExecution that creates a playground Joke block
+    A pending ModelTransformation that creates a playground Joke block
   </is>
   <properties>
     <executionId override="true">

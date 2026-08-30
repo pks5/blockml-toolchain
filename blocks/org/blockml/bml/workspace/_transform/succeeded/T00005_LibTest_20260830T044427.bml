@@ -14,10 +14,10 @@
     succeeded:T00005_LibTest_20260830T044427
   </type>
   <baseType>
-    workflow:TaskExecution
+    workflow:ModelTransformation
   </baseType>
   <is>
-    A pending TaskExecution that creates a playground Joke block
+    A pending ModelTransformation that creates a playground Joke block
   </is>
   <properties>
     <executionId override="true">
@@ -36,7 +36,7 @@
       <value>2026-08-30T04:44:27</value>
     </startedAt>
     <feedback override="true" type="org.blockml.bml.type.Text">
-      <value>Execute created a 6-block library domain model in package org.blockml.bml.workspace.playground.library, matching the requested task. Only playground/library/ files were added; the pending->running move of the TaskExecution is normal pipeline lifecycle, not an errant model edit.
+      <value>Execute created a 6-block library domain model in package org.blockml.bml.workspace.playground.library, matching the requested task. Only playground/library/ files were added; the pending->running move of the ModelTransformation is normal pipeline lifecycle, not an errant model edit.
 
 Structure: Library is the aggregate root owning books, members, authors and borrowings via &lt;aggregations> (so Borrowing is managed library state, not a property of Book/Member - requirement met). Book.authors and Borrowing.member/Borrowing.book are non-owning &lt;associations> typed InstanceReference(T)[] / InstanceReference(T); Author and Member are owned only by Library, so authors/members outlive books and can be shared (requirement met). AvailabilityStatus is an EnumType with Available/Borrowed members. Every important block has concise &lt;documentation>.
 

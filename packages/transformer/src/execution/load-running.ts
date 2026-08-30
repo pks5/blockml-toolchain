@@ -22,7 +22,7 @@ export function loadRunningExecution(
   if (!document) {
     throw new TransformError(
       "execution",
-      `Running TaskExecution ${started.runningFqn} was not found`,
+      `Running ModelTransformation ${started.runningFqn} was not found`,
     );
   }
 

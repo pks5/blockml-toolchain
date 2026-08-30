@@ -16,7 +16,7 @@
   <name>PrepareExecution</name>
   <type>transformercap:PrepareExecution</type>
   <baseType>core:Capability</baseType>
-  <is>Process stage [1] — create a running TaskExecution</is>
+  <is>Process stage [1] — create a running ModelTransformation</is>
 
   <documentation>
     # Prepare Execution
@@ -32,15 +32,15 @@
   <references>
     <see type="transformerdocumentation:ArchitectureOverview" relation="SeeAlso" />
     <see type="transformercap:ExecuteTask" relation="SeeAlso" />
-    <see type="workflow:TaskExecution" relation="SeeAlso" />
+    <see type="workflow:ModelTransformation" relation="SeeAlso" />
   </references>
 
   <properties>
     <pendingFqn type="type:Text">
-      <documentation>Pending TaskExecution FQN. (required)</documentation>
+      <documentation>Pending ModelTransformation FQN. (required)</documentation>
     </pendingFqn>
     <runningFqn type="type:Text">
-      <documentation>Running TaskExecution FQN after relocation. (required)</documentation>
+      <documentation>Running ModelTransformation FQN after relocation. (required)</documentation>
     </runningFqn>
     <sequence type="type:Integer">
       <documentation>Allocated execution sequence. (required)</documentation>

@@ -1,6 +1,6 @@
 <!--
-  Transformer Workflow — TaskExecution
-  FQN: org.blockml.bml.transformer.workflow.TaskExecution
+  Transformer Workflow — ModelTransformation
+  FQN: org.blockml.bml.transformer.workflow.ModelTransformation
 -->
 <block
   xmlns="http://blockml.org/bml"
@@ -11,13 +11,13 @@
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type">
 
-  <name>TaskExecution</name>
-  <type>workflow:TaskExecution</type>
+  <name>ModelTransformation</name>
+  <type>workflow:ModelTransformation</type>
   <baseType>core:Block</baseType>
-  <is>A recorded execution of a workflow Task</is>
+  <is>A recorded transformation of the model by a workflow Task</is>
 
   <documentation>
-    One execution of a Task against the model.
+    One transformation of the model driven by a Task.
 
     * `status` — lifecycle state (`workflow:ExecutionStatus`). Matches the
       `_transform` package: Pending, Running, Succeeded, Failed.

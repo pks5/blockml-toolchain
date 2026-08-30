@@ -16,10 +16,10 @@
   <name>FinalizeExecution</name>
   <type>transformercap:FinalizeExecution</type>
   <baseType>core:Capability</baseType>
-  <is>Process stage [5] — complete the TaskExecution lifecycle</is>
+  <is>Process stage [5] — complete the ModelTransformation lifecycle</is>
 
   <documentation>
-    Set completedAt and status, then relocate the running TaskExecution to
+    Set completedAt and status, then relocate the running ModelTransformation to
     _transform.succeeded or _transform.failed. Default implementation is
     deterministic. Runs after every started execution, including Execute,
     Reflect, or Persist failure. TS: pipeline/finalize.ts.
@@ -28,15 +28,15 @@
   <references>
     <see type="transformerdocumentation:ArchitectureOverview" relation="SeeAlso" />
     <see type="transformercap:PersistExecution" relation="SeeAlso" />
-    <see type="workflow:TaskExecution" relation="SeeAlso" />
+    <see type="workflow:ModelTransformation" relation="SeeAlso" />
   </references>
 
   <properties>
     <runningFqn type="type:Text">
-      <documentation>Running TaskExecution FQN to finalize. (required)</documentation>
+      <documentation>Running ModelTransformation FQN to finalize. (required)</documentation>
     </runningFqn>
     <terminalFqn type="type:Text">
-      <documentation>Succeeded or failed TaskExecution FQN after relocation. (required)</documentation>
+      <documentation>Succeeded or failed ModelTransformation FQN after relocation. (required)</documentation>
     </terminalFqn>
     <status type="workflow:ExecutionStatus">
       <documentation>Terminal status Succeeded or Failed. (required)</documentation>

@@ -3,7 +3,7 @@ import {
   bootstrapFullProjectRegistry,
   type TypeRegistry,
 } from "@blockml/framework";
-import { TASK_EXECUTION_FQN } from "./constants.js";
+import { MODEL_TRANSFORMATION_FQN } from "./constants.js";
 import { TransformError } from "./errors.js";
 import { parseExecutionFqn } from "./lifecycle.js";
 import {
@@ -13,7 +13,7 @@ import {
   hasAggregationComposition,
   hasPropertyValue,
   hasTaskComposition,
-  isTaskExecution,
+  isModelTransformation,
 } from "./properties.js";
 
 export interface ResolvedExecution {
@@ -49,7 +49,7 @@ export function resolvePendingExecutionInRegistry(
   if (!parsed || parsed.stage !== "pending") {
     throw new TransformError(
       "resolve",
-      `Execution FQN must be a TaskExecution under <library>._transform.pending, got ${executionFqn}`,
+      `Execution FQN must be a ModelTransformation under <library>._transform.pending, got ${executionFqn}`,
     );
   }
 
@@ -61,10 +61,10 @@ export function resolvePendingExecutionInRegistry(
     );
   }
 
-  if (!isTaskExecution(document.block, registry)) {
+  if (!isModelTransformation(document.block, registry)) {
     throw new TransformError(
       "resolve",
-      `${executionFqn} is not a ${TASK_EXECUTION_FQN}`,
+      `${executionFqn} is not a ${MODEL_TRANSFORMATION_FQN}`,
     );
   }
 

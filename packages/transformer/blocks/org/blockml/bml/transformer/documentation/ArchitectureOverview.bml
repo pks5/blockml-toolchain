@@ -22,7 +22,7 @@
     worktree lock around stages [1]–[5]. The orchestrator only sequences
     stages; it does not implement them.
 
-    Lifecycle locations of workflow:TaskExecution (pending / running /
+    Lifecycle locations of workflow:ModelTransformation (pending / running /
     succeeded / failed) are not these process stages. status on the Block
     matches the package: Pending, Running, Succeeded, Failed.
 
@@ -38,7 +38,7 @@
     [2] Execute Task — transformercap:ExecuteTask
         Default: TransformationAgent (Claude Code at the CLI). Receives
         the running execution and the repository. May change BML model
-        source. Must not write TaskExecution metadata or files under
+        source. Must not write ModelTransformation metadata or files under
         _transform/. Claude default: Edit(**/*.bml), deny
         Edit(**/_transform/**) and Edit(**/node_modules/**), Bash
         limited to npx blockml.
@@ -51,7 +51,7 @@
         Execute throws; feedback never decides Succeeded vs Failed.
 
     [4] Persist Execution — transformercap:PersistExecution
-        Default: deterministic. Reloads the running TaskExecution and
+        Default: deterministic. Reloads the running ModelTransformation and
         writes changedFiles, feedback, and on failure a BML exception.
         Must not relocate the Block. Skips I/O when all of those are empty.
 
@@ -73,7 +73,7 @@
 
   <references>
     <see type="transformercap:RunTransformation" relation="Defines" />
-    <see type="workflow:TaskExecution" relation="SeeAlso" />
+    <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
   </references>
 

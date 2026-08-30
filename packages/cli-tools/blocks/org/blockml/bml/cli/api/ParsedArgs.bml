@@ -42,7 +42,7 @@
     <limit type="type:Integer"><documentation>--limit: max search hits. (optional)</documentation></limit>
     <query type="type:Text"><documentation>Joined positional query for search. (optional)</documentation></query>
     <index type="type:Boolean"><documentation>search index subcommand: full rebuild. (optional)</documentation></index>
-    <executionFqn type="type:Text"><documentation>FQN of a pending TaskExecution for transform. (optional)</documentation></executionFqn>
+    <executionFqn type="type:Text"><documentation>FQN of a pending ModelTransformation for transform. (optional)</documentation></executionFqn>
   </properties>
 
 </block>

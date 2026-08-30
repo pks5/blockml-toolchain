@@ -16,7 +16,7 @@ function pendingXml(name: string): string {
     ` xmlns:type="org.blockml.bml.type">`,
     `  <name>${name}</name>`,
     `  <type>pending:${name}</type>`,
-    `  <baseType>workflow:TaskExecution</baseType>`,
+    `  <baseType>workflow:ModelTransformation</baseType>`,
     `  <is>pending execution fixture</is>`,
     `  <properties>`,
     `    <executionId override="true"><value>d41bf2a3-f51f-4171-a2e4-e71893c16f24</value></executionId>`,

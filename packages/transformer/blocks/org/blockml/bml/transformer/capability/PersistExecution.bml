@@ -16,13 +16,13 @@
   <name>PersistExecution</name>
   <type>transformercap:PersistExecution</type>
   <baseType>core:Capability</baseType>
-  <is>Process stage [4] — write reflection into the running TaskExecution</is>
+  <is>Process stage [4] — write reflection into the running ModelTransformation</is>
 
   <documentation>
     # Persist Execution
 
     Write `changedFiles`, `feedback`, and on failure the BML exception into
-    the running TaskExecution. Must not relocate the Block.
+    the running ModelTransformation. Must not relocate the Block.
 
     Default implementation is a deterministic BOM writer. Skips I/O when
     `changedFiles` is empty, `feedback` is absent, and no exception is present.
@@ -33,15 +33,15 @@
     <see type="transformerdocumentation:ArchitectureOverview" relation="SeeAlso" />
     <see type="transformercap:ReflectOnExecution" relation="SeeAlso" />
     <see type="transformercap:FinalizeExecution" relation="SeeAlso" />
-    <see type="workflow:TaskExecution" relation="SeeAlso" />
+    <see type="workflow:ModelTransformation" relation="SeeAlso" />
   </references>
 
   <properties>
     <changedFiles type="type:Text[]">
-      <documentation>Paths to persist onto TaskExecution.changedFiles. (required)</documentation>
+      <documentation>Paths to persist onto ModelTransformation.changedFiles. (required)</documentation>
     </changedFiles>
     <feedback type="type:Text">
-      <documentation>Text to persist onto TaskExecution.feedback. (optional)</documentation>
+      <documentation>Text to persist onto ModelTransformation.feedback. (optional)</documentation>
     </feedback>
   </properties>
 

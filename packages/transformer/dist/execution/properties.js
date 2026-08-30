@@ -1,10 +1,10 @@
 import { collectBaseTypeChain } from "@blockml/framework";
-import { DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, INTEGER_TYPE_FQN, TASK_EXECUTION_FQN, TEXT_TYPE_FQN, } from "./constants.js";
-export function isTaskExecution(block, registry) {
-    if (block.type === TASK_EXECUTION_FQN || block.baseType === TASK_EXECUTION_FQN) {
+import { DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, INTEGER_TYPE_FQN, MODEL_TRANSFORMATION_FQN, TEXT_TYPE_FQN, } from "./constants.js";
+export function isModelTransformation(block, registry) {
+    if (block.type === MODEL_TRANSFORMATION_FQN || block.baseType === MODEL_TRANSFORMATION_FQN) {
         return true;
     }
-    return collectBaseTypeChain(block, registry).some((entry) => entry.type === TASK_EXECUTION_FQN);
+    return collectBaseTypeChain(block, registry).some((entry) => entry.type === MODEL_TRANSFORMATION_FQN);
 }
 export function hasTaskComposition(block) {
     return hasAggregationComposition(block, "task");
@@ -157,8 +157,8 @@ export function setException(block, message) {
     };
     upsertAggregation(block, aggregation);
 }
-export function taskExecutionHasCompletedAt(registry) {
-    const type = registry.get(TASK_EXECUTION_FQN)?.block;
+export function modelTransformationHasCompletedAt(registry) {
+    const type = registry.get(MODEL_TRANSFORMATION_FQN)?.block;
     if (!type) {
         return true;
     }

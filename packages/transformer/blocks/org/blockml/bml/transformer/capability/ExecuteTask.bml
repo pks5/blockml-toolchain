@@ -21,10 +21,10 @@
   <documentation>
     # Execute Task
 
-    Receive the running TaskExecution and the repository. Change BML model
+    Receive the running ModelTransformation and the repository. Change BML model
     source to perform the Task.
 
-    - Must not write TaskExecution metadata or any file under _transform/.
+    - Must not write ModelTransformation metadata or any file under _transform/.
     - Default Claude implementation: Edit on *.bml only; deny _transform/
       and node_modules/; Bash limited to npx blockml.
     - TS: pipeline/execute.ts.
@@ -39,7 +39,7 @@
 
   <properties>
     <runningFqn type="type:Text">
-      <documentation>Running TaskExecution FQN from Prepare. (required)</documentation>
+      <documentation>Running ModelTransformation FQN from Prepare. (required)</documentation>
     </runningFqn>
     <workspaceRoot type="type:Text">
       <documentation>Repository root this stage may modify. (required)</documentation>
