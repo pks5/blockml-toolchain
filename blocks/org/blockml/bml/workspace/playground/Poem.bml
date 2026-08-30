@@ -1,0 +1,30 @@
+<!--
+  Workspace Playground — Poem
+  FQN: org.blockml.bml.workspace.playground.Poem
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:playground="org.blockml.bml.workspace.playground">
+
+  <name>Poem</name>
+  <type>playground:Poem</type>
+  <baseType>core:Documentation</baseType>
+  <is>A random poem produced by a workspace transform execution</is>
+
+  <documentation>
+    The compiler sleeps, the tests all pass,
+    a quiet green across the glass.
+    No warning hums, no stack unwinds,
+    just tidy loops and settled minds.
+
+    Then someone types a single line,
+    and chaos blooms by slow design.
+    We chase the bug through midnight code,
+    and thank the log for what it showed.
+  </documentation>
+
+</block>
