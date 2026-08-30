@@ -5,14 +5,14 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:pending="org.blockml.bml.workspace._transform.pending"
+  xmlns:running="org.blockml.bml.workspace._transform.running"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
   <name>
-    PoemTest
+    T00009_PoemTest_20260830T215131
   </name>
   <type>
-    pending:PoemTest
+    running:T00009_PoemTest_20260830T215131
   </type>
   <baseType>
     workflow:ModelTransformation
@@ -25,11 +25,20 @@
       <value>eda93728-afb2-401d-a35c-0dc31b9932a4</value>
     </executionId>
     <status override="true" type="workflow:ExecutionStatus">
-      <value>Pending</value>
+      <value>Running</value>
     </status>
     <createdAt override="true" type="type:DateTime">
       <value>2026-08-30T01:40:20</value>
     </createdAt>
+    <sequence override="true" type="type:Integer">
+      <value>9</value>
+    </sequence>
+    <startedAt override="true" type="type:DateTime">
+      <value>2026-08-30T21:51:31</value>
+    </startedAt>
+    <baseCommit override="true" type="type:Text">
+      <value>f3c13d220baa87905ad6c1c0bfb45b24018fc038</value>
+    </baseCommit>
   </properties>
   <aggregations>
     <task override="true">
