@@ -7,6 +7,8 @@ export type { ClaudePermissionMode, ClaudeTransformPermissions, } from "./agent/
 export { ClaudeLiveFormatter, formatClaudeStreamLine, } from "./agent/claude-stream.js";
 export type { ClaudeCodeAgentOptions, ClaudeProcessRequest, ClaudeProcessResult, ClaudeProcessRunner, } from "./agent/claude-code-agent.js";
 export { TransformError } from "./execution/errors.js";
+export type { TransformFailureKind } from "./execution/errors.js";
+export { acquireWorktreeLock, transformLockPath, TRANSFORM_LOCK_STALE_MS, } from "./runtime/worktree-lock.js";
 export { resolvePendingExecution } from "./execution/resolve.js";
 export { startExecution } from "./execution/start.js";
 export { completeExecution } from "./execution/complete.js";

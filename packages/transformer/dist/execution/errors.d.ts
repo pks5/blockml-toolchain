@@ -1,4 +1,4 @@
-export type TransformFailureKind = "resolve" | "execution";
+export type TransformFailureKind = "resolve" | "execution" | "busy";
 export declare class TransformError extends Error {
     readonly kind: TransformFailureKind;
     constructor(kind: TransformFailureKind, message: string);

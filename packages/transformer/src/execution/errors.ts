@@ -1,4 +1,4 @@
-export type TransformFailureKind = "resolve" | "execution";
+export type TransformFailureKind = "resolve" | "execution" | "busy";
 
 export class TransformError extends Error {
   readonly kind: TransformFailureKind;
@@ -10,6 +10,6 @@ export class TransformError extends Error {
   }
 
   get exitCode(): number {
-    return this.kind === "resolve" ? 2 : 1;
+    return this.kind === "execution" ? 1 : 2;
   }
 }

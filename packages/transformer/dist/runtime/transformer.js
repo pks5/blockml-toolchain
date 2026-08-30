@@ -2,6 +2,7 @@ import { TransformError } from "../execution/errors.js";
 import { completeExecution } from "../execution/complete.js";
 import { resolvePendingExecution } from "../execution/resolve.js";
 import { startExecution } from "../execution/start.js";
+import { acquireWorktreeLock } from "./worktree-lock.js";
 export class Transformer {
     workspaceRoot;
     agent;
@@ -12,24 +13,30 @@ export class Transformer {
         this.now = options.now ?? (() => new Date());
     }
     async run(executionFqn) {
-        const resolved = resolvePendingExecution(executionFqn, this.workspaceRoot);
-        const started = startExecution(resolved, this.now());
-        const agentResult = await this.agent.execute({
-            workspaceRoot: this.workspaceRoot,
-            executionFqn: started.runningFqn,
-        });
-        if (!agentResult.success) {
-            throw new TransformError("execution", agentResult.error || "Transformation agent failed");
+        const lock = await acquireWorktreeLock(this.workspaceRoot, executionFqn);
+        try {
+            const resolved = resolvePendingExecution(executionFqn, this.workspaceRoot);
+            const started = startExecution(resolved, this.now());
+            const agentResult = await this.agent.execute({
+                workspaceRoot: this.workspaceRoot,
+                executionFqn: started.runningFqn,
+            });
+            if (!agentResult.success) {
+                throw new TransformError("execution", agentResult.error || "Transformation agent failed");
+            }
+            const completed = completeExecution(this.workspaceRoot, started, this.now());
+            return {
+                success: true,
+                pendingFqn: executionFqn,
+                runningFqn: started.runningFqn,
+                completedFqn: completed.completedFqn,
+                sequence: started.sequence,
+                executionId: started.executionId,
+            };
         }
-        const completed = completeExecution(this.workspaceRoot, started, this.now());
-        return {
-            success: true,
-            pendingFqn: executionFqn,
-            runningFqn: started.runningFqn,
-            completedFqn: completed.completedFqn,
-            sequence: started.sequence,
-            executionId: started.executionId,
-        };
+        finally {
+            await lock.release();
+        }
     }
 }
 export async function runTransformation(options) {

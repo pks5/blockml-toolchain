@@ -6,7 +6,7 @@ export class TransformError extends Error {
         this.kind = kind;
     }
     get exitCode() {
-        return this.kind === "resolve" ? 2 : 1;
+        return this.kind === "execution" ? 1 : 2;
     }
 }
 //# sourceMappingURL=errors.js.map

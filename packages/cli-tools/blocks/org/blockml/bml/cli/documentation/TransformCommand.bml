@@ -33,9 +33,14 @@
     EXECUTION-FQN is the FQN of a TaskExecution under
     {library}._transform.pending. Tasks are not accepted directly.
 
-    The transformer resolves the execution, assigns sequence and startedAt,
-    relocates it to _transform.running, invokes a TransformationAgent (Claude Code
-    by default), and on success relocates the same Block to _transform.completed.
+    The transformer takes an exclusive worktree lock, then resolves the
+    execution, assigns sequence and startedAt, relocates it to
+    _transform.running, invokes a TransformationAgent (Claude Code by default),
+    and on success relocates the same Block to _transform.completed.
+
+    Only one transform may run at a time in the same Git worktree. A second
+    call fails immediately (exit 2) with no wait. Different worktrees may
+    run in parallel.
 
     --verbose streams the agent session live (thinking, tools, text).
 

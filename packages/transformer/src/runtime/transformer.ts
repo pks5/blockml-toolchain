@@ -3,6 +3,7 @@ import { TransformError } from "../execution/errors.js";
 import { completeExecution } from "../execution/complete.js";
 import { resolvePendingExecution } from "../execution/resolve.js";
 import { startExecution, type StartedExecution } from "../execution/start.js";
+import { acquireWorktreeLock } from "./worktree-lock.js";
 
 export interface TransformerOptions {
   workspaceRoot: string;
@@ -31,27 +32,32 @@ export class Transformer {
   }
 
   async run(executionFqn: string): Promise<TransformRunResult> {
-    const resolved = resolvePendingExecution(executionFqn, this.workspaceRoot);
-    const started = startExecution(resolved, this.now());
-    const agentResult = await this.agent.execute({
-      workspaceRoot: this.workspaceRoot,
-      executionFqn: started.runningFqn,
-    });
-    if (!agentResult.success) {
-      throw new TransformError(
-        "execution",
-        agentResult.error || "Transformation agent failed",
-      );
+    const lock = await acquireWorktreeLock(this.workspaceRoot, executionFqn);
+    try {
+      const resolved = resolvePendingExecution(executionFqn, this.workspaceRoot);
+      const started = startExecution(resolved, this.now());
+      const agentResult = await this.agent.execute({
+        workspaceRoot: this.workspaceRoot,
+        executionFqn: started.runningFqn,
+      });
+      if (!agentResult.success) {
+        throw new TransformError(
+          "execution",
+          agentResult.error || "Transformation agent failed",
+        );
+      }
+      const completed = completeExecution(this.workspaceRoot, started, this.now());
+      return {
+        success: true,
+        pendingFqn: executionFqn,
+        runningFqn: started.runningFqn,
+        completedFqn: completed.completedFqn,
+        sequence: started.sequence,
+        executionId: started.executionId,
+      };
+    } finally {
+      await lock.release();
     }
-    const completed = completeExecution(this.workspaceRoot, started, this.now());
-    return {
-      success: true,
-      pendingFqn: executionFqn,
-      runningFqn: started.runningFqn,
-      completedFqn: completed.completedFqn,
-      sequence: started.sequence,
-      executionId: started.executionId,
-    };
   }
 }
 
