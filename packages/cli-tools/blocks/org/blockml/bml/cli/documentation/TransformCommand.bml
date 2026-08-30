@@ -49,6 +49,10 @@
 
     --verbose streams the agent session live (thinking, tools, text).
 
+    The worktree must be clean at start (exit 2 otherwise). Prepare records
+    baseCommit from HEAD and commits the running relocation. Execute commits
+    model changes. Finalize commits the succeeded or failed relocation.
+
     Pending-contract violations never start the execution (exit 2).]]></documentation>
   <references>
     <see type="clidocumentation:Commands" relation="SeeAlso" />

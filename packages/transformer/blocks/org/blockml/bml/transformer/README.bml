@@ -34,8 +34,10 @@
     onto the running ModelTransformation. After a started execution, Finalize
     always relocates the Block to `_transform.succeeded` or
     `_transform.failed` from the Success/Exception contract — never from
-    agent text. Transformation intelligence lives in the model, not in
-    the engine.
+    agent text. Prepare requires a clean Git worktree, records `baseCommit`,
+    and commits the running relocation; Execute commits model changes;
+    Finalize commits the terminal relocation. Transformation intelligence
+    lives in the model, not in the engine.
   </documentation>
 
   <references>

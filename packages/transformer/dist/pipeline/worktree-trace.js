@@ -1,5 +1,5 @@
-import { spawnSync } from "node:child_process";
 import { resolve } from "node:path";
+import { gitStdout } from "./git.js";
 export function isTransformLifecyclePath(path) {
     return path.includes("/_transform/") || path.startsWith("_transform/");
 }
@@ -8,32 +8,22 @@ export function modelChangedFiles(paths) {
 }
 export function collectWorktreeTrace(workspaceRoot) {
     const empty = { diff: "", changedFiles: [] };
-    const toplevel = git(workspaceRoot, ["rev-parse", "--show-toplevel"]);
+    const toplevel = gitStdout(workspaceRoot, ["rev-parse", "--show-toplevel"]);
     if (toplevel === undefined) {
         return empty;
     }
     if (resolve(toplevel.trim()) !== resolve(workspaceRoot)) {
         return empty;
     }
-    const status = git(workspaceRoot, ["status", "--porcelain"]);
+    const status = gitStdout(workspaceRoot, ["status", "--porcelain"]);
     if (status === undefined) {
         return empty;
     }
     const changedFiles = parsePorcelain(status);
-    const unstaged = git(workspaceRoot, ["diff"]) ?? "";
-    const staged = git(workspaceRoot, ["diff", "--cached"]) ?? "";
+    const unstaged = gitStdout(workspaceRoot, ["diff"]) ?? "";
+    const staged = gitStdout(workspaceRoot, ["diff", "--cached"]) ?? "";
     const diff = [unstaged, staged].filter((part) => part.trim().length > 0).join("\n");
     return { diff, changedFiles };
-}
-function git(cwd, args) {
-    const result = spawnSync("git", args, {
-        cwd,
-        encoding: "utf8",
-    });
-    if (result.error || result.status !== 0) {
-        return undefined;
-    }
-    return result.stdout;
 }
 function parsePorcelain(stdout) {
     const files = [];

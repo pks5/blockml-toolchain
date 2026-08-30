@@ -4,7 +4,7 @@ export function createPrepareStage() {
     return {
         async run(pendingFqn, context) {
             const resolved = resolvePendingExecution(pendingFqn, context.workspaceRoot);
-            const started = startExecution(resolved, context.now());
+            const started = startExecution(resolved, context.now(), context.workspaceRoot);
             return { pendingFqn, started };
         },
     };

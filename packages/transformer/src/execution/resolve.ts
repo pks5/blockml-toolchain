@@ -27,6 +27,7 @@ export interface ResolvedExecution {
 const REQUIRED_PRESENT = ["executionId", "createdAt"] as const;
 const FORBIDDEN_PROPERTIES = [
   "startedAt",
+  "baseCommit",
   "completedAt",
   "sequence",
   "feedback",

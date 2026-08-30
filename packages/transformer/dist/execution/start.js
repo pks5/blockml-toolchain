@@ -1,9 +1,11 @@
 import { forkBom } from "@blockml/framework";
 import { formatDateTimeProperty, generateExecutionName } from "./lifecycle.js";
-import { getExecutionId, setSequence, setStartedAt, setStatus } from "./properties.js";
+import { getExecutionId, setBaseCommit, setSequence, setStartedAt, setStatus, } from "./properties.js";
 import { applyExecutionIdentity, persistDocument, removeFile, rewriteInboundReferences, } from "./relocate.js";
 import { SequenceAllocator } from "./sequence.js";
-export function startExecution(resolved, now, allocator = new SequenceAllocator()) {
+import { assertWorktreeClean, commitWorktree } from "../pipeline/git.js";
+export function startExecution(resolved, now, workspaceRoot, allocator = new SequenceAllocator()) {
+    const baseCommit = assertWorktreeClean(workspaceRoot);
     const sequence = allocator.nextSequence(resolved.libraryFqn, resolved.registry);
     const generatedName = generateExecutionName(sequence, resolved.originalName, now);
     const startedAtIso = formatDateTimeProperty(now);
@@ -13,6 +15,7 @@ export function startExecution(resolved, now, allocator = new SequenceAllocator(
     setSequence(forked.block, sequence);
     setStatus(forked.block, "Running");
     setStartedAt(forked.block, startedAtIso);
+    setBaseCommit(forked.block, baseCommit);
     const runningFqn = applyExecutionIdentity(forked, {
         libraryFqn: resolved.libraryFqn,
         stage: "running",
@@ -23,6 +26,9 @@ export function startExecution(resolved, now, allocator = new SequenceAllocator(
     if (pendingFilePath !== forked.source.filePath) {
         removeFile(pendingFilePath);
     }
+    commitWorktree(workspaceRoot, `transform(start): ${generatedName}`, {
+        required: true,
+    });
     return {
         executionId,
         libraryFqn: resolved.libraryFqn,
@@ -30,6 +36,7 @@ export function startExecution(resolved, now, allocator = new SequenceAllocator(
         sequence,
         startedAt: now,
         startedAtIso,
+        baseCommit,
         generatedName,
         runningFqn,
         runningFilePath: forked.source.filePath,

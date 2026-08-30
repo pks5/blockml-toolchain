@@ -14,6 +14,7 @@ import {
   rewriteInboundReferences,
 } from "./relocate.js";
 import type { StartedExecution } from "./start.js";
+import { commitWorktree } from "../pipeline/git.js";
 
 export interface FinalizedExecution {
   terminalFqn: string;
@@ -48,6 +49,9 @@ export function finalizeExecution(
   if (runningFilePath !== forked.source.filePath) {
     removeFile(runningFilePath);
   }
+  commitWorktree(workspaceRoot, `transform(${stage}): ${started.generatedName}`, {
+    required: true,
+  });
 
   return {
     terminalFqn,

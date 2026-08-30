@@ -1,4 +1,5 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import type { TransformationAgent } from "../src/agent/transformation-agent.js";
 
@@ -21,6 +22,47 @@ export function writeProject(dir: string, files: Record<string, string>): void {
     mkdirSync(dirname(path), { recursive: true });
     writeFileSync(path, contents);
   }
+  commitFixture(dir);
+}
+
+export function gitHead(dir: string): string {
+  return gitOrThrow(dir, ["rev-parse", "HEAD"]).trim();
+}
+
+export function gitLogSubjects(dir: string): string[] {
+  const stdout = gitOrThrow(dir, ["log", "--pretty=%s"]);
+  return stdout.trim().length === 0 ? [] : stdout.trim().split("\n");
+}
+
+function commitFixture(dir: string, message = "fixture"): void {
+  if (!existsSync(join(dir, ".git"))) {
+    gitOrThrow(dir, ["init"]);
+    gitOrThrow(dir, ["config", "user.email", "transformer@test"]);
+    gitOrThrow(dir, ["config", "user.name", "Transformer Test"]);
+  }
+  const gitignore = join(dir, ".gitignore");
+  if (!existsSync(gitignore)) {
+    writeFileSync(gitignore, ".blockml/\n");
+  }
+  gitOrThrow(dir, ["add", "-A"]);
+  const cached = spawnSync("git", ["diff", "--cached", "--quiet"], {
+    cwd: dir,
+    encoding: "utf8",
+  });
+  if (cached.status === 0) {
+    return;
+  }
+  gitOrThrow(dir, ["-c", "commit.gpgsign=false", "commit", "-m", message]);
+}
+
+function gitOrThrow(dir: string, args: string[]): string {
+  const result = spawnSync("git", args, { cwd: dir, encoding: "utf8" });
+  if (result.error || (result.status ?? 1) !== 0) {
+    throw new Error(
+      `git ${args.join(" ")} failed: ${result.stderr || result.error?.message || ""}`,
+    );
+  }
+  return result.stdout ?? "";
 }
 
 export function pendingExecutionXml(opts: {

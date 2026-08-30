@@ -32,16 +32,18 @@
     [1] Prepare Execution — transformercap:PrepareExecution
         Default: deterministic. Validate the pending contract (status=
         Pending, task, executionId, createdAt; no start/finish fields),
-        assign sequence and startedAt, set status=Running, relocate to
-        _transform.running. If the contract is violated, do not start.
+        require a clean Git worktree, assign sequence, startedAt, and
+        baseCommit (HEAD), set status=Running, relocate to
+        _transform.running, then commit. If the contract is violated or
+        the worktree is dirty, do not start.
 
     [2] Execute Task — transformercap:ExecuteTask
         Default: TransformationAgent (Claude Code at the CLI). Receives
         the running execution and the repository. May change BML model
-        source. Must not write ModelTransformation metadata or files under
-        _transform/. Claude default: Edit(**/*.bml), deny
-        Edit(**/_transform/**) and Edit(**/node_modules/**), Bash
-        limited to npx blockml.
+        source, then commits those model changes. Must not write
+        ModelTransformation metadata or files under _transform/. Claude
+        default: Edit(**/*.bml), deny Edit(**/_transform/**) and
+        Edit(**/node_modules/**), Bash limited to npx blockml.
 
     [3] Reflect on Execution — transformercap:ReflectOnExecution
         Default: Claude Worker #2. Must not change the model. Receives the
@@ -60,7 +62,8 @@
         Success: status=Succeeded, completedAt, no exception, relocate
         running to succeeded. Failure: status=Failed, completedAt,
         exception present, relocate running to failed. Technical errors
-        become workflow:ExecutionException.
+        become workflow:ExecutionException. Commits after the terminal
+        relocation.
 
     TypeScript:
     • runtime/transformer.ts → transformercap:RunTransformation

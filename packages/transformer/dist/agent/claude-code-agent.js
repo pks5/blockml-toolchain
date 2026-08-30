@@ -17,7 +17,7 @@ export function buildClaudeExecutionPrompt(executionFqn) {
         "",
         "Do not modify the ModelTransformation block.",
         "Do not write files under any _transform/ directory.",
-        "Do not set changedFiles, feedback, completedAt, status, or exception,",
+        "Do not set changedFiles, feedback, completedAt, baseCommit, status, or exception,",
         "or move the execution between pending, running, succeeded, and failed.",
         "",
         "Use the BlockML model, installed libraries, Search, validation tooling,",

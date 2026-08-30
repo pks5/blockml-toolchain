@@ -22,6 +22,8 @@
     * `status` — lifecycle state (`workflow:ExecutionStatus`). Matches the
       `_transform` package: Pending, Running, Succeeded, Failed.
     * `startedAt` / `completedAt` — the execution interval.
+    * `baseCommit` — Git HEAD commit when this execution started. Set only
+      after Prepare confirms a clean worktree and sets `status=Running`.
     * `task` — the Task that ran.
     * `changedFiles` — workspace-relative paths modified during this execution
       (`type:FilePathEntity[]`).
@@ -52,6 +54,9 @@
     <startedAt type="type:DateTime">
       <documentation>When this execution started.</documentation>
     </startedAt>
+    <baseCommit type="type:Text">
+      <documentation>Git HEAD commit at start, recorded after a clean-worktree check.</documentation>
+    </baseCommit>
     <completedAt type="type:DateTime">
       <documentation>When this execution finished.</documentation>
     </completedAt>

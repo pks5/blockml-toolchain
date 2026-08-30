@@ -14,6 +14,7 @@ export declare function setOverridePropertyList(block: BlockDefinition, name: st
 export declare function setSequence(block: BlockDefinition, sequence: number): void;
 export declare function setStatus(block: BlockDefinition, status: ExecutionStatusId): void;
 export declare function setStartedAt(block: BlockDefinition, iso: string): void;
+export declare function setBaseCommit(block: BlockDefinition, commit: string): void;
 export declare function setCompletedAt(block: BlockDefinition, iso: string): void;
 export declare function setFeedback(block: BlockDefinition, feedback: string): void;
 export declare function setChangedFiles(block: BlockDefinition, paths: readonly string[]): void;

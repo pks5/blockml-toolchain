@@ -23,8 +23,12 @@
 
     1. Validate the pending contract: `status=Pending`, `task`, `executionId`,
        and `createdAt` must be set; start/finish fields must be absent.
-    2. Assign `sequence` and `startedAt`, set `status=Running`.
-    3. Relocate the Block to `_transform.running`.
+    2. Require a clean Git worktree (including HEAD). Abort without starting
+       if the worktree is dirty or not a Git toplevel.
+    3. Assign `sequence`, `startedAt`, and `baseCommit` (current HEAD), set
+       `status=Running`.
+    4. Relocate the Block to `_transform.running`.
+    5. Commit the running relocation.
 
     Default implementation is deterministic. TS: pipeline/prepare.ts.
   </documentation>

@@ -22,7 +22,8 @@
     # Execute Task
 
     Receive the running ModelTransformation and the repository. Change BML model
-    source to perform the Task.
+    source to perform the Task. After the agent returns, commit model changes
+    (skip the commit when the worktree has nothing to commit).
 
     - Must not write ModelTransformation metadata or any file under _transform/.
     - Default Claude implementation: Edit on *.bml only; deny _transform/

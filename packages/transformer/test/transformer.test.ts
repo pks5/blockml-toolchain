@@ -1,8 +1,9 @@
-import { existsSync, mkdirSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { parse } from "@blockml/parser";
 import { Transformer } from "../src/runtime/transformer.js";
+import { TransformError } from "../src/execution/errors.js";
 import { ClaudeCodeAgent } from "../src/agent/claude-code-agent.js";
 import {
   formatDateTimeProperty,
@@ -16,6 +17,8 @@ import {
   EXECUTION_ID,
   FIXED_NOW,
   failingAgent,
+  gitHead,
+  gitLogSubjects,
   historyExecutionXml,
   pendingExecutionXml,
   pendingFqn,
@@ -209,5 +212,63 @@ describe("Transformer lifecycle", () => {
     expect(source).toContain("this.pipeline.persist.run");
     expect(source).toContain("this.pipeline.finalize.run");
     expect(ClaudeCodeAgent.name).toBe("ClaudeCodeAgent");
+  });
+
+  it("aborts when the worktree is dirty and does not start the execution", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+      }),
+    });
+    writeFileSync(join(TMP, "dirty.txt"), "uncommitted");
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    await expect(transformer.run(pendingFqn("JokeTest"))).rejects.toSatisfy(
+      (error: unknown) => {
+        expect(error).toBeInstanceOf(TransformError);
+        expect((error as TransformError).kind).toBe("resolve");
+        expect((error as TransformError).message).toMatch(/not clean/i);
+        return true;
+      },
+    );
+    expect(
+      existsSync(join(TMP, "blocks/com/example/model/_transform/pending/JokeTest.bml")),
+    ).toBe(true);
+  });
+
+  it("records HEAD as baseCommit and commits start, execute, and terminal snapshots", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+      }),
+    });
+    const headBefore = gitHead(TMP);
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: {
+        async execute() {
+          writeFileSync(join(TMP, "blocks/com/example/model/Face.bml"), "<block/>\n");
+          return { success: true };
+        },
+      },
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(true);
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).toContain(`<value>${headBefore}</value>`);
+    expect(gitLogSubjects(TMP)).toEqual([
+      `transform(succeeded): ${generated}`,
+      `transform(execute): ${generated}`,
+      `transform(start): ${generated}`,
+      "fixture",
+    ]);
   });
 });

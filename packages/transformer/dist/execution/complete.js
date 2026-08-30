@@ -3,6 +3,7 @@ import { formatDateTimeProperty } from "./lifecycle.js";
 import { loadRunningExecution } from "./load-running.js";
 import { setCompletedAt, setStatus, modelTransformationHasCompletedAt, } from "./properties.js";
 import { applyExecutionIdentity, persistDocument, removeFile, rewriteInboundReferences, } from "./relocate.js";
+import { commitWorktree } from "../pipeline/git.js";
 export function finalizeExecution(workspaceRoot, started, now, stage) {
     const { document, registry } = loadRunningExecution(workspaceRoot, started);
     const forked = forkBom(document);
@@ -22,6 +23,9 @@ export function finalizeExecution(workspaceRoot, started, now, stage) {
     if (runningFilePath !== forked.source.filePath) {
         removeFile(runningFilePath);
     }
+    commitWorktree(workspaceRoot, `transform(${stage}): ${started.generatedName}`, {
+        required: true,
+    });
     return {
         terminalFqn,
         terminalFilePath: forked.source.filePath,

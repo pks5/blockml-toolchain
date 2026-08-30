@@ -6,6 +6,7 @@ import { getExecutionId, getPropertyLiteral, getStatus, hasAggregationCompositio
 const REQUIRED_PRESENT = ["executionId", "createdAt"];
 const FORBIDDEN_PROPERTIES = [
     "startedAt",
+    "baseCommit",
     "completedAt",
     "sequence",
     "feedback",

@@ -120,6 +120,9 @@ export function setStatus(block, status) {
 export function setStartedAt(block, iso) {
     setOverrideProperty(block, "startedAt", DATETIME_TYPE_FQN, iso);
 }
+export function setBaseCommit(block, commit) {
+    setOverrideProperty(block, "baseCommit", TEXT_TYPE_FQN, commit);
+}
 export function setCompletedAt(block, iso) {
     setOverrideProperty(block, "completedAt", DATETIME_TYPE_FQN, iso);
 }

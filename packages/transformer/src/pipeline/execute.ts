@@ -7,6 +7,7 @@ import type {
   TransformStage,
 } from "./types.js";
 import { collectWorktreeTrace, modelChangedFiles } from "./worktree-trace.js";
+import { commitWorktree } from "./git.js";
 
 export function createExecuteStage(
   agent: TransformationAgent,
@@ -27,6 +28,10 @@ export function createExecuteStage(
         );
       }
       const worktree = collectWorktreeTrace(context.workspaceRoot);
+      commitWorktree(
+        context.workspaceRoot,
+        `transform(execute): ${prepared.started.generatedName}`,
+      );
       return {
         ...prepared,
         trace: {

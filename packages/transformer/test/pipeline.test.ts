@@ -235,7 +235,9 @@ describe("Transformer pipeline", () => {
     });
     await transformer.run(pendingFqn("JokeTest"));
     expect(received?.stdout).toBe("wrote extra");
-    expect(received?.changedFiles).toEqual([]);
+    expect(received?.changedFiles).toEqual([
+      "blocks/com/example/model/Extra.bml",
+    ]);
   });
 
   it("still persists and finalizes when reflect fails", async () => {

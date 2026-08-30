@@ -189,6 +189,10 @@ export function setStartedAt(block: BlockDefinition, iso: string): void {
   setOverrideProperty(block, "startedAt", DATETIME_TYPE_FQN, iso);
 }
 
+export function setBaseCommit(block: BlockDefinition, commit: string): void {
+  setOverrideProperty(block, "baseCommit", TEXT_TYPE_FQN, commit);
+}
+
 export function setCompletedAt(block: BlockDefinition, iso: string): void {
   setOverrideProperty(block, "completedAt", DATETIME_TYPE_FQN, iso);
 }

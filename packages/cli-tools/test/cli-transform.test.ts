@@ -1,3 +1,4 @@
+import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -49,6 +50,21 @@ function writeProject(): void {
     join(TMP, "blocks/com/example/model/_transform/pending/JokeTest.bml"),
     pendingXml("JokeTest"),
   );
+  writeFileSync(join(TMP, ".gitignore"), ".blockml/\n");
+  gitOrThrow(["init"]);
+  gitOrThrow(["config", "user.email", "transformer@test"]);
+  gitOrThrow(["config", "user.name", "Transformer Test"]);
+  gitOrThrow(["add", "-A"]);
+  gitOrThrow(["-c", "commit.gpgsign=false", "commit", "-m", "fixture"]);
+}
+
+function gitOrThrow(args: string[]): void {
+  const result = spawnSync("git", args, { cwd: TMP, encoding: "utf8" });
+  if (result.error || (result.status ?? 1) !== 0) {
+    throw new Error(
+      `git ${args.join(" ")} failed: ${result.stderr || result.error?.message || ""}`,
+    );
+  }
 }
 
 describe("parseArgs transform", () => {
