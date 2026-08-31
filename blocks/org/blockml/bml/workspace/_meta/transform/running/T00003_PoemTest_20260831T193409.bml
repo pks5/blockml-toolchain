@@ -5,14 +5,14 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:pending="org.blockml.bml.workspace._meta.transform.pending"
+  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
   <name>
-    PoemTest
+    T00003_PoemTest_20260831T193409
   </name>
   <type>
-    pending:PoemTest
+    running:T00003_PoemTest_20260831T193409
   </type>
   <baseType>
     workflow:ModelTransformation
@@ -25,17 +25,28 @@
       <value>A transformation that creates a playground Poem block</value>
     </description>
     <status override="true" type="workflow:ExecutionStatus">
-      <value>Pending</value>
+      <value>Running</value>
     </status>
     <createdAt override="true" type="type:DateTime">
       <value>2026-08-30T01:40:20</value>
     </createdAt>
+    <executionId override="true" type="type:Text">
+      <value>a172de3d-c399-45b4-99f4-d1df2a2ecf6d</value>
+    </executionId>
+    <sequence override="true" type="type:Integer">
+      <value>3</value>
+    </sequence>
+    <startedAt override="true" type="type:DateTime">
+      <value>2026-08-31T19:34:09</value>
+    </startedAt>
+    <baseCommit override="true" type="type:Text">
+      <value>2dcb61dc8ff1ed5f6017cd4c57d78a180f1045f1</value>
+    </baseCommit>
   </properties>
   <aggregations>
     <stages override="true">
       <composition>
         <workflow:Stage name="Create Poem" status="Pending">
-        
           <task>
             <composition>
               <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.Poem.bml that contains a random german poem. For each execution create a new poem." />
@@ -43,7 +54,6 @@
           </task>
         </workflow:Stage>
         <workflow:Stage name="Translate Poem" status="Pending">
-        
           <task>
             <composition>
               <workflow:InstructionTask instructions="Translate the poem in org.blockml.bml.workspace.playground.Poem.bml to french." />
