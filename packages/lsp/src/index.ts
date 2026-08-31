@@ -15,6 +15,13 @@ export {
   type OutlineSymbol,
 } from "./outline.js";
 export {
+  semanticTokensFor,
+  SEMANTIC_TOKEN_LEGEND,
+  SEMANTIC_TOKEN_SCOPES,
+  SEMANTIC_TOKEN_TYPES,
+  type SemanticTokensResult,
+} from "./semantic-tokens.js";
+export {
   analyzeDocument,
   formatDocument,
   type AnalysisResult,

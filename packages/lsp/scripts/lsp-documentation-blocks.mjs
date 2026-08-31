@@ -20,7 +20,8 @@ export const documentationBlocks = [
     + textDocument/formatting (parse → serialize)
     + textDocument/hover (XML-token hit-test + TypeRegistry)
     + textDocument/documentSymbol (Urmodell outline tree)
-    + textDocument/definition and textDocument/references (hit-test + TypeRegistry).
+    + textDocument/definition and textDocument/references (hit-test + TypeRegistry)
+    + textDocument/semanticTokens/full (position-based FrameworkRoles highlight).
     Semantics: @blockml/parser, @blockml/serializer, @blockml/validator, @blockml/framework.`,
     refs: [
       { type: "lspdocumentation:LayerSeparation", relation: "ReadNext" },
@@ -65,6 +66,9 @@ export const documentationBlocks = [
     (definition = LocationLink with whole-QName originSelectionRange; references =
     baseType + member types, optional declaration).
 
+    Semantic tokens: textDocument/semanticTokens/full → semanticTokensFor → XML-stack
+    walk classified by FrameworkRoles position (no parser). Nested block re-enters L1.
+
     Workspace bootstrap reads blockml.config.json (srcDir, libraries) inline — no @blockml/cli dependency.
     Corpus-first: always scan srcDir. Seed = package.json blockml.library then config.libraries
     (additive). FQN dependencies resolve via discovered BlockML npm/workspace packages
@@ -85,8 +89,9 @@ export const documentationBlocks = [
     • textDocument/hover (XML-token hit-test + TypeRegistry)
     • textDocument/documentSymbol (Urmodell outline tree)
     • textDocument/definition and textDocument/references (hit-test + TypeRegistry)
+    • textDocument/semanticTokens/full (position-based FrameworkRoles highlight)
     • blockml-lsp stdio binary
-    • analyzeDocument, formatDocument, hoverAt, documentSymbols, definitionAt, and referencesAt public API for tests and non-LSP hosts
+    • analyzeDocument, formatDocument, hoverAt, documentSymbols, definitionAt, referencesAt, and semanticTokensFor public API for tests and non-LSP hosts
 
     Out of scope V1:
     • Completion
@@ -106,6 +111,7 @@ export const documentationBlocks = [
     documentSymbols(text, filePath): OutlineSymbol[] | null
     definitionAt(text, filePath, position, workspace): LspLocationLink[] | null
     referencesAt(text, filePath, position, workspace, includeDeclaration?): LspLocation[] | null
+    semanticTokensFor(text): SemanticTokensResult
     createWorkspace(rootDir): WorkspaceState
     loadBomConfig(rootDir): BomConfig
     invalidateWorkspace(rootDir): void
@@ -121,6 +127,7 @@ export const documentationBlocks = [
       { type: "lspcap:DocumentSymbols", relation: "Defines" },
       { type: "lspcap:DefinitionAt", relation: "Defines" },
       { type: "lspcap:ReferencesAt", relation: "Defines" },
+      { type: "lspcap:SemanticTokensFor", relation: "Defines" },
       { type: "lspdocumentation:DesignDecisions", relation: "ReadNext" },
     ],
   },
@@ -155,6 +162,10 @@ export const documentationBlocks = [
     the whole QName. includeDeclaration controls whether the defining block.source
     is included.
 
+    onSemanticTokens: semanticTokensFor on the in-memory buffer; XML-stack walk
+    classified by FrameworkRoles position (no parser, no TypeRegistry). Nested
+    block re-enters L1. Legend token types map to *.bml TextMate scopes in the client.
+
     Bootstrap errors (BML_LIBRARY_*) published once per workspace on each document until fixed.`,
     refs: [
       { type: "lspcap:StartLanguageServer", relation: "Defines" },
@@ -166,7 +177,7 @@ export const documentationBlocks = [
     doc: `@blockml/lsp — LSP server, language-service, workspace bootstrap. Owns this BML library.
 
     @blockml/parser / @blockml/serializer / @blockml/validator / @blockml/framework — semantic backend.
-    External VS Code (or other) extension — Language Client, TextMate grammar, .bml file association.`,
+    External VS Code (or other) extension — Language Client, TextMate grammar, token colors, .bml file association.`,
     refs: [
       { type: "lspdocumentation:ScopeExclusions", relation: "ReadNext" },
     ],
@@ -175,7 +186,7 @@ export const documentationBlocks = [
     name: "ScopeExclusions",
     is: "Explicit out-of-scope for @blockml/lsp V1",
     doc: `Out of scope:
-    • IDE extension UI, syntax highlighting — external packages
+    • IDE extension UI, TextMate grammar, token colors, and file associations — external packages
     • BomBuilder structural authoring (V3)
     • Completion, workspace/symbol
     • Range formatting, tab indent
@@ -225,7 +236,13 @@ export const documentationBlocks = [
     covering the whole prefix:Local, dotted FQN, or unqualified PascalCase in a
     type slot (implicit namespace). Language tags are not definitions. Targets
     and usages come from the disk TypeRegistry (no unsaved overlay).
-    includeDeclaration defaults true.`,
+    includeDeclaration defaults true.
+
+    Semantic tokens are an XML-stack walk (no parser). Element names are classified
+    by nesting relative to the nearest block, matching
+    org.blockml.bml.vscode.theme.FrameworkRoles — same local name, different color
+    by position. Nested block re-enters block-body rules. Clients map the
+    legend types to *.bml TextMate scopes; theming stays in the IDE package.`,
     refs: [
       { type: "lspdocumentation:PublicApi", relation: "ReadNext" },
     ],

@@ -21,6 +21,7 @@ import { hoverAt } from "./hover.js";
 import { analyzeDocument, formatDocument } from "./language-service.js";
 import { definitionAt, referencesAt } from "./navigation.js";
 import { documentSymbols } from "./outline.js";
+import { SEMANTIC_TOKEN_LEGEND, semanticTokensFor } from "./semantic-tokens.js";
 import { diagnosticToLsp } from "./positions.js";
 import {
   createWorkspace,
@@ -124,6 +125,11 @@ connection.onInitialize((params) => {
       documentSymbolProvider: true,
       definitionProvider: true,
       referencesProvider: true,
+      semanticTokensProvider: {
+        legend: SEMANTIC_TOKEN_LEGEND,
+        full: true,
+        range: false,
+      },
     },
   };
 });
@@ -251,6 +257,14 @@ connection.onDefinition((params: DefinitionParams) => {
       targetSelectionRange: link.target.range,
     }),
   );
+});
+
+connection.languages.semanticTokens.on((params) => {
+  const doc = documents.get(params.textDocument.uri);
+  if (!doc) {
+    return { data: [] };
+  }
+  return semanticTokensFor(doc.getText());
 });
 
 connection.onReferences((params: ReferenceParams) => {

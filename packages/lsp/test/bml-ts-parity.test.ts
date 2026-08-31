@@ -20,6 +20,7 @@ const TS_CAPABILITY_EXPORTS = [
   "documentSymbols",
   "definitionAt",
   "referencesAt",
+  "semanticTokensFor",
   "createWorkspace",
   "loadBomConfig",
   "invalidateWorkspace",
@@ -74,6 +75,7 @@ describe("LSP BML ↔ TS parity", () => {
     expect(schemaCaps.has("documentSymbols")).toBe(true);
     expect(schemaCaps.has("definitionAt")).toBe(true);
     expect(schemaCaps.has("referencesAt")).toBe(true);
+    expect(schemaCaps.has("semanticTokensFor")).toBe(true);
     expect(schemaCaps.has("startLanguageServer")).toBe(true);
   });
 

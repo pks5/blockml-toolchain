@@ -80,12 +80,14 @@
         <lsp:OutlineSymbol />
         <lsp:LspLocation />
         <lsp:LspLocationLink />
+        <lsp:SemanticTokensResult />
         <lspcap:AnalyzeDocument />
         <lspcap:FormatDocument />
         <lspcap:HoverAt />
         <lspcap:DocumentSymbols />
         <lspcap:DefinitionAt />
         <lspcap:ReferencesAt />
+        <lspcap:SemanticTokensFor />
         <lspcap:StartLanguageServer />
         <lspdocumentation:Introduction />
         <lspdocumentation:LayerSeparation />

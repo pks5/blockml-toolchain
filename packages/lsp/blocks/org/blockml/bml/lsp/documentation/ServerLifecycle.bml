@@ -63,6 +63,10 @@
     the whole QName. includeDeclaration controls whether the defining block.source
     is included.
 
+    onSemanticTokens: semanticTokensFor on the in-memory buffer; XML-stack walk
+    classified by FrameworkRoles position (no parser, no TypeRegistry). Nested
+    block re-enters L1. Legend token types map to *.bml TextMate scopes in the client.
+
     Bootstrap errors (BML_LIBRARY_*) published once per workspace on each document until fixed.</documentation>
 
   <references>

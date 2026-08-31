@@ -35,8 +35,8 @@
   <baseType>core:Documentation</baseType>
   <is>Explicit out-of-scope for @blockml/lsp V1</is>
 
-  <documentation>Out of scope:
-    • IDE extension UI, syntax highlighting — external packages
+  <documentation>    Out of scope:
+    • IDE extension UI, TextMate grammar, token colors, and file associations — external packages
     • BomBuilder structural authoring (V3)
     • Completion, workspace/symbol
     • Range formatting, tab indent

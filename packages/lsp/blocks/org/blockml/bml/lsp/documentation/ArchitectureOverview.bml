@@ -52,6 +52,9 @@
     (definition = LocationLink with whole-QName originSelectionRange; references =
     baseType + member types, optional declaration).
 
+    Semantic tokens: textDocument/semanticTokens/full → semanticTokensFor → XML-stack
+    walk classified by FrameworkRoles position (no parser). Nested block re-enters L1.
+
     Workspace bootstrap reads blockml.config.json (srcDir, libraries) inline — no @blockml/cli dependency.
     Corpus-first: always scan srcDir. Seed = package.json blockml.library then config.libraries
     (additive). FQN dependencies resolve via discovered BlockML npm/workspace packages

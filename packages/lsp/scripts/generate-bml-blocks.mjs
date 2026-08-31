@@ -146,6 +146,17 @@ const blocks = [
   {
     pkg: "",
     prefix: "lsp",
+    name: "SemanticTokensResult",
+    is: "LSP semanticTokens/full payload",
+    doc: "BML type gap: stands for TypeScript SemanticTokensResult (packages/lsp/src/semantic-tokens.ts). data is the LSP 5-int delta encoding (deltaLine, deltaStart, length, tokenType, tokenModifiers).",
+    baseType: "lsp:LspType",
+    fields: [
+      { name: "data", type: "type:Integer[]", required: true, doc: "LSP SemanticTokens.data integer array." },
+    ],
+  },
+  {
+    pkg: "",
+    prefix: "lsp",
     name: "LspLocation",
     is: "URI plus range for a workspace location",
     doc: "BML type gap: stands for TypeScript LspLocation (packages/lsp/src/navigation.ts).",
@@ -267,9 +278,33 @@ const capabilities = [
   {
     pkg: "capability",
     prefix: "lspcap",
+    name: "SemanticTokensFor",
+    is: "Position-based semantic tokens for a BML document",
+    doc: `# Position-based semantic tokens for a BML document
+
+    XML-stack walk (no parser, no TypeRegistry). Classifies each element name by nesting
+    relative to the nearest block, matching org.blockml.bml.vscode.theme.FrameworkRoles:
+
+    • root, block declaration/facet/container
+    • member container/name/field/facet/sub-container
+    • domain type, composition instance
+
+    Nested block re-enters L1. Lexical tokens cover attributes, strings, comments,
+    interpolation, embed, and punctuation. Returns LSP SemanticTokens.data (5-int groups).
+    Used by textDocument/semanticTokens/full.`,
+    tsExport: "semanticTokensFor",
+    inputs: [
+      { name: "text", type: "type:Text", required: true },
+    ],
+    output: { name: "result", type: "lsp:SemanticTokensResult", required: true, doc: "LSP encoded semantic tokens." },
+    refs: ["lspdocumentation:PublicApi"],
+  },
+  {
+    pkg: "capability",
+    prefix: "lspcap",
     name: "StartLanguageServer",
     is: "stdio LSP server entry (bin blockml-lsp)",
-    doc: "packages/lsp/dist/server.js — document sync, publishDiagnostics, textDocument/formatting, textDocument/hover, textDocument/documentSymbol, textDocument/definition, and textDocument/references.",
+    doc: "packages/lsp/dist/server.js — document sync, publishDiagnostics, textDocument/formatting, textDocument/hover, textDocument/documentSymbol, textDocument/definition, textDocument/references, and textDocument/semanticTokens/full.",
     tsExport: "startLanguageServer",
     refs: ["lspdocumentation:ServerLifecycle"],
   },

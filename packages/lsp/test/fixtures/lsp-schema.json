@@ -57,6 +57,13 @@
       "baseType": "lsp:LspType"
     },
     {
+      "fqn": "org.blockml.bml.lsp.SemanticTokensResult",
+      "tsExport": "SemanticTokensResult",
+      "pkg": "root",
+      "abstract": false,
+      "baseType": "lsp:LspType"
+    },
+    {
       "fqn": "org.blockml.bml.lsp.LspLocation",
       "tsExport": "LspLocation",
       "pkg": "root",
@@ -251,6 +258,24 @@
         "type": "lsp:LspLocation[]",
         "required": true,
         "doc": "LspLocation[] | null."
+      }
+    },
+    {
+      "name": "SemanticTokensFor",
+      "tsExport": "semanticTokensFor",
+      "fqn": "org.blockml.bml.lsp.capability.SemanticTokensFor",
+      "inputs": [
+        {
+          "name": "text",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "lsp:SemanticTokensResult",
+        "required": true,
+        "doc": "LSP encoded semantic tokens."
       }
     },
     {

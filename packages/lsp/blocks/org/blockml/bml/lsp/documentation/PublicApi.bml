@@ -41,6 +41,7 @@
     documentSymbols(text, filePath): OutlineSymbol[] | null
     definitionAt(text, filePath, position, workspace): LspLocationLink[] | null
     referencesAt(text, filePath, position, workspace, includeDeclaration?): LspLocation[] | null
+    semanticTokensFor(text): SemanticTokensResult
     createWorkspace(rootDir): WorkspaceState
     loadBomConfig(rootDir): BomConfig
     invalidateWorkspace(rootDir): void
@@ -57,6 +58,7 @@
     <see type="lspcap:DocumentSymbols" relation="Defines" />
     <see type="lspcap:DefinitionAt" relation="Defines" />
     <see type="lspcap:ReferencesAt" relation="Defines" />
+    <see type="lspcap:SemanticTokensFor" relation="Defines" />
     <see type="lspdocumentation:DesignDecisions" relation="ReadNext" />
   </references>
 

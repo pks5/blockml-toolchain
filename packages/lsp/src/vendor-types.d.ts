@@ -72,6 +72,11 @@ declare module "vscode-languageserver/node.js" {
     ) => void;
     onDefinition: (handler: (params: DefinitionParams) => LocationLink[] | Location[] | null) => void;
     onReferences: (handler: (params: ReferenceParams) => Location[] | null) => void;
+    languages: {
+      semanticTokens: {
+        on: (handler: (params: SemanticTokensParams) => SemanticTokens) => void;
+      };
+    };
     sendDiagnostics: (params: { uri: string; diagnostics: Diagnostic[] }) => void;
     listen: () => void;
   }
@@ -96,7 +101,28 @@ declare module "vscode-languageserver/node.js" {
       documentSymbolProvider?: boolean;
       definitionProvider?: boolean;
       referencesProvider?: boolean;
+      semanticTokensProvider?: SemanticTokensOptions;
     };
+  }
+
+  export interface SemanticTokensLegend {
+    tokenTypes: string[];
+    tokenModifiers: string[];
+  }
+
+  export interface SemanticTokensOptions {
+    legend: SemanticTokensLegend;
+    range?: boolean;
+    full?: boolean | { delta?: boolean };
+  }
+
+  export interface SemanticTokensParams {
+    textDocument: { uri: string };
+  }
+
+  export interface SemanticTokens {
+    resultId?: string;
+    data: number[];
   }
 
   export interface Location {

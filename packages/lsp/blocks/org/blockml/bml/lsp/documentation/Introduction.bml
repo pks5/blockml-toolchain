@@ -46,7 +46,8 @@
     + textDocument/formatting (parse → serialize)
     + textDocument/hover (XML-token hit-test + TypeRegistry)
     + textDocument/documentSymbol (Urmodell outline tree)
-    + textDocument/definition and textDocument/references (hit-test + TypeRegistry).
+    + textDocument/definition and textDocument/references (hit-test + TypeRegistry)
+    + textDocument/semanticTokens/full (position-based FrameworkRoles highlight).
     Semantics: @blockml/parser, @blockml/serializer, @blockml/validator, @blockml/framework.</documentation>
 
   <references>
