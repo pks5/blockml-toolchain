@@ -34,7 +34,8 @@
     --all, --per-package, --verbose, --json, --force, --limit.
 
     Positional: validate=file; compile=target or file+target; search=query
-    tokens or subcommand index; transform=execution FQN.
+    tokens or subcommand index; transform=subcommand then args
+    (apply=execution FQN).
   </documentation>
 
   <references>

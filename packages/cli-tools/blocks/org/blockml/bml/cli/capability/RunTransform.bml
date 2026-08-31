@@ -24,10 +24,10 @@
   <name>RunTransform</name>
   <type>clicap:RunTransform</type>
   <baseType>core:Capability</baseType>
-  <is>Execute blockml transform command</is>
+  <is>Execute blockml transform apply</is>
 
   <documentation>
-    # Execute blockml transform command
+    # Execute blockml transform apply
 
     Runs each workflow Stage of a pending ModelTransformation (Prepare,
     then per Stage: Running commit, Execute, Reflect, Persist; then
@@ -47,6 +47,7 @@
   <references>
     <see type="clidocumentation:TransformCommand" relation="SeeAlso" />
     <see type="clicommand:TransformCommand" relation="SeeAlso" />
+    <see type="clicommand:TransformApplyCommand" relation="SeeAlso" />
   </references>
 
   <properties>

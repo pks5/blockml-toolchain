@@ -2,9 +2,10 @@ import { bootstrapFullProjectRegistry, } from "@blockml/framework";
 import { MODEL_TRANSFORMATION_FQN } from "./constants.js";
 import { TransformError } from "./errors.js";
 import { parseExecutionFqn } from "./lifecycle.js";
-import { getExecutionId, getPropertyLiteral, getStageInstances, getStageStatus, getStatus, hasAggregationComposition, hasPropertyValue, hasStageProperty, isModelTransformation, stageHasAggregation, stageHasTask, } from "./properties.js";
-const REQUIRED_PRESENT = ["executionId", "createdAt"];
+import { getPropertyLiteral, getStageInstances, getStageStatus, getStatus, hasAggregationComposition, hasPropertyValue, hasStageProperty, isModelTransformation, stageHasAggregation, stageHasTask, } from "./properties.js";
+const REQUIRED_PRESENT = ["createdAt"];
 const FORBIDDEN_PROPERTIES = [
+    "executionId",
     "startedAt",
     "baseCommit",
     "completedAt",
@@ -71,9 +72,6 @@ function assertPendingContract(fqn, block) {
     }
     if (getStatus(block) !== "Pending") {
         throw new TransformError("resolve", `${fqn} must have status=Pending before it can be started`);
-    }
-    if (!getExecutionId(block)) {
-        throw new TransformError("resolve", `${fqn} must have executionId set before it can be started`);
     }
     const createdAt = getPropertyLiteral(block, "createdAt");
     if (typeof createdAt !== "string" || createdAt.length === 0) {

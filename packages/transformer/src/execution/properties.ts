@@ -361,6 +361,10 @@ export function setSequence(block: BlockDefinition, sequence: number): void {
   setOverrideProperty(block, "sequence", INTEGER_TYPE_FQN, sequence);
 }
 
+export function setExecutionId(block: BlockDefinition, executionId: string): void {
+  setOverrideProperty(block, "executionId", TEXT_TYPE_FQN, executionId);
+}
+
 export function setStatus(block: BlockDefinition, status: ExecutionStatusId): void {
   setOverrideProperty(block, "status", EXECUTION_STATUS_FQN, status);
 }

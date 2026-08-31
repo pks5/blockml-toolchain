@@ -1,7 +1,7 @@
 import type { ResolvedExecution } from "./resolve.js";
 import { SequenceAllocator } from "./sequence.js";
 export interface StartedExecution {
-    executionId: string | undefined;
+    executionId: string;
     libraryFqn: string;
     originalName: string;
     sequence: number;

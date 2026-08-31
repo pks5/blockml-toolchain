@@ -28,7 +28,11 @@
   <is>blockml transform specification</is>
 
   <documentation><![CDATA[Syntax:
-    blockml transform EXECUTION-FQN [--verbose]
+    blockml transform apply EXECUTION-FQN [--verbose]
+
+    transform is a parent command. V1 defines the apply subcommand only.
+    Further transform subcommands are declared on clicommand:TransformCommand
+    subcommands.
 
     EXECUTION-FQN is the FQN of a ModelTransformation under
     {library}._meta.transform.pending. Tasks are not accepted directly.
@@ -63,6 +67,8 @@
     Pending-contract violations never start the execution (exit 2).]]></documentation>
   <references>
     <see type="clidocumentation:Commands" relation="SeeAlso" />
+    <see type="clicommand:TransformCommand" relation="SeeAlso" />
+    <see type="clicommand:TransformApplyCommand" relation="SeeAlso" />
     <see type="clicap:RunTransform" relation="SeeAlso" />
   </references>
 

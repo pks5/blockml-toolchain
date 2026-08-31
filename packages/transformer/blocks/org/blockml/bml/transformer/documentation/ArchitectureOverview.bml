@@ -36,9 +36,10 @@
 
     [1] Prepare Execution — transformercap:PrepareExecution
         Default: deterministic. Validate the pending contract (status=
-        Pending, stages with a Task each, executionId, createdAt; no
+        Pending, stages with a Task each, createdAt; no executionId or
         start/finish fields on the ModelTransformation), require a clean
-        Git worktree, assign sequence, startedAt, and baseCommit (HEAD),
+        Git worktree, assign a unique executionId (random UUID), sequence,
+        startedAt, and baseCommit (HEAD),
         set status=Running, relocate to _meta.transform.running, then commit.
         If the contract is violated or the worktree is dirty, do not start.
 

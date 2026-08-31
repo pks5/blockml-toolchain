@@ -240,6 +240,9 @@ function upsertAggregation(block, aggregation) {
 export function setSequence(block, sequence) {
     setOverrideProperty(block, "sequence", INTEGER_TYPE_FQN, sequence);
 }
+export function setExecutionId(block, executionId) {
+    setOverrideProperty(block, "executionId", TEXT_TYPE_FQN, executionId);
+}
 export function setStatus(block, status) {
     setOverrideProperty(block, "status", EXECUTION_STATUS_FQN, status);
 }

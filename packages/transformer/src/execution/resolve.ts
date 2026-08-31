@@ -7,7 +7,6 @@ import { MODEL_TRANSFORMATION_FQN } from "./constants.js";
 import { TransformError } from "./errors.js";
 import { parseExecutionFqn } from "./lifecycle.js";
 import {
-  getExecutionId,
   getPropertyLiteral,
   getStageInstances,
   getStageStatus,
@@ -28,8 +27,9 @@ export interface ResolvedExecution {
   registry: TypeRegistry;
 }
 
-const REQUIRED_PRESENT = ["executionId", "createdAt"] as const;
+const REQUIRED_PRESENT = ["createdAt"] as const;
 const FORBIDDEN_PROPERTIES = [
+  "executionId",
   "startedAt",
   "baseCommit",
   "completedAt",
@@ -135,12 +135,6 @@ function assertPendingContract(fqn: string, block: BlockDefinition): void {
     throw new TransformError(
       "resolve",
       `${fqn} must have status=Pending before it can be started`,
-    );
-  }
-  if (!getExecutionId(block)) {
-    throw new TransformError(
-      "resolve",
-      `${fqn} must have executionId set before it can be started`,
     );
   }
   const createdAt = getPropertyLiteral(block, "createdAt");

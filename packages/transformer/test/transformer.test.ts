@@ -14,7 +14,6 @@ import {
 import { SequenceAllocator } from "../src/execution/sequence.js";
 import { bootstrapFullProjectRegistry } from "@blockml/framework";
 import {
-  EXECUTION_ID,
   FIXED_NOW,
   failingAgent,
   gitHead,
@@ -109,7 +108,7 @@ describe("Transformer lifecycle", () => {
     rmSync(TMP, { recursive: true, force: true });
   });
 
-  it("moves pending to running then succeeded, preserving executionId and references", async () => {
+  it("moves pending to running then succeeded, assigning executionId and preserving references", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
@@ -126,7 +125,9 @@ describe("Transformer lifecycle", () => {
     const result = await transformer.run(pendingFqn("JokeTest"));
 
     expect(result.sequence).toBe(1);
-    expect(result.executionId).toBe(EXECUTION_ID);
+    expect(result.executionId).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+    );
     expect(result.runningFqn).toBe(
       `com.example.model._meta.transform.running.${generated}`,
     );
@@ -150,7 +151,7 @@ describe("Transformer lifecycle", () => {
     );
     expect(existsSync(succeededPath)).toBe(true);
     const succeeded = readFileSync(succeededPath, "utf8");
-    expect(succeeded).toContain(EXECUTION_ID);
+    expect(succeeded).toContain(result.executionId);
     expect(succeeded).toContain("<value>1</value>");
     expect(succeeded).toContain(formatDateTimeProperty(FIXED_NOW));
     expect(succeeded).toContain("workflow:InstructionTask");

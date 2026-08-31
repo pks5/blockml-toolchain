@@ -51,7 +51,7 @@ export interface TransformRunResult {
   terminalFqn: string;
   status: TerminalExecutionStatus;
   sequence: number;
-  executionId: string | undefined;
+  executionId: string;
   error?: string;
 }
 

@@ -29,6 +29,7 @@ export { startWorkflowStage } from "./execution/start-stage.js";
 export { formatTransformLifecycle, emitLifecycle, } from "./execution/lifecycle-events.js";
 export type { TransformLifecycleEvent, TransformLifecycleListener, } from "./execution/lifecycle-events.js";
 export { SequenceAllocator } from "./execution/sequence.js";
+export { allocateUniqueExecutionId, usedExecutionIds } from "./execution/execution-id.js";
 export { parseExecutionFqn, generateExecutionName, padSequence, formatNameTimestamp, formatDateTimeProperty, } from "./execution/lifecycle.js";
 export { MODEL_TRANSFORMATION_FQN } from "./execution/constants.js";
 //# sourceMappingURL=index.d.ts.map

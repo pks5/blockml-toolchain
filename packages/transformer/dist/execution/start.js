@@ -1,6 +1,7 @@
 import { forkBom } from "@blockml/framework";
+import { allocateUniqueExecutionId } from "./execution-id.js";
 import { formatDateTimeProperty, generateExecutionName } from "./lifecycle.js";
-import { getExecutionId, setBaseCommit, setSequence, setStartedAt, setStatus, } from "./properties.js";
+import { setBaseCommit, setExecutionId, setSequence, setStartedAt, setStatus, } from "./properties.js";
 import { applyExecutionIdentity, persistDocument, removeFile, rewriteInboundReferences, } from "./relocate.js";
 import { SequenceAllocator } from "./sequence.js";
 import { assertWorktreeClean, commitWorktree } from "../pipeline/git.js";
@@ -11,7 +12,8 @@ export function startExecution(resolved, now, workspaceRoot, allocator = new Seq
     const startedAtIso = formatDateTimeProperty(now);
     const pendingFilePath = resolved.document.source.filePath;
     const forked = forkBom(resolved.document);
-    const executionId = getExecutionId(forked.block);
+    const executionId = allocateUniqueExecutionId(resolved.registry);
+    setExecutionId(forked.block, executionId);
     setSequence(forked.block, sequence);
     setStatus(forked.block, "Running");
     setStartedAt(forked.block, startedAtIso);

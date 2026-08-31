@@ -23,6 +23,9 @@
     * `status` — lifecycle state (`workflow:ExecutionStatus`). Matches the
       `_meta.transform` package: Pending, Running, Succeeded, Failed.
       `Succeeded` only when every Stage succeeded.
+    * `executionId` — globally unique identifier. Absent while pending.
+      Assigned when Prepare sets `status=Running` (random UUID, unique
+      among other ModelTransformations).
     * `startedAt` / `completedAt` — the execution interval.
     * `baseCommit` — Git HEAD commit when this execution started. Set only
       after Prepare confirms a clean worktree and sets `status=Running`.
@@ -41,7 +44,7 @@
       <documentation>Description of this transformation.</documentation>
     </description>
     <executionId type="type:Text">
-      <documentation>Globally unique identifier of this execution.</documentation>
+      <documentation>Globally unique identifier. Absent while pending; assigned at Running.</documentation>
     </executionId>
     <sequence type="type:Integer">
       <documentation>Which execution within the model this transformation was applied to.</documentation>

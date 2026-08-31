@@ -7,6 +7,7 @@ import { resolvePendingExecution } from "../src/execution/resolve.js";
 import { MODEL_TRANSFORMATION_FQN } from "../src/execution/constants.js";
 import {
   LIBRARY,
+  EXECUTION_ID,
   pendingExecutionXml,
   pendingFqn,
   plainBlockXml,
@@ -80,6 +81,18 @@ describe("resolvePendingExecution", () => {
     });
     expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
       /status=Pending/,
+    );
+  });
+
+  it("rejects a pending execution that already has executionId", () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        executionId: EXECUTION_ID,
+      }),
+    });
+    expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
+      /must not have executionId/,
     );
   });
 

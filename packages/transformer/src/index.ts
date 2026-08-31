@@ -90,6 +90,7 @@ export type {
   TransformLifecycleListener,
 } from "./execution/lifecycle-events.js";
 export { SequenceAllocator } from "./execution/sequence.js";
+export { allocateUniqueExecutionId, usedExecutionIds } from "./execution/execution-id.js";
 export {
   parseExecutionFqn,
   generateExecutionName,

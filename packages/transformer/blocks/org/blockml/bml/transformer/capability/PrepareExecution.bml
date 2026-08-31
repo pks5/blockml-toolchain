@@ -22,12 +22,12 @@
     # Prepare Execution
 
     1. Validate the pending contract: `status=Pending`, `stages` with a
-       Task on each Stage, `executionId`, and `createdAt` must be set;
+       Task on each Stage, and `createdAt` must be set; `executionId` and
        start/finish fields must be absent on the ModelTransformation.
     2. Require a clean Git worktree (including HEAD). Abort without starting
        if the worktree is dirty or not a Git toplevel.
-    3. Assign `sequence`, `startedAt`, and `baseCommit` (current HEAD), set
-       `status=Running`.
+    3. Assign a unique `executionId` (random UUID), `sequence`, `startedAt`,
+       and `baseCommit` (current HEAD), set `status=Running`.
     4. Relocate the Block to `_meta.transform.running`.
     5. Commit the running relocation.
 

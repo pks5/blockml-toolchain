@@ -84,6 +84,7 @@
         <clicommand:CompileCommand />
         <clicommand:SearchCommand />
         <clicommand:TransformCommand />
+        <clicommand:TransformApplyCommand />
         <clicap:LoadConfig />
         <clicap:ParseArgs />
         <clicap:FormatDiagnostic />

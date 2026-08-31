@@ -25,7 +25,7 @@
     org.blockml.bml.transformer.capability.*.
 
     The TypeScript engine executes ModelTransformation instances via
-    `blockml transform EXECUTION-FQN`. Transformer.run prepares the
+    `blockml transform apply EXECUTION-FQN`. Transformer.run prepares the
     execution, then runs each `workflow:Stage` in order: persist Stage
     Running, Execute its Task in an isolated agent process, Reflect,
     Persist results onto that Stage, commit. Default Prepare and Finalize

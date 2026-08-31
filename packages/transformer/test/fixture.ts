@@ -75,9 +75,15 @@ export function pendingExecutionXml(opts: {
   extraRefs?: string;
   stageInstructions?: readonly string[];
 }): string {
-  const executionId = opts.executionId ?? EXECUTION_ID;
   const refs = opts.extraRefs
     ? `  <references>\n${opts.extraRefs}\n  </references>\n`
+    : "";
+  const executionIdXml = opts.executionId
+    ? [
+        `    <executionId override="true">`,
+        `      <value>${opts.executionId}</value>`,
+        `    </executionId>`,
+      ].join("\n")
     : "";
   const instructions = opts.stageInstructions ?? ["Do the task."];
   const stages = instructions
@@ -107,9 +113,7 @@ export function pendingExecutionXml(opts: {
     `  <is>pending execution fixture</is>`,
     refs,
     `  <properties>`,
-    `    <executionId override="true">`,
-    `      <value>${executionId}</value>`,
-    `    </executionId>`,
+    executionIdXml,
     `    <status override="true" type="org.blockml.bml.transformer.workflow.ExecutionStatus">`,
     `      <value>Pending</value>`,
     `    </status>`,

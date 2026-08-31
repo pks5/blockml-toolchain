@@ -26,14 +26,19 @@
   <baseType>cli:CliType</baseType>
   <is>blockml transform command model</is>
 
-  <documentation>blockml transform EXECUTION-FQN. The argument is the FQN of a pending ModelTransformation. Delegates to @blockml/transformer.</documentation>
+  <documentation>blockml transform SUBCOMMAND. Parent command for transformation subcommands. V1 defines apply only. Further subcommands are added to subcommands.</documentation>
   <references>
     <see type="clidocumentation:TransformCommand" relation="SeeAlso" />
+    <see type="clicommand:TransformApplyCommand" relation="SeeAlso" />
     <see type="clicap:RunTransform" relation="SeeAlso" />
   </references>
-  <properties>
-    <executionFqn type="type:Text"><documentation>FQN of a ModelTransformation in the library _meta.transform.pending package. (required)</documentation></executionFqn>
-    <verbose type="type:Boolean"><documentation>Stream the transformation agent output live. (optional)</documentation></verbose>
-  </properties>
+  <aggregations>
+    <subcommands type="cli:CliType[]">
+      <documentation>Named subcommands of blockml transform. V1: apply.</documentation>
+      <composition>
+        <clicommand:TransformApplyCommand />
+      </composition>
+    </subcommands>
+  </aggregations>
 
 </block>

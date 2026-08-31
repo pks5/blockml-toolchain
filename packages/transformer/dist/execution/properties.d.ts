@@ -27,6 +27,7 @@ export declare function getStatus(block: BlockDefinition): string | undefined;
 export declare function setOverrideProperty(block: BlockDefinition, name: string, typeFqn: string, value: unknown): void;
 export declare function setOverridePropertyList(block: BlockDefinition, name: string, typeFqn: string, values: readonly unknown[]): void;
 export declare function setSequence(block: BlockDefinition, sequence: number): void;
+export declare function setExecutionId(block: BlockDefinition, executionId: string): void;
 export declare function setStatus(block: BlockDefinition, status: ExecutionStatusId): void;
 export declare function setStartedAt(block: BlockDefinition, iso: string): void;
 export declare function setBaseCommit(block: BlockDefinition, commit: string): void;

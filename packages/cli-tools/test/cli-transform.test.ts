@@ -20,7 +20,6 @@ function pendingXml(name: string): string {
     `  <baseType>workflow:ModelTransformation</baseType>`,
     `  <is>pending execution fixture</is>`,
     `  <properties>`,
-    `    <executionId override="true"><value>d41bf2a3-f51f-4171-a2e4-e71893c16f24</value></executionId>`,
     `    <status override="true" type="org.blockml.bml.transformer.workflow.ExecutionStatus">`,
     `      <value>Pending</value>`,
     `    </status>`,
@@ -75,24 +74,28 @@ function gitOrThrow(args: string[]): void {
 }
 
 describe("parseArgs transform", () => {
-  it("parses the execution FQN", () => {
+  it("parses transform apply and the execution FQN", () => {
     const parsed = parseArgs([
       "transform",
+      "apply",
       "org.blockml.bml.workspace._meta.transform.pending.JokeTest",
     ]);
     expect(parsed.command).toBe("transform");
+    expect(parsed.subcommand).toBe("apply");
     expect(parsed.executionFqn).toBe(
       "org.blockml.bml.workspace._meta.transform.pending.JokeTest",
     );
   });
 
-  it("maps transform --verbose", () => {
+  it("maps transform --verbose before apply", () => {
     const parsed = parseArgs([
       "transform",
-      "org.blockml.bml.workspace._meta.transform.pending.JokeTest",
       "--verbose",
+      "apply",
+      "org.blockml.bml.workspace._meta.transform.pending.JokeTest",
     ]);
     expect(parsed.verbose).toBe(true);
+    expect(parsed.subcommand).toBe("apply");
     expect(parsed.executionFqn).toBe(
       "org.blockml.bml.workspace._meta.transform.pending.JokeTest",
     );
@@ -117,7 +120,7 @@ describe("blockml transform CLI", () => {
       },
     };
     const { code, stderr } = await runCli(
-      ["transform", `${LIBRARY}._meta.transform.pending.JokeTest`],
+      ["transform", "apply", `${LIBRARY}._meta.transform.pending.JokeTest`],
       TMP,
       { transformAgent: failing },
     );
@@ -133,8 +136,32 @@ describe("blockml transform CLI", () => {
     expect(readdirSync(failedDir).some((name) => name.endsWith(".bml"))).toBe(true);
   });
 
+  it("returns 2 when the subcommand is missing", async () => {
+    const { code, stderr } = await runCli(["transform"], TMP, {
+      transformAgent: {
+        async execute() {
+          return { success: true };
+        },
+      },
+    });
+    expect(code).toBe(2);
+    expect(stderr).toMatch(/Specify a transform subcommand/);
+  });
+
+  it("returns 2 when the subcommand is unknown", async () => {
+    const { code, stderr } = await runCli(["transform", "preview"], TMP, {
+      transformAgent: {
+        async execute() {
+          return { success: true };
+        },
+      },
+    });
+    expect(code).toBe(2);
+    expect(stderr).toMatch(/Unknown transform subcommand: preview/);
+  });
+
   it("returns 2 when the FQN is missing", async () => {
-    const { code } = await runCli(["transform"], TMP, {
+    const { code } = await runCli(["transform", "apply"], TMP, {
       transformAgent: {
         async execute() {
           return { success: true };
@@ -146,7 +173,7 @@ describe("blockml transform CLI", () => {
 
   it("prints Stage lifecycle lines without --verbose on success", async () => {
     const { code, stderr } = await runCli(
-      ["transform", `${LIBRARY}._meta.transform.pending.JokeTest`],
+      ["transform", "apply", `${LIBRARY}._meta.transform.pending.JokeTest`],
       TMP,
       {
         transformAgent: {

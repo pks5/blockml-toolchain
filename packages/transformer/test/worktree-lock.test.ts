@@ -158,9 +158,6 @@ function writePending(dir: string, name: string): void {
   writeProject(dir, {
     [`blocks/com/example/model/_meta/transform/pending/${name}.bml`]: pendingExecutionXml({
       name,
-      executionId: name === "TaskA"
-        ? "aaaaaaaa-0000-4000-8000-00000000000a"
-        : "bbbbbbbb-0000-4000-8000-00000000000b",
     }),
   });
 }
