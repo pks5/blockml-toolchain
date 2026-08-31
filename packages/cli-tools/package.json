@@ -1,6 +1,6 @@
 {
   "name": "@blockml/cli",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "BlockML CLI — validate, compile, search, and transform BML",
   "license": "Apache-2.0",
   "repository": {
@@ -34,14 +34,14 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@blockml/blockdoc-target": "^0.8.1",
-    "@blockml/fatblock-target": "^0.8.1",
-    "@blockml/xsd-target": "^0.8.1",
-    "@blockml/compiler": "^0.8.1",
+    "@blockml/blockdoc-target": "^0.9.0",
+    "@blockml/fatblock-target": "^0.9.0",
+    "@blockml/xsd-target": "^0.9.0",
+    "@blockml/compiler": "^0.9.0",
     "@blockml/core": "^1.0.9",
-    "@blockml/framework": "^0.8.1",
-    "@blockml/search": "^0.8.1",
-    "@blockml/transformer": "^0.8.1",
+    "@blockml/framework": "^0.9.0",
+    "@blockml/search": "^0.9.0",
+    "@blockml/transformer": "^0.9.0",
     "libxmljs2": "^0.35.0"
   },
   "engines": {
