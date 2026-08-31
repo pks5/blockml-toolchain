@@ -91,6 +91,35 @@ describe("semanticHighlightSpans", () => {
     expect(typeAt(SAMPLE, "<composition>\n        <theme:HighlightRole")).toBe("memberSubContainer");
   });
 
+  it("does not treat title, description, or content as FrameworkRoles facets", () => {
+    const src = [
+      "<block>",
+      "  <title>block title</title>",
+      "  <description>block desc</description>",
+      "  <content>block content</content>",
+      "  <properties>",
+      "    <title>member title</title>",
+      "    <item>",
+      "      <title>inner title</title>",
+      "      <description>inner desc</description>",
+      "      <content>inner content</content>",
+      "    </item>",
+      "  </properties>",
+      "  <aggregations>",
+      "    <description>agg desc</description>",
+      "  </aggregations>",
+      "</block>",
+    ].join("\n");
+    expect(typeAt(src, "<title>block title")).toBe("memberName");
+    expect(typeAt(src, "<description>block desc")).toBe("memberName");
+    expect(typeAt(src, "<content>block content")).toBe("memberName");
+    expect(typeAt(src, "<title>member title")).toBe("memberName");
+    expect(typeAt(src, "<description>agg desc")).toBe("memberName");
+    expect(typeAt(src, "<title>inner title")).toBe("tag");
+    expect(typeAt(src, "<description>inner desc")).toBe("tag");
+    expect(typeAt(src, "<content>inner content")).toBe("tag");
+  });
+
   it("colors PascalCase composition instances and nested composition children", () => {
     expect(typeAt(SAMPLE, "<theme:HighlightRole")).toBe("compositionInstance");
     expect(typeAt(SAMPLE, "</theme:HighlightRole>")).toBe("compositionInstance");
