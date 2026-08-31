@@ -18,7 +18,7 @@ const USAGE = "Usage: blockml compile <target> [--out dir] [--src dir] [--librar
     "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b] [--verbose]\n" +
     "       blockml search <query> [--json] [--limit n] [--src dir] [--libraries a,b]\n" +
     "       blockml search index [--force] [--src dir] [--libraries a,b]\n" +
-    "       blockml transform <execution-fqn> [--verbose]";
+    "       blockml transform apply <execution-fqn> [--verbose]";
 function workspaceRoot(from) {
     let dir = resolve(from);
     for (;;) {
@@ -116,7 +116,10 @@ export function parseArgs(argv) {
                 }
             }
             else if (result.command === "transform") {
-                if (!result.executionFqn) {
+                if (!result.subcommand) {
+                    result.subcommand = flag;
+                }
+                else if (result.subcommand === "apply" && !result.executionFqn) {
                     result.executionFqn = flag;
                 }
             }
@@ -596,6 +599,16 @@ async function executeCli(argv, cwd, options = {}) {
             return { code, lines };
         }
         if (parsed.command === "transform") {
+            if (parsed.subcommand !== "apply") {
+                if (!parsed.subcommand) {
+                    pushLines(lines, "Specify a transform subcommand.", "error");
+                }
+                else {
+                    pushLines(lines, `Unknown transform subcommand: ${parsed.subcommand}.`, "error");
+                }
+                pushLines(lines, USAGE, "info");
+                return { code: 2, lines };
+            }
             const verbose = parsed.verbose === true;
             const agent = options.transformAgent ?? defaultTransformAgent(verbose);
             const reflectAgent = options.reflectAgent ??

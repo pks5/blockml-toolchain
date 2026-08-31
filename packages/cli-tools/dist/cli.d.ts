@@ -3,6 +3,7 @@ import { type CliOutputLine } from "./cli-style.js";
 import type { ReflectionAgent, TransformationAgent } from "@blockml/transformer";
 export interface ParsedArgs {
     command?: string;
+    subcommand?: string;
     target?: string;
     file?: string;
     all?: boolean;
