@@ -34,14 +34,16 @@
   <aggregations>
     <stages override="true">
       <composition>
-        <workflow:Stage name="Create Poem" status="Succeeded">
+        <workflow:Stage name="Create Poem" status="Pending">
+        
           <task>
             <composition>
               <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.Poem.bml that contains a random poem. For each execution create a new poem." />
             </composition>
           </task>
         </workflow:Stage>
-        <workflow:Stage name="Translate Poem" status="Succeeded">
+        <workflow:Stage name="Translate Poem" status="Pending">
+        
           <task>
             <composition>
               <workflow:InstructionTask instructions="Translate the poem in org.blockml.bml.workspace.playground.Poem.bml to spanish." />
