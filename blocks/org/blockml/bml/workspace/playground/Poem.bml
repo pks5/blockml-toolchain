@@ -16,25 +16,25 @@
   <is>A random poem produced by a workspace transform execution</is>
 
   <documentation>
-    Der Morgen legt sich grau auf stille Dächer,
-    ein Amselruf zerteilt den kühlen Wind.
-    Die Straßen atmen noch im halben Schlummer,
-    wo Schatten sich um leere Bänke sind.
+    Le matin se dépose, gris, sur les toits muets,
+    un cri de merle fend le vent glacé.
+    Les rues respirent encore dans un demi-sommeil,
+    où les ombres entourent les bancs déserts.
 
-    Ein Fenster glüht, als hielte es die Sonne,
-    die Lampe wacht, wo längst der Tag begann.
-    Der Kaffee dampft, ein kleiner Halt im Rauschen,
-    bevor die Stunde ihren Lauf gewann.
+    Une fenêtre rougeoie, comme si elle tenait le soleil,
+    la lampe veille, là où le jour a commencé depuis longtemps.
+    Le café fume, une petite halte dans le vacarme,
+    avant que l'heure ne prenne son cours.
 
-    Und über allem zieht ein Schwarm von Krähen
-    wie Tinte, die der Himmel langsam schreibt.
-    Sie zeichnen Bögen, die kein Mensch behalten kann,
-    und doch ein Gruß, der bis zum Abend bleibt.
+    Et par-dessus tout passe une nuée de corbeaux
+    comme une encre que le ciel écrit lentement.
+    Ils tracent des arcs que nul homme ne peut retenir,
+    et pourtant un salut qui demeure jusqu'au soir.
   </documentation>
 
   <properties>
     <title>
-      <value>Der Morgen legt sich grau</value>
+      <value>Le matin se dépose gris</value>
     </title>
     <author>
       <value>John Doe</value>
