@@ -46,7 +46,9 @@
   <aggregations>
     <stages override="true">
       <composition>
-        <workflow:Stage name="Create Poem" status="Pending">
+        <workflow:Stage name="Create Poem" status="Running">
+          <startedAt>2026-08-31T19:34:09</startedAt>
+          <baseCommit>db929ccb4ceaea628ed9ec5f85ae41de493e4d75</baseCommit>
           <task>
             <composition>
               <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.Poem.bml that contains a random german poem. For each execution create a new poem." />
