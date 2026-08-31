@@ -9,7 +9,7 @@ export function applyExecutionIdentity(document, identity) {
     const nextFqn = executionFqn(identity.libraryFqn, identity.stage, identity.name);
     const previousFqn = document.block.type;
     const previousPath = document.source.filePath;
-    const nextPath = executionFilePath(previousPath, identity.stage, identity.name);
+    const nextPath = executionFilePath(previousPath, identity.libraryFqn, identity.stage, identity.name);
     const nextPackage = lifecyclePackageFqn(identity.libraryFqn, identity.stage);
     document.block.name = identity.name;
     document.block.type = nextFqn;

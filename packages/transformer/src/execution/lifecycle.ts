@@ -1,10 +1,12 @@
-import { dirname, join } from "node:path";
+import { join } from "node:path";
 import type { LifecycleStage } from "./constants.js";
 import {
   LIFECYCLE_STAGES,
+  META_SEGMENT,
   TRANSFORM_PACKAGE,
-  TRANSFORM_PATH,
+  TRANSFORM_PACKAGE_SEGMENT,
 } from "./constants.js";
+import { TransformError } from "./errors.js";
 
 export interface ParsedExecutionFqn {
   libraryFqn: string;
@@ -83,17 +85,45 @@ export function generateExecutionName(
 
 export function executionFilePath(
   currentPath: string,
+  libraryFqn: string,
   stage: LifecycleStage,
   name: string,
 ): string {
-  const replaced = currentPath.replace(
-    new RegExp(`/${TRANSFORM_PATH}/(${LIFECYCLE_STAGES.join("|")})/[^/]+\\.bml$`),
-    `/${TRANSFORM_PATH}/${stage}/${name}.bml`,
-  );
-  if (replaced !== currentPath) {
-    return replaced;
+  const libraryRoot = libraryRootFromPath(currentPath, libraryFqn);
+  if (!libraryRoot) {
+    throw new TransformError(
+      "execution",
+      `Cannot relocate ${name}: ${currentPath} is not under library ${libraryFqn}`,
+    );
   }
-  return join(dirname(currentPath), "..", stage, `${name}.bml`);
+  return join(
+    libraryRoot,
+    META_SEGMENT,
+    TRANSFORM_PACKAGE_SEGMENT,
+    stage,
+    `${name}.bml`,
+  );
+}
+
+function libraryRootFromPath(currentPath: string, libraryFqn: string): string | undefined {
+  const posix = currentPath.replaceAll("\\", "/");
+  const librarySeg = libraryFqn.replaceAll(".", "/");
+  const needle = `/${librarySeg}/`;
+  const idx = posix.lastIndexOf(needle);
+  if (idx >= 0) {
+    return fromPosix(posix.slice(0, idx + needle.length - 1), currentPath);
+  }
+  if (posix === librarySeg || posix.endsWith(`/${librarySeg}`)) {
+    return fromPosix(posix, currentPath);
+  }
+  return undefined;
+}
+
+function fromPosix(posix: string, original: string): string {
+  if (original.includes("\\") && !original.includes("/")) {
+    return posix.replaceAll("/", "\\");
+  }
+  return posix;
 }
 
 function compactTimestamp(date: Date): string {

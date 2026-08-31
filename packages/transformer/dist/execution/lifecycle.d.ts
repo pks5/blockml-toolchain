@@ -15,5 +15,5 @@ export declare function formatNameTimestamp(date: Date): string;
 export declare function formatDateTimeProperty(date: Date): string;
 export declare function sanitizeBlockName(name: string): string;
 export declare function generateExecutionName(sequence: number, originalName: string, startedAt: Date): string;
-export declare function executionFilePath(currentPath: string, stage: LifecycleStage, name: string): string;
+export declare function executionFilePath(currentPath: string, libraryFqn: string, stage: LifecycleStage, name: string): string;
 //# sourceMappingURL=lifecycle.d.ts.map

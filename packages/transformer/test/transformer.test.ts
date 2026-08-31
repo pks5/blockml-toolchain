@@ -405,4 +405,37 @@ describe("Transformer lifecycle", () => {
       "fixture",
     ]);
   });
+
+  it("relocates a pending file outside _meta/transform into _meta/transform stages", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/temp/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.status).toBe("Succeeded");
+    expect(
+      existsSync(join(TMP, "blocks/com/example/model/temp/JokeTest.bml")),
+    ).toBe(false);
+    expect(
+      existsSync(join(TMP, `blocks/com/example/model/running/${generated}.bml`)),
+    ).toBe(false);
+    expect(
+      existsSync(join(TMP, `blocks/com/example/model/succeeded/${generated}.bml`)),
+    ).toBe(false);
+    expect(
+      existsSync(
+        join(
+          TMP,
+          `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`,
+        ),
+      ),
+    ).toBe(true);
+  });
 });

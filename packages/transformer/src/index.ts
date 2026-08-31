@@ -94,6 +94,7 @@ export { allocateUniqueExecutionId, usedExecutionIds } from "./execution/executi
 export {
   parseExecutionFqn,
   generateExecutionName,
+  executionFilePath,
   padSequence,
   formatNameTimestamp,
   formatDateTimeProperty,
