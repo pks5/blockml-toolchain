@@ -36,11 +36,12 @@
 
   <capabilities>
     <require type="cap:Action">
+      <abstract>true</abstract>
       <throws>
         <workflow:PrerequisiteNotMetException />
         <workflow:ExecutionException />
       </throws>
-      <abstract>true</abstract>
+      
       <documentation>Enforce this precondition. Concrete subtypes supply the Action implementation.</documentation>
     </require>
   </capabilities>

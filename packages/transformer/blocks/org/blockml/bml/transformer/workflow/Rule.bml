@@ -36,10 +36,10 @@
   <capabilities>
     <apply type="cap:Action">
       <abstract>true</abstract>
-      <documentation>Apply this rule in the current Task.run context. Concrete subtypes supply the Action implementation.</documentation>
       <throws>
         <workflow:ExecutionException />
       </throws>
+      <documentation>Apply this rule in the current Task.run context. Concrete subtypes supply the Action implementation.</documentation>
     </apply>
   </capabilities>
 

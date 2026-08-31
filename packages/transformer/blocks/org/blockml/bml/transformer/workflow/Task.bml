@@ -42,15 +42,15 @@
 
   <capabilities>
     <run type="cap:Action">
+      <throws>
+        <workflow:PrerequisiteNotMetException />
+        <workflow:ExecutionException />
+      </throws>
       <documentation>
         External entry point. Enforces prerequisites, applies rules, then calls
         execute until every success criterion holds. Callers invoke this; override
         execute, not run.
       </documentation>
-      <throws>
-        <workflow:PrerequisiteNotMetException />
-        <workflow:ExecutionException />
-      </throws>
       <implementation language="lang:PseudoCode"><![CDATA[
 
 for each prerequisite in #this.prerequisites:
@@ -75,13 +75,13 @@ until allSatisfied
 
     <_execute type="cap:Action">
       <abstract>true</abstract>
+      <throws>
+        <workflow:ExecutionException />
+      </throws>
       <documentation>
         The task's actual action. Protected: subtypes override it, external callers
         do not. Invoked by run after prerequisites and rules.
       </documentation>
-      <throws>
-        <workflow:ExecutionException />
-      </throws>
     </_execute>
   </capabilities>
 
