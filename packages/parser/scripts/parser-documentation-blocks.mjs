@@ -278,6 +278,10 @@ export const documentationBlocks = [
     doc: `Property/aggregation/association/capability members:
     • Element QName = member identity (deprecated namespace= attr → error)
     • type attribute → TypeExpression; value/memberValues for properties
+    • One <value> per namespace on a property member. Unprefixed <value> /
+      value="…" is the canonical namespace (""). Prefixed <prefix:value>
+      (Annotation xmlns) is a separate facet. Extra copies of the same
+      namespace → BML_DUPLICATE_PROPERTY_VALUE.
     • One <composition> per aggregation member, as a direct child of that member
       (not of <block>, <aggregations>, or nested inside metadata). Extra copies →
       BML_DUPLICATE_COMPOSITION. Misplaced → BML_STANDALONE_COMPOSITION.
@@ -385,6 +389,7 @@ export const documentationBlocks = [
     • BML_UNKNOWN_DIRECTIVE — unknown bml:* attribute (B2)
     • BML_STANDALONE_COMPOSITION — <composition> not a direct child of an aggregation member
     • BML_DUPLICATE_COMPOSITION — more than one <composition> on the same aggregation member
+    • BML_DUPLICATE_PROPERTY_VALUE — more than one <value> for the same namespace on a property
     • BML_UNEXPECTED_TEXT — non-whitespace text on an element-only grammar node
 
     Map-time diagnostics attach Diagnostic.source to the use-site token when known

@@ -42,7 +42,7 @@
       <documentation>type (optional). TS type: bomtype:TypeExpression.</documentation>
     </type>
     <values type="bommember:PropertyValueEntry[]">
-      <documentation>values (optional). TS type: bommember:PropertyValueEntry[].</documentation>
+      <documentation>values (optional). At most one entry per namespace. TS type: bommember:PropertyValueEntry[].</documentation>
     </values>
     <value type="bomvalue:MemberValue">
       <documentation>value (optional). TS type: bomvalue:MemberValue.</documentation>

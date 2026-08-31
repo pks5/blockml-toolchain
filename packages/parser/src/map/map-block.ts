@@ -19,6 +19,7 @@ import type {
   MemberValue,
   PropertyDefinition,
   PropertyValueEntry,
+  SourceLocation,
   TypeReferenceEntityInstance,
   XmlRenderingBlock,
   XmlRenderingMember,
@@ -67,6 +68,7 @@ import {
   isAllowedRootChild,
   isCharacterDataHost,
   reportDuplicateComposition,
+  reportDuplicatePropertyValue,
   reportStandaloneComposition,
   reportUnexpectedTextChildren,
   reportUnknownElement,
@@ -480,7 +482,7 @@ function finishMember<T extends MemberDefinition>(
       unknown.push(toUnknownXmlNode(child, ctx));
     }
     if (unknown.length > 0) {
-      member.unknownElements = unknown;
+      member.unknownElements = [...(member.unknownElements ?? []), ...unknown];
     }
   }
   return member;
@@ -1052,41 +1054,57 @@ function mapPropertyValues(
   ctx: MapContext,
 ) {
   const entries: PropertyValueEntry[] = [];
+  const seenNamespaces = new Set<string>();
+  const extras: UnknownXmlNode[] = [];
+
+  const addEntry = (
+    ns: string,
+    val: MemberValue,
+    child: Element | undefined,
+    source?: SourceLocation,
+  ) => {
+    if (seenNamespaces.has(ns)) {
+      reportDuplicatePropertyValue(child ?? element, ctx, source);
+      if (child) {
+        extras.push(toUnknownXmlNode(child, ctx));
+      }
+      return;
+    }
+    seenNamespaces.add(ns);
+    entries.push({ namespace: ns, value: val });
+    if (ns === "") {
+      prop.value = val;
+    }
+  };
+
   for (const child of elementChildren(element)) {
     const local = elementLocalName(child);
-    if (local === "value") {
-      const prefix = elementPrefix(child);
-      const ns = prefix ? (resolvePrefix(prefix, ctx.bindings) ?? "") : "";
-      const attrVal = getAttribute(child, "value");
-      const { text } = getCharacterData(child);
-      const raw = attrVal ?? text;
-      const val = parseMemberValue(raw, typeFqn, ctx.filePath, 1, 1, "element");
-      if (val) {
-        entries.push({ namespace: ns, value: val });
-        if (ns === "") {
-          prop.value = val;
-        }
-      }
-    } else if (local.endsWith(":value")) {
-      const prefix = elementPrefix(child);
-      const ns = prefix ? (resolvePrefix(prefix, ctx.bindings) ?? "") : "";
-      const { text } = getCharacterData(child);
-      const val = parseMemberValue(text, typeFqn, ctx.filePath, 1, 1, "element");
-      if (val) {
-        entries.push({ namespace: ns, value: val });
-      }
+    if (local !== "value" && !local.endsWith(":value")) {
+      continue;
+    }
+    const prefix = elementPrefix(child);
+    const ns = prefix ? (resolvePrefix(prefix, ctx.bindings) ?? "") : "";
+    const attrVal = local === "value" ? getAttribute(child, "value") : undefined;
+    const { text } = getCharacterData(child);
+    const raw = attrVal ?? text;
+    const val = parseMemberValue(raw, typeFqn, ctx.filePath, 1, 1, "element");
+    if (val) {
+      addEntry(ns, val, child);
     }
   }
   const attrVal = getAttribute(element, "value");
-  if (attrVal !== undefined && !prop.value) {
+  if (attrVal !== undefined) {
     const val = parseMemberValue(attrVal, typeFqn, ctx.filePath, 1, 1, "attribute");
     if (val) {
-      entries.push({ namespace: "", value: val });
-      prop.value = val;
+      const loc = attributeValueLoc(ctx.filePath, ctx.source, element, "value", attrVal);
+      addEntry("", val, undefined, loc);
     }
   }
   if (entries.length > 0) {
     prop.values = entries;
+  }
+  if (extras.length > 0) {
+    prop.unknownElements = extras;
   }
 }
 

@@ -118,6 +118,103 @@ describe("structural BML validation", () => {
     }
   });
 
+  it("reports a second value on the same property namespace", () => {
+    const source = sample(
+      [
+        "  <properties>",
+        '    <title type="type:Text">',
+        "      <value>Keep</value>",
+        "      <value>Drop</value>",
+        "    </title>",
+        "  </properties>",
+      ].join("\n"),
+    );
+    const result = parse(source, { filePath: "dup-value.bml", continueOnError: true });
+    expect(result.document).not.toBeNull();
+    const diag = result.diagnostics.find((d) => d.code === "BML_DUPLICATE_PROPERTY_VALUE");
+    expect(diag).toBeDefined();
+    const title = result.document!.block.members.find((m) => m.name === "title");
+    expect(title?.kind).toBe("property");
+    if (title?.kind !== "property") {
+      return;
+    }
+    expect(title.values).toHaveLength(1);
+    expect(title.value && "value" in title.value ? title.value.value : undefined).toBe("Keep");
+    expect(title.unknownElements?.some((n) => n.localName === "value")).toBe(true);
+  });
+
+  it("allows one value per annotation namespace", () => {
+    const source = sample(
+      [
+        "  <properties>",
+        '    <title type="type:Text">',
+        "      <value>Start</value>",
+        "      <scad:value>start</scad:value>",
+        "    </title>",
+        "  </properties>",
+      ].join("\n"),
+      ' xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"',
+    );
+    const result = parse(source, { filePath: "facet-value.bml", continueOnError: true });
+    expect(result.document).not.toBeNull();
+    expect(result.diagnostics.some((d) => d.code === "BML_DUPLICATE_PROPERTY_VALUE")).toBe(false);
+    const title = result.document!.block.members.find((m) => m.name === "title");
+    expect(title?.kind).toBe("property");
+    if (title?.kind !== "property") {
+      return;
+    }
+    expect(title.values).toHaveLength(2);
+    expect(title.values?.map((e) => e.namespace)).toEqual([
+      "",
+      "com.machineblocks.bml.annotation.ScadAnnotation",
+    ]);
+  });
+
+  it("reports a second value in the same annotation namespace", () => {
+    const source = sample(
+      [
+        "  <properties>",
+        '    <title type="type:Text">',
+        "      <scad:value>start</scad:value>",
+        "      <scad:value>center</scad:value>",
+        "    </title>",
+        "  </properties>",
+      ].join("\n"),
+      ' xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"',
+    );
+    const result = parse(source, { filePath: "dup-facet-value.bml", continueOnError: true });
+    expect(result.document).not.toBeNull();
+    expect(result.diagnostics.some((d) => d.code === "BML_DUPLICATE_PROPERTY_VALUE")).toBe(true);
+    const title = result.document!.block.members.find((m) => m.name === "title");
+    expect(title?.kind).toBe("property");
+    if (title?.kind !== "property") {
+      return;
+    }
+    expect(title.values).toHaveLength(1);
+  });
+
+  it("reports value attribute plus value element as a duplicate canonical value", () => {
+    const source = sample(
+      [
+        "  <properties>",
+        '    <title type="type:Text" value="Attr">',
+        "      <value>Elem</value>",
+        "    </title>",
+        "  </properties>",
+      ].join("\n"),
+    );
+    const result = parse(source, { filePath: "dup-value-attr.bml", continueOnError: true });
+    expect(result.document).not.toBeNull();
+    expect(result.diagnostics.some((d) => d.code === "BML_DUPLICATE_PROPERTY_VALUE")).toBe(true);
+    const title = result.document!.block.members.find((m) => m.name === "title");
+    expect(title?.kind).toBe("property");
+    if (title?.kind !== "property") {
+      return;
+    }
+    expect(title.values).toHaveLength(1);
+    expect(title.value && "value" in title.value ? title.value.value : undefined).toBe("Elem");
+  });
+
   it("reports standalone composition at block root", () => {
     const source = sample("  <composition><test:Child /></composition>");
     const result = parse(source, { filePath: "standalone-composition.bml", continueOnError: true });

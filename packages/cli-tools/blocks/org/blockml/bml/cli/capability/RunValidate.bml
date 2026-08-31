@@ -38,7 +38,9 @@
     After CLI17 diagnostics, always print a status line:
     Validation succeeded|failed. Tested N block(s), M with errors, W warning(s), R recommendation(s).
 
-    Block = unique filePath. XSD is not part of this command.
+    Block = unique filePath. M counts unique filePaths among error diagnostics
+    (parse + semantic). W and R count warning/recommendation diagnostics.
+    XSD is not part of this command.
   </documentation>
 
   <references>

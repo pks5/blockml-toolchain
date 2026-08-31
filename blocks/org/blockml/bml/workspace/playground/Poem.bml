@@ -27,4 +27,16 @@
     抖落冬日最后的残雪。
   </documentation>
 
+  <properties>
+    <title>
+      <value>Poem</value>
+    </title>
+    <author>
+      <value>John Doe</value>
+    </author>
+    <year>
+      <value>2026</value>
+    </year>
+  </properties>
+
 </block>

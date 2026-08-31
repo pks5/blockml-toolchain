@@ -277,6 +277,19 @@ export const reportDuplicateComposition = (element: Element, ctx: MapContext): v
   );
 };
 
+export const reportDuplicatePropertyValue = (
+  element: Element,
+  ctx: MapContext,
+  source?: SourceLocation,
+): void => {
+  reportDiagnostic(
+    ctx,
+    "BML_DUPLICATE_PROPERTY_VALUE",
+    "property members may have at most one value per namespace",
+    source ?? elementSourceLoc(ctx.filePath, ctx.source, element),
+  );
+};
+
 const CHARACTER_DATA_HOSTS = new Set([
   "name",
   "type",

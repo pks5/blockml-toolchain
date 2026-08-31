@@ -32,7 +32,7 @@
 
   <properties>
     <namespace type="type:Text">
-      <documentation>"" = canonical value. (required)</documentation>
+      <documentation>"" = canonical value; else resolved Annotation FQN. Unique per PropertyDefinition. (required)</documentation>
     </namespace>
     <value type="bomvalue:MemberValue">
       <documentation>value (required). TS type: bomvalue:MemberValue.</documentation>

@@ -62,6 +62,7 @@ export interface PropertyDefinition extends MemberDefinitionBase {
   typeFqn: string;
   /** Full parse-time type expression when authored form is not a plain FQN (e.g. TypeReference(core:Block)). */
   type?: TypeExpression;
+  /** At most one entry per namespace; extras are BML_DUPLICATE_PROPERTY_VALUE. */
   values?: PropertyValueEntry[];
   /** Convenience — default-namespace entry from values[]. */
   value?: MemberValue;

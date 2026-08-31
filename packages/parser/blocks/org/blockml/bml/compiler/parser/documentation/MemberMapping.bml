@@ -38,6 +38,10 @@
   <documentation><![CDATA[Property/aggregation/association/capability members:
     • Element QName = member identity (deprecated namespace= attr → error)
     • type attribute → TypeExpression; value/memberValues for properties
+    • One <value> per namespace on a property member. Unprefixed <value> /
+      value="…" is the canonical namespace (""). Prefixed <prefix:value>
+      (Annotation xmlns) is a separate facet. Extra copies of the same
+      namespace → BML_DUPLICATE_PROPERTY_VALUE.
     • One <composition> per aggregation member, as a direct child of that member
       (not of <block>, <aggregations>, or nested inside metadata). Extra copies →
       BML_DUPLICATE_COMPOSITION. Misplaced → BML_STANDALONE_COMPOSITION.

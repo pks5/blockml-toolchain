@@ -202,15 +202,36 @@ function countBySeverity(
   return diagnostics.filter((d) => d.severity === severity).length;
 }
 
+/** Unique files with error diagnostics (parse + semantic). Unlocated errors count as one block. */
+function countBlocksWithErrors(diagnostics: PrintableDiagnostic[]): number {
+  const files = new Set<string>();
+  let unlocated = 0;
+  for (const d of diagnostics) {
+    if (d.severity !== "error") {
+      continue;
+    }
+    const file = d.source?.file;
+    if (file) {
+      files.add(file);
+    } else {
+      unlocated += 1;
+    }
+  }
+  if (files.size > 0) {
+    return files.size;
+  }
+  return unlocated > 0 ? 1 : 0;
+}
+
 function printValidateOutcome(
   lines: CliOutputLine[],
   blocksTested: number,
-  blocksWithErrors: number,
   failed: boolean,
   diagnostics: PrintableDiagnostic[],
 ): void {
   const word = blocksTested === 1 ? "block" : "blocks";
   const status = failed ? "failed" : "succeeded";
+  const blocksWithErrors = countBlocksWithErrors(diagnostics);
   const warnings = countBySeverity(diagnostics, "warning");
   const recommendations = countBySeverity(diagnostics, "recommendation");
   const warningWord = warnings === 1 ? "warning" : "warnings";
@@ -465,7 +486,7 @@ function runValidate(parsed: ParsedArgs, rootDir: string, lines: CliOutputLine[]
     const diagnostics = [...bootstrap.diagnostics, ...result.diagnostics];
     printDiagnostics(diagnostics, lines);
     const failed = diagnostics.some((d) => d.severity === "error");
-    printValidateOutcome(lines, 1, result.success ? 0 : 1, failed, diagnostics);
+    printValidateOutcome(lines, 1, failed, diagnostics);
     return failed ? 1 : 0;
   }
 
@@ -475,13 +496,7 @@ function runValidate(parsed: ParsedArgs, rootDir: string, lines: CliOutputLine[]
   const diagnostics = [...bootstrap.diagnostics, ...validated.diagnostics];
   printDiagnostics(diagnostics, lines);
   const failed = diagnostics.some((d) => d.severity === "error");
-  printValidateOutcome(
-    lines,
-    validated.blocksTested,
-    validated.blocksWithErrors,
-    failed,
-    diagnostics,
-  );
+  printValidateOutcome(lines, validated.blocksTested, failed, diagnostics);
   return failed ? 1 : 0;
 }
 

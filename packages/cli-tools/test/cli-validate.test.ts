@@ -321,6 +321,42 @@ describe("runCli validate (parse + semantic, no XSD)", () => {
     expect(stderr).not.toMatch(/BML_XSD_VALIDATION_ERROR/);
     expect(stderr).toMatch(/Validation failed\. Tested 1 block,/);
   });
+
+  it("counts parse errors in the with-errors tally for project validate", async () => {
+    const srcDir = join(tmpProject, "blocks");
+    mkdirSync(srcDir, { recursive: true });
+    writeFileSync(
+      join(tmpProject, "package.json"),
+      JSON.stringify({ name: "dup-value-validate", blockml: { srcDir: "blocks" } }),
+      "utf8",
+    );
+    writeFileSync(
+      join(srcDir, "Dup.bml"),
+      `<block xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:cli="com.test.cli">
+  <name>Dup</name>
+  <type>cli:Dup</type>
+  <baseType>core:Block</baseType>
+  <is>duplicate value</is>
+  <properties>
+    <title type="type:Text">
+      <value>Keep</value>
+      <value>Drop</value>
+    </title>
+  </properties>
+</block>`,
+      "utf8",
+    );
+
+    const { code, stderr } = await runCli(["validate"], tmpProject);
+    expect(code).toBe(1);
+    expect(stderr).toMatch(/BML_DUPLICATE_PROPERTY_VALUE/);
+    expect(stderr).toMatch(
+      /Validation failed\. Tested \d+ blocks?, 1 with errors, \d+ warnings?, \d+ recommendations?\./,
+    );
+  });
 });
 
 describe("xsd-validate standalone helper", () => {

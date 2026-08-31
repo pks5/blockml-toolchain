@@ -7,7 +7,7 @@ import { parseVisibilityFromName } from "../util/visibility.js";
 import { parseBooleanAttribute, isBooleanLiteral } from "../util/boolean.js";
 import { resolveBlockReference, resolvePrefix, resolveTypeName, elementSourceLoc, elementStartTagIsSelfClosing, attributeValueLoc, TYPE_REFERENCE_ENTITY, } from "../util/qname.js";
 import { withElementLocation } from "../util/mapping-error.js";
-import { collectBlockGrammarAttributes, collectIdentityOrSectionAttributes, collectMemberGrammarAttributes, isAllowedRootChild, isCharacterDataHost, reportDuplicateComposition, reportStandaloneComposition, reportUnexpectedTextChildren, reportUnknownElement, toUnknownXmlNode, } from "./structural.js";
+import { collectBlockGrammarAttributes, collectIdentityOrSectionAttributes, collectMemberGrammarAttributes, isAllowedRootChild, isCharacterDataHost, reportDuplicateComposition, reportDuplicatePropertyValue, reportStandaloneComposition, reportUnexpectedTextChildren, reportUnknownElement, toUnknownXmlNode, } from "./structural.js";
 const MEMBER_SECTIONS = new Set([
     "properties",
     "aggregations",
@@ -300,7 +300,7 @@ function finishMember(element, member, ctx) {
             unknown.push(toUnknownXmlNode(child, ctx));
         }
         if (unknown.length > 0) {
-            member.unknownElements = unknown;
+            member.unknownElements = [...(member.unknownElements ?? []), ...unknown];
         }
     }
     return member;
@@ -787,42 +787,50 @@ function mapGenericTypes(element, ctx) {
 }
 function mapPropertyValues(element, prop, typeFqn, ctx) {
     const entries = [];
+    const seenNamespaces = new Set();
+    const extras = [];
+    const addEntry = (ns, val, child, source) => {
+        if (seenNamespaces.has(ns)) {
+            reportDuplicatePropertyValue(child ?? element, ctx, source);
+            if (child) {
+                extras.push(toUnknownXmlNode(child, ctx));
+            }
+            return;
+        }
+        seenNamespaces.add(ns);
+        entries.push({ namespace: ns, value: val });
+        if (ns === "") {
+            prop.value = val;
+        }
+    };
     for (const child of elementChildren(element)) {
         const local = elementLocalName(child);
-        if (local === "value") {
-            const prefix = elementPrefix(child);
-            const ns = prefix ? (resolvePrefix(prefix, ctx.bindings) ?? "") : "";
-            const attrVal = getAttribute(child, "value");
-            const { text } = getCharacterData(child);
-            const raw = attrVal ?? text;
-            const val = parseMemberValue(raw, typeFqn, ctx.filePath, 1, 1, "element");
-            if (val) {
-                entries.push({ namespace: ns, value: val });
-                if (ns === "") {
-                    prop.value = val;
-                }
-            }
+        if (local !== "value" && !local.endsWith(":value")) {
+            continue;
         }
-        else if (local.endsWith(":value")) {
-            const prefix = elementPrefix(child);
-            const ns = prefix ? (resolvePrefix(prefix, ctx.bindings) ?? "") : "";
-            const { text } = getCharacterData(child);
-            const val = parseMemberValue(text, typeFqn, ctx.filePath, 1, 1, "element");
-            if (val) {
-                entries.push({ namespace: ns, value: val });
-            }
+        const prefix = elementPrefix(child);
+        const ns = prefix ? (resolvePrefix(prefix, ctx.bindings) ?? "") : "";
+        const attrVal = local === "value" ? getAttribute(child, "value") : undefined;
+        const { text } = getCharacterData(child);
+        const raw = attrVal ?? text;
+        const val = parseMemberValue(raw, typeFqn, ctx.filePath, 1, 1, "element");
+        if (val) {
+            addEntry(ns, val, child);
         }
     }
     const attrVal = getAttribute(element, "value");
-    if (attrVal !== undefined && !prop.value) {
+    if (attrVal !== undefined) {
         const val = parseMemberValue(attrVal, typeFqn, ctx.filePath, 1, 1, "attribute");
         if (val) {
-            entries.push({ namespace: "", value: val });
-            prop.value = val;
+            const loc = attributeValueLoc(ctx.filePath, ctx.source, element, "value", attrVal);
+            addEntry("", val, undefined, loc);
         }
     }
     if (entries.length > 0) {
         prop.values = entries;
+    }
+    if (extras.length > 0) {
+        prop.unknownElements = extras;
     }
 }
 function mapMemberGroups(element, target, ctx) {

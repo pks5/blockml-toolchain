@@ -583,7 +583,7 @@ const blocks = [
     name: "PropertyValueEntry",
     is: "Namespaced property value entry",
     fields: [
-      { name: "namespace", type: "type:Text", required: true, doc: '"" = canonical value.' },
+      { name: "namespace", type: "type:Text", required: true, doc: '"" = canonical value; else resolved Annotation FQN. Unique per PropertyDefinition.' },
       { name: "value", type: "bomvalue:MemberValue", required: true },
     ],
   },
@@ -598,7 +598,7 @@ const blocks = [
       { name: "kind", type: "type:Text", required: true, literal: "property" },
       { name: "typeFqn", type: "type:Text", required: true },
       { name: "type", type: "bomtype:TypeExpression" },
-      { name: "values", type: "bommember:PropertyValueEntry[]" },
+      { name: "values", type: "bommember:PropertyValueEntry[]", doc: "At most one entry per namespace." },
       { name: "value", type: "bomvalue:MemberValue" },
       { name: "group", type: "type:Text" },
       { name: "suggestions", type: "bomcomp:BlockInstance[]" },
