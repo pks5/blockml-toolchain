@@ -1,0 +1,47 @@
+<!--
+  Workspace Playground — Poem
+  FQN: org.blockml.bml.workspace.playground.Poem
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:playground="org.blockml.bml.workspace.playground">
+
+  <name>Poem</name>
+  <type>playground:Poem</type>
+  <baseType>core:Documentation</baseType>
+  <is>A random poem produced by a workspace transform execution</is>
+
+  <documentation>
+    Der Morgen legt sich grau auf stille Dächer,
+    ein Amselruf zerteilt den kühlen Wind.
+    Die Straßen atmen noch im halben Schlummer,
+    wo Schatten sich um leere Bänke sind.
+
+    Ein Fenster glüht, als hielte es die Sonne,
+    die Lampe wacht, wo längst der Tag begann.
+    Der Kaffee dampft, ein kleiner Halt im Rauschen,
+    bevor die Stunde ihren Lauf gewann.
+
+    Und über allem zieht ein Schwarm von Krähen
+    wie Tinte, die der Himmel langsam schreibt.
+    Sie zeichnen Bögen, die kein Mensch behalten kann,
+    und doch ein Gruß, der bis zum Abend bleibt.
+  </documentation>
+
+  <properties>
+    <title>
+      <value>Der Morgen legt sich grau</value>
+    </title>
+    <author>
+      <value>John Doe</value>
+    </author>
+    <year>
+      <value>2026</value>
+    </year>
+  </properties>
+
+</block>
