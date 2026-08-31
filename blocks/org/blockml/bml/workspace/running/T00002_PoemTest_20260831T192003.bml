@@ -5,14 +5,14 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:pending="org.blockml.bml.workspace._meta.transform.pending"
+  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
   <name>
-    PoemTest
+    T00002_PoemTest_20260831T192003
   </name>
   <type>
-    pending:PoemTest
+    running:T00002_PoemTest_20260831T192003
   </type>
   <baseType>
     workflow:ModelTransformation
@@ -25,17 +25,28 @@
       <value>A transformation that creates a playground Poem block</value>
     </description>
     <status override="true" type="workflow:ExecutionStatus">
-      <value>Pending</value>
+      <value>Running</value>
     </status>
     <createdAt override="true" type="type:DateTime">
       <value>2026-08-30T01:40:20</value>
     </createdAt>
+    <executionId override="true" type="type:Text">
+      <value>7dd15096-e1e6-47c0-914d-6f9ba04afbbe</value>
+    </executionId>
+    <sequence override="true" type="type:Integer">
+      <value>2</value>
+    </sequence>
+    <startedAt override="true" type="type:DateTime">
+      <value>2026-08-31T19:20:03</value>
+    </startedAt>
+    <baseCommit override="true" type="type:Text">
+      <value>fe2411c294ea3dc80e8685d6ffe487647fddeb39</value>
+    </baseCommit>
   </properties>
   <aggregations>
     <stages override="true">
       <composition>
         <workflow:Stage name="Create Poem" status="Pending">
-        
           <task>
             <composition>
               <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.Poem.bml that contains a random poem. For each execution create a new poem." />
@@ -43,7 +54,6 @@
           </task>
         </workflow:Stage>
         <workflow:Stage name="Translate Poem" status="Pending">
-        
           <task>
             <composition>
               <workflow:InstructionTask instructions="Translate the poem in org.blockml.bml.workspace.playground.Poem.bml to spanish." />
