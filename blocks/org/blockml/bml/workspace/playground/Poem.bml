@@ -16,25 +16,25 @@
   <is>A random poem produced by a workspace transform execution</is>
 
   <documentation>
-    Le matin se dépose, gris, sur les toits muets,
-    un cri de merle fend le vent glacé.
-    Les rues respirent encore dans un demi-sommeil,
-    où les ombres entourent les bancs déserts.
+    Mane cinereum super tecta muta descendit,
+    merulae clamor ventum gelidum findit.
+    Viae adhuc in semisomno spirant,
+    ubi umbrae scamna deserta cingunt.
 
-    Une fenêtre rougeoie, comme si elle tenait le soleil,
-    la lampe veille, là où le jour a commencé depuis longtemps.
-    Le café fume, une petite halte dans le vacarme,
-    avant que l'heure ne prenne son cours.
+    Fenestra rubet, quasi solem teneat,
+    lucerna vigilat, ubi dies iam pridem coepit.
+    Caffea fumat, brevis mora in strepitu,
+    antequam hora cursum suum capiat.
 
-    Et par-dessus tout passe une nuée de corbeaux
-    comme une encre que le ciel écrit lentement.
-    Ils tracent des arcs que nul homme ne peut retenir,
-    et pourtant un salut qui demeure jusqu'au soir.
+    Et super omnia transit nubes corvorum
+    velut atramentum quod caelum lente scribit.
+    Arcus designant quos nemo hominum tenere potest,
+    et tamen salutatio quae usque ad vesperum manet.
   </documentation>
 
   <properties>
     <title>
-      <value>Le matin se dépose gris</value>
+      <value>Mane cinereum descendit</value>
     </title>
     <author>
       <value>John Doe</value>
