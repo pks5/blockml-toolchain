@@ -5,14 +5,14 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:pending="org.blockml.bml.workspace._meta.transform.pending"
+  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
   <name>
-    CatAndMouse
+    T00004_CatAndMouse_20260831T213340
   </name>
   <type>
-    pending:CatAndMouse
+    running:T00004_CatAndMouse_20260831T213340
   </type>
   <baseType>
     workflow:ModelTransformation
@@ -25,12 +25,23 @@
       <value>A transformation that creates a playground Poem block about a cat and a mouse</value>
     </description>
     <status override="true" type="workflow:ExecutionStatus">
-      <value>Pending</value>
+      <value>Running</value>
     </status>
     <createdAt override="true" type="type:DateTime">
       <value>2026-08-30T01:40:20</value>
     </createdAt>
-    
+    <executionId override="true" type="type:Text">
+      <value>cf136fe2-f5d7-4054-b2d7-65ddde86d840</value>
+    </executionId>
+    <sequence override="true" type="type:Integer">
+      <value>4</value>
+    </sequence>
+    <startedAt override="true" type="type:DateTime">
+      <value>2026-08-31T21:33:40</value>
+    </startedAt>
+    <baseCommit override="true" type="type:Text">
+      <value>219f3c00b63e092bd1cb391579c0ba58d441e5a0</value>
+    </baseCommit>
   </properties>
   <aggregations>
     <stages override="true">
