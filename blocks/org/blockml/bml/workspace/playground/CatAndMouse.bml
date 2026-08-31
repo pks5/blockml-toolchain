@@ -1,0 +1,47 @@
+<!--
+  Workspace Playground — CatAndMouse
+  FQN: org.blockml.bml.workspace.playground.CatAndMouse
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:playground="org.blockml.bml.workspace.playground">
+
+  <name>CatAndMouse</name>
+  <type>playground:CatAndMouse</type>
+  <baseType>core:Documentation</baseType>
+  <is>A playground poem about a cat and a mouse produced by a workspace transform execution</is>
+
+  <documentation>
+    Along the skirting board the small grey shadow goes,
+    a whisper of feet where the lamplight barely glows.
+    Above the rug the cat unfolds without a sound,
+    two lanterns for eyes fixed low upon the ground.
+
+    The mouse knows the map of every crack and seam,
+    the cat knows patience, and the long slow gleam.
+    A crumb is the prize, a heartbeat is the cost,
+    and the kitchen holds its breath for the one who has lost.
+
+    Then a clock strikes once and the spell breaks clean,
+    the mouse is a rumour, the floor is swept and green.
+    The cat sits down and washes one indifferent paw,
+    as if it had never wanted the thing it never saw.
+  </documentation>
+
+  <properties>
+    <title>
+      <value>Along the Skirting Board</value>
+    </title>
+    <author>
+      <value>John Doe</value>
+    </author>
+    <year>
+      <value>2026</value>
+    </year>
+  </properties>
+
+</block>
