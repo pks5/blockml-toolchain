@@ -53,7 +53,7 @@ export function buildClaudeReflectPrompt(
     '{ "changedFiles": ["relative/path.bml"], "feedback": "summary" }',
     "",
     "changedFiles must be workspace-relative paths Execute actually modified.",
-    "Do not include _transform/ ModelTransformation files unless Execute wrongly",
+    "Do not include _meta/transform/ ModelTransformation files unless Execute wrongly",
     "touched them; mention that in feedback if so.",
   ].join("\n");
 }

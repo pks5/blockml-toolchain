@@ -23,7 +23,7 @@ describe("ClaudeCodeAgent", () => {
 
   it("writes AGENTS.md when missing and includes the running execution FQN in the prompt", async () => {
     const runningFqn =
-      "com.example.model._transform.running.T00001_JokeTest_20260830T011702";
+      "com.example.model._meta.transform.running.T00001_JokeTest_20260830T011702";
     let captured: {
       command: string;
       args: string[];
@@ -66,7 +66,7 @@ describe("ClaudeCodeAgent", () => {
     expect(prompt).toContain("Running Stage");
     expect(prompt).toContain("Change BML model source");
     expect(prompt).toContain("Do not modify the ModelTransformation block");
-    expect(prompt).toContain("_transform/");
+    expect(prompt).toContain("_meta/transform/");
   });
 
   it("streams a verbose Claude session with stream-json", async () => {
@@ -80,7 +80,7 @@ describe("ClaudeCodeAgent", () => {
     });
     await agent.execute({
       workspaceRoot: TMP,
-      executionFqn: "com.example.model._transform.running.X",
+      executionFqn: "com.example.model._meta.transform.running.X",
       stageIndex: 0,
     });
     expect(captured?.live).toBe(true);
@@ -108,7 +108,7 @@ describe("ClaudeCodeAgent", () => {
     });
     const result = await agent.execute({
       workspaceRoot: TMP,
-      executionFqn: "com.example.model._transform.running.X",
+      executionFqn: "com.example.model._meta.transform.running.X",
       stageIndex: 0,
     });
     expect(result.success).toBe(false);

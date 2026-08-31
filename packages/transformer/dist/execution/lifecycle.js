@@ -1,6 +1,6 @@
 import { dirname, join } from "node:path";
-import { LIFECYCLE_STAGES, TRANSFORM_SEGMENT } from "./constants.js";
-const EXECUTION_FQN = new RegExp(`^(.+)\\._transform\\.(${LIFECYCLE_STAGES.join("|")})\\.([^.]+)$`);
+import { LIFECYCLE_STAGES, TRANSFORM_PACKAGE, TRANSFORM_PATH, } from "./constants.js";
+const EXECUTION_FQN = new RegExp(`^(.+)\\.${TRANSFORM_PACKAGE.replaceAll(".", "\\.")}\\.(${LIFECYCLE_STAGES.join("|")})\\.([^.]+)$`);
 export function isLifecycleStage(value) {
     return LIFECYCLE_STAGES.includes(value);
 }
@@ -17,10 +17,10 @@ export function parseExecutionFqn(fqn) {
     };
 }
 export function executionFqn(libraryFqn, stage, name) {
-    return `${libraryFqn}.${TRANSFORM_SEGMENT}.${stage}.${name}`;
+    return `${libraryFqn}.${TRANSFORM_PACKAGE}.${stage}.${name}`;
 }
 export function lifecyclePackageFqn(libraryFqn, stage) {
-    return `${libraryFqn}.${TRANSFORM_SEGMENT}.${stage}`;
+    return `${libraryFqn}.${TRANSFORM_PACKAGE}.${stage}`;
 }
 export function padSequence(sequence) {
     return String(sequence).padStart(5, "0");
@@ -46,7 +46,7 @@ export function generateExecutionName(sequence, originalName, startedAt) {
     return `T${padSequence(sequence)}_${safe}_${formatNameTimestamp(startedAt)}`;
 }
 export function executionFilePath(currentPath, stage, name) {
-    const replaced = currentPath.replace(new RegExp(`/_transform/(${LIFECYCLE_STAGES.join("|")})/[^/]+\\.bml$`), `/_transform/${stage}/${name}.bml`);
+    const replaced = currentPath.replace(new RegExp(`/${TRANSFORM_PATH}/(${LIFECYCLE_STAGES.join("|")})/[^/]+\\.bml$`), `/${TRANSFORM_PATH}/${stage}/${name}.bml`);
     if (replaced !== currentPath) {
         return replaced;
     }

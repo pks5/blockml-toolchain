@@ -22,7 +22,7 @@
     # Finalize Execution
 
     Set completedAt and status, then relocate the running ModelTransformation to
-    `_transform.succeeded` or `_transform.failed`. `Succeeded` only when every
+    `_meta.transform.succeeded` or `_meta.transform.failed`. `Succeeded` only when every
     Stage succeeded. After that relocation, commit.
 
     Default implementation is deterministic. Runs after every started execution,

@@ -32,7 +32,7 @@
     <see type="clicap:RunTransform" relation="SeeAlso" />
   </references>
   <properties>
-    <executionFqn type="type:Text"><documentation>FQN of a ModelTransformation in the library _transform.pending package. (required)</documentation></executionFqn>
+    <executionFqn type="type:Text"><documentation>FQN of a ModelTransformation in the library _meta.transform.pending package. (required)</documentation></executionFqn>
     <verbose type="type:Boolean"><documentation>Stream the transformation agent output live. (optional)</documentation></verbose>
   </properties>
 

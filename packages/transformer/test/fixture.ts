@@ -8,7 +8,7 @@ export const EXECUTION_ID = "d41bf2a3-f51f-4171-a2e4-e71893c16f24";
 export const FIXED_NOW = new Date(2026, 7, 30, 1, 17, 2);
 
 export function pendingFqn(name: string): string {
-  return `${LIBRARY}._transform.pending.${name}`;
+  return `${LIBRARY}._meta.transform.pending.${name}`;
 }
 
 export function writeProject(dir: string, files: Record<string, string>): void {
@@ -99,7 +99,7 @@ export function pendingExecutionXml(opts: {
     `<block xmlns="http://blockml.org/bml"`,
     ` xmlns:core="org.blockml.bml.core"`,
     ` xmlns:workflow="org.blockml.bml.transformer.workflow"`,
-    ` xmlns:pending="${LIBRARY}._transform.pending"`,
+    ` xmlns:pending="${LIBRARY}._meta.transform.pending"`,
     ` xmlns:type="org.blockml.bml.type">`,
     `  <name>${opts.name}</name>`,
     `  <type>pending:${opts.name}</type>`,
@@ -139,7 +139,7 @@ export function historyExecutionXml(opts: {
     `<block xmlns="http://blockml.org/bml"`,
     ` xmlns:core="org.blockml.bml.core"`,
     ` xmlns:workflow="org.blockml.bml.transformer.workflow"`,
-    ` xmlns:${opts.stage}="${LIBRARY}._transform.${opts.stage}"`,
+    ` xmlns:${opts.stage}="${LIBRARY}._meta.transform.${opts.stage}"`,
     ` xmlns:type="org.blockml.bml.type">`,
     `  <name>${opts.name}</name>`,
     `  <type>${opts.stage}:${opts.name}</type>`,
@@ -186,7 +186,7 @@ export function referrerXml(name: string, seeType: string): string {
   return [
     `<block xmlns="http://blockml.org/bml"`,
     ` xmlns:core="org.blockml.bml.core"`,
-    ` xmlns:pending="${LIBRARY}._transform.pending"`,
+    ` xmlns:pending="${LIBRARY}._meta.transform.pending"`,
     ` xmlns:test="${LIBRARY}">`,
     `  <name>${name}</name>`,
     `  <type>test:${name}</type>`,

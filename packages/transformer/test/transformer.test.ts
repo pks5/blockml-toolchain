@@ -60,7 +60,7 @@ describe("sequence allocation", () => {
 
   it("starts at 1 when no previous sequence exists", async () => {
     writeProject(TMP, {
-      "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
       }),
     });
@@ -75,14 +75,14 @@ describe("sequence allocation", () => {
 
   it("increments from existing running and succeeded sequences", async () => {
     writeProject(TMP, {
-      "blocks/com/example/model/_transform/succeeded/T00007_Prior_20260101T000000.bml":
+      "blocks/com/example/model/_meta/transform/succeeded/T00007_Prior_20260101T000000.bml":
         historyExecutionXml({
           name: "T00007_Prior_20260101T000000",
           stage: "succeeded",
           executionId: "aaaaaaaa-0000-4000-8000-000000000007",
           sequence: 7,
         }),
-      "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
       }),
     });
@@ -111,7 +111,7 @@ describe("Transformer lifecycle", () => {
 
   it("moves pending to running then succeeded, preserving executionId and references", async () => {
     writeProject(TMP, {
-      "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
       }),
       "blocks/com/example/model/Referrer.bml": referrerXml("Referrer", "pending:JokeTest"),
@@ -128,25 +128,25 @@ describe("Transformer lifecycle", () => {
     expect(result.sequence).toBe(1);
     expect(result.executionId).toBe(EXECUTION_ID);
     expect(result.runningFqn).toBe(
-      `com.example.model._transform.running.${generated}`,
+      `com.example.model._meta.transform.running.${generated}`,
     );
     expect(result.terminalFqn).toBe(
-      `com.example.model._transform.succeeded.${generated}`,
+      `com.example.model._meta.transform.succeeded.${generated}`,
     );
     expect(result.status).toBe("Succeeded");
     expect(calls).toEqual([result.runningFqn]);
 
     expect(
-      existsSync(join(TMP, "blocks/com/example/model/_transform/pending/JokeTest.bml")),
+      existsSync(join(TMP, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml")),
     ).toBe(false);
     expect(
       existsSync(
-        join(TMP, `blocks/com/example/model/_transform/running/${generated}.bml`),
+        join(TMP, `blocks/com/example/model/_meta/transform/running/${generated}.bml`),
       ),
     ).toBe(false);
     const succeededPath = join(
       TMP,
-      `blocks/com/example/model/_transform/succeeded/${generated}.bml`,
+      `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`,
     );
     expect(existsSync(succeededPath)).toBe(true);
     const succeeded = readFileSync(succeededPath, "utf8");
@@ -168,7 +168,7 @@ describe("Transformer lifecycle", () => {
 
   it("relocates a failed agent execution to failed with an exception", async () => {
     writeProject(TMP, {
-      "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
       }),
     });
@@ -183,16 +183,16 @@ describe("Transformer lifecycle", () => {
     expect(result.status).toBe("Failed");
     expect(result.error).toMatch(/claude exited 1/);
     expect(result.terminalFqn).toBe(
-      `com.example.model._transform.failed.${generated}`,
+      `com.example.model._meta.transform.failed.${generated}`,
     );
     expect(
       existsSync(
-        join(TMP, `blocks/com/example/model/_transform/running/${generated}.bml`),
+        join(TMP, `blocks/com/example/model/_meta/transform/running/${generated}.bml`),
       ),
     ).toBe(false);
     const failedPath = join(
       TMP,
-      `blocks/com/example/model/_transform/failed/${generated}.bml`,
+      `blocks/com/example/model/_meta/transform/failed/${generated}.bml`,
     );
     expect(existsSync(failedPath)).toBe(true);
     const failed = readFileSync(failedPath, "utf8");
@@ -217,7 +217,7 @@ describe("Transformer lifecycle", () => {
 
   it("aborts when the worktree is dirty and does not start the execution", async () => {
     writeProject(TMP, {
-      "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
       }),
     });
@@ -236,13 +236,13 @@ describe("Transformer lifecycle", () => {
       },
     );
     expect(
-      existsSync(join(TMP, "blocks/com/example/model/_transform/pending/JokeTest.bml")),
+      existsSync(join(TMP, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml")),
     ).toBe(true);
   });
 
   it("records HEAD as baseCommit and commits start, execute, and terminal snapshots", async () => {
     writeProject(TMP, {
-      "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
       }),
     });
@@ -261,7 +261,7 @@ describe("Transformer lifecycle", () => {
     const result = await transformer.run(pendingFqn("JokeTest"));
     expect(result.success).toBe(true);
     const succeeded = readFileSync(
-      join(TMP, `blocks/com/example/model/_transform/succeeded/${generated}.bml`),
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
       "utf8",
     );
     expect(succeeded).toContain(`<value>${headBefore}</value>`);
@@ -276,14 +276,14 @@ describe("Transformer lifecycle", () => {
 
   it("persists Stage Running and baseCommit before the agent runs", async () => {
     writeProject(TMP, {
-      "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
       }),
     });
     const generated = "T00001_JokeTest_20260830T011702";
     const runningPath = join(
       TMP,
-      `blocks/com/example/model/_transform/running/${generated}.bml`,
+      `blocks/com/example/model/_meta/transform/running/${generated}.bml`,
     );
     let observedHead: string | undefined;
     const transformer = new Transformer({
@@ -307,7 +307,7 @@ describe("Transformer lifecycle", () => {
 
   it("runs every Stage in an isolated execute call and stops after a failure", async () => {
     writeProject(TMP, {
-      "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
         stageInstructions: ["First stage task.", "Second stage task."],
       }),
@@ -331,7 +331,7 @@ describe("Transformer lifecycle", () => {
     expect(result.success).toBe(false);
     expect(calls).toEqual([0]);
     const failed = readFileSync(
-      join(TMP, `blocks/com/example/model/_transform/failed/${generated}.bml`),
+      join(TMP, `blocks/com/example/model/_meta/transform/failed/${generated}.bml`),
       "utf8",
     );
     expect(failed).toContain("stage one failed");
@@ -348,7 +348,7 @@ describe("Transformer lifecycle", () => {
 
   it("succeeds only when every Stage succeeds and emits lifecycle events", async () => {
     writeProject(TMP, {
-      "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
         stageInstructions: ["First stage task.", "Second stage task."],
       }),

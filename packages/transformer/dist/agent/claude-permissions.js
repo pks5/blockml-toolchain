@@ -7,7 +7,7 @@ export const CLAUDE_EXECUTE_PERMISSIONS = {
         "Edit(**/*.bml)",
         "Bash(npx blockml *)",
     ],
-    disallowedTools: ["Edit(**/_transform/**)", "Edit(**/node_modules/**)"],
+    disallowedTools: ["Edit(**/_meta/transform/**)", "Edit(**/node_modules/**)"],
 };
 export const CLAUDE_REFLECT_PERMISSIONS = {
     permissionMode: "bypassPermissions",

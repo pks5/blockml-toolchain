@@ -8,7 +8,14 @@ export const TEXT_TYPE_FQN = "org.blockml.bml.type.Text";
 export const FILE_PATH_TYPE_FQN = "org.blockml.bml.type.FilePath";
 export const FILE_PATH_ENTITY_FQN = "org.blockml.bml.type.FilePathEntity";
 export const TYPE_PACKAGE_FQN = "org.blockml.bml.type";
-export const TRANSFORM_SEGMENT = "_transform";
+/** Library-local metadata package. Created when missing; shared by future extensions. */
+export const META_SEGMENT = "_meta";
+/** Transformer subtree under `_meta`. */
+export const TRANSFORM_PACKAGE_SEGMENT = "transform";
+/** Dotted package path: `_meta.transform`. */
+export const TRANSFORM_PACKAGE = `${META_SEGMENT}.${TRANSFORM_PACKAGE_SEGMENT}`;
+/** Filesystem path: `_meta/transform`. */
+export const TRANSFORM_PATH = `${META_SEGMENT}/${TRANSFORM_PACKAGE_SEGMENT}`;
 export const LIFECYCLE_STAGES = [
     "pending",
     "running",

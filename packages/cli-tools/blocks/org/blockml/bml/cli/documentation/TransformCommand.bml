@@ -31,7 +31,7 @@
     blockml transform EXECUTION-FQN [--verbose]
 
     EXECUTION-FQN is the FQN of a ModelTransformation under
-    {library}._transform.pending. Tasks are not accepted directly.
+    {library}._meta.transform.pending. Tasks are not accepted directly.
 
     The transformer takes an exclusive worktree lock, then prepares the
     ModelTransformation and runs each workflow Stage in order: persist
@@ -40,9 +40,9 @@
     deterministic. Default Execute is a TransformationAgent (Claude Code)
     that changes BML only. Default Reflect is a second Claude worker
     (read-only; changedFiles + feedback). Default Persist writes those
-    fields onto the Stage. Finalize relocates to _transform.succeeded only
-    when every Stage succeeded; otherwise _transform.failed and a non-zero
-    exit. A failed Stage aborts the rest.
+    fields onto the Stage. Finalize relocates to _meta.transform.succeeded
+    only when every Stage succeeded; otherwise _meta.transform.failed and a
+    non-zero exit. A failed Stage aborts the rest.
 
     Lifecycle lines (ModelTransformation and Stage status, execute/reflect
     start and done) always print so progress is visible without --verbose.

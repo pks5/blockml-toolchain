@@ -27,7 +27,7 @@ describe("resolvePendingExecution", () => {
 
   it("resolves a valid pending ModelTransformation", () => {
     writeProject(TMP, {
-      "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
       }),
     });
@@ -54,19 +54,19 @@ describe("resolvePendingExecution", () => {
     }
   });
 
-  it("rejects an execution outside _transform.pending", () => {
+  it("rejects an execution outside _meta.transform.pending", () => {
     writeProject(TMP, {
-      "blocks/com/example/model/_transform/succeeded/OldOne.bml": pendingExecutionXml({
+      "blocks/com/example/model/_meta/transform/succeeded/OldOne.bml": pendingExecutionXml({
         name: "OldOne",
       })
-        .replaceAll("_transform.pending", "_transform.succeeded")
+        .replaceAll("_meta.transform.pending", "_meta.transform.succeeded")
         .replaceAll("xmlns:pending=", "xmlns:succeeded=")
         .replaceAll("<type>pending:", "<type>succeeded:"),
     });
     const { registry } = bootstrapFullProjectRegistry({ rootDir: TMP });
-    expect(registry.get(`${LIBRARY}._transform.succeeded.OldOne`)).toBeTruthy();
+    expect(registry.get(`${LIBRARY}._meta.transform.succeeded.OldOne`)).toBeTruthy();
     expect(() =>
-      resolvePendingExecution(`${LIBRARY}._transform.succeeded.OldOne`, TMP),
+      resolvePendingExecution(`${LIBRARY}._meta.transform.succeeded.OldOne`, TMP),
     ).toThrow(/pending/);
   });
 
@@ -76,7 +76,7 @@ describe("resolvePendingExecution", () => {
       ">Running</value>",
     );
     writeProject(TMP, {
-      "blocks/com/example/model/_transform/pending/JokeTest.bml": xml,
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": xml,
     });
     expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
       /status=Pending/,
@@ -92,7 +92,7 @@ describe("resolvePendingExecution", () => {
   </properties>`,
     );
     writeProject(TMP, {
-      "blocks/com/example/model/_transform/pending/JokeTest.bml": xml,
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": xml,
     });
     expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
       /must not have sequence/,

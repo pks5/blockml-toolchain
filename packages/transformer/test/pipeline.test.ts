@@ -92,8 +92,8 @@ describe("Transformer pipeline", () => {
             return {
               success: true as const,
               pendingFqn: pendingFqn("JokeTest"),
-              runningFqn: `com.example.model._transform.running.${generated}`,
-              terminalFqn: `com.example.model._transform.succeeded.${generated}`,
+              runningFqn: `com.example.model._meta.transform.running.${generated}`,
+              terminalFqn: `com.example.model._meta.transform.succeeded.${generated}`,
               status: "Succeeded" as const,
               sequence: 1,
               executionId: "fixture",
@@ -106,12 +106,12 @@ describe("Transformer pipeline", () => {
     await transformer.run(pendingFqn("JokeTest"));
     const runningPath = join(
       TMP,
-      `blocks/com/example/model/_transform/running/${generated}.bml`,
+      `blocks/com/example/model/_meta/transform/running/${generated}.bml`,
     );
     expect(existsSync(runningPath)).toBe(true);
     expect(
       existsSync(
-        join(TMP, `blocks/com/example/model/_transform/succeeded/${generated}.bml`),
+        join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
       ),
     ).toBe(false);
     const running = readFileSync(runningPath, "utf8");
@@ -143,14 +143,14 @@ describe("Transformer pipeline", () => {
     });
     await transformer.run(pendingFqn("JokeTest"));
     const succeeded = readFileSync(
-      join(TMP, `blocks/com/example/model/_transform/succeeded/${generated}.bml`),
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
       "utf8",
     );
     expect(succeeded).toContain(
       '<type:FilePathEntity value="model.bml" />',
     );
     expect(succeeded).toContain(">ok</feedback>");
-    expect(succeeded).not.toContain(`_transform/running/${generated}`);
+    expect(succeeded).not.toContain(`_meta/transform/running/${generated}`);
   });
 
   it("does not write changedFiles or feedback when reflection is empty", async () => {
@@ -163,7 +163,7 @@ describe("Transformer pipeline", () => {
     });
     await transformer.run(pendingFqn("JokeTest"));
     const succeeded = readFileSync(
-      join(TMP, `blocks/com/example/model/_transform/succeeded/${generated}.bml`),
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
       "utf8",
     );
     expect(succeeded).not.toContain("<changedFiles");
@@ -193,7 +193,7 @@ describe("Transformer pipeline", () => {
     expect(order).toEqual(["prepare", "execute", "persist", "finalize"]);
     const failedPath = join(
       TMP,
-      `blocks/com/example/model/_transform/failed/${generated}.bml`,
+      `blocks/com/example/model/_meta/transform/failed/${generated}.bml`,
     );
     expect(existsSync(failedPath)).toBe(true);
     const failed = readFileSync(failedPath, "utf8");
@@ -202,7 +202,7 @@ describe("Transformer pipeline", () => {
     expect(failed).toContain(">Failed</value>");
     expect(
       existsSync(
-        join(TMP, `blocks/com/example/model/_transform/running/${generated}.bml`),
+        join(TMP, `blocks/com/example/model/_meta/transform/running/${generated}.bml`),
       ),
     ).toBe(false);
   });
@@ -291,7 +291,7 @@ describe("Transformer pipeline", () => {
     expect(order).toEqual(["prepare", "execute", "reflect", "persist", "finalize"]);
     expect(
       existsSync(
-        join(TMP, `blocks/com/example/model/_transform/failed/${generated}.bml`),
+        join(TMP, `blocks/com/example/model/_meta/transform/failed/${generated}.bml`),
       ),
     ).toBe(true);
   });
@@ -299,7 +299,7 @@ describe("Transformer pipeline", () => {
 
 function writePending(): void {
   writeProject(TMP, {
-    "blocks/com/example/model/_transform/pending/JokeTest.bml": pendingExecutionXml({
+    "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
       name: "JokeTest",
     }),
   });

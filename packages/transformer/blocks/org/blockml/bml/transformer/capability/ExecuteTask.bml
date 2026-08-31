@@ -27,9 +27,9 @@
     commits model changes together with the Stage terminal state.
 
     - Must not write ModelTransformation metadata (including Stages) or any
-      file under _transform/.
-    - Default Claude implementation: Edit on *.bml only; deny _transform/
-      and node_modules/; Bash limited to npx blockml.
+      file under `_meta/transform/`.
+    - Default Claude implementation: Edit on *.bml only; deny
+      `_meta/transform/` and node_modules/; Bash limited to npx blockml.
     - TS: pipeline/execute.ts.
   </documentation>
 

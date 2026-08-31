@@ -69,7 +69,7 @@ describe("ClaudeReflectAgent", () => {
     });
     const result = await agent.reflect({
       workspaceRoot: TMP,
-      executionFqn: "com.example.model._transform.running.T00001_X",
+      executionFqn: "com.example.model._meta.transform.running.T00001_X",
       stageIndex: 0,
       trace: TRACE,
     });
@@ -80,7 +80,7 @@ describe("ClaudeReflectAgent", () => {
     });
     const prompt = captured?.args.find((arg, i) => captured?.args[i - 1] === "-p");
     expect(prompt).toContain("Reflect step");
-    expect(prompt).toContain("com.example.model._transform.running.T00001_X");
+    expect(prompt).toContain("com.example.model._meta.transform.running.T00001_X");
     expect(prompt).toContain("execute did the work");
     expect(prompt).toContain("blocks/com/example/model/Face.bml");
     expect(prompt).toContain("must NOT change");
@@ -100,7 +100,7 @@ describe("ClaudeReflectAgent", () => {
     });
     const failed = await failing.reflect({
       workspaceRoot: TMP,
-      executionFqn: "com.example.model._transform.running.X",
+      executionFqn: "com.example.model._meta.transform.running.X",
       stageIndex: 0,
       trace: TRACE,
     });
@@ -114,7 +114,7 @@ describe("ClaudeReflectAgent", () => {
     });
     const parsed = await invalid.reflect({
       workspaceRoot: TMP,
-      executionFqn: "com.example.model._transform.running.X",
+      executionFqn: "com.example.model._meta.transform.running.X",
       stageIndex: 0,
       trace: TRACE,
     });
@@ -124,8 +124,8 @@ describe("ClaudeReflectAgent", () => {
 
 describe("buildClaudeReflectPrompt", () => {
   it("includes git files and execute stdout", () => {
-    const prompt = buildClaudeReflectPrompt("lib._transform.running.T1", 0, TRACE);
-    expect(prompt).toContain("lib._transform.running.T1");
+    const prompt = buildClaudeReflectPrompt("lib._meta.transform.running.T1", 0, TRACE);
+    expect(prompt).toContain("lib._meta.transform.running.T1");
     expect(prompt).toContain("Face.bml");
     expect(prompt).toContain("execute did the work");
     expect(prompt).toContain("changedFiles");

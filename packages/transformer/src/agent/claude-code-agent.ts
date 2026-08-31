@@ -54,7 +54,7 @@ export function buildClaudeExecutionPrompt(
     "Change BML model source so the Task is done. Change nothing else.",
     "",
     "Do not modify the ModelTransformation block, including its Stages.",
-    "Do not write files under any _transform/ directory.",
+    "Do not write files under any _meta/transform/ directory.",
     "Do not set changedFiles, feedback, completedAt, baseCommit, status, or exception,",
     "or move the execution between pending, running, succeeded, and failed.",
     "",

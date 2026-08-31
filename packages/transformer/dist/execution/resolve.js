@@ -26,7 +26,7 @@ export function resolvePendingExecution(executionFqn, workspaceRoot) {
 export function resolvePendingExecutionInRegistry(executionFqn, registry) {
     const parsed = parseExecutionFqn(executionFqn);
     if (!parsed || parsed.stage !== "pending") {
-        throw new TransformError("resolve", `Execution FQN must be a ModelTransformation under <library>._transform.pending, got ${executionFqn}`);
+        throw new TransformError("resolve", `Execution FQN must be a ModelTransformation under <library>._meta.transform.pending, got ${executionFqn}`);
     }
     const document = registry.get(executionFqn);
     if (!document) {

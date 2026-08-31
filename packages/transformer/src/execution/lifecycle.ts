@@ -1,6 +1,10 @@
 import { dirname, join } from "node:path";
 import type { LifecycleStage } from "./constants.js";
-import { LIFECYCLE_STAGES, TRANSFORM_SEGMENT } from "./constants.js";
+import {
+  LIFECYCLE_STAGES,
+  TRANSFORM_PACKAGE,
+  TRANSFORM_PATH,
+} from "./constants.js";
 
 export interface ParsedExecutionFqn {
   libraryFqn: string;
@@ -10,7 +14,7 @@ export interface ParsedExecutionFqn {
 }
 
 const EXECUTION_FQN = new RegExp(
-  `^(.+)\\._transform\\.(${LIFECYCLE_STAGES.join("|")})\\.([^.]+)$`,
+  `^(.+)\\.${TRANSFORM_PACKAGE.replaceAll(".", "\\.")}\\.(${LIFECYCLE_STAGES.join("|")})\\.([^.]+)$`,
 );
 
 export function isLifecycleStage(value: string): value is LifecycleStage {
@@ -35,14 +39,14 @@ export function executionFqn(
   stage: LifecycleStage,
   name: string,
 ): string {
-  return `${libraryFqn}.${TRANSFORM_SEGMENT}.${stage}.${name}`;
+  return `${libraryFqn}.${TRANSFORM_PACKAGE}.${stage}.${name}`;
 }
 
 export function lifecyclePackageFqn(
   libraryFqn: string,
   stage: LifecycleStage,
 ): string {
-  return `${libraryFqn}.${TRANSFORM_SEGMENT}.${stage}`;
+  return `${libraryFqn}.${TRANSFORM_PACKAGE}.${stage}`;
 }
 
 export function padSequence(sequence: number): string {
@@ -83,8 +87,8 @@ export function executionFilePath(
   name: string,
 ): string {
   const replaced = currentPath.replace(
-    new RegExp(`/_transform/(${LIFECYCLE_STAGES.join("|")})/[^/]+\\.bml$`),
-    `/_transform/${stage}/${name}.bml`,
+    new RegExp(`/${TRANSFORM_PATH}/(${LIFECYCLE_STAGES.join("|")})/[^/]+\\.bml$`),
+    `/${TRANSFORM_PATH}/${stage}/${name}.bml`,
   );
   if (replaced !== currentPath) {
     return replaced;

@@ -61,7 +61,7 @@ export function resolvePendingExecutionInRegistry(
   if (!parsed || parsed.stage !== "pending") {
     throw new TransformError(
       "resolve",
-      `Execution FQN must be a ModelTransformation under <library>._transform.pending, got ${executionFqn}`,
+      `Execution FQN must be a ModelTransformation under <library>._meta.transform.pending, got ${executionFqn}`,
     );
   }
 

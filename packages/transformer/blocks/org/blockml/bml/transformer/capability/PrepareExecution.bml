@@ -28,7 +28,7 @@
        if the worktree is dirty or not a Git toplevel.
     3. Assign `sequence`, `startedAt`, and `baseCommit` (current HEAD), set
        `status=Running`.
-    4. Relocate the Block to `_transform.running`.
+    4. Relocate the Block to `_meta.transform.running`.
     5. Commit the running relocation.
 
     Default implementation is deterministic. TS: pipeline/prepare.ts.

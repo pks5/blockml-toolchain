@@ -20,13 +20,13 @@
     Closed set of states a `workflow:ModelTransformation` or
     `workflow:Stage` can be in.
 
-    On a ModelTransformation the `_transform` package of the Block matches
-    this value:
+    On a ModelTransformation the `_meta.transform` package of the Block
+    matches this value:
 
-    * `Pending` — created, not yet started (`_transform.pending`).
-    * `Running` — currently executing (`_transform.running`).
-    * `Failed` — finished unsuccessfully (`_transform.failed`).
-    * `Succeeded` — finished successfully (`_transform.succeeded`).
+    * `Pending` — created, not yet started (`_meta.transform.pending`).
+    * `Running` — currently executing (`_meta.transform.running`).
+    * `Failed` — finished unsuccessfully (`_meta.transform.failed`).
+    * `Succeeded` — finished successfully (`_meta.transform.succeeded`).
 
     A Stage uses the same values. Its `Running` state is persisted and
     committed before the Stage's Task runs (recovery boundary). A Stage

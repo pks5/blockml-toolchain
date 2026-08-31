@@ -7,7 +7,7 @@ import {
 } from "../src/agent/claude-permissions.js";
 
 describe("Claude execute permissions", () => {
-  it("allows model BML edits and BlockML CLI, denies _transform and node_modules", () => {
+  it("allows model BML edits and BlockML CLI, denies _meta/transform and node_modules", () => {
     const args = claudePermissionCliArgs();
     expect(args[0]).toBe("--permission-mode");
     expect(args[1]).toBe(CLAUDE_EXECUTE_PERMISSIONS.permissionMode);
@@ -20,13 +20,13 @@ describe("Claude execute permissions", () => {
     expect(CLAUDE_EXECUTE_PERMISSIONS.allowedTools).not.toContain("Write");
     expect(CLAUDE_EXECUTE_PERMISSIONS.allowedTools).not.toContain("Bash");
     expect(CLAUDE_EXECUTE_PERMISSIONS.disallowedTools).toContain(
-      "Edit(**/_transform/**)",
+      "Edit(**/_meta/transform/**)",
     );
     expect(CLAUDE_EXECUTE_PERMISSIONS.disallowedTools).toContain(
       "Edit(**/node_modules/**)",
     );
     expect(args).toContain("--disallowedTools");
-    expect(args).toContain("Edit(**/_transform/**)");
+    expect(args).toContain("Edit(**/_meta/transform/**)");
     expect(CLAUDE_TRANSFORM_PERMISSIONS).toBe(CLAUDE_EXECUTE_PERMISSIONS);
   });
 

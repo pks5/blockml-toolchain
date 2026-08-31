@@ -13,7 +13,7 @@ function pendingXml(name: string): string {
     `<block xmlns="http://blockml.org/bml"`,
     ` xmlns:core="org.blockml.bml.core"`,
     ` xmlns:workflow="org.blockml.bml.transformer.workflow"`,
-    ` xmlns:pending="${LIBRARY}._transform.pending"`,
+    ` xmlns:pending="${LIBRARY}._meta.transform.pending"`,
     ` xmlns:type="org.blockml.bml.type">`,
     `  <name>${name}</name>`,
     `  <type>pending:${name}</type>`,
@@ -48,13 +48,13 @@ function pendingXml(name: string): string {
 }
 
 function writeProject(): void {
-  mkdirSync(join(TMP, "blocks/com/example/model/_transform/pending"), { recursive: true });
+  mkdirSync(join(TMP, "blocks/com/example/model/_meta/transform/pending"), { recursive: true });
   writeFileSync(
     join(TMP, "package.json"),
     JSON.stringify({ name: "cli-transform-fixture", private: true }),
   );
   writeFileSync(
-    join(TMP, "blocks/com/example/model/_transform/pending/JokeTest.bml"),
+    join(TMP, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml"),
     pendingXml("JokeTest"),
   );
   writeFileSync(join(TMP, ".gitignore"), ".blockml/\n");
@@ -78,23 +78,23 @@ describe("parseArgs transform", () => {
   it("parses the execution FQN", () => {
     const parsed = parseArgs([
       "transform",
-      "org.blockml.bml.workspace._transform.pending.JokeTest",
+      "org.blockml.bml.workspace._meta.transform.pending.JokeTest",
     ]);
     expect(parsed.command).toBe("transform");
     expect(parsed.executionFqn).toBe(
-      "org.blockml.bml.workspace._transform.pending.JokeTest",
+      "org.blockml.bml.workspace._meta.transform.pending.JokeTest",
     );
   });
 
   it("maps transform --verbose", () => {
     const parsed = parseArgs([
       "transform",
-      "org.blockml.bml.workspace._transform.pending.JokeTest",
+      "org.blockml.bml.workspace._meta.transform.pending.JokeTest",
       "--verbose",
     ]);
     expect(parsed.verbose).toBe(true);
     expect(parsed.executionFqn).toBe(
-      "org.blockml.bml.workspace._transform.pending.JokeTest",
+      "org.blockml.bml.workspace._meta.transform.pending.JokeTest",
     );
   });
 });
@@ -117,7 +117,7 @@ describe("blockml transform CLI", () => {
       },
     };
     const { code, stderr } = await runCli(
-      ["transform", `${LIBRARY}._transform.pending.JokeTest`],
+      ["transform", `${LIBRARY}._meta.transform.pending.JokeTest`],
       TMP,
       { transformAgent: failing },
     );
@@ -127,9 +127,9 @@ describe("blockml transform CLI", () => {
     expect(stderr).toMatch(/Stage 1\/1 execute start/);
     expect(stderr).toMatch(/ModelTransformation Failed/);
     expect(
-      existsSync(join(TMP, "blocks/com/example/model/_transform/pending/JokeTest.bml")),
+      existsSync(join(TMP, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml")),
     ).toBe(false);
-    const failedDir = join(TMP, "blocks/com/example/model/_transform/failed");
+    const failedDir = join(TMP, "blocks/com/example/model/_meta/transform/failed");
     expect(readdirSync(failedDir).some((name) => name.endsWith(".bml"))).toBe(true);
   });
 
@@ -146,7 +146,7 @@ describe("blockml transform CLI", () => {
 
   it("prints Stage lifecycle lines without --verbose on success", async () => {
     const { code, stderr } = await runCli(
-      ["transform", `${LIBRARY}._transform.pending.JokeTest`],
+      ["transform", `${LIBRARY}._meta.transform.pending.JokeTest`],
       TMP,
       {
         transformAgent: {

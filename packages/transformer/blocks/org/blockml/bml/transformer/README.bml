@@ -30,12 +30,13 @@
     Running, Execute its Task in an isolated agent process, Reflect,
     Persist results onto that Stage, commit. Default Prepare and Finalize
     are deterministic. Default Execute is a TransformationAgent that
-    changes BML model source only (not ModelTransformation / _transform/).
-    Default Reflect is a second Claude worker (read-only; changedFiles +
-    feedback). Default Persist writes those fields onto the Stage that
-    just ran. After a started execution, Finalize relocates the Block to
-    `_transform.succeeded` only when every Stage succeeded, otherwise
-    `_transform.failed`. A failed Stage aborts the rest. Prepare requires
+    changes BML model source only (not ModelTransformation /
+    `_meta/transform/`). Default Reflect is a second Claude worker
+    (read-only; changedFiles + feedback). Default Persist writes those
+    fields onto the Stage that just ran. After a started execution,
+    Finalize relocates the Block to `_meta.transform.succeeded` only when
+    every Stage succeeded, otherwise `_meta.transform.failed`. A failed
+    Stage aborts the rest. Prepare requires
     a clean Git worktree, records `baseCommit`, and commits the running
     relocation. Each Stage commits Running first (recovery boundary), then
     commits model changes together with the Stage terminal state. Finalize

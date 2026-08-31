@@ -21,7 +21,7 @@
     instances. Each Stage runs one Task in an isolated agent process.
 
     * `status` — lifecycle state (`workflow:ExecutionStatus`). Matches the
-      `_transform` package: Pending, Running, Succeeded, Failed.
+      `_meta.transform` package: Pending, Running, Succeeded, Failed.
       `Succeeded` only when every Stage succeeded.
     * `startedAt` / `completedAt` — the execution interval.
     * `baseCommit` — Git HEAD commit when this execution started. Set only

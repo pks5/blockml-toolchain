@@ -1,8 +1,11 @@
 import { resolve } from "node:path";
+import { TRANSFORM_PATH } from "../execution/constants.js";
 import { gitStdout } from "./git.js";
 
 export function isTransformLifecyclePath(path: string): boolean {
-  return path.includes("/_transform/") || path.startsWith("_transform/");
+  return (
+    path.includes(`/${TRANSFORM_PATH}/`) || path.startsWith(`${TRANSFORM_PATH}/`)
+  );
 }
 
 export function modelChangedFiles(paths: readonly string[]): string[] {

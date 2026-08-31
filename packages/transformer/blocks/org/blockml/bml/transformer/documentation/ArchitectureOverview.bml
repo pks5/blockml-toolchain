@@ -25,8 +25,11 @@
     workflow:Stage is the unit of work inside a ModelTransformation.
     Process steps (Prepare, Execute, Reflect, Persist, Finalize) are not
     the same as workflow Stages. Lifecycle packages of the
-    ModelTransformation (pending / running / succeeded / failed) match
-    its status.
+    ModelTransformation live under the library-local `_meta.transform`
+    package (pending / running / succeeded / failed) and match its
+    status. `_meta` is the shared metadata package for the library; it is
+    created when missing. Future extensions use other packages under
+    `_meta`.
 
     Each workflow Stage runs in its own isolated agent process. Agent
     context from a previous Stage is never reused.
@@ -36,7 +39,7 @@
         Pending, stages with a Task each, executionId, createdAt; no
         start/finish fields on the ModelTransformation), require a clean
         Git worktree, assign sequence, startedAt, and baseCommit (HEAD),
-        set status=Running, relocate to _transform.running, then commit.
+        set status=Running, relocate to _meta.transform.running, then commit.
         If the contract is violated or the worktree is dirty, do not start.
 
     Then for each workflow Stage, in order:
@@ -50,9 +53,9 @@
             process per Stage. Receives the running execution and performs
             the Task of the currently Running Stage. May change BML model
             source. Must not write ModelTransformation metadata (including
-            Stages) or files under _transform/. Does not commit; model
+            Stages) or files under _meta/transform/. Does not commit; model
             changes stay uncommitted until Persist. Claude default:
-            Edit(**/*.bml), deny Edit(**/_transform/**) and
+            Edit(**/*.bml), deny Edit(**/_meta/transform/**) and
             Edit(**/node_modules/**), Bash limited to npx blockml.
 
         [3] Reflect on Execution — transformercap:ReflectOnExecution
