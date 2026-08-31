@@ -46,7 +46,9 @@
   <aggregations>
     <stages override="true">
       <composition>
-        <workflow:Stage name="Create Poem" status="Pending">
+        <workflow:Stage name="Create Poem" status="Running">
+          <startedAt>2026-08-31T21:33:40</startedAt>
+          <baseCommit>4c2f896d36fa805fc1f0abdd981830f7bab5536d</baseCommit>
           <task>
             <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.CatAndMouse.bml that contains a poem about acat and a mouse." />
           </task>
