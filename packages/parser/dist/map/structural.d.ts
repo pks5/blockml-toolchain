@@ -14,6 +14,7 @@ export declare const collectMemberGrammarAttributes: (element: Element, ctx: Map
 export declare const reportUnknownElement: (element: Element, ctx: MapContext) => void;
 export declare const reportStandaloneComposition: (element: Element, ctx: MapContext) => void;
 export declare const reportDuplicateComposition: (element: Element, ctx: MapContext) => void;
+export declare const reportNestedComposition: (element: Element, ctx: MapContext) => void;
 export declare const reportDuplicatePropertyValue: (element: Element, ctx: MapContext, source?: SourceLocation) => void;
 export declare const isCharacterDataHost: (element: Element) => boolean;
 export declare const reportUnexpectedTextChildren: (element: Element, ctx: MapContext) => void;

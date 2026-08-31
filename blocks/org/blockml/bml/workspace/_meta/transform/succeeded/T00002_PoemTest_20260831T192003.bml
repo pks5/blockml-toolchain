@@ -55,14 +55,10 @@
           <feedback>Stage 1 (&quot;Create Poem&quot;) completed as specified. The InstructionTask required creating/updating org.blockml.bml.workspace.playground.Poem.bml with a fresh random poem per execution. Execute replaced the prior &lt;documentation> content (a Chinese poem) with a new original English poem of two ABAB quatrains. Everything outside &lt;documentation> is preserved: block header/comment, namespaces, &lt;name>/&lt;type>/&lt;baseType> (playground:Poem / core:Documentation), &lt;is>, and all &lt;properties> (title=Poem, author=John Doe, year=2026). The change is minimal and scoped to the single expected file. No ModelTransformation or _meta/transform/ files were modified by Execute (the running/T00002_PoemTest_20260831T192003 block was only the pre-existing stage-start commit). Model remains structurally consistent and ready for Stage 2 (&quot;Translate Poem&quot;). Note: I could not run `npx blockml validate` (Bash disabled in this Reflect session), so validation was not independently re-confirmed, but the edit is well-formed XML consistent with the surrounding conventions.</feedback>
           <completedAt>2026-08-31T19:21:26</completedAt>
           <task>
-            <composition>
-              <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.Poem.bml that contains a random poem. For each execution create a new poem." />
-            </composition>
+            <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.Poem.bml that contains a random poem. For each execution create a new poem." />
           </task>
           <changedFiles>
-            <composition>
-              <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/Poem.bml" />
-            </composition>
+            <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/Poem.bml" />
           </changedFiles>
         </workflow:Stage>
         <workflow:Stage name="Translate Poem" status="Succeeded">
@@ -71,14 +67,10 @@
           <feedback>Stage 2 of T00002_PoemTest_20260831T192003 modified exactly one model file: blocks/org/blockml/bml/workspace/playground/Poem.bml. The change is confined to the &lt;documentation> block of the Poem block — the two English stanzas were replaced with a Spanish translation (same 8-line, 2-stanza structure preserved). The &lt;is> summary, &lt;properties>, and all surrounding structure are untouched. No ModelTransformation / _meta/transform/ files were wrongly written by Execute (the running/ directory was not present; only pending/ and succeeded/ exist). Change is scoped, structurally consistent with the prior version, and appears to be a plain content edit. Recommend running `npx blockml validate` to confirm the BML still parses, but no structural risk is apparent from the diff.</feedback>
           <completedAt>2026-08-31T19:22:10</completedAt>
           <task>
-            <composition>
-              <workflow:InstructionTask instructions="Translate the poem in org.blockml.bml.workspace.playground.Poem.bml to spanish." />
-            </composition>
+            <workflow:InstructionTask instructions="Translate the poem in org.blockml.bml.workspace.playground.Poem.bml to spanish." />
           </task>
           <changedFiles>
-            <composition>
-              <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/Poem.bml" />
-            </composition>
+            <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/Poem.bml" />
           </changedFiles>
         </workflow:Stage>
       </composition>

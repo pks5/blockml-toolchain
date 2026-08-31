@@ -1133,6 +1133,7 @@ Qualified `{BlockFQN}::{id}` references (e.g. in `basePresets`) validate against
 bare <composition> on definition            → BML_STANDALONE_COMPOSITION (error)
 <{aggregationName}><composition>…           → CompositionTemplate for that aggregation
 <memberName> on instance                    → BlockInstance.aggregationCompositions[]
+<composition> inside instance aggregation   → BML_NESTED_COMPOSITION (error; children still mapped)
 ```
 
 The `composition aggregation="…"` attribute is **removed** — aggregations are opened by member element name.

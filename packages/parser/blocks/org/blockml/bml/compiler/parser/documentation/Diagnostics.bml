@@ -50,6 +50,7 @@
     • BML_UNKNOWN_ATTRIBUTE — attribute not allowed on a grammar node (structural)
     • BML_UNKNOWN_DIRECTIVE — unknown bml:* attribute (B2)
     • BML_STANDALONE_COMPOSITION — <composition> not a direct child of an aggregation member
+    • BML_NESTED_COMPOSITION — <composition> inside an aggregation that is already nested in a composition
     • BML_DUPLICATE_COMPOSITION — more than one <composition> on the same aggregation member
     • BML_DUPLICATE_PROPERTY_VALUE — more than one <value> for the same namespace on a property
     • BML_UNEXPECTED_TEXT — non-whitespace text on an element-only grammar node

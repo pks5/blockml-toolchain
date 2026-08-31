@@ -282,10 +282,15 @@ export const documentationBlocks = [
       value="…" is the canonical namespace (""). Prefixed <prefix:value>
       (Annotation xmlns) is a separate facet. Extra copies of the same
       namespace → BML_DUPLICATE_PROPERTY_VALUE.
-    • One <composition> per aggregation member, as a direct child of that member
-      (not of <block>, <aggregations>, or nested inside metadata). Extra copies →
-      BML_DUPLICATE_COMPOSITION. Misplaced → BML_STANDALONE_COMPOSITION.
-      Sugar without a <composition> wrapper (instances as direct children) stays allowed.
+    • One <composition> per aggregation member on a Block definition, as a direct
+      child of that member (not of <block>, <aggregations>, nested inside metadata,
+      or inside an aggregation that is already nested in a composition). Extra
+      copies → BML_DUPLICATE_COMPOSITION. Misplaced → BML_STANDALONE_COMPOSITION.
+      Wrapper inside a composition instance aggregation → BML_NESTED_COMPOSITION
+      (children still mapped). On Block instances, aggregations are filled by
+      member name with children as direct descendants — no <composition> wrapper.
+      Sugar without a <composition> wrapper (instances as direct children) stays
+      allowed on definitions.
     • Constraints/suggestions → BlockInstance[] in document order
     • Capability <throws> → TypeReferenceEntityInstance[] (empty-QName sugar or
       explicit type:TypeReferenceEntity); bound B = core:Exception
@@ -388,6 +393,7 @@ export const documentationBlocks = [
     • BML_UNKNOWN_ATTRIBUTE — attribute not allowed on a grammar node (structural)
     • BML_UNKNOWN_DIRECTIVE — unknown bml:* attribute (B2)
     • BML_STANDALONE_COMPOSITION — <composition> not a direct child of an aggregation member
+    • BML_NESTED_COMPOSITION — <composition> inside an aggregation that is already nested in a composition
     • BML_DUPLICATE_COMPOSITION — more than one <composition> on the same aggregation member
     • BML_DUPLICATE_PROPERTY_VALUE — more than one <value> for the same namespace on a property
     • BML_UNEXPECTED_TEXT — non-whitespace text on an element-only grammar node

@@ -228,7 +228,8 @@ const capabilities = [
     pkg: "capability",
     prefix: "sercap",
     name: "EmitBlockInstance",
-    is: "Emit BlockInstance composition element with member values and directives",
+    is: "Emit BlockInstance with member values, nested aggregations, and directives",
+    doc: "Emit BlockInstance composition element with member values and directives. Nested aggregations are filled by member name without a <composition> wrapper.",
     inputs: [
       { name: "writer", type: "seremit:XmlWriter", required: true },
       { name: "instance", type: "bomcomp:BlockInstance", required: true },

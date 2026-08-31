@@ -9,7 +9,9 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
-  xmlns:type="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type"
+  xmlns:lang="org.blockml.bml.language"
+  xmlns:cap="org.blockml.bml.capability">
 
   <name>Stage</name>
   <type>workflow:Stage</type>
@@ -73,4 +75,5 @@
     </exception>
   </aggregations>
 
+  
 </block>

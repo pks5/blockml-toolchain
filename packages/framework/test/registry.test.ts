@@ -25,6 +25,7 @@ describe("TypeRegistry bootstrap", () => {
         d.code !== "BML_UNKNOWN_ATTRIBUTE" &&
         d.code !== "BML_UNKNOWN_DIRECTIVE" &&
         d.code !== "BML_STANDALONE_COMPOSITION" &&
+        d.code !== "BML_NESTED_COMPOSITION" &&
         d.code !== "BML_DUPLICATE_COMPOSITION" &&
         d.code !== "BML_DUPLICATE_PROPERTY_VALUE" &&
         d.code !== "BML_UNEXPECTED_TEXT",
@@ -69,6 +70,7 @@ describe("TypeRegistry bootstrap", () => {
         d.code !== "BML_UNKNOWN_ATTRIBUTE" &&
         d.code !== "BML_UNKNOWN_DIRECTIVE" &&
         d.code !== "BML_STANDALONE_COMPOSITION" &&
+        d.code !== "BML_NESTED_COMPOSITION" &&
         d.code !== "BML_DUPLICATE_COMPOSITION" &&
         d.code !== "BML_DUPLICATE_PROPERTY_VALUE" &&
         d.code !== "BML_UNEXPECTED_TEXT",

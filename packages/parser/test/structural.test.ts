@@ -286,4 +286,84 @@ describe("structural BML validation", () => {
     }
     expect(child.instance.typeFqn).toBe("com.blockml.test.struct.Sample");
   });
+
+  it("reports composition inside an instance aggregation", () => {
+    const source = sample(
+      [
+        "  <aggregations>",
+        "    <children>",
+        "      <composition>",
+        "        <test:Child>",
+        "          <items>",
+        "            <composition>",
+        "              <test:Grandchild />",
+        "            </composition>",
+        "          </items>",
+        "        </test:Child>",
+        "      </composition>",
+        "    </children>",
+        "  </aggregations>",
+      ].join("\n"),
+    );
+    const result = parse(source, { filePath: "nested-composition.bml", continueOnError: true });
+    expect(result.document).not.toBeNull();
+    expect(result.success).toBe(false);
+    const diag = result.diagnostics.find((d) => d.code === "BML_NESTED_COMPOSITION");
+    expect(diag).toBeDefined();
+    const children = result.document!.block.members.find((m) => m.name === "children");
+    expect(children?.kind).toBe("aggregation");
+    if (children?.kind !== "aggregation") {
+      return;
+    }
+    const child = children.composition?.children[0];
+    expect(child?.kind).toBe("blockInstance");
+    if (child?.kind !== "blockInstance") {
+      return;
+    }
+    const items = child.instance.aggregationCompositions?.find((a) => a.aggregationName === "items");
+    expect(items?.composition.children[0]?.kind).toBe("blockInstance");
+    if (items?.composition.children[0]?.kind !== "blockInstance") {
+      return;
+    }
+    expect(items.composition.children[0].instance.typeFqn).toBe(
+      "com.blockml.test.struct.Grandchild",
+    );
+  });
+
+  it("maps instance aggregations without a composition wrapper", () => {
+    const source = sample(
+      [
+        "  <aggregations>",
+        "    <children>",
+        "      <composition>",
+        "        <test:Child>",
+        "          <items>",
+        "            <test:Grandchild />",
+        "          </items>",
+        "        </test:Child>",
+        "      </composition>",
+        "    </children>",
+        "  </aggregations>",
+      ].join("\n"),
+    );
+    const result = parse(source, { filePath: "instance-aggregation.bml", continueOnError: true });
+    expect(result.document).not.toBeNull();
+    expect(result.diagnostics.some((d) => d.code === "BML_NESTED_COMPOSITION")).toBe(false);
+    const children = result.document!.block.members.find((m) => m.name === "children");
+    expect(children?.kind).toBe("aggregation");
+    if (children?.kind !== "aggregation") {
+      return;
+    }
+    const child = children.composition?.children[0];
+    expect(child?.kind).toBe("blockInstance");
+    if (child?.kind !== "blockInstance") {
+      return;
+    }
+    const items = child.instance.aggregationCompositions?.find((a) => a.aggregationName === "items");
+    expect(items?.composition.children[0]?.kind).toBe("blockInstance");
+    const serialized = serialize(result.document!);
+    expect(serialized.text).toContain("<items>");
+    expect(serialized.text).toMatch(/<items>\s*<test:Grandchild/);
+    expect(serialized.text).not.toMatch(/<items>\s*<composition>/);
+  });
 });

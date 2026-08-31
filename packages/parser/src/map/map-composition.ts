@@ -30,7 +30,12 @@ import {
 import { parseVisibilityFromName } from "../util/visibility.js";
 import type { MapContext } from "./context.js";
 import { withElementLocation } from "../util/mapping-error.js";
-import { listUnknownBmlAttributes, reportStandaloneComposition, reportUnexpectedTextChildren } from "./structural.js";
+import {
+  listUnknownBmlAttributes,
+  reportNestedComposition,
+  reportStandaloneComposition,
+  reportUnexpectedTextChildren,
+} from "./structural.js";
 
 const MEMBER_SECTIONS = new Set([
   "properties",
@@ -184,12 +189,35 @@ export function mapBlockInstanceNode(
     }
   }
 
+  const aggregationCompositions: BlockInstance["aggregationCompositions"] = [];
+  for (const child of elementChildren(element)) {
+    const childLocal = elementLocalName(child);
+    if (childLocal === "composition" || RESERVED.has(childLocal)) {
+      continue;
+    }
+    if (!instanceMemberIsAggregationFill(child)) {
+      continue;
+    }
+    for (const compositionEl of elementChildren(child).filter(
+      (c) => elementLocalName(c) === "composition",
+    )) {
+      reportNestedComposition(compositionEl, ctx);
+    }
+    aggregationCompositions.push({
+      aggregationName: parseVisibilityFromName(childLocal).name,
+      composition: mapCompositionTemplate(child, parseVisibilityFromName(childLocal).name, ctx),
+    });
+  }
+
   for (const child of elementChildren(element)) {
     const childLocal = elementLocalName(child);
     if (childLocal === "composition") {
       continue;
     }
     if (RESERVED.has(childLocal)) {
+      continue;
+    }
+    if (instanceMemberIsAggregationFill(child)) {
       continue;
     }
     const { text } = getCharacterData(child);
@@ -203,28 +231,6 @@ export function mapBlockInstanceNode(
     );
     if (val) {
       memberValues[childLocal] = val;
-    }
-  }
-
-  const aggregationCompositions: BlockInstance["aggregationCompositions"] = [];
-  for (const child of elementChildren(element)) {
-    const childLocal = elementLocalName(child);
-    if (childLocal === "composition") {
-      continue;
-    }
-    const compChild = elementChildren(child).find(
-      (c) => elementLocalName(c) === "composition",
-    );
-    if (compChild || elementChildren(child).some((c) => !RESERVED.has(elementLocalName(c)))) {
-      const hasComposition = elementChildren(child).some(
-        (c) => elementLocalName(c) === "composition",
-      );
-      if (hasComposition) {
-        aggregationCompositions.push({
-          aggregationName: parseVisibilityFromName(childLocal).name,
-          composition: mapCompositionTemplate(child, parseVisibilityFromName(childLocal).name, ctx),
-        });
-      }
     }
   }
 
@@ -260,6 +266,13 @@ export function mapBlockInstanceNode(
     ...(directives.length > 0 ? { directives } : {}),
     source: loc,
   };
+}
+
+function instanceMemberIsAggregationFill(element: Element): boolean {
+  return elementChildren(element).some((c) => {
+    const local = elementLocalName(c);
+    return local === "composition" || local === "container" || !RESERVED.has(local);
+  });
 }
 
 export function isTypeReferenceEntitySugar(

@@ -30,24 +30,39 @@ export function emitCompositionTemplate(
     writer.pushDepth();
   }
 
-  const compositionDirectives = emitDirectiveAttrs(template.directives);
-  writer.line(
-    `<composition${compositionDirectives.length ? " " + compositionDirectives.join(" ") : ""}>`,
-  );
-  writer.pushDepth();
-  for (const directive of template.directives ?? []) {
-    // directives on composition element — emitted as attrs on composition tag in source;
-    // for canonical emit we keep them on composition opening (limited support)
-  }
-  for (const child of template.children) {
-    emitCompositionNode(writer, child, ctx);
-  }
-  writer.popDepth();
-  writer.line("</composition>");
+  emitCompositionContents(writer, template, ctx, true);
 
   if (wrapInAggregation) {
     writer.popDepth();
     writer.line(`</${wrapInAggregation}>`);
+  }
+}
+
+function emitCompositionContents(
+  writer: XmlWriter,
+  template: CompositionTemplate,
+  ctx: EmitContext,
+  wrapInComposition: boolean,
+): void {
+  const compositionDirectives = emitDirectiveAttrs(template.directives);
+  if (wrapInComposition) {
+    writer.line(
+      `<composition${compositionDirectives.length ? " " + compositionDirectives.join(" ") : ""}>`,
+    );
+    writer.pushDepth();
+  } else if (compositionDirectives.length > 0) {
+    writer.line(`<bml:container ${compositionDirectives.join(" ")}>`);
+    writer.pushDepth();
+  }
+  for (const child of template.children) {
+    emitCompositionNode(writer, child, ctx);
+  }
+  if (wrapInComposition) {
+    writer.popDepth();
+    writer.line("</composition>");
+  } else if (compositionDirectives.length > 0) {
+    writer.popDepth();
+    writer.line("</bml:container>");
   }
 }
 
@@ -135,7 +150,7 @@ export function emitBlockInstance(
   for (const agg of instance.aggregationCompositions ?? []) {
     writer.line(`<${agg.aggregationName}>`);
     writer.pushDepth();
-    emitCompositionTemplate(writer, agg.composition, ctx);
+    emitCompositionContents(writer, agg.composition, ctx, false);
     writer.popDepth();
     writer.line(`</${agg.aggregationName}>`);
   }

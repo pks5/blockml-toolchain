@@ -684,6 +684,7 @@ BML_OVERRIDE_REQUIRED         — local redeclaration merges with baseType or co
 BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED — abstract member on a concrete block (must be explicitly implemented via abstract="false")
 BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=true
 BML_STANDALONE_COMPOSITION     — <composition> not nested inside an aggregation member element
+BML_NESTED_COMPOSITION         — <composition> inside an aggregation that is already nested in a composition
 BML_UNKNOWN_NAMESPACE_PREFIX  — member element prefix references undeclared xmlns: prefix
 BML_NAMESPACE_UNBOUND         — QName emit needs unbound namespace (no namespaceBindings entry — D2)
 BML_NAMESPACE_PREFIX_COLLISION — prefix→namespace conflict when merging documents (FatBlock — D2)

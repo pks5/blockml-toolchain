@@ -1499,12 +1499,12 @@ All async messaging is asynchronous. A Capability may reply using the `replyTo` 
 
 A Composition fills an Aggregation with concrete child Block instances. **Composition is part of Aggregation** — the preferred authoring form nests `<composition>` directly inside `<aggregation>`. The `composition aggregation="…"` attribute is removed.
 
-Compositions may appear on Block definitions (filling declared or inherited aggregations) and on Block instances (opening aggregations inline). Every Block instance may optionally contain its own nested composition — the language is fully recursive.
+Compositions may appear on Block definitions (filling declared or inherited aggregations) and on Block instances (opening aggregations inline). Every Block instance may optionally contain its own nested aggregation fill — the language is fully recursive. On instances, that fill uses the aggregation member name with children as direct descendants; a `<composition>` wrapper at that site is `BML_NESTED_COMPOSITION`.
 
 ```text
 aggregation   — opened by aggregation member element name on definitions and instances
 visibility    — on the aggregation member; controls composition instance ID reachability (see Member Visibility)
-children      — ordered list of child Block instances (each may contain nested compositions)
+children      — ordered list of child Block instances (each may contain nested aggregation fills)
 ```
 
 **Placement rules:**
@@ -1514,6 +1514,8 @@ children      — ordered list of child Block instances (each may contain nested
 New aggregation declaration     → type required on the aggregation element
 Inherited aggregation override  → override="true" required; type may be omitted; aggregation element + <composition> only
 Standalone <composition>        → BML_STANDALONE_COMPOSITION (validation error)
+<composition> on an instance aggregation (already nested in a composition)
+                                → BML_NESTED_COMPOSITION (validation error; children still mapped)
 ```
 
 Each child instance carries:

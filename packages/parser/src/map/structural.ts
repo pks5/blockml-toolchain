@@ -277,6 +277,15 @@ export const reportDuplicateComposition = (element: Element, ctx: MapContext): v
   );
 };
 
+export const reportNestedComposition = (element: Element, ctx: MapContext): void => {
+  reportDiagnostic(
+    ctx,
+    "BML_NESTED_COMPOSITION",
+    "composition must not appear inside an aggregation that is already nested in a composition",
+    elementSourceLoc(ctx.filePath, ctx.source, element),
+  );
+};
+
 export const reportDuplicatePropertyValue = (
   element: Element,
   ctx: MapContext,

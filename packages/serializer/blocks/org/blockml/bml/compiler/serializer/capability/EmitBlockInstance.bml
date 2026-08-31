@@ -30,9 +30,11 @@
   <name>EmitBlockInstance</name>
   <type>sercap:EmitBlockInstance</type>
   <baseType>core:Capability</baseType>
-  <is>Emit BlockInstance composition element with member values and directives</is>
+  <is>Emit BlockInstance with member values, nested aggregations, and directives</is>
 
-  <documentation>Emit BlockInstance composition element with member values and directives</documentation>
+  <documentation><![CDATA[Emit BlockInstance composition element with member values and
+    directives. Nested aggregations are filled by member name without a
+    <composition> wrapper.]]></documentation>
 
   <references>
     <see type="sercap:VisibilityPrefix" relation="SeeAlso" />

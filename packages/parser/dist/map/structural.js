@@ -207,6 +207,9 @@ export const reportStandaloneComposition = (element, ctx) => {
 export const reportDuplicateComposition = (element, ctx) => {
     reportDiagnostic(ctx, "BML_DUPLICATE_COMPOSITION", "aggregation members may have at most one composition", elementSourceLoc(ctx.filePath, ctx.source, element));
 };
+export const reportNestedComposition = (element, ctx) => {
+    reportDiagnostic(ctx, "BML_NESTED_COMPOSITION", "composition must not appear inside an aggregation that is already nested in a composition", elementSourceLoc(ctx.filePath, ctx.source, element));
+};
 export const reportDuplicatePropertyValue = (element, ctx, source) => {
     reportDiagnostic(ctx, "BML_DUPLICATE_PROPERTY_VALUE", "property members may have at most one value per namespace", source ?? elementSourceLoc(ctx.filePath, ctx.source, element));
 };

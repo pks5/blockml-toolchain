@@ -784,7 +784,8 @@ const blocks = [
     pkg: "composition",
     prefix: "bomcomp",
     name: "InstanceAggregationComposition",
-    is: "Inline aggregation composition on a Block instance",
+    is: "Inline aggregation fill on a Block instance",
+    doc: "Inline aggregation fill on a Block instance. Children are authored as direct descendants of the aggregation member — no <composition> wrapper. A wrapper at this site is BML_NESTED_COMPOSITION.",
     fields: [
       { name: "aggregationName", type: "type:Text", required: true },
       { name: "composition", type: "bomcomp:CompositionTemplate", required: true },
