@@ -13,33 +13,33 @@
   <name>PoemNew</name>
   <type>playground:PoemNew</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, written in German about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, translated into Russian from German, about a tree and a mushroom</is>
 
   <documentation>
-    Am Waldrand steht ein alter Baum,
-    die Wurzeln tief im Erdenraum.
-    Er trägt die Jahre wie ein Kleid,
-    gewoben aus Geduld und Zeit.
+    На опушке стоит старый дуб,
+    уходят корни в землю вглубь.
+    Он годы носит, как наряд,
+    из терпеливых лет подряд.
 
-    Zu seinen Füßen, klein und stumm,
-    wächst über Nacht ein Pilz herum.
-    Ein brauner Hut auf schmalem Stiel,
-    er will nicht viel und sagt nicht viel.
+    У ног его, и тих, и мал,
+    за ночь грибок нежданно встал.
+    На тонкой ножке шляпка спит,
+    он мало хочет, всё молчит.
 
-    Der Baum spricht leise: "Bleib bei mir,
-    der Herbst wird kalt, ich halte dir
-    das raue Wetter von dem Dach."
-    Der Pilz nickt kaum und bleibt doch wach.
+    Дуб шепчет тихо: «Будь со мной,
+    придёт мороз — я за стеной
+    тебя укрою от дождя».
+    Гриб еле кивнёт, но не спя.
 
-    So stehen beide, groß und klein,
-    im ersten grauen Morgenschein.
-    Der eine hoch, der andre nah –
-    und beide wissen: Wald ist da.
+    Так и стоят — велик и мал,
+    в рассвете, что чуть серым стал.
+    Один вознёсся, тот приник,
+    и знают оба: лес велик.
   </documentation>
 
   <properties>
     <title>
-      <value>Der Baum und der Pilz</value>
+      <value>Дерево и гриб</value>
     </title>
     <author>
       <value>John Doe</value>
