@@ -13,33 +13,33 @@
   <name>PoemNew</name>
   <type>playground:PoemNew</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, translated into Russian from German, about a tree and a mushroom</is>
 
   <documentation>
-    Die Birke wiegt im Abendwind,
-    ihr weißes Kleid ist zart und lind.
-    Die Blätter flüstern, hell und fein,
-    ein Lied aus Silber, Luft und Schein.
+    Берёза качается в ветре ночном,
+    бела её платья убор день за днём.
+    Листва шелестит, и легка, и светла —
+    как песня из воздуха и серебра.
 
-    Im Moos, wo kaum ein Sonnenstrahl,
-    wächst still ein Pilz zum ersten Mal.
-    Sein Hütchen braun, sein Stiel so bleich,
-    er steht allein im Schattenreich.
+    Во мху, где не сыщешь луча с вышины,
+    впервые грибок вырастает из тьмы.
+    Коричнева шляпка, и бледен росток,
+    один он стоит, где царит холодок.
 
-    „Sei still", so raunt die Birke sacht,
-    „ich hüte dich durch Wind und Nacht.
-    Mein Laub fängt Tau und Regen ein,
-    so darfst du ohne Sorge sein."
+    «Молчи, — прошептала берёза ему, —
+    тебя сквозь и ветер, и ночь сберегу.
+    Листва моя ловит росу и дожди,
+    и ты без забот и тревоги расти».
 
-    Und als der Morgen grau erwacht,
-    hat jeder seinen Platz bedacht:
-    die Birke hoch, der Pilz im Grün —
-    zwei Freunde, die im Walde blühn.
+    Когда же рассвет забрезжит седой,
+    нашёл каждый место и жребий свой:
+    берёза — высоко, грибочек — в тени,
+    два друга, в лесу расцветают они.
   </documentation>
 
   <properties>
     <title>
-      <value>Die Birke und der Pilz</value>
+      <value>Берёза и гриб</value>
     </title>
     <author>
       <value>John Doe</value>
