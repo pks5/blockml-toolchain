@@ -31,7 +31,9 @@
 
   <documentation>Directives follow Thymeleaf model — attributes on modified element, stored unexpanded.
 
-    bml:id, bml:version, bml:bean, bml:scope → BlockInstance fields (NOT directives[]).
+    bml:id, bml:version, bml:bean, bml:scope, bml:generics → BlockInstance fields (NOT directives[]).
+    bml:generics binds open genericTypes (attribute or child element; parentheses required).
+    Misplaced bml:generics is still stored so validate() can emit BML_GENERICS_DIRECTIVE_NOT_ALLOWED.
     bml:with → composition, aggregation, bml:container, block instances.
     bml:each, bml:if, bml:unless → bml:container, block instances.
 

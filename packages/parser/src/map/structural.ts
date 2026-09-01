@@ -54,6 +54,7 @@ export const KNOWN_BML_ATTRIBUTE_LOCALS = new Set([
   "bean",
   "scope",
   "xml",
+  "generics",
 ]);
 
 const BLOCK_ALLOWED_ATTR_LOCALS = new Set(["type"]);
@@ -97,7 +98,7 @@ export const isAllowedRootChild = (element: Element): boolean => {
   if (METADATA_TAGS.has(local) || MEMBER_SECTIONS.has(local) || ROOT_EXTRA_TAGS.has(local)) {
     return true;
   }
-  if (prefix === "bml" && (local === "xml" || local === "container")) {
+  if (prefix === "bml" && (local === "xml" || local === "container" || local === "generics")) {
     return true;
   }
   return false;
@@ -317,6 +318,7 @@ const CHARACTER_DATA_HOSTS = new Set([
   "language",
   "value",
   "xml",
+  "generics",
   "keywords",
   "aliases",
 ]);

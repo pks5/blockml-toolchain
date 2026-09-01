@@ -1,10 +1,52 @@
 import { expressionFromRaw } from "./member-value.js";
-import { getAttribute } from "../util/xml.js";
-import { collectUnknownBmlAttributes } from "./structural.js";
+import { elementChildren, elementLocalName, elementPrefix, getAttribute, getCharacterData, } from "../util/xml.js";
+import { collectUnknownBmlAttributes, reportDiagnostic } from "./structural.js";
+import { parseGenericArgumentList, } from "./type-expression.js";
+import { attributeValueLoc, elementSourceLoc } from "../util/qname.js";
 const BML_NS = "http://blockml.org/bml";
 function bmlAttr(element, local) {
     return (getAttribute(element, `bml:${local}`) ??
         getAttribute(element, `${BML_NS}:${local}`));
+}
+export const isGenericsDirectiveElement = (element) => {
+    const local = elementLocalName(element);
+    const prefix = elementPrefix(element);
+    return (prefix === "bml" && local === "generics") || local === "bml:generics";
+};
+export function parseGenericsBinding(element, ctx, options) {
+    const loc = elementSourceLoc(ctx.filePath, ctx.source, element);
+    const attr = bmlAttr(element, "generics");
+    const child = elementChildren(element).find(isGenericsDirectiveElement);
+    let raw;
+    let authoredPlacement;
+    let source = loc;
+    if (attr !== undefined) {
+        raw = attr;
+        authoredPlacement = "attribute";
+        source =
+            attributeValueLoc(ctx.filePath, ctx.source, element, "bml:generics", attr) ?? loc;
+    }
+    else if (child) {
+        raw = getCharacterData(child).text;
+        authoredPlacement = "element";
+        source = elementSourceLoc(ctx.filePath, ctx.source, child);
+    }
+    else {
+        return undefined;
+    }
+    const binding = {
+        raw,
+        authoredPlacement,
+        source,
+    };
+    const parsed = parseGenericArgumentList(raw, ctx.bindings, "type", options);
+    if (parsed.ok) {
+        binding.arguments = parsed.arguments;
+    }
+    else if (parsed.code === "BML_INVALID_TYPE_REFERENCE") {
+        reportDiagnostic(ctx, parsed.code, parsed.message, source);
+    }
+    return binding;
 }
 export function parseDirectives(element, loc, ctx) {
     const directives = [];

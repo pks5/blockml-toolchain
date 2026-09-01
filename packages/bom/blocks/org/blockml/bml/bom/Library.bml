@@ -116,6 +116,7 @@
         <bommember:ImplementationBlock />
         <bommember:CapabilityDefinition />
         <bomcomp:WithBinding />
+        <bomcomp:GenericsBinding />
         <bomcomp:DirectiveAttribute />
         <bomcomp:EachDirective />
         <bomcomp:IfDirective />

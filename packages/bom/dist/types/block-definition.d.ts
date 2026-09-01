@@ -1,5 +1,5 @@
 import type { CharacterDataForm, EmptyElementForm, MetadataElementTrivia, MemberSectionName, SourceLocation, UnknownXmlNode, XmlRenderingBlock, XmlTrivia } from "./common.js";
-import type { BlockInstance } from "./composition.js";
+import type { BlockInstance, GenericsBinding } from "./composition.js";
 import type { MemberDefinition } from "./member-definition.js";
 import type { CompositionTemplate } from "./composition.js";
 import type { TypeExpression } from "./type-expression.js";
@@ -70,6 +70,8 @@ export interface BlockDefinition {
     final?: boolean;
     /** Authored block-level `<bml:xml>…</bml:xml>`. */
     xmlRendering?: XmlRenderingBlock;
+    /** Misplaced `bml:generics` on a Block definition (or member section). */
+    generics?: GenericsBinding;
     /** BlockML access visibility — Sub-Blocks only. */
     visibility?: "private" | "protected" | "public";
     /** Contract TypeReferenceEntity instances merged into this Block. Root block only. */

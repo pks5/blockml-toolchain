@@ -62,6 +62,7 @@ export type {
   BlockInstanceNode,
   VirtualContainerNode,
   BlockInstance,
+  GenericsBinding,
   DirectiveAttribute,
   EachDirective,
   IfDirective,

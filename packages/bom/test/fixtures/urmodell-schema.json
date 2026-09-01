@@ -1042,6 +1042,11 @@
           "required": false
         },
         {
+          "name": "generics",
+          "type": "bomcomp:GenericsBinding",
+          "required": false
+        },
+        {
           "name": "visibility",
           "type": "type:Text",
           "required": false
@@ -1222,6 +1227,11 @@
         {
           "name": "xmlRendering",
           "type": "bomcommon:XmlRenderingMember",
+          "required": false
+        },
+        {
+          "name": "generics",
+          "type": "bomcomp:GenericsBinding",
           "required": false
         },
         {
@@ -1516,6 +1526,35 @@
       ]
     },
     {
+      "fqn": "org.blockml.bml.bom.composition.GenericsBinding",
+      "tsExport": "GenericsBinding",
+      "pkg": "composition",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "raw",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "arguments",
+          "type": "bomtype:TypeExpression[]",
+          "required": false
+        },
+        {
+          "name": "authoredPlacement",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ]
+    },
+    {
       "fqn": "org.blockml.bml.bom.composition.WithBinding",
       "tsExport": "WithBinding",
       "pkg": "composition",
@@ -1669,6 +1708,11 @@
           "required": false
         },
         {
+          "name": "generics",
+          "type": "bomcomp:GenericsBinding",
+          "required": false
+        },
+        {
           "name": "basePresets",
           "type": "type:Text",
           "required": false
@@ -1725,6 +1769,11 @@
         {
           "name": "directives",
           "type": "bomcomp:DirectiveAttribute[]",
+          "required": false
+        },
+        {
+          "name": "generics",
+          "type": "bomcomp:GenericsBinding",
           "required": false
         },
         {
@@ -1814,6 +1863,11 @@
         {
           "name": "directives",
           "type": "bomcomp:DirectiveAttribute[]",
+          "required": false
+        },
+        {
+          "name": "generics",
+          "type": "bomcomp:GenericsBinding",
           "required": false
         },
         {

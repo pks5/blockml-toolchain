@@ -2,6 +2,7 @@ import { createMapContext } from "./context.js";
 import { mapBlockInstanceNode, mapCompositionTemplate, mapTypeReferenceEntityInstance, isTypeReferenceEntitySugar, buildSubBlockIndex, } from "./map-composition.js";
 import { parseTypeExpression, inferCardinality, } from "./type-expression.js";
 import { parseMemberValue } from "./member-value.js";
+import { parseGenericsBinding, isGenericsDirectiveElement } from "./directives.js";
 import { elementChildren, elementLocalName, elementPrefix, getAttribute, getCharacterData, xmlTriviaFromElement, } from "../util/xml.js";
 import { parseVisibilityFromName } from "../util/visibility.js";
 import { parseBooleanAttribute, isBooleanLiteral } from "../util/boolean.js";
@@ -31,6 +32,10 @@ function mapBlockDefinition(element, ctx, parentType) {
     const unknownAttrs = collectBlockGrammarAttributes(element, ctx);
     if (unknownAttrs) {
         block.unknownAttributes = unknownAttrs;
+    }
+    const blockGenerics = parseGenericsBinding(element, ctx, typeResolveOptions(ctx));
+    if (blockGenerics) {
+        block.generics = blockGenerics;
     }
     const childElements = elementChildren(element);
     const subBlocksRaw = [];
@@ -160,6 +165,8 @@ const MEMBER_CHILD_METADATA = new Set([
     "throws",
     "bml:xml",
     "xml",
+    "generics",
+    "bml:generics",
     "abstract",
     "final",
     "language",
@@ -171,7 +178,7 @@ function isMemberMetadataChild(element) {
     if (MEMBER_CHILD_METADATA.has(local)) {
         return true;
     }
-    if (prefix === "bml" && (local === "xml" || local === "container")) {
+    if (prefix === "bml" && (local === "xml" || local === "container" || local === "generics")) {
         return true;
     }
     return false;
@@ -362,6 +369,10 @@ function mapMemberBase(element, name, visibility, namespace, ctx) {
         const { text } = getCharacterData(xmlEl);
         base.xmlRendering = parseMemberXmlRendering(text, "element");
     }
+    const memberGenerics = parseGenericsBinding(element, ctx, typeResolveOptions(ctx));
+    if (memberGenerics) {
+        base.generics = memberGenerics;
+    }
     mapMemberDocumentation(element, base, ctx);
     mapMemberConstraints(element, base, ctx);
     return base;
@@ -405,6 +416,12 @@ function mapMetadataFields(element, block, ctx) {
         const extraAttrs = collectIdentityOrSectionAttributes(child, ctx);
         if (extraAttrs) {
             block.unknownAttributes = { ...block.unknownAttributes, ...extraAttrs };
+        }
+        if (MEMBER_SECTIONS.has(elementLocalName(child)) && !block.generics) {
+            const sectionGenerics = parseGenericsBinding(child, ctx, typeResolveOptions(ctx));
+            if (sectionGenerics) {
+                block.generics = sectionGenerics;
+            }
         }
         const local = elementLocalName(child);
         switch (local) {
@@ -506,6 +523,15 @@ function mapMetadataFields(element, block, ctx) {
                 block.xmlRendering = { raw: text };
                 break;
             }
+            case "bml:generics":
+            case "generics":
+                if (isGenericsDirectiveElement(child) && !block.generics) {
+                    const fromChild = parseGenericsBinding(element, ctx, typeResolveOptions(ctx));
+                    if (fromChild) {
+                        block.generics = fromChild;
+                    }
+                }
+                break;
             default:
                 break;
         }

@@ -43,7 +43,7 @@
     • other xsi:* → ignore (not memberValues)
 
     Rule 2 — bml:* attributes:
-    • Composition meta (bml:id, bml:version, …) → BlockInstance fields
+    • Composition meta (bml:id, bml:version, bml:generics, …) → BlockInstance fields
     • Directives (bml:each, bml:if, …) → directives[]
     • Unknown bml:* → BML_UNKNOWN_DIRECTIVE (error at map time — B2)
 

@@ -41,6 +41,7 @@ import {
   type TypeExpressionResolveOptions,
 } from "./type-expression.js";
 import { parseMemberValue } from "./member-value.js";
+import { parseGenericsBinding, isGenericsDirectiveElement } from "./directives.js";
 import {
   elementChildren,
   elementLocalName,
@@ -106,6 +107,11 @@ function mapBlockDefinition(
   const unknownAttrs = collectBlockGrammarAttributes(element, ctx);
   if (unknownAttrs) {
     block.unknownAttributes = unknownAttrs;
+  }
+
+  const blockGenerics = parseGenericsBinding(element, ctx, typeResolveOptions(ctx));
+  if (blockGenerics) {
+    block.generics = blockGenerics;
   }
 
   const childElements = elementChildren(element);
@@ -277,6 +283,8 @@ const MEMBER_CHILD_METADATA = new Set([
   "throws",
   "bml:xml",
   "xml",
+  "generics",
+  "bml:generics",
   "abstract",
   "final",
   "language",
@@ -289,7 +297,7 @@ function isMemberMetadataChild(element: Element): boolean {
   if (MEMBER_CHILD_METADATA.has(local)) {
     return true;
   }
-  if (prefix === "bml" && (local === "xml" || local === "container")) {
+  if (prefix === "bml" && (local === "xml" || local === "container" || local === "generics")) {
     return true;
   }
   return false;
@@ -560,6 +568,11 @@ function mapMemberBase(
     base.xmlRendering = parseMemberXmlRendering(text, "element");
   }
 
+  const memberGenerics = parseGenericsBinding(element, ctx, typeResolveOptions(ctx));
+  if (memberGenerics) {
+    base.generics = memberGenerics;
+  }
+
   mapMemberDocumentation(element, base as MemberDefinition, ctx);
   mapMemberConstraints(element, base, ctx);
 
@@ -613,6 +626,12 @@ function mapMetadataFields(
     const extraAttrs = collectIdentityOrSectionAttributes(child, ctx);
     if (extraAttrs) {
       block.unknownAttributes = { ...block.unknownAttributes, ...extraAttrs };
+    }
+    if (MEMBER_SECTIONS.has(elementLocalName(child)) && !block.generics) {
+      const sectionGenerics = parseGenericsBinding(child, ctx, typeResolveOptions(ctx));
+      if (sectionGenerics) {
+        block.generics = sectionGenerics;
+      }
     }
     const local = elementLocalName(child);
     switch (local) {
@@ -737,6 +756,15 @@ function mapMetadataFields(
         block.xmlRendering = { raw: text } satisfies XmlRenderingBlock;
         break;
       }
+      case "bml:generics":
+      case "generics":
+        if (isGenericsDirectiveElement(child) && !block.generics) {
+          const fromChild = parseGenericsBinding(element, ctx, typeResolveOptions(ctx));
+          if (fromChild) {
+            block.generics = fromChild;
+          }
+        }
+        break;
       default:
         break;
     }

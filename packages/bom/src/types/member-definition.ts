@@ -5,7 +5,7 @@ import type {
   XmlRenderingMember,
   XmlTrivia,
 } from "./common.js";
-import type { BlockInstance } from "./composition.js";
+import type { BlockInstance, GenericsBinding } from "./composition.js";
 import type {
   AliasEntry,
   ChangelogEntry,
@@ -47,6 +47,8 @@ export interface MemberDefinitionBase {
   final?: boolean;
   override?: boolean;
   xmlRendering?: XmlRenderingMember;
+  /** Misplaced `bml:generics` on a member declaration. */
+  generics?: GenericsBinding;
   constraints?: BlockInstance[];
   xmlTrivia?: XmlTrivia;
   source?: SourceLocation;

@@ -78,6 +78,84 @@ describe("structural BML validation", () => {
     expect(result.document!.block.unknownAttributes?.["bml:ech"]).toBe("items");
   });
 
+  it("accepts bml:generics as a known directive on the block root", () => {
+    const source = sample("", ' bml:generics="(type:Integer)"');
+    const result = parse(source, { filePath: "known-generics.bml", continueOnError: true });
+    expect(result.document).not.toBeNull();
+    expect(result.diagnostics.some((d) => d.code === "BML_UNKNOWN_DIRECTIVE")).toBe(false);
+    expect(result.document!.block.generics?.raw).toBe("(type:Integer)");
+    expect(result.document!.block.generics?.authoredPlacement).toBe("attribute");
+  });
+
+  it("does not map instance bml:generics element form to a member named generics", () => {
+    const source = sample(
+      [
+        "  <aggregations>",
+        "    <children>",
+        "      <composition>",
+        "        <test:Child>",
+        "          <bml:generics>(type:Integer)</bml:generics>",
+        "        </test:Child>",
+        "      </composition>",
+        "    </children>",
+        "  </aggregations>",
+      ].join("\n"),
+    );
+    const result = parse(source, { filePath: "generics-not-property.bml", continueOnError: true });
+    expect(result.document).not.toBeNull();
+    expect(result.diagnostics.some((d) => d.code === "BML_UNKNOWN_DIRECTIVE")).toBe(false);
+    const children = result.document!.block.members.find((m) => m.name === "children");
+    expect(children?.kind).toBe("aggregation");
+    if (children?.kind !== "aggregation") {
+      return;
+    }
+    const child = children.composition?.children[0];
+    expect(child?.kind).toBe("blockInstance");
+    if (child?.kind !== "blockInstance") {
+      return;
+    }
+    expect(child.instance.memberValues.generics).toBeUndefined();
+    expect(child.instance.generics?.raw).toBe("(type:Integer)");
+    expect(child.instance.generics?.authoredPlacement).toBe("element");
+    const serialized = serialize(result.document!);
+    expect(serialized.text).toContain("<bml:generics>(type:Integer)</bml:generics>");
+    expect(serialized.text).not.toMatch(/<generics[>\s]/);
+  });
+
+  it("roundtrips instance bml:generics attribute form", () => {
+    const source = sample(
+      [
+        "  <aggregations>",
+        "    <children>",
+        "      <composition>",
+        '        <test:Child bml:generics="(type:Integer)" />',
+        "      </composition>",
+        "    </children>",
+        "  </aggregations>",
+      ].join("\n"),
+    );
+    const result = parse(source, { filePath: "generics-attr-roundtrip.bml", continueOnError: true });
+    expect(result.document).not.toBeNull();
+    const serialized = serialize(result.document!);
+    expect(serialized.text).toContain('bml:generics="(type:Integer)"');
+    const second = parse(serialized.text!, { filePath: "generics-attr-roundtrip.bml", continueOnError: true });
+    const child = second.document!.block.compositions[0]?.children[0];
+    expect(child?.kind).toBe("blockInstance");
+    if (child?.kind !== "blockInstance") {
+      return;
+    }
+    expect(child.instance.generics?.raw).toBe("(type:Integer)");
+    expect(child.instance.generics?.authoredPlacement).toBe("attribute");
+  });
+
+  it("does not treat a property named generics as bml:generics", () => {
+    const source = sample("  <properties>\n    <generics type=\"type:Text\" />\n  </properties>");
+    const result = parse(source, { filePath: "property-generics.bml", continueOnError: true });
+    expect(result.document).not.toBeNull();
+    expect(result.document!.block.generics).toBeUndefined();
+    expect(result.document!.block.members.some((m) => m.name === "generics")).toBe(true);
+  });
+
   it("does not treat a property named nmae as a Gerüst error", () => {
     const source = sample("  <properties>\n    <nmae type=\"type:Text\" />\n  </properties>");
     const result = parse(source, { filePath: "property-nmae.bml", continueOnError: true });

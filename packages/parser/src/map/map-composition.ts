@@ -9,6 +9,8 @@ import type { Element } from "@xmldom/xmldom";
 import {
   parseDirectives,
   parseBmlMeta,
+  parseGenericsBinding,
+  isGenericsDirectiveElement,
 } from "./directives.js";
 import { parseMemberValue } from "./member-value.js";
 import {
@@ -94,6 +96,7 @@ export function mapCompositionTemplate(
     reportUnexpectedTextChildren(compositionEl, ctx);
   }
   const directives = parseDirectives(target, loc, ctx);
+  const generics = parseGenericsBinding(target, ctx);
   const children = compositionEl
     ? mapCompositionChildren(compositionEl, ctx)
     : mapCompositionChildren(element, ctx);
@@ -101,6 +104,7 @@ export function mapCompositionTemplate(
   return {
     aggregationName,
     ...(directives.length > 0 ? { directives } : {}),
+    ...(generics ? { generics } : {}),
     children,
     source: loc,
   };
@@ -120,16 +124,18 @@ function mapCompositionChildren(
     if (METADATA_ELEMENTS.has(local)) {
       continue;
     }
-    if (elementPrefix(child) === "bml" && (local === "xml" || local === "container")) {
+    if (elementPrefix(child) === "bml" && (local === "xml" || local === "generics")) {
       continue;
     }
     if (local === "container" || local === "bml:container") {
       const loc = elementSourceLoc(ctx.filePath, ctx.source, child);
       reportUnexpectedTextChildren(child, ctx);
       const directives = parseDirectives(child, loc, ctx);
+      const generics = parseGenericsBinding(child, ctx);
       const vnode: VirtualContainerNode = {
         kind: "virtualContainer",
         ...(directives.length > 0 ? { directives } : {}),
+        ...(generics ? { generics } : {}),
         children: mapCompositionChildren(child, ctx),
         source: loc,
       };
@@ -195,6 +201,9 @@ export function mapBlockInstanceNode(
     if (childLocal === "composition" || RESERVED.has(childLocal)) {
       continue;
     }
+    if (isGenericsDirectiveElement(child)) {
+      continue;
+    }
     if (!instanceMemberIsAggregationFill(child)) {
       continue;
     }
@@ -217,6 +226,9 @@ export function mapBlockInstanceNode(
     if (RESERVED.has(childLocal)) {
       continue;
     }
+    if (isGenericsDirectiveElement(child)) {
+      continue;
+    }
     if (instanceMemberIsAggregationFill(child)) {
       continue;
     }
@@ -235,6 +247,7 @@ export function mapBlockInstanceNode(
   }
 
   const directives = parseDirectives(element, loc, ctx);
+  const generics = parseGenericsBinding(element, ctx);
   const instance: BlockInstance = {
     typeFqn,
     memberValues: Object.fromEntries(
@@ -252,6 +265,7 @@ export function mapBlockInstanceNode(
   if (meta.version) instance.version = meta.version;
   if (meta.bean) instance.bean = meta.bean;
   if (meta.scope) instance.scope = meta.scope;
+  if (generics) instance.generics = generics;
 
   const trivia = xmlTriviaFromElement(element);
   if (trivia) instance.xmlTrivia = trivia;

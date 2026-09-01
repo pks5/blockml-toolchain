@@ -46,6 +46,9 @@
     <scope type="type:Text">
       <documentation>"local" | "context". (optional)</documentation>
     </scope>
+    <generics type="bomcomp:GenericsBinding">
+      <documentation>Authored bml:generics on this instance. (optional)</documentation>
+    </generics>
     <basePresets type="type:Text">
       <documentation>basePresets (optional). TS type: type:Text.</documentation>
     </basePresets>

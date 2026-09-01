@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { parse } from "@blockml/parser";
+import { TypeRegistry } from "@blockml/framework";
 import { validate } from "../src/index.js";
 
 const ROOT = join(import.meta.dirname, "..", "..", "..");
@@ -43,6 +44,57 @@ describe("validate() integration", () => {
     const result = validate(parsed.document!, { continueOnError: false });
     expect(result.success).toBe(false);
     expect(result.pragmaticModel).toBeUndefined();
+  });
+
+  it("reports BML_OPEN_GENERIC_INSTANCE through validate()", () => {
+    const ns = [
+      'xmlns="http://blockml.org/bml"',
+      'xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"',
+      'xmlns:core="org.blockml.bml.core"',
+      'xmlns:test="com.blockml.test.generics"',
+    ].join(" ");
+    const generic = parse(
+      [
+        `<block ${ns}>`,
+        "  <name>MyBlock</name>",
+        "  <type>test:MyBlock</type>",
+        "  <baseType>core:Block</baseType>",
+        "  <is>generic box</is>",
+        "  <genericTypes>",
+        '    <T baseType="core:Block" />',
+        "  </genericTypes>",
+        "</block>",
+      ].join("\n"),
+      { filePath: "my-block.bml", continueOnError: true },
+    );
+    const host = parse(
+      [
+        `<block ${ns}>`,
+        "  <name>Host</name>",
+        "  <type>test:Host</type>",
+        "  <baseType>core:Block</baseType>",
+        "  <is>host</is>",
+        "  <aggregations>",
+        "    <children>",
+        "      <composition>",
+        "        <test:MyBlock />",
+        "      </composition>",
+        "    </children>",
+        "  </aggregations>",
+        "</block>",
+      ].join("\n"),
+      { filePath: "open-instance.bml", continueOnError: true },
+    );
+    expect(generic.document).not.toBeNull();
+    expect(host.document).not.toBeNull();
+    const registry = new TypeRegistry();
+    registry.register(generic.document!);
+    registry.register(host.document!);
+    const result = validate(host.document!, { typeRegistry: registry });
+    expect(result.success).toBe(false);
+    expect(result.diagnostics.some((d) => d.code === "BML_OPEN_GENERIC_INSTANCE")).toBe(
+      true,
+    );
   });
 
   it("bootstraps via libraryPaths when provided", () => {

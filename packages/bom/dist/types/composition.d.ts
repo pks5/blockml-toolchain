@@ -1,9 +1,20 @@
 import type { MemberValue, ExpressionValue } from "./values.js";
 import type { SourceLocation, XmlTrivia } from "./common.js";
+import type { TypeExpression } from "./type-expression.js";
+/** Authored `bml:generics` — legal on BlockInstance, preserved on illegal hosts for validate(). */
+export interface GenericsBinding {
+    raw: string;
+    /** Present only when the parenthesized TypeExpression list parsed successfully. */
+    arguments?: TypeExpression[];
+    authoredPlacement: "attribute" | "element";
+    source?: SourceLocation;
+}
 /** Target aggregation name — e.g. "_parts", "blocks", "_presets". */
 export interface CompositionTemplate {
     aggregationName: string;
     directives?: DirectiveAttribute[];
+    /** Misplaced `bml:generics` on a composition wrapper. */
+    generics?: GenericsBinding;
     children: CompositionNode[];
     source?: SourceLocation;
 }
@@ -24,6 +35,8 @@ export interface VirtualContainerNode {
     kind: "virtualContainer";
     /** bml:each, bml:if, bml:unless, bml:with on `<bml:container>`. */
     directives?: DirectiveAttribute[];
+    /** Misplaced `bml:generics` on `<bml:container>`. */
+    generics?: GenericsBinding;
     children: CompositionNode[];
     source?: SourceLocation;
 }
@@ -39,6 +52,8 @@ export interface BlockInstance {
     bean?: MemberValue;
     /** From bml:scope — bean visibility: "local" (default) or "context". */
     scope?: "local" | "context";
+    /** From bml:generics — binds open genericTypes on this instance. */
+    generics?: GenericsBinding;
     /** Preset reference: {PresetsDocumentFQN}::{preset-id}. */
     basePresets?: string;
     renderGroup?: string;

@@ -30,8 +30,8 @@
   <baseType>core:Documentation</baseType>
   <is>Validator diagnostics and host abort policy</is>
 
-  <documentation>The validator aggregates diagnostics from framework utilities (validateTypes,
-    validateConstraints), bootstrap (when TypeRegistry is built inline), and validateStyle.
+  <documentation>    The validator aggregates diagnostics from framework utilities (validateTypes,
+    validateConstraints, validateGenerics), bootstrap (when TypeRegistry is built inline), and validateStyle.
 
     Diagnostic type: org.blockml.bml.bom.common.Diagnostic (shared across toolchain).
     Style codes: BML_STYLE_PREFER_CDATA, BML_STYLE_PREFER_MARKDOWN,

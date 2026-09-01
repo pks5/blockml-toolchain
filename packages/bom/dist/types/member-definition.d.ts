@@ -1,5 +1,5 @@
 import type { CharacterDataForm, SourceLocation, UnknownXmlNode, XmlRenderingMember, XmlTrivia } from "./common.js";
-import type { BlockInstance } from "./composition.js";
+import type { BlockInstance, GenericsBinding } from "./composition.js";
 import type { ChangelogEntry, DocumentationExample, DocumentationProseEntry, DocumentationReference, KeywordEntry, TypeReferenceEntityInstance } from "./block-definition.js";
 import type { TypeDescriptor, TypeExpression } from "./type-expression.js";
 import type { MemberValue } from "./values.js";
@@ -26,6 +26,8 @@ export interface MemberDefinitionBase {
     final?: boolean;
     override?: boolean;
     xmlRendering?: XmlRenderingMember;
+    /** Misplaced `bml:generics` on a member declaration. */
+    generics?: GenericsBinding;
     constraints?: BlockInstance[];
     xmlTrivia?: XmlTrivia;
     source?: SourceLocation;

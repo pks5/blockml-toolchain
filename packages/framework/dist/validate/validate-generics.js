@@ -1,0 +1,113 @@
+import { openGenericParameters, resolveGenericApplication, } from "../resolve/resolve-generic-application.js";
+function diag(code, message, file, loc) {
+    return {
+        severity: "error",
+        code,
+        message,
+        source: {
+            file: loc?.file ?? file,
+            line: loc?.line ?? 1,
+            column: loc?.column ?? 1,
+            ...(loc?.endLine !== undefined ? { endLine: loc.endLine } : {}),
+            ...(loc?.endColumn !== undefined ? { endColumn: loc.endColumn } : {}),
+        },
+    };
+}
+function reportNotAllowed(binding, file, diagnostics) {
+    diagnostics.push(diag("BML_GENERICS_DIRECTIVE_NOT_ALLOWED", "bml:generics is only allowed on Block instances", file, binding.source));
+}
+function validateInstanceGenerics(instance, registry, file, diagnostics) {
+    const typeDoc = registry.get(instance.typeFqn);
+    const params = typeDoc?.block.genericTypes ?? [];
+    const typeBindings = typeDoc?.source.namespaceBindings ?? {};
+    const open = openGenericParameters(params, typeBindings);
+    const binding = instance.generics;
+    if (!binding) {
+        if (open.length > 0) {
+            diagnostics.push(diag("BML_OPEN_GENERIC_INSTANCE", `Instance of ${instance.typeFqn} has open genericTypes and requires bml:generics`, file, instance.source));
+        }
+        return;
+    }
+    if (open.length === 0) {
+        diagnostics.push(diag("BML_GENERICS_ARGUMENT_MISMATCH", `bml:generics is not applicable; ${instance.typeFqn} has no open genericTypes`, file, binding.source));
+        return;
+    }
+    if (binding.arguments === undefined) {
+        const raw = binding.raw.trim();
+        if (raw.startsWith("(") && raw.endsWith(")")) {
+            return;
+        }
+        diagnostics.push(diag("BML_GENERICS_ARGUMENT_MISMATCH", "bml:generics must be a parenthesized TypeExpression list", file, binding.source));
+        return;
+    }
+    const resolved = resolveGenericApplication(params, binding.arguments, registry, typeBindings);
+    for (const item of resolved.diagnostics) {
+        diagnostics.push(diag(item.code, item.message, file, binding.source));
+    }
+}
+function walkCompositionNodes(nodes, registry, file, diagnostics) {
+    for (const node of nodes) {
+        if (node.kind === "virtualContainer") {
+            if (node.generics) {
+                reportNotAllowed(node.generics, file, diagnostics);
+            }
+            walkCompositionNodes(node.children, registry, file, diagnostics);
+            continue;
+        }
+        validateInstanceGenerics(node.instance, registry, file, diagnostics);
+        for (const agg of node.instance.aggregationCompositions ?? []) {
+            walkCompositionTemplate(agg.composition, registry, file, diagnostics, true);
+        }
+    }
+}
+function walkCompositionTemplate(template, registry, file, diagnostics, wrapperIsIllegalHost) {
+    if (wrapperIsIllegalHost && template.generics) {
+        reportNotAllowed(template.generics, file, diagnostics);
+    }
+    walkCompositionNodes(template.children, registry, file, diagnostics);
+}
+function walkConstraintInstance(instance, file, diagnostics) {
+    if (instance.generics) {
+        reportNotAllowed(instance.generics, file, diagnostics);
+    }
+}
+function walkMember(member, file, diagnostics) {
+    if (member.generics) {
+        reportNotAllowed(member.generics, file, diagnostics);
+    }
+    for (const instance of member.constraints ?? []) {
+        walkConstraintInstance(instance, file, diagnostics);
+    }
+    if (member.kind === "property") {
+        for (const instance of member.suggestions ?? []) {
+            walkConstraintInstance(instance, file, diagnostics);
+        }
+    }
+}
+function walkBlock(block, registry, file, diagnostics) {
+    if (block.generics) {
+        reportNotAllowed(block.generics, file, diagnostics);
+    }
+    for (const member of block.members) {
+        walkMember(member, file, diagnostics);
+    }
+    for (const template of block.compositions) {
+        walkCompositionTemplate(template, registry, file, diagnostics, true);
+    }
+    for (const instance of block.constraints ?? []) {
+        walkConstraintInstance(instance, file, diagnostics);
+    }
+    for (const sub of block.subBlocks) {
+        walkBlock(sub, registry, file, diagnostics);
+    }
+    for (const embedded of block.embeddedBlocks) {
+        walkBlock(embedded, registry, file, diagnostics);
+    }
+}
+export function validateGenerics(document, registry) {
+    const diagnostics = [];
+    const file = document.source.filePath ?? "<memory>";
+    walkBlock(document.block, registry, file, diagnostics);
+    return diagnostics;
+}
+//# sourceMappingURL=validate-generics.js.map

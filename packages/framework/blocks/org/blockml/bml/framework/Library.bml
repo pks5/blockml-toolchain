@@ -116,6 +116,7 @@
         <fwcap:PeekLibraryTypeFqn />
         <fwcap:ValidateEmbeddedBlocks />
         <fwcap:ValidateInstances />
+        <fwcap:ValidateGenerics />
         <fwcap:ValidatePresets />
         <fwcap:ValidateVisibility />
         <fwcap:ValidateReadOnly />

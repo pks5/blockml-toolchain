@@ -61,6 +61,8 @@
     parseExpression(source) → ParseExpressionOutcome
     validateTypes(document, registry) → Diagnostic[]
     validateVersions(document, registry) → Diagnostic[]
+    validateInstances(document, registry) → Diagnostic[]
+    validateGenerics(document, registry) → Diagnostic[]
     validateConstraints(document, registry) → Diagnostic[]
     getPropertyNumericValue(property) → number | undefined
     isLiteralValue(value) → boolean

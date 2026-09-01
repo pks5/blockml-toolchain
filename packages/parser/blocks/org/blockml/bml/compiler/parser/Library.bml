@@ -96,11 +96,13 @@
         <parcap:MapTypeReferenceEntityInstance />
         <parcap:BuildSubBlockIndex />
         <parcap:ParseTypeExpression />
+        <parcap:ParseGenericArgumentList />
         <parcap:InferCardinality />
         <parcap:TypeExpressionToString />
         <parcap:ParseMemberValue />
         <parcap:ExpressionFromRaw />
         <parcap:ParseDirectives />
+        <parcap:ParseGenericsBinding />
         <parcap:ParseBmlMeta />
         <parcap:ParseVisibilityFromName />
         <parcap:VisibilityPrefix />

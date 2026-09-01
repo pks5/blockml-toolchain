@@ -37,13 +37,14 @@
     4. validateEmbeddedBlocks(pragmaticModel) → append diagnostics
     5. validateVersions(pragmaticModel, registry) → append diagnostics
     6. validateInstances(pragmaticModel, registry) → append diagnostics
-    7. validatePresets(pragmaticModel, registry) → append diagnostics
-    8. validateVisibility(pragmaticModel, registry) → append diagnostics
-    9. validateReadOnly(pragmaticModel, registry) → append diagnostics
-    10. validateConstraints(pragmaticModel, registry) → append diagnostics
-    11. validateStyle(pragmaticModel) → append warning/recommendation diagnostics
-    12. success = no diagnostic with severity === "error"
-    13. Return ValidateResult { pragmaticModel?, diagnostics, success }
+    7. validateGenerics(pragmaticModel, registry) → append diagnostics
+    8. validatePresets(pragmaticModel, registry) → append diagnostics
+    9. validateVisibility(pragmaticModel, registry) → append diagnostics
+    10. validateReadOnly(pragmaticModel, registry) → append diagnostics
+    11. validateConstraints(pragmaticModel, registry) → append diagnostics
+    12. validateStyle(pragmaticModel) → append warning/recommendation diagnostics
+    13. success = no diagnostic with severity === "error"
+    14. Return ValidateResult { pragmaticModel?, diagnostics, success }
 
     When continueOnError === false and success === false, pragmaticModel is omitted
     from the result (early return with diagnostics only).

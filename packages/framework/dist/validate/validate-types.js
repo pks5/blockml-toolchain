@@ -1,5 +1,6 @@
 import { parseExpression } from "../expression/parse-expression.js";
-import { collectBaseTypeChain, memberIdentityKey, resolveEffectiveMembers, } from "../resolve/resolve-effective-members.js";
+import { memberIdentityKey, resolveEffectiveMembers, } from "../resolve/resolve-effective-members.js";
+import { satisfiesTypeBound } from "../resolve/satisfies-type-bound.js";
 import { isWellKnownTypeFqn } from "@blockml/parser";
 function diag(code, message, file, loc) {
     const source = {
@@ -19,24 +20,6 @@ function typeIsKnown(fqn, registry) {
     return registry.has(fqn) || isWellKnownTypeFqn(fqn);
 }
 const CORE_EXCEPTION = "org.blockml.bml.core.Exception";
-/** G on T's baseType chain, or G ∈ T.contracts[] (direct only). */
-function satisfiesTypeBound(typeFqn, boundFqn, registry) {
-    if (typeFqn === boundFqn) {
-        return true;
-    }
-    const start = registry.get(typeFqn)?.block;
-    if (!start) {
-        return false;
-    }
-    if ((start.contracts ?? []).some((c) => c.value === boundFqn)) {
-        return true;
-    }
-    const chain = collectBaseTypeChain(start, registry);
-    if (chain.some((b) => b.type === boundFqn)) {
-        return true;
-    }
-    return chain[0]?.baseType === boundFqn;
-}
 function walkNamedTypes(expr, visit) {
     if (!expr) {
         return;

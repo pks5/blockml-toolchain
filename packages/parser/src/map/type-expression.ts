@@ -217,16 +217,22 @@ function parseAnonymousStruct(input: string, ctx: ParseCtx): AnonymousStructType
   return { kind: "anonymousStruct", fields };
 }
 
+function parseTypeArgumentListInner(argsText: string, ctx: ParseCtx): TypeExpression[] {
+  if (!argsText.trim()) {
+    return [];
+  }
+  return splitTopLevel(argsText, ",").map((a) => parseTypeExpressionInternal(a.trim(), ctx));
+}
+
 function parseGenericApplication(
   base: string,
   argsText: string,
   ctx: ParseCtx,
 ): NamedTypeReference {
-  const args = splitTopLevel(argsText, ",");
   return {
     kind: "named",
     fqn: resolveTypeName(base, ctx.bindings, ctx.implicit),
-    typeArguments: args.map((a) => parseTypeExpressionInternal(a.trim(), ctx)),
+    typeArguments: parseTypeArgumentListInner(argsText, ctx),
   };
 }
 
@@ -335,6 +341,38 @@ export function parseTypeExpression(
   options?: TypeExpressionResolveOptions,
 ): TypeExpression {
   return parseTypeExpressionInternal(raw, { bindings, implicit, ...options });
+}
+
+export type ParseGenericArgumentListResult =
+  | { ok: true; arguments: TypeExpression[] }
+  | { ok: false; code: "BML_GENERICS_ARGUMENT_MISMATCH" }
+  | { ok: false; code: "BML_INVALID_TYPE_REFERENCE"; message: string };
+
+/**
+ * Parse a parenthesized type-argument list as used by `bml:generics`.
+ * Outer parentheses are required. The type name is omitted because the
+ * instance tag is the type.
+ */
+export function parseGenericArgumentList(
+  raw: string,
+  bindings: Record<string, string>,
+  implicit: ImplicitNamespaceContext = "type",
+  options?: TypeExpressionResolveOptions,
+): ParseGenericArgumentListResult {
+  const input = raw.trim();
+  if (!isFullyParenthesized(input)) {
+    return { ok: false, code: "BML_GENERICS_ARGUMENT_MISMATCH" };
+  }
+  const inner = input.slice(1, -1).trim();
+  try {
+    return {
+      ok: true,
+      arguments: parseTypeArgumentListInner(inner, { bindings, implicit, ...options }),
+    };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return { ok: false, code: "BML_INVALID_TYPE_REFERENCE", message };
+  }
 }
 
 export function inferCardinality(type: TypeExpression | undefined):

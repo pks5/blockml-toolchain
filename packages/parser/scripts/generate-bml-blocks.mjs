@@ -370,6 +370,18 @@ const capabilities = [
   {
     pkg: "capability",
     prefix: "parcap",
+    name: "ParseGenericArgumentList",
+    is: "Parse a parenthesized TypeExpression list for bml:generics",
+    inputs: [
+      { name: "raw", type: "type:Text", required: true },
+      { name: "bindings", type: "type:Text", required: true },
+    ],
+    output: { name: "arguments", type: "bomtype:TypeExpression[]", required: true },
+    refs: ["parcap:ParseTypeExpression"],
+  },
+  {
+    pkg: "capability",
+    prefix: "parcap",
     name: "InferCardinality",
     is: "Infer cardinality from TypeExpression shape",
     inputs: [{ name: "type", type: "bomtype:TypeExpression" }],
@@ -417,6 +429,18 @@ const capabilities = [
     ],
     output: { name: "directives", type: "bomcomp:DirectiveAttribute[]", required: true },
     refs: ["pardocumentation:AttributeClassification"],
+  },
+  {
+    pkg: "capability",
+    prefix: "parcap",
+    name: "ParseGenericsBinding",
+    is: "Parse bml:generics attribute or child element into GenericsBinding",
+    inputs: [
+      { name: "element", type: "parmap:XmlDomNode", required: true },
+      { name: "ctx", type: "parmap:MapContext", required: true },
+    ],
+    output: { name: "binding", type: "bomcomp:GenericsBinding" },
+    refs: ["parcap:ParseGenericArgumentList", "pardocumentation:AttributeClassification"],
   },
   {
     pkg: "capability",

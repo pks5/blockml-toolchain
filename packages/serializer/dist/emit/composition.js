@@ -15,13 +15,19 @@ export function emitCompositionTemplate(writer, template, ctx, wrapInAggregation
 }
 function emitCompositionContents(writer, template, ctx, wrapInComposition) {
     const compositionDirectives = emitDirectiveAttrs(template.directives);
+    const genericsAttr = emitGenericsAttr(template.generics);
+    const startAttrs = [...compositionDirectives, ...genericsAttr];
+    const wrapContainer = !wrapInComposition &&
+        (startAttrs.length > 0 || template.generics?.authoredPlacement === "element");
     if (wrapInComposition) {
-        writer.line(`<composition${compositionDirectives.length ? " " + compositionDirectives.join(" ") : ""}>`);
+        writer.line(`<composition${startAttrs.length ? " " + startAttrs.join(" ") : ""}>`);
         writer.pushDepth();
+        emitGenericsElement(writer, template.generics);
     }
-    else if (compositionDirectives.length > 0) {
-        writer.line(`<bml:container ${compositionDirectives.join(" ")}>`);
+    else if (wrapContainer) {
+        writer.line(`<bml:container${startAttrs.length ? " " + startAttrs.join(" ") : ""}>`);
         writer.pushDepth();
+        emitGenericsElement(writer, template.generics);
     }
     for (const child of template.children) {
         emitCompositionNode(writer, child, ctx);
@@ -30,7 +36,7 @@ function emitCompositionContents(writer, template, ctx, wrapInComposition) {
         writer.popDepth();
         writer.line("</composition>");
     }
-    else if (compositionDirectives.length > 0) {
+    else if (wrapContainer) {
         writer.popDepth();
         writer.line("</bml:container>");
     }
@@ -38,8 +44,11 @@ function emitCompositionContents(writer, template, ctx, wrapInComposition) {
 export function emitCompositionNode(writer, node, ctx) {
     if (node.kind === "virtualContainer") {
         const containerDirectives = emitDirectiveAttrs(node.directives);
-        writer.line(`<bml:container${containerDirectives.length ? " " + containerDirectives.join(" ") : ""}>`);
+        const genericsAttr = emitGenericsAttr(node.generics);
+        const startAttrs = [...containerDirectives, ...genericsAttr];
+        writer.line(`<bml:container${startAttrs.length ? " " + startAttrs.join(" ") : ""}>`);
         writer.pushDepth();
+        emitGenericsElement(writer, node.generics);
         for (const child of node.children) {
             emitCompositionNode(writer, child, ctx);
         }
@@ -69,6 +78,7 @@ export function emitBlockInstance(writer, instance, directives, ctx) {
     if (instance.scope) {
         attrs.push(`bml:scope="${instance.scope}"`);
     }
+    attrs.push(...emitGenericsAttr(instance.generics));
     if (instance.unknownAttributes) {
         for (const [name, value] of Object.entries(instance.unknownAttributes)) {
             attrs.push(`${name}="${escapeAttr(value)}"`);
@@ -87,14 +97,17 @@ export function emitBlockInstance(writer, instance, directives, ctx) {
         }
         elementChildren.push(emitMemberValueElement(name, val));
     }
+    const genericsElement = instance.generics?.authoredPlacement === "element";
     const hasBody = elementChildren.length > 0 ||
-        (instance.aggregationCompositions?.length ?? 0) > 0;
+        (instance.aggregationCompositions?.length ?? 0) > 0 ||
+        genericsElement;
     if (!hasBody) {
         writer.line(`<${tag}${attrs.length ? " " + attrs.join(" ") : ""} />`);
         return;
     }
     writer.line(`<${tag}${attrs.length ? " " + attrs.join(" ") : ""}>`);
     writer.pushDepth();
+    emitGenericsElement(writer, instance.generics);
     for (const line of elementChildren) {
         writer.line(line);
     }
@@ -107,6 +120,18 @@ export function emitBlockInstance(writer, instance, directives, ctx) {
     }
     writer.popDepth();
     writer.line(`</${tag}>`);
+}
+function emitGenericsAttr(binding) {
+    if (!binding || binding.authoredPlacement !== "attribute") {
+        return [];
+    }
+    return [`bml:generics="${escapeAttr(binding.raw)}"`];
+}
+function emitGenericsElement(writer, binding) {
+    if (!binding || binding.authoredPlacement !== "element") {
+        return;
+    }
+    writer.line(`<bml:generics>${binding.raw}</bml:generics>`);
 }
 function emitDirectiveAttrs(directives) {
     if (!directives?.length) {

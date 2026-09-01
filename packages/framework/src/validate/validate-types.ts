@@ -14,10 +14,10 @@ import type {
 import type { TypeRegistry } from "../registry/type-registry.js";
 import { parseExpression } from "../expression/parse-expression.js";
 import {
-  collectBaseTypeChain,
   memberIdentityKey,
   resolveEffectiveMembers,
 } from "../resolve/resolve-effective-members.js";
+import { satisfiesTypeBound } from "../resolve/satisfies-type-bound.js";
 import { isWellKnownTypeFqn } from "@blockml/parser";
 
 function diag(
@@ -45,29 +45,6 @@ function typeIsKnown(fqn: string, registry: TypeRegistry): boolean {
 }
 
 const CORE_EXCEPTION = "org.blockml.bml.core.Exception";
-
-/** G on T's baseType chain, or G ∈ T.contracts[] (direct only). */
-function satisfiesTypeBound(
-  typeFqn: string,
-  boundFqn: string,
-  registry: TypeRegistry,
-): boolean {
-  if (typeFqn === boundFqn) {
-    return true;
-  }
-  const start = registry.get(typeFqn)?.block;
-  if (!start) {
-    return false;
-  }
-  if ((start.contracts ?? []).some((c) => c.value === boundFqn)) {
-    return true;
-  }
-  const chain = collectBaseTypeChain(start, registry);
-  if (chain.some((b) => b.type === boundFqn)) {
-    return true;
-  }
-  return chain[0]?.baseType === boundFqn;
-}
 
 function walkNamedTypes(expr: TypeExpression | undefined, visit: (fqn: string) => void): void {
   if (!expr) {

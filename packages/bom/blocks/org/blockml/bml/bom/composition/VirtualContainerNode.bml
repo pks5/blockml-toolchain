@@ -38,6 +38,9 @@
     <directives type="bomcomp:DirectiveAttribute[]">
       <documentation>directives (optional). TS type: bomcomp:DirectiveAttribute[].</documentation>
     </directives>
+    <generics type="bomcomp:GenericsBinding">
+      <documentation>Misplaced bml:generics on bml:container. (optional)</documentation>
+    </generics>
     <children type="bomcomp:CompositionNode[]">
       <documentation>children (required). TS type: bomcomp:CompositionNode[].</documentation>
     </children>

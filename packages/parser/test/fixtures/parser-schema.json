@@ -597,6 +597,28 @@
       }
     },
     {
+      "name": "ParseGenericArgumentList",
+      "tsExport": "parseGenericArgumentList",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ParseGenericArgumentList",
+      "inputs": [
+        {
+          "name": "raw",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "bindings",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "arguments",
+        "type": "bomtype:TypeExpression[]",
+        "required": true
+      }
+    },
+    {
       "name": "InferCardinality",
       "tsExport": "inferCardinality",
       "fqn": "org.blockml.bml.compiler.parser.capability.InferCardinality",
@@ -693,6 +715,28 @@
         "name": "directives",
         "type": "bomcomp:DirectiveAttribute[]",
         "required": true
+      }
+    },
+    {
+      "name": "ParseGenericsBinding",
+      "tsExport": "parseGenericsBinding",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ParseGenericsBinding",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "parmap:XmlDomNode",
+          "required": true
+        },
+        {
+          "name": "ctx",
+          "type": "parmap:MapContext",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "binding",
+        "type": "bomcomp:GenericsBinding",
+        "required": false
       }
     },
     {

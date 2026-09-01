@@ -4,3 +4,9 @@ export {
   resolveTypeName,
   type ImplicitNamespaceContext,
 } from "./util/qname.js";
+export {
+  parseTypeExpression,
+  parseGenericArgumentList,
+  type ParseGenericArgumentListResult,
+  type TypeExpressionResolveOptions,
+} from "./map/type-expression.js";

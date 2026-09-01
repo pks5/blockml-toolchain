@@ -39,6 +39,7 @@ export { validateVersions } from "./validate/validate-versions.js";
 export { validateConstraints } from "./validate/validate-constraints.js";
 export { validateEmbeddedBlocks } from "./validate/validate-embedded-blocks.js";
 export { validateInstances } from "./validate/validate-instances.js";
+export { validateGenerics } from "./validate/validate-generics.js";
 export { validatePresets } from "./validate/validate-presets.js";
 export { validateVisibility } from "./validate/validate-visibility.js";
 export { validateReadOnly } from "./validate/validate-readonly.js";

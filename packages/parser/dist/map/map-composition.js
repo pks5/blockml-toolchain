@@ -1,4 +1,4 @@
-import { parseDirectives, parseBmlMeta, } from "./directives.js";
+import { parseDirectives, parseBmlMeta, parseGenericsBinding, isGenericsDirectiveElement, } from "./directives.js";
 import { parseMemberValue } from "./member-value.js";
 import { elementChildren, elementLocalName, elementPrefix, getAttribute, getCharacterData, isElement, xmlTriviaFromElement, } from "../util/xml.js";
 import { resolveBlockReference, resolvePrefix, resolveTypeName, TYPE_REFERENCE_ENTITY, elementSourceLoc, } from "../util/qname.js";
@@ -53,12 +53,14 @@ export function mapCompositionTemplate(element, aggregationName, ctx) {
         reportUnexpectedTextChildren(compositionEl, ctx);
     }
     const directives = parseDirectives(target, loc, ctx);
+    const generics = parseGenericsBinding(target, ctx);
     const children = compositionEl
         ? mapCompositionChildren(compositionEl, ctx)
         : mapCompositionChildren(element, ctx);
     return {
         aggregationName,
         ...(directives.length > 0 ? { directives } : {}),
+        ...(generics ? { generics } : {}),
         children,
         source: loc,
     };
@@ -74,16 +76,18 @@ function mapCompositionChildren(compositionEl, ctx) {
         if (METADATA_ELEMENTS.has(local)) {
             continue;
         }
-        if (elementPrefix(child) === "bml" && (local === "xml" || local === "container")) {
+        if (elementPrefix(child) === "bml" && (local === "xml" || local === "generics")) {
             continue;
         }
         if (local === "container" || local === "bml:container") {
             const loc = elementSourceLoc(ctx.filePath, ctx.source, child);
             reportUnexpectedTextChildren(child, ctx);
             const directives = parseDirectives(child, loc, ctx);
+            const generics = parseGenericsBinding(child, ctx);
             const vnode = {
                 kind: "virtualContainer",
                 ...(directives.length > 0 ? { directives } : {}),
+                ...(generics ? { generics } : {}),
                 children: mapCompositionChildren(child, ctx),
                 source: loc,
             };
@@ -130,6 +134,9 @@ export function mapBlockInstanceNode(element, ctx) {
         if (childLocal === "composition" || RESERVED.has(childLocal)) {
             continue;
         }
+        if (isGenericsDirectiveElement(child)) {
+            continue;
+        }
         if (!instanceMemberIsAggregationFill(child)) {
             continue;
         }
@@ -149,6 +156,9 @@ export function mapBlockInstanceNode(element, ctx) {
         if (RESERVED.has(childLocal)) {
             continue;
         }
+        if (isGenericsDirectiveElement(child)) {
+            continue;
+        }
         if (instanceMemberIsAggregationFill(child)) {
             continue;
         }
@@ -159,6 +169,7 @@ export function mapBlockInstanceNode(element, ctx) {
         }
     }
     const directives = parseDirectives(element, loc, ctx);
+    const generics = parseGenericsBinding(element, ctx);
     const instance = {
         typeFqn,
         memberValues: Object.fromEntries(Object.entries(memberValues).filter(([, v]) => v !== undefined)),
@@ -176,6 +187,8 @@ export function mapBlockInstanceNode(element, ctx) {
         instance.bean = meta.bean;
     if (meta.scope)
         instance.scope = meta.scope;
+    if (generics)
+        instance.generics = generics;
     const trivia = xmlTriviaFromElement(element);
     if (trivia)
         instance.xmlTrivia = trivia;

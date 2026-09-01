@@ -95,6 +95,9 @@
     <xmlRendering type="bomcommon:XmlRenderingBlock">
       <documentation>xmlRendering (optional). TS type: bomcommon:XmlRenderingBlock.</documentation>
     </xmlRendering>
+    <generics type="bomcomp:GenericsBinding">
+      <documentation>Misplaced bml:generics on a Block definition. (optional)</documentation>
+    </generics>
     <visibility type="type:Text">
       <documentation>"private" | "protected" | "public". Sub-Blocks only. (optional)</documentation>
     </visibility>

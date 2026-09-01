@@ -1,0 +1,56 @@
+<!--
+  Framework Capability — ValidateGenerics
+  FQN: org.blockml.bml.framework.capability.ValidateGenerics
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwconfig="org.blockml.bml.framework.config"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:fwexpression="org.blockml.bml.framework.expression"
+  xmlns:fwregistry="org.blockml.bml.framework.registry"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
+
+  <name>ValidateGenerics</name>
+  <type>fwcap:ValidateGenerics</type>
+  <baseType>core:Capability</baseType>
+  <is>Open generic instance and bml:generics placement checks</is>
+
+  <documentation>Open generic instance and bml:generics placement checks against
+    TypeRegistry. Emits BML_OPEN_GENERIC_INSTANCE, BML_GENERICS_DIRECTIVE_NOT_ALLOWED,
+    BML_GENERICS_ARGUMENT_MISMATCH, and reuses BML_GENERIC_CONSTRAINT_VIOLATION /
+    BML_MISSING_GENERIC_TYPE_ARGUMENT.</documentation>
+
+  <properties>
+    <document type="bomdoc:BomDocument">
+      <documentation>document. TS type: bomdoc:BomDocument. (required)</documentation>
+    </document>
+    <registry type="fwcap:TypeRegistry">
+      <documentation>registry. TS type: fwcap:TypeRegistry. (required)</documentation>
+    </registry>
+    <diagnostics type="bomcommon:Diagnostic[]">
+      <documentation>diagnostics. TS type: bomcommon:Diagnostic[]. (required)</documentation>
+    </diagnostics>
+  </properties>
+
+</block>

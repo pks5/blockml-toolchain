@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseTypeExpression, typeExpressionToString } from "../src/map/type-expression.js";
+import { parseTypeExpression, parseGenericArgumentList, typeExpressionToString } from "../src/map/type-expression.js";
 
 const BINDINGS = {
   lang: "org.blockml.bml.language",
@@ -147,5 +147,42 @@ describe("parseTypeExpression", () => {
     if (expr.kind === "named") {
       expect(expr.fqn).toBe("com.blockml.test.Host");
     }
+  });
+});
+
+describe("parseGenericArgumentList", () => {
+  it("parses a parenthesized single TypeExpression", () => {
+    const result = parseGenericArgumentList("(type:Integer)", BINDINGS);
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.arguments).toHaveLength(1);
+    expect(result.arguments[0]).toMatchObject({
+      kind: "named",
+      fqn: "org.blockml.bml.type.Integer",
+    });
+  });
+
+  it("parses two positional arguments", () => {
+    const result = parseGenericArgumentList("(type:String, core:Block)", BINDINGS);
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.arguments).toHaveLength(2);
+    expect(result.arguments[0]).toMatchObject({
+      kind: "named",
+      fqn: "org.blockml.bml.type.String",
+    });
+    expect(result.arguments[1]).toMatchObject({
+      kind: "named",
+      fqn: "org.blockml.bml.core.Block",
+    });
+  });
+
+  it("rejects a list without parentheses", () => {
+    const result = parseGenericArgumentList("type:Integer", BINDINGS);
+    expect(result).toEqual({ ok: false, code: "BML_GENERICS_ARGUMENT_MISMATCH" });
   });
 });

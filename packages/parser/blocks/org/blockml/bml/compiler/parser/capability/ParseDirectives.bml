@@ -34,7 +34,8 @@
   <baseType>core:Capability</baseType>
   <is>Parse bml:each/if/unless/with directive attributes</is>
 
-  <documentation>Parse bml:each/if/unless/with directive attributes</documentation>
+  <documentation>Parse bml:each/if/unless/with directive attributes.
+    bml:generics is composition meta (ParseGenericsBinding), not a flow-control directive.</documentation>
 
   <references>
     <see type="pardocumentation:AttributeClassification" relation="SeeAlso" />
