@@ -16,8 +16,7 @@ import {
 } from "./constants.js";
 import { getPropertyLiteral, setOverrideProperty } from "./properties.js";
 
-export const EMPTY_STRUCT_FQN =
-  "org.blockml.bml.transformer.workflow.EmptyStruct";
+export const EMPTY_STRUCT_FQN = "org.blockml.bml.type.EmptyStruct";
 export const STRUCT_TYPE_FQN = "org.blockml.bml.type.StructType";
 export const NUMBER_TYPE_FQN = "org.blockml.bml.type.Number";
 export const PRIMITIVE_TYPE_FQN = "org.blockml.bml.type.PrimitiveType";

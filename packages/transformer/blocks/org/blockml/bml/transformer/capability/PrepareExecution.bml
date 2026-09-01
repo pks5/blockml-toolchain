@@ -35,7 +35,7 @@
     5. Deep-merge CLI `--parameters` JSON over pending `parameters`, check
        the bound generic `T`, and write the result onto the running copy.
        Omitted CLI parameters are `{}`. Bound `T` defaults to
-       `workflow:EmptyStruct`.
+       `type:EmptyStruct`.
     6. Commit the running relocation.
 
     Default implementation is deterministic. TS: pipeline/prepare.ts.

@@ -39,7 +39,7 @@
 
     --parameters is a JSON object merged over pending ModelTransformation
     parameters (CLI wins; nested objects merge; arrays replace). Prepare
-    checks the result against the bound generic T (default EmptyStruct)
+    checks the result against the bound generic T (default type:EmptyStruct)
     and writes it onto the running copy. Omitted --parameters is {}.
 
     The transformer takes an exclusive worktree lock, then prepares the

@@ -28,7 +28,7 @@
       recorded executions. Default false: the pending Block is relocated
       and removed.
     * `parameters` — run values of generic `T` (`type:StructType`, default
-      `workflow:EmptyStruct`). Bind `T` with
+      `type:EmptyStruct`). Bind `T` with
       `baseType=workflow:ModelTransformation(Parameters)` and a same-Block
       SubBlock `Parameters`. Prepare deep-merges CLI `--parameters` JSON
       over pending defaults, checks the bound `T`, and writes the result
@@ -50,11 +50,11 @@
     <see type="workflow:Stage" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
-    <see type="workflow:EmptyStruct" relation="SeeAlso" />
+    <see type="type:EmptyStruct" relation="SeeAlso" />
   </references>
 
   <genericTypes>
-    <T baseType="type:StructType" defaultType="workflow:EmptyStruct" />
+    <T baseType="type:StructType" defaultType="type:EmptyStruct" />
   </genericTypes>
 
   <properties>
@@ -72,7 +72,7 @@
     </template>
     <parameters type="T">
       <documentation>
-        Run parameters of bound T. Default EmptyStruct (empty object).
+        Run parameters of bound T. Default type:EmptyStruct (empty object).
         Prepare merges CLI JSON over pending values and writes the result
         when setting Running. Tasks do not read this; map it later with
         expressions.

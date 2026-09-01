@@ -8,6 +8,7 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
   xmlns:transformer="org.blockml.bml.transformer"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation"
@@ -59,7 +60,7 @@
     <see type="workflow:Rule" relation="SeeAlso" />
     <see type="workflow:InstructionRule" relation="SeeAlso" />
     <see type="workflow:InstructionTask" relation="SeeAlso" />
-    <see type="workflow:EmptyStruct" relation="SeeAlso" />
+    <see type="type:EmptyStruct" relation="SeeAlso" />
   </references>
 
 </block>
