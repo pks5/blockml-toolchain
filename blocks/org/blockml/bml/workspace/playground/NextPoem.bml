@@ -13,33 +13,33 @@
   <name>NextPoem</name>
   <type>playground:NextPoem</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, written in Spanish, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
 
   <documentation>
-    En la ladera del bosque crece el viejo roble,
-    su ramaje se mece suave en el vendaval.
-    Las raíces se hunden hondo en el musgo oscuro,
-    allí descansa firme, paciente, quieto y grande.
+    Im Buchenhain, wo früh der Nebel zieht,
+    steht eine Buche, die den Himmel sieht.
+    Ihr glatter Stamm trägt Rinde silbergrau,
+    sie lauscht dem Specht und trinkt den kühlen Tau.
 
-    A sus pies, donde habita la sombra,
-    una pequeña seta corona la tierra húmeda.
-    Su sombrero es pardo, su tallo pálido y fino,
-    salió a la luz por primera vez.
+    Am Fuß der Buche, tief im Laubgeflecht,
+    reckt sich ein Pilz empor, noch zart und schlecht
+    geschützt vor kaltem Frost und Morgenwind;
+    sein brauner Hut glänzt taunass, weich und lind.
 
-    "No tengas miedo", le susurra el árbol,
-    "te protejo del mal tiempo, duerme en paz.
-    Mi techo de hojas atrapa cada gota,
-    así puedes estar aquí resguardado y sin cuidado."
+    "Bleib nah bei mir", so spricht der Baum ihn an,
+    "mein Schatten hält den heißen Mittag zahm.
+    Ich breite Laub als Decke um dich her
+    und schütze dich, dann fürchtest du nichts mehr."
 
-    Y cuando la mañana gris se alzó en el cielo,
-    cada uno reconoció su lugar en el bosque:
-    el roble en lo alto, la seta en el verde fresco,
-    dos amigos que florecen en el mismo bosque.
+    So wuchsen sie durch Sommer, Herbst und Jahr,
+    die Buche hoch, der Pilz im Moose klar.
+    Wenn Wandrer ruhn im kühlen grünen Zelt,
+    sind zwei Gefährten Wächter dieser Welt.
   </documentation>
 
   <properties>
     <title>
-      <value>El roble y la seta</value>
+      <value>Die Buche und der Pilz</value>
     </title>
     <author>
       <value>John Doe</value>
