@@ -1,0 +1,47 @@
+<!--
+  Workspace Playground — PoemNew
+  FQN: org.blockml.bml.workspace.playground.PoemNew
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:playground="org.blockml.bml.workspace.playground">
+
+  <name>PoemNew</name>
+  <type>playground:PoemNew</type>
+  <baseType>core:Documentation</baseType>
+  <is>A random poem in Latin produced by a workspace transform execution</is>
+
+  <documentation>
+    Sub luce prima frigidus surgit ager,
+    et rura torpent nube canescente gravi.
+    Corvus per auras clamat, umbrae per vias,
+    et flumen ipsum murmure occulto fluit.
+
+    Fenestra rubet, quasi solem intus tenens,
+    lucerna vigilat, ubi dies iam coepit olim.
+    Fumat culina, parva mora inter strepitum,
+    antequam hora sua vertigine rapiatur.
+
+    Super omnia transit examen atrum avium,
+    velut atramentum quod caelum lente scribit.
+    Ducunt arcus quos nemo mortalis tenet,
+    et tamen salve manet dum vesper adest.
+  </documentation>
+
+  <properties>
+    <title>
+      <value>Sub luce prima</value>
+    </title>
+    <author>
+      <value>John Doe</value>
+    </author>
+    <year>
+      <value>2026</value>
+    </year>
+  </properties>
+
+</block>

@@ -49,12 +49,17 @@
   <aggregations>
     <stages override="true">
       <composition>
-        <workflow:Stage name="Create Poem" status="Running">
+        <workflow:Stage name="Create Poem" status="Succeeded">
           <startedAt>2026-09-01T19:19:30</startedAt>
           <baseCommit>685095eca41fbca150b053be238bd86de0028082</baseCommit>
+          <feedback>Stage 1 (&quot;Create Poem&quot;) completed as instructed. Execute created exactly one new file, blocks/org/blockml/bml/workspace/playground/PoemNew.bml (FQN org.blockml.bml.workspace.playground.PoemNew), a previously non-existent block. It is untracked (the whole playground/ directory is new), which is why `git diff` is empty. The block is well-formed BML: baseType core:Documentation, matching type/name (playground:PoemNew / PoemNew), an `is` line, a 12-line original Latin poem in &lt;documentation>, and title/author/year properties. Content matches the Stage 1 instruction (a random Latin poem, freshly authored for this execution). No ModelTransformation/_meta/transform/ files were modified by Execute — the running transform BML T00005_PoemTest_20260901T191930.bml was left untouched, as required. Stage 2 (&quot;Translate Poem&quot; to Japanese) remains Pending and will operate on this same file. Note: validation could not be run in this Reflect step (Bash disabled), so `npx blockml validate` was not executed here; recommend the pipeline validate before committing.</feedback>
+          <completedAt>2026-09-01T19:20:55</completedAt>
           <task>
             <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.PoemNew.bml that contains a random poem in latin. For each execution create a new poem." />
           </task>
+          <changedFiles>
+            <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/PoemNew.bml" />
+          </changedFiles>
         </workflow:Stage>
         <workflow:Stage name="Translate Poem" status="Pending">
           <task>
