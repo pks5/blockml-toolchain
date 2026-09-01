@@ -243,8 +243,8 @@ export const documentationBlocks = [
     • BML_UNKNOWN_PROPERTY — instance memberValues key not in effective members (error)
 
     validateGenerics:
-    • BML_OPEN_GENERIC_INSTANCE — aggregated instance still has open genericTypes without bml:generics
-    • BML_GENERICS_DIRECTIVE_NOT_ALLOWED — bml:generics not on a Block instance
+    • BML_OPEN_GENERIC_INSTANCE — aggregated domain Block instance still has open genericTypes without bml:generics (not TypeReferenceEntity sugar)
+    • BML_GENERICS_DIRECTIVE_NOT_ALLOWED — bml:generics not on a Block instance (including TypeReferenceEntity QName sugar)
     • BML_GENERICS_ARGUMENT_MISMATCH — bml:generics does not match open genericTypes
     • BML_MISSING_GENERIC_TYPE_ARGUMENT — directive present but a required argument has no defaultType
     • BML_GENERIC_CONSTRAINT_VIOLATION — argument fails parameter baseType via satisfiesTypeBound

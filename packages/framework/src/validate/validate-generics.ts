@@ -8,12 +8,16 @@ import type {
   GenericsBinding,
   MemberDefinition,
   SourceLocation,
+  TypeExpression,
 } from "@blockml/bom";
 import type { TypeRegistry } from "../registry/type-registry.js";
+import { resolveEffectiveMembers } from "../resolve/resolve-effective-members.js";
 import {
   openGenericParameters,
   resolveGenericApplication,
 } from "../resolve/resolve-generic-application.js";
+
+const TYPE_REFERENCE_ENTITY = "org.blockml.bml.type.TypeReferenceEntity";
 
 function diag(
   code: string,
@@ -48,6 +52,30 @@ function reportNotAllowed(
       binding.source,
     ),
   );
+}
+
+function isTypeReferenceEntityType(expr?: TypeExpression): boolean {
+  if (!expr) {
+    return false;
+  }
+  if (expr.kind === "grouped") {
+    return isTypeReferenceEntityType(expr.expression);
+  }
+  return expr.kind === "named" && expr.fqn === TYPE_REFERENCE_ENTITY;
+}
+
+function aggregationIsTypeReferenceEntity(
+  owner: BlockDefinition | undefined,
+  aggregationName: string,
+  registry: TypeRegistry,
+): boolean {
+  if (!owner) {
+    return false;
+  }
+  const member = resolveEffectiveMembers(owner, registry).find(
+    (m) => m.kind === "aggregation" && m.name === aggregationName,
+  );
+  return member?.kind === "aggregation" && isTypeReferenceEntityType(member.type);
 }
 
 function validateInstanceGenerics(
@@ -120,18 +148,42 @@ function walkCompositionNodes(
   registry: TypeRegistry,
   file: string,
   diagnostics: Diagnostic[],
+  typeReferenceEntityAggregation: boolean,
 ): void {
   for (const node of nodes) {
     if (node.kind === "virtualContainer") {
       if (node.generics) {
         reportNotAllowed(node.generics, file, diagnostics);
       }
-      walkCompositionNodes(node.children, registry, file, diagnostics);
+      walkCompositionNodes(
+        node.children,
+        registry,
+        file,
+        diagnostics,
+        typeReferenceEntityAggregation,
+      );
+      continue;
+    }
+    if (typeReferenceEntityAggregation) {
+      if (node.instance.generics) {
+        reportNotAllowed(node.instance.generics, file, diagnostics);
+      }
+      for (const agg of node.instance.aggregationCompositions ?? []) {
+        walkCompositionTemplate(agg.composition, registry, file, diagnostics, true, true);
+      }
       continue;
     }
     validateInstanceGenerics(node.instance, registry, file, diagnostics);
+    const instanceType = registry.get(node.instance.typeFqn)?.block;
     for (const agg of node.instance.aggregationCompositions ?? []) {
-      walkCompositionTemplate(agg.composition, registry, file, diagnostics, true);
+      walkCompositionTemplate(
+        agg.composition,
+        registry,
+        file,
+        diagnostics,
+        true,
+        aggregationIsTypeReferenceEntity(instanceType, agg.aggregationName, registry),
+      );
     }
   }
 }
@@ -142,11 +194,18 @@ function walkCompositionTemplate(
   file: string,
   diagnostics: Diagnostic[],
   wrapperIsIllegalHost: boolean,
+  typeReferenceEntityAggregation: boolean,
 ): void {
   if (wrapperIsIllegalHost && template.generics) {
     reportNotAllowed(template.generics, file, diagnostics);
   }
-  walkCompositionNodes(template.children, registry, file, diagnostics);
+  walkCompositionNodes(
+    template.children,
+    registry,
+    file,
+    diagnostics,
+    typeReferenceEntityAggregation,
+  );
 }
 
 function walkConstraintInstance(
@@ -190,7 +249,14 @@ function walkBlock(
     walkMember(member, file, diagnostics);
   }
   for (const template of block.compositions) {
-    walkCompositionTemplate(template, registry, file, diagnostics, true);
+    walkCompositionTemplate(
+      template,
+      registry,
+      file,
+      diagnostics,
+      true,
+      aggregationIsTypeReferenceEntity(block, template.aggregationName, registry),
+    );
   }
   for (const instance of block.constraints ?? []) {
     walkConstraintInstance(instance, file, diagnostics);

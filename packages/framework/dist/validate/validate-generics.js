@@ -1,4 +1,6 @@
+import { resolveEffectiveMembers } from "../resolve/resolve-effective-members.js";
 import { openGenericParameters, resolveGenericApplication, } from "../resolve/resolve-generic-application.js";
+const TYPE_REFERENCE_ENTITY = "org.blockml.bml.type.TypeReferenceEntity";
 function diag(code, message, file, loc) {
     return {
         severity: "error",
@@ -15,6 +17,22 @@ function diag(code, message, file, loc) {
 }
 function reportNotAllowed(binding, file, diagnostics) {
     diagnostics.push(diag("BML_GENERICS_DIRECTIVE_NOT_ALLOWED", "bml:generics is only allowed on Block instances", file, binding.source));
+}
+function isTypeReferenceEntityType(expr) {
+    if (!expr) {
+        return false;
+    }
+    if (expr.kind === "grouped") {
+        return isTypeReferenceEntityType(expr.expression);
+    }
+    return expr.kind === "named" && expr.fqn === TYPE_REFERENCE_ENTITY;
+}
+function aggregationIsTypeReferenceEntity(owner, aggregationName, registry) {
+    if (!owner) {
+        return false;
+    }
+    const member = resolveEffectiveMembers(owner, registry).find((m) => m.kind === "aggregation" && m.name === aggregationName);
+    return member?.kind === "aggregation" && isTypeReferenceEntityType(member.type);
 }
 function validateInstanceGenerics(instance, registry, file, diagnostics) {
     const typeDoc = registry.get(instance.typeFqn);
@@ -45,26 +63,36 @@ function validateInstanceGenerics(instance, registry, file, diagnostics) {
         diagnostics.push(diag(item.code, item.message, file, binding.source));
     }
 }
-function walkCompositionNodes(nodes, registry, file, diagnostics) {
+function walkCompositionNodes(nodes, registry, file, diagnostics, typeReferenceEntityAggregation) {
     for (const node of nodes) {
         if (node.kind === "virtualContainer") {
             if (node.generics) {
                 reportNotAllowed(node.generics, file, diagnostics);
             }
-            walkCompositionNodes(node.children, registry, file, diagnostics);
+            walkCompositionNodes(node.children, registry, file, diagnostics, typeReferenceEntityAggregation);
+            continue;
+        }
+        if (typeReferenceEntityAggregation) {
+            if (node.instance.generics) {
+                reportNotAllowed(node.instance.generics, file, diagnostics);
+            }
+            for (const agg of node.instance.aggregationCompositions ?? []) {
+                walkCompositionTemplate(agg.composition, registry, file, diagnostics, true, true);
+            }
             continue;
         }
         validateInstanceGenerics(node.instance, registry, file, diagnostics);
+        const instanceType = registry.get(node.instance.typeFqn)?.block;
         for (const agg of node.instance.aggregationCompositions ?? []) {
-            walkCompositionTemplate(agg.composition, registry, file, diagnostics, true);
+            walkCompositionTemplate(agg.composition, registry, file, diagnostics, true, aggregationIsTypeReferenceEntity(instanceType, agg.aggregationName, registry));
         }
     }
 }
-function walkCompositionTemplate(template, registry, file, diagnostics, wrapperIsIllegalHost) {
+function walkCompositionTemplate(template, registry, file, diagnostics, wrapperIsIllegalHost, typeReferenceEntityAggregation) {
     if (wrapperIsIllegalHost && template.generics) {
         reportNotAllowed(template.generics, file, diagnostics);
     }
-    walkCompositionNodes(template.children, registry, file, diagnostics);
+    walkCompositionNodes(template.children, registry, file, diagnostics, typeReferenceEntityAggregation);
 }
 function walkConstraintInstance(instance, file, diagnostics) {
     if (instance.generics) {
@@ -92,7 +120,7 @@ function walkBlock(block, registry, file, diagnostics) {
         walkMember(member, file, diagnostics);
     }
     for (const template of block.compositions) {
-        walkCompositionTemplate(template, registry, file, diagnostics, true);
+        walkCompositionTemplate(template, registry, file, diagnostics, true, aggregationIsTypeReferenceEntity(block, template.aggregationName, registry));
     }
     for (const instance of block.constraints ?? []) {
         walkConstraintInstance(instance, file, diagnostics);

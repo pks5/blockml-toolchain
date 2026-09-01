@@ -327,4 +327,125 @@ describe("validateGenerics", () => {
     ).toBe(true);
     expect(diagnostics.some((d) => d.code === "BML_OPEN_GENERIC_INSTANCE")).toBe(false);
   });
+
+  it("does not treat TypeReferenceEntity QName sugar as an open generic instance", () => {
+    const registry = registryWithBasics();
+    const catalog = parseBlock(
+      [
+        `<block ${NS}>`,
+        "  <name>Catalog</name>",
+        "  <type>test:Catalog</type>",
+        "  <baseType>core:Block</baseType>",
+        "  <is>catalog</is>",
+        "  <aggregations>",
+        '    <blocks type="type:TypeReferenceEntity(core:Block)[]">',
+        "      <composition>",
+        "        <test:MyBlock />",
+        "      </composition>",
+        "    </blocks>",
+        "  </aggregations>",
+        "</block>",
+      ].join("\n"),
+      "tre-sugar.bml",
+    );
+    registry.register(catalog);
+    const diagnostics = validateGenerics(catalog, registry);
+    expect(diagnostics.map((d) => d.code)).toEqual([]);
+  });
+
+  it("does not treat inherited TypeReferenceEntity catalog fills as instances", () => {
+    const registry = registryWithBasics();
+    registry.register(
+      parseBlock(
+        [
+          `<block ${NS}>`,
+          "  <name>CatalogBase</name>",
+          "  <type>test:CatalogBase</type>",
+          "  <baseType>core:Block</baseType>",
+          "  <is>catalog base</is>",
+          "  <aggregations>",
+          '    <blocks type="type:TypeReferenceEntity(core:Block)[]" />',
+          "  </aggregations>",
+          "</block>",
+        ].join("\n"),
+        "catalog-base.bml",
+      ),
+    );
+    const catalog = parseBlock(
+      [
+        `<block ${NS}>`,
+        "  <name>Catalog</name>",
+        "  <type>test:Catalog</type>",
+        "  <baseType>test:CatalogBase</baseType>",
+        "  <is>catalog</is>",
+        "  <aggregations>",
+        "    <blocks>",
+        "      <composition>",
+        "        <test:MyBlock />",
+        "      </composition>",
+        "    </blocks>",
+        "  </aggregations>",
+        "</block>",
+      ].join("\n"),
+      "catalog-fill.bml",
+    );
+    registry.register(catalog);
+    const diagnostics = validateGenerics(catalog, registry);
+    expect(diagnostics.map((d) => d.code)).toEqual([]);
+  });
+
+  it("reports BML_GENERICS_DIRECTIVE_NOT_ALLOWED on TypeReferenceEntity sugar", () => {
+    const registry = registryWithBasics();
+    const catalog = parseBlock(
+      [
+        `<block ${NS}>`,
+        "  <name>Catalog</name>",
+        "  <type>test:Catalog</type>",
+        "  <baseType>core:Block</baseType>",
+        "  <is>catalog</is>",
+        "  <aggregations>",
+        '    <blocks type="type:TypeReferenceEntity(core:Block)[]">',
+        "      <composition>",
+        '        <test:MyBlock bml:generics="(test:Other)" />',
+        "      </composition>",
+        "    </blocks>",
+        "  </aggregations>",
+        "</block>",
+      ].join("\n"),
+      "tre-generics.bml",
+    );
+    registry.register(catalog);
+    const diagnostics = validateGenerics(catalog, registry);
+    expect(diagnostics.some((d) => d.code === "BML_GENERICS_DIRECTIVE_NOT_ALLOWED")).toBe(
+      true,
+    );
+    expect(diagnostics.some((d) => d.code === "BML_OPEN_GENERIC_INSTANCE")).toBe(false);
+  });
+
+  it("does not treat instance-fill TypeReferenceEntity sugar as an open generic instance", () => {
+    const registry = registryWithBasics();
+    registry.register(
+      parseBlock(
+        [
+          `<block ${NS}>`,
+          "  <name>Catalog</name>",
+          "  <type>test:Catalog</type>",
+          "  <baseType>core:Block</baseType>",
+          "  <is>catalog</is>",
+          "  <aggregations>",
+          '    <blocks type="type:TypeReferenceEntity(core:Block)[]" />',
+          "  </aggregations>",
+          "</block>",
+        ].join("\n"),
+        "catalog-type.bml",
+      ),
+    );
+    const host = hostWithChild(
+      "<test:Catalog><blocks><test:MyBlock /></blocks></test:Catalog>",
+      "tre-instance-fill.bml",
+    );
+    registry.register(host);
+    const diagnostics = validateGenerics(host, registry);
+    expect(diagnostics.map((d) => d.code)).toEqual([]);
+  });
 });
