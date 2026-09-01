@@ -52,7 +52,9 @@
   <aggregations>
     <stages override="true">
       <composition>
-        <workflow:Stage name="Create Poem" status="Pending">
+        <workflow:Stage name="Create Poem" status="Running">
+          <startedAt>2026-09-01T23:49:44</startedAt>
+          <baseCommit>99b98d835c263586feee38be7564f0b6c9cf5def</baseCommit>
           <task>
             <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.NextPoem.bml that contains a random poem in german about a tree and a mushroom. For each execution create a new poem." />
           </task>
