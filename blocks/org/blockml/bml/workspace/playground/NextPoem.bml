@@ -13,33 +13,33 @@
   <name>NextPoem</name>
   <type>playground:NextPoem</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, written in Spanish, about a tree and a mushroom</is>
 
   <documentation>
-    Am Hang des Waldes wächst die Eiche alt,
-    ihr Astwerk wiegt sich sanft im Windgewalt'.
-    Die Wurzeln greifen tief ins dunkle Moos,
-    dort ruht sie fest, geduldig, still und groß.
+    En la ladera del bosque crece el viejo roble,
+    su ramaje se mece suave en el vendaval.
+    Las raíces se hunden hondo en el musgo oscuro,
+    allí descansa firme, paciente, quieto y grande.
 
-    Zu ihren Füßen, wo der Schatten wohnt,
-    ein kleiner Pilz die feuchte Erde krönt.
-    Sein Hut ist braun, sein Stiel ist blass und schmal,
-    er kam ans Licht zum allerersten Mal.
+    A sus pies, donde habita la sombra,
+    una pequeña seta corona la tierra húmeda.
+    Su sombrero es pardo, su tallo pálido y fino,
+    salió a la luz por primera vez.
 
-    "Hab keine Furcht", so raunt der Baum ihm zu,
-    "ich schirme dich vor Wetter, schlaf in Ruh.
-    Mein Blätterdach fängt jeden Tropfen ein,
-    so kannst du sorglos hier geborgen sein."
+    "No tengas miedo", le susurra el árbol,
+    "te protejo del mal tiempo, duerme en paz.
+    Mi techo de hojas atrapa cada gota,
+    así puedes estar aquí resguardado y sin cuidado."
 
-    Und als der Morgen grau am Himmel stand,
-    hat jeder seinen Platz im Wald erkannt:
-    die Eiche hoch, der Pilz im kühlen Grün,
-    zwei Freunde, die im selben Walde blühn.
+    Y cuando la mañana gris se alzó en el cielo,
+    cada uno reconoció su lugar en el bosque:
+    el roble en lo alto, la seta en el verde fresco,
+    dos amigos que florecen en el mismo bosque.
   </documentation>
 
   <properties>
     <title>
-      <value>Die Eiche und der Pilz</value>
+      <value>El roble y la seta</value>
     </title>
     <author>
       <value>John Doe</value>
