@@ -13,33 +13,33 @@
   <name>PoemNew</name>
   <type>playground:PoemNew</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, translated into Russian from German, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
 
   <documentation>
-    На кромке леса бук стоит,
-    в зелёный час одет на вид.
-    Кора груба, вершина — ширь,
-    он тихо дремлет, зная мир.
+    Die Birke wiegt im Abendwind,
+    ihr weißes Kleid ist zart und lind.
+    Die Blätter flüstern, hell und fein,
+    ein Lied aus Silber, Luft und Schein.
 
-    У ног его, и мал, и смел,
-    за ночь грибок в траве поспел.
-    Он в красной шляпке, тонконог,
-    цветёт лишь раз — короткий срок.
+    Im Moos, wo kaum ein Sonnenstrahl,
+    wächst still ein Pilz zum ersten Mal.
+    Sein Hütchen braun, sein Stiel so bleich,
+    er steht allein im Schattenreich.
 
-    Бук говорит: «Останься здесь,
-    холодный ветер бродит весь.
-    Я задержу и дождь, и снег,
-    и рост не будет горек, нет.»
+    „Sei still", so raunt die Birke sacht,
+    „ich hüte dich durch Wind und Nacht.
+    Mein Laub fängt Tau und Regen ein,
+    so darfst du ohne Sorge sein."
 
-    Так в сером утре мокнут двое,
-    гигант и карлик под росою.
-    Один высок, другой — у ног,
-    но лес обоим — общий кров.
+    Und als der Morgen grau erwacht,
+    hat jeder seinen Platz bedacht:
+    die Birke hoch, der Pilz im Grün —
+    zwei Freunde, die im Walde blühn.
   </documentation>
 
   <properties>
     <title>
-      <value>В тени бука</value>
+      <value>Die Birke und der Pilz</value>
     </title>
     <author>
       <value>John Doe</value>
