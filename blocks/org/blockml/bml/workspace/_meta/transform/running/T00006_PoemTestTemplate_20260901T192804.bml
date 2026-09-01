@@ -61,7 +61,9 @@
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/PoemNew.bml" />
           </changedFiles>
         </workflow:Stage>
-        <workflow:Stage name="Translate Poem" status="Pending">
+        <workflow:Stage name="Translate Poem" status="Running">
+          <startedAt>2026-09-01T19:28:56</startedAt>
+          <baseCommit>77e1665ae606ce4d872d8cb9c4c2586b09f8a857</baseCommit>
           <task>
             <workflow:InstructionTask instructions="Translate the poem in org.blockml.bml.workspace.playground.PoemNew.bml to russian." />
           </task>
