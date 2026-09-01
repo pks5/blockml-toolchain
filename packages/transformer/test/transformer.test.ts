@@ -152,6 +152,7 @@ describe("Transformer lifecycle", () => {
     expect(existsSync(succeededPath)).toBe(true);
     const succeeded = readFileSync(succeededPath, "utf8");
     expect(succeeded).toContain(result.executionId);
+    expect(succeeded).toMatch(/<executionId[^>]*type="type:UUID"/);
     expect(succeeded).toContain("<value>1</value>");
     expect(succeeded).toContain(formatDateTimeProperty(FIXED_NOW));
     expect(succeeded).toContain("workflow:InstructionTask");

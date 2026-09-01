@@ -33,7 +33,7 @@
     <template override="true" type="type:Boolean">
       <value>false</value>
     </template>
-    <executionId override="true" type="type:Text">
+    <executionId override="true" type="type:UUID">
       <value>cf88c55b-2c5d-4725-b39e-856238c904bd</value>
     </executionId>
     <sequence override="true" type="type:Integer">

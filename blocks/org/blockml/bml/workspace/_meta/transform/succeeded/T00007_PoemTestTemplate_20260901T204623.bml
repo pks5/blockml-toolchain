@@ -49,7 +49,7 @@
     <parameters override="true" type="Parameters">
       <value>{author:"John Doe"}</value>
     </parameters>
-    <executionId override="true" type="type:Text">
+    <executionId override="true" type="type:UUID">
       <value>86ce1c81-f187-43fd-a0af-8c400be58e85</value>
     </executionId>
     <sequence override="true" type="type:Integer">

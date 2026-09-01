@@ -36,7 +36,7 @@
     <parameters override="true" type="succeeded:T00008_PoemTestTemplate_20260901T205956.Parameters">
       <value>{author:"John Doe",language:"German"}</value>
     </parameters>
-    <executionId override="true" type="type:Text">
+    <executionId override="true" type="type:UUID">
       <value>8ea4aa4c-140c-4a7a-b8cf-d85657c8e788</value>
     </executionId>
     <sequence override="true" type="type:Integer">

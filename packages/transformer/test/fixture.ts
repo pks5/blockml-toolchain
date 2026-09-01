@@ -83,7 +83,7 @@ export function pendingExecutionXml(opts: {
     : "";
   const executionIdXml = opts.executionId
     ? [
-        `    <executionId override="true">`,
+        `    <executionId override="true" type="org.blockml.bml.type.UUID">`,
         `      <value>${opts.executionId}</value>`,
         `    </executionId>`,
       ].join("\n")
@@ -190,7 +190,7 @@ export function historyExecutionXml(opts: {
     `  <baseType>workflow:ModelTransformation</baseType>`,
     `  <is>history execution fixture</is>`,
     `  <properties>`,
-    `    <executionId override="true"><value>${opts.executionId}</value></executionId>`,
+    `    <executionId override="true" type="org.blockml.bml.type.UUID"><value>${opts.executionId}</value></executionId>`,
     `    <sequence override="true"><value>${opts.sequence}</value></sequence>`,
     `  </properties>`,
     `  <aggregations>`,

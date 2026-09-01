@@ -30,7 +30,7 @@
     <createdAt override="true" type="type:DateTime">
       <value>2026-08-30T01:40:20</value>
     </createdAt>
-    <executionId override="true" type="type:Text">
+    <executionId override="true" type="type:UUID">
       <value>a172de3d-c399-45b4-99f4-d1df2a2ecf6d</value>
     </executionId>
     <sequence override="true" type="type:Integer">

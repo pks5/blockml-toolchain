@@ -19,6 +19,7 @@ import {
   MODEL_TRANSFORMATION_FQN,
   STAGE_FQN,
   TEXT_TYPE_FQN,
+  UUID_TYPE_FQN,
   type ExecutionStatusId,
 } from "./constants.js";
 
@@ -375,7 +376,7 @@ export function setSequence(block: BlockDefinition, sequence: number): void {
 }
 
 export function setExecutionId(block: BlockDefinition, executionId: string): void {
-  setOverrideProperty(block, "executionId", TEXT_TYPE_FQN, executionId);
+  setOverrideProperty(block, "executionId", UUID_TYPE_FQN, executionId);
 }
 
 export function setStatus(block: BlockDefinition, status: ExecutionStatusId): void {

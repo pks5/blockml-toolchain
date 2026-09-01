@@ -39,7 +39,7 @@
         Default: deterministic. Validate the pending contract (status=
         Pending, stages with a Task each, createdAt; no executionId or
         start/finish fields on the ModelTransformation), require a clean
-        Git worktree, assign a unique executionId (random UUID), sequence,
+        Git worktree, assign a unique executionId (type:UUID), sequence,
         startedAt, and baseCommit (HEAD),
         set status=Running, relocate to _meta.transform.running, then commit.
         When template is true, leave the pending Block in place, copy it
@@ -102,6 +102,7 @@
     <see type="workflow:Stage" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="type:EmptyStruct" relation="SeeAlso" />
+    <see type="type:UUID" relation="SeeAlso" />
   </references>
 
 </block>
