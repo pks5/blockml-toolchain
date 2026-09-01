@@ -13,33 +13,33 @@
   <name>PoemNew</name>
   <type>playground:PoemNew</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, translated into Russian from German, about a tree and a mushroom</is>
 
   <documentation>
-    Am Waldrand steht die Buche breit,
-    sie trägt ein Kleid aus grüner Zeit.
-    Ihr Stamm ist rau, ihr Wipfel weit,
-    sie wiegt sich sacht und ohne Streit.
+    На кромке леса бук стоит,
+    в зелёный час одет на вид.
+    Кора груба, вершина — ширь,
+    он тихо дремлет, зная мир.
 
-    Zu ihren Füßen, klein und kühn,
-    sprießt über Nacht ein Pilz im Grün.
-    Sein Hut ist rot, sein Fuß ist schmal,
-    er blüht nur einmal, dieses Mal.
+    У ног его, и мал, и смел,
+    за ночь грибок в траве поспел.
+    Он в красной шляпке, тонконог,
+    цветёт лишь раз — короткий срок.
 
-    Die Buche spricht: „Bleib hier bei mir,
-    der kalte Wind, er kommt zu dir.
-    Ich halte Regen, Frost und Schnee,
-    dann tut das Wachsen dir nicht weh."
+    Бук говорит: «Останься здесь,
+    холодный ветер бродит весь.
+    Я задержу и дождь, и снег,
+    и рост не будет горек, нет.»
 
-    So stehen sie im Morgengrau,
-    der Riese und der Zwerg im Tau.
-    Der eine hoch, der andre nah —
-    und beide wissen: Wald ist da.
+    Так в сером утре мокнут двое,
+    гигант и карлик под росою.
+    Один высок, другой — у ног,
+    но лес обоим — общий кров.
   </documentation>
 
   <properties>
     <title>
-      <value>Im Schatten der Buche</value>
+      <value>В тени бука</value>
     </title>
     <author>
       <value>John Doe</value>
