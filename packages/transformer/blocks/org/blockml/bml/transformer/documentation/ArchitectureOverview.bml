@@ -41,8 +41,10 @@
         Git worktree, assign a unique executionId (random UUID), sequence,
         startedAt, and baseCommit (HEAD),
         set status=Running, relocate to _meta.transform.running, then commit.
-        When template is true, leave the pending Block in place, copy it,
-        set template=false on the copy, and relocate that copy instead.
+        When template is true, leave the pending Block in place, copy it
+        (including SubBlocks / bound T), set template=false on the copy,
+        rewrite local type FQNs onto the copy, and relocate that copy
+        instead.
         Merge CLI --parameters JSON over pending parameters, check bound T
         (default EmptyStruct), and write the result onto the running copy.
         If the contract is violated or the worktree is dirty, do not start.

@@ -41,15 +41,10 @@ export function finalizeExecution(
   setStatus(forked.block, succeeded ? "Succeeded" : "Failed");
 
   const runningFilePath = forked.source.filePath;
-  const retainPending =
-    forked.source.namespaceBindings?.pending !== undefined
-      ? (["pending"] as const)
-      : undefined;
   const terminalFqn = applyExecutionIdentity(forked, {
     libraryFqn: started.libraryFqn,
     stage,
     name: started.generatedName,
-    ...(retainPending ? { retainStages: retainPending } : {}),
   });
   rewriteParameterTypeFqns(forked.block, started.runningFqn, terminalFqn);
 

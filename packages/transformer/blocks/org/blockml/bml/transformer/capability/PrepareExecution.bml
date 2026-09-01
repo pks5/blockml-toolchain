@@ -29,8 +29,9 @@
     3. Assign a unique `executionId` (random UUID), `sequence`, `startedAt`,
        and `baseCommit` (current HEAD), set `status=Running`.
     4. Relocate the Block to `_meta.transform.running`. When `template` is
-       true, leave the pending Block in place, copy it, set
-       `template=false` on the copy, and relocate that copy instead.
+       true, leave the pending Block in place, copy it (including
+       SubBlocks / bound `T`), set `template=false` on the copy, rewrite
+       local type FQNs onto the copy, and relocate that copy instead.
     5. Deep-merge CLI `--parameters` JSON over pending `parameters`, check
        the bound generic `T`, and write the result onto the running copy.
        Omitted CLI parameters are `{}`. Bound `T` defaults to

@@ -348,7 +348,7 @@ describe("Transformer lifecycle", () => {
     expect(succeeded).not.toContain("_meta.transform.pending.");
   });
 
-  it("keeps a template parameter schema FQN on the pending Block", async () => {
+  it("copies the parameter schema onto a template execution", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
@@ -369,14 +369,22 @@ describe("Transformer lifecycle", () => {
     expect(
       existsSync(join(TMP, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml")),
     ).toBe(true);
+    const pending = readFileSync(
+      join(TMP, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml"),
+      "utf8",
+    );
+    expect(pending).toContain("<name>JokeTest</name>");
+    expect(pending).toContain('{"language":"en"}');
     const succeeded = readFileSync(
       join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
       "utf8",
     );
     expect(succeeded).toContain("de");
-    expect(succeeded).toContain("pending:JokeTest.Parameters");
+    expect(succeeded).toMatch(/<name>\s*Parameters\s*<\/name>/);
+    expect(succeeded).toContain(`${generated}.Parameters`);
     expect(succeeded).toContain("<value>false</value>");
-    expect(succeeded).not.toMatch(/<name>\s*Parameters\s*<\/name>/);
+    expect(succeeded).not.toContain("pending:JokeTest");
+    expect(succeeded).not.toContain("_meta.transform.pending.");
   });
 
   it("relocates a failed agent execution to failed with an exception", async () => {

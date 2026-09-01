@@ -11,6 +11,5 @@ export declare function pendingParametersObject(block: BlockDefinition): Record<
 export declare function resolveParametersTypeFqn(block: BlockDefinition): string;
 export declare function assertParametersCompatible(value: Record<string, unknown>, typeFqn: string, registry: TypeRegistry, path?: string): void;
 export declare function applyExecutionParameters(block: BlockDefinition, registry: TypeRegistry, cliParameters?: Record<string, unknown>): Record<string, unknown>;
-export declare function dropNestedTypesUnder(block: BlockDefinition, parentFqn: string): void;
 export declare function rewriteParameterTypeFqns(block: BlockDefinition, fromFqn: string, toFqn: string): void;
 //# sourceMappingURL=parameters.d.ts.map

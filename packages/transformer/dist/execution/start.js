@@ -1,7 +1,7 @@
 import { forkBom } from "@blockml/framework";
 import { allocateUniqueExecutionId } from "./execution-id.js";
 import { formatDateTimeProperty, generateExecutionName } from "./lifecycle.js";
-import { applyExecutionParameters, dropNestedTypesUnder, rewriteParameterTypeFqns, } from "./parameters.js";
+import { applyExecutionParameters, rewriteParameterTypeFqns } from "./parameters.js";
 import { isTemplate, setBaseCommit, setExecutionId, setSequence, setStartedAt, setStatus, setTemplate, } from "./properties.js";
 import { applyExecutionIdentity, persistDocument, removeFile, rewriteInboundReferences, } from "./relocate.js";
 import { SequenceAllocator } from "./sequence.js";
@@ -28,14 +28,8 @@ export function startExecution(resolved, now, workspaceRoot, allocator = new Seq
         libraryFqn: resolved.libraryFqn,
         stage: "running",
         name: generatedName,
-        ...(keepPending ? { retainStages: ["pending"] } : {}),
     });
-    if (keepPending) {
-        dropNestedTypesUnder(forked.block, resolved.fqn);
-    }
-    else {
-        rewriteParameterTypeFqns(forked.block, resolved.fqn, runningFqn);
-    }
+    rewriteParameterTypeFqns(forked.block, resolved.fqn, runningFqn);
     if (!keepPending) {
         rewriteInboundReferences(resolved.registry, resolved.fqn, runningFqn, pendingFilePath);
     }

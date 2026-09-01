@@ -149,9 +149,6 @@ export function applyExecutionParameters(block, registry, cliParameters = {}) {
     setOverrideProperty(block, "parameters", typeFqn, merged);
     return merged;
 }
-export function dropNestedTypesUnder(block, parentFqn) {
-    block.subBlocks = block.subBlocks.filter((sub) => sub.type !== parentFqn && !sub.type.startsWith(`${parentFqn}.`));
-}
 export function rewriteParameterTypeFqns(block, fromFqn, toFqn) {
     const rewrite = (value) => value === fromFqn || value.startsWith(`${fromFqn}.`)
         ? `${toFqn}${value.slice(fromFqn.length)}`

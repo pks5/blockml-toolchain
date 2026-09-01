@@ -5,7 +5,6 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:pending="org.blockml.bml.workspace._meta.transform.pending"
   xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
@@ -16,11 +15,24 @@
     succeeded:T00007_PoemTestTemplate_20260901T204623
   </type>
   <baseType>
-    workflow:ModelTransformation(pending:PoemTestTemplate.Parameters)
+    workflow:ModelTransformation(Parameters)
   </baseType>
   <is>
     A pending ModelTransformation that creates a playground Poem block
   </is>
+
+  <subBlocks>
+    <block>
+      <name>Parameters</name>
+      <baseType>type:StructType</baseType>
+      <is>Run parameters for this poem transformation</is>
+      <properties>
+        <author type="type:Text" />
+        <subject type="type:Text" />
+        <language type="type:Text" />
+      </properties>
+    </block>
+  </subBlocks>
   <properties>
     <description override="true">
       <value>A transformation that creates a playground Poem block</value>
@@ -34,7 +46,7 @@
     <template override="true" type="type:Boolean">
       <value>false</value>
     </template>
-    <parameters override="true" type="pending:PoemTestTemplate.Parameters">
+    <parameters override="true" type="Parameters">
       <value>{author:"John Doe"}</value>
     </parameters>
     <executionId override="true" type="type:Text">

@@ -23,7 +23,10 @@
     * `template` — when true, this Block is a reusable template. Prepare
       leaves it in `_meta.transform.pending`, copies it, sets
       `template=false` on the copy, and relocates that copy to running.
-      Default false: the pending Block is relocated and removed.
+      The copy is a snapshot: SubBlocks (including bound `T`) are copied
+      and rewritten onto the copy, so later template edits cannot change
+      recorded executions. Default false: the pending Block is relocated
+      and removed.
     * `parameters` — run values of generic `T` (`type:StructType`, default
       `workflow:EmptyStruct`). Bind `T` with
       `baseType=workflow:ModelTransformation(Parameters)` and a same-Block
@@ -61,8 +64,9 @@
     <template type="type:Boolean">
       <documentation>
         When true, this ModelTransformation is a reusable template. Prepare
-        leaves the pending Block in place, copies it, sets template=false on
-        the copy, and relocates that copy to running. Default false.
+        leaves the pending Block in place, copies it including SubBlocks,
+        sets template=false on the copy, rewrites local type FQNs onto the
+        copy, and relocates that copy to running. Default false.
       </documentation>
       <value>false</value>
     </template>

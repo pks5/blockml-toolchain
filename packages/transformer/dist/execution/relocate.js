@@ -11,20 +11,16 @@ export function applyExecutionIdentity(document, identity) {
     const previousPath = document.source.filePath;
     const nextPath = executionFilePath(previousPath, identity.libraryFqn, identity.stage, identity.name);
     const nextPackage = lifecyclePackageFqn(identity.libraryFqn, identity.stage);
-    const retain = new Set(identity.retainStages ?? []);
     document.block.name = identity.name;
     document.block.type = nextFqn;
     document.source.filePath = nextPath;
     const bindings = { ...(document.source.namespaceBindings ?? {}) };
     for (const stage of LIFECYCLE_STAGES) {
-        if (!retain.has(stage)) {
-            delete bindings[stage];
-        }
+        delete bindings[stage];
     }
     for (const [prefix, uri] of Object.entries(bindings)) {
         for (const stage of LIFECYCLE_STAGES) {
-            if (!retain.has(stage) &&
-                uri === lifecyclePackageFqn(identity.libraryFqn, stage)) {
+            if (uri === lifecyclePackageFqn(identity.libraryFqn, stage)) {
                 delete bindings[prefix];
             }
         }

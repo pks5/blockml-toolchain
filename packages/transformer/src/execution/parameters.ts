@@ -215,12 +215,6 @@ export function applyExecutionParameters(
   return merged;
 }
 
-export function dropNestedTypesUnder(block: BlockDefinition, parentFqn: string): void {
-  block.subBlocks = block.subBlocks.filter(
-    (sub) => sub.type !== parentFqn && !sub.type.startsWith(`${parentFqn}.`),
-  );
-}
-
 export function rewriteParameterTypeFqns(
   block: BlockDefinition,
   fromFqn: string,

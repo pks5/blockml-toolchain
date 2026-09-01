@@ -1,11 +1,7 @@
 import { forkBom } from "@blockml/framework";
 import { allocateUniqueExecutionId } from "./execution-id.js";
 import { formatDateTimeProperty, generateExecutionName } from "./lifecycle.js";
-import {
-  applyExecutionParameters,
-  dropNestedTypesUnder,
-  rewriteParameterTypeFqns,
-} from "./parameters.js";
+import { applyExecutionParameters, rewriteParameterTypeFqns } from "./parameters.js";
 import {
   isTemplate,
   setBaseCommit,
@@ -69,13 +65,8 @@ export function startExecution(
     libraryFqn: resolved.libraryFqn,
     stage: "running",
     name: generatedName,
-    ...(keepPending ? { retainStages: ["pending"] as const } : {}),
   });
-  if (keepPending) {
-    dropNestedTypesUnder(forked.block, resolved.fqn);
-  } else {
-    rewriteParameterTypeFqns(forked.block, resolved.fqn, runningFqn);
-  }
+  rewriteParameterTypeFqns(forked.block, resolved.fqn, runningFqn);
 
   if (!keepPending) {
     rewriteInboundReferences(
