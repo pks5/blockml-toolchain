@@ -5,14 +5,14 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:pending="org.blockml.bml.workspace._meta.transform.pending"
+  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
   <name>
-    PoemTest
+    T00005_PoemTest_20260901T191930
   </name>
   <type>
-    pending:PoemTest
+    running:T00005_PoemTest_20260901T191930
   </type>
   <baseType>
     workflow:ModelTransformation
@@ -25,7 +25,7 @@
       <value>A transformation that creates a playground Poem block</value>
     </description>
     <status override="true" type="workflow:ExecutionStatus">
-      <value>Pending</value>
+      <value>Running</value>
     </status>
     <createdAt override="true" type="type:DateTime">
       <value>2026-08-30T01:40:20</value>
@@ -33,6 +33,18 @@
     <template override="true" type="type:Boolean">
       <value>true</value>
     </template>
+    <executionId override="true" type="type:Text">
+      <value>5e8ecaf5-dc90-4308-993d-639bf965d643</value>
+    </executionId>
+    <sequence override="true" type="type:Integer">
+      <value>5</value>
+    </sequence>
+    <startedAt override="true" type="type:DateTime">
+      <value>2026-09-01T19:19:30</value>
+    </startedAt>
+    <baseCommit override="true" type="type:Text">
+      <value>ce054ff9ba3b883b64d431bf604d08cfb83bbf95</value>
+    </baseCommit>
   </properties>
   <aggregations>
     <stages override="true">
