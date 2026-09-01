@@ -24,6 +24,8 @@ export declare function getPropertyLiteral(block: BlockDefinition, name: string)
 export declare function getExecutionId(block: BlockDefinition): string | undefined;
 export declare function getSequence(block: BlockDefinition): number | undefined;
 export declare function getStatus(block: BlockDefinition): string | undefined;
+export declare function isTemplate(block: BlockDefinition): boolean;
+export declare function setTemplate(block: BlockDefinition, template: boolean): void;
 export declare function setOverrideProperty(block: BlockDefinition, name: string, typeFqn: string, value: unknown): void;
 export declare function setOverridePropertyList(block: BlockDefinition, name: string, typeFqn: string, values: readonly unknown[]): void;
 export declare function setSequence(block: BlockDefinition, sequence: number): void;

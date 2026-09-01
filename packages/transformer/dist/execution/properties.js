@@ -1,5 +1,5 @@
 import { collectBaseTypeChain } from "@blockml/framework";
-import { DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, MODEL_TRANSFORMATION_FQN, STAGE_FQN, TEXT_TYPE_FQN, } from "./constants.js";
+import { BOOLEAN_TYPE_FQN, DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, MODEL_TRANSFORMATION_FQN, STAGE_FQN, TEXT_TYPE_FQN, } from "./constants.js";
 export function isModelTransformation(block, registry) {
     if (block.type === MODEL_TRANSFORMATION_FQN || block.baseType === MODEL_TRANSFORMATION_FQN) {
         return true;
@@ -175,6 +175,16 @@ export function getStatus(block) {
     }
     const separator = value.lastIndexOf("::");
     return separator >= 0 ? value.slice(separator + 2) : value;
+}
+export function isTemplate(block) {
+    const value = getPropertyLiteral(block, "template");
+    if (value === true) {
+        return true;
+    }
+    return typeof value === "string" && value.toLowerCase() === "true";
+}
+export function setTemplate(block, template) {
+    setOverrideProperty(block, "template", BOOLEAN_TYPE_FQN, template);
 }
 export function setOverrideProperty(block, name, typeFqn, value) {
     const literal = {
