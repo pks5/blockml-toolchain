@@ -13,28 +13,33 @@
   <name>PoemNew</name>
   <type>playground:PoemNew</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, translated into Japanese</is>
+  <is>A random poem produced by a workspace transform execution, written in German about a tree and a mushroom</is>
 
   <documentation>
-    夜明けの最初の光のもと、冷えた野が目を覚ます、
-    重く白んでゆく雲の下、田園は麻痺したように静まる。
-    鴉が大気を裂いて鳴き、影が通りを渡ってゆき、
-    川はそれ自身、密やかなささやきとなって流れる。
+    Am Waldrand steht ein alter Baum,
+    die Wurzeln tief im Erdenraum.
+    Er trägt die Jahre wie ein Kleid,
+    gewoben aus Geduld und Zeit.
 
-    窓は赤く燃え、まるで内に太陽を宿すかのよう、
-    ランプは見守る、そこではもう昔に一日が始まっていた。
-    台所は煙をあげる、喧噪のあいだのささやかな間、
-    やがてその時刻は、自らの渦にさらわれてゆく前に。
+    Zu seinen Füßen, klein und stumm,
+    wächst über Nacht ein Pilz herum.
+    Ein brauner Hut auf schmalem Stiel,
+    er will nicht viel und sagt nicht viel.
 
-    すべてのものの上を、黒い鳥の群れが過ぎてゆく、
-    空をゆっくりと書き記してゆく墨のように。
-    誰ひとり手にすることのない弧を彼らは描き、
-    それでも夕暮れが近づくあいだ、別れの挨拶は残る。
+    Der Baum spricht leise: "Bleib bei mir,
+    der Herbst wird kalt, ich halte dir
+    das raue Wetter von dem Dach."
+    Der Pilz nickt kaum und bleibt doch wach.
+
+    So stehen beide, groß und klein,
+    im ersten grauen Morgenschein.
+    Der eine hoch, der andre nah –
+    und beide wissen: Wald ist da.
   </documentation>
 
   <properties>
     <title>
-      <value>夜明けの最初の光のもと</value>
+      <value>Der Baum und der Pilz</value>
     </title>
     <author>
       <value>John Doe</value>
