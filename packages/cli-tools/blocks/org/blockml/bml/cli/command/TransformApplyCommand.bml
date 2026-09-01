@@ -26,7 +26,7 @@
   <baseType>cli:CliType</baseType>
   <is>blockml transform apply subcommand</is>
 
-  <documentation>blockml transform apply EXECUTION-FQN. The CLI token is apply. The argument is the FQN of a pending ModelTransformation. Delegates to @blockml/transformer.</documentation>
+  <documentation>blockml transform apply EXECUTION-FQN [--verbose] [--parameters JSON]. The CLI token is apply. The argument is the FQN of a pending ModelTransformation. Delegates to @blockml/transformer.</documentation>
   <references>
     <see type="clicommand:TransformCommand" relation="SeeAlso" />
     <see type="clidocumentation:TransformCommand" relation="SeeAlso" />
@@ -34,6 +34,7 @@
   </references>
   <properties>
     <executionFqn type="type:Text"><documentation>FQN of a ModelTransformation in the library _meta.transform.pending package. (required)</documentation></executionFqn>
+    <parameters type="type:Text"><documentation>JSON object of run parameters. Deep-merged over pending parameters. (optional)</documentation></parameters>
     <verbose type="type:Boolean"><documentation>Stream the transformation agent output live. (optional)</documentation></verbose>
   </properties>
 

@@ -24,6 +24,12 @@
       leaves it in `_meta.transform.pending`, copies it, sets
       `template=false` on the copy, and relocates that copy to running.
       Default false: the pending Block is relocated and removed.
+    * `parameters` — run values of generic `T` (`type:StructType`, default
+      `workflow:EmptyStruct`). Bind `T` with
+      `baseType=workflow:ModelTransformation(Parameters)` and a same-Block
+      SubBlock `Parameters`. Prepare deep-merges CLI `--parameters` JSON
+      over pending defaults, checks the bound `T`, and writes the result
+      onto the running copy. Execute does not interpret this property.
     * `status` — lifecycle state (`workflow:ExecutionStatus`). Matches the
       `_meta.transform` package: Pending, Running, Succeeded, Failed.
       `Succeeded` only when every Stage succeeded.
@@ -41,7 +47,12 @@
     <see type="workflow:Stage" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
+    <see type="workflow:EmptyStruct" relation="SeeAlso" />
   </references>
+
+  <genericTypes>
+    <T baseType="type:StructType" defaultType="workflow:EmptyStruct" />
+  </genericTypes>
 
   <properties>
     <description type="type:Text">
@@ -55,6 +66,14 @@
       </documentation>
       <value>false</value>
     </template>
+    <parameters type="T">
+      <documentation>
+        Run parameters of bound T. Default EmptyStruct (empty object).
+        Prepare merges CLI JSON over pending values and writes the result
+        when setting Running. Tasks do not read this; map it later with
+        expressions.
+      </documentation>
+    </parameters>
     <executionId type="type:Text">
       <documentation>Globally unique identifier. Absent while pending; assigned at Running.</documentation>
     </executionId>

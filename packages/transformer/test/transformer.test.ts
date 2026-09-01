@@ -271,6 +271,114 @@ describe("Transformer lifecycle", () => {
     ).toBe(true);
   });
 
+  it("writes empty parameters for the default EmptyStruct binding", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.status).toBe("Succeeded");
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).toContain("EmptyStruct");
+    expect(succeeded).toMatch(/<parameters[\s\S]*<value>\{\}<\/value>/);
+  });
+
+  it("rejects CLI parameters when T is EmptyStruct", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+      }),
+    });
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+      parameters: { language: "de" },
+    });
+    await expect(transformer.run(pendingFqn("JokeTest"))).rejects.toSatisfy(
+      (error: unknown) => {
+        expect(error).toBeInstanceOf(TransformError);
+        expect((error as TransformError).kind).toBe("resolve");
+        expect((error as TransformError).message).toMatch(/Unknown parameter language/);
+        return true;
+      },
+    );
+    expect(
+      existsSync(join(TMP, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml")),
+    ).toBe(true);
+  });
+
+  it("deep-merges CLI parameters over pending defaults for a bound T", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        parameterFields: ["language", "topic"],
+        pendingParameters: '{"topic":"tree"}',
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+      parameters: { language: "de" },
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.status).toBe("Succeeded");
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).toContain("language");
+    expect(succeeded).toContain("de");
+    expect(succeeded).toContain("topic");
+    expect(succeeded).toContain("tree");
+    expect(succeeded).toContain(`${generated}.Parameters`);
+    expect(succeeded).not.toContain("_meta.transform.running.");
+    expect(succeeded).not.toContain("_meta.transform.pending.");
+  });
+
+  it("keeps a template parameter schema FQN on the pending Block", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        template: true,
+        parameterFields: ["language"],
+        pendingParameters: '{"language":"en"}',
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+      parameters: { language: "de" },
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.status).toBe("Succeeded");
+    expect(
+      existsSync(join(TMP, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml")),
+    ).toBe(true);
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).toContain("de");
+    expect(succeeded).toContain("pending:JokeTest.Parameters");
+    expect(succeeded).toContain("<value>false</value>");
+    expect(succeeded).not.toMatch(/<name>\s*Parameters\s*<\/name>/);
+  });
+
   it("relocates a failed agent execution to failed with an exception", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({

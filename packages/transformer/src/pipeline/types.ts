@@ -6,6 +6,7 @@ export interface StageContext {
   workspaceRoot: string;
   now: () => Date;
   onLifecycle?: TransformLifecycleListener;
+  parameters?: Record<string, unknown>;
 }
 
 export interface TransformStage<Input, Output> {

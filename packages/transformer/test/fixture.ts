@@ -75,6 +75,8 @@ export function pendingExecutionXml(opts: {
   extraRefs?: string;
   stageInstructions?: readonly string[];
   template?: boolean;
+  parameterFields?: readonly string[];
+  pendingParameters?: string;
 }): string {
   const refs = opts.extraRefs
     ? `  <references>\n${opts.extraRefs}\n  </references>\n`
@@ -94,6 +96,34 @@ export function pendingExecutionXml(opts: {
           `    </template>`,
         ].join("\n")
       : "";
+  const pendingParametersXml = opts.pendingParameters
+    ? [
+        `    <parameters override="true">`,
+        `      <value>${opts.pendingParameters}</value>`,
+        `    </parameters>`,
+      ].join("\n")
+    : "";
+  const parameterFields = opts.parameterFields ?? [];
+  const bindParameters = parameterFields.length > 0;
+  const baseType = bindParameters
+    ? "workflow:ModelTransformation(Parameters)"
+    : "workflow:ModelTransformation";
+  const subBlocks = bindParameters
+    ? [
+        `  <subBlocks>`,
+        `    <block>`,
+        `      <name>Parameters</name>`,
+        `      <baseType>type:StructType</baseType>`,
+        `      <is>parameters for this transformation</is>`,
+        `      <properties>`,
+        ...parameterFields.map(
+          (field) => `        <${field} type="type:Text" />`,
+        ),
+        `      </properties>`,
+        `    </block>`,
+        `  </subBlocks>`,
+      ].join("\n")
+    : "";
   const instructions = opts.stageInstructions ?? ["Do the task."];
   const stages = instructions
     .map(
@@ -116,12 +146,14 @@ export function pendingExecutionXml(opts: {
     ` xmlns:type="org.blockml.bml.type">`,
     `  <name>${opts.name}</name>`,
     `  <type>pending:${opts.name}</type>`,
-    `  <baseType>workflow:ModelTransformation</baseType>`,
+    `  <baseType>${baseType}</baseType>`,
     `  <is>pending execution fixture</is>`,
     refs,
+    subBlocks,
     `  <properties>`,
     executionIdXml,
     templateXml,
+    pendingParametersXml,
     `    <status override="true" type="org.blockml.bml.transformer.workflow.ExecutionStatus">`,
     `      <value>Pending</value>`,
     `    </status>`,

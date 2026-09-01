@@ -56,3 +56,67 @@ describe("baseType type expression", () => {
     }
   });
 });
+
+describe("baseType nested SubBlock type argument", () => {
+  it("resolves an unqualified SubBlock name in a generic baseType", () => {
+    const source = [
+      '<block xmlns="http://blockml.org/bml"',
+      ' xmlns:core="org.blockml.bml.core"',
+      ' xmlns:type="org.blockml.bml.type"',
+      ' xmlns:test="com.blockml.test.basetype">',
+      "  <name>Host</name>",
+      "  <type>test:Host</type>",
+      "  <baseType>core:Block</baseType>",
+      "  <is>host with nested Parameters</is>",
+      "  <genericTypes>",
+      '    <T baseType="type:StructType" />',
+      "  </genericTypes>",
+      "  <subBlocks>",
+      "    <block>",
+      "      <name>Parameters</name>",
+      "      <baseType>type:StructType</baseType>",
+      "      <is>nested struct</is>",
+      "    </block>",
+      "  </subBlocks>",
+      "</block>",
+      "",
+    ].join("\n");
+    const host = parse(source, { filePath: "host.bml" });
+    expect(host.success, JSON.stringify(host.diagnostics)).toBe(true);
+
+    const derived = [
+      '<block xmlns="http://blockml.org/bml"',
+      ' xmlns:core="org.blockml.bml.core"',
+      ' xmlns:type="org.blockml.bml.type"',
+      ' xmlns:test="com.blockml.test.basetype">',
+      "  <name>Run</name>",
+      "  <type>test:Run</type>",
+      "  <baseType>test:Host(Parameters)</baseType>",
+      "  <is>binds T to nested Parameters</is>",
+      "  <subBlocks>",
+      "    <block>",
+      "      <name>Parameters</name>",
+      "      <baseType>type:StructType</baseType>",
+      "      <is>nested struct</is>",
+      "      <properties>",
+      '        <language type="type:Text" />',
+      "      </properties>",
+      "    </block>",
+      "  </subBlocks>",
+      "</block>",
+      "",
+    ].join("\n");
+    const result = parse(derived, { filePath: "run.bml" });
+    expect(result.success, JSON.stringify(result.diagnostics)).toBe(true);
+    const expr = result.document!.block.baseTypeExpression;
+    expect(expr?.kind).toBe("named");
+    if (expr?.kind !== "named") {
+      return;
+    }
+    expect(expr.fqn).toBe("com.blockml.test.basetype.Host");
+    expect(expr.typeArguments?.[0]).toMatchObject({
+      kind: "named",
+      fqn: "com.blockml.test.basetype.Run.Parameters",
+    });
+  });
+});

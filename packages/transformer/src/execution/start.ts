@@ -2,6 +2,11 @@ import { forkBom } from "@blockml/framework";
 import { allocateUniqueExecutionId } from "./execution-id.js";
 import { formatDateTimeProperty, generateExecutionName } from "./lifecycle.js";
 import {
+  applyExecutionParameters,
+  dropNestedTypesUnder,
+  rewriteParameterTypeFqns,
+} from "./parameters.js";
+import {
   isTemplate,
   setBaseCommit,
   setExecutionId,
@@ -39,6 +44,7 @@ export function startExecution(
   now: Date,
   workspaceRoot: string,
   allocator = new SequenceAllocator(),
+  cliParameters: Record<string, unknown> = {},
 ): StartedExecution {
   const baseCommit = assertWorktreeClean(workspaceRoot);
   const sequence = allocator.nextSequence(resolved.libraryFqn, resolved.registry);
@@ -52,6 +58,7 @@ export function startExecution(
   if (keepPending) {
     setTemplate(forked.block, false);
   }
+  applyExecutionParameters(forked.block, resolved.registry, cliParameters);
   setExecutionId(forked.block, executionId);
   setSequence(forked.block, sequence);
   setStatus(forked.block, "Running");
@@ -62,7 +69,13 @@ export function startExecution(
     libraryFqn: resolved.libraryFqn,
     stage: "running",
     name: generatedName,
+    ...(keepPending ? { retainStages: ["pending"] as const } : {}),
   });
+  if (keepPending) {
+    dropNestedTypesUnder(forked.block, resolved.fqn);
+  } else {
+    rewriteParameterTypeFqns(forked.block, resolved.fqn, runningFqn);
+  }
 
   if (!keepPending) {
     rewriteInboundReferences(

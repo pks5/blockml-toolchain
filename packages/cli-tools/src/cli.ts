@@ -47,7 +47,7 @@ const USAGE =
   "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b] [--verbose]\n" +
   "       blockml search <query> [--json] [--limit n] [--src dir] [--libraries a,b]\n" +
   "       blockml search index [--force] [--src dir] [--libraries a,b]\n" +
-  "       blockml transform apply <execution-fqn> [--verbose]";
+  "       blockml transform apply <execution-fqn> [--verbose] [--parameters json]";
 
 function workspaceRoot(from: string): string {
   let dir = resolve(from);
@@ -81,6 +81,7 @@ export interface ParsedArgs {
   query?: string;
   index?: boolean;
   executionFqn?: string;
+  parametersJson?: string;
 }
 
 export interface CliRunOptions {
@@ -145,6 +146,9 @@ export function parseArgs(argv: string[]): ParsedArgs {
           result.limit = Math.floor(n);
         }
       }
+    } else if (flag === "--parameters") {
+      const value = args.shift();
+      result.parametersJson = value ?? "";
     } else if (flag && !flag.startsWith("-")) {
       if (result.command === "validate") {
         if (!result.file) {
@@ -877,6 +881,7 @@ async function executeCli(
         agent,
         reflectAgent,
         options.onOutputLine,
+        parsed.parametersJson,
       );
       return { code, lines };
     }

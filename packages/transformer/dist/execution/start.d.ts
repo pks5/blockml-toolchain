@@ -13,5 +13,5 @@ export interface StartedExecution {
     runningFilePath: string;
     pendingFilePath: string;
 }
-export declare function startExecution(resolved: ResolvedExecution, now: Date, workspaceRoot: string, allocator?: SequenceAllocator): StartedExecution;
+export declare function startExecution(resolved: ResolvedExecution, now: Date, workspaceRoot: string, allocator?: SequenceAllocator, cliParameters?: Record<string, unknown>): StartedExecution;
 //# sourceMappingURL=start.d.ts.map

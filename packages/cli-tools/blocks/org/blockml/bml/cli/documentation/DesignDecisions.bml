@@ -37,7 +37,8 @@
     - CLI6 registry bootstrap: identity seed (blockml.library) plus config/--libraries extras; compile paths=[srcDir] or blockdoc default project library roots (CLI22); validate corpusPaths=project source roots.
     - CLI7 writeOutputFiles cleanOutDir rmSync.
     - CLI8 rootFiles beside rootDir (XSD catalog).
-    - CLI9 parseArgs flag and positional rules.
+    - CLI9 parseArgs flag and positional rules. Transform apply accepts
+      --parameters JSON.
     - CLI10 validate file XOR --all. Default validate = project sources; --all = entire registry.
     - CLI11 validate never writes render output.
     - CLI12 default compile target blockdoc.

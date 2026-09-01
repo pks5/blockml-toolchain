@@ -18,7 +18,7 @@ const USAGE = "Usage: blockml compile <target> [--out dir] [--src dir] [--librar
     "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b] [--verbose]\n" +
     "       blockml search <query> [--json] [--limit n] [--src dir] [--libraries a,b]\n" +
     "       blockml search index [--force] [--src dir] [--libraries a,b]\n" +
-    "       blockml transform apply <execution-fqn> [--verbose]";
+    "       blockml transform apply <execution-fqn> [--verbose] [--parameters json]";
 function workspaceRoot(from) {
     let dir = resolve(from);
     for (;;) {
@@ -88,6 +88,10 @@ export function parseArgs(argv) {
                     result.limit = Math.floor(n);
                 }
             }
+        }
+        else if (flag === "--parameters") {
+            const value = args.shift();
+            result.parametersJson = value ?? "";
         }
         else if (flag && !flag.startsWith("-")) {
             if (result.command === "validate") {
@@ -613,7 +617,7 @@ async function executeCli(argv, cwd, options = {}) {
             const agent = options.transformAgent ?? defaultTransformAgent(verbose);
             const reflectAgent = options.reflectAgent ??
                 (options.transformAgent ? undefined : defaultReflectAgent(verbose));
-            const code = await runTransform(parsed.executionFqn, cwd, lines, USAGE, agent, reflectAgent, options.onOutputLine);
+            const code = await runTransform(parsed.executionFqn, cwd, lines, USAGE, agent, reflectAgent, options.onOutputLine, parsed.parametersJson);
             return { code, lines };
         }
         if (parsed.command !== "compile") {

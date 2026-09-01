@@ -8,6 +8,7 @@ import {
   modelTransformationHasCompletedAt,
   allStagesSucceeded,
 } from "./properties.js";
+import { rewriteParameterTypeFqns } from "./parameters.js";
 import {
   applyExecutionIdentity,
   persistDocument,
@@ -40,11 +41,17 @@ export function finalizeExecution(
   setStatus(forked.block, succeeded ? "Succeeded" : "Failed");
 
   const runningFilePath = forked.source.filePath;
+  const retainPending =
+    forked.source.namespaceBindings?.pending !== undefined
+      ? (["pending"] as const)
+      : undefined;
   const terminalFqn = applyExecutionIdentity(forked, {
     libraryFqn: started.libraryFqn,
     stage,
     name: started.generatedName,
+    ...(retainPending ? { retainStages: retainPending } : {}),
   });
+  rewriteParameterTypeFqns(forked.block, started.runningFqn, terminalFqn);
 
   rewriteInboundReferences(registry, started.runningFqn, terminalFqn, runningFilePath);
   persistDocument(forked);

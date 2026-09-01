@@ -5,6 +5,7 @@ export interface RelocateIdentity {
     libraryFqn: string;
     stage: LifecycleStage;
     name: string;
+    retainStages?: readonly LifecycleStage[];
 }
 export declare function applyExecutionIdentity(document: BomDocument, identity: RelocateIdentity): string;
 export declare function rewriteInboundReferences(registry: TypeRegistry, oldFqn: string, newFqn: string, exceptFilePath: string): void;

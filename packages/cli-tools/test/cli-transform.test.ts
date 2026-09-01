@@ -98,6 +98,17 @@ describe("parseArgs transform", () => {
       "org.blockml.bml.workspace._meta.transform.pending.JokeTest",
     );
   });
+
+  it("parses transform apply --parameters JSON", () => {
+    const parsed = parseArgs([
+      "transform",
+      "apply",
+      "org.blockml.bml.workspace._meta.transform.pending.JokeTest",
+      "--parameters",
+      '{"language":"de"}',
+    ]);
+    expect(parsed.parametersJson).toBe('{"language":"de"}');
+  });
 });
 
 describe("blockml transform CLI", () => {

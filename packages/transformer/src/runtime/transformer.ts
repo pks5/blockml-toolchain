@@ -29,6 +29,7 @@ export interface TransformerOptions {
   pipeline?: Partial<TransformPipeline>;
   now?: () => Date;
   onLifecycle?: TransformLifecycleListener;
+  parameters?: Record<string, unknown>;
 }
 
 export class Transformer {
@@ -36,12 +37,14 @@ export class Transformer {
   private readonly pipeline: TransformPipeline;
   private readonly now: () => Date;
   private readonly onLifecycle: TransformLifecycleListener | undefined;
+  private readonly parameters: Record<string, unknown>;
 
   constructor(options: TransformerOptions) {
     this.workspaceRoot = options.workspaceRoot;
     this.pipeline = resolvePipeline(options);
     this.now = options.now ?? (() => new Date());
     this.onLifecycle = options.onLifecycle;
+    this.parameters = options.parameters ?? {};
   }
 
   async run(executionFqn: string): Promise<TransformRunResult> {
@@ -49,6 +52,7 @@ export class Transformer {
     const context: StageContext = {
       workspaceRoot: this.workspaceRoot,
       now: this.now,
+      parameters: this.parameters,
       ...(this.onLifecycle ? { onLifecycle: this.onLifecycle } : {}),
     };
     try {
@@ -233,6 +237,7 @@ export interface RunTransformationOptions {
   pipeline?: Partial<TransformPipeline>;
   now?: () => Date;
   onLifecycle?: TransformLifecycleListener;
+  parameters?: Record<string, unknown>;
 }
 
 export type RunTransformationResult =
@@ -265,6 +270,9 @@ export async function runTransformation(
   }
   if (options.onLifecycle) {
     transformerOptions.onLifecycle = options.onLifecycle;
+  }
+  if (options.parameters) {
+    transformerOptions.parameters = options.parameters;
   }
   const transformer = new Transformer(transformerOptions);
   try {

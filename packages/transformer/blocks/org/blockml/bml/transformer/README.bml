@@ -25,7 +25,7 @@
     org.blockml.bml.transformer.capability.*.
 
     The TypeScript engine executes ModelTransformation instances via
-    `blockml transform apply EXECUTION-FQN`. Transformer.run prepares the
+    `blockml transform apply EXECUTION-FQN [--parameters JSON]`. Transformer.run prepares the
     execution, then runs each `workflow:Stage` in order: persist Stage
     Running, Execute its Task in an isolated agent process, Reflect,
     Persist results onto that Stage, commit. Default Prepare and Finalize
@@ -59,6 +59,7 @@
     <see type="workflow:Rule" relation="SeeAlso" />
     <see type="workflow:InstructionRule" relation="SeeAlso" />
     <see type="workflow:InstructionTask" relation="SeeAlso" />
+    <see type="workflow:EmptyStruct" relation="SeeAlso" />
   </references>
 
 </block>

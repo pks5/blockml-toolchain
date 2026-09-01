@@ -9,17 +9,20 @@ export class Transformer {
     pipeline;
     now;
     onLifecycle;
+    parameters;
     constructor(options) {
         this.workspaceRoot = options.workspaceRoot;
         this.pipeline = resolvePipeline(options);
         this.now = options.now ?? (() => new Date());
         this.onLifecycle = options.onLifecycle;
+        this.parameters = options.parameters ?? {};
     }
     async run(executionFqn) {
         const lock = await acquireWorktreeLock(this.workspaceRoot, executionFqn);
         const context = {
             workspaceRoot: this.workspaceRoot,
             now: this.now,
+            parameters: this.parameters,
             ...(this.onLifecycle ? { onLifecycle: this.onLifecycle } : {}),
         };
         try {
@@ -187,6 +190,9 @@ export async function runTransformation(options) {
     }
     if (options.onLifecycle) {
         transformerOptions.onLifecycle = options.onLifecycle;
+    }
+    if (options.parameters) {
+        transformerOptions.parameters = options.parameters;
     }
     const transformer = new Transformer(transformerOptions);
     try {

@@ -16,6 +16,7 @@ export interface RelocateIdentity {
   libraryFqn: string;
   stage: LifecycleStage;
   name: string;
+  retainStages?: readonly LifecycleStage[];
 }
 
 export function applyExecutionIdentity(
@@ -32,6 +33,7 @@ export function applyExecutionIdentity(
     identity.name,
   );
   const nextPackage = lifecyclePackageFqn(identity.libraryFqn, identity.stage);
+  const retain = new Set(identity.retainStages ?? []);
 
   document.block.name = identity.name;
   document.block.type = nextFqn;
@@ -39,11 +41,16 @@ export function applyExecutionIdentity(
 
   const bindings = { ...(document.source.namespaceBindings ?? {}) };
   for (const stage of LIFECYCLE_STAGES) {
-    delete bindings[stage];
+    if (!retain.has(stage)) {
+      delete bindings[stage];
+    }
   }
   for (const [prefix, uri] of Object.entries(bindings)) {
     for (const stage of LIFECYCLE_STAGES) {
-      if (uri === lifecyclePackageFqn(identity.libraryFqn, stage)) {
+      if (
+        !retain.has(stage) &&
+        uri === lifecyclePackageFqn(identity.libraryFqn, stage)
+      ) {
         delete bindings[prefix];
       }
     }

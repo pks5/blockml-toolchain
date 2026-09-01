@@ -2,7 +2,9 @@ import {
   ClaudeCodeAgent,
   ClaudeReflectAgent,
   formatTransformLifecycle,
+  parseParametersJson,
   runTransformation,
+  TransformError,
   type ReflectionAgent,
   type TransformationAgent,
   type TransformLifecycleEvent,
@@ -21,6 +23,7 @@ export async function runTransform(
   agent: TransformationAgent,
   reflectAgent?: ReflectionAgent,
   onOutputLine?: (line: CliOutputLine) => void,
+  parametersJson?: string,
 ): Promise<number> {
   const fqn = executionFqn?.trim() ?? "";
   if (!fqn) {
@@ -29,11 +32,24 @@ export async function runTransform(
     return 2;
   }
 
+  let parameters: Record<string, unknown> | undefined;
+  if (parametersJson !== undefined) {
+    try {
+      parameters = parseParametersJson(parametersJson);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : String(error);
+      emit(lines, onOutputLine, message, "error");
+      return error instanceof TransformError ? error.exitCode : 2;
+    }
+  }
+
   const result = await runTransformation({
     workspaceRoot: rootDir,
     executionFqn: fqn,
     agent,
     ...(reflectAgent ? { reflectAgent } : {}),
+    ...(parameters ? { parameters } : {}),
     onLifecycle: (event) => {
       const line = lifecycleOutput(event);
       if (line) {

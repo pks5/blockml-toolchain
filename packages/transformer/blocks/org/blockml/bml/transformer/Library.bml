@@ -59,6 +59,7 @@
       <composition>
         <workflow:CompositeTask />
         <workflow:Criterion />
+        <workflow:EmptyStruct />
         <workflow:ExecutionException />
         <workflow:ExecutionStatus />
         <workflow:InstructionRule />

@@ -81,6 +81,7 @@ function mapBlockDefinition(element, ctx, parentType) {
     if (unknownElements.length > 0) {
         block.unknownElements = unknownElements;
     }
+    seedSubBlockIndex(element, block, ctx, parentType, subBlocksRaw);
     mapMetadataFields(element, block, ctx);
     if (!block.name) {
         block.name = block.type.split(".").pop() ?? "Block";
@@ -513,6 +514,59 @@ function mapMetadataFields(element, block, ctx) {
     if (xmlAttr !== undefined && !block.xmlRendering) {
         block.xmlRendering = { raw: xmlAttr };
     }
+}
+function seedSubBlockIndex(element, block, ctx, parentType, subBlocksRaw) {
+    if (subBlocksRaw.length === 0) {
+        return;
+    }
+    let peekedName = block.name;
+    let peekedType = block.type;
+    for (const child of elementChildren(element)) {
+        const local = elementLocalName(child);
+        if (local === "name") {
+            peekedName = getTextOrAttr(child) ?? peekedName;
+        }
+        else if (local === "type") {
+            const typeText = getTextOrAttr(child);
+            if (typeText) {
+                peekedType = resolveBlockReference(typeText, ctx.bindings, ctx.subBlockIndex, parentType);
+            }
+        }
+    }
+    if (!peekedType && parentType && peekedName) {
+        peekedType = `${parentType}.${peekedName}`;
+    }
+    if (!peekedType) {
+        return;
+    }
+    const peeked = subBlocksRaw
+        .map((el) => peekSubBlock(el, peekedType, ctx, parentType))
+        .filter((entry) => entry !== undefined);
+    if (peeked.length === 0) {
+        return;
+    }
+    ctx.subBlockIndex = buildSubBlockIndex(peeked, peekedType);
+    ctx.parentBlockType = peekedType;
+}
+function peekSubBlock(element, parentType, ctx, enclosingParent) {
+    let name = getAttribute(element, "name");
+    let typeText;
+    for (const child of elementChildren(element)) {
+        const local = elementLocalName(child);
+        if (local === "name" && !name) {
+            name = getTextOrAttr(child);
+        }
+        else if (local === "type") {
+            typeText = getTextOrAttr(child);
+        }
+    }
+    if (!name) {
+        return undefined;
+    }
+    const type = typeText
+        ? resolveBlockReference(typeText, ctx.bindings, ctx.subBlockIndex, enclosingParent ?? parentType)
+        : `${parentType}.${name}`;
+    return { name, type };
 }
 function getTextOrAttr(element, tag) {
     const el = tag

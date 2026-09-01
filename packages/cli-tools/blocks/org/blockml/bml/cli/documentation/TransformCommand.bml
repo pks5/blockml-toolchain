@@ -28,7 +28,7 @@
   <is>blockml transform specification</is>
 
   <documentation><![CDATA[Syntax:
-    blockml transform apply EXECUTION-FQN [--verbose]
+    blockml transform apply EXECUTION-FQN [--verbose] [--parameters JSON]
 
     transform is a parent command. V1 defines the apply subcommand only.
     Further transform subcommands are declared on clicommand:TransformCommand
@@ -36,6 +36,11 @@
 
     EXECUTION-FQN is the FQN of a ModelTransformation under
     {library}._meta.transform.pending. Tasks are not accepted directly.
+
+    --parameters is a JSON object merged over pending ModelTransformation
+    parameters (CLI wins; nested objects merge; arrays replace). Prepare
+    checks the result against the bound generic T (default EmptyStruct)
+    and writes it onto the running copy. Omitted --parameters is {}.
 
     The transformer takes an exclusive worktree lock, then prepares the
     ModelTransformation and runs each workflow Stage in order: persist

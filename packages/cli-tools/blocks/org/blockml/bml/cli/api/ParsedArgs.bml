@@ -44,6 +44,7 @@
     <query type="type:Text"><documentation>Joined positional query for search. (optional)</documentation></query>
     <index type="type:Boolean"><documentation>search index subcommand: full rebuild. (optional)</documentation></index>
     <executionFqn type="type:Text"><documentation>FQN of a pending ModelTransformation for transform apply. (optional)</documentation></executionFqn>
+    <parametersJson type="type:Text"><documentation>Raw --parameters JSON object for transform apply. (optional)</documentation></parametersJson>
   </properties>
 
 </block>

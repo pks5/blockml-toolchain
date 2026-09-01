@@ -1,11 +1,12 @@
 import { forkBom } from "@blockml/framework";
 import { allocateUniqueExecutionId } from "./execution-id.js";
 import { formatDateTimeProperty, generateExecutionName } from "./lifecycle.js";
+import { applyExecutionParameters, dropNestedTypesUnder, rewriteParameterTypeFqns, } from "./parameters.js";
 import { isTemplate, setBaseCommit, setExecutionId, setSequence, setStartedAt, setStatus, setTemplate, } from "./properties.js";
 import { applyExecutionIdentity, persistDocument, removeFile, rewriteInboundReferences, } from "./relocate.js";
 import { SequenceAllocator } from "./sequence.js";
 import { assertWorktreeClean, commitWorktree } from "../pipeline/git.js";
-export function startExecution(resolved, now, workspaceRoot, allocator = new SequenceAllocator()) {
+export function startExecution(resolved, now, workspaceRoot, allocator = new SequenceAllocator(), cliParameters = {}) {
     const baseCommit = assertWorktreeClean(workspaceRoot);
     const sequence = allocator.nextSequence(resolved.libraryFqn, resolved.registry);
     const generatedName = generateExecutionName(sequence, resolved.originalName, now);
@@ -17,6 +18,7 @@ export function startExecution(resolved, now, workspaceRoot, allocator = new Seq
     if (keepPending) {
         setTemplate(forked.block, false);
     }
+    applyExecutionParameters(forked.block, resolved.registry, cliParameters);
     setExecutionId(forked.block, executionId);
     setSequence(forked.block, sequence);
     setStatus(forked.block, "Running");
@@ -26,7 +28,14 @@ export function startExecution(resolved, now, workspaceRoot, allocator = new Seq
         libraryFqn: resolved.libraryFqn,
         stage: "running",
         name: generatedName,
+        ...(keepPending ? { retainStages: ["pending"] } : {}),
     });
+    if (keepPending) {
+        dropNestedTypesUnder(forked.block, resolved.fqn);
+    }
+    else {
+        rewriteParameterTypeFqns(forked.block, resolved.fqn, runningFqn);
+    }
     if (!keepPending) {
         rewriteInboundReferences(resolved.registry, resolved.fqn, runningFqn, pendingFilePath);
     }

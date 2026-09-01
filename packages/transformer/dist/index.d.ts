@@ -32,4 +32,5 @@ export { SequenceAllocator } from "./execution/sequence.js";
 export { allocateUniqueExecutionId, usedExecutionIds } from "./execution/execution-id.js";
 export { parseExecutionFqn, generateExecutionName, executionFilePath, padSequence, formatNameTimestamp, formatDateTimeProperty, } from "./execution/lifecycle.js";
 export { MODEL_TRANSFORMATION_FQN } from "./execution/constants.js";
+export { parseParametersJson } from "./execution/parameters.js";
 //# sourceMappingURL=index.d.ts.map
