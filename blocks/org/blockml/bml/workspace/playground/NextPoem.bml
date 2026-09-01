@@ -13,33 +13,33 @@
   <name>NextPoem</name>
   <type>playground:NextPoem</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, written in Spanish, about a tree and a mushroom</is>
 
   <documentation>
-    Im Buchenhain, wo früh der Nebel zieht,
-    steht eine Buche, die den Himmel sieht.
-    Ihr glatter Stamm trägt Rinde silbergrau,
-    sie lauscht dem Specht und trinkt den kühlen Tau.
+    En el hayedo, donde la niebla va temprano,
+    se alza una haya que contempla el cielo lejano.
+    Su tronco liso viste corteza gris plateada,
+    escucha al pájaro y bebe el rocío de la alborada.
 
-    Am Fuß der Buche, tief im Laubgeflecht,
-    reckt sich ein Pilz empor, noch zart und schlecht
-    geschützt vor kaltem Frost und Morgenwind;
-    sein brauner Hut glänzt taunass, weich und lind.
+    Al pie del haya, hondo entre la hojarasca,
+    se yergue un hongo, aún tierno, que apenas se enmascara
+    del frío de la escarcha y del viento matinal;
+    su sombrero pardo brilla de rocío, suave y sin igual.
 
-    "Bleib nah bei mir", so spricht der Baum ihn an,
-    "mein Schatten hält den heißen Mittag zahm.
-    Ich breite Laub als Decke um dich her
-    und schütze dich, dann fürchtest du nichts mehr."
+    "Quédate junto a mí", le dice el árbol al hongo,
+    "mi sombra amansa el mediodía más bochornoso y largo.
+    Extiendo hojas como manta a tu alrededor
+    y te protejo; así ya no temerás dolor."
 
-    So wuchsen sie durch Sommer, Herbst und Jahr,
-    die Buche hoch, der Pilz im Moose klar.
-    Wenn Wandrer ruhn im kühlen grünen Zelt,
-    sind zwei Gefährten Wächter dieser Welt.
+    Así crecieron por verano, otoño y año,
+    alta la haya, y el hongo en el musgo sin daño.
+    Cuando el viandante descansa en la verde y fresca tienda,
+    dos compañeros son guardianes de esta senda.
   </documentation>
 
   <properties>
     <title>
-      <value>Die Buche und der Pilz</value>
+      <value>La haya y el hongo</value>
     </title>
     <author>
       <value>John Doe</value>
