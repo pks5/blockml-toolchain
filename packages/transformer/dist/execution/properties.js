@@ -1,5 +1,5 @@
 import { collectBaseTypeChain } from "@blockml/framework";
-import { BOOLEAN_TYPE_FQN, DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, MODEL_TRANSFORMATION_FQN, STAGE_FQN, TEXT_TYPE_FQN, } from "./constants.js";
+import { BOOLEAN_TYPE_FQN, DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, MODEL_TRANSFORMATION_FQN, STAGE_FQN, TEXT_TYPE_FQN, UUID_TYPE_FQN, } from "./constants.js";
 export function isModelTransformation(block, registry) {
     if (block.type === MODEL_TRANSFORMATION_FQN || block.baseType === MODEL_TRANSFORMATION_FQN) {
         return true;
@@ -251,7 +251,7 @@ export function setSequence(block, sequence) {
     setOverrideProperty(block, "sequence", INTEGER_TYPE_FQN, sequence);
 }
 export function setExecutionId(block, executionId) {
-    setOverrideProperty(block, "executionId", TEXT_TYPE_FQN, executionId);
+    setOverrideProperty(block, "executionId", UUID_TYPE_FQN, executionId);
 }
 export function setStatus(block, status) {
     setOverrideProperty(block, "status", EXECUTION_STATUS_FQN, status);

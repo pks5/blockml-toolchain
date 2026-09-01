@@ -5,6 +5,7 @@ export declare const EXECUTION_EXCEPTION_FQN = "org.blockml.bml.transformer.work
 export declare const INTEGER_TYPE_FQN = "org.blockml.bml.type.Integer";
 export declare const DATETIME_TYPE_FQN = "org.blockml.bml.type.DateTime";
 export declare const TEXT_TYPE_FQN = "org.blockml.bml.type.Text";
+export declare const UUID_TYPE_FQN = "org.blockml.bml.type.UUID";
 export declare const BOOLEAN_TYPE_FQN = "org.blockml.bml.type.Boolean";
 export declare const FILE_PATH_TYPE_FQN = "org.blockml.bml.type.FilePath";
 export declare const FILE_PATH_ENTITY_FQN = "org.blockml.bml.type.FilePathEntity";

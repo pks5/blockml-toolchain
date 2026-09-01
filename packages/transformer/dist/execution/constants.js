@@ -5,6 +5,7 @@ export const EXECUTION_EXCEPTION_FQN = "org.blockml.bml.transformer.workflow.Exe
 export const INTEGER_TYPE_FQN = "org.blockml.bml.type.Integer";
 export const DATETIME_TYPE_FQN = "org.blockml.bml.type.DateTime";
 export const TEXT_TYPE_FQN = "org.blockml.bml.type.Text";
+export const UUID_TYPE_FQN = "org.blockml.bml.type.UUID";
 export const BOOLEAN_TYPE_FQN = "org.blockml.bml.type.Boolean";
 export const FILE_PATH_TYPE_FQN = "org.blockml.bml.type.FilePath";
 export const FILE_PATH_ENTITY_FQN = "org.blockml.bml.type.FilePathEntity";

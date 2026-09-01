@@ -1,6 +1,6 @@
 import type { BlockDefinition } from "@blockml/bom";
 import { type TypeRegistry } from "@blockml/framework";
-export declare const EMPTY_STRUCT_FQN = "org.blockml.bml.transformer.workflow.EmptyStruct";
+export declare const EMPTY_STRUCT_FQN = "org.blockml.bml.type.EmptyStruct";
 export declare const STRUCT_TYPE_FQN = "org.blockml.bml.type.StructType";
 export declare const NUMBER_TYPE_FQN = "org.blockml.bml.type.Number";
 export declare const PRIMITIVE_TYPE_FQN = "org.blockml.bml.type.PrimitiveType";
