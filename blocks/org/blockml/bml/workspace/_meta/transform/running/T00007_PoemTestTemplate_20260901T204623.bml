@@ -1,0 +1,69 @@
+<!--Workspace pending transform — JokeTest
+  FQN: org.blockml.bml.workspace._meta.transform.succeeded.T00001_JokeTest_20260830T014020-->
+<block xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:pending="org.blockml.bml.workspace._meta.transform.pending"
+  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
+
+  <name>
+    T00007_PoemTestTemplate_20260901T204623
+  </name>
+  <type>
+    running:T00007_PoemTestTemplate_20260901T204623
+  </type>
+  <baseType>
+    workflow:ModelTransformation(pending:PoemTestTemplate.Parameters)
+  </baseType>
+  <is>
+    A pending ModelTransformation that creates a playground Poem block
+  </is>
+  <properties>
+    <description override="true">
+      <value>A transformation that creates a playground Poem block</value>
+    </description>
+    <status override="true" type="workflow:ExecutionStatus">
+      <value>Running</value>
+    </status>
+    <createdAt override="true" type="type:DateTime">
+      <value>2026-08-30T01:40:20</value>
+    </createdAt>
+    <template override="true" type="type:Boolean">
+      <value>false</value>
+    </template>
+    <parameters override="true" type="pending:PoemTestTemplate.Parameters">
+      <value>{author:"John Doe"}</value>
+    </parameters>
+    <executionId override="true" type="type:Text">
+      <value>86ce1c81-f187-43fd-a0af-8c400be58e85</value>
+    </executionId>
+    <sequence override="true" type="type:Integer">
+      <value>7</value>
+    </sequence>
+    <startedAt override="true" type="type:DateTime">
+      <value>2026-09-01T20:46:23</value>
+    </startedAt>
+    <baseCommit override="true" type="type:Text">
+      <value>6c1ae08bf7e0a52a86729944862a6581f065a78e</value>
+    </baseCommit>
+  </properties>
+  <aggregations>
+    <stages override="true">
+      <composition>
+        <workflow:Stage name="Create Poem" status="Pending">
+          <task>
+            <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.PoemNew.bml that contains a random poem in german about a tree and a mushroom. For each execution create a new poem." />
+          </task>
+        </workflow:Stage>
+        <workflow:Stage name="Translate Poem" status="Pending">
+          <task>
+            <workflow:InstructionTask instructions="Translate the poem in org.blockml.bml.workspace.playground.PoemNew.bml to russian." />
+          </task>
+        </workflow:Stage>
+      </composition>
+    </stages>
+  </aggregations>
+</block>
