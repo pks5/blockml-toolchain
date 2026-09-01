@@ -22,10 +22,12 @@
     # Persist Execution
 
     Write `changedFiles`, `feedback`, `status`, `completedAt`, and on
-    failure the BML exception into the current `workflow:Stage`. Then
-    commit model changes together with that Stage terminal state. Must
-    not relocate the ModelTransformation and must not write those fields
-    onto the ModelTransformation.
+    failure the BML exception into the current `workflow:Stage`. When the
+    Stage succeeded and aggregates a `workflow:ResultProducer`, invoke
+    `produce` and write the returned value onto `result`. Then commit
+    model changes together with that Stage terminal state. Must not
+    relocate the ModelTransformation and must not write those fields onto
+    the ModelTransformation.
 
     Default implementation is a deterministic BOM writer. Always writes
     Stage status. TS: pipeline/persist.ts and execution/persist.ts.
@@ -37,6 +39,7 @@
     <see type="transformercap:FinalizeExecution" relation="SeeAlso" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:Stage" relation="SeeAlso" />
+    <see type="workflow:ResultProducer" relation="SeeAlso" />
   </references>
 
   <properties>

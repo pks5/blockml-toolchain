@@ -66,6 +66,7 @@
         <workflow:ModelTransformation />
         <workflow:Prerequisite />
         <workflow:PrerequisiteNotMetException />
+        <workflow:ResultProducer />
         <workflow:Rule />
         <workflow:Stage />
         <workflow:Task />

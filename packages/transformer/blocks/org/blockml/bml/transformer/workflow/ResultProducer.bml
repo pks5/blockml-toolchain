@@ -1,0 +1,64 @@
+<!--
+  Transformer Workflow — ResultProducer
+  FQN: org.blockml.bml.transformer.workflow.ResultProducer
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:cap="org.blockml.bml.capability"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:workflow="org.blockml.bml.transformer.workflow">
+
+  <name>ResultProducer</name>
+  <type>workflow:ResultProducer</type>
+  <baseType>core:Block</baseType>
+  <is>A strategy that produces a Stage's typed result</is>
+
+  <documentation>
+    Defines how a Stage's `result` is determined.
+
+    `produce` is an Outbound capability. It yields a value of generic `T`
+    (`type:ValueType`, default `type:Text`). After a Stage's Task completes
+    successfully, the transformer invokes `produce` and writes the returned
+    value onto `Stage.result`.
+
+    A Stage may aggregate one ResultProducer. When present, that producer
+    determines how `result` is filled; the producer's `T` is the Stage's
+    `T`. When absent, `result` remains unset.
+
+    Concrete subtypes implement `produce`.
+  </documentation>
+
+  <isNot>Not a Task (the Stage's work), not Stage.feedback (untyped agent
+    commentary), and not Reflect (changedFiles and feedback).</isNot>
+
+  <references>
+    <see type="workflow:Stage" relation="SeeAlso" />
+    <see type="workflow:Task" relation="ContrastsWith" />
+    <see type="core:ValueType" relation="SeeAlso" />
+  </references>
+
+  <abstract>true</abstract>
+
+  <genericTypes>
+    <T baseType="type:ValueType" />
+  </genericTypes>
+
+  <capabilities>
+    <produce type="cap:Outbound" outputType="T">
+      <throws>
+        <workflow:ExecutionException />
+      </throws>
+      <abstract>true</abstract>
+      <documentation>
+        Produce this Stage's result value of bound T. Concrete subtypes
+        supply the Outbound implementation. Invoked after a successful
+        Task; the returned value is written onto Stage.result.
+      </documentation>
+    </produce>
+  </capabilities>
+
+</block>

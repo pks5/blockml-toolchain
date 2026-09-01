@@ -75,6 +75,8 @@
         [4] Persist Execution — transformercap:PersistExecution
             Default: deterministic. Writes changedFiles, feedback, status,
             completedAt, and on failure a BML exception onto this Stage.
+            When the Stage succeeded and aggregates a ResultProducer,
+            invokes produce and writes the returned value onto result.
             Commits model changes together with the Stage terminal state.
             Must not relocate the ModelTransformation. A Failed Stage
             aborts remaining Stages.
@@ -100,6 +102,7 @@
     <see type="transformercap:RunTransformation" relation="Defines" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:Stage" relation="SeeAlso" />
+    <see type="workflow:ResultProducer" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="type:EmptyStruct" relation="SeeAlso" />
     <see type="type:UUID" relation="SeeAlso" />

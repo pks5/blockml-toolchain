@@ -50,6 +50,7 @@
     <see type="transformercap:RunTransformation" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="workflow:Stage" relation="SeeAlso" />
+    <see type="workflow:ResultProducer" relation="SeeAlso" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:CompositeTask" relation="SeeAlso" />
     <see type="workflow:Prerequisite" relation="SeeAlso" />
