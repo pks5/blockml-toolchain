@@ -41,6 +41,8 @@
         Git worktree, assign a unique executionId (random UUID), sequence,
         startedAt, and baseCommit (HEAD),
         set status=Running, relocate to _meta.transform.running, then commit.
+        When template is true, leave the pending Block in place, copy it,
+        set template=false on the copy, and relocate that copy instead.
         If the contract is violated or the worktree is dirty, do not start.
 
     Then for each workflow Stage, in order:

@@ -2,11 +2,13 @@ import { forkBom } from "@blockml/framework";
 import { allocateUniqueExecutionId } from "./execution-id.js";
 import { formatDateTimeProperty, generateExecutionName } from "./lifecycle.js";
 import {
+  isTemplate,
   setBaseCommit,
   setExecutionId,
   setSequence,
   setStartedAt,
   setStatus,
+  setTemplate,
 } from "./properties.js";
 import {
   applyExecutionIdentity,
@@ -43,9 +45,13 @@ export function startExecution(
   const generatedName = generateExecutionName(sequence, resolved.originalName, now);
   const startedAtIso = formatDateTimeProperty(now);
   const pendingFilePath = resolved.document.source.filePath;
+  const keepPending = isTemplate(resolved.document.block);
   const forked = forkBom(resolved.document);
   const executionId = allocateUniqueExecutionId(resolved.registry);
 
+  if (keepPending) {
+    setTemplate(forked.block, false);
+  }
   setExecutionId(forked.block, executionId);
   setSequence(forked.block, sequence);
   setStatus(forked.block, "Running");
@@ -58,14 +64,16 @@ export function startExecution(
     name: generatedName,
   });
 
-  rewriteInboundReferences(
-    resolved.registry,
-    resolved.fqn,
-    runningFqn,
-    pendingFilePath,
-  );
+  if (!keepPending) {
+    rewriteInboundReferences(
+      resolved.registry,
+      resolved.fqn,
+      runningFqn,
+      pendingFilePath,
+    );
+  }
   persistDocument(forked);
-  if (pendingFilePath !== forked.source.filePath) {
+  if (!keepPending && pendingFilePath !== forked.source.filePath) {
     removeFile(pendingFilePath);
   }
   commitWorktree(workspaceRoot, `transform(start): ${generatedName}`, {

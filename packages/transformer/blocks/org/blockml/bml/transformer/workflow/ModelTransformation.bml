@@ -20,6 +20,10 @@
     One transformation of the model driven by sequential `workflow:Stage`
     instances. Each Stage runs one Task in an isolated agent process.
 
+    * `template` — when true, this Block is a reusable template. Prepare
+      leaves it in `_meta.transform.pending`, copies it, sets
+      `template=false` on the copy, and relocates that copy to running.
+      Default false: the pending Block is relocated and removed.
     * `status` — lifecycle state (`workflow:ExecutionStatus`). Matches the
       `_meta.transform` package: Pending, Running, Succeeded, Failed.
       `Succeeded` only when every Stage succeeded.
@@ -43,6 +47,14 @@
     <description type="type:Text">
       <documentation>Description of this transformation.</documentation>
     </description>
+    <template type="type:Boolean">
+      <documentation>
+        When true, this ModelTransformation is a reusable template. Prepare
+        leaves the pending Block in place, copies it, sets template=false on
+        the copy, and relocates that copy to running. Default false.
+      </documentation>
+      <value>false</value>
+    </template>
     <executionId type="type:Text">
       <documentation>Globally unique identifier. Absent while pending; assigned at Running.</documentation>
     </executionId>

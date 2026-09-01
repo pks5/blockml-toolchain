@@ -1,0 +1,53 @@
+<!--Workspace pending transform — JokeTest
+  FQN: org.blockml.bml.workspace._meta.transform.succeeded.T00001_JokeTest_20260830T014020-->
+<block xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:pending="org.blockml.bml.workspace._meta.transform.pending"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
+
+  <name>
+    PoemTest
+  </name>
+  <type>
+    pending:PoemTest
+  </type>
+  <baseType>
+    workflow:ModelTransformation
+  </baseType>
+  <is>
+    A pending ModelTransformation that creates a playground Poem block
+  </is>
+  <properties>
+    <description override="true">
+      <value>A transformation that creates a playground Poem block</value>
+    </description>
+    <status override="true" type="workflow:ExecutionStatus">
+      <value>Pending</value>
+    </status>
+    <createdAt override="true" type="type:DateTime">
+      <value>2026-08-30T01:40:20</value>
+    </createdAt>
+    <template override="true" type="type:Boolean">
+      <value>true</value>
+    </template>
+  </properties>
+  <aggregations>
+    <stages override="true">
+      <composition>
+        <workflow:Stage name="Create Poem" status="Pending">
+          <task>
+            <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.PoemNew.bml that contains a random poem in latin. For each execution create a new poem." />
+          </task>
+        </workflow:Stage>
+        <workflow:Stage name="Translate Poem" status="Pending">
+          <task>
+            <workflow:InstructionTask instructions="Translate the poem in org.blockml.bml.workspace.playground.PoemNew.bml to japanese." />
+          </task>
+        </workflow:Stage>
+      </composition>
+    </stages>
+  </aggregations>
+</block>

@@ -74,6 +74,7 @@ export function pendingExecutionXml(opts: {
   executionId?: string;
   extraRefs?: string;
   stageInstructions?: readonly string[];
+  template?: boolean;
 }): string {
   const refs = opts.extraRefs
     ? `  <references>\n${opts.extraRefs}\n  </references>\n`
@@ -85,6 +86,14 @@ export function pendingExecutionXml(opts: {
         `    </executionId>`,
       ].join("\n")
     : "";
+  const templateXml =
+    opts.template === true
+      ? [
+          `    <template override="true" type="org.blockml.bml.type.Boolean">`,
+          `      <value>true</value>`,
+          `    </template>`,
+        ].join("\n")
+      : "";
   const instructions = opts.stageInstructions ?? ["Do the task."];
   const stages = instructions
     .map(
@@ -112,6 +121,7 @@ export function pendingExecutionXml(opts: {
     refs,
     `  <properties>`,
     executionIdXml,
+    templateXml,
     `    <status override="true" type="org.blockml.bml.transformer.workflow.ExecutionStatus">`,
     `      <value>Pending</value>`,
     `    </status>`,

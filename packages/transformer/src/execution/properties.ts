@@ -9,6 +9,7 @@ import type {
 } from "@blockml/bom";
 import { collectBaseTypeChain, type TypeRegistry } from "@blockml/framework";
 import {
+  BOOLEAN_TYPE_FQN,
   DATETIME_TYPE_FQN,
   EXECUTION_EXCEPTION_FQN,
   EXECUTION_STATUS_FQN,
@@ -273,6 +274,18 @@ export function getStatus(block: BlockDefinition): string | undefined {
   }
   const separator = value.lastIndexOf("::");
   return separator >= 0 ? value.slice(separator + 2) : value;
+}
+
+export function isTemplate(block: BlockDefinition): boolean {
+  const value = getPropertyLiteral(block, "template");
+  if (value === true) {
+    return true;
+  }
+  return typeof value === "string" && value.toLowerCase() === "true";
+}
+
+export function setTemplate(block: BlockDefinition, template: boolean): void {
+  setOverrideProperty(block, "template", BOOLEAN_TYPE_FQN, template);
 }
 
 export function setOverrideProperty(

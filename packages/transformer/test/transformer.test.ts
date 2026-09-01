@@ -167,6 +167,110 @@ describe("Transformer lifecycle", () => {
     );
   });
 
+  it("copies a template pending ModelTransformation and leaves the original in place", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        template: true,
+      }),
+      "blocks/com/example/model/Referrer.bml": referrerXml("Referrer", "pending:JokeTest"),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+
+    expect(result.status).toBe("Succeeded");
+    expect(result.terminalFqn).toBe(
+      `com.example.model._meta.transform.succeeded.${generated}`,
+    );
+
+    const pendingPath = join(
+      TMP,
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml",
+    );
+    expect(existsSync(pendingPath)).toBe(true);
+    const pending = readFileSync(pendingPath, "utf8");
+    expect(pending).toContain("<name>JokeTest</name>");
+    expect(pending).toContain("<value>true</value>");
+    expect(pending).not.toContain(result.executionId);
+    expect(pending).not.toContain(generated);
+
+    const succeededPath = join(
+      TMP,
+      `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`,
+    );
+    expect(existsSync(succeededPath)).toBe(true);
+    const succeeded = readFileSync(succeededPath, "utf8");
+    expect(succeeded).toContain(result.executionId);
+    expect(succeeded).toContain(
+      `<template override="true" type="type:Boolean">`,
+    );
+    expect(succeeded).toContain("<value>false</value>");
+    expect(succeeded).not.toContain("<value>true</value>");
+
+    const referrerPath = join(TMP, "blocks/com/example/model/Referrer.bml");
+    const referrer = readFileSync(referrerPath, "utf8");
+    expect(referrer).toContain("pending:JokeTest");
+    const parsedReferrer = parse(referrer, { filePath: referrerPath });
+    expect(parsedReferrer.document?.block.references?.[0]?.type).toBe(
+      pendingFqn("JokeTest"),
+    );
+  });
+
+  it("can apply a template pending ModelTransformation more than once", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        template: true,
+      }),
+    });
+    const first = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const firstResult = await first.run(pendingFqn("JokeTest"));
+    expect(firstResult.status).toBe("Succeeded");
+
+    const secondNow = new Date(2026, 7, 30, 1, 18, 2);
+    const second = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => secondNow,
+    });
+    const secondResult = await second.run(pendingFqn("JokeTest"));
+    expect(secondResult.status).toBe("Succeeded");
+    expect(secondResult.sequence).toBe(2);
+    expect(secondResult.terminalFqn).toBe(
+      "com.example.model._meta.transform.succeeded.T00002_JokeTest_20260830T011802",
+    );
+    expect(
+      existsSync(
+        join(TMP, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml"),
+      ),
+    ).toBe(true);
+    expect(
+      existsSync(
+        join(
+          TMP,
+          "blocks/com/example/model/_meta/transform/succeeded/T00001_JokeTest_20260830T011702.bml",
+        ),
+      ),
+    ).toBe(true);
+    expect(
+      existsSync(
+        join(
+          TMP,
+          "blocks/com/example/model/_meta/transform/succeeded/T00002_JokeTest_20260830T011802.bml",
+        ),
+      ),
+    ).toBe(true);
+  });
+
   it("relocates a failed agent execution to failed with an exception", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
