@@ -13,33 +13,33 @@
   <name>NextPoem</name>
   <type>playground:NextPoem</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, written in Spanish, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
 
   <documentation>
-    En el hayedo, donde la niebla va temprano,
-    se alza una haya que contempla el cielo lejano.
-    Su tronco liso viste corteza gris plateada,
-    escucha al pájaro y bebe el rocío de la alborada.
+    Am Waldrand steht die alte Eiche breit,
+    ihr Astwerk trägt das Licht der Sommerzeit.
+    Die Rinde rau, von vielen Jahren schwer,
+    hat Sturm und Frost getrotzt und manchem Meer.
 
-    Al pie del haya, hondo entre la hojarasca,
-    se yergue un hongo, aún tierno, que apenas se enmascara
-    del frío de la escarcha y del viento matinal;
-    su sombrero pardo brilla de rocío, suave y sin igual.
+    Zu ihren Füßen, still im feuchten Moos,
+    wächst klein ein Pilz, noch scheu und wurzellos.
+    Sein brauner Hut glänzt matt vom Morgentau,
+    er duckt sich vor dem Wind im Dämmergrau.
 
-    "Quédate junto a mí", le dice el árbol al hongo,
-    "mi sombra amansa el mediodía más bochornoso y largo.
-    Extiendo hojas como manta a tu alrededor
-    y te protejo; así ya no temerás dolor."
+    "Bleib nah bei mir", so spricht der Baum ihn an,
+    "mein Schatten kühlt, wenn heiß der Mittag brann.
+    Ich breite Laub wie eine Decke aus
+    und halte dir den harten Regen aus."
 
-    Así crecieron por verano, otoño y año,
-    alta la haya, y el hongo en el musgo sin daño.
-    Cuando el viandante descansa en la verde y fresca tienda,
-    dos compañeros son guardianes de esta senda.
+    So wuchsen sie durch Herbst und Winterschnee,
+    die Eiche hoch, der Pilz im stillen Klee.
+    Und rastet wer im grünen, kühlen Zelt,
+    sind zwei Gefährten Hüter dieser Welt.
   </documentation>
 
   <properties>
     <title>
-      <value>La haya y el hongo</value>
+      <value>Die Eiche und der Pilz</value>
     </title>
     <author>
       <value>John Doe</value>
