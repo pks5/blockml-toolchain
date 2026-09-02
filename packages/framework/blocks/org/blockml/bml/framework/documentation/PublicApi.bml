@@ -58,6 +58,7 @@
     resolveContracts(block, registry) → MemberDefinition[] (contract slice; used by resolveEffectiveMembers)
     collectBaseTypeChain(block, registry) → BlockDefinition[]
     memberIdentityKey(member) → string
+    findLocalMember(block, member) → MemberDefinition | undefined
     parseExpression(source) → ParseExpressionOutcome
     validateTypes(document, registry) → Diagnostic[]
     validateVersions(document, registry) → Diagnostic[]

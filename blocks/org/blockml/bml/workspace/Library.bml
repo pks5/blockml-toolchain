@@ -19,6 +19,7 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:framework="org.blockml.bml.framework"
   xmlns:graph="org.blockml.bml.graph"
+  xmlns:inspect="org.blockml.bml.inspect"
   xmlns:search="org.blockml.bml.search"
   xmlns:blockdoc="org.blockml.bml.target.blockdoc"
   xmlns:fatblock="org.blockml.bml.target.fatblock"
@@ -67,6 +68,7 @@
         <fatblock:Library />
         <framework:Library />
         <graph:Library />
+        <inspect:Library />
         <parser:Library />
         <runtime:Library />
         <search:Library />

@@ -1,0 +1,52 @@
+<!--
+  Inspect — InspectTypeRef
+  FQN: org.blockml.bml.inspect.InspectTypeRef
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:inspect="org.blockml.bml.inspect"
+  xmlns:inspectcap="org.blockml.bml.inspect.capability"
+  xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>InspectTypeRef</name>
+  <type>inspect:InspectTypeRef</type>
+  <baseType>inspect:InspectType</baseType>
+  <is>Compact TypeExpression projection</is>
+
+  <documentation>kind is named, union, generic, anonymousStruct, self, genericParam, or grouped. Named FQNs stay as ref; they are not inlined.</documentation>
+
+  <properties>
+    <kind type="type:Text">
+      <documentation>TypeExpression kind. (required)</documentation>
+    </kind>
+    <ref type="type:Text">
+      <documentation>Named type FQN. (optional)</documentation>
+    </ref>
+    <args type="inspect:InspectTypeRef[]">
+      <documentation>Generic type arguments. (optional)</documentation>
+    </args>
+    <alternatives type="inspect:InspectTypeRef[]">
+      <documentation>Union alternatives. (optional)</documentation>
+    </alternatives>
+    <name type="type:Text">
+      <documentation>Generic parameter name. (optional)</documentation>
+    </name>
+    <multiplicity type="type:Text">
+      <documentation>min..max label. (optional)</documentation>
+    </multiplicity>
+  </properties>
+
+</block>

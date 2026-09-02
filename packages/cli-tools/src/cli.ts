@@ -37,6 +37,7 @@ import { loadConfig, type BomConfig } from "./load-config.js";
 import { projectLibraryPackageDirs, projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
 import { runSearch } from "./run-search.js";
 import { runGraph } from "./run-graph.js";
+import { runInspect } from "./run-inspect.js";
 import { runNew } from "./run-new.js";
 import { defaultReflectAgent, defaultTransformAgent, runTransform } from "./run-transform.js";
 import { writeOutputFiles } from "./write-output.js";
@@ -54,6 +55,7 @@ const USAGE =
   "       blockml graph path <from> <to> [--json] [--depth n]\n" +
   "       blockml graph query <cypher> [--json]\n" +
   "       blockml graph schema [--json]\n" +
+  "       blockml inspect <fqn> [--depth n] [--json] [--src dir] [--libraries a,b]\n" +
   "       blockml transform apply <execution-fqn> [--verbose] [--parameters json]\n" +
   "       blockml new <fqn> [--baseType fqn] [--is text] [--src dir] [--libraries a,b]";
 
@@ -90,6 +92,7 @@ export interface ParsedArgs {
   index?: boolean;
   graphFqn?: string;
   graphTo?: string;
+  inspectFqn?: string;
   depth?: number;
   executionFqn?: string;
   parametersJson?: string;
@@ -164,7 +167,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
       const value = args.shift();
       if (value) {
         const n = Number(value);
-        if (Number.isFinite(n) && n > 0) {
+        if (Number.isFinite(n) && n >= 0) {
           result.depth = Math.floor(n);
         }
       }
@@ -229,6 +232,10 @@ export function parseArgs(argv: string[]): ParsedArgs {
           result.subcommand = flag;
         } else if (result.subcommand === "apply" && !result.executionFqn) {
           result.executionFqn = flag;
+        }
+      } else if (result.command === "inspect") {
+        if (!result.inspectFqn) {
+          result.inspectFqn = flag;
         }
       } else if (result.command === "new") {
         if (!result.newFqn) {
@@ -926,6 +933,18 @@ async function executeCli(
         return { code: 2, lines };
       }
       const code = await runGraph(parsed, cwd, config, lines, formatDiagnostic, USAGE);
+      return { code, lines };
+    }
+
+    if (parsed.command === "inspect") {
+      let config: BomConfig;
+      try {
+        config = loadConfig(cwd);
+      } catch (e) {
+        pushLines(lines, e instanceof Error ? e.message : String(e), "error");
+        return { code: 2, lines };
+      }
+      const code = await runInspect(parsed, cwd, config, lines, USAGE);
       return { code, lines };
     }
 

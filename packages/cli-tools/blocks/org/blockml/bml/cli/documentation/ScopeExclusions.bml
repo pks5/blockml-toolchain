@@ -27,7 +27,7 @@
   <is>Explicitly out of V1 CLI library scope</is>
 
   <documentation>Not V1 in this package (may exist in MD vision only):
-    • init, inspect, watch, activate-config commands
+    • init, watch, activate-config commands
     • bom-cli.config.json command renaming
     • Incremental build cache .bom-cache/ (C5)
     • Thumbnail generation OpenSCAD+Sharp (C6)

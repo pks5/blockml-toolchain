@@ -20,6 +20,7 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:builder="org.blockml.bml.builder"
   xmlns:graph="org.blockml.bml.graph"
+  xmlns:inspect="org.blockml.bml.inspect"
   xmlns:search="org.blockml.bml.search"
   xmlns:transformer="org.blockml.bml.transformer"
   xmlns:type="org.blockml.bml.type">
@@ -38,6 +39,7 @@
     Framework bootstrap lives in org.blockml.bml.framework.*.
     Local search lives in org.blockml.bml.search.* (@blockml/search).
     Local graph lives in org.blockml.bml.graph.* (@blockml/graph).
+    Inspect lives in org.blockml.bml.inspect.* (@blockml/inspect).
     Builder lives in org.blockml.bml.builder.* (@blockml/builder).
     Transformation lives in org.blockml.bml.transformer.* (@blockml/transformer).
 
@@ -69,6 +71,7 @@
         <framework:Library />
         <builder:Library />
         <graph:Library />
+        <inspect:Library />
         <search:Library />
         <transformer:Library />
       </composition>
@@ -90,6 +93,7 @@
         <clicommand:CompileCommand />
         <clicommand:SearchCommand />
         <clicommand:GraphCommand />
+        <clicommand:InspectCommand />
         <clicommand:TransformCommand />
         <clicommand:TransformApplyCommand />
         <clicommand:NewCommand />
@@ -101,6 +105,7 @@
         <clicap:RunValidate />
         <clicap:RunSearch />
         <clicap:RunGraph />
+        <clicap:RunInspect />
         <clicap:RunNew />
         <clicap:RunTransform />
         <clicap:ValidateAgainstXsd />
@@ -123,6 +128,7 @@
         <clidocumentation:ValidateCommand />
         <clidocumentation:SearchCommand />
         <clidocumentation:GraphCommand />
+        <clidocumentation:InspectCommand />
         <clidocumentation:NewCommand />
         <clidocumentation:TransformCommand />
         <clidocumentation:Configuration />

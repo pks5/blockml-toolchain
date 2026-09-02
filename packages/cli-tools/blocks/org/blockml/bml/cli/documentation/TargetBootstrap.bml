@@ -34,7 +34,7 @@
     config.targets[] defines available targets; CLI target argument selects which to compile.
     Default targets when omitted: ["blockdoc"].
 
-    validate and inspect (later) do NOT call bootstrapTargets.
+    validate and inspect do NOT call bootstrapTargets.
     Domain targets (machineblocks-v3-scad) registered by @machineblocks/cli — not this package.</documentation>
   <references>
     <see type="clidocumentation:TargetCliMatrix" relation="ReadNext" />

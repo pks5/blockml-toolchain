@@ -1,0 +1,73 @@
+<!--
+  Inspect — InspectedMember
+  FQN: org.blockml.bml.inspect.InspectedMember
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:inspect="org.blockml.bml.inspect"
+  xmlns:inspectcap="org.blockml.bml.inspect.capability"
+  xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>InspectedMember</name>
+  <type>inspect:InspectedMember</type>
+  <baseType>inspect:InspectType</baseType>
+  <is>One effective member in an Inspect projection</is>
+
+  <documentation>kind is property, aggregation, association, or capability. inheritedFrom is omitted when the member is declared on the inspected Block.</documentation>
+
+  <properties>
+    <kind type="type:Text">
+      <documentation>Member kind. (required)</documentation>
+    </kind>
+    <name type="type:Text">
+      <documentation>Logical member name. (required)</documentation>
+    </name>
+    <type type="inspect:InspectTypeRef">
+      <documentation>Projected member type. (optional)</documentation>
+    </type>
+    <inputType type="inspect:InspectTypeRef">
+      <documentation>Capability input type. (optional)</documentation>
+    </inputType>
+    <outputType type="inspect:InspectTypeRef">
+      <documentation>Capability output type. (optional)</documentation>
+    </outputType>
+    <throws type="type:Text">
+      <documentation>Thrown type FQNs. TS: Text[]. (optional)</documentation>
+    </throws>
+    <cardinality type="type:Text">
+      <documentation>Aggregation or association cardinality. (optional)</documentation>
+    </cardinality>
+    <inheritedFrom type="type:Text">
+      <documentation>Declaring ancestor or contract FQN. (optional)</documentation>
+    </inheritedFrom>
+    <visibility type="type:Text">
+      <documentation>Member visibility. (optional)</documentation>
+    </visibility>
+    <readOnly type="type:Boolean">
+      <documentation>true when the member is read-only. (optional)</documentation>
+    </readOnly>
+    <abstract type="type:Boolean">
+      <documentation>true when the member is abstract. (optional)</documentation>
+    </abstract>
+    <final type="type:Boolean">
+      <documentation>true when the member is final. (optional)</documentation>
+    </final>
+    <override type="type:Boolean">
+      <documentation>true when the member overrides an ancestor. (optional)</documentation>
+    </override>
+  </properties>
+
+</block>

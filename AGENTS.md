@@ -115,6 +115,18 @@ npx blockml graph query '<cypher>'
 
 The graph indexes the same corpus as `validate --all`. Rebuild with `npx blockml graph index` when the index is missing or stale. Prefer named operations over Cypher; use `npx blockml graph schema` before ad-hoc queries.
 
+## Inspect
+
+Use BlockML Inspect to load a Block by FQN as a compact JSON view with effective members and optional recursive type expansion.
+
+```bash
+npx blockml inspect <fqn>
+npx blockml inspect <fqn> --depth 0
+npx blockml inspect <fqn> --depth 2
+```
+
+Default depth is 1. `depth: 0` is the root only. Inspect uses the same corpus as `validate --all`. It does not write an index. Open BML files to edit; use inspect to understand a Block.
+
 ## Builder
 
 Use BlockML Builder (BomBuilder) to create or structurally edit Blocks as Urmodell graphs, then serialize to BML.
@@ -173,8 +185,8 @@ For most BlockML tasks, use the following workflow:
 
 1. Understand the requested semantic change or question.
 2. Search the model for the relevant concepts using `npx blockml search`.
-3. Identify relevant Blocks by FQN. Use `npx blockml graph` for structure (uses, ancestors, path).
-4. Read the relevant BML definitions.
+3. Identify relevant Blocks by FQN. Use `npx blockml inspect <fqn>` for the effective shape. Use `npx blockml graph` for structure (uses, ancestors, path).
+4. Read the relevant BML definitions when editing.
 5. Follow references, base types, related Blocks, or libraries when necessary.
 6. Determine the smallest coherent semantic change.
 7. Modify the BML source.
@@ -195,7 +207,9 @@ npx blockml search
     ↓
 relevant FQNs
     ↓
-targeted BML reads
+npx blockml inspect <fqn>
+    ↓
+targeted BML reads (when editing)
     ↓
 reason/change
 ```
@@ -314,6 +328,7 @@ Preferred examples:
 
 ```bash
 npx blockml search "<query>"
+npx blockml inspect "<fqn>"
 npx blockml graph uses "<fqn>"
 npx blockml new "<fqn>"
 npx blockml validate
@@ -392,6 +407,7 @@ For example:
 
 ```bash
 npx blockml search "StructType"
+npx blockml inspect org.blockml.bml.type.StructType
 npx blockml search "capability"
 npx blockml search "aggregation"
 ```

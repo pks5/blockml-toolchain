@@ -27,6 +27,7 @@ Cross-package references (still Markdown until migrated): `06_compiler.md`, `14_
 | Command inventory | `org.blockml.bml.cli.documentation.Commands` |
 | blockml compile | `org.blockml.bml.cli.documentation.CompileCommand` |
 | blockml validate | `org.blockml.bml.cli.documentation.ValidateCommand` |
+| blockml inspect | `org.blockml.bml.cli.documentation.InspectCommand` |
 | blockml.config.json | `org.blockml.bml.cli.documentation.Configuration` |
 | targets[] bootstrap (C3) | `org.blockml.bml.cli.documentation.TargetBootstrap` |
 | Per-target CLI matrix | `org.blockml.bml.cli.documentation.TargetCliMatrix` |

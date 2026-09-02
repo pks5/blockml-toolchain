@@ -1,0 +1,72 @@
+<!--
+  Inspect — InspectedBlock
+  FQN: org.blockml.bml.inspect.InspectedBlock
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:inspect="org.blockml.bml.inspect"
+  xmlns:inspectcap="org.blockml.bml.inspect.capability"
+  xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>InspectedBlock</name>
+  <type>inspect:InspectedBlock</type>
+  <baseType>inspect:InspectType</baseType>
+  <is>Compact projection of one Block</is>
+
+  <documentation>Members are the effective set. baseType and ancestors are FQN refs only — the inheritance chain is not copied into InspectResult.blocks.</documentation>
+
+  <properties>
+    <fqn type="type:Text">
+      <documentation>Block FQN. (required)</documentation>
+    </fqn>
+    <name type="type:Text">
+      <documentation>Short name. (required)</documentation>
+    </name>
+    <file type="type:Text">
+      <documentation>Source path relative to project root. (optional)</documentation>
+    </file>
+    <origin type="type:Text">
+      <documentation>workspace, dependency, or unresolved. (optional)</documentation>
+    </origin>
+    <is type="type:Text">
+      <documentation>Idea descriptor. (optional)</documentation>
+    </is>
+    <documentation type="type:Text">
+      <documentation>First documentation entry, truncated. (optional)</documentation>
+    </documentation>
+    <ancestors type="type:Text">
+      <documentation>baseType chain FQNs excluding self. TS: Text[]. (optional)</documentation>
+    </ancestors>
+    <contracts type="type:Text">
+      <documentation>Contract FQNs. TS: Text[]. (optional)</documentation>
+    </contracts>
+    <subBlocks type="type:Text">
+      <documentation>Nested sub-block FQNs. TS: Text[]. (optional)</documentation>
+    </subBlocks>
+    <abstract type="type:Boolean">
+      <documentation>true when the Block is abstract. (optional)</documentation>
+    </abstract>
+    <final type="type:Boolean">
+      <documentation>true when the Block is final. (optional)</documentation>
+    </final>
+  </properties>
+  <aggregations>
+    <members type="inspect:InspectedMember[]">
+      <documentation>Effective members. (required)</documentation>
+    </members>
+  </aggregations>
+
+</block>

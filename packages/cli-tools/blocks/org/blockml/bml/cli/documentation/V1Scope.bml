@@ -37,18 +37,20 @@
     • blockml graph path FROM TO [--json] [--depth]
     • blockml graph query CYPHER [--json]
     • blockml graph schema [--json]
+    • blockml inspect FQN [--depth n] [--json] [--src] [--libraries]
     • blockml transform apply EXECUTION-FQN [--verbose]
     • blockml new FQN [--baseType FQN] [--is text]
     • Targets: blockdoc (default), xsd, fatblock; custom via registerTargetFactory or targetPackages
     • Config: targets[], targetPackages, targetOptions, defaultTarget
-    • Flags: --out, --src, --libraries, --include (fatblock), --per-package (fatblock), --all, --verbose (validate, transform), --json (search, graph), --limit (search), --force (search/graph index), --depth (graph), --baseType (new), --is (new)
+    • Flags: --out, --src, --libraries, --include (fatblock), --per-package (fatblock), --all, --verbose (validate, transform), --json (search, graph, inspect), --limit (search), --force (search/graph index), --depth (graph, inspect), --baseType (new), --is (new)
     • Validate uses parse + @blockml/validator only; XSD is compile xsd, not a validate step
     • Search uses @blockml/search over the validate --all corpus
     • Graph uses @blockml/graph over the validate --all corpus
+    • Inspect uses @blockml/inspect over the validate --all corpus
     • New uses @blockml/builder; writes .bml and updates Library.blocks
 
     V1 not implemented (documented in ScopeExclusions):
-    init, inspect, watch, activate-config,
+    init, watch, activate-config,
     incremental .bom-cache, thumbnails, OpenSCAD resolver, bom-cli.config.json renaming.</documentation>
   <references>
     <see type="clidocumentation:PublicApi" relation="ReadNext" />

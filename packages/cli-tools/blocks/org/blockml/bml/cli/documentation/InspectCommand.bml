@@ -1,0 +1,42 @@
+<!--
+  CLI Documentation — InspectCommand
+  FQN: org.blockml.bml.cli.documentation.InspectCommand
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:inspect="org.blockml.bml.inspect"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>InspectCommand</name>
+  <type>clidocumentation:InspectCommand</type>
+  <baseType>core:Documentation</baseType>
+  <is>blockml inspect specification</is>
+
+  <documentation>Syntax:
+    blockml inspect FQN [--depth n] [--json] [--src dir] [--libraries a,b]
+
+    Inspect uses the same corpus as validate --all (@blockml/inspect / bootstrapFullProjectRegistry).
+    Output is InspectResult JSON (root, depth, blocks, unresolved, cycles, truncated).
+    Default depth 1, allowed 0, cap 3. --json is accepted and implied.
+    Missing or unknown FQN → exit 2.</documentation>
+  <references>
+    <see type="clidocumentation:Commands" relation="SeeAlso" />
+    <see type="clicap:RunInspect" relation="SeeAlso" />
+  </references>
+
+</block>

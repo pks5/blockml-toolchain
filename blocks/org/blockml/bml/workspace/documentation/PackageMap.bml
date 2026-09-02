@@ -19,6 +19,7 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:framework="org.blockml.bml.framework"
   xmlns:graph="org.blockml.bml.graph"
+  xmlns:inspect="org.blockml.bml.inspect"
   xmlns:search="org.blockml.bml.search"
   xmlns:blockdoc="org.blockml.bml.target.blockdoc"
   xmlns:fatblock="org.blockml.bml.target.fatblock"
@@ -53,6 +54,8 @@
       → packages/search/blocks/org/blockml/bml/search/Library.bml
     • @blockml/graph → org.blockml.bml.graph.Library
       → packages/graph/blocks/org/blockml/bml/graph/Library.bml
+    • @blockml/inspect → org.blockml.bml.inspect.Library
+      → packages/inspect/blocks/org/blockml/bml/inspect/Library.bml
     • @blockml/transformer → org.blockml.bml.transformer.Library
       → packages/transformer/blocks/org/blockml/bml/transformer/Library.bml
     • @blockml/compiler → org.blockml.bml.compiler.runtime.Library

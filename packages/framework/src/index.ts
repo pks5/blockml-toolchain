@@ -23,6 +23,7 @@ export {
   resolveContracts,
   collectBaseTypeChain,
   memberIdentityKey,
+  findLocalMember,
 } from "./resolve/resolve-effective-members.js";
 export { parseExpression } from "./expression/parse-expression.js";
 export type {

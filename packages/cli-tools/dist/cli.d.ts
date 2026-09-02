@@ -20,6 +20,7 @@ export interface ParsedArgs {
     index?: boolean;
     graphFqn?: string;
     graphTo?: string;
+    inspectFqn?: string;
     depth?: number;
     executionFqn?: string;
     parametersJson?: string;

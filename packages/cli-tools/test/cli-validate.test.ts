@@ -466,7 +466,7 @@ describe("runCli other commands", () => {
   });
 
   it("returns 2 for an unknown command", async () => {
-    const { code, stderr } = await runCli(["inspect"], ROOT);
+    const { code, stderr } = await runCli(["frobnicate"], ROOT);
     expect(code).toBe(2);
     expect(stderr).toMatch(/Usage: blockml/);
   });

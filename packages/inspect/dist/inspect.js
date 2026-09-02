@@ -1,0 +1,280 @@
+import { isAbsolute, relative, resolve } from "node:path";
+import { bootstrapFullProjectRegistry, collectBaseTypeChain, findLocalMember, isLiteralValue, projectSourceRoots, resolveEffectiveMembers, } from "@blockml/framework";
+import { collectNamedFqns, projectTypeExpression } from "./type-refs.js";
+import { DEFAULT_INSPECT_DEPTH, DEFAULT_MAX_BLOCKS, DOC_TRUNCATE, MAX_INSPECT_DEPTH, TYPE_PACKAGE_PREFIX, VALUE_TYPE_FQN, } from "./types.js";
+function clampDepth(depth) {
+    const n = depth === undefined ? DEFAULT_INSPECT_DEPTH : depth;
+    if (!Number.isFinite(n) || n < 0) {
+        return DEFAULT_INSPECT_DEPTH;
+    }
+    return Math.min(MAX_INSPECT_DEPTH, Math.floor(n));
+}
+export function isLeafTypeFqn(fqn) {
+    return fqn.startsWith(TYPE_PACKAGE_PREFIX) || fqn === VALUE_TYPE_FQN;
+}
+function isPathInside(inner, outer) {
+    const a = resolve(inner);
+    const b = resolve(outer);
+    const rel = relative(b, a);
+    return rel === "" || (!rel.startsWith("..") && !isAbsolute(rel));
+}
+function originForFile(filePath, workspaceRoots) {
+    if (!filePath) {
+        return "unresolved";
+    }
+    for (const root of workspaceRoots) {
+        if (isPathInside(filePath, root)) {
+            return "workspace";
+        }
+    }
+    return "dependency";
+}
+function displayPath(file, rootDir) {
+    if (!rootDir || !file) {
+        return file;
+    }
+    const abs = resolve(file);
+    const rel = relative(rootDir, abs);
+    return rel && !rel.startsWith("..") && !isAbsolute(rel) ? rel : file;
+}
+function truncate(text) {
+    if (!text) {
+        return undefined;
+    }
+    if (text.length <= DOC_TRUNCATE) {
+        return text;
+    }
+    return text.slice(0, DOC_TRUNCATE);
+}
+function firstDocumentation(block) {
+    const text = block.documentations?.[0]?.text;
+    return truncate(text);
+}
+function pushUnique(list, value) {
+    if (!list.includes(value)) {
+        list.push(value);
+    }
+}
+function inheritedFromOwner(block, member, registry) {
+    if (findLocalMember(block, member)) {
+        return undefined;
+    }
+    const chain = collectBaseTypeChain(block, registry);
+    const ancestors = chain.slice(0, -1);
+    for (let i = ancestors.length - 1; i >= 0; i--) {
+        const ancestor = ancestors[i];
+        if (ancestor && findLocalMember(ancestor, member)) {
+            return ancestor.type;
+        }
+    }
+    for (const ref of block.contracts ?? []) {
+        const contractDoc = registry.get(ref.value);
+        if (contractDoc && findLocalMember(contractDoc.block, member)) {
+            return contractDoc.block.type;
+        }
+    }
+    return undefined;
+}
+function projectMember(member, inheritedFrom) {
+    const projected = {
+        kind: member.kind,
+        name: member.name,
+    };
+    if (inheritedFrom) {
+        projected.inheritedFrom = inheritedFrom;
+    }
+    if (member.visibility) {
+        projected.visibility = member.visibility;
+    }
+    if (member.readOnly) {
+        projected.readOnly = true;
+    }
+    if (member.abstract) {
+        projected.abstract = true;
+    }
+    if (member.final) {
+        projected.final = true;
+    }
+    if (member.override) {
+        projected.override = true;
+    }
+    if (member.kind === "property") {
+        const type = projectTypeExpression(member.type, member.typeFqn);
+        if (type) {
+            projected.type = type;
+        }
+        if (isLiteralValue(member.value)) {
+            projected.value = member.value.value;
+        }
+    }
+    else if (member.kind === "aggregation" || member.kind === "association") {
+        const type = projectTypeExpression(member.type);
+        if (type) {
+            projected.type = type;
+        }
+        if (member.cardinality) {
+            projected.cardinality = member.cardinality;
+        }
+    }
+    else if (member.kind === "capability") {
+        const input = projectTypeExpression(member.inputType);
+        if (input) {
+            projected.inputType = input;
+        }
+        const output = projectTypeExpression(member.outputType);
+        if (output) {
+            projected.outputType = output;
+        }
+        const throws = (member.throws ?? []).map((item) => item.value).filter(Boolean);
+        if (throws.length > 0) {
+            projected.throws = throws;
+        }
+    }
+    return projected;
+}
+function collectDeclaredExpansionRefs(block) {
+    const refs = [];
+    for (const contract of block.contracts ?? []) {
+        if (contract.value) {
+            refs.push(contract.value);
+        }
+    }
+    for (const sub of block.subBlocks) {
+        if (sub.type) {
+            refs.push(sub.type);
+        }
+    }
+    for (const member of block.members) {
+        if (member.kind === "property") {
+            refs.push(...collectNamedFqns(member.type, member.typeFqn));
+        }
+        else if (member.kind === "aggregation" || member.kind === "association") {
+            refs.push(...collectNamedFqns(member.type));
+        }
+        else if (member.kind === "capability") {
+            refs.push(...collectNamedFqns(member.inputType));
+            refs.push(...collectNamedFqns(member.outputType));
+            for (const thrown of member.throws ?? []) {
+                if (thrown.value) {
+                    refs.push(thrown.value);
+                }
+            }
+        }
+    }
+    return [...new Set(refs)];
+}
+function projectBlock(doc, registry, options) {
+    const block = doc.block;
+    const filePath = doc.source?.filePath || block.source?.file || "";
+    const workspaceRoots = options.rootDir
+        ? projectSourceRoots(options.rootDir, options.srcDir)
+        : [];
+    const projected = {
+        fqn: block.type,
+        name: block.name,
+        members: [],
+    };
+    if (filePath) {
+        projected.file = displayPath(filePath, options.rootDir);
+        projected.origin = originForFile(filePath, workspaceRoots);
+    }
+    if (block.is) {
+        projected.is = block.is;
+    }
+    const documentation = firstDocumentation(block);
+    if (documentation) {
+        projected.documentation = documentation;
+    }
+    if (block.baseType) {
+        projected.baseType = { ref: block.baseType };
+    }
+    const chain = collectBaseTypeChain(block, registry);
+    const ancestorFqns = chain.slice(0, -1).map((item) => item.type).filter(Boolean);
+    if (ancestorFqns.length > 0) {
+        projected.ancestors = ancestorFqns;
+    }
+    const contracts = (block.contracts ?? []).map((item) => item.value).filter(Boolean);
+    if (contracts.length > 0) {
+        projected.contracts = contracts;
+    }
+    const subBlocks = block.subBlocks.map((sub) => sub.type).filter(Boolean);
+    if (subBlocks.length > 0) {
+        projected.subBlocks = subBlocks;
+    }
+    if (block.abstract) {
+        projected.abstract = true;
+    }
+    if (block.final) {
+        projected.final = true;
+    }
+    const effective = resolveEffectiveMembers(block, registry);
+    projected.members = effective.map((member) => projectMember(member, inheritedFromOwner(block, member, registry)));
+    return projected;
+}
+export function inspectBlock(fqn, registry, options = {}) {
+    const depth = clampDepth(options.depth);
+    const maxBlocks = options.maxBlocks ?? DEFAULT_MAX_BLOCKS;
+    const result = {
+        root: fqn,
+        depth,
+        blocks: {},
+        unresolved: [],
+        cycles: [],
+        truncated: [],
+    };
+    const visiting = new Set();
+    const expanded = new Set();
+    const expand = (currentFqn, remaining) => {
+        if (visiting.has(currentFqn)) {
+            pushUnique(result.cycles, currentFqn);
+            return;
+        }
+        if (expanded.has(currentFqn)) {
+            return;
+        }
+        if (isLeafTypeFqn(currentFqn) && currentFqn !== fqn) {
+            return;
+        }
+        const doc = registry.get(currentFqn);
+        if (!doc) {
+            pushUnique(result.unresolved, currentFqn);
+            return;
+        }
+        const already = Object.keys(result.blocks).length;
+        if (already >= maxBlocks && currentFqn !== fqn) {
+            pushUnique(result.truncated, currentFqn);
+            return;
+        }
+        visiting.add(currentFqn);
+        result.blocks[currentFqn] = projectBlock(doc, registry, options);
+        expanded.add(currentFqn);
+        if (remaining > 0) {
+            for (const ref of collectDeclaredExpansionRefs(doc.block)) {
+                expand(ref, remaining - 1);
+            }
+        }
+        visiting.delete(currentFqn);
+    };
+    expand(fqn, depth);
+    return result;
+}
+export function inspectProject(fqn, options = {}) {
+    const rootDir = options.rootDir ?? process.cwd();
+    const bootstrap = bootstrapFullProjectRegistry({
+        rootDir,
+        ...(options.srcDir !== undefined ? { srcDir: options.srcDir } : {}),
+        ...(options.libraries !== undefined ? { libraries: options.libraries } : {}),
+    });
+    const blockOptions = { rootDir };
+    if (options.depth !== undefined) {
+        blockOptions.depth = options.depth;
+    }
+    if (options.srcDir !== undefined) {
+        blockOptions.srcDir = options.srcDir;
+    }
+    if (options.maxBlocks !== undefined) {
+        blockOptions.maxBlocks = options.maxBlocks;
+    }
+    return inspectBlock(fqn, bootstrap.registry, blockOptions);
+}
+//# sourceMappingURL=inspect.js.map

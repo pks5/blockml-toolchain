@@ -1,0 +1,58 @@
+<!--
+  Inspect Documentation — DesignDecisions
+  FQN: org.blockml.bml.inspect.documentation.DesignDecisions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:inspect="org.blockml.bml.inspect"
+  xmlns:inspectcap="org.blockml.bml.inspect.capability"
+  xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>DesignDecisions</name>
+  <type>inspectdocumentation:DesignDecisions</type>
+  <baseType>core:Documentation</baseType>
+  <is>Normative Inspect decisions INSPECT1–INSPECT10</is>
+
+  <documentation>
+    # Normative Inspect decisions INSPECT1–INSPECT10
+
+    INSPECT1 CLI verb is inspect; the projection is an Inspect view, not a Resolved BOM.
+
+    INSPECT2 JSON-only output; --json is accepted and implied.
+
+    INSPECT3 Default depth 1, allowed 0, cap 3.
+
+    INSPECT4 Members are effective; inheritedFrom from findLocalMember plus baseType/contract owners.
+
+    INSPECT5 Expansion follows declared member types, contracts, and subBlocks — not the baseType chain and not inherited member types.
+
+    INSPECT6 Leaf FQNs: org.blockml.bml.type.* and org.blockml.bml.core.ValueType.
+
+    INSPECT7 Flat blocks map; cycles, unresolved, truncated are explicit FQN lists.
+
+    INSPECT8 Max 48 expanded blocks; documentation truncated to 400 characters.
+
+    INSPECT9 No persistent index; live TypeRegistry via bootstrapFullProjectRegistry.
+
+    INSPECT10 Inspect does not flatten into BOM and does not round-trip to BML.
+  </documentation>
+
+  <references>
+    <see type="inspectdocumentation:PackageOwnership" relation="ReadNext" />
+  </references>
+
+</block>

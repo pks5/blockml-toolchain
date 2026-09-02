@@ -34,7 +34,7 @@
     This library (org.blockml.bml.cli.*) is the SSOT. TypeScript in packages/cli-tools/src/
     implements it. Tests in packages/cli-tools/test/ encode behavioral contracts.
 
-    V1 implements validate, compile, search, graph, transform, and new (blockdoc, xsd, fatblock targets).
+    V1 implements validate, compile, search, graph, inspect, transform, and new (blockdoc, xsd, fatblock targets).
     Domain products use thin host CLIs (e.g. @machineblocks/cli) — see DualCliModel.
 
     Pipeline: loadConfig → bootstrapTypeRegistry → bootstrapTargets → compileToOutput → writeOutputFiles.</documentation>

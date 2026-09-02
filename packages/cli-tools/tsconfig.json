@@ -13,6 +13,7 @@
     { "path": "../framework" },
     { "path": "../search" },
     { "path": "../graph" },
+    { "path": "../inspect" },
     { "path": "../builder" },
     { "path": "../parser" },
     { "path": "../serializer" },

@@ -1,0 +1,81 @@
+<!--
+  BlockML Inspect Library Descriptor
+  FQN: org.blockml.bml.inspect.Library
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:inspect="org.blockml.bml.inspect"
+  xmlns:inspectcap="org.blockml.bml.inspect.capability"
+  xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>Library</name>
+  <type>inspect:Library</type>
+  <baseType>core:BlockLibrary</baseType>
+  <is>The BlockML Inspect package library catalog</is>
+
+  <documentation>
+    Canonical inspect-view specification for BlockML — ephemeral JSON projection
+    of a Block from the validate --all TypeRegistry. TypeScript in packages/inspect/src/
+    implements this library. Membership is defined exclusively by this blocks list.
+  </documentation>
+
+  <version>0.9.0</version>
+
+  <language>
+    <English />
+  </language>
+
+  <properties>
+    <description override="true">
+      <value>BlockML Inspect library</value>
+    </description>
+  </properties>
+
+  <aggregations>
+    <readMe>
+      <composition>
+        <inspect:README />
+      </composition>
+    </readMe>
+    <dependencies>
+      <composition>
+        <blockml:Library />
+        <bom:Library />
+        <framework:Library />
+      </composition>
+    </dependencies>
+    <blocks>
+      <composition>
+        <inspect:InspectType />
+        <inspect:InspectTypeRef />
+        <inspect:InspectedMember />
+        <inspect:InspectedBlock />
+        <inspect:InspectResult />
+        <inspect:InspectOptions />
+        <inspectcap:InspectBlock />
+        <inspectdocumentation:Introduction />
+        <inspectdocumentation:LayerSeparation />
+        <inspectdocumentation:ArchitectureOverview />
+        <inspectdocumentation:V1Scope />
+        <inspectdocumentation:PublicApi />
+        <inspectdocumentation:DesignDecisions />
+        <inspectdocumentation:PackageOwnership />
+        <inspectdocumentation:ScopeExclusions />
+      </composition>
+    </blocks>
+  </aggregations>
+
+</block>

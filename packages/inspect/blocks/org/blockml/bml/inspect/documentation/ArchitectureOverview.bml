@@ -1,0 +1,42 @@
+<!--
+  Inspect Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.inspect.documentation.ArchitectureOverview
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:inspect="org.blockml.bml.inspect"
+  xmlns:inspectcap="org.blockml.bml.inspect.capability"
+  xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>ArchitectureOverview</name>
+  <type>inspectdocumentation:ArchitectureOverview</type>
+  <baseType>core:Documentation</baseType>
+  <is>Registry to inspect projection</is>
+
+  <documentation>inspectProject: bootstrapFullProjectRegistry → TypeRegistry.get(fqn) → resolveEffectiveMembers → InspectResult JSON.
+
+    inspectBlock skips bootstrap and projects against a supplied registry.
+
+    Expansion is a flat blocks map keyed by FQN. depth 0 projects only the root. depth n projects declared member types, contracts, and subBlocks up to n hops. The baseType chain is listed as ancestors and is not copied into blocks.
+
+    Leaf FQNs under org.blockml.bml.type. and org.blockml.bml.core.ValueType stay as refs.</documentation>
+
+  <references>
+    <see type="inspectdocumentation:V1Scope" relation="ReadNext" />
+  </references>
+
+</block>

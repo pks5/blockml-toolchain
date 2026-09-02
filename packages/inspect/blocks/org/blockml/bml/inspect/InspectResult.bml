@@ -1,0 +1,54 @@
+<!--
+  Inspect — InspectResult
+  FQN: org.blockml.bml.inspect.InspectResult
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:inspect="org.blockml.bml.inspect"
+  xmlns:inspectcap="org.blockml.bml.inspect.capability"
+  xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>InspectResult</name>
+  <type>inspect:InspectResult</type>
+  <baseType>inspect:InspectType</baseType>
+  <is>Ephemeral JSON inspect view for one root FQN</is>
+
+  <documentation><![CDATA[Not a canonical model format. TS blocks is Record<fqn, InspectedBlock>. unresolved, cycles, and truncated are FQN lists.]]></documentation>
+
+  <properties>
+    <root type="type:Text">
+      <documentation>Inspected root FQN. (required)</documentation>
+    </root>
+    <depth type="type:Integer">
+      <documentation>Applied expansion depth. (required)</documentation>
+    </depth>
+    <unresolved type="type:Text">
+      <documentation>FQNs not found in the registry. TS: Text[]. (required)</documentation>
+    </unresolved>
+    <cycles type="type:Text">
+      <documentation>FQNs that closed an expansion cycle. TS: Text[]. (required)</documentation>
+    </cycles>
+    <truncated type="type:Text">
+      <documentation>FQNs skipped after the block budget. TS: Text[]. (required)</documentation>
+    </truncated>
+  </properties>
+  <aggregations>
+    <blocks type="inspect:InspectedBlock[]">
+      <documentation>Projected blocks. TS: Record keyed by FQN. (required)</documentation>
+    </blocks>
+  </aggregations>
+
+</block>

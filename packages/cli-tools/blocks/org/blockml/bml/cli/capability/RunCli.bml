@@ -28,7 +28,7 @@
   <documentation>
     # Public CLI entry: argv + cwd to exit code and stderr
 
-    CLI18: validate command to RunValidate; compile to RunCompile; search to RunSearch; transform apply to RunTransform; unknown command or transform subcommand exit 2 with USAGE.
+    CLI18: validate command to RunValidate; compile to RunCompile; search to RunSearch; graph to RunGraph; inspect to RunInspect; transform apply to RunTransform; unknown command or transform subcommand exit 2 with USAGE.
 
     Uncaught throws → Internal CLI error: message, exit 2 (application error, not BML diagnostics).
 
@@ -43,6 +43,7 @@
     <see type="clicap:RunValidate" relation="SeeAlso" />
     <see type="clicap:RunCompile" relation="SeeAlso" />
     <see type="clicap:RunSearch" relation="SeeAlso" />
+    <see type="clicap:RunInspect" relation="SeeAlso" />
     <see type="clicap:RunTransform" relation="SeeAlso" />
     <see type="clicap:WriteCliOutput" relation="SeeAlso" />
   </references>

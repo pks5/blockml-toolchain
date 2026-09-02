@@ -25,7 +25,7 @@
   <baseType>cli:CliType</baseType>
   <is>Command names and V1 implementation status</is>
 
-  <documentation>V1 implements validate, compile, search, graph, transform, and new. Later: init, inspect, watch, activate-config.</documentation>
+  <documentation>V1 implements validate, compile, search, graph, inspect, transform, and new. Later: init, watch, activate-config.</documentation>
   <properties>
     <validate type="type:Boolean"><documentation>true — implemented in V1.</documentation></validate>
     <compile type="type:Boolean"><documentation>true — implemented in V1.</documentation></compile>
@@ -34,7 +34,7 @@
     <transform type="type:Boolean"><documentation>true — implemented in V1.</documentation></transform>
     <new type="type:Boolean"><documentation>true — implemented in V1.</documentation></new>
     <init type="type:Boolean"><documentation>false — planned.</documentation></init>
-    <inspect type="type:Boolean"><documentation>false — planned.</documentation></inspect>
+    <inspect type="type:Boolean"><documentation>true — implemented in V1.</documentation></inspect>
     <watch type="type:Boolean"><documentation>false — planned.</documentation></watch>
     <activateConfig type="type:Boolean"><documentation>false — planned.</documentation></activateConfig>
   </properties>

@@ -18,6 +18,7 @@ PACKAGES=(
   "@blockml/fatblock-target"
   "@blockml/search"
   "@blockml/graph"
+  "@blockml/inspect"
   "@blockml/builder"
   "@blockml/transformer"
   "@blockml/cli"

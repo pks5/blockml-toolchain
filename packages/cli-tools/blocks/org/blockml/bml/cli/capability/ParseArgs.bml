@@ -35,7 +35,7 @@
     --parameters (transform apply JSON object), --baseType and --is (new).
 
     Positional: validate=file; compile=target or file+target; search=query
-    tokens or subcommand index; graph=subcommand then args; transform=subcommand then args
+    tokens or subcommand index; graph=subcommand then args; inspect=FQN; transform=subcommand then args
     (apply=execution FQN); new=FQN.
   </documentation>
 

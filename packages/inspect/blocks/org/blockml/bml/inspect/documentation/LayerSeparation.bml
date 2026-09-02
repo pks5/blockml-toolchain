@@ -1,0 +1,43 @@
+<!--
+  Inspect Documentation — LayerSeparation
+  FQN: org.blockml.bml.inspect.documentation.LayerSeparation
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:inspect="org.blockml.bml.inspect"
+  xmlns:inspectcap="org.blockml.bml.inspect.capability"
+  xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>LayerSeparation</name>
+  <type>inspectdocumentation:LayerSeparation</type>
+  <baseType>core:Documentation</baseType>
+  <is>Inspect vs framework vs parser vs CLI</is>
+
+  <documentation>Layers:
+
+    org.blockml.bml.inspect.* (@blockml/inspect) — InspectResult projection, depth/cycle/budget, leaf-type policy.
+    @blockml/framework — TypeRegistry, bootstrapFullProjectRegistry, resolveEffectiveMembers, findLocalMember.
+    @blockml/parser / @blockml/bom — BlockDefinition, TypeExpression, MemberDefinition.
+    @blockml/cli — blockml inspect command host.
+
+    Inspect does not parse BML with a second path. It does not own a corpus or an index. It does not depend on @blockml/graph.</documentation>
+
+  <references>
+    <see type="inspectdocumentation:ArchitectureOverview" relation="ReadNext" />
+  </references>
+
+</block>

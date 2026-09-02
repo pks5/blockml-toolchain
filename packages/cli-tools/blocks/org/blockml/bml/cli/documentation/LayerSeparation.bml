@@ -39,6 +39,8 @@
 
     @blockml/graph — authored structural graph. CLI wraps as RunGraph.
 
+    @blockml/inspect — compact Block inspect view. CLI wraps as RunInspect.
+
     @blockml/builder — BomBuilder session. CLI wraps as RunNew.
 
     Target packages (@blockml/blockdoc-target, xsd-target, fatblock-target) — RenderTarget impls
