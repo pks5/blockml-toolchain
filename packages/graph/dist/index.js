@@ -12,7 +12,7 @@ export { GraphIndex } from "./graph-index.js";
 export { graphDataFromRegistry } from "./mapper.js";
 export { collectNamedTypes } from "./type-refs.js";
 export { defaultIndexDir, resolveIndexDir } from "./fingerprint.js";
-export { graphSchema } from "./schema.js";
+export { graphSchema, GRAPH_RELATIONS, GRAPH_CYPHER_EXAMPLE } from "./schema.js";
 function resolveOptions(options = {}) {
     const rootDir = options.rootDir ?? process.cwd();
     const srcDir = options.srcDir ?? "blocks";

@@ -20,6 +20,11 @@ export interface InspectStructField {
     name: string;
     type: InspectTypeRef;
 }
+export interface InspectedImplementation {
+    language: string;
+    source: string;
+    sourceTruncated?: boolean;
+}
 export interface InspectedMember {
     kind: "property" | "aggregation" | "association" | "capability";
     name: string;
@@ -36,6 +41,7 @@ export interface InspectedMember {
     override?: boolean;
     value?: unknown;
     instances?: InspectedInstance[];
+    implementation?: InspectedImplementation;
 }
 export interface InspectedInstance {
     type: string;

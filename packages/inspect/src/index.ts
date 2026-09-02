@@ -14,6 +14,7 @@ export {
 export type {
   InspectBlockOptions,
   InspectedBlock,
+  InspectedImplementation,
   InspectedInstance,
   InspectedMember,
   InspectOrigin,

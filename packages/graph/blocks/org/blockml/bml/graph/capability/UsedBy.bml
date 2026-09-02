@@ -25,7 +25,7 @@
   <type>graphcap:UsedBy</type>
   <baseType>core:Capability</baseType>
   <is>Incoming authored block-level references</is>
-  <documentation>Inverse of Uses. Default depth 1. depth n walks n incoming hops; further hops set GraphNeighbor.source.</documentation>
+  <documentation>Inverse of Uses. Default depth 1. depth n walks n incoming hops; further hops set GraphNeighbor.source. CLI --origin, --relation, and --limit filter the result list (comma-separated origin/relation; limit is a cap after filtering).</documentation>
   <references>
     <see type="graphcap:Uses" relation="SeeAlso" />
   </references>
@@ -36,6 +36,15 @@
     <depth type="type:Integer">
       <documentation>Incoming hops. Default 1. (optional)</documentation>
     </depth>
+    <origin type="type:Text">
+      <documentation>Keep neighbors whose node.origin is one of workspace, dependency, unresolved. Comma-separated. (optional)</documentation>
+    </origin>
+    <relation type="type:Text">
+      <documentation>Keep neighbors whose relation is listed. Comma-separated GraphRelation names. (optional)</documentation>
+    </relation>
+    <limit type="type:Integer">
+      <documentation>Max neighbors after filters. (optional)</documentation>
+    </limit>
     <neighbors type="graph:GraphNeighbor[]">
       <documentation>Incoming neighbors. (required)</documentation>
     </neighbors>

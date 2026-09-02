@@ -49,6 +49,28 @@ function truncateDocumentation(text) {
 function firstDocumentation(block) {
     return truncateDocumentation(block.documentations?.[0]?.text);
 }
+function lastSegment(fqn) {
+    const parts = fqn.split(".");
+    return parts[parts.length - 1] || fqn;
+}
+function projectImplementation(impl) {
+    const text = impl?.source?.trim();
+    if (!impl || !text) {
+        return undefined;
+    }
+    const truncated = truncateDocumentation(text);
+    if (!truncated) {
+        return undefined;
+    }
+    const projected = {
+        language: lastSegment(impl.languageFqn) || impl.languageFqn,
+        source: truncated.text,
+    };
+    if (truncated.truncated) {
+        projected.sourceTruncated = true;
+    }
+    return projected;
+}
 function projectMemberValue(value) {
     if (value.kind === "literal") {
         return value.value;
@@ -199,6 +221,10 @@ function projectMember(member, inheritedFrom) {
         const throws = (member.throws ?? []).map((item) => item.value).filter(Boolean);
         if (throws.length > 0) {
             projected.throws = throws;
+        }
+        const implementation = projectImplementation(member.implementation);
+        if (implementation) {
+            projected.implementation = implementation;
         }
     }
     return projected;

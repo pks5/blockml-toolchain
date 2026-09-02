@@ -25,7 +25,7 @@
   <type>graphcap:Neighbors</type>
   <baseType>core:Capability</baseType>
   <is>Union of uses and usedBy</is>
-  <documentation>Authored environment of a block, both directions. Default depth 1. depth n is an undirected walk of n hops.</documentation>
+  <documentation>Authored environment of a block, both directions. Default depth 1. depth n is an undirected walk of n hops. CLI --origin, --relation, and --limit filter the result list.</documentation>
   <references>
     <see type="graphcap:Uses" relation="SeeAlso" />
     <see type="graphcap:UsedBy" relation="SeeAlso" />
@@ -37,6 +37,15 @@
     <depth type="type:Integer">
       <documentation>Undirected hops. Default 1. (optional)</documentation>
     </depth>
+    <origin type="type:Text">
+      <documentation>Keep neighbors whose node.origin is listed. Comma-separated. (optional)</documentation>
+    </origin>
+    <relation type="type:Text">
+      <documentation>Keep neighbors whose relation is listed. Comma-separated. (optional)</documentation>
+    </relation>
+    <limit type="type:Integer">
+      <documentation>Max neighbors after filters. (optional)</documentation>
+    </limit>
     <neighbors type="graph:GraphNeighbor[]">
       <documentation>Neighbors. (required)</documentation>
     </neighbors>

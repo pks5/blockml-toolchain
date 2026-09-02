@@ -263,7 +263,10 @@ describe("graph semantic API", () => {
       const schema = index.schema();
       expect(schema.relations).toContain("BASE_TYPE");
       expect(schema.relations).toContain("MEMBER_TYPE");
-      expect(graphSchema().description.length).toBeGreaterThan(0);
+      expect(schema.description).toMatch(/type\(\)/);
+      expect(schema.description).toMatch(/shortestPath\(\)/);
+      expect(schema.example).toMatch(/MATCH \(a:Block \{fqn: \$fqn\}\)-\[:BASE_TYPE\]->/);
+      expect(graphSchema().example).toBe(schema.example);
 
       const queried = await index.query(
         "MATCH (a:Block)-[:BASE_TYPE*1..]->(b:Block) WHERE b.fqn = $fqn RETURN a.fqn ORDER BY a.fqn",

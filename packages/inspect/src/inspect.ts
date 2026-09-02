@@ -28,6 +28,7 @@ import {
   VALUE_TYPE_FQN,
   type InspectBlockOptions,
   type InspectedBlock,
+  type InspectedImplementation,
   type InspectedInstance,
   type InspectedMember,
   type InspectOrigin,
@@ -87,6 +88,32 @@ function truncateDocumentation(text: string | undefined): { text: string; trunca
 
 function firstDocumentation(block: BlockDefinition): { text: string; truncated: boolean } | undefined {
   return truncateDocumentation(block.documentations?.[0]?.text);
+}
+
+function lastSegment(fqn: string): string {
+  const parts = fqn.split(".");
+  return parts[parts.length - 1] || fqn;
+}
+
+function projectImplementation(
+  impl: { languageFqn: string; source: string } | undefined,
+): InspectedImplementation | undefined {
+  const text = impl?.source?.trim();
+  if (!impl || !text) {
+    return undefined;
+  }
+  const truncated = truncateDocumentation(text);
+  if (!truncated) {
+    return undefined;
+  }
+  const projected: InspectedImplementation = {
+    language: lastSegment(impl.languageFqn) || impl.languageFqn,
+    source: truncated.text,
+  };
+  if (truncated.truncated) {
+    projected.sourceTruncated = true;
+  }
+  return projected;
 }
 
 function projectMemberValue(value: MemberValue): unknown {
@@ -249,6 +276,10 @@ function projectMember(member: MemberDefinition, inheritedFrom?: string): Inspec
     const throws = (member.throws ?? []).map((item) => item.value).filter(Boolean);
     if (throws.length > 0) {
       projected.throws = throws;
+    }
+    const implementation = projectImplementation(member.implementation);
+    if (implementation) {
+      projected.implementation = implementation;
     }
   }
 

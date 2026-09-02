@@ -40,6 +40,9 @@
     <json type="type:Boolean"><documentation>Print JSON. (optional)</documentation></json>
     <force type="type:Boolean"><documentation>Alias of full rebuild for graph index. (optional)</documentation></force>
     <depth type="type:Integer"><documentation>uses/used-by/neighbors hops (default 1); ancestors/descendants/path max hops (default 16). members ignores --depth. (optional)</documentation></depth>
+    <origin type="type:Text"><documentation>--origin filter for uses/used-by/neighbors. (optional)</documentation></origin>
+    <relation type="type:Text"><documentation>--relation filter for uses/used-by/neighbors. (optional)</documentation></relation>
+    <limit type="type:Integer"><documentation>--limit cap after filters for uses/used-by/neighbors. (optional)</documentation></limit>
   </properties>
 
 </block>

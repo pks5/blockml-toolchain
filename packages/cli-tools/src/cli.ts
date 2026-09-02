@@ -51,7 +51,8 @@ const USAGE =
   "       blockml search <query> [--json] [--limit n] [--src dir] [--libraries a,b]\n" +
   "       blockml search index [--force] [--src dir] [--libraries a,b]\n" +
   "       blockml graph index [--force] [--src dir] [--libraries a,b]\n" +
-  "       blockml graph neighbors|uses|used-by|ancestors|descendants|members <fqn> [--json] [--depth n]\n" +
+  "       blockml graph neighbors|uses|used-by <fqn> [--json] [--depth n] [--origin o] [--relation r] [--limit n]\n" +
+  "       blockml graph ancestors|descendants|members <fqn> [--json] [--depth n]\n" +
   "       blockml graph path <from> <to> [--json] [--depth n]\n" +
   "       blockml graph query <cypher> [--json]\n" +
   "       blockml graph schema [--json]\n" +
@@ -62,7 +63,8 @@ const USAGE =
 
 const GRAPH_USAGE =
   "Usage: blockml graph index [--force] [--src dir] [--libraries a,b]\n" +
-  "       blockml graph neighbors|uses|used-by|ancestors|descendants|members <fqn> [--json] [--depth n]\n" +
+  "       blockml graph neighbors|uses|used-by <fqn> [--json] [--depth n] [--origin o] [--relation r] [--limit n]\n" +
+  "       blockml graph ancestors|descendants|members <fqn> [--json] [--depth n]\n" +
   "       blockml graph path <from> <to> [--json] [--depth n]\n" +
   "       blockml graph query <cypher> [--json]\n" +
   "       blockml graph schema [--json]\n" +
@@ -131,6 +133,8 @@ export interface ParsedArgs {
   newBaseType?: string;
   newIs?: string;
   help?: boolean;
+  origin?: string;
+  relation?: string;
 }
 
 export interface CliRunOptions {
@@ -219,6 +223,16 @@ export function parseArgs(argv: string[]): ParsedArgs {
       }
     } else if (flag === "--help" || flag === "-h") {
       result.help = true;
+    } else if (flag === "--origin") {
+      const value = args.shift();
+      if (value) {
+        result.origin = value;
+      }
+    } else if (flag === "--relation") {
+      const value = args.shift();
+      if (value) {
+        result.relation = value;
+      }
     } else if (flag && !flag.startsWith("-")) {
       if (result.command === "validate") {
         if (!result.file) {

@@ -12,6 +12,9 @@ export interface GraphCliArgs {
     depth?: number;
     srcDir?: string;
     libraries?: string[];
+    origin?: string;
+    relation?: string;
+    limit?: number;
 }
 export declare function runGraph(parsed: GraphCliArgs, rootDir: string, config: BomConfig, lines: CliOutputLine[], formatDiagnostic: (d: {
     severity: string;

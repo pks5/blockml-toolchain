@@ -1,6 +1,7 @@
 import { isAbsolute, relative, resolve } from "node:path";
 import {
   getIndexStatus,
+  GRAPH_RELATIONS,
   openGraph,
   rebuildIndex,
   type GraphIndexHandle,
@@ -8,6 +9,7 @@ import {
   type GraphMember,
   type GraphNeighbor,
   type GraphNode,
+  type GraphOrigin,
   type GraphPath,
   type GraphQueryResult,
 } from "@blockml/graph";
@@ -40,6 +42,9 @@ export interface GraphCliArgs {
   depth?: number;
   srcDir?: string;
   libraries?: string[];
+  origin?: string;
+  relation?: string;
+  limit?: number;
 }
 
 function displayPath(file: string, rootDir: string): string {
@@ -189,6 +194,57 @@ async function rejectUnknownFqn(
   return true;
 }
 
+const GRAPH_ORIGINS: readonly GraphOrigin[] = ["workspace", "dependency", "unresolved"];
+
+function splitCsv(raw: string | undefined): string[] {
+  return (raw ?? "")
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
+
+function applyNeighborFilters(
+  hits: GraphNeighbor[],
+  parsed: GraphCliArgs,
+  lines: CliOutputLine[],
+): GraphNeighbor[] | undefined {
+  let out = hits;
+  const origins = splitCsv(parsed.origin);
+  if (origins.length > 0) {
+    const allowed = new Set<string>(GRAPH_ORIGINS);
+    const bad = origins.find((value) => !allowed.has(value));
+    if (bad) {
+      pushLines(
+        lines,
+        `Unknown origin: ${bad}. Use workspace, dependency, or unresolved.`,
+        "error",
+      );
+      return undefined;
+    }
+    const wanted = new Set(origins);
+    out = out.filter((hit) => wanted.has(hit.node.origin));
+  }
+  const relations = splitCsv(parsed.relation);
+  if (relations.length > 0) {
+    const allowed = new Set<string>(GRAPH_RELATIONS);
+    const bad = relations.find((value) => !allowed.has(value));
+    if (bad) {
+      pushLines(
+        lines,
+        `Unknown relation: ${bad}. Use ${GRAPH_RELATIONS.join(", ")}.`,
+        "error",
+      );
+      return undefined;
+    }
+    const wanted = new Set(relations);
+    out = out.filter((hit) => wanted.has(hit.relation));
+  }
+  if (parsed.limit !== undefined) {
+    out = out.slice(0, parsed.limit);
+  }
+  return out;
+}
+
 export async function runGraph(
   parsed: GraphCliArgs,
   rootDir: string,
@@ -237,6 +293,7 @@ export async function runGraph(
         pushLines(lines, `nodes: ${schema.nodes.join(", ")}`, "info");
         pushLines(lines, `relations: ${schema.relations.join(", ")}`, "info");
         pushLines(lines, schema.description, "info");
+        pushLines(lines, `example: ${schema.example}`, "info");
       }
       return 0;
     }
@@ -340,15 +397,19 @@ export async function runGraph(
         : subcommand === "used-by"
           ? await index.usedBy(fqn, depthOptions)
           : await index.neighbors(fqn, depthOptions);
+    const filtered = applyNeighborFilters(neighbors, parsed, lines);
+    if (!filtered) {
+      return 2;
+    }
     if (parsed.json) {
-      emitJson(lines, neighbors);
+      emitJson(lines, filtered);
       return 0;
     }
-    if (neighbors.length === 0) {
+    if (filtered.length === 0) {
       pushLines(lines, "No matches.", "info");
       return 0;
     }
-    for (const hit of neighbors) {
+    for (const hit of filtered) {
       pushLines(lines, formatNeighbor(hit, rootDir), "info");
     }
     return 0;

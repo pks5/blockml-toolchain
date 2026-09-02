@@ -1,0 +1,43 @@
+<!--
+  Inspect — InspectedImplementation
+  FQN: org.blockml.bml.inspect.InspectedImplementation
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:inspect="org.blockml.bml.inspect"
+  xmlns:inspectcap="org.blockml.bml.inspect.capability"
+  xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>InspectedImplementation</name>
+  <type>inspect:InspectedImplementation</type>
+  <baseType>inspect:InspectType</baseType>
+  <is>Capability implementation projection</is>
+
+  <documentation>language is the last segment of languageFqn (English, PseudoCode). source is truncated like documentation at 400 characters; sourceTruncated is true when cut.</documentation>
+
+  <properties>
+    <language type="type:Text">
+      <documentation>Implementation language name. (required)</documentation>
+    </language>
+    <source type="type:Text">
+      <documentation>Implementation text, possibly truncated. (required)</documentation>
+    </source>
+    <sourceTruncated type="type:Boolean">
+      <documentation>true when source was cut at 400 characters. (optional)</documentation>
+    </sourceTruncated>
+  </properties>
+
+</block>

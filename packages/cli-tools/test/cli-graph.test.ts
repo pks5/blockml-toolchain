@@ -5,14 +5,14 @@ import { parseArgs, runCli } from "../src/cli.js";
 
 const TMP = join(import.meta.dirname, ".tmp-cli-graph");
 
-function sampleBlock(name: string, extra = ""): string {
+function sampleBlock(name: string, extra = "", baseType = "core:Block"): string {
   return [
     '<block xmlns="http://blockml.org/bml"',
     ' xmlns:core="org.blockml.bml.core"',
     ' xmlns:test="com.blockml.test.cligraph">',
     `  <name>${name}</name>`,
     `  <type>test:${name}</type>`,
-    "  <baseType>core:Block</baseType>",
+    `  <baseType>${baseType}</baseType>`,
     "  <is>cli graph fixture</is>",
     "  <documentation>cli graph fixture</documentation>",
     extra,
@@ -50,6 +50,23 @@ describe("parseArgs graph", () => {
     expect(help.help).toBe(true);
     const depth = parseArgs(["graph", "uses", "org.example.Wall", "--depth", "2"]);
     expect(depth.depth).toBe(2);
+  });
+
+  it("maps --origin --relation --limit", () => {
+    const parsed = parseArgs([
+      "graph",
+      "used-by",
+      "org.example.Wall",
+      "--origin",
+      "workspace,dependency",
+      "--relation",
+      "BASE_TYPE,MEMBER_TYPE",
+      "--limit",
+      "5",
+    ]);
+    expect(parsed.origin).toBe("workspace,dependency");
+    expect(parsed.relation).toBe("BASE_TYPE,MEMBER_TYPE");
+    expect(parsed.limit).toBe(5);
   });
 });
 
@@ -130,5 +147,55 @@ describe("blockml graph CLI", () => {
     const reverse = await runCli(["graph", "path", core, omega], TMP);
     expect(reverse.code).toBe(0);
     expect(reverse.stderr).toMatch(/No path\./);
+  });
+
+  it("prints a Ladybug Cypher example on graph schema", async () => {
+    await runCli(["graph", "index"], TMP);
+    const { code, stderr } = await runCli(["graph", "schema"], TMP);
+    expect(code).toBe(0);
+    expect(stderr).toMatch(/type\(\)/);
+    expect(stderr).toMatch(/shortestPath\(\)/);
+    expect(stderr).toMatch(/example: MATCH \(a:Block \{fqn: \$fqn\}\)/);
+  });
+
+  it("filters uses by origin, relation, and limit", async () => {
+    writeFileSync(join(TMP, "blocks/Alpha.bml"), sampleBlock("Alpha", "", "test:Omega"));
+    await runCli(["graph", "index"], TMP);
+    const omega = "com.blockml.test.cligraph.Omega";
+    const alpha = "com.blockml.test.cligraph.Alpha";
+
+    const usedByWorkspace = await runCli(
+      ["graph", "used-by", omega, "--json", "--origin", "workspace"],
+      TMP,
+    );
+    expect(usedByWorkspace.code).toBe(0);
+    const workspaceHits = JSON.parse(
+      usedByWorkspace.stderr.slice(usedByWorkspace.stderr.indexOf("[")),
+    ) as Array<{ node: { fqn: string }; relation: string }>;
+    expect(workspaceHits.some((hit) => hit.node.fqn === alpha && hit.relation === "BASE_TYPE")).toBe(true);
+
+    const usedByDep = await runCli(
+      ["graph", "used-by", omega, "--json", "--origin", "dependency"],
+      TMP,
+    );
+    expect(usedByDep.code).toBe(0);
+    const depHits = JSON.parse(usedByDep.stderr.slice(usedByDep.stderr.indexOf("["))) as Array<{
+      node: { fqn: string };
+    }>;
+    expect(depHits.some((hit) => hit.node.fqn === alpha)).toBe(false);
+
+    const byRelation = await runCli(["graph", "used-by", omega, "--json", "--relation", "MEMBER_TYPE"], TMP);
+    expect(byRelation.code).toBe(0);
+    const relationHits = JSON.parse(byRelation.stderr.slice(byRelation.stderr.indexOf("["))) as unknown[];
+    expect(relationHits).toEqual([]);
+
+    const limited = await runCli(["graph", "used-by", omega, "--json", "--origin", "workspace", "--limit", "1"], TMP);
+    expect(limited.code).toBe(0);
+    const limitedHits = JSON.parse(limited.stderr.slice(limited.stderr.indexOf("["))) as unknown[];
+    expect(limitedHits).toHaveLength(1);
+
+    const bad = await runCli(["graph", "used-by", omega, "--origin", "nope"], TMP);
+    expect(bad.code).toBe(2);
+    expect(bad.stderr).toMatch(/Unknown origin: nope/);
   });
 });

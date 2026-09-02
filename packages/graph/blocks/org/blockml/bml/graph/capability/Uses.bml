@@ -25,7 +25,7 @@
   <type>graphcap:Uses</type>
   <baseType>core:Capability</baseType>
   <is>Outgoing authored block-level references</is>
-  <documentation>Default depth 1 is one hop: BASE_TYPE, CONTRACT, HAS_SUBBLOCK plus types of authored members. via names the member. depth n walks n outgoing hops; further hops set GraphNeighbor.source to the block that owns the edge.</documentation>
+  <documentation>Default depth 1 is one hop: BASE_TYPE, CONTRACT, HAS_SUBBLOCK plus types of authored members. via names the member. depth n walks n outgoing hops; further hops set GraphNeighbor.source to the block that owns the edge. CLI --origin, --relation, and --limit filter the result list.</documentation>
   <properties>
     <fqn type="type:Text">
       <documentation>Block FQN. (required)</documentation>
@@ -33,6 +33,15 @@
     <depth type="type:Integer">
       <documentation>Outgoing hops. Default 1. (optional)</documentation>
     </depth>
+    <origin type="type:Text">
+      <documentation>Keep neighbors whose node.origin is listed. Comma-separated. (optional)</documentation>
+    </origin>
+    <relation type="type:Text">
+      <documentation>Keep neighbors whose relation is listed. Comma-separated. (optional)</documentation>
+    </relation>
+    <limit type="type:Integer">
+      <documentation>Max neighbors after filters. (optional)</documentation>
+    </limit>
     <neighbors type="graph:GraphNeighbor[]">
       <documentation>Outgoing neighbors. (required)</documentation>
     </neighbors>

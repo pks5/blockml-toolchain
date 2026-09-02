@@ -28,6 +28,8 @@ export interface ParsedArgs {
     newBaseType?: string;
     newIs?: string;
     help?: boolean;
+    origin?: string;
+    relation?: string;
 }
 export interface CliRunOptions {
     transformAgent?: TransformationAgent;

@@ -35,7 +35,7 @@
 
     Options: depth?, rootDir?, srcDir?, libraries? (inspectProject), maxBlocks?.
     Constants: DEFAULT_INSPECT_DEPTH, MAX_INSPECT_DEPTH, DEFAULT_MAX_BLOCKS, DOC_TRUNCATE.
-    InspectedMember.value is a literal property value. InspectedMember.instances are authored composition children.</documentation>
+    InspectedMember.value is a literal property value. InspectedMember.instances are authored composition children. Capability members may include InspectedImplementation (language + truncated source).</documentation>
 
   <references>
     <see type="inspectcap:InspectBlock" relation="Defines" />

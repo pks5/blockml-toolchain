@@ -26,7 +26,7 @@
   <baseType>inspect:InspectType</baseType>
   <is>One effective member in an Inspect projection</is>
 
-  <documentation>kind is property, aggregation, association, or capability. inheritedFrom is omitted when the member is declared on the inspected Block. instances holds authored composition children when present.</documentation>
+  <documentation>kind is property, aggregation, association, or capability. inheritedFrom is omitted when the member is declared on the inspected Block. instances holds authored composition children when present. capability members include implementation (language + truncated source) when authored.</documentation>
 
   <properties>
     <kind type="type:Text">
@@ -71,6 +71,9 @@
     <value type="type:Text">
       <documentation>Literal property value. TS: unknown. (optional)</documentation>
     </value>
+    <implementation type="inspect:InspectedImplementation">
+      <documentation>Authored capability implementation. (optional)</documentation>
+    </implementation>
   </properties>
   <aggregations>
     <instances type="inspect:InspectedInstance[]">

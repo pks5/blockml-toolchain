@@ -94,6 +94,7 @@ export interface GraphSchema {
   nodes: string[];
   relations: GraphRelation[];
   description: string;
+  example: string;
 }
 
 export type IndexState = "missing" | "ready" | "stale";

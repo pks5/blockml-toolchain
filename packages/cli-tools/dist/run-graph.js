@@ -1,5 +1,5 @@
 import { isAbsolute, relative, resolve } from "node:path";
-import { getIndexStatus, openGraph, rebuildIndex, } from "@blockml/graph";
+import { getIndexStatus, GRAPH_RELATIONS, openGraph, rebuildIndex, } from "@blockml/graph";
 import { diagnosticKind, pushLines } from "./cli-style.js";
 import { suggestMatchingFqn, unknownFqnMessage } from "./suggest-fqn.js";
 export const GRAPH_SUBCOMMANDS = [
@@ -123,6 +123,42 @@ async function rejectUnknownFqn(index, fqn, lines, parsed, rootDir, config) {
     pushLines(lines, unknownFqnMessage(fqn, suggestion), "error");
     return true;
 }
+const GRAPH_ORIGINS = ["workspace", "dependency", "unresolved"];
+function splitCsv(raw) {
+    return (raw ?? "")
+        .split(",")
+        .map((part) => part.trim())
+        .filter(Boolean);
+}
+function applyNeighborFilters(hits, parsed, lines) {
+    let out = hits;
+    const origins = splitCsv(parsed.origin);
+    if (origins.length > 0) {
+        const allowed = new Set(GRAPH_ORIGINS);
+        const bad = origins.find((value) => !allowed.has(value));
+        if (bad) {
+            pushLines(lines, `Unknown origin: ${bad}. Use workspace, dependency, or unresolved.`, "error");
+            return undefined;
+        }
+        const wanted = new Set(origins);
+        out = out.filter((hit) => wanted.has(hit.node.origin));
+    }
+    const relations = splitCsv(parsed.relation);
+    if (relations.length > 0) {
+        const allowed = new Set(GRAPH_RELATIONS);
+        const bad = relations.find((value) => !allowed.has(value));
+        if (bad) {
+            pushLines(lines, `Unknown relation: ${bad}. Use ${GRAPH_RELATIONS.join(", ")}.`, "error");
+            return undefined;
+        }
+        const wanted = new Set(relations);
+        out = out.filter((hit) => wanted.has(hit.relation));
+    }
+    if (parsed.limit !== undefined) {
+        out = out.slice(0, parsed.limit);
+    }
+    return out;
+}
 export async function runGraph(parsed, rootDir, config, lines, formatDiagnostic, usage) {
     const subcommand = parsed.subcommand;
     if (!subcommand || !GRAPH_SUBCOMMANDS.includes(subcommand)) {
@@ -159,6 +195,7 @@ export async function runGraph(parsed, rootDir, config, lines, formatDiagnostic,
                 pushLines(lines, `nodes: ${schema.nodes.join(", ")}`, "info");
                 pushLines(lines, `relations: ${schema.relations.join(", ")}`, "info");
                 pushLines(lines, schema.description, "info");
+                pushLines(lines, `example: ${schema.example}`, "info");
             }
             return 0;
         }
@@ -252,15 +289,19 @@ export async function runGraph(parsed, rootDir, config, lines, formatDiagnostic,
             : subcommand === "used-by"
                 ? await index.usedBy(fqn, depthOptions)
                 : await index.neighbors(fqn, depthOptions);
+        const filtered = applyNeighborFilters(neighbors, parsed, lines);
+        if (!filtered) {
+            return 2;
+        }
         if (parsed.json) {
-            emitJson(lines, neighbors);
+            emitJson(lines, filtered);
             return 0;
         }
-        if (neighbors.length === 0) {
+        if (filtered.length === 0) {
             pushLines(lines, "No matches.", "info");
             return 0;
         }
-        for (const hit of neighbors) {
+        for (const hit of filtered) {
             pushLines(lines, formatNeighbor(hit, rootDir), "info");
         }
         return 0;

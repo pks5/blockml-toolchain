@@ -32,12 +32,18 @@ export const GRAPH_SCHEMA_DESCRIPTION = [
   "Only authored edges are stored. Transitive relations are computed by traversals.",
   "path follows outgoing authored edges only (the same direction as uses).",
   "Block.origin is workspace | dependency | unresolved. Stub Blocks have resolved=false.",
+  "Ladybug Cypher subset: MATCH, OPTIONAL MATCH, WHERE, RETURN, ORDER BY, LIMIT, DISTINCT, named relationship types, $params, variable-length [:REL*1..n].",
+  "No type(), labels(), shortestPath(), CALL, CREATE, MERGE, or DELETE. Prefer named graph operations; use schema() before Cypher.",
 ].join(" ");
+
+export const GRAPH_CYPHER_EXAMPLE =
+  "MATCH (a:Block {fqn: $fqn})-[:BASE_TYPE]->(b:Block) RETURN b.fqn";
 
 export function graphSchema(): GraphSchema {
   return {
     nodes: [...GRAPH_NODE_TABLES],
     relations: [...GRAPH_RELATIONS],
     description: GRAPH_SCHEMA_DESCRIPTION,
+    example: GRAPH_CYPHER_EXAMPLE,
   };
 }

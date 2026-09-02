@@ -18,6 +18,8 @@ function blockXml(opts: {
     ' xmlns:core="org.blockml.bml.core"',
     ' xmlns:type="org.blockml.bml.type"',
     ' xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"',
+    ' xmlns:lang="org.blockml.bml.language"',
+    ' xmlns:cap="org.blockml.bml.capability"',
     ` xmlns:test="${NS}">`,
     `  <name>${opts.name}</name>`,
     `  <type>test:${opts.name}</type>`,
@@ -337,5 +339,32 @@ describe("inspectProject", () => {
     expect(block?.documentation?.endsWith("…")).toBe(true);
     expect(block?.documentation?.startsWith("inspect fixture ")).toBe(true);
     expect(block?.documentation?.length).toBe(401);
+  });
+
+  it("projects capability implementation language and truncated source", () => {
+    const dir = join(TMP, "impl");
+    const longBody = `Do the thing. ${"x".repeat(420)}`;
+    writeProject(dir, {
+      "blocks/Runner.bml": blockXml({
+        name: "Runner",
+        extra: [
+          "  <documentation>runner</documentation>",
+          "  <capabilities>",
+          '    <go type="cap:Action">',
+          '      <implementation language="lang:English">',
+          `        ${longBody}`,
+          "      </implementation>",
+          "    </go>",
+          "  </capabilities>",
+        ].join("\n"),
+      }),
+    });
+    const result = inspectProject(`${NS}.Runner`, { rootDir: dir, depth: 0 });
+    const go = result.blocks[`${NS}.Runner`]?.members.find((m) => m.name === "go");
+    expect(go?.kind).toBe("capability");
+    expect(go?.implementation?.language).toBe("English");
+    expect(go?.implementation?.sourceTruncated).toBe(true);
+    expect(go?.implementation?.source.startsWith("Do the thing.")).toBe(true);
+    expect(go?.implementation?.source.endsWith("…")).toBe(true);
   });
 });

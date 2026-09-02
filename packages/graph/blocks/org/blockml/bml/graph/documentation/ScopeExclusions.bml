@@ -29,8 +29,7 @@
     • Composition instance / containment graph
     • Documentation see-also as structural edges
     • Materialized derived / transitive edges
-    • Query-time --scope workspace filter (origin is stored for later)
-    • --relation / --direction CLI flags
+    • --direction CLI flag
     • First-class impact, cycles, subgraph operations
     • Incremental indexing
     • Second BML discovery or parser

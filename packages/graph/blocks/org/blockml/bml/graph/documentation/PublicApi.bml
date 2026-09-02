@@ -34,6 +34,7 @@
 
     GraphIndex: uses, usedBy, neighbors, ancestors, descendants, path, members, schema, query, block, close.
     uses/usedBy/neighbors take GraphDepthOptions (default 1 hop). Further hops set GraphNeighbor.source.
+    schema() includes a Ladybug Cypher subset description and example. No type() or shortestPath().
     path follows outgoing authored edges only. block(fqn) returns the Block node or absent.
     Ladybug types are not exported.</documentation>
   <references>
