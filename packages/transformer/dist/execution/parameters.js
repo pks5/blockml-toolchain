@@ -65,6 +65,9 @@ function namedArgumentFqn(expr) {
 export function assertParametersCompatible(value, typeFqn, registry, path = "parameters") {
     assertValueCompatible(value, typeFqn, registry, path);
 }
+export function assertCompatibleValue(value, typeFqn, registry, path) {
+    assertValueCompatible(value, typeFqn, registry, path);
+}
 function assertValueCompatible(value, typeFqn, registry, path) {
     if (extendsType(typeFqn, STRUCT_TYPE_FQN, registry) || typeFqn === EMPTY_STRUCT_FQN) {
         if (!isPlainObject(value)) {

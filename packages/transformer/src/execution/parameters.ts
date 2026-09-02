@@ -96,6 +96,15 @@ export function assertParametersCompatible(
   assertValueCompatible(value, typeFqn, registry, path);
 }
 
+export function assertCompatibleValue(
+  value: unknown,
+  typeFqn: string,
+  registry: TypeRegistry,
+  path: string,
+): void {
+  assertValueCompatible(value, typeFqn, registry, path);
+}
+
 function assertValueCompatible(
   value: unknown,
   typeFqn: string,

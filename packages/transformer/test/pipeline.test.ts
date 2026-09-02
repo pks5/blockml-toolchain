@@ -10,6 +10,7 @@ import {
   FIXED_NOW,
   pendingExecutionXml,
   pendingFqn,
+  resultProducerXml,
   successfulAgent,
   writeProject,
 } from "./fixture.js";
@@ -170,6 +171,90 @@ describe("Transformer pipeline", () => {
     expect(succeeded).not.toContain("<feedback");
   });
 
+  it("writes Stage.result from reflection when a ResultProducer is present", async () => {
+    writePendingWithProducer();
+    const generated = "T00001_JokeTest_20260830T011702";
+    const producerRequests: (string | undefined)[] = [];
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      reflectAgent: {
+        async reflect(request) {
+          producerRequests.push(request.resultProducer?.produceImplementation);
+          return {
+            success: true,
+            changedFiles: ["model.bml"],
+            feedback: "ok",
+            result: "a tree and a mushroom",
+          };
+        },
+      },
+      now: () => FIXED_NOW,
+    });
+    const run = await transformer.run(pendingFqn("JokeTest"));
+    expect(run.success).toBe(true);
+    expect(producerRequests[0]).toContain("Returns a summary of the poem.");
+    expect(producerRequests[1]).toBeUndefined();
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).toContain(">a tree and a mushroom</result>");
+    expect(succeeded).toContain(">ok</feedback>");
+  });
+
+  it("does not write Stage.result when the Stage has no ResultProducer", async () => {
+    writePending();
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      reflectAgent: {
+        async reflect(request) {
+          expect(request.resultProducer).toBeUndefined();
+          return {
+            success: true,
+            changedFiles: ["model.bml"],
+            feedback: "ok",
+            result: "should not be persisted",
+          };
+        },
+      },
+      now: () => FIXED_NOW,
+    });
+    await transformer.run(pendingFqn("JokeTest"));
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).not.toContain("<result");
+  });
+
+  it("fails the Stage when ResultProducer.produce returns no result", async () => {
+    writePendingWithProducer();
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      reflectAgent: {
+        async reflect() {
+          return { success: true, changedFiles: ["model.bml"], feedback: "ok" };
+        },
+      },
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(false);
+    expect(result.status).toBe("Failed");
+    expect(result.error).toMatch(/did not return a result/);
+    const failed = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/failed/${generated}.bml`),
+      "utf8",
+    );
+    expect(failed).toContain("did not return a result");
+    expect(failed).not.toContain("</result>");
+  });
+
   it("skips reflect and still persists and finalizes when execute fails", async () => {
     writePending();
     const order: string[] = [];
@@ -302,6 +387,19 @@ function writePending(): void {
     "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
       name: "JokeTest",
     }),
+  });
+}
+
+function writePendingWithProducer(): void {
+  writeProject(TMP, {
+    "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+      name: "JokeTest",
+      stageInstructions: ["Create a poem.", "Translate the poem."],
+      resultProducerImplementation: "Returns a summary of the poem.",
+    }),
+    "blocks/com/example/model/TestResultProducer.bml": resultProducerXml(
+      "Returns a summary of the poem.",
+    ),
   });
 }
 

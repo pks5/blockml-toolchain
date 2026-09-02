@@ -10,7 +10,7 @@ export { collectWorktreeTrace } from "./pipeline/worktree-trace.js";
 export type { WorktreeTrace } from "./pipeline/worktree-trace.js";
 export type { StageContext, TransformStage, TransformPipeline, PreparedExecution, StageBoundExecution, ExecutionTrace, ExecutedWork, Reflection, PersistedExecution, } from "./pipeline/types.js";
 export type { TransformationAgent, AgentExecutionRequest, AgentExecutionResult, } from "./agent/transformation-agent.js";
-export type { ReflectionAgent, ReflectRequest, ReflectResult, } from "./agent/reflection-agent.js";
+export type { ReflectionAgent, ReflectRequest, ReflectResult, ResultProducerSpec, } from "./agent/reflection-agent.js";
 export { ClaudeCodeAgent, buildClaudeExecutionPrompt, ensureAgentsMarkdown, runClaudeProcess, } from "./agent/claude-code-agent.js";
 export { ClaudeReflectAgent, buildClaudeReflectPrompt, parseReflectionOutput, } from "./agent/claude-reflect-agent.js";
 export type { ClaudeReflectAgentOptions } from "./agent/claude-reflect-agent.js";

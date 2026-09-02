@@ -1,17 +1,18 @@
 import type { ExecutionTrace } from "../pipeline/types.js";
 import { type ClaudeTransformPermissions } from "./claude-permissions.js";
 import { type ClaudeProcessRunner } from "./claude-code-agent.js";
-import type { ReflectRequest, ReflectResult, ReflectionAgent } from "./reflection-agent.js";
+import type { ReflectRequest, ReflectResult, ReflectionAgent, ResultProducerSpec } from "./reflection-agent.js";
 export interface ClaudeReflectAgentOptions {
     command?: string;
     runProcess?: ClaudeProcessRunner;
     verbose?: boolean;
     permissions?: ClaudeTransformPermissions;
 }
-export declare function buildClaudeReflectPrompt(executionFqn: string, stageIndex: number, trace: ExecutionTrace): string;
+export declare function buildClaudeReflectPrompt(executionFqn: string, stageIndex: number, trace: ExecutionTrace, resultProducer?: ResultProducerSpec): string;
 export declare function parseReflectionOutput(stdout: string): {
     changedFiles: string[];
     feedback: string;
+    result?: unknown;
 };
 export declare class ClaudeReflectAgent implements ReflectionAgent {
     private readonly command;

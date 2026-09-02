@@ -69,14 +69,17 @@
         [3] Reflect on Execution — transformercap:ReflectOnExecution
             Default: Claude Worker #2, new process per Stage. Must not
             change the model. Receives the Execute trace and returns
-            changedFiles and feedback for this Stage. Skipped when Execute
-            throws; feedback never decides Succeeded vs Failed.
+            changedFiles and feedback for this Stage. When the Stage
+            aggregates a ResultProducer, also interprets produce against
+            that Execute output and returns result of bound T. Skipped
+            when Execute throws; feedback never decides Succeeded vs Failed.
+            A missing or ill-typed produce result fails the Stage.
 
         [4] Persist Execution — transformercap:PersistExecution
             Default: deterministic. Writes changedFiles, feedback, status,
             completedAt, and on failure a BML exception onto this Stage.
-            When the Stage succeeded and aggregates a ResultProducer,
-            invokes produce and writes the returned value onto result.
+            When the Stage succeeded and reflection supplied a result,
+            writes that value onto result. Does not interpret produce.
             Commits model changes together with the Stage terminal state.
             Must not relocate the ModelTransformation. A Failed Stage
             aborts remaining Stages.

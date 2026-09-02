@@ -29,8 +29,8 @@
     * `baseCommit` — Git HEAD commit when this Stage started.
     * `task` — the Task that ran in this Stage.
     * `resultProducer` — optional strategy that produces `result` of bound
-      `T` (`workflow:ResultProducer(T)`). After a successful Task, the
-      transformer invokes `produce` and writes the value onto `result`.
+      `T` (`workflow:ResultProducer(T)`). After a successful Task, Reflect
+      interprets `produce`; Persist writes the value onto `result`.
     * `feedback` — Stage-local feedback from its agent process.
     * `changedFiles` — workspace-relative paths modified during this Stage
       (`type:FilePathEntity[]`).
@@ -75,6 +75,7 @@
       <documentation>
         Typed outcome of this Stage. Written from resultProducer.produce
         after a successful Task when that aggregation is present.
+        Reflect interprets produce; Persist writes this property.
       </documentation>
     </result>
   </properties>
@@ -85,9 +86,10 @@
     </task>
     <resultProducer type="workflow:ResultProducer(T)">
       <documentation>
-        How this Stage's result is produced. When present, produce is
-        invoked after a successful Task and the returned value is written
-        onto result. Absent when this Stage has no typed result.
+        How this Stage's result is produced. When present, Reflect
+        interprets produce after a successful Task and Persist writes
+        the returned value onto result. Absent when this Stage has no
+        typed result.
       </documentation>
     </resultProducer>
     <changedFiles type="type:FilePathEntity[]">

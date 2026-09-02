@@ -34,6 +34,9 @@ export function createPersistStage(): TransformStage<Reflection, PersistedExecut
         ...(reflected.exceptionMessage !== undefined
           ? { exceptionMessage: reflected.exceptionMessage }
           : {}),
+        ...(reflected.result !== undefined && reflected.resultTypeFqn
+          ? { result: reflected.result, resultTypeFqn: reflected.resultTypeFqn }
+          : {}),
       });
       return { ...reflected };
     },

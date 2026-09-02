@@ -35,6 +35,7 @@ export type {
   ReflectionAgent,
   ReflectRequest,
   ReflectResult,
+  ResultProducerSpec,
 } from "./agent/reflection-agent.js";
 export {
   ClaudeCodeAgent,

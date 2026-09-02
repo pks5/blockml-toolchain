@@ -21,9 +21,9 @@
     Defines how a Stage's `result` is determined.
 
     `produce` is an Outbound capability. It yields a value of generic `T`
-    (`core:ValueType`, default `type:Text`). After a Stage's Task completes
-    successfully, the transformer invokes `produce` and writes the returned
-    value onto `Stage.result`.
+    (`core:ValueType`). After a Stage's Task completes successfully, Reflect
+    interprets `produce` against that Stage's Execute output. Persist writes
+    the returned value onto `Stage.result`. Persist does not interpret produce.
 
     A Stage may aggregate one ResultProducer. When present, that producer
     determines how `result` is filled; the producer's `T` is the Stage's
@@ -55,8 +55,9 @@
       <abstract>true</abstract>
       <documentation>
         Produce this Stage's result value of bound T. Concrete subtypes
-        supply the Outbound implementation. Invoked after a successful
-        Task; the returned value is written onto Stage.result.
+        supply the Outbound implementation. Reflect interprets produce
+        after a successful Task; Persist writes the returned value onto
+        Stage.result.
       </documentation>
     </produce>
   </capabilities>
