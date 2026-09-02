@@ -1,0 +1,46 @@
+<!--
+  CLI Documentation — GraphCommand
+  FQN: org.blockml.bml.cli.documentation.GraphCommand
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:graph="org.blockml.bml.graph"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>GraphCommand</name>
+  <type>clidocumentation:GraphCommand</type>
+  <baseType>core:Documentation</baseType>
+  <is>blockml graph specification</is>
+
+  <documentation>Syntax:
+    blockml graph index [--force] [--src dir] [--libraries a,b]
+    blockml graph neighbors|uses|used-by|ancestors|descendants|members FQN [--json] [--depth n]
+    blockml graph path FROM TO [--json] [--depth n]
+    blockml graph query CYPHER [--json]
+    blockml graph schema [--json]
+
+    Graph uses the same corpus as validate --all (@blockml/graph / bootstrapFullProjectRegistry).
+    Missing or stale .blockml/graph/ is rebuilt automatically before a query.
+    --json prints the corresponding Graph API objects.
+    Human lines: relation, FQN, relative file path and line.</documentation>
+  <references>
+    <see type="clidocumentation:Commands" relation="SeeAlso" />
+    <see type="clicap:RunGraph" relation="SeeAlso" />
+  </references>
+
+</block>

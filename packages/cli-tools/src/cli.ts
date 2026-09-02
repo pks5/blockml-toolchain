@@ -36,6 +36,7 @@ import {
 import { loadConfig, type BomConfig } from "./load-config.js";
 import { projectLibraryPackageDirs, projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
 import { runSearch } from "./run-search.js";
+import { runGraph } from "./run-graph.js";
 import { defaultReflectAgent, defaultTransformAgent, runTransform } from "./run-transform.js";
 import { writeOutputFiles } from "./write-output.js";
 import type { ReflectionAgent, TransformationAgent } from "@blockml/transformer";
@@ -47,6 +48,11 @@ const USAGE =
   "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b] [--verbose]\n" +
   "       blockml search <query> [--json] [--limit n] [--src dir] [--libraries a,b]\n" +
   "       blockml search index [--force] [--src dir] [--libraries a,b]\n" +
+  "       blockml graph index [--force] [--src dir] [--libraries a,b]\n" +
+  "       blockml graph neighbors|uses|used-by|ancestors|descendants|members <fqn> [--json] [--depth n]\n" +
+  "       blockml graph path <from> <to> [--json] [--depth n]\n" +
+  "       blockml graph query <cypher> [--json]\n" +
+  "       blockml graph schema [--json]\n" +
   "       blockml transform apply <execution-fqn> [--verbose] [--parameters json]";
 
 function workspaceRoot(from: string): string {
@@ -80,6 +86,9 @@ export interface ParsedArgs {
   limit?: number;
   query?: string;
   index?: boolean;
+  graphFqn?: string;
+  graphTo?: string;
+  depth?: number;
   executionFqn?: string;
   parametersJson?: string;
 }
@@ -146,6 +155,14 @@ export function parseArgs(argv: string[]): ParsedArgs {
           result.limit = Math.floor(n);
         }
       }
+    } else if (flag === "--depth") {
+      const value = args.shift();
+      if (value) {
+        const n = Number(value);
+        if (Number.isFinite(n) && n > 0) {
+          result.depth = Math.floor(n);
+        }
+      }
     } else if (flag === "--parameters") {
       const value = args.shift();
       result.parametersJson = value ?? "";
@@ -168,6 +185,29 @@ export function parseArgs(argv: string[]): ParsedArgs {
           result.query = result.query ? `${result.query} ${flag}` : `index ${flag}`;
         } else {
           result.query = result.query ? `${result.query} ${flag}` : flag;
+        }
+      } else if (result.command === "graph") {
+        if (!result.subcommand) {
+          result.subcommand = flag;
+        } else if (result.subcommand === "path") {
+          if (!result.graphFqn) {
+            result.graphFqn = flag;
+          } else if (!result.graphTo) {
+            result.graphTo = flag;
+          }
+        } else if (result.subcommand === "query") {
+          result.query = result.query ? `${result.query} ${flag}` : flag;
+        } else if (
+          result.subcommand === "neighbors" ||
+          result.subcommand === "uses" ||
+          result.subcommand === "used-by" ||
+          result.subcommand === "ancestors" ||
+          result.subcommand === "descendants" ||
+          result.subcommand === "members"
+        ) {
+          if (!result.graphFqn) {
+            result.graphFqn = flag;
+          }
         }
       } else if (result.command === "transform") {
         if (!result.subcommand) {
@@ -855,6 +895,18 @@ async function executeCli(
         return { code: 2, lines };
       }
       const code = await runSearch(parsed, cwd, config, lines, formatDiagnostic, USAGE);
+      return { code, lines };
+    }
+
+    if (parsed.command === "graph") {
+      let config: BomConfig;
+      try {
+        config = loadConfig(cwd);
+      } catch (e) {
+        pushLines(lines, e instanceof Error ? e.message : String(e), "error");
+        return { code: 2, lines };
+      }
+      const code = await runGraph(parsed, cwd, config, lines, formatDiagnostic, USAGE);
       return { code, lines };
     }
 

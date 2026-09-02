@@ -1,0 +1,41 @@
+<!--
+  Graph Documentation — PublicApi
+  FQN: org.blockml.bml.graph.documentation.PublicApi
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:graph="org.blockml.bml.graph"
+  xmlns:graphcap="org.blockml.bml.graph.capability"
+  xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>PublicApi</name>
+  <type>graphdocumentation:PublicApi</type>
+  <baseType>core:Documentation</baseType>
+  <is>Exported API from packages/graph/src/index.ts</is>
+  <documentation>buildIndex(options?) → BuildIndexResult
+    buildMemoryIndex(registry, options?) → GraphIndex
+    rebuildIndex(options?) → BuildIndexResult
+    loadIndex(options?) → GraphIndex | undefined
+    getIndexStatus(options?) → IndexStatus
+    openGraph(options?) → BuildIndexResult
+
+    GraphIndex: uses, usedBy, neighbors, ancestors, descendants, path, members, schema, query, close.
+    Ladybug types are not exported.</documentation>
+  <references>
+    <see type="graphcap:BuildIndex" relation="Defines" />
+    <see type="graphcap:Query" relation="Defines" />
+  </references>
+</block>

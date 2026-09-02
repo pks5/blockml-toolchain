@@ -1,0 +1,45 @@
+<!--
+  CLI Command — GraphCommand
+  FQN: org.blockml.bml.cli.command.GraphCommand
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:graph="org.blockml.bml.graph"
+  xmlns:search="org.blockml.bml.search"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>GraphCommand</name>
+  <type>clicommand:GraphCommand</type>
+  <baseType>cli:CliType</baseType>
+  <is>blockml graph command model</is>
+
+  <documentation>blockml graph SUBCOMMAND. Corpus is validate --all via @blockml/graph. Subcommands: index, neighbors, uses, used-by, ancestors, descendants, members, path, query, schema.</documentation>
+  <references>
+    <see type="clidocumentation:GraphCommand" relation="SeeAlso" />
+    <see type="clicap:RunGraph" relation="SeeAlso" />
+  </references>
+  <properties>
+    <subcommand type="type:Text"><documentation>Graph subcommand. (required)</documentation></subcommand>
+    <graphFqn type="type:Text"><documentation>Block FQN, or path start FQN. (optional)</documentation></graphFqn>
+    <graphTo type="type:Text"><documentation>Path end FQN. (optional)</documentation></graphTo>
+    <query type="type:Text"><documentation>Cypher for graph query. (optional)</documentation></query>
+    <json type="type:Boolean"><documentation>Print JSON. (optional)</documentation></json>
+    <force type="type:Boolean"><documentation>Alias of full rebuild for graph index. (optional)</documentation></force>
+    <depth type="type:Integer"><documentation>Max hops for ancestors, descendants, path. (optional)</documentation></depth>
+  </properties>
+
+</block>

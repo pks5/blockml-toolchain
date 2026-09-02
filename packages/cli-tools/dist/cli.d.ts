@@ -18,6 +18,9 @@ export interface ParsedArgs {
     limit?: number;
     query?: string;
     index?: boolean;
+    graphFqn?: string;
+    graphTo?: string;
+    depth?: number;
     executionFqn?: string;
     parametersJson?: string;
 }

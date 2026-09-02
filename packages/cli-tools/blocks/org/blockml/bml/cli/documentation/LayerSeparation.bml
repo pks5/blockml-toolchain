@@ -37,6 +37,8 @@
 
     @blockml/transformer — sequential workflow Stages on a ModelTransformation. CLI wraps as RunTransform and supplies default Execute and Reflect agents.
 
+    @blockml/graph — authored structural graph. CLI wraps as RunGraph.
+
     Target packages (@blockml/blockdoc-target, xsd-target, fatblock-target) — RenderTarget impls
     and targetOptions types. CLI registers via bootstrapTargets; does not own render algorithms.
 

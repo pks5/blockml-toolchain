@@ -1,0 +1,37 @@
+<!--
+  Graph Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.graph.documentation.ArchitectureOverview
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:graph="org.blockml.bml.graph"
+  xmlns:graphcap="org.blockml.bml.graph.capability"
+  xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>ArchitectureOverview</name>
+  <type>graphdocumentation:ArchitectureOverview</type>
+  <baseType>core:Documentation</baseType>
+  <is>Corpus to index to Graph API</is>
+  <documentation>BML files → bootstrapFullProjectRegistry → TypeRegistry → authored Block/Member nodes and edges → Ladybug store → .blockml/graph/ cache → Graph API.
+
+    Graph corpus == validate --all corpus. Index is a derived cache; BML remains source of truth.
+
+    Only authored edges are stored. Transitive relations are computed by traversals.
+    Persistence: .blockml/graph/lbug plus manifest.json (package.json/lockfile hashes, indexed file mtimes). Missing or stale index → full rebuild.</documentation>
+  <references>
+    <see type="graphdocumentation:V1Scope" relation="ReadNext" />
+  </references>
+</block>

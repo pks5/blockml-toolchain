@@ -1,0 +1,49 @@
+<!--
+  Graph — GraphNeighbor
+  FQN: org.blockml.bml.graph.GraphNeighbor
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:graph="org.blockml.bml.graph"
+  xmlns:graphcap="org.blockml.bml.graph.capability"
+  xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>GraphNeighbor</name>
+  <type>graph:GraphNeighbor</type>
+  <baseType>graph:GraphType</baseType>
+  <is>One semantic 1-hop result</is>
+  <documentation>Block-level uses/usedBy/neighbors result. via is the Member that explains a MEMBER_TYPE hop.</documentation>
+  <properties>
+    <node type="graph:GraphNode">
+      <documentation>Neighbor block. (required)</documentation>
+    </node>
+    <relation type="type:Text">
+      <documentation>Authored relation. (required)</documentation>
+    </relation>
+    <direction type="type:Text">
+      <documentation>outgoing or incoming. (required)</documentation>
+    </direction>
+    <via type="graph:GraphNode">
+      <documentation>Member node when the hop goes through a member. (optional)</documentation>
+    </via>
+    <file type="type:Text">
+      <documentation>Provenance file. (optional)</documentation>
+    </file>
+    <line type="type:Integer">
+      <documentation>Provenance line. (optional)</documentation>
+    </line>
+  </properties>
+</block>

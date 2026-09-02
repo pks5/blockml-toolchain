@@ -27,8 +27,8 @@
 
   <documentation>CLI9: parsed command-line arguments from process.argv slice.</documentation>
   <properties>
-    <command type="type:Text"><documentation>validate | compile | search | transform. (optional)</documentation></command>
-    <subcommand type="type:Text"><documentation>Subcommand of command. For transform: apply. (optional)</documentation></subcommand>
+    <command type="type:Text"><documentation>validate | compile | search | graph | transform. (optional)</documentation></command>
+    <subcommand type="type:Text"><documentation>Subcommand of command. For transform: apply. For graph: index, neighbors, uses, used-by, ancestors, descendants, members, path, query, schema. (optional)</documentation></subcommand>
     <target type="type:Text"><documentation>Registry name e.g. blockdoc, xsd, fatblock. (optional)</documentation></target>
     <file type="type:Text"><documentation>Path to .bml file for document targets or validate. (optional)</documentation></file>
     <all type="type:Boolean"><documentation>--all: validate entire registry including npm (validate) or document compile. (optional)</documentation></all>
@@ -38,11 +38,14 @@
     <include type="type:Text"><documentation>--include comma-separated for fatblock. (optional)</documentation></include>
     <perPackage type="type:Boolean"><documentation>--per-package: one fatblock per local package.json blockml.library. (optional)</documentation></perPackage>
     <verbose type="type:Boolean"><documentation>--verbose: validate bootstrap lists; transform streams additional agent-session detail. Lifecycle lines always print. (optional)</documentation></verbose>
-    <json type="type:Boolean"><documentation>--json: machine-readable SearchResult[] on stdout (search). (optional)</documentation></json>
-    <force type="type:Boolean"><documentation>--force: alias of full rebuild for search index. (optional)</documentation></force>
+    <json type="type:Boolean"><documentation>--json: machine-readable output (search, graph). (optional)</documentation></json>
+    <force type="type:Boolean"><documentation>--force: alias of full rebuild for search or graph index. (optional)</documentation></force>
     <limit type="type:Integer"><documentation>--limit: max search hits. (optional)</documentation></limit>
-    <query type="type:Text"><documentation>Joined positional query for search. (optional)</documentation></query>
+    <query type="type:Text"><documentation>Joined positional query for search, or Cypher for graph query. (optional)</documentation></query>
     <index type="type:Boolean"><documentation>search index subcommand: full rebuild. (optional)</documentation></index>
+    <graphFqn type="type:Text"><documentation>Block FQN for graph ops, or path start. (optional)</documentation></graphFqn>
+    <graphTo type="type:Text"><documentation>Path end FQN for graph path. (optional)</documentation></graphTo>
+    <depth type="type:Integer"><documentation>--depth: max hops for graph ancestors, descendants, path. (optional)</documentation></depth>
     <executionFqn type="type:Text"><documentation>FQN of a pending ModelTransformation for transform apply. (optional)</documentation></executionFqn>
     <parametersJson type="type:Text"><documentation>Raw --parameters JSON object for transform apply. (optional)</documentation></parametersJson>
   </properties>

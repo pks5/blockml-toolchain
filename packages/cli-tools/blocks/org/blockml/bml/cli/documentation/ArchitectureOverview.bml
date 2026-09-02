@@ -39,12 +39,13 @@
     {hostFqn}.fat.bml at the invocation directory.
 
     TypeScript module map:
-    • cli.ts → RunCli, ParseArgs, RunValidate, RunCompile, RunCompileFatBlock, RunSearch, RunTransform, FormatDiagnostic
+    • cli.ts → RunCli, ParseArgs, RunValidate, RunCompile, RunCompileFatBlock, RunSearch, RunGraph, RunTransform, FormatDiagnostic
     • load-config.ts → LoadConfig, api/BomConfig
     • bootstrap-targets.ts → BootstrapTargets
     • bootstrap-type-registry.ts → BootstrapProjectTypeRegistry
     • project-sources.ts → project source roots for default validate; project library package roots for default blockdoc
     • run-search.ts → RunSearch
+    • run-graph.ts → RunGraph
     • run-transform.ts → RunTransform
     • write-output.ts → WriteOutputFiles</documentation>
   <references>

@@ -1,0 +1,95 @@
+<!--
+  BlockML Graph Library Descriptor
+  FQN: org.blockml.bml.graph.Library
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:graph="org.blockml.bml.graph"
+  xmlns:graphcap="org.blockml.bml.graph.capability"
+  xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>Library</name>
+  <type>graph:Library</type>
+  <baseType>core:BlockLibrary</baseType>
+  <is>The BlockML Graph package library catalog</is>
+
+  <documentation>
+    Canonical graph specification for BlockML — local authored structural graph
+    over the validate --all BML corpus. TypeScript in packages/graph/src/ implements this library.
+    Membership is defined exclusively by this blocks list.
+  </documentation>
+
+  <version>0.9.0</version>
+
+  <language>
+    <English />
+  </language>
+
+  <properties>
+    <description override="true">
+      <value>BlockML Graph library</value>
+    </description>
+  </properties>
+
+  <aggregations>
+    <readMe>
+      <composition>
+        <graph:README />
+      </composition>
+    </readMe>
+    <dependencies>
+      <composition>
+        <blockml:Library />
+        <bom:Library />
+        <framework:Library />
+      </composition>
+    </dependencies>
+    <blocks>
+      <composition>
+        <graph:GraphType />
+        <graph:GraphIndexOptions />
+        <graph:GraphNode />
+        <graph:GraphEdge />
+        <graph:GraphNeighbor />
+        <graph:GraphMember />
+        <graph:GraphPath />
+        <graph:GraphQueryResult />
+        <graph:IndexStatus />
+        <graph:BuildIndexResult />
+        <graphcap:BuildIndex />
+        <graphcap:OpenIndex />
+        <graphcap:RebuildIndex />
+        <graphcap:Uses />
+        <graphcap:UsedBy />
+        <graphcap:Neighbors />
+        <graphcap:Ancestors />
+        <graphcap:Descendants />
+        <graphcap:Path />
+        <graphcap:Members />
+        <graphcap:Query />
+        <graphcap:Schema />
+        <graphdocumentation:Introduction />
+        <graphdocumentation:LayerSeparation />
+        <graphdocumentation:ArchitectureOverview />
+        <graphdocumentation:V1Scope />
+        <graphdocumentation:PublicApi />
+        <graphdocumentation:PackageOwnership />
+        <graphdocumentation:ScopeExclusions />
+      </composition>
+    </blocks>
+  </aggregations>
+
+</block>

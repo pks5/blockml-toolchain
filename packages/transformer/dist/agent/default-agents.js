@@ -19,13 +19,14 @@ Use the project-local CLI:
 
 \`\`\`bash
 npx blockml search "<query>"
+npx blockml graph uses "<fqn>"
 npx blockml validate
 npx blockml validate --all
 \`\`\`
 
 \`validate\` is for ordinary project work. \`validate --all\` includes reachable BlockML libraries under \`node_modules\`.
 
-Search before scanning directories. Identify Blocks by FQN. Modify BML source, then validate. Do not invent BlockML concepts that can be looked up in the model.
+Search before scanning directories. Use graph for structure (uses, ancestors, path). Identify Blocks by FQN. Modify BML source, then validate. Do not invent BlockML concepts that can be looked up in the model.
 
 When in doubt, search the model rather than guessing.
 `;

@@ -32,12 +32,18 @@
     • blockml compile [file] target | blockml compile target
     • blockml search QUERY [--json] [--limit] [--src] [--libraries]
     • blockml search index [--force]
+    • blockml graph index [--force]
+    • blockml graph neighbors|uses|used-by|ancestors|descendants|members FQN [--json] [--depth]
+    • blockml graph path FROM TO [--json] [--depth]
+    • blockml graph query CYPHER [--json]
+    • blockml graph schema [--json]
     • blockml transform apply EXECUTION-FQN [--verbose]
     • Targets: blockdoc (default), xsd, fatblock; custom via registerTargetFactory or targetPackages
     • Config: targets[], targetPackages, targetOptions, defaultTarget
-    • Flags: --out, --src, --libraries, --include (fatblock), --per-package (fatblock), --all, --verbose (validate, transform), --json (search), --limit (search), --force (search index)
+    • Flags: --out, --src, --libraries, --include (fatblock), --per-package (fatblock), --all, --verbose (validate, transform), --json (search, graph), --limit (search), --force (search/graph index), --depth (graph)
     • Validate uses parse + @blockml/validator only; XSD is compile xsd, not a validate step
     • Search uses @blockml/search over the validate --all corpus
+    • Graph uses @blockml/graph over the validate --all corpus
 
     V1 not implemented (documented in ScopeExclusions):
     init, new block, inspect, watch, activate-config,

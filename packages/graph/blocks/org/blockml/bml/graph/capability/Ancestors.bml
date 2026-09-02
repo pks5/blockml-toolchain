@@ -1,0 +1,40 @@
+<!--
+  Graph Capability — Ancestors
+  FQN: org.blockml.bml.graph.capability.Ancestors
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:graph="org.blockml.bml.graph"
+  xmlns:graphcap="org.blockml.bml.graph.capability"
+  xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>Ancestors</name>
+  <type>graphcap:Ancestors</type>
+  <baseType>core:Capability</baseType>
+  <is>BASE_TYPE walk toward roots</is>
+  <documentation>Only BASE_TYPE. Default depth 16.</documentation>
+  <properties>
+    <fqn type="type:Text">
+      <documentation>Block FQN. (required)</documentation>
+    </fqn>
+    <depth type="type:Integer">
+      <documentation>Max hops (optional).</documentation>
+    </depth>
+    <nodes type="graph:GraphNode[]">
+      <documentation>Ancestor blocks. (required)</documentation>
+    </nodes>
+  </properties>
+</block>

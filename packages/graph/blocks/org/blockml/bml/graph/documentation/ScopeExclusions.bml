@@ -1,0 +1,41 @@
+<!--
+  Graph Documentation — ScopeExclusions
+  FQN: org.blockml.bml.graph.documentation.ScopeExclusions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:graph="org.blockml.bml.graph"
+  xmlns:graphcap="org.blockml.bml.graph.capability"
+  xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>ScopeExclusions</name>
+  <type>graphdocumentation:ScopeExclusions</type>
+  <baseType>core:Documentation</baseType>
+  <is>Explicit out-of-scope for @blockml/graph V1</is>
+  <documentation>Out of scope:
+    • Composition instance / containment graph
+    • Documentation see-also as structural edges
+    • Materialized derived / transitive edges
+    • Query-time --scope workspace filter (origin is stored for later)
+    • --relation / --direction CLI flags
+    • First-class impact, cycles, subgraph operations
+    • Incremental indexing
+    • Second BML discovery or parser
+    • Exporting Ladybug types on the public API</documentation>
+  <references>
+    <see type="graphdocumentation:Introduction" relation="SeeAlso" />
+  </references>
+</block>

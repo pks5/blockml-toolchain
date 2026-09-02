@@ -18,6 +18,7 @@
   xmlns:clidocumentation="org.blockml.bml.cli.documentation"
   xmlns:runtime="org.blockml.bml.compiler.runtime"
   xmlns:framework="org.blockml.bml.framework"
+  xmlns:graph="org.blockml.bml.graph"
   xmlns:search="org.blockml.bml.search"
   xmlns:transformer="org.blockml.bml.transformer"
   xmlns:type="org.blockml.bml.type">
@@ -35,6 +36,7 @@
     implements this library. Compiler facade and scope live in org.blockml.bml.compiler.runtime.*
     Framework bootstrap lives in org.blockml.bml.framework.*.
     Local search lives in org.blockml.bml.search.* (@blockml/search).
+    Local graph lives in org.blockml.bml.graph.* (@blockml/graph).
     Transformation lives in org.blockml.bml.transformer.* (@blockml/transformer).
 
     Membership is defined exclusively by this blocks list.
@@ -63,6 +65,7 @@
         <blockml:Library />
         <runtime:Library />
         <framework:Library />
+        <graph:Library />
         <search:Library />
         <transformer:Library />
       </composition>
@@ -83,6 +86,7 @@
         <clicommand:ValidateCommand />
         <clicommand:CompileCommand />
         <clicommand:SearchCommand />
+        <clicommand:GraphCommand />
         <clicommand:TransformCommand />
         <clicommand:TransformApplyCommand />
         <clicap:LoadConfig />
@@ -92,6 +96,7 @@
         <clicap:RunCli />
         <clicap:RunValidate />
         <clicap:RunSearch />
+        <clicap:RunGraph />
         <clicap:RunTransform />
         <clicap:ValidateAgainstXsd />
         <clicap:RunCompile />
@@ -112,6 +117,7 @@
         <clidocumentation:CompileCommand />
         <clidocumentation:ValidateCommand />
         <clidocumentation:SearchCommand />
+        <clidocumentation:GraphCommand />
         <clidocumentation:TransformCommand />
         <clidocumentation:Configuration />
         <clidocumentation:TargetBootstrap />

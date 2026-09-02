@@ -6,6 +6,7 @@
     { "path": "packages/serializer" },
     { "path": "packages/framework" },
     { "path": "packages/search" },
+    { "path": "packages/graph" },
     { "path": "packages/transformer" },
     { "path": "packages/validator" },
     { "path": "packages/compiler" },

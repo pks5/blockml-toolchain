@@ -1,0 +1,43 @@
+{
+  "name": "@blockml/graph",
+  "version": "0.9.0",
+  "description": "BlockML structural graph over the project BML corpus",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pks5/blockml-toolchain.git",
+    "directory": "packages/graph"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "blockml": {
+    "library": "./blocks/org/blockml/bml/graph/Library.bml"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "blocks"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "prepublishOnly": "npm run build",
+    "test": "vitest run packages/graph/test"
+  },
+  "dependencies": {
+    "@blockml/bom": "^0.9.0",
+    "@blockml/core": "^1.0.10",
+    "@blockml/framework": "^0.9.0",
+    "@ladybugdb/core": "^0.20.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

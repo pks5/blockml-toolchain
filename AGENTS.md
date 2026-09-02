@@ -101,6 +101,20 @@ npx blockml search index
 
 If search results appear incomplete or dependencies/model sources have changed, rebuild the index before assuming that a definition does not exist.
 
+## Graph
+
+Use BlockML Graph for structural questions: inheritance, members, incoming/outgoing type references, and paths between Blocks.
+
+```bash
+npx blockml graph uses <fqn>
+npx blockml graph used-by <fqn>
+npx blockml graph ancestors <fqn>
+npx blockml graph path <from-fqn> <to-fqn>
+npx blockml graph query '<cypher>'
+```
+
+The graph indexes the same corpus as `validate --all`. Rebuild with `npx blockml graph index` when the index is missing or stale. Prefer named operations over Cypher; use `npx blockml graph schema` before ad-hoc queries.
+
 ## Validation
 
 Use the normal validation command for regular work on the current project:
@@ -149,7 +163,7 @@ For most BlockML tasks, use the following workflow:
 
 1. Understand the requested semantic change or question.
 2. Search the model for the relevant concepts using `npx blockml search`.
-3. Identify relevant Blocks by FQN.
+3. Identify relevant Blocks by FQN. Use `npx blockml graph` for structure (uses, ancestors, path).
 4. Read the relevant BML definitions.
 5. Follow references, base types, related Blocks, or libraries when necessary.
 6. Determine the smallest coherent semantic change.
@@ -290,6 +304,7 @@ Preferred examples:
 
 ```bash
 npx blockml search "<query>"
+npx blockml graph uses "<fqn>"
 npx blockml validate
 ```
 

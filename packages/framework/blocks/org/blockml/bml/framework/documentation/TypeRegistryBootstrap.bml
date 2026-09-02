@@ -61,7 +61,7 @@
     extras (config.libraries / --libraries), deduped by realpath.
 
     bootstrapFullProjectRegistry({ rootDir, srcDir?, libraries? }) is the shared
-    entry point for `blockml validate --all` and `@blockml/search`. It sets
+    entry point for `blockml validate --all`, `@blockml/search`, and `@blockml/graph`. It sets
     corpus paths to projectSourceRoots (this package srcDir plus local packages/*
     BlockML modules) and library seeds to resolveLibrarySeeds, then calls
     bootstrapTypeRegistry. The resulting registry is the effective BML corpus:

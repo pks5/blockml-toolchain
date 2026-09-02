@@ -31,11 +31,11 @@
     CLI9: first non-flag token is command.
 
     Flags: --out, --src, --libraries (comma-split), --include (comma-split),
-    --all, --per-package, --verbose, --json, --force, --limit,
+    --all, --per-package, --verbose, --json, --force, --limit, --depth,
     --parameters (transform apply JSON object).
 
     Positional: validate=file; compile=target or file+target; search=query
-    tokens or subcommand index; transform=subcommand then args
+    tokens or subcommand index; graph=subcommand then args; transform=subcommand then args
     (apply=execution FQN).
   </documentation>
 

@@ -12,6 +12,7 @@
     { "path": "../compiler" },
     { "path": "../framework" },
     { "path": "../search" },
+    { "path": "../graph" },
     { "path": "../transformer" }
   ]
 }
