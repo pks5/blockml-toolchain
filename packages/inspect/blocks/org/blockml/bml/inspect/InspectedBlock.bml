@@ -45,8 +45,11 @@
       <documentation>Idea descriptor. (optional)</documentation>
     </is>
     <documentation type="type:Text">
-      <documentation>First documentation entry, truncated. (optional)</documentation>
+      <documentation>First documentation entry. Truncated to 400 characters with an ellipsis when longer. (optional)</documentation>
     </documentation>
+    <documentationTruncated type="type:Boolean">
+      <documentation>true when documentation was truncated. (optional)</documentation>
+    </documentationTruncated>
     <ancestors type="type:Text">
       <documentation>baseType chain FQNs excluding self. TS: Text[]. (optional)</documentation>
     </ancestors>

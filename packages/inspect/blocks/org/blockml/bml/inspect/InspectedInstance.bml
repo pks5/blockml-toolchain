@@ -1,0 +1,49 @@
+<!--
+  Inspect — InspectedInstance
+  FQN: org.blockml.bml.inspect.InspectedInstance
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:inspect="org.blockml.bml.inspect"
+  xmlns:inspectcap="org.blockml.bml.inspect.capability"
+  xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>InspectedInstance</name>
+  <type>inspect:InspectedInstance</type>
+  <baseType>inspect:InspectType</baseType>
+  <is>One authored composition child on an aggregation</is>
+
+  <documentation><![CDATA[Compact projection of a composition BlockInstance. Enum literals use id. Library catalog entries are type-only. Nested aggregation fills are aggregations keyed by member name. TS members is Record<name, value>; aggregations is Record<name, InspectedInstance[]>.]]></documentation>
+
+  <properties>
+    <type type="type:Text">
+      <documentation>Instance type FQN. (required)</documentation>
+    </type>
+    <id type="type:Text">
+      <documentation>bml:id when authored. (optional)</documentation>
+    </id>
+    <generics type="type:Text">
+      <documentation>Raw bml:generics when authored. (optional)</documentation>
+    </generics>
+    <members type="type:Text">
+      <documentation>Authored instance member values. TS: Record of name to value. (optional)</documentation>
+    </members>
+    <aggregations type="type:Text">
+      <documentation>Nested aggregation fills. TS: Record of name to InspectedInstance list. (optional)</documentation>
+    </aggregations>
+  </properties>
+
+</block>

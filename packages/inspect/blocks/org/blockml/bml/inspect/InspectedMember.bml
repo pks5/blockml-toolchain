@@ -26,7 +26,7 @@
   <baseType>inspect:InspectType</baseType>
   <is>One effective member in an Inspect projection</is>
 
-  <documentation>kind is property, aggregation, association, or capability. inheritedFrom is omitted when the member is declared on the inspected Block.</documentation>
+  <documentation>kind is property, aggregation, association, or capability. inheritedFrom is omitted when the member is declared on the inspected Block. instances holds authored composition children when present.</documentation>
 
   <properties>
     <kind type="type:Text">
@@ -68,6 +68,14 @@
     <override type="type:Boolean">
       <documentation>true when the member overrides an ancestor. (optional)</documentation>
     </override>
+    <value type="type:Text">
+      <documentation>Literal property value. TS: unknown. (optional)</documentation>
+    </value>
   </properties>
+  <aggregations>
+    <instances type="inspect:InspectedInstance[]">
+      <documentation>Authored composition children. Enum literals, Library catalog refs, nested Stage fills. (optional)</documentation>
+    </instances>
+  </aggregations>
 
 </block>

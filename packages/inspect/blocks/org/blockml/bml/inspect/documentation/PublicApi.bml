@@ -34,7 +34,8 @@
     collectNamedFqns(expr, typeFqn?) → string[]
 
     Options: depth?, rootDir?, srcDir?, libraries? (inspectProject), maxBlocks?.
-    Constants: DEFAULT_INSPECT_DEPTH, MAX_INSPECT_DEPTH, DEFAULT_MAX_BLOCKS.</documentation>
+    Constants: DEFAULT_INSPECT_DEPTH, MAX_INSPECT_DEPTH, DEFAULT_MAX_BLOCKS, DOC_TRUNCATE.
+    InspectedMember.value is a literal property value. InspectedMember.instances are authored composition children.</documentation>
 
   <references>
     <see type="inspectcap:InspectBlock" relation="Defines" />

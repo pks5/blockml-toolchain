@@ -41,7 +41,7 @@ Once search returns FQNs, inspect the relevant Block before opening a large `.bm
 npx blockml inspect <fqn> [--depth n]
 ```
 
-JSON only (default). Depth 0 is that Block only; default 1; cap 3. Budget 48 blocks. If `truncated` is non-empty, inspect the needed child FQN instead of raising depth. Live TypeRegistry — no cache file. Not a write format; do not round-trip Inspect JSON to BML. Unknown FQN exits 2.
+JSON only (default). Depth 0 is that Block only; default 1; cap 3. Budget 48 blocks. If `truncated` is non-empty, inspect the needed child FQN instead of raising depth. Live TypeRegistry — no cache file. Not a write format; do not round-trip Inspect JSON to BML. Unknown FQN exits 2. Documentation longer than 400 characters is truncated with an ellipsis and `documentationTruncated=true`. Aggregation members include authored composition instances (enum literals, Library catalog FQNs, nested Stage/Task fills).
 
 ### graph — how it connects
 

@@ -33,7 +33,9 @@
 
     Expansion is a flat blocks map keyed by FQN. depth 0 projects only the root. depth n projects declared member types, contracts, and subBlocks up to n hops. The baseType chain is listed as ancestors and is not copied into blocks.
 
-    Leaf FQNs under org.blockml.bml.type. and org.blockml.bml.core.ValueType stay as refs.</documentation>
+    Leaf FQNs under org.blockml.bml.type. and org.blockml.bml.core.ValueType stay as refs.
+
+    Aggregation members include authored composition instances on the member (not as extra blocks). Documentation longer than 400 characters is truncated with an ellipsis and documentationTruncated=true.</documentation>
 
   <references>
     <see type="inspectdocumentation:V1Scope" relation="ReadNext" />

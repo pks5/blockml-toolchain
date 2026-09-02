@@ -17,6 +17,7 @@ function blockXml(opts: {
     '<block xmlns="http://blockml.org/bml"',
     ' xmlns:core="org.blockml.bml.core"',
     ' xmlns:type="org.blockml.bml.type"',
+    ' xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"',
     ` xmlns:test="${NS}">`,
     `  <name>${opts.name}</name>`,
     `  <type>test:${opts.name}</type>`,
@@ -208,5 +209,133 @@ describe("inspectProject", () => {
     const result = inspectProject(`${NS}.Nope`, { rootDir: dir, depth: 0 });
     expect(result.blocks).toEqual({});
     expect(result.unresolved).toContain(`${NS}.Nope`);
+  });
+
+  it("projects enum composition literals as instances with id", () => {
+    const dir = join(TMP, "enum");
+    writeProject(dir, {
+      "blocks/Color.bml": blockXml({
+        name: "Color",
+        baseType: "type:EnumType",
+        extra: [
+          "  <documentation>color</documentation>",
+          "  <aggregations>",
+          "    <values>",
+          "      <composition>",
+          '        <test:Color bml:id="Red" />',
+          '        <test:Color bml:id="Blue" />',
+          "      </composition>",
+          "    </values>",
+          "  </aggregations>",
+        ].join("\n"),
+      }),
+    });
+    const result = inspectProject(`${NS}.Color`, { rootDir: dir, depth: 0 });
+    const values = result.blocks[`${NS}.Color`]?.members.find((m) => m.name === "values");
+    expect(values?.instances?.map((item) => item.id)).toEqual(["Red", "Blue"]);
+    expect(values?.instances?.every((item) => item.type === `${NS}.Color`)).toBe(true);
+  });
+
+  it("projects library-style catalog FQNs on aggregations", () => {
+    const dir = join(TMP, "catalog");
+    writeProject(dir, {
+      "blocks/Address.bml": blockXml({ name: "Address" }),
+      "blocks/Catalog.bml": blockXml({
+        name: "Catalog",
+        extra: [
+          "  <documentation>catalog</documentation>",
+          "  <aggregations>",
+          "    <blocks>",
+          "      <composition>",
+          "        <test:Address />",
+          "        <test:Catalog />",
+          "      </composition>",
+          "    </blocks>",
+          "  </aggregations>",
+        ].join("\n"),
+      }),
+    });
+    const result = inspectProject(`${NS}.Catalog`, { rootDir: dir, depth: 0 });
+    const blocks = result.blocks[`${NS}.Catalog`]?.members.find((m) => m.name === "blocks");
+    expect(blocks?.instances?.map((item) => item.type)).toEqual([`${NS}.Address`, `${NS}.Catalog`]);
+  });
+
+  it("projects nested composition instances with member values", () => {
+    const dir = join(TMP, "nested");
+    writeProject(dir, {
+      "blocks/Task.bml": blockXml({
+        name: "Task",
+        extra: [
+          "  <documentation>task</documentation>",
+          "  <properties>",
+          '    <instructions type="type:Text"/>',
+          "  </properties>",
+        ].join("\n"),
+      }),
+      "blocks/Stage.bml": blockXml({
+        name: "Stage",
+        extra: [
+          "  <documentation>stage</documentation>",
+          "  <properties>",
+          '    <name type="type:Text"/>',
+          "  </properties>",
+          "  <aggregations>",
+          '    <task type="test:Task"/>',
+          "  </aggregations>",
+        ].join("\n"),
+      }),
+      "blocks/Pipeline.bml": blockXml({
+        name: "Pipeline",
+        extra: [
+          "  <documentation>pipeline</documentation>",
+          "  <aggregations>",
+          "    <stages>",
+          "      <composition>",
+          '        <test:Stage name="Build">',
+          "          <task>",
+          "            <composition>",
+          '              <test:Task instructions="compile" />',
+          "            </composition>",
+          "          </task>",
+          "        </test:Stage>",
+          "      </composition>",
+          "    </stages>",
+          "  </aggregations>",
+        ].join("\n"),
+      }),
+    });
+    const result = inspectProject(`${NS}.Pipeline`, { rootDir: dir, depth: 0 });
+    const stages = result.blocks[`${NS}.Pipeline`]?.members.find((m) => m.name === "stages");
+    expect(stages?.instances).toEqual([
+      {
+        type: `${NS}.Stage`,
+        members: { name: "Build" },
+        aggregations: {
+          task: [
+            {
+              type: `${NS}.Task`,
+              members: { instructions: "compile" },
+            },
+          ],
+        },
+      },
+    ]);
+  });
+
+  it("marks truncated documentation", () => {
+    const dir = join(TMP, "docs");
+    const longDoc = `inspect fixture ${"x".repeat(420)}`;
+    writeProject(dir, {
+      "blocks/Verbose.bml": blockXml({
+        name: "Verbose",
+        extra: `  <documentation>${longDoc}</documentation>`,
+      }),
+    });
+    const result = inspectProject(`${NS}.Verbose`, { rootDir: dir, depth: 0 });
+    const block = result.blocks[`${NS}.Verbose`];
+    expect(block?.documentationTruncated).toBe(true);
+    expect(block?.documentation?.endsWith("…")).toBe(true);
+    expect(block?.documentation?.startsWith("inspect fixture ")).toBe(true);
+    expect(block?.documentation?.length).toBe(401);
   });
 });

@@ -48,6 +48,15 @@ export interface InspectedMember {
   final?: boolean;
   override?: boolean;
   value?: unknown;
+  instances?: InspectedInstance[];
+}
+
+export interface InspectedInstance {
+  type: string;
+  id?: string;
+  generics?: string;
+  members?: Record<string, unknown>;
+  aggregations?: Record<string, InspectedInstance[]>;
 }
 
 export interface InspectedBlock {
@@ -57,6 +66,7 @@ export interface InspectedBlock {
   origin?: InspectOrigin;
   is?: string;
   documentation?: string;
+  documentationTruncated?: boolean;
   baseType?: { ref: string };
   ancestors?: string[];
   contracts?: string[];

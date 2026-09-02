@@ -44,7 +44,7 @@
 
     INSPECT7 Flat blocks map; cycles, unresolved, truncated are explicit FQN lists.
 
-    INSPECT8 Max 48 expanded blocks; documentation truncated to 400 characters.
+    INSPECT8 Max 48 expanded blocks; documentation truncated to 400 characters with an ellipsis and documentationTruncated=true.
 
     INSPECT9 No persistent index; live TypeRegistry via bootstrapFullProjectRegistry.
 

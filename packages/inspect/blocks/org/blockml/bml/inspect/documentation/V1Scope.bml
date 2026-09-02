@@ -32,6 +32,8 @@
     • Effective members with inheritedFrom
     • Compact TypeExpression projection
     • depth 0..3 (default 1), cycle detection, 48-block budget
+    • Aggregation composition instances (enum literals, Library catalog FQNs, nested fills)
+    • documentationTruncated when documentation exceeds 400 characters
     • JSON-only CLI: blockml inspect FQN [--depth n]
 
     Out of scope: see ScopeExclusions.</documentation>

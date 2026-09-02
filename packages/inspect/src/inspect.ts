@@ -1,8 +1,12 @@
 import { isAbsolute, relative, resolve } from "node:path";
 import type {
   BlockDefinition,
+  BlockInstance,
   BomDocument,
+  CompositionNode,
+  CompositionTemplate,
   MemberDefinition,
+  MemberValue,
   TypeExpression,
 } from "@blockml/bom";
 import {
@@ -24,6 +28,7 @@ import {
   VALUE_TYPE_FQN,
   type InspectBlockOptions,
   type InspectedBlock,
+  type InspectedInstance,
   type InspectedMember,
   type InspectOrigin,
   type InspectProjectOptions,
@@ -70,19 +75,89 @@ function displayPath(file: string, rootDir: string | undefined): string {
   return rel && !rel.startsWith("..") && !isAbsolute(rel) ? rel : file;
 }
 
-function truncate(text: string | undefined): string | undefined {
+function truncateDocumentation(text: string | undefined): { text: string; truncated: boolean } | undefined {
   if (!text) {
     return undefined;
   }
   if (text.length <= DOC_TRUNCATE) {
-    return text;
+    return { text, truncated: false };
   }
-  return text.slice(0, DOC_TRUNCATE);
+  return { text: `${text.slice(0, DOC_TRUNCATE)}…`, truncated: true };
 }
 
-function firstDocumentation(block: BlockDefinition): string | undefined {
-  const text = block.documentations?.[0]?.text;
-  return truncate(text);
+function firstDocumentation(block: BlockDefinition): { text: string; truncated: boolean } | undefined {
+  return truncateDocumentation(block.documentations?.[0]?.text);
+}
+
+function projectMemberValue(value: MemberValue): unknown {
+  if (value.kind === "literal") {
+    return value.value;
+  }
+  if (value.kind === "expression") {
+    return { expression: value.raw };
+  }
+  return value.address.raw;
+}
+
+function projectInstanceId(id: MemberValue | undefined): string | undefined {
+  if (!id) {
+    return undefined;
+  }
+  const projected = projectMemberValue(id);
+  if (projected === undefined || projected === null || projected === "") {
+    return undefined;
+  }
+  return String(projected);
+}
+
+function projectInstance(instance: BlockInstance): InspectedInstance {
+  const projected: InspectedInstance = { type: instance.typeFqn };
+  const id = projectInstanceId(instance.id);
+  if (id) {
+    projected.id = id;
+  }
+  if (instance.generics?.raw) {
+    projected.generics = instance.generics.raw;
+  }
+  const members: Record<string, unknown> = {};
+  for (const [name, value] of Object.entries(instance.memberValues)) {
+    members[name] = projectMemberValue(value);
+  }
+  if (Object.keys(members).length > 0) {
+    projected.members = members;
+  }
+  if (instance.aggregationCompositions && instance.aggregationCompositions.length > 0) {
+    const aggregations: Record<string, InspectedInstance[]> = {};
+    for (const fill of instance.aggregationCompositions) {
+      const children = projectInstances(fill.composition);
+      if (children) {
+        aggregations[fill.aggregationName] = children;
+      }
+    }
+    if (Object.keys(aggregations).length > 0) {
+      projected.aggregations = aggregations;
+    }
+  }
+  return projected;
+}
+
+function walkCompositionNodes(nodes: CompositionNode[], out: InspectedInstance[]): void {
+  for (const node of nodes) {
+    if (node.kind === "virtualContainer") {
+      walkCompositionNodes(node.children, out);
+      continue;
+    }
+    out.push(projectInstance(node.instance));
+  }
+}
+
+function projectInstances(composition: CompositionTemplate | undefined): InspectedInstance[] | undefined {
+  if (!composition || composition.children.length === 0) {
+    return undefined;
+  }
+  const instances: InspectedInstance[] = [];
+  walkCompositionNodes(composition.children, instances);
+  return instances.length > 0 ? instances : undefined;
 }
 
 function pushUnique(list: string[], value: string): void {
@@ -156,6 +231,12 @@ function projectMember(member: MemberDefinition, inheritedFrom?: string): Inspec
     if (member.cardinality) {
       projected.cardinality = member.cardinality;
     }
+    if (member.kind === "aggregation") {
+      const instances = projectInstances(member.composition);
+      if (instances) {
+        projected.instances = instances;
+      }
+    }
   } else if (member.kind === "capability") {
     const input = projectTypeExpression(member.inputType as TypeExpression | undefined);
     if (input) {
@@ -228,7 +309,10 @@ function projectBlock(
   }
   const documentation = firstDocumentation(block);
   if (documentation) {
-    projected.documentation = documentation;
+    projected.documentation = documentation.text;
+    if (documentation.truncated) {
+      projected.documentationTruncated = true;
+    }
   }
   if (block.baseType) {
     projected.baseType = { ref: block.baseType };
