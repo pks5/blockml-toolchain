@@ -41,6 +41,10 @@
     BML_GENERICS_ARGUMENT_MISMATCH, and reuses BML_GENERIC_CONSTRAINT_VIOLATION /
     BML_MISSING_GENERIC_TYPE_ARGUMENT.
 
+    bml:generics is allowed whenever the instance type declares genericTypes.
+    Open parameters require a binding. Parameters with defaultType may omit it;
+    authored arguments override defaultType.
+
     BML_OPEN_GENERIC_INSTANCE applies only to domain Block instances. Children of a
     TypeReferenceEntity aggregation (Library blocks, contracts, …) are type
     references — empty QName sugar or explicit TypeReferenceEntity — not instances

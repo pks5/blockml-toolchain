@@ -21,7 +21,7 @@
     Defines how a Stage's `result` is determined.
 
     `produce` is an Outbound capability. It yields a value of generic `T`
-    (`type:ValueType`, default `type:Text`). After a Stage's Task completes
+    (`core:ValueType`, default `type:Text`). After a Stage's Task completes
     successfully, the transformer invokes `produce` and writes the returned
     value onto `Stage.result`.
 
@@ -44,7 +44,7 @@
   <abstract>true</abstract>
 
   <genericTypes>
-    <T baseType="type:ValueType" />
+    <T baseType="core:ValueType" />
   </genericTypes>
 
   <capabilities>

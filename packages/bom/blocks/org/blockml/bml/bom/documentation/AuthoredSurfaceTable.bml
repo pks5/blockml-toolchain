@@ -36,7 +36,7 @@
     - xmlns / xmlns:prefix → SourceInfo.namespaceBindings 1:1 authored → Serializer QName emit (B21)
     - xsi:schemaLocation / xsi:noNamespaceSchemaLocation → SourceInfo (B25) → re-emit on root
     - bml:xml → xmlRendering block+member — NOT directives[] → Serializer, FatBlock, XSD
-    - bml:generics → BlockInstance.generics (and illegal-host copies) — NOT directives[] → Validator binds open genericTypes
+    - bml:generics → BlockInstance.generics (and illegal-host copies) — NOT directives[] → Validator binds genericTypes (open params required; defaultType may be overridden)
     - element|attribute dual placement → authoredPlacement (D9) → MUST roundtrip authored form
     - Text vs CDATA → authoredCharacterDataForm (D8) → emit CDATA when needed or authored
     - Literal syntax [5,5,6] vs {x:5,…} → LiteralValue authored form → Renderer serializes

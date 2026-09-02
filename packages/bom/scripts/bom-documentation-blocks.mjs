@@ -80,6 +80,7 @@ export const documentationBlocks = [
     xmlns / xmlns:prefix → SourceInfo.namespaceBindings 1:1 authored → Serializer QName emit (B21)
     xsi:schemaLocation / xsi:noNamespaceSchemaLocation → SourceInfo (B25) → re-emit on root
     bml:xml → xmlRendering block+member — NOT directives[] → Serializer, FatBlock, XSD
+    bml:generics → BlockInstance.generics (and illegal-host copies) — NOT directives[] → Validator binds genericTypes (open params required; defaultType may be overridden)
     element|attribute dual placement → authoredPlacement (D9) → MUST roundtrip authored form
     Text vs CDATA → authoredCharacterDataForm (D8) → emit CDATA when needed or authored
     Literal syntax [5,5,6] vs {x:5,…} → LiteralValue authored form → Renderer serializes
@@ -253,7 +254,10 @@ export const documentationBlocks = [
     is: "Directive placement and Thymeleaf model",
     doc: `Directives follow Thymeleaf model — attributes on modified element, stored unexpanded.
 
-    bml:id, bml:version, bml:bean, bml:scope → BlockInstance fields (NOT directives[]).
+    bml:id, bml:version, bml:bean, bml:scope, bml:generics → BlockInstance fields (NOT directives[]).
+    bml:generics binds genericTypes (attribute or child element; parentheses required).
+    Open parameters require a binding; parameters with defaultType may omit it.
+    Authored arguments override defaultType.
     bml:with → composition, aggregation, bml:container, block instances.
     bml:each, bml:if, bml:unless → bml:container, block instances.
 

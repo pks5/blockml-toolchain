@@ -49,7 +49,7 @@
   </references>
 
   <genericTypes>
-    <T baseType="type:ValueType" defaultType="type:Text" />
+    <T baseType="core:ValueType" defaultType="type:Text" />
   </genericTypes>
 
   <properties>

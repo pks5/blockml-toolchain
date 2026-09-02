@@ -506,7 +506,7 @@ const capabilities = [
     prefix: "fwcap",
     name: "ValidateGenerics",
     is: "Open generic instance and bml:generics placement checks",
-    doc: "Open generic instance and bml:generics placement checks against TypeRegistry. Emits BML_OPEN_GENERIC_INSTANCE, BML_GENERICS_DIRECTIVE_NOT_ALLOWED, BML_GENERICS_ARGUMENT_MISMATCH, and reuses BML_GENERIC_CONSTRAINT_VIOLATION / BML_MISSING_GENERIC_TYPE_ARGUMENT. BML_OPEN_GENERIC_INSTANCE applies only to domain Block instances. Children of a TypeReferenceEntity aggregation (Library blocks, contracts, …) are type references — empty QName sugar or explicit TypeReferenceEntity — not instances of the named type. They must not carry bml:generics; if present, emit BML_GENERICS_DIRECTIVE_NOT_ALLOWED.",
+    doc: "Open generic instance and bml:generics placement checks against TypeRegistry. Emits BML_OPEN_GENERIC_INSTANCE, BML_GENERICS_DIRECTIVE_NOT_ALLOWED, BML_GENERICS_ARGUMENT_MISMATCH, and reuses BML_GENERIC_CONSTRAINT_VIOLATION / BML_MISSING_GENERIC_TYPE_ARGUMENT. bml:generics is allowed whenever the instance type declares genericTypes. Open parameters require a binding. Parameters with defaultType may omit it; authored arguments override defaultType. BML_OPEN_GENERIC_INSTANCE applies only to domain Block instances. Children of a TypeReferenceEntity aggregation (Library blocks, contracts, …) are type references — empty QName sugar or explicit TypeReferenceEntity — not instances of the named type. They must not carry bml:generics; if present, emit BML_GENERICS_DIRECTIVE_NOT_ALLOWED.",
     tsExport: "validateGenerics",
     inputs: [
       { name: "document", type: "bomdoc:BomDocument", required: true },

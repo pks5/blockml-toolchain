@@ -301,6 +301,41 @@ describe("validateGenerics", () => {
     expect(diagnostics.map((d) => d.code)).toEqual([]);
   });
 
+  it("allows bml:generics to restate a defaultType-only generic", () => {
+    const registry = registryWithBasics();
+    const host = hostWithChild(
+      '<test:Defaulted bml:generics="(test:Other)" />',
+      "defaulted-restate.bml",
+    );
+    registry.register(host);
+    const diagnostics = validateGenerics(host, registry);
+    expect(diagnostics.map((d) => d.code)).toEqual([]);
+  });
+
+  it("allows bml:generics to override a defaultType-only generic", () => {
+    const registry = registryWithBasics();
+    const host = hostWithChild(
+      '<test:Defaulted bml:generics="(test:Bound)" />',
+      "defaulted-override.bml",
+    );
+    registry.register(host);
+    const diagnostics = validateGenerics(host, registry);
+    expect(diagnostics.map((d) => d.code)).toEqual([]);
+  });
+
+  it("reports BML_GENERIC_CONSTRAINT_VIOLATION when a defaultType override fails the bound", () => {
+    const registry = registryWithBasics();
+    const host = hostWithChild(
+      '<test:Defaulted bml:generics="(test:Unrelated)" />',
+      "defaulted-bound-fail.bml",
+    );
+    registry.register(host);
+    const diagnostics = validateGenerics(host, registry);
+    expect(diagnostics.some((d) => d.code === "BML_GENERIC_CONSTRAINT_VIOLATION")).toBe(
+      true,
+    );
+  });
+
   it("reports BML_GENERICS_ARGUMENT_MISMATCH when parentheses are missing", () => {
     const registry = registryWithBasics();
     const host = hostWithChild(

@@ -52,7 +52,7 @@ export interface BlockInstance {
     bean?: MemberValue;
     /** From bml:scope — bean visibility: "local" (default) or "context". */
     scope?: "local" | "context";
-    /** From bml:generics — binds open genericTypes on this instance. */
+    /** From bml:generics — binds genericTypes on this instance (overrides defaultType). */
     generics?: GenericsBinding;
     /** Preset reference: {PresetsDocumentFQN}::{preset-id}. */
     basePresets?: string;

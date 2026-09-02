@@ -104,11 +104,11 @@ function validateInstanceGenerics(
     return;
   }
 
-  if (open.length === 0) {
+  if (params.length === 0) {
     diagnostics.push(
       diag(
         "BML_GENERICS_ARGUMENT_MISMATCH",
-        `bml:generics is not applicable; ${instance.typeFqn} has no open genericTypes`,
+        `bml:generics is not applicable; ${instance.typeFqn} has no genericTypes`,
         file,
         binding.source,
       ),

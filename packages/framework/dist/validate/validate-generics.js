@@ -46,8 +46,8 @@ function validateInstanceGenerics(instance, registry, file, diagnostics) {
         }
         return;
     }
-    if (open.length === 0) {
-        diagnostics.push(diag("BML_GENERICS_ARGUMENT_MISMATCH", `bml:generics is not applicable; ${instance.typeFqn} has no open genericTypes`, file, binding.source));
+    if (params.length === 0) {
+        diagnostics.push(diag("BML_GENERICS_ARGUMENT_MISMATCH", `bml:generics is not applicable; ${instance.typeFqn} has no genericTypes`, file, binding.source));
         return;
     }
     if (binding.arguments === undefined) {
