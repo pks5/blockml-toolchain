@@ -58,12 +58,12 @@
       <composition>
         <workflow:Stage name="Create Poem" status="Pending">
           <task>
-            <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.NextPoem.bml that contains a random poem in german about a tree and a mushroom. For each execution create a new poem." />
+            <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.NextPoem222.bml that contains a random poem in german about a tree and a mushroom. For each execution create a new poem." />
           </task>
         </workflow:Stage>
         <workflow:Stage name="Translate Poem" status="Pending">
           <task>
-            <workflow:InstructionTask instructions="Translate the poem in org.blockml.bml.workspace.playground.NextPoem.bml to spanish." />
+            <workflow:InstructionTask instructions="Translate the poem in org.blockml.bml.workspace.playground.NextPoem222.bml to spanish." />
           </task>
         </workflow:Stage>
       </composition>
