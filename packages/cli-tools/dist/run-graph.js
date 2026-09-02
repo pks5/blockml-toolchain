@@ -65,9 +65,10 @@ function formatMember(member, rootDir) {
 function formatPath(path, rootDir) {
     const lines = [formatNode(path.from, rootDir)];
     for (const hop of path.hops) {
+        const arrow = hop.direction === "incoming" ? `<--${hop.relation}--` : `--${hop.relation}-->`;
         const where = loc(hop.file, hop.line, rootDir);
         const suffix = where ? `  ${where}` : "";
-        lines.push(`  --${hop.relation}--> ${formatNode(hop.node, rootDir)}${suffix}`);
+        lines.push(`  ${arrow} ${formatNode(hop.node, rootDir)}${suffix}`);
     }
     return lines.join("\n");
 }
@@ -102,6 +103,14 @@ function requireFqn(parsed, lines, usage) {
         return undefined;
     }
     return fqn;
+}
+async function rejectUnknownFqn(index, fqn, lines) {
+    const node = await index.block(fqn);
+    if (node) {
+        return false;
+    }
+    pushLines(lines, `Unknown Block FQN: ${fqn}.`, "error");
+    return true;
 }
 export async function runGraph(parsed, rootDir, config, lines, formatDiagnostic, usage) {
     const subcommand = parsed.subcommand;
@@ -172,6 +181,9 @@ export async function runGraph(parsed, rootDir, config, lines, formatDiagnostic,
                 pushLines(lines, usage, "info");
                 return 2;
             }
+            if ((await rejectUnknownFqn(index, from, lines)) || (await rejectUnknownFqn(index, to, lines))) {
+                return 2;
+            }
             const path = await index.path(from, to, depthOptions);
             if (parsed.json) {
                 emitJson(lines, path ?? null);
@@ -186,6 +198,9 @@ export async function runGraph(parsed, rootDir, config, lines, formatDiagnostic,
         }
         const fqn = requireFqn(parsed, lines, usage);
         if (!fqn) {
+            return 2;
+        }
+        if (await rejectUnknownFqn(index, fqn, lines)) {
             return 2;
         }
         if (subcommand === "members") {

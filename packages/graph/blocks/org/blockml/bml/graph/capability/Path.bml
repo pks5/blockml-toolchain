@@ -25,7 +25,7 @@
   <type>graphcap:Path</type>
   <baseType>core:Capability</baseType>
   <is>Shortest authored path between two blocks</is>
-  <documentation>Walks stored edges including HAS_MEMBER and MEMBER_TYPE so provenance is preserved.</documentation>
+  <documentation>Walks outgoing authored edges only (the same direction as uses), including HAS_MEMBER and MEMBER_TYPE so provenance is preserved. Incoming edges are used-by, not path. Each hop is a GraphNeighbor with direction outgoing.</documentation>
   <properties>
     <from type="type:Text">
       <documentation>Start FQN. (required)</documentation>

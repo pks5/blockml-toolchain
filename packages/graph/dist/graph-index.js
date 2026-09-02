@@ -1,4 +1,4 @@
-import { ancestors as walkAncestors, descendants as walkDescendants, graphSchema, members as listMembers, neighbors as listNeighbors, runQuery, shortestPath, usedBy as listUsedBy, uses as listUses, } from "./operations.js";
+import { ancestors as walkAncestors, descendants as walkDescendants, graphSchema, loadBlock, members as listMembers, neighbors as listNeighbors, runQuery, shortestPath, usedBy as listUsedBy, uses as listUses, } from "./operations.js";
 export class GraphIndex {
     diagnostics;
     blocks;
@@ -32,6 +32,9 @@ export class GraphIndex {
     }
     members(fqn) {
         return listMembers(this.store, fqn);
+    }
+    block(fqn) {
+        return loadBlock(this.store, fqn);
     }
     schema() {
         return graphSchema();

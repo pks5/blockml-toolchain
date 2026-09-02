@@ -25,7 +25,7 @@
   <type>graph:GraphPath</type>
   <baseType>graph:GraphType</baseType>
   <is>Shortest authored path between two blocks</is>
-  <documentation>hops include Member nodes so provenance explains why two blocks connect.</documentation>
+  <documentation>hops are GraphNeighbor values with direction outgoing. Member nodes explain MEMBER_TYPE connections. path does not walk incoming edges.</documentation>
   <properties>
     <from type="graph:GraphNode">
       <documentation>Start block. (required)</documentation>

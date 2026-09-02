@@ -45,7 +45,7 @@ JSON only (default). Depth 0 is that Block only; default 1; cap 3. Budget 48 blo
 
 ### graph — how it connects
 
-Inheritance, uses / used-by, members, and paths. Prefer named operations. Use `graph schema` before Cypher. Rebuild with `graph index` if the index is missing or stale.
+Inheritance, uses / used-by, members, and paths. Prefer named operations. Use `graph schema` before Cypher. Rebuild with `graph index` if the index is missing or stale. Unknown FQN exits 2 (same as inspect). `path` follows outgoing authored edges only (the same direction as `uses`); reverse questions use `used-by`. The graph database is exclusive; the CLI waits if another graph process holds the index.
 
 ```bash
 npx blockml graph uses <fqn>

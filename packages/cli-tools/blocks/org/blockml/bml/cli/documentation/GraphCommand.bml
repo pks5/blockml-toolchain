@@ -36,6 +36,9 @@
 
     Graph uses the same corpus as validate --all (@blockml/graph / bootstrapFullProjectRegistry).
     Missing or stale .blockml/graph/ is rebuilt automatically before a query.
+    Unknown Block FQN → exit 2 (same as inspect). Existing block with no hits → No matches / No path, exit 0.
+    path follows outgoing authored edges only (same direction as uses); hops print --RELATION--> . Reverse questions use used-by.
+    The graph database is exclusive; the CLI waits if another graph process holds the index.
     --json prints the corresponding Graph API objects.
     Human lines: relation, FQN, relative file path and line.</documentation>
   <references>

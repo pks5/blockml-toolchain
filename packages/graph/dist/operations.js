@@ -177,7 +177,7 @@ export async function descendants(store, fqn, depth) {
     return rows.map((row) => blockNodeFromRow(row[0], row[1], row[2], row[3], row[4], row[5]));
 }
 function pushHop(hops, key, node, relation, file, line) {
-    const hop = { key, node, relation };
+    const hop = { key, node, relation, direction: "outgoing" };
     const edgeFile = asString(file);
     if (edgeFile) {
         hop.file = edgeFile;
@@ -188,18 +188,13 @@ function pushHop(hops, key, node, relation, file, line) {
     }
     hops.push(hop);
 }
-async function expand(store, node) {
+async function expandOutgoing(store, node) {
     const hops = [];
     if (node.kind === "block") {
         for (const relation of BLOCK_TO_BLOCK) {
             const outgoing = await store.exec(`MATCH (a:Block {fqn: $id})-[r:${relation}]->(b:Block)
          RETURN b.fqn, b.name, b.file, b.library, b.origin, b.resolved, r.file, r.line`, { id: node.fqn });
             for (const row of outgoing) {
-                pushHop(hops, `block:${asString(row[0])}`, blockNodeFromRow(row[0], row[1], row[2], row[3], row[4], row[5]), relation, row[6], row[7]);
-            }
-            const incoming = await store.exec(`MATCH (b:Block)-[r:${relation}]->(a:Block {fqn: $id})
-         RETURN b.fqn, b.name, b.file, b.library, b.origin, b.resolved, r.file, r.line`, { id: node.fqn });
-            for (const row of incoming) {
                 pushHop(hops, `block:${asString(row[0])}`, blockNodeFromRow(row[0], row[1], row[2], row[3], row[4], row[5]), relation, row[6], row[7]);
             }
         }
@@ -216,11 +211,6 @@ async function expand(store, node) {
         for (const row of outgoing) {
             pushHop(hops, `block:${asString(row[0])}`, blockNodeFromRow(row[0], row[1], row[2], row[3], row[4], row[5]), relation, row[6], row[7]);
         }
-    }
-    const owners = await store.exec(`MATCH (a:Block)-[r:HAS_MEMBER]->(m:Member {id: $id})
-     RETURN a.fqn, a.name, a.file, a.library, a.origin, a.resolved, r.file, r.line`, { id: node.fqn });
-    for (const row of owners) {
-        pushHop(hops, `block:${asString(row[0])}`, blockNodeFromRow(row[0], row[1], row[2], row[3], row[4], row[5]), "HAS_MEMBER", row[6], row[7]);
     }
     return hops;
 }
@@ -245,7 +235,7 @@ export async function shortestPath(store, from, to, depth) {
         if (current.hops.length >= max) {
             continue;
         }
-        const nextHops = await expand(store, current.node);
+        const nextHops = await expandOutgoing(store, current.node);
         for (const hop of nextHops) {
             if (visited.has(hop.key)) {
                 continue;
@@ -253,6 +243,7 @@ export async function shortestPath(store, from, to, depth) {
             visited.add(hop.key);
             const pathHop = {
                 relation: hop.relation,
+                direction: hop.direction,
                 node: hop.node,
             };
             if (hop.file) {

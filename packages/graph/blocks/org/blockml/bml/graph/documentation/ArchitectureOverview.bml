@@ -30,7 +30,8 @@
     Graph corpus == validate --all corpus. Index is a derived cache; BML remains source of truth.
 
     Only authored edges are stored. Transitive relations are computed by traversals.
-    Persistence: .blockml/graph/lbug plus manifest.json (package.json/lockfile hashes, indexed file mtimes). Missing or stale index → full rebuild.</documentation>
+    Persistence: .blockml/graph/lbug plus manifest.json (package.json/lockfile hashes, indexed file mtimes). Missing or stale index → full rebuild.
+    Ladybug is exclusive. openGraph/rebuildIndex take .blockml/graph/index.lock until close() and retry if the database file is locked.</documentation>
   <references>
     <see type="graphdocumentation:V1Scope" relation="ReadNext" />
   </references>

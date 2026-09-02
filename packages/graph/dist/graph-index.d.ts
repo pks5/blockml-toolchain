@@ -15,6 +15,7 @@ export declare class GraphIndex implements GraphIndexHandle {
     descendants(fqn: string, options?: GraphDepthOptions): Promise<GraphNode[]>;
     path(from: string, to: string, options?: GraphDepthOptions): Promise<GraphPath | undefined>;
     members(fqn: string): Promise<GraphMember[]>;
+    block(fqn: string): Promise<GraphNode | undefined>;
     schema(): GraphSchema;
     query(cypher: string, params?: Record<string, unknown>): Promise<GraphQueryResult>;
     close(): Promise<void>;

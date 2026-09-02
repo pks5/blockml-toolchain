@@ -11,6 +11,7 @@ import {
   resolveIndexDir,
 } from "./fingerprint.js";
 import { GraphIndex } from "./graph-index.js";
+import { acquireGraphLock } from "./graph-lock.js";
 import { createLadybugStore, openLadybugStore, populateStore } from "./ladybug-store.js";
 import { graphDataFromRegistry } from "./mapper.js";
 import { MEMORY_DB_PATH } from "./store.js";
@@ -145,7 +146,23 @@ export async function loadIndex(options: GraphIndexOptions = {}): Promise<GraphI
   );
 }
 
-export async function rebuildIndex(options: GraphIndexOptions = {}): Promise<BuildIndexResult> {
+function holdUntilClose(index: GraphIndex, release: () => Promise<void>): GraphIndex {
+  const innerClose = index.close.bind(index);
+  let released = false;
+  const close = async (): Promise<void> => {
+    try {
+      await innerClose();
+    } finally {
+      if (!released) {
+        released = true;
+        await release();
+      }
+    }
+  };
+  return Object.assign(index, { close });
+}
+
+async function rebuildIndexUnlocked(options: GraphIndexOptions): Promise<BuildIndexResult> {
   const { rootDir, srcDir, libraries, indexDir } = resolveOptions(options);
   const bootstrap = bootstrapFullProjectRegistry({ rootDir, srcDir, libraries });
   const data = graphDataFromRegistry(bootstrap.registry, { rootDir, srcDir });
@@ -171,17 +188,40 @@ export async function rebuildIndex(options: GraphIndexOptions = {}): Promise<Bui
   };
 }
 
-export async function openGraph(options: GraphIndexOptions = {}): Promise<BuildIndexResult> {
-  const loaded = await loadIndex(options);
-  if (loaded) {
-    return {
-      index: loaded,
-      diagnostics: loaded.diagnostics,
-      blocks: loaded.blocks,
-      members: loaded.memberCount,
-    };
+export async function rebuildIndex(options: GraphIndexOptions = {}): Promise<BuildIndexResult> {
+  const { indexDir } = resolveOptions(options);
+  const release = await acquireGraphLock(indexDir);
+  try {
+    const result = await rebuildIndexUnlocked(options);
+    holdUntilClose(result.index as GraphIndex, release);
+    return result;
+  } catch (error) {
+    await release();
+    throw error;
   }
-  return rebuildIndex(options);
+}
+
+export async function openGraph(options: GraphIndexOptions = {}): Promise<BuildIndexResult> {
+  const { indexDir } = resolveOptions(options);
+  const release = await acquireGraphLock(indexDir);
+  try {
+    const loaded = await loadIndex(options);
+    if (loaded) {
+      holdUntilClose(loaded, release);
+      return {
+        index: loaded,
+        diagnostics: loaded.diagnostics,
+        blocks: loaded.blocks,
+        members: loaded.memberCount,
+      };
+    }
+    const result = await rebuildIndexUnlocked(options);
+    holdUntilClose(result.index as GraphIndex, release);
+    return result;
+  } catch (error) {
+    await release();
+    throw error;
+  }
 }
 
 export type { GraphIndexHandle as Graph } from "./types.js";

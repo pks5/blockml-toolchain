@@ -25,7 +25,7 @@
   <type>graphcap:OpenIndex</type>
   <baseType>core:Capability</baseType>
   <is>Load a ready graph index or rebuild when missing or stale</is>
-  <documentation>Load a ready index or rebuild when missing or stale</documentation>
+  <documentation>Load a ready index or rebuild when missing or stale. The Ladybug database is exclusive; openGraph waits on an index lock if another process holds the graph, then loads or rebuilds. close() releases the lock.</documentation>
   <references>
     <see type="graphcap:RebuildIndex" relation="SeeAlso" />
   </references>

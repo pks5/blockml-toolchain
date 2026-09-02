@@ -25,6 +25,7 @@ export const GRAPH_SCHEMA_DESCRIPTION = [
     "Authored BlockML definition graph. Nodes: Block (type FQN), Member (ownerFqn#kind:name).",
     "Relations: BASE_TYPE, CONTRACT, HAS_SUBBLOCK, HAS_MEMBER, MEMBER_TYPE, INPUT_TYPE, OUTPUT_TYPE, THROWS.",
     "Only authored edges are stored. Transitive relations are computed by traversals.",
+    "path follows outgoing authored edges only (the same direction as uses).",
     "Block.origin is workspace | dependency | unresolved. Stub Blocks have resolved=false.",
 ].join(" ");
 export function graphSchema() {

@@ -32,7 +32,8 @@
     getIndexStatus(options?) → IndexStatus
     openGraph(options?) → BuildIndexResult
 
-    GraphIndex: uses, usedBy, neighbors, ancestors, descendants, path, members, schema, query, close.
+    GraphIndex: uses, usedBy, neighbors, ancestors, descendants, path, members, schema, query, block, close.
+    path follows outgoing authored edges only. block(fqn) returns the Block node or absent.
     Ladybug types are not exported.</documentation>
   <references>
     <see type="graphcap:BuildIndex" relation="Defines" />

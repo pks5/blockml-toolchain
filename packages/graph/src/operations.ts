@@ -286,6 +286,7 @@ interface Hop {
   key: string;
   node: GraphNode;
   relation: GraphRelation;
+  direction: "outgoing";
   file?: string;
   line?: number;
   via?: GraphNode;
@@ -299,7 +300,7 @@ function pushHop(
   file: unknown,
   line: unknown,
 ): void {
-  const hop: Hop = { key, node, relation };
+  const hop: Hop = { key, node, relation, direction: "outgoing" };
   const edgeFile = asString(file);
   if (edgeFile) {
     hop.file = edgeFile;
@@ -311,7 +312,7 @@ function pushHop(
   hops.push(hop);
 }
 
-async function expand(store: GraphStore, node: GraphNode): Promise<Hop[]> {
+async function expandOutgoing(store: GraphStore, node: GraphNode): Promise<Hop[]> {
   const hops: Hop[] = [];
   if (node.kind === "block") {
     for (const relation of BLOCK_TO_BLOCK) {
@@ -321,21 +322,6 @@ async function expand(store: GraphStore, node: GraphNode): Promise<Hop[]> {
         { id: node.fqn },
       );
       for (const row of outgoing) {
-        pushHop(
-          hops,
-          `block:${asString(row[0])}`,
-          blockNodeFromRow(row[0], row[1], row[2], row[3], row[4], row[5]),
-          relation,
-          row[6],
-          row[7],
-        );
-      }
-      const incoming = await store.exec(
-        `MATCH (b:Block)-[r:${relation}]->(a:Block {fqn: $id})
-         RETURN b.fqn, b.name, b.file, b.library, b.origin, b.resolved, r.file, r.line`,
-        { id: node.fqn },
-      );
-      for (const row of incoming) {
         pushHop(
           hops,
           `block:${asString(row[0])}`,
@@ -380,21 +366,6 @@ async function expand(store: GraphStore, node: GraphNode): Promise<Hop[]> {
       );
     }
   }
-  const owners = await store.exec(
-    `MATCH (a:Block)-[r:HAS_MEMBER]->(m:Member {id: $id})
-     RETURN a.fqn, a.name, a.file, a.library, a.origin, a.resolved, r.file, r.line`,
-    { id: node.fqn },
-  );
-  for (const row of owners) {
-    pushHop(
-      hops,
-      `block:${asString(row[0])}`,
-      blockNodeFromRow(row[0], row[1], row[2], row[3], row[4], row[5]),
-      "HAS_MEMBER",
-      row[6],
-      row[7],
-    );
-  }
   return hops;
 }
 
@@ -424,7 +395,7 @@ export async function shortestPath(
     if (current.hops.length >= max) {
       continue;
     }
-    const nextHops = await expand(store, current.node);
+    const nextHops = await expandOutgoing(store, current.node);
     for (const hop of nextHops) {
       if (visited.has(hop.key)) {
         continue;
@@ -432,6 +403,7 @@ export async function shortestPath(
       visited.add(hop.key);
       const pathHop: GraphPathHop = {
         relation: hop.relation,
+        direction: hop.direction,
         node: hop.node,
       };
       if (hop.file) {

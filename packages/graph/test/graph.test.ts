@@ -213,8 +213,16 @@ describe("graph semantic API", () => {
 
       const path = await index.path(wall, numberFqn);
       expect(path).toBeDefined();
+      expect(path!.hops.every((hop) => hop.direction === "outgoing")).toBe(true);
       expect(path!.hops.some((hop) => hop.node.kind === "member")).toBe(true);
       expect(path!.hops.at(-1)?.node.fqn).toBe(numberFqn);
+
+      const sizePath = await index.path(physical, size3d);
+      expect(sizePath?.hops.some((hop) => hop.relation === "MEMBER_TYPE")).toBe(true);
+      expect(await index.path(size3d, physical)).toBeUndefined();
+      expect(await index.path(numberFqn, wall)).toBeUndefined();
+      expect(await index.block(wall)).toMatchObject({ fqn: wall, kind: "block" });
+      expect(await index.block("com.blockml.test.graph.DoesNotExist")).toBeUndefined();
 
       const schema = index.schema();
       expect(schema.relations).toContain("BASE_TYPE");

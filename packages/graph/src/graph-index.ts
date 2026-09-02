@@ -3,6 +3,7 @@ import {
   ancestors as walkAncestors,
   descendants as walkDescendants,
   graphSchema,
+  loadBlock,
   members as listMembers,
   neighbors as listNeighbors,
   runQuery,
@@ -69,6 +70,10 @@ export class GraphIndex implements GraphIndexHandle {
 
   members(fqn: string): Promise<GraphMember[]> {
     return listMembers(this.store, fqn);
+  }
+
+  block(fqn: string): Promise<GraphNode | undefined> {
+    return loadBlock(this.store, fqn);
   }
 
   schema(): GraphSchema {

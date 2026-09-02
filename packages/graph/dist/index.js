@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { bootstrapFullProjectRegistry } from "@blockml/framework";
 import { buildManifest, MANIFEST_FILE, manifestIsCurrent, readManifest, resolveDbDir, resolveIndexDir, } from "./fingerprint.js";
 import { GraphIndex } from "./graph-index.js";
+import { acquireGraphLock } from "./graph-lock.js";
 import { createLadybugStore, openLadybugStore, populateStore } from "./ladybug-store.js";
 import { graphDataFromRegistry } from "./mapper.js";
 import { MEMORY_DB_PATH } from "./store.js";
@@ -84,7 +85,23 @@ export async function loadIndex(options = {}) {
     const store = await openLadybugStore(resolveDbDir(indexDir));
     return new GraphIndex(store, manifest.blocks, manifest.members, manifest.files.map((file) => file.path));
 }
-export async function rebuildIndex(options = {}) {
+function holdUntilClose(index, release) {
+    const innerClose = index.close.bind(index);
+    let released = false;
+    const close = async () => {
+        try {
+            await innerClose();
+        }
+        finally {
+            if (!released) {
+                released = true;
+                await release();
+            }
+        }
+    };
+    return Object.assign(index, { close });
+}
+async function rebuildIndexUnlocked(options) {
     const { rootDir, srcDir, libraries, indexDir } = resolveOptions(options);
     const bootstrap = bootstrapFullProjectRegistry({ rootDir, srcDir, libraries });
     const data = graphDataFromRegistry(bootstrap.registry, { rootDir, srcDir });
@@ -103,16 +120,40 @@ export async function rebuildIndex(options = {}) {
         members: index.memberCount,
     };
 }
-export async function openGraph(options = {}) {
-    const loaded = await loadIndex(options);
-    if (loaded) {
-        return {
-            index: loaded,
-            diagnostics: loaded.diagnostics,
-            blocks: loaded.blocks,
-            members: loaded.memberCount,
-        };
+export async function rebuildIndex(options = {}) {
+    const { indexDir } = resolveOptions(options);
+    const release = await acquireGraphLock(indexDir);
+    try {
+        const result = await rebuildIndexUnlocked(options);
+        holdUntilClose(result.index, release);
+        return result;
     }
-    return rebuildIndex(options);
+    catch (error) {
+        await release();
+        throw error;
+    }
+}
+export async function openGraph(options = {}) {
+    const { indexDir } = resolveOptions(options);
+    const release = await acquireGraphLock(indexDir);
+    try {
+        const loaded = await loadIndex(options);
+        if (loaded) {
+            holdUntilClose(loaded, release);
+            return {
+                index: loaded,
+                diagnostics: loaded.diagnostics,
+                blocks: loaded.blocks,
+                members: loaded.memberCount,
+            };
+        }
+        const result = await rebuildIndexUnlocked(options);
+        holdUntilClose(result.index, release);
+        return result;
+    }
+    catch (error) {
+        await release();
+        throw error;
+    }
 }
 //# sourceMappingURL=index.js.map

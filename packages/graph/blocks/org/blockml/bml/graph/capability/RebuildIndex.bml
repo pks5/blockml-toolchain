@@ -25,7 +25,7 @@
   <type>graphcap:RebuildIndex</type>
   <baseType>core:Capability</baseType>
   <is>Full rebuild and persist of the graph index</is>
-  <documentation>Deletes .blockml/graph/lbug and rebuilds authored nodes and edges, then writes manifest.json.</documentation>
+  <documentation>Deletes .blockml/graph/lbug and rebuilds authored nodes and edges, then writes manifest.json. Waits on the same exclusive index lock as OpenIndex so two processes cannot rebuild or query concurrently.</documentation>
   <references>
     <see type="graphcap:BuildIndex" relation="SeeAlso" />
   </references>

@@ -2,6 +2,7 @@ import { Database, Connection, type QueryResult } from "@ladybugdb/core";
 import { GRAPH_SCHEMA_DDL } from "./schema.js";
 import type { GraphData, MappedBlock, MappedEdge, MappedMember } from "./mapper.js";
 import type { GraphStore } from "./store.js";
+import { withLadybugLockRetry } from "./graph-lock.js";
 
 async function rowsFromResult(result: QueryResult | QueryResult[]): Promise<{
   columns: string[];
@@ -66,11 +67,13 @@ export class LadybugStore implements GraphStore {
 }
 
 export async function openLadybugStore(databasePath: string): Promise<LadybugStore> {
-  const database = new Database(databasePath);
-  await database.init();
-  const connection = new Connection(database);
-  await connection.init();
-  return new LadybugStore(database, connection);
+  return withLadybugLockRetry(async () => {
+    const database = new Database(databasePath);
+    await database.init();
+    const connection = new Connection(database);
+    await connection.init();
+    return new LadybugStore(database, connection);
+  });
 }
 
 export async function createLadybugStore(databasePath: string): Promise<LadybugStore> {

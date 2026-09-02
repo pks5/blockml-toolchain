@@ -79,4 +79,33 @@ describe("blockml graph CLI", () => {
       true,
     );
   });
+
+  it("returns 2 for an unknown FQN", async () => {
+    await runCli(["graph", "index"], TMP);
+    const { code, stderr } = await runCli(["graph", "uses", "com.blockml.test.cligraph.Missing"], TMP);
+    expect(code).toBe(2);
+    expect(stderr).toMatch(/Unknown Block FQN: com\.blockml\.test\.cligraph\.Missing/);
+  });
+
+  it("returns 2 for an unknown path endpoint", async () => {
+    await runCli(["graph", "index"], TMP);
+    const { code, stderr } = await runCli(
+      ["graph", "path", "com.blockml.test.cligraph.Omega", "com.blockml.test.cligraph.Missing"],
+      TMP,
+    );
+    expect(code).toBe(2);
+    expect(stderr).toMatch(/Unknown Block FQN: com\.blockml\.test\.cligraph\.Missing/);
+  });
+
+  it("prints an outgoing path and no reverse path through Block", async () => {
+    await runCli(["graph", "index"], TMP);
+    const omega = "com.blockml.test.cligraph.Omega";
+    const core = "org.blockml.bml.core.Block";
+    const forward = await runCli(["graph", "path", omega, core], TMP);
+    expect(forward.code).toBe(0);
+    expect(forward.stderr).toMatch(/--BASE_TYPE-->/);
+    const reverse = await runCli(["graph", "path", core, omega], TMP);
+    expect(reverse.code).toBe(0);
+    expect(reverse.stderr).toMatch(/No path\./);
+  });
 });

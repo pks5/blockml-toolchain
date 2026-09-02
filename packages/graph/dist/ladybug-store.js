@@ -1,5 +1,6 @@
 import { Database, Connection } from "@ladybugdb/core";
 import { GRAPH_SCHEMA_DDL } from "./schema.js";
+import { withLadybugLockRetry } from "./graph-lock.js";
 async function rowsFromResult(result) {
     const results = Array.isArray(result) ? result : [result];
     const columns = results[0] ? await results[0].getColumnNames() : [];
@@ -48,11 +49,13 @@ export class LadybugStore {
     }
 }
 export async function openLadybugStore(databasePath) {
-    const database = new Database(databasePath);
-    await database.init();
-    const connection = new Connection(database);
-    await connection.init();
-    return new LadybugStore(database, connection);
+    return withLadybugLockRetry(async () => {
+        const database = new Database(databasePath);
+        await database.init();
+        const connection = new Connection(database);
+        await connection.init();
+        return new LadybugStore(database, connection);
+    });
 }
 export async function createLadybugStore(databasePath) {
     const store = await openLadybugStore(databasePath);
