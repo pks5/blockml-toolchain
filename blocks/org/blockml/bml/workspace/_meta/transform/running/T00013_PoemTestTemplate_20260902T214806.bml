@@ -1,0 +1,115 @@
+<!--Workspace pending transform — JokeTest
+  FQN: org.blockml.bml.workspace._meta.transform.succeeded.T00001_JokeTest_20260830T014020-->
+<block xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:cap="org.blockml.bml.capability"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
+
+  <name>
+    T00013_PoemTestTemplate_20260902T214806
+  </name>
+  <type>
+    running:T00013_PoemTestTemplate_20260902T214806
+  </type>
+  <baseType>
+    workflow:ModelTransformation(running:T00013_PoemTestTemplate_20260902T214806.Parameters)
+  </baseType>
+  <is>
+    A pending ModelTransformation that creates a playground Poem block
+  </is>
+  <properties>
+    <description override="true">
+      <value>A transformation that creates a playground Poem block</value>
+    </description>
+    <status override="true" type="workflow:ExecutionStatus">
+      <value>Running</value>
+    </status>
+    <createdAt override="true" type="type:DateTime">
+      <value>2026-08-30T01:40:20</value>
+    </createdAt>
+    <template override="true" type="type:Boolean">
+      <value>false</value>
+    </template>
+    <parameters override="true" type="running:T00013_PoemTestTemplate_20260902T214806.Parameters">
+      <value>{author:"John Doe",language:"German"}</value>
+    </parameters>
+    <executionId override="true" type="type:UUID">
+      <value>fad9fb9b-b920-4d6b-8a94-de29886e09bd</value>
+    </executionId>
+    <sequence override="true" type="type:Integer">
+      <value>13</value>
+    </sequence>
+    <startedAt override="true" type="type:DateTime">
+      <value>2026-09-02T21:48:06</value>
+    </startedAt>
+    <baseCommit override="true" type="type:Text">
+      <value>9faa4bafa9739337537226715c303b0a1947ce53</value>
+    </baseCommit>
+  </properties>
+  <aggregations>
+    <stages override="true">
+      <composition>
+        <workflow:Stage bml:generics="(type:Text)" name="Create Poem" status="Pending">
+          <task>
+            <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.NextPoem222.bml that contains a random poem in german about a tree and a mushroom. For each execution create a new poem." />
+          </task>
+          <resultProducer>
+            <org.blockml.bml.workspace._meta.transform.pending.PoemTestTemplate.TestResultProducer />
+          </resultProducer>
+        </workflow:Stage>
+        <workflow:Stage name="Translate Poem" status="Pending">
+          <task>
+            <workflow:InstructionTask instructions="Translate the poem in org.blockml.bml.workspace.playground.NextPoem222.bml to spanish." />
+          </task>
+        </workflow:Stage>
+      </composition>
+    </stages>
+  </aggregations>
+  <subBlocks>
+    <block>
+      <name>
+        Parameters
+      </name>
+      <type>
+        running:T00013_PoemTestTemplate_20260902T214806.Parameters
+      </type>
+      <baseType>
+        type:StructType
+      </baseType>
+      <is>
+        Run parameters for this poem transformation
+      </is>
+      <properties>
+        <author type="type:Text" />
+        <subject type="type:Text" />
+        <language type="type:Text" />
+      </properties>
+    </block>
+    <block>
+      <name>
+        TestResultProducer
+      </name>
+      <type>
+        running:T00013_PoemTestTemplate_20260902T214806.TestResultProducer
+      </type>
+      <baseType>
+        workflow:ResultProducer(type:Text)
+      </baseType>
+      <is>
+        A test result producer that produces a result of type type:Text
+      </is>
+      <capabilities>
+        <produce override="true" type="cap:Outbound" outputType="type:Text">
+          <implementation language="org.blockml.bml.language.English">
+            Returns a summary of the poem that is created during stage 1.
+          </implementation>
+        </produce>
+      </capabilities>
+    </block>
+  </subBlocks>
+</block>
