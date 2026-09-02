@@ -1,8 +1,12 @@
 export const DEFAULT_AGENTS_MD = `# BlockML Project Instructions
 
-This repository contains a BlockML model. BML is the editable source of truth. The BOM is the canonical parsed representation. Generated outputs are derived artifacts, not the source of truth.
+This repository contains a BlockML model. BML is the editable source of truth. The BOM is the canonical parsed representation.
 
 The effective model includes local BML, workspace packages, and BlockML libraries from npm. Identify Blocks by FQN. Look up semantics in the model. Do not invent types, syntax, or capabilities.
+
+A BlockML repository may contain anything besides BML — TypeScript, Java, OpenSCAD, tests, docs, a song, or any other files. There is no default companion language. Those files are not the model. Change BML first, then update companions to match the new BML: \`blockml compile\` when a target exists, or edit them directly (including by an LLM). Never invent model semantics only in companions, and never update companions first and retrofit BML.
+
+BML libraries are packaged as npm packages by default. The BlockML toolchain is Node/npm. That is the *host* for models and tools — not the repository's product. Output, when a repo has one, is a companion artifact built from BML. It might be a Spring application, OpenSCAD, an npm package, or anything else; npm output is common, not required. An npm tree in the repo may be toolchain, BML libraries, product output, or several of these at once. Do not assume \`package.json\` is the product.
 
 ## Tools
 
@@ -69,9 +73,9 @@ npx blockml validate --all
 
 \`validate\` is ordinary project work. \`--all\` is the complete reachable corpus, including npm libraries under \`node_modules\`. Do not use \`--all\` as the default after every edit. Do not ignore validation errors caused by your changes.
 
-### compile — render artifacts
+### compile — render when a target exists
 
-Renders derived output (\`blockdoc\`, \`xsd\`, \`fatblock\`). Do not patch generated files to fix the model; change BML and recompile.
+Renders derived output for registered targets (\`blockdoc\`, \`xsd\`, \`fatblock\`, …). Use this when the companion is a compile target: change BML, then recompile. Do not patch compile output to fix the model. Companions with no target are updated by direct edit after the BML change.
 
 \`\`\`bash
 npx blockml compile blockdoc|xsd|fatblock
@@ -89,6 +93,7 @@ Pipeline stage constraints belong to the Execute / Reflect prompts, not here.
 
 \`\`\`text
 task → search → FQNs → inspect (graph if structure) → targeted BML read → smallest BML edit → validate
+     → update companions to match (compile and/or edit)
 \`\`\`
 
 If syntax is unclear: inspect the type Block, then similar existing BML, then change. Do not guess.
@@ -97,8 +102,9 @@ Treat in-BML documentation as searchable knowledge. After dependency changes, re
 
 ## Rules
 
-- Modify BML source, not generated artifacts or \`node_modules\`.
+- Change BML first. Then update companions from that BML (compile or direct edit). Companions are never SSOT.
 - Prefer existing Blocks over new duplicates. Keep the change scoped.
+- Do not edit \`node_modules\`.
 - Do not commit, push, reset, or rewrite user git state unless asked.
 - Report gaps instead of inventing unsupported solutions.
 `;
