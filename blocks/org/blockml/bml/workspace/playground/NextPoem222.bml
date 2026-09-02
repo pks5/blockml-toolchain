@@ -13,33 +13,33 @@
   <name>NextPoem222</name>
   <type>playground:NextPoem222</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, translated into Spanish, about a tree and a mushroom</is>
 
   <documentation>
-    Am Waldrand steht die alte Buche breit,
-    ihr Blätterdach trägt Sommerlicht und Zeit.
-    Die Rinde grau, von vielen Jahren schwer,
-    trotzt sie den Stürmen, Frost und Regenmeer.
+    En la linde del bosque se alza la vieja haya ancha,
+    su bóveda de hojas guarda la luz del verano y el tiempo.
+    Su corteza es gris, pesada por muchos años,
+    mas resiste las tormentas, la escarcha y el mar de lluvia.
 
-    Zu ihren Füßen, still im feuchten Moos,
-    wächst klein ein Pilz, ganz wurzellos und bloß.
-    Sein brauner Hut glänzt sacht vom Morgentau,
-    er duckt sich vor dem Wind im Dämmergrau.
+    A sus pies, en silencio sobre el musgo mojado,
+    crece pequeño un hongo, desnudo y sin raíz.
+    Su sombrero pardo reluce apenas con el rocío del alba,
+    y se encoge ante el viento en el gris del crepúsculo.
 
-    "Bleib nah bei mir", so spricht der Baum ihn an,
-    "mein Schatten kühlt, wenn heiß der Mittag brann.
-    Ich breite meine Krone wie ein Zelt
-    und schütze dich, wenn harter Regen fällt."
+    "Quédate junto a mí", así le habla el árbol,
+    "mi sombra refresca cuando arde el mediodía.
+    Extiendo mi copa como una tienda
+    y te protejo cuando cae la lluvia dura."
 
-    So wuchsen sie durch Herbst und Winterschnee,
-    hoch stand die Buche, klein der Pilz im Klee.
-    Und wer sich setzt in ihren grünen Bann,
-    trifft zwei Gefährten, die man lieben kann.
+    Así crecieron por el otoño y la nieve del invierno,
+    alta se alzaba el haya, pequeño el hongo en el trébol.
+    Y quien se sienta bajo su verde hechizo,
+    encuentra dos compañeros a los que se puede amar.
   </documentation>
 
   <properties>
     <title>
-      <value>Die Buche und der Pilz</value>
+      <value>El haya y el hongo</value>
     </title>
     <author>
       <value>John Doe</value>

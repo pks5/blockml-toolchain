@@ -64,12 +64,17 @@
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/NextPoem222.bml" />
           </changedFiles>
         </workflow:Stage>
-        <workflow:Stage name="Translate Poem" status="Running">
+        <workflow:Stage name="Translate Poem" status="Succeeded">
           <startedAt>2026-09-02T16:50:04</startedAt>
           <baseCommit>23c4209e751201c047b16d7b27ae8dc1b9528c84</baseCommit>
+          <feedback>Stage 2 applied a single coherent semantic change to blocks/org/blockml/bml/workspace/playground/NextPoem222.bml: the poem was translated from German into Spanish. All three affected regions are mutually consistent — the &lt;is> descriptor now reads 'translated into Spanish, about a tree and a mushroom' (subject 'a tree and a mushroom' preserved), the &lt;documentation> body holds the full Spanish rendering of all four stanzas (structure, stanza count, and imagery — beech/haya, mushroom/hongo, moss, dew, canopy — preserved), and the &lt;title> property value changed from 'Die Buche und der Pilz' to 'El haya y el hongo'. The &lt;author> value ('John Doe'), &lt;name>, &lt;type>, and &lt;baseType> (core:Documentation) were correctly left untouched. No ModelTransformation / _meta/transform/ files were modified by Execute, and no other model files were touched. Change is scoped and matches the stage intent.</feedback>
+          <completedAt>2026-09-02T16:51:02</completedAt>
           <task>
             <workflow:InstructionTask instructions="Translate the poem in org.blockml.bml.workspace.playground.NextPoem222.bml to spanish." />
           </task>
+          <changedFiles>
+            <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/NextPoem222.bml" />
+          </changedFiles>
         </workflow:Stage>
       </composition>
     </stages>
