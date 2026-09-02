@@ -13,33 +13,33 @@
   <name>NextPoem</name>
   <type>playground:NextPoem</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, written in Spanish, about a tree and a mushroom</is>
 
   <documentation>
-    Am Waldrand steht die alte Eiche breit,
-    ihr Astwerk trägt das Licht der Sommerzeit.
-    Die Rinde rau, von vielen Jahren schwer,
-    hat Sturm und Frost getrotzt und manchem Meer.
+    Al borde del bosque se alza el viejo roble ancho,
+    su ramaje sostiene la luz del verano manso.
+    La corteza áspera, pesada de tantos años,
+    ha resistido tormentas, heladas y mil daños.
 
-    Zu ihren Füßen, still im feuchten Moos,
-    wächst klein ein Pilz, noch scheu und wurzellos.
-    Sein brauner Hut glänzt matt vom Morgentau,
-    er duckt sich vor dem Wind im Dämmergrau.
+    A sus pies, en silencio sobre el musgo mojado,
+    crece un hongo pequeño, sin raíz y asustado.
+    Su sombrero moreno reluce con el rocío,
+    y se encoge ante el viento en el alba y su frío.
 
-    "Bleib nah bei mir", so spricht der Baum ihn an,
-    "mein Schatten kühlt, wenn heiß der Mittag brann.
-    Ich breite Laub wie eine Decke aus
-    und halte dir den harten Regen aus."
+    "Quédate junto a mí", así le habla el árbol,
+    "mi sombra da frescor cuando el mediodía arde.
+    Despliego mi follaje como un manto sobre el suelo
+    y te protejo cuando la lluvia recia cae del cielo."
 
-    So wuchsen sie durch Herbst und Winterschnee,
-    die Eiche hoch, der Pilz im stillen Klee.
-    Und rastet wer im grünen, kühlen Zelt,
-    sind zwei Gefährten Hüter dieser Welt.
+    Así crecieron juntos por otoño y por nevada,
+    alto el roble, y el hongo en la hierba callada.
+    Y quien se echa a la sombra de la verde, fresca tienda,
+    halla a dos compañeros que guardan esta senda.
   </documentation>
 
   <properties>
     <title>
-      <value>Die Eiche und der Pilz</value>
+      <value>El roble y el hongo</value>
     </title>
     <author>
       <value>John Doe</value>
