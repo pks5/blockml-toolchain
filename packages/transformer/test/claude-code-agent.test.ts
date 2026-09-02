@@ -42,6 +42,7 @@ describe("ClaudeCodeAgent", () => {
       stageIndex: 0,
     });
     expect(result).toEqual({ success: true, stdout: "ok", stderr: "" });
+    expect(DEFAULT_AGENTS_MD).toContain("inspect");
     expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe(DEFAULT_AGENTS_MD);
     expect(captured?.cwd).toBe(TMP);
     expect(captured?.command).toBe("claude");
