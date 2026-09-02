@@ -48,12 +48,19 @@ JSON only (default). Depth 0 is that Block only; default 1; cap 3. Budget 48 blo
 Inheritance, uses / used-by, members, and paths. Prefer named operations. Use \`graph schema\` before Cypher. Rebuild with \`graph index\` if the index is missing or stale. Unknown FQN exits 2 (same as inspect). \`path\` follows outgoing authored edges only (the same direction as \`uses\`); reverse questions use \`used-by\`. The graph database is exclusive; the CLI waits if another graph process holds the index.
 
 \`\`\`bash
-npx blockml graph uses <fqn>
-npx blockml graph used-by <fqn>
+npx blockml graph index
+npx blockml graph uses <fqn> [--depth n]
+npx blockml graph used-by <fqn> [--depth n]
+npx blockml graph neighbors <fqn> [--depth n]
 npx blockml graph ancestors <fqn>
+npx blockml graph descendants <fqn>
+npx blockml graph members <fqn>
 npx blockml graph path <from-fqn> <to-fqn>
+npx blockml graph query <cypher>
 npx blockml graph schema
 \`\`\`
+
+\`uses\` / \`used-by\` / \`neighbors\` \`--depth\` is hops (default 1). \`members\` ignores \`--depth\`. Unknown FQN may print \`Did you mean …?\`. \`--help\` prints command usage and exits 0.
 
 ### new — create a Block
 

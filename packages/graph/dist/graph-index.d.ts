@@ -8,9 +8,9 @@ export declare class GraphIndex implements GraphIndexHandle {
     readonly filePaths: string[];
     private readonly store;
     constructor(store: GraphStore, blocks: number, memberCount: number, filePaths: string[], diagnostics?: Diagnostic[]);
-    uses(fqn: string): Promise<GraphNeighbor[]>;
-    usedBy(fqn: string): Promise<GraphNeighbor[]>;
-    neighbors(fqn: string): Promise<GraphNeighbor[]>;
+    uses(fqn: string, options?: GraphDepthOptions): Promise<GraphNeighbor[]>;
+    usedBy(fqn: string, options?: GraphDepthOptions): Promise<GraphNeighbor[]>;
+    neighbors(fqn: string, options?: GraphDepthOptions): Promise<GraphNeighbor[]>;
     ancestors(fqn: string, options?: GraphDepthOptions): Promise<GraphNode[]>;
     descendants(fqn: string, options?: GraphDepthOptions): Promise<GraphNode[]>;
     path(from: string, to: string, options?: GraphDepthOptions): Promise<GraphPath | undefined>;

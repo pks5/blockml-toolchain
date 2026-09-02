@@ -12,14 +12,14 @@ export class GraphIndex {
         this.filePaths = filePaths;
         this.diagnostics = diagnostics;
     }
-    uses(fqn) {
-        return listUses(this.store, fqn);
+    uses(fqn, options) {
+        return listUses(this.store, fqn, options?.depth);
     }
-    usedBy(fqn) {
-        return listUsedBy(this.store, fqn);
+    usedBy(fqn, options) {
+        return listUsedBy(this.store, fqn, options?.depth);
     }
-    neighbors(fqn) {
-        return listNeighbors(this.store, fqn);
+    neighbors(fqn, options) {
+        return listNeighbors(this.store, fqn, options?.depth);
     }
     ancestors(fqn, options) {
         return walkAncestors(this.store, fqn, options?.depth);

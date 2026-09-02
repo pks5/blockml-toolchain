@@ -1,4 +1,4 @@
-import { DEFAULT_GRAPH_DEPTH } from "./types.js";
+import { DEFAULT_GRAPH_DEPTH, DEFAULT_USES_DEPTH } from "./types.js";
 import { graphSchema } from "./schema.js";
 const BLOCK_TO_BLOCK = ["BASE_TYPE", "CONTRACT", "HAS_SUBBLOCK"];
 const MEMBER_TO_BLOCK = ["MEMBER_TYPE", "INPUT_TYPE", "OUTPUT_TYPE", "THROWS"];
@@ -91,6 +91,12 @@ function depthOf(depth) {
     }
     return Math.floor(depth);
 }
+function usesDepthOf(depth) {
+    if (depth === undefined || !Number.isFinite(depth) || depth < 1) {
+        return DEFAULT_USES_DEPTH;
+    }
+    return Math.floor(depth);
+}
 async function loadBlock(store, fqn) {
     const rows = await store.exec("MATCH (b:Block {fqn: $fqn}) RETURN b.fqn, b.name, b.file, b.library, b.origin, b.resolved", { fqn });
     const row = rows[0];
@@ -99,7 +105,7 @@ async function loadBlock(store, fqn) {
     }
     return blockNodeFromRow(row[0], row[1], row[2], row[3], row[4], row[5]);
 }
-export async function uses(store, fqn) {
+async function usesOneHop(store, fqn) {
     const out = [];
     for (const relation of BLOCK_TO_BLOCK) {
         const rows = await store.exec(`MATCH (a:Block {fqn: $fqn})-[r:${relation}]->(b:Block)
@@ -128,7 +134,7 @@ export async function uses(store, fqn) {
     }
     return out;
 }
-export async function usedBy(store, fqn) {
+async function usedByOneHop(store, fqn) {
     const out = [];
     for (const relation of BLOCK_TO_BLOCK) {
         const rows = await store.exec(`MATCH (a:Block)-[r:${relation}]->(b:Block {fqn: $fqn})
@@ -157,10 +163,63 @@ export async function usedBy(store, fqn) {
     }
     return out;
 }
-export async function neighbors(store, fqn) {
-    const outgoing = await uses(store, fqn);
-    const incoming = await usedBy(store, fqn);
+async function neighborsOneHop(store, fqn) {
+    const outgoing = await usesOneHop(store, fqn);
+    const incoming = await usedByOneHop(store, fqn);
     return [...outgoing, ...incoming];
+}
+async function oneHop(store, fqn, kind) {
+    if (kind === "outgoing") {
+        return usesOneHop(store, fqn);
+    }
+    if (kind === "incoming") {
+        return usedByOneHop(store, fqn);
+    }
+    return neighborsOneHop(store, fqn);
+}
+async function walkHops(store, start, depth, kind) {
+    const max = usesDepthOf(depth);
+    const out = [];
+    const seen = new Set();
+    let frontier = [start];
+    const ownerCache = new Map();
+    for (let hop = 1; hop <= max; hop++) {
+        const next = [];
+        for (const owner of frontier) {
+            let ownerNode;
+            if (owner !== start) {
+                if (!ownerCache.has(owner)) {
+                    ownerCache.set(owner, await loadBlock(store, owner));
+                }
+                ownerNode = ownerCache.get(owner);
+            }
+            const hits = await oneHop(store, owner, kind);
+            for (const hit of hits) {
+                const target = hit.node.fqn;
+                if (!target || target === start || seen.has(target)) {
+                    continue;
+                }
+                seen.add(target);
+                const neighbor = { ...hit };
+                if (ownerNode) {
+                    neighbor.source = ownerNode;
+                }
+                out.push(neighbor);
+                next.push(target);
+            }
+        }
+        frontier = next;
+    }
+    return out;
+}
+export async function uses(store, fqn, depth) {
+    return walkHops(store, fqn, depth ?? DEFAULT_USES_DEPTH, "outgoing");
+}
+export async function usedBy(store, fqn, depth) {
+    return walkHops(store, fqn, depth ?? DEFAULT_USES_DEPTH, "incoming");
+}
+export async function neighbors(store, fqn, depth) {
+    return walkHops(store, fqn, depth ?? DEFAULT_USES_DEPTH, "both");
 }
 export async function ancestors(store, fqn, depth) {
     const max = depthOf(depth);

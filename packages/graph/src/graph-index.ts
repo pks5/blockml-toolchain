@@ -44,16 +44,16 @@ export class GraphIndex implements GraphIndexHandle {
     this.diagnostics = diagnostics;
   }
 
-  uses(fqn: string): Promise<GraphNeighbor[]> {
-    return listUses(this.store, fqn);
+  uses(fqn: string, options?: GraphDepthOptions): Promise<GraphNeighbor[]> {
+    return listUses(this.store, fqn, options?.depth);
   }
 
-  usedBy(fqn: string): Promise<GraphNeighbor[]> {
-    return listUsedBy(this.store, fqn);
+  usedBy(fqn: string, options?: GraphDepthOptions): Promise<GraphNeighbor[]> {
+    return listUsedBy(this.store, fqn, options?.depth);
   }
 
-  neighbors(fqn: string): Promise<GraphNeighbor[]> {
-    return listNeighbors(this.store, fqn);
+  neighbors(fqn: string, options?: GraphDepthOptions): Promise<GraphNeighbor[]> {
+    return listNeighbors(this.store, fqn, options?.depth);
   }
 
   ancestors(fqn: string, options?: GraphDepthOptions): Promise<GraphNode[]> {

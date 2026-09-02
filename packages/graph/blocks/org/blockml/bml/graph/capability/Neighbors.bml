@@ -25,7 +25,7 @@
   <type>graphcap:Neighbors</type>
   <baseType>core:Capability</baseType>
   <is>Union of uses and usedBy</is>
-  <documentation>Immediate authored environment of a block, both directions.</documentation>
+  <documentation>Authored environment of a block, both directions. Default depth 1. depth n is an undirected walk of n hops.</documentation>
   <references>
     <see type="graphcap:Uses" relation="SeeAlso" />
     <see type="graphcap:UsedBy" relation="SeeAlso" />
@@ -34,6 +34,9 @@
     <fqn type="type:Text">
       <documentation>Block FQN. (required)</documentation>
     </fqn>
+    <depth type="type:Integer">
+      <documentation>Undirected hops. Default 1. (optional)</documentation>
+    </depth>
     <neighbors type="graph:GraphNeighbor[]">
       <documentation>Neighbors. (required)</documentation>
     </neighbors>

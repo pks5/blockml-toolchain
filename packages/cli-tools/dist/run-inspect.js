@@ -1,5 +1,6 @@
 import { inspectProject } from "@blockml/inspect";
 import { pushLines } from "./cli-style.js";
+import { suggestMatchingFqn, unknownFqnMessage } from "./suggest-fqn.js";
 export async function runInspect(parsed, rootDir, config, lines, usage) {
     const fqn = parsed.inspectFqn?.trim() ?? "";
     if (!fqn) {
@@ -18,7 +19,16 @@ export async function runInspect(parsed, rootDir, config, lines, usage) {
         ...(parsed.depth !== undefined ? { depth: parsed.depth } : {}),
     });
     if (!result.blocks[fqn] && result.unresolved.includes(fqn)) {
-        pushLines(lines, `Unknown Block FQN: ${fqn}.`, "error");
+        const suggestion = await suggestMatchingFqn(fqn, {
+            rootDir,
+            ...(parsed.srcDir !== undefined || config.srcDir !== undefined
+                ? { srcDir: parsed.srcDir ?? config.srcDir }
+                : {}),
+            ...(parsed.libraries !== undefined || config.libraries !== undefined
+                ? { libraries: parsed.libraries ?? config.libraries }
+                : {}),
+        });
+        pushLines(lines, unknownFqnMessage(fqn, suggestion), "error");
         return 2;
     }
     pushLines(lines, JSON.stringify(result, null, 2), "info");

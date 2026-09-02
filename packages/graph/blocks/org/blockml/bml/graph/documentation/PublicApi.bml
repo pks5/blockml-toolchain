@@ -33,6 +33,7 @@
     openGraph(options?) → BuildIndexResult
 
     GraphIndex: uses, usedBy, neighbors, ancestors, descendants, path, members, schema, query, block, close.
+    uses/usedBy/neighbors take GraphDepthOptions (default 1 hop). Further hops set GraphNeighbor.source.
     path follows outgoing authored edges only. block(fqn) returns the Block node or absent.
     Ladybug types are not exported.</documentation>
   <references>

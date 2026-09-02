@@ -1,6 +1,7 @@
 import type { Diagnostic } from "@blockml/bom";
 export declare const INDEX_FORMAT_VERSION = 1;
 export declare const DEFAULT_GRAPH_DEPTH = 16;
+export declare const DEFAULT_USES_DEPTH = 1;
 export type GraphOrigin = "workspace" | "dependency" | "unresolved";
 export type GraphNodeKind = "block" | "member";
 export type MemberKind = "property" | "aggregation" | "association" | "capability";
@@ -38,6 +39,7 @@ export interface GraphNeighbor {
     relation: GraphRelation;
     direction: "outgoing" | "incoming";
     via?: GraphNode;
+    source?: GraphNode;
     file?: string;
     line?: number;
 }
@@ -79,9 +81,9 @@ export interface GraphIndexHandle {
     readonly blocks: number;
     readonly memberCount: number;
     readonly filePaths: string[];
-    uses(fqn: string): Promise<GraphNeighbor[]>;
-    usedBy(fqn: string): Promise<GraphNeighbor[]>;
-    neighbors(fqn: string): Promise<GraphNeighbor[]>;
+    uses(fqn: string, options?: GraphDepthOptions): Promise<GraphNeighbor[]>;
+    usedBy(fqn: string, options?: GraphDepthOptions): Promise<GraphNeighbor[]>;
+    neighbors(fqn: string, options?: GraphDepthOptions): Promise<GraphNeighbor[]>;
     ancestors(fqn: string, options?: GraphDepthOptions): Promise<GraphNode[]>;
     descendants(fqn: string, options?: GraphDepthOptions): Promise<GraphNode[]>;
     path(from: string, to: string, options?: GraphDepthOptions): Promise<GraphPath | undefined>;

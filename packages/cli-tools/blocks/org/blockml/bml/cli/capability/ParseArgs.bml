@@ -32,7 +32,8 @@
 
     Flags: --out, --src, --libraries (comma-split), --include (comma-split),
     --all, --per-package, --verbose, --json, --force, --limit, --depth,
-    --parameters (transform apply JSON object), --baseType and --is (new).
+    --parameters (transform apply JSON object), --baseType and --is (new),
+    --help / -h (print usage, exit 0). The token help as command or graph subcommand is the same.
 
     Positional: validate=file; compile=target or file+target; search=query
     tokens or subcommand index; graph=subcommand then args; inspect=FQN; transform=subcommand then args

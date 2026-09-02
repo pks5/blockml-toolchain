@@ -39,7 +39,7 @@
     <query type="type:Text"><documentation>Cypher for graph query. (optional)</documentation></query>
     <json type="type:Boolean"><documentation>Print JSON. (optional)</documentation></json>
     <force type="type:Boolean"><documentation>Alias of full rebuild for graph index. (optional)</documentation></force>
-    <depth type="type:Integer"><documentation>Max hops for ancestors, descendants, path. (optional)</documentation></depth>
+    <depth type="type:Integer"><documentation>uses/used-by/neighbors hops (default 1); ancestors/descendants/path max hops (default 16). members ignores --depth. (optional)</documentation></depth>
   </properties>
 
 </block>

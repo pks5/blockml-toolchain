@@ -9,7 +9,7 @@ import type {
   GraphRelation,
   MemberKind,
 } from "./types.js";
-import { DEFAULT_GRAPH_DEPTH } from "./types.js";
+import { DEFAULT_GRAPH_DEPTH, DEFAULT_USES_DEPTH } from "./types.js";
 import { graphSchema } from "./schema.js";
 import type { GraphStore } from "./store.js";
 
@@ -136,6 +136,13 @@ function depthOf(depth?: number): number {
   return Math.floor(depth);
 }
 
+function usesDepthOf(depth?: number): number {
+  if (depth === undefined || !Number.isFinite(depth) || depth < 1) {
+    return DEFAULT_USES_DEPTH;
+  }
+  return Math.floor(depth);
+}
+
 async function loadBlock(store: GraphStore, fqn: string): Promise<GraphNode | undefined> {
   const rows = await store.exec(
     "MATCH (b:Block {fqn: $fqn}) RETURN b.fqn, b.name, b.file, b.library, b.origin, b.resolved",
@@ -148,7 +155,7 @@ async function loadBlock(store: GraphStore, fqn: string): Promise<GraphNode | un
   return blockNodeFromRow(row[0], row[1], row[2], row[3], row[4], row[5]);
 }
 
-export async function uses(store: GraphStore, fqn: string): Promise<GraphNeighbor[]> {
+async function usesOneHop(store: GraphStore, fqn: string): Promise<GraphNeighbor[]> {
   const out: GraphNeighbor[] = [];
   for (const relation of BLOCK_TO_BLOCK) {
     const rows = await store.exec(
@@ -197,7 +204,7 @@ export async function uses(store: GraphStore, fqn: string): Promise<GraphNeighbo
   return out;
 }
 
-export async function usedBy(store: GraphStore, fqn: string): Promise<GraphNeighbor[]> {
+async function usedByOneHop(store: GraphStore, fqn: string): Promise<GraphNeighbor[]> {
   const out: GraphNeighbor[] = [];
   for (const relation of BLOCK_TO_BLOCK) {
     const rows = await store.exec(
@@ -246,10 +253,77 @@ export async function usedBy(store: GraphStore, fqn: string): Promise<GraphNeigh
   return out;
 }
 
-export async function neighbors(store: GraphStore, fqn: string): Promise<GraphNeighbor[]> {
-  const outgoing = await uses(store, fqn);
-  const incoming = await usedBy(store, fqn);
+async function neighborsOneHop(store: GraphStore, fqn: string): Promise<GraphNeighbor[]> {
+  const outgoing = await usesOneHop(store, fqn);
+  const incoming = await usedByOneHop(store, fqn);
   return [...outgoing, ...incoming];
+}
+
+async function oneHop(
+  store: GraphStore,
+  fqn: string,
+  kind: "outgoing" | "incoming" | "both",
+): Promise<GraphNeighbor[]> {
+  if (kind === "outgoing") {
+    return usesOneHop(store, fqn);
+  }
+  if (kind === "incoming") {
+    return usedByOneHop(store, fqn);
+  }
+  return neighborsOneHop(store, fqn);
+}
+
+async function walkHops(
+  store: GraphStore,
+  start: string,
+  depth: number,
+  kind: "outgoing" | "incoming" | "both",
+): Promise<GraphNeighbor[]> {
+  const max = usesDepthOf(depth);
+  const out: GraphNeighbor[] = [];
+  const seen = new Set<string>();
+  let frontier = [start];
+  const ownerCache = new Map<string, GraphNode | undefined>();
+  for (let hop = 1; hop <= max; hop++) {
+    const next: string[] = [];
+    for (const owner of frontier) {
+      let ownerNode: GraphNode | undefined;
+      if (owner !== start) {
+        if (!ownerCache.has(owner)) {
+          ownerCache.set(owner, await loadBlock(store, owner));
+        }
+        ownerNode = ownerCache.get(owner);
+      }
+      const hits = await oneHop(store, owner, kind);
+      for (const hit of hits) {
+        const target = hit.node.fqn;
+        if (!target || target === start || seen.has(target)) {
+          continue;
+        }
+        seen.add(target);
+        const neighbor: GraphNeighbor = { ...hit };
+        if (ownerNode) {
+          neighbor.source = ownerNode;
+        }
+        out.push(neighbor);
+        next.push(target);
+      }
+    }
+    frontier = next;
+  }
+  return out;
+}
+
+export async function uses(store: GraphStore, fqn: string, depth?: number): Promise<GraphNeighbor[]> {
+  return walkHops(store, fqn, depth ?? DEFAULT_USES_DEPTH, "outgoing");
+}
+
+export async function usedBy(store: GraphStore, fqn: string, depth?: number): Promise<GraphNeighbor[]> {
+  return walkHops(store, fqn, depth ?? DEFAULT_USES_DEPTH, "incoming");
+}
+
+export async function neighbors(store: GraphStore, fqn: string, depth?: number): Promise<GraphNeighbor[]> {
+  return walkHops(store, fqn, depth ?? DEFAULT_USES_DEPTH, "both");
 }
 
 export async function ancestors(

@@ -43,6 +43,14 @@ describe("parseArgs graph", () => {
     expect(parsed.subcommand).toBe("query");
     expect(parsed.query).toBe("MATCH (a:Block) RETURN a.fqn");
   });
+
+  it("maps --help and uses --depth", () => {
+    const help = parseArgs(["graph", "--help"]);
+    expect(help.command).toBe("graph");
+    expect(help.help).toBe(true);
+    const depth = parseArgs(["graph", "uses", "org.example.Wall", "--depth", "2"]);
+    expect(depth.depth).toBe(2);
+  });
 });
 
 describe("blockml graph CLI", () => {
@@ -95,6 +103,21 @@ describe("blockml graph CLI", () => {
     );
     expect(code).toBe(2);
     expect(stderr).toMatch(/Unknown Block FQN: com\.blockml\.test\.cligraph\.Missing/);
+  });
+
+  it("prints graph usage and exits 0 for --help", async () => {
+    const { code, stderr } = await runCli(["graph", "--help"], TMP);
+    expect(code).toBe(0);
+    expect(stderr).toMatch(/Usage: blockml graph/);
+    expect(stderr).not.toMatch(/blockml compile/);
+  });
+
+  it("suggests a matching FQN for an unknown short name", async () => {
+    await runCli(["graph", "index"], TMP);
+    const { code, stderr } = await runCli(["graph", "uses", "Omega"], TMP);
+    expect(code).toBe(2);
+    expect(stderr).toMatch(/Unknown Block FQN: Omega/);
+    expect(stderr).toMatch(/Did you mean com\.blockml\.test\.cligraph\.Omega\?/);
   });
 
   it("prints an outgoing path and no reverse path through Block", async () => {

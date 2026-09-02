@@ -2,9 +2,9 @@ import type { GraphMember, GraphNeighbor, GraphNode, GraphPath, GraphQueryResult
 import { graphSchema } from "./schema.js";
 import type { GraphStore } from "./store.js";
 declare function loadBlock(store: GraphStore, fqn: string): Promise<GraphNode | undefined>;
-export declare function uses(store: GraphStore, fqn: string): Promise<GraphNeighbor[]>;
-export declare function usedBy(store: GraphStore, fqn: string): Promise<GraphNeighbor[]>;
-export declare function neighbors(store: GraphStore, fqn: string): Promise<GraphNeighbor[]>;
+export declare function uses(store: GraphStore, fqn: string, depth?: number): Promise<GraphNeighbor[]>;
+export declare function usedBy(store: GraphStore, fqn: string, depth?: number): Promise<GraphNeighbor[]>;
+export declare function neighbors(store: GraphStore, fqn: string, depth?: number): Promise<GraphNeighbor[]>;
 export declare function ancestors(store: GraphStore, fqn: string, depth?: number): Promise<GraphNode[]>;
 export declare function descendants(store: GraphStore, fqn: string, depth?: number): Promise<GraphNode[]>;
 export declare function shortestPath(store: GraphStore, from: string, to: string, depth?: number): Promise<GraphPath | undefined>;

@@ -294,11 +294,10 @@ function mapBlockRelations(
   if (!fqn) {
     return;
   }
-  const baseRefs = block.baseTypeExpression
-    ? collectNamedTypes(block.baseTypeExpression)
-    : block.baseType
-      ? [{ fqn: block.baseType }]
-      : [];
+  const parentFqn =
+    block.baseType ||
+    (block.baseTypeExpression?.kind === "named" ? block.baseTypeExpression.fqn : undefined);
+  const baseRefs: NamedTypeRef[] = parentFqn ? [{ fqn: parentFqn }] : [];
   typeEdgesFromNamed(
     "BASE_TYPE",
     fqn,

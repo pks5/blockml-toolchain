@@ -104,6 +104,42 @@ describe("graph mapping", () => {
     expect(data.blocks.find((block) => block.fqn === wall)?.origin).toBe("workspace");
   });
 
+  it("maps BASE_TYPE to the parent only, not generic arguments", () => {
+    writeProject(TMP, {
+      "blocks/Size3D.bml": sampleBlock({
+        name: "Size3D",
+        extra: [
+          "  <properties>",
+          '    <x type="core:Number"><documentation>x</documentation></x>',
+          "  </properties>",
+        ].join("\n"),
+      }),
+      "blocks/PhysicalObject.bml": sampleBlock({
+        name: "PhysicalObject",
+        extra: [
+          "  <properties>",
+          '    <size type="test:Size3D"><documentation>size</documentation></size>',
+          "  </properties>",
+        ].join("\n"),
+      }),
+      "blocks/Bound.bml": sampleBlock({
+        name: "Bound",
+        baseType: "test:PhysicalObject(test:Size3D)",
+      }),
+    });
+    const { registry } = bootstrapFullProjectRegistry({ rootDir: TMP });
+    const data = graphDataFromRegistry(registry, { rootDir: TMP });
+    const bound = "com.blockml.test.graph.Bound";
+    const physical = "com.blockml.test.graph.PhysicalObject";
+    const size3d = "com.blockml.test.graph.Size3D";
+    expect(
+      data.edges.some((edge) => edge.relation === "BASE_TYPE" && edge.from === bound && edge.to === physical),
+    ).toBe(true);
+    expect(
+      data.edges.some((edge) => edge.relation === "BASE_TYPE" && edge.from === bound && edge.to === size3d),
+    ).toBe(false);
+  });
+
   it("creates stub nodes for unresolved type FQNs", () => {
     writeProject(TMP, {
       "blocks/MissingRef.bml": sampleBlock({
@@ -234,6 +270,56 @@ describe("graph semantic API", () => {
         { fqn: CORE_FQN },
       );
       expect(queried.rows.some((row) => row.values.includes(wall))).toBe(true);
+
+      const uses1 = await index.uses(wall);
+      expect(uses1.some((hit) => hit.node.fqn === size3d)).toBe(false);
+      const uses2 = await index.uses(wall, { depth: 2 });
+      const sizeHop = uses2.find((hit) => hit.node.fqn === size3d);
+      expect(sizeHop?.relation).toBe("MEMBER_TYPE");
+      expect(sizeHop?.source?.fqn).toBe(physical);
+      expect(uses2.some((hit) => hit.node.fqn === physical && !hit.source)).toBe(true);
+
+      const usedBy2 = await index.usedBy(size3d, { depth: 2 });
+      const wallHop = usedBy2.find((hit) => hit.node.fqn === wall);
+      expect(wallHop?.source?.fqn).toBe(physical);
+    } finally {
+      await index.close();
+    }
+  });
+
+  it("does not inherit SubBlock or generic-argument members via BASE_TYPE", async () => {
+    writeProject(TMP, {
+      "blocks/Size3D.bml": sampleBlock({
+        name: "Size3D",
+        extra: [
+          "  <properties>",
+          '    <x type="core:Number"><documentation>x</documentation></x>',
+          "  </properties>",
+        ].join("\n"),
+      }),
+      "blocks/PhysicalObject.bml": sampleBlock({
+        name: "PhysicalObject",
+        extra: [
+          "  <properties>",
+          '    <size type="test:Size3D"><documentation>size</documentation></size>',
+          "  </properties>",
+        ].join("\n"),
+      }),
+      "blocks/Bound.bml": sampleBlock({
+        name: "Bound",
+        baseType: "test:PhysicalObject(test:Size3D)",
+      }),
+    });
+    const { registry } = bootstrapFullProjectRegistry({ rootDir: TMP });
+    const index = await buildMemoryIndex(registry, { rootDir: TMP });
+    try {
+      const bound = "com.blockml.test.graph.Bound";
+      const physical = "com.blockml.test.graph.PhysicalObject";
+      const members = await index.members(bound);
+      expect(members.some((member) => member.node.name === "size" && member.inheritedFrom === physical)).toBe(
+        true,
+      );
+      expect(members.some((member) => member.node.name === "x")).toBe(false);
     } finally {
       await index.close();
     }

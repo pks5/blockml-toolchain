@@ -30,6 +30,7 @@
     Graph corpus == validate --all corpus. Index is a derived cache; BML remains source of truth.
 
     Only authored edges are stored. Transitive relations are computed by traversals.
+    BASE_TYPE is the resolved parent Block, not generic arguments on the baseType expression. Generic arguments may appear as HAS_SUBBLOCK when they are nested SubBlocks.
     Persistence: .blockml/graph/lbug plus manifest.json (package.json/lockfile hashes, indexed file mtimes). Missing or stale index → full rebuild.
     Ladybug is exclusive. openGraph/rebuildIndex take .blockml/graph/index.lock until close() and retry if the database file is locked.</documentation>
   <references>

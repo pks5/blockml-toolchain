@@ -25,7 +25,7 @@
   <type>graphcap:UsedBy</type>
   <baseType>core:Capability</baseType>
   <is>Incoming authored block-level references</is>
-  <documentation>Inverse of Uses.</documentation>
+  <documentation>Inverse of Uses. Default depth 1. depth n walks n incoming hops; further hops set GraphNeighbor.source.</documentation>
   <references>
     <see type="graphcap:Uses" relation="SeeAlso" />
   </references>
@@ -33,6 +33,9 @@
     <fqn type="type:Text">
       <documentation>Block FQN. (required)</documentation>
     </fqn>
+    <depth type="type:Integer">
+      <documentation>Incoming hops. Default 1. (optional)</documentation>
+    </depth>
     <neighbors type="graph:GraphNeighbor[]">
       <documentation>Incoming neighbors. (required)</documentation>
     </neighbors>

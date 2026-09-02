@@ -25,7 +25,7 @@
   <type>graph:GraphNeighbor</type>
   <baseType>graph:GraphType</baseType>
   <is>One semantic 1-hop result</is>
-  <documentation>Block-level uses/usedBy/neighbors result. via is the Member that explains a MEMBER_TYPE hop.</documentation>
+  <documentation>Block-level uses/usedBy/neighbors result. via is the Member that explains a MEMBER_TYPE hop. source is set when the edge is owned by a block other than the queried FQN (uses/used-by/neighbors depth &gt; 1).</documentation>
   <properties>
     <node type="graph:GraphNode">
       <documentation>Neighbor block. (required)</documentation>
@@ -39,6 +39,9 @@
     <via type="graph:GraphNode">
       <documentation>Member node when the hop goes through a member. (optional)</documentation>
     </via>
+    <source type="graph:GraphNode">
+      <documentation>Block that owns this edge when it is not the queried FQN. (optional)</documentation>
+    </source>
     <file type="type:Text">
       <documentation>Provenance file. (optional)</documentation>
     </file>

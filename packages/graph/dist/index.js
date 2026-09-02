@@ -7,7 +7,7 @@ import { acquireGraphLock } from "./graph-lock.js";
 import { createLadybugStore, openLadybugStore, populateStore } from "./ladybug-store.js";
 import { graphDataFromRegistry } from "./mapper.js";
 import { MEMORY_DB_PATH } from "./store.js";
-export { DEFAULT_GRAPH_DEPTH, INDEX_FORMAT_VERSION } from "./types.js";
+export { DEFAULT_GRAPH_DEPTH, DEFAULT_USES_DEPTH, INDEX_FORMAT_VERSION } from "./types.js";
 export { GraphIndex } from "./graph-index.js";
 export { graphDataFromRegistry } from "./mapper.js";
 export { collectNamedTypes } from "./type-refs.js";

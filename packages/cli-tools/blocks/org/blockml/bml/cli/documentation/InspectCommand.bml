@@ -34,7 +34,8 @@
     Output is InspectResult JSON (root, depth, blocks, unresolved, cycles, truncated).
     Aggregation members include authored composition instances. Documentation longer than 400 characters sets documentationTruncated.
     Default depth 1, allowed 0, cap 3. --json is accepted and implied.
-    Missing or unknown FQN → exit 2.</documentation>
+    Missing or unknown FQN → exit 2. Unknown FQN may print Did you mean …? when search finds a Block whose last segment matches.
+    --help and -h print this syntax and exit 0.</documentation>
   <references>
     <see type="clidocumentation:Commands" relation="SeeAlso" />
     <see type="clicap:RunInspect" relation="SeeAlso" />

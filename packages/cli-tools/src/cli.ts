@@ -57,7 +57,38 @@ const USAGE =
   "       blockml graph schema [--json]\n" +
   "       blockml inspect <fqn> [--depth n] [--json] [--src dir] [--libraries a,b]\n" +
   "       blockml transform apply <execution-fqn> [--verbose] [--parameters json]\n" +
-  "       blockml new <fqn> [--baseType fqn] [--is text] [--src dir] [--libraries a,b]";
+  "       blockml new <fqn> [--baseType fqn] [--is text] [--src dir] [--libraries a,b]\n" +
+  "       blockml --help";
+
+const GRAPH_USAGE =
+  "Usage: blockml graph index [--force] [--src dir] [--libraries a,b]\n" +
+  "       blockml graph neighbors|uses|used-by|ancestors|descendants|members <fqn> [--json] [--depth n]\n" +
+  "       blockml graph path <from> <to> [--json] [--depth n]\n" +
+  "       blockml graph query <cypher> [--json]\n" +
+  "       blockml graph schema [--json]\n" +
+  "       blockml graph --help";
+
+const INSPECT_USAGE =
+  "Usage: blockml inspect <fqn> [--depth n] [--json] [--src dir] [--libraries a,b]\n" +
+  "       blockml inspect --help";
+
+const SEARCH_USAGE =
+  "Usage: blockml search <query> [--json] [--limit n] [--src dir] [--libraries a,b]\n" +
+  "       blockml search index [--force] [--src dir] [--libraries a,b]\n" +
+  "       blockml search --help";
+
+function usageFor(command?: string): string {
+  switch (command) {
+    case "graph":
+      return GRAPH_USAGE;
+    case "inspect":
+      return INSPECT_USAGE;
+    case "search":
+      return SEARCH_USAGE;
+    default:
+      return USAGE;
+  }
+}
 
 function workspaceRoot(from: string): string {
   let dir = resolve(from);
@@ -99,6 +130,7 @@ export interface ParsedArgs {
   newFqn?: string;
   newBaseType?: string;
   newIs?: string;
+  help?: boolean;
 }
 
 export interface CliRunOptions {
@@ -118,9 +150,10 @@ export function parseArgs(argv: string[]): ParsedArgs {
   const args = [...argv];
   const result: ParsedArgs = {};
 
-  const first = args.shift();
+  const first = args[0];
   if (first !== undefined && !first.startsWith("-")) {
     result.command = first;
+    args.shift();
   }
 
   while (args.length > 0) {
@@ -184,6 +217,8 @@ export function parseArgs(argv: string[]): ParsedArgs {
       if (value) {
         result.newIs = value;
       }
+    } else if (flag === "--help" || flag === "-h") {
+      result.help = true;
     } else if (flag && !flag.startsWith("-")) {
       if (result.command === "validate") {
         if (!result.file) {
@@ -907,6 +942,12 @@ async function executeCli(
   try {
     const parsed = parseArgs(argv);
 
+    if (parsed.help || parsed.command === "help" || parsed.subcommand === "help") {
+      const command = parsed.command === "help" ? undefined : parsed.command;
+      pushLines(lines, usageFor(command), "info");
+      return { code: 0, lines };
+    }
+
     if (parsed.command === "validate") {
       const code = runValidate(parsed, cwd, lines);
       return { code, lines };
@@ -920,7 +961,7 @@ async function executeCli(
         pushLines(lines, e instanceof Error ? e.message : String(e), "error");
         return { code: 2, lines };
       }
-      const code = await runSearch(parsed, cwd, config, lines, formatDiagnostic, USAGE);
+      const code = await runSearch(parsed, cwd, config, lines, formatDiagnostic, SEARCH_USAGE);
       return { code, lines };
     }
 
@@ -932,7 +973,7 @@ async function executeCli(
         pushLines(lines, e instanceof Error ? e.message : String(e), "error");
         return { code: 2, lines };
       }
-      const code = await runGraph(parsed, cwd, config, lines, formatDiagnostic, USAGE);
+      const code = await runGraph(parsed, cwd, config, lines, formatDiagnostic, GRAPH_USAGE);
       return { code, lines };
     }
 
@@ -944,7 +985,7 @@ async function executeCli(
         pushLines(lines, e instanceof Error ? e.message : String(e), "error");
         return { code: 2, lines };
       }
-      const code = await runInspect(parsed, cwd, config, lines, USAGE);
+      const code = await runInspect(parsed, cwd, config, lines, INSPECT_USAGE);
       return { code, lines };
     }
 

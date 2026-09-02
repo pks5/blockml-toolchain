@@ -1,6 +1,7 @@
 import { isAbsolute, relative, resolve } from "node:path";
 import { getIndexStatus, openGraph, rebuildIndex, } from "@blockml/graph";
 import { diagnosticKind, pushLines } from "./cli-style.js";
+import { suggestMatchingFqn, unknownFqnMessage } from "./suggest-fqn.js";
 export const GRAPH_SUBCOMMANDS = [
     "index",
     "neighbors",
@@ -52,9 +53,10 @@ function formatNode(node, rootDir) {
 }
 function formatNeighbor(hit, rootDir) {
     const via = hit.via ? ` via ${hit.via.displayFqn ?? hit.via.fqn}` : "";
+    const source = hit.source ? ` from ${hit.source.displayFqn ?? hit.source.fqn}` : "";
     const where = loc(hit.file, hit.line, rootDir);
     const suffix = where ? `  ${where}` : "";
-    return `${hit.direction}  ${hit.relation}${via}  ${formatNode(hit.node, rootDir)}${suffix}`;
+    return `${hit.direction}  ${hit.relation}${via}  ${formatNode(hit.node, rootDir)}${source}${suffix}`;
 }
 function formatMember(member, rootDir) {
     const inherited = member.inheritedFrom ? ` inheritedFrom ${member.inheritedFrom}` : "";
@@ -104,12 +106,21 @@ function requireFqn(parsed, lines, usage) {
     }
     return fqn;
 }
-async function rejectUnknownFqn(index, fqn, lines) {
+async function rejectUnknownFqn(index, fqn, lines, parsed, rootDir, config) {
     const node = await index.block(fqn);
     if (node) {
         return false;
     }
-    pushLines(lines, `Unknown Block FQN: ${fqn}.`, "error");
+    const suggestion = await suggestMatchingFqn(fqn, {
+        rootDir,
+        ...(parsed.srcDir !== undefined || config.srcDir !== undefined
+            ? { srcDir: parsed.srcDir ?? config.srcDir }
+            : {}),
+        ...(parsed.libraries !== undefined || config.libraries !== undefined
+            ? { libraries: parsed.libraries ?? config.libraries }
+            : {}),
+    });
+    pushLines(lines, unknownFqnMessage(fqn, suggestion), "error");
     return true;
 }
 export async function runGraph(parsed, rootDir, config, lines, formatDiagnostic, usage) {
@@ -181,7 +192,8 @@ export async function runGraph(parsed, rootDir, config, lines, formatDiagnostic,
                 pushLines(lines, usage, "info");
                 return 2;
             }
-            if ((await rejectUnknownFqn(index, from, lines)) || (await rejectUnknownFqn(index, to, lines))) {
+            if ((await rejectUnknownFqn(index, from, lines, parsed, rootDir, config)) ||
+                (await rejectUnknownFqn(index, to, lines, parsed, rootDir, config))) {
                 return 2;
             }
             const path = await index.path(from, to, depthOptions);
@@ -200,7 +212,7 @@ export async function runGraph(parsed, rootDir, config, lines, formatDiagnostic,
         if (!fqn) {
             return 2;
         }
-        if (await rejectUnknownFqn(index, fqn, lines)) {
+        if (await rejectUnknownFqn(index, fqn, lines, parsed, rootDir, config)) {
             return 2;
         }
         if (subcommand === "members") {
@@ -236,10 +248,10 @@ export async function runGraph(parsed, rootDir, config, lines, formatDiagnostic,
             return 0;
         }
         const neighbors = subcommand === "uses"
-            ? await index.uses(fqn)
+            ? await index.uses(fqn, depthOptions)
             : subcommand === "used-by"
-                ? await index.usedBy(fqn)
-                : await index.neighbors(fqn);
+                ? await index.usedBy(fqn, depthOptions)
+                : await index.neighbors(fqn, depthOptions);
         if (parsed.json) {
             emitJson(lines, neighbors);
             return 0;

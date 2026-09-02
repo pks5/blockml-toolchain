@@ -62,6 +62,13 @@ describe("parseArgs", () => {
   it("maps validate --verbose", () => {
     expect(parseArgs(["validate", "--verbose"]).verbose).toBe(true);
   });
+
+  it("maps --help without consuming it as the command", () => {
+    expect(parseArgs(["--help"]).help).toBe(true);
+    expect(parseArgs(["--help"]).command).toBeUndefined();
+    expect(parseArgs(["-h"]).help).toBe(true);
+    expect(parseArgs(["help"]).command).toBe("help");
+  });
 });
 
 describe("isCliEntry", () => {
@@ -469,6 +476,15 @@ describe("runCli other commands", () => {
     const { code, stderr } = await runCli(["frobnicate"], ROOT);
     expect(code).toBe(2);
     expect(stderr).toMatch(/Usage: blockml/);
+  });
+
+  it("prints usage and exits 0 for --help and help", async () => {
+    const flag = await runCli(["--help"], ROOT);
+    expect(flag.code).toBe(0);
+    expect(flag.stderr).toMatch(/Usage: blockml/);
+    const token = await runCli(["help"], ROOT);
+    expect(token.code).toBe(0);
+    expect(token.stderr).toMatch(/Usage: blockml/);
   });
 
   it("requires host file or package.json blockml.library for fatblock", async () => {

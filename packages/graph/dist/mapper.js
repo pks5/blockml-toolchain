@@ -173,11 +173,9 @@ function mapBlockRelations(block, file, blocks, edges, workspaceRoots) {
     if (!fqn) {
         return;
     }
-    const baseRefs = block.baseTypeExpression
-        ? collectNamedTypes(block.baseTypeExpression)
-        : block.baseType
-            ? [{ fqn: block.baseType }]
-            : [];
+    const parentFqn = block.baseType ||
+        (block.baseTypeExpression?.kind === "named" ? block.baseTypeExpression.fqn : undefined);
+    const baseRefs = parentFqn ? [{ fqn: parentFqn }] : [];
     typeEdgesFromNamed("BASE_TYPE", fqn, baseRefs, locFile(block.baseTypeSource, file), locLine(block.baseTypeSource), blocks, edges, workspaceRoots);
     const contractRefs = (block.contracts ?? [])
         .map((entry) => entry.value?.trim())

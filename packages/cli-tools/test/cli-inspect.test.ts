@@ -29,6 +29,12 @@ describe("parseArgs inspect", () => {
     expect(parsed.depth).toBe(0);
     expect(parsed.json).toBe(true);
   });
+
+  it("maps --help", () => {
+    const parsed = parseArgs(["inspect", "--help"]);
+    expect(parsed.command).toBe("inspect");
+    expect(parsed.help).toBe(true);
+  });
 });
 
 describe("blockml inspect CLI", () => {
@@ -68,5 +74,19 @@ describe("blockml inspect CLI", () => {
     const { code, stderr } = await runCli(["inspect"], TMP);
     expect(code).toBe(2);
     expect(stderr).toMatch(/Specify a Block FQN/);
+    expect(stderr).toMatch(/Usage: blockml inspect/);
+  });
+
+  it("prints inspect usage and exits 0 for --help", async () => {
+    const { code, stderr } = await runCli(["inspect", "--help"], TMP);
+    expect(code).toBe(0);
+    expect(stderr).toMatch(/Usage: blockml inspect/);
+  });
+
+  it("suggests a matching FQN for an unknown short name", async () => {
+    const { code, stderr } = await runCli(["inspect", "Widget"], TMP);
+    expect(code).toBe(2);
+    expect(stderr).toMatch(/Unknown Block FQN: Widget/);
+    expect(stderr).toMatch(/Did you mean com\.blockml\.test\.cliinspect\.Widget\?/);
   });
 });

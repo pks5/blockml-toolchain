@@ -3,7 +3,7 @@ import { type TypeRegistry } from "@blockml/framework";
 import { GraphIndex } from "./graph-index.js";
 import type { BuildIndexResult, GraphIndexOptions, IndexStatus } from "./types.js";
 export type { BuildIndexResult, GraphDepthOptions, GraphEdge, GraphIndexHandle, GraphIndexOptions, GraphMember, GraphNeighbor, GraphNode, GraphNodeKind, GraphOrigin, GraphPath, GraphPathHop, GraphQueryResult, GraphQueryRow, GraphRelation, GraphSchema, IndexState, IndexStatus, MemberKind, } from "./types.js";
-export { DEFAULT_GRAPH_DEPTH, INDEX_FORMAT_VERSION } from "./types.js";
+export { DEFAULT_GRAPH_DEPTH, DEFAULT_USES_DEPTH, INDEX_FORMAT_VERSION } from "./types.js";
 export { GraphIndex } from "./graph-index.js";
 export { graphDataFromRegistry } from "./mapper.js";
 export { collectNamedTypes } from "./type-refs.js";

@@ -25,7 +25,7 @@
   <type>graphcap:Members</type>
   <baseType>core:Capability</baseType>
   <is>Authored members plus inherited view</is>
-  <documentation>HAS_MEMBER on the block plus BASE_TYPE and CONTRACT owners. inheritedFrom is set for inherited members; those edges are not stored on the child.</documentation>
+  <documentation>HAS_MEMBER on the block plus BASE_TYPE ancestors and CONTRACT owners. inheritedFrom is set for inherited members; those edges are not stored on the child. BASE_TYPE is the resolved parent only — generic arguments on baseType are not ancestors. SubBlock members are not listed on the parent.</documentation>
   <properties>
     <fqn type="type:Text">
       <documentation>Block FQN. (required)</documentation>

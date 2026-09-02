@@ -42,7 +42,7 @@ export type {
   IndexStatus,
   MemberKind,
 } from "./types.js";
-export { DEFAULT_GRAPH_DEPTH, INDEX_FORMAT_VERSION } from "./types.js";
+export { DEFAULT_GRAPH_DEPTH, DEFAULT_USES_DEPTH, INDEX_FORMAT_VERSION } from "./types.js";
 export { GraphIndex } from "./graph-index.js";
 export { graphDataFromRegistry } from "./mapper.js";
 export { collectNamedTypes } from "./type-refs.js";

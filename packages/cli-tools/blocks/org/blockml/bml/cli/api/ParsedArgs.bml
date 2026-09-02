@@ -45,13 +45,14 @@
     <index type="type:Boolean"><documentation>search index subcommand: full rebuild. (optional)</documentation></index>
     <graphFqn type="type:Text"><documentation>Block FQN for graph ops, or path start. (optional)</documentation></graphFqn>
     <graphTo type="type:Text"><documentation>Path end FQN for graph path. (optional)</documentation></graphTo>
-    <depth type="type:Integer"><documentation>--depth: max hops for graph ancestors, descendants, path; inspect expansion depth (0 allowed). (optional)</documentation></depth>
+    <depth type="type:Integer"><documentation>--depth: uses/used-by/neighbors hops (default 1); ancestors/descendants/path max hops (default 16); inspect expansion (0 allowed). members ignores --depth. (optional)</documentation></depth>
     <inspectFqn type="type:Text"><documentation>Block FQN for inspect. (optional)</documentation></inspectFqn>
     <executionFqn type="type:Text"><documentation>FQN of a pending ModelTransformation for transform apply. (optional)</documentation></executionFqn>
     <parametersJson type="type:Text"><documentation>Raw --parameters JSON object for transform apply. (optional)</documentation></parametersJson>
     <newFqn type="type:Text"><documentation>FQN for blockml new. (optional)</documentation></newFqn>
     <newBaseType type="type:Text"><documentation>--baseType for blockml new. (optional)</documentation></newBaseType>
     <newIs type="type:Text"><documentation>--is for blockml new. (optional)</documentation></newIs>
+    <help type="type:Boolean"><documentation>--help / -h: print command usage and exit 0. (optional)</documentation></help>
   </properties>
 
 </block>

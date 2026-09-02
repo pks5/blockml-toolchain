@@ -1,6 +1,7 @@
 import { inspectProject, type InspectResult } from "@blockml/inspect";
 import { pushLines, type CliOutputLine } from "./cli-style.js";
 import type { BomConfig } from "./load-config.js";
+import { suggestMatchingFqn, unknownFqnMessage } from "./suggest-fqn.js";
 
 export interface InspectCliArgs {
   inspectFqn?: string;
@@ -36,7 +37,16 @@ export async function runInspect(
   });
 
   if (!result.blocks[fqn] && result.unresolved.includes(fqn)) {
-    pushLines(lines, `Unknown Block FQN: ${fqn}.`, "error");
+    const suggestion = await suggestMatchingFqn(fqn, {
+      rootDir,
+      ...(parsed.srcDir !== undefined || config.srcDir !== undefined
+        ? { srcDir: parsed.srcDir ?? config.srcDir }
+        : {}),
+      ...(parsed.libraries !== undefined || config.libraries !== undefined
+        ? { libraries: parsed.libraries ?? config.libraries }
+        : {}),
+    });
+    pushLines(lines, unknownFqnMessage(fqn, suggestion), "error");
     return 2;
   }
 

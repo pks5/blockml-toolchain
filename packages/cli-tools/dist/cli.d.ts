@@ -27,6 +27,7 @@ export interface ParsedArgs {
     newFqn?: string;
     newBaseType?: string;
     newIs?: string;
+    help?: boolean;
 }
 export interface CliRunOptions {
     transformAgent?: TransformationAgent;
