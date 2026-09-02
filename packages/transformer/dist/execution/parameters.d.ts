@@ -12,5 +12,10 @@ export declare function resolveParametersTypeFqn(block: BlockDefinition): string
 export declare function assertParametersCompatible(value: Record<string, unknown>, typeFqn: string, registry: TypeRegistry, path?: string): void;
 export declare function assertCompatibleValue(value: unknown, typeFqn: string, registry: TypeRegistry, path: string): void;
 export declare function applyExecutionParameters(block: BlockDefinition, registry: TypeRegistry, cliParameters?: Record<string, unknown>): Record<string, unknown>;
+/**
+ * Rewrite FQNs rooted at this execution Block after a lifecycle relocate.
+ * Covers SubBlocks, the parameters property, and composition instances
+ * (e.g. a ResultProducer SubBlock referenced from a Stage).
+ */
 export declare function rewriteParameterTypeFqns(block: BlockDefinition, fromFqn: string, toFqn: string): void;
 //# sourceMappingURL=parameters.d.ts.map

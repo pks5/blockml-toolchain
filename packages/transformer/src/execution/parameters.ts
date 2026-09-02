@@ -1,5 +1,7 @@
 import type {
   BlockDefinition,
+  CompositionNode,
+  CompositionTemplate,
   PropertyDefinition,
   TypeExpression,
 } from "@blockml/bom";
@@ -223,6 +225,11 @@ export function applyExecutionParameters(
   return merged;
 }
 
+/**
+ * Rewrite FQNs rooted at this execution Block after a lifecycle relocate.
+ * Covers SubBlocks, the parameters property, and composition instances
+ * (e.g. a ResultProducer SubBlock referenced from a Stage).
+ */
 export function rewriteParameterTypeFqns(
   block: BlockDefinition,
   fromFqn: string,
@@ -240,11 +247,17 @@ export function rewriteParameterTypeFqns(
       }
     }
   }
-  for (const sub of block.subBlocks) {
+  for (const sub of block.subBlocks ?? []) {
     sub.type = rewrite(sub.type);
     rewriteParameterTypeFqns(sub, fromFqn, toFqn);
   }
+  for (const template of block.compositions ?? []) {
+    rewriteCompositionTemplate(template, rewrite);
+  }
   for (const member of block.members) {
+    if (member.kind === "aggregation") {
+      rewriteCompositionTemplate(member.composition, rewrite);
+    }
     if (member.kind !== "property" || member.name !== "parameters") {
       continue;
     }
@@ -253,6 +266,32 @@ export function rewriteParameterTypeFqns(
     }
     if (member.type?.kind === "named") {
       member.type.fqn = rewrite(member.type.fqn);
+    }
+  }
+}
+
+function rewriteCompositionTemplate(
+  template: CompositionTemplate | undefined,
+  rewrite: (value: string) => string,
+): void {
+  if (!template) {
+    return;
+  }
+  rewriteCompositionNodes(template.children, rewrite);
+}
+
+function rewriteCompositionNodes(
+  nodes: CompositionNode[],
+  rewrite: (value: string) => string,
+): void {
+  for (const node of nodes) {
+    if (node.kind === "virtualContainer") {
+      rewriteCompositionNodes(node.children, rewrite);
+      continue;
+    }
+    node.instance.typeFqn = rewrite(node.instance.typeFqn);
+    for (const agg of node.instance.aggregationCompositions ?? []) {
+      rewriteCompositionTemplate(agg.composition, rewrite);
     }
   }
 }

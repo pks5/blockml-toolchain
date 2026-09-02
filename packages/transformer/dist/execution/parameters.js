@@ -152,6 +152,11 @@ export function applyExecutionParameters(block, registry, cliParameters = {}) {
     setOverrideProperty(block, "parameters", typeFqn, merged);
     return merged;
 }
+/**
+ * Rewrite FQNs rooted at this execution Block after a lifecycle relocate.
+ * Covers SubBlocks, the parameters property, and composition instances
+ * (e.g. a ResultProducer SubBlock referenced from a Stage).
+ */
 export function rewriteParameterTypeFqns(block, fromFqn, toFqn) {
     const rewrite = (value) => value === fromFqn || value.startsWith(`${fromFqn}.`)
         ? `${toFqn}${value.slice(fromFqn.length)}`
@@ -164,11 +169,17 @@ export function rewriteParameterTypeFqns(block, fromFqn, toFqn) {
             }
         }
     }
-    for (const sub of block.subBlocks) {
+    for (const sub of block.subBlocks ?? []) {
         sub.type = rewrite(sub.type);
         rewriteParameterTypeFqns(sub, fromFqn, toFqn);
     }
+    for (const template of block.compositions ?? []) {
+        rewriteCompositionTemplate(template, rewrite);
+    }
     for (const member of block.members) {
+        if (member.kind === "aggregation") {
+            rewriteCompositionTemplate(member.composition, rewrite);
+        }
         if (member.kind !== "property" || member.name !== "parameters") {
             continue;
         }
@@ -177,6 +188,24 @@ export function rewriteParameterTypeFqns(block, fromFqn, toFqn) {
         }
         if (member.type?.kind === "named") {
             member.type.fqn = rewrite(member.type.fqn);
+        }
+    }
+}
+function rewriteCompositionTemplate(template, rewrite) {
+    if (!template) {
+        return;
+    }
+    rewriteCompositionNodes(template.children, rewrite);
+}
+function rewriteCompositionNodes(nodes, rewrite) {
+    for (const node of nodes) {
+        if (node.kind === "virtualContainer") {
+            rewriteCompositionNodes(node.children, rewrite);
+            continue;
+        }
+        node.instance.typeFqn = rewrite(node.instance.typeFqn);
+        for (const agg of node.instance.aggregationCompositions ?? []) {
+            rewriteCompositionTemplate(agg.composition, rewrite);
         }
     }
 }

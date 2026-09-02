@@ -203,6 +203,42 @@ describe("Transformer pipeline", () => {
     expect(succeeded).toContain(">ok</feedback>");
   });
 
+  it("relocates a SubBlock ResultProducer instance off the pending FQN", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        template: true,
+        resultProducerImplementation: "Returns a summary of the poem.",
+        resultProducerAsSubBlock: true,
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      reflectAgent: {
+        async reflect() {
+          return {
+            success: true,
+            changedFiles: [],
+            feedback: "ok",
+            result: "summary",
+          };
+        },
+      },
+      now: () => FIXED_NOW,
+    });
+    const run = await transformer.run(pendingFqn("JokeTest"));
+    expect(run.success).toBe(true);
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).not.toContain("_meta.transform.pending.");
+    expect(succeeded).toContain(`${generated}.TestResultProducer`);
+    expect(succeeded).toContain(">summary</result>");
+  });
+
   it("does not write Stage.result when the Stage has no ResultProducer", async () => {
     writePending();
     const generated = "T00001_JokeTest_20260830T011702";

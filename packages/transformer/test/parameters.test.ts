@@ -3,6 +3,7 @@ import { TransformError } from "../src/execution/errors.js";
 import {
   deepMergeParameters,
   parseParametersJson,
+  rewriteParameterTypeFqns,
 } from "../src/execution/parameters.js";
 
 describe("parseParametersJson", () => {
@@ -41,5 +42,71 @@ describe("deepMergeParameters", () => {
     expect(deepMergeParameters({ tags: ["a"] }, { tags: ["b", "c"] })).toEqual({
       tags: ["b", "c"],
     });
+  });
+});
+
+describe("rewriteParameterTypeFqns", () => {
+  it("rewrites SubBlock instance typeFqns nested under a Stage", () => {
+    const fromFqn = "pkg._meta.transform.pending.Poem";
+    const toFqn = "pkg._meta.transform.running.T00001_Poem";
+    const producerFqn = `${fromFqn}.TestResultProducer`;
+    const block = {
+      name: "Poem",
+      type: toFqn,
+      members: [
+        {
+          kind: "aggregation",
+          name: "stages",
+          composition: {
+            aggregationName: "stages",
+            children: [
+              {
+                kind: "blockInstance",
+                instance: {
+                  typeFqn: "org.blockml.bml.transformer.workflow.Stage",
+                  memberValues: {},
+                  aggregationCompositions: [
+                    {
+                      aggregationName: "resultProducer",
+                      composition: {
+                        aggregationName: "resultProducer",
+                        children: [
+                          {
+                            kind: "blockInstance",
+                            instance: {
+                              typeFqn: producerFqn,
+                              memberValues: {},
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      ],
+      subBlocks: [
+        {
+          name: "TestResultProducer",
+          type: producerFqn,
+          members: [],
+        },
+      ],
+      compositions: [],
+    } as unknown as import("@blockml/bom").BlockDefinition;
+
+    rewriteParameterTypeFqns(block, fromFqn, toFqn);
+
+    expect(block.subBlocks[0]?.type).toBe(`${toFqn}.TestResultProducer`);
+    const stages = block.members[0] as {
+      composition: { children: Array<{ instance: { aggregationCompositions: Array<{ composition: { children: Array<{ instance: { typeFqn: string } }> } }> } }> };
+    };
+    expect(
+      stages.composition.children[0]?.instance.aggregationCompositions[0]
+        ?.composition.children[0]?.instance.typeFqn,
+    ).toBe(`${toFqn}.TestResultProducer`);
   });
 });

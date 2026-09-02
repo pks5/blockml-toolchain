@@ -102,6 +102,7 @@ export function pendingExecutionXml(opts: {
   parameterFields?: readonly string[];
   pendingParameters?: string;
   resultProducerImplementation?: string;
+  resultProducerAsSubBlock?: boolean;
 }): string {
   const refs = opts.extraRefs
     ? `  <references>\n${opts.extraRefs}\n  </references>\n`
@@ -131,6 +132,7 @@ export function pendingExecutionXml(opts: {
   const parameterFields = opts.parameterFields ?? [];
   const bindParameters = parameterFields.length > 0;
   const withResultProducer = opts.resultProducerImplementation !== undefined;
+  const producerAsSubBlock = withResultProducer && opts.resultProducerAsSubBlock === true;
   const baseType = bindParameters
     ? "workflow:ModelTransformation(Parameters)"
     : "workflow:ModelTransformation";
@@ -138,7 +140,7 @@ export function pendingExecutionXml(opts: {
     ? [
         ` xmlns:cap="org.blockml.bml.capability"`,
         ` xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"`,
-        ` xmlns:test="${LIBRARY}"`,
+        ...(producerAsSubBlock ? [] : [` xmlns:test="${LIBRARY}"`]),
       ]
     : [];
   const parameterBlock = bindParameters
@@ -155,17 +157,36 @@ export function pendingExecutionXml(opts: {
         `    </block>`,
       ]
     : [];
-  const nested = [...parameterBlock];
+  const producerBlock = producerAsSubBlock
+    ? [
+        `    <block>`,
+        `      <name>TestResultProducer</name>`,
+        `      <baseType>workflow:ResultProducer(type:Text)</baseType>`,
+        `      <is>a test result producer</is>`,
+        `      <capabilities>`,
+        `        <produce override="true" type="cap:Outbound" outputType="type:Text">`,
+        `          <implementation language="English">`,
+        `            ${opts.resultProducerImplementation}`,
+        `          </implementation>`,
+        `        </produce>`,
+        `      </capabilities>`,
+        `    </block>`,
+      ]
+    : [];
+  const nested = [...parameterBlock, ...producerBlock];
   const subBlocks =
     nested.length > 0 ? [`  <subBlocks>`, ...nested, `  </subBlocks>`].join("\n") : "";
   const instructions = opts.stageInstructions ?? ["Do the task."];
   const stages = instructions
     .map((text, index) => {
+      const producerTag = producerAsSubBlock
+        ? "<TestResultProducer />"
+        : "<test:TestResultProducer />";
       const producerXml =
         withResultProducer && index === 0
           ? [
               `          <resultProducer>`,
-              `            <test:TestResultProducer />`,
+              `            ${producerTag}`,
               `          </resultProducer>`,
             ].join("\n")
           : "";
