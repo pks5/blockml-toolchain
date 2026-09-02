@@ -27,7 +27,7 @@
 
   <documentation>CLI9: parsed command-line arguments from process.argv slice.</documentation>
   <properties>
-    <command type="type:Text"><documentation>validate | compile | search | graph | transform. (optional)</documentation></command>
+    <command type="type:Text"><documentation>validate | compile | search | graph | transform | new. (optional)</documentation></command>
     <subcommand type="type:Text"><documentation>Subcommand of command. For transform: apply. For graph: index, neighbors, uses, used-by, ancestors, descendants, members, path, query, schema. (optional)</documentation></subcommand>
     <target type="type:Text"><documentation>Registry name e.g. blockdoc, xsd, fatblock. (optional)</documentation></target>
     <file type="type:Text"><documentation>Path to .bml file for document targets or validate. (optional)</documentation></file>
@@ -48,6 +48,9 @@
     <depth type="type:Integer"><documentation>--depth: max hops for graph ancestors, descendants, path. (optional)</documentation></depth>
     <executionFqn type="type:Text"><documentation>FQN of a pending ModelTransformation for transform apply. (optional)</documentation></executionFqn>
     <parametersJson type="type:Text"><documentation>Raw --parameters JSON object for transform apply. (optional)</documentation></parametersJson>
+    <newFqn type="type:Text"><documentation>FQN for blockml new. (optional)</documentation></newFqn>
+    <newBaseType type="type:Text"><documentation>--baseType for blockml new. (optional)</documentation></newBaseType>
+    <newIs type="type:Text"><documentation>--is for blockml new. (optional)</documentation></newIs>
   </properties>
 
 </block>

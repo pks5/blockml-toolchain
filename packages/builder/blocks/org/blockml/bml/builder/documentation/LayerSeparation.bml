@@ -1,0 +1,40 @@
+<!--
+  Builder Documentation — LayerSeparation
+  FQN: org.blockml.bml.builder.documentation.LayerSeparation
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:builder="org.blockml.bml.builder"
+  xmlns:buildercap="org.blockml.bml.builder.capability"
+  xmlns:builderdocumentation="org.blockml.bml.builder.documentation"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>LayerSeparation</name>
+  <type>builderdocumentation:LayerSeparation</type>
+  <baseType>core:Documentation</baseType>
+  <is>Builder vs BOM vs framework vs CLI</is>
+  <documentation>Layers:
+
+    org.blockml.bml.builder.* (@blockml/builder) — writable session, mutations, seal().
+    @blockml/bom — Urmodell types only.
+    @blockml/framework — TypeRegistry, forkBom (resolve only; not authoring).
+    @blockml/parser — BML → BomDocument for Edit.
+    @blockml/serializer — BomDocument → BML after seal().
+    @blockml/cli — blockml new host (paths, Library catalog, file write).
+
+    Builder does not parse, serialize, validate, or write files.</documentation>
+  <references>
+    <see type="builderdocumentation:ArchitectureOverview" relation="ReadNext" />
+  </references>
+</block>

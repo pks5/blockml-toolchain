@@ -30,8 +30,9 @@
   <is>Toolchain package responsibilities for the Urmodell</is>
 
   <documentation>@blockml/bom — all Urmodell interfaces, ParseResult/SerializeResult/ValidateResult (B26 + Stage 2),
-    ValidateOptions, TypeRegistryReader, Diagnostic (compiler result type), bomEquals/stripProvenance (B20),
-    future BomBuilder (V3).
+    ValidateOptions, TypeRegistryReader, Diagnostic (compiler result type), bomEquals/stripProvenance (B20).
+
+    @blockml/builder — BomBuilder writable session; seal() → BomDocument.
 
     @blockml/framework — TypeRegistry, forkBom, resolveEffectiveMembers, validateTypes, parseExpression.
     Utilities never mutate Urmodell.

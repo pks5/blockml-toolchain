@@ -9,6 +9,7 @@
                       "
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
+  xmlns:builder="org.blockml.bml.builder"
   xmlns:cli="org.blockml.bml.cli"
   xmlns:parser="org.blockml.bml.compiler.parser"
   xmlns:runtime="org.blockml.bml.compiler.runtime"
@@ -38,6 +39,8 @@
       → node_modules/@blockml/core/blocks/org/blockml/bml/Library.bml
     • @blockml/bom → org.blockml.bml.bom.Library
       → packages/bom/blocks/org/blockml/bml/bom/Library.bml
+    • @blockml/builder → org.blockml.bml.builder.Library
+      → packages/builder/blocks/org/blockml/bml/builder/Library.bml
     • @blockml/parser → org.blockml.bml.compiler.parser.Library
       → packages/parser/blocks/org/blockml/bml/compiler/parser/Library.bml
     • @blockml/serializer → org.blockml.bml.compiler.serializer.Library

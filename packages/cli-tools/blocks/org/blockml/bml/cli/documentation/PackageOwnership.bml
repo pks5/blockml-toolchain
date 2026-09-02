@@ -27,7 +27,7 @@
   <is>Who owns CLI vs compiler vs targets</is>
 
   <documentation>    @blockml/cli owns: this BML library; cli.ts orchestration; blockml.config.json subset;
-    bootstrapTargets; writeOutputFiles; V1 validate/compile/search/graph/transform commands.
+    bootstrapTargets; writeOutputFiles; V1 validate/compile/search/graph/transform/new commands.
 
     @blockml/compiler owns: compileToOutput, CompileRequest, scope auto resolution, Target Registry API.
 

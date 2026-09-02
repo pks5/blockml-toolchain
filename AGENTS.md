@@ -115,6 +115,16 @@ npx blockml graph query '<cypher>'
 
 The graph indexes the same corpus as `validate --all`. Rebuild with `npx blockml graph index` when the index is missing or stale. Prefer named operations over Cypher; use `npx blockml graph schema` before ad-hoc queries.
 
+## Builder
+
+Use BlockML Builder (BomBuilder) to create or structurally edit Blocks as Urmodell graphs, then serialize to BML.
+
+```bash
+npx blockml new <fqn> [--baseType FQN] [--is text]
+```
+
+`blockml new` writes a `.bml` file and adds the Block to the owning Library catalog. Programmatic authoring uses `@blockml/builder` (`BomBuilder.create` / `edit` / `seal`). Do not mutate sealed `BomDocument`s or use `forkBom` for structural authoring.
+
 ## Validation
 
 Use the normal validation command for regular work on the current project:
@@ -305,6 +315,7 @@ Preferred examples:
 ```bash
 npx blockml search "<query>"
 npx blockml graph uses "<fqn>"
+npx blockml new "<fqn>"
 npx blockml validate
 ```
 

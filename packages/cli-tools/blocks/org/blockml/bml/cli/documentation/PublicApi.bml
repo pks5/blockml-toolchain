@@ -41,6 +41,7 @@
     • bootstrapProjectTypeRegistry(options) → BootstrapResult
     • runSearch via blockml search (delegates to @blockml/search)
     • runGraph via blockml graph (delegates to @blockml/graph)
+    • runNew via blockml new (delegates to @blockml/builder)
     • runTransform via blockml transform apply (delegates to @blockml/transformer)
     • writeOutputFiles(output, outDir, rootDir?, options?) → WriteOutputResult
     • loadTargetFromPackage / resolveTargetPackage / isBuiltinTarget (plugin loader)

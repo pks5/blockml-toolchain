@@ -9,6 +9,7 @@
                       "
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
+  xmlns:builder="org.blockml.bml.builder"
   xmlns:cli="org.blockml.bml.cli"
   xmlns:parser="org.blockml.bml.compiler.parser"
   xmlns:runtime="org.blockml.bml.compiler.runtime"
@@ -60,6 +61,7 @@
       <composition>
         <blockml:Library />
         <bom:Library />
+        <builder:Library />
         <blockdoc:Library />
         <cli:Library />
         <fatblock:Library />

@@ -1,0 +1,41 @@
+<!--
+  Builder Capability — EnsureNamespaceBinding
+  FQN: org.blockml.bml.builder.capability.EnsureNamespaceBinding
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:builder="org.blockml.bml.builder"
+  xmlns:buildercap="org.blockml.bml.builder.capability"
+  xmlns:builderdocumentation="org.blockml.bml.builder.documentation"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>EnsureNamespaceBinding</name>
+  <type>buildercap:EnsureNamespaceBinding</type>
+  <baseType>core:Capability</baseType>
+  <is>Declare an xmlns prefix for a package FQN</is>
+  <documentation>No-op when the namespace is already bound. If the suggested prefix is
+    taken by another URI, a numeric suffix is used. Known org.blockml.bml.*
+    packages use conventional prefixes (core, type, cli, graph, …).</documentation>
+  <properties>
+    <prefix type="type:Text">
+      <documentation>Suggested prefix. (required)</documentation>
+    </prefix>
+    <namespace type="type:Text">
+      <documentation>Package FQN or XML namespace URI. (required)</documentation>
+    </namespace>
+    <result type="builder:BomBuilder">
+      <documentation>This session. (required)</documentation>
+    </result>
+  </properties>
+</block>

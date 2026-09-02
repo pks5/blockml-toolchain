@@ -16,6 +16,7 @@
   "devDependencies": {
     "@blockml/blockdoc-target": "workspace:*",
     "@blockml/bom": "workspace:*",
+    "@blockml/builder": "workspace:*",
     "@blockml/cli": "workspace:*",
     "@blockml/compiler": "workspace:*",
     "@blockml/fatblock-target": "workspace:*",
@@ -54,6 +55,7 @@
     "test:lsp": "vitest run packages/lsp/test",
     "test:search": "vitest run packages/search/test",
     "test:graph": "vitest run packages/graph/test",
+    "test:builder": "vitest run packages/builder/test",
     "test:transformer": "vitest run packages/transformer/test",
     "compile:blockdoc": "node packages/cli-tools/dist/cli.js compile blockdoc",
     "compile:xsd": "node packages/cli-tools/dist/cli.js compile xsd",

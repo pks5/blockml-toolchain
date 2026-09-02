@@ -1,0 +1,41 @@
+<!--
+  Builder Capability — Edit
+  FQN: org.blockml.bml.builder.capability.Edit
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:builder="org.blockml.bml.builder"
+  xmlns:buildercap="org.blockml.bml.builder.capability"
+  xmlns:builderdocumentation="org.blockml.bml.builder.documentation"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>Edit</name>
+  <type>buildercap:Edit</type>
+  <baseType>core:Capability</baseType>
+  <is>Start a BomBuilder session from an existing Urmodell</is>
+  <documentation>BomBuilder.edit(document). Deep-clones the document into the session.
+    Does not use forkBom. The original BomDocument is not mutated.</documentation>
+  <references>
+    <see type="bomdoc:BomDocument" relation="SeeAlso" />
+    <see type="builder:BomBuilder" relation="SeeAlso" />
+  </references>
+  <properties>
+    <document type="bomdoc:BomDocument">
+      <documentation>Parse-origin or previously sealed document. (required)</documentation>
+    </document>
+    <result type="builder:BomBuilder">
+      <documentation>Writable session. (required)</documentation>
+    </result>
+  </properties>
+</block>

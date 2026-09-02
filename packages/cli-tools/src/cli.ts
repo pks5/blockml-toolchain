@@ -37,6 +37,7 @@ import { loadConfig, type BomConfig } from "./load-config.js";
 import { projectLibraryPackageDirs, projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
 import { runSearch } from "./run-search.js";
 import { runGraph } from "./run-graph.js";
+import { runNew } from "./run-new.js";
 import { defaultReflectAgent, defaultTransformAgent, runTransform } from "./run-transform.js";
 import { writeOutputFiles } from "./write-output.js";
 import type { ReflectionAgent, TransformationAgent } from "@blockml/transformer";
@@ -53,7 +54,8 @@ const USAGE =
   "       blockml graph path <from> <to> [--json] [--depth n]\n" +
   "       blockml graph query <cypher> [--json]\n" +
   "       blockml graph schema [--json]\n" +
-  "       blockml transform apply <execution-fqn> [--verbose] [--parameters json]";
+  "       blockml transform apply <execution-fqn> [--verbose] [--parameters json]\n" +
+  "       blockml new <fqn> [--baseType fqn] [--is text] [--src dir] [--libraries a,b]";
 
 function workspaceRoot(from: string): string {
   let dir = resolve(from);
@@ -91,6 +93,9 @@ export interface ParsedArgs {
   depth?: number;
   executionFqn?: string;
   parametersJson?: string;
+  newFqn?: string;
+  newBaseType?: string;
+  newIs?: string;
 }
 
 export interface CliRunOptions {
@@ -166,6 +171,16 @@ export function parseArgs(argv: string[]): ParsedArgs {
     } else if (flag === "--parameters") {
       const value = args.shift();
       result.parametersJson = value ?? "";
+    } else if (flag === "--baseType") {
+      const value = args.shift();
+      if (value) {
+        result.newBaseType = value;
+      }
+    } else if (flag === "--is") {
+      const value = args.shift();
+      if (value) {
+        result.newIs = value;
+      }
     } else if (flag && !flag.startsWith("-")) {
       if (result.command === "validate") {
         if (!result.file) {
@@ -214,6 +229,10 @@ export function parseArgs(argv: string[]): ParsedArgs {
           result.subcommand = flag;
         } else if (result.subcommand === "apply" && !result.executionFqn) {
           result.executionFqn = flag;
+        }
+      } else if (result.command === "new") {
+        if (!result.newFqn) {
+          result.newFqn = flag;
         }
       } else if (!result.target) {
         result.target = flag;
@@ -935,6 +954,18 @@ async function executeCli(
         options.onOutputLine,
         parsed.parametersJson,
       );
+      return { code, lines };
+    }
+
+    if (parsed.command === "new") {
+      let config: BomConfig;
+      try {
+        config = loadConfig(cwd);
+      } catch (e) {
+        pushLines(lines, e instanceof Error ? e.message : String(e), "error");
+        return { code: 2, lines };
+      }
+      const code = runNew(parsed, cwd, config, lines, USAGE);
       return { code, lines };
     }
 

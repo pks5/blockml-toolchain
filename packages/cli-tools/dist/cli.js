@@ -11,6 +11,7 @@ import { loadConfig } from "./load-config.js";
 import { projectLibraryPackageDirs, projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
 import { runSearch } from "./run-search.js";
 import { runGraph } from "./run-graph.js";
+import { runNew } from "./run-new.js";
 import { defaultReflectAgent, defaultTransformAgent, runTransform } from "./run-transform.js";
 import { writeOutputFiles } from "./write-output.js";
 const USAGE = "Usage: blockml compile <target> [--out dir] [--src dir] [--libraries a,b]\n" +
@@ -24,7 +25,8 @@ const USAGE = "Usage: blockml compile <target> [--out dir] [--src dir] [--librar
     "       blockml graph path <from> <to> [--json] [--depth n]\n" +
     "       blockml graph query <cypher> [--json]\n" +
     "       blockml graph schema [--json]\n" +
-    "       blockml transform apply <execution-fqn> [--verbose] [--parameters json]";
+    "       blockml transform apply <execution-fqn> [--verbose] [--parameters json]\n" +
+    "       blockml new <fqn> [--baseType fqn] [--is text] [--src dir] [--libraries a,b]";
 function workspaceRoot(from) {
     let dir = resolve(from);
     for (;;) {
@@ -108,6 +110,18 @@ export function parseArgs(argv) {
             const value = args.shift();
             result.parametersJson = value ?? "";
         }
+        else if (flag === "--baseType") {
+            const value = args.shift();
+            if (value) {
+                result.newBaseType = value;
+            }
+        }
+        else if (flag === "--is") {
+            const value = args.shift();
+            if (value) {
+                result.newIs = value;
+            }
+        }
         else if (flag && !flag.startsWith("-")) {
             if (result.command === "validate") {
                 if (!result.file) {
@@ -166,6 +180,11 @@ export function parseArgs(argv) {
                 }
                 else if (result.subcommand === "apply" && !result.executionFqn) {
                     result.executionFqn = flag;
+                }
+            }
+            else if (result.command === "new") {
+                if (!result.newFqn) {
+                    result.newFqn = flag;
                 }
             }
             else if (!result.target) {
@@ -671,6 +690,18 @@ async function executeCli(argv, cwd, options = {}) {
             const reflectAgent = options.reflectAgent ??
                 (options.transformAgent ? undefined : defaultReflectAgent(verbose));
             const code = await runTransform(parsed.executionFqn, cwd, lines, USAGE, agent, reflectAgent, options.onOutputLine, parsed.parametersJson);
+            return { code, lines };
+        }
+        if (parsed.command === "new") {
+            let config;
+            try {
+                config = loadConfig(cwd);
+            }
+            catch (e) {
+                pushLines(lines, e instanceof Error ? e.message : String(e), "error");
+                return { code: 2, lines };
+            }
+            const code = runNew(parsed, cwd, config, lines, USAGE);
             return { code, lines };
         }
         if (parsed.command !== "compile") {

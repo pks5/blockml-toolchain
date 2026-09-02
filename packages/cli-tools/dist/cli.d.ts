@@ -23,6 +23,9 @@ export interface ParsedArgs {
     depth?: number;
     executionFqn?: string;
     parametersJson?: string;
+    newFqn?: string;
+    newBaseType?: string;
+    newIs?: string;
 }
 export interface CliRunOptions {
     transformAgent?: TransformationAgent;

@@ -13,6 +13,9 @@
     { "path": "../framework" },
     { "path": "../search" },
     { "path": "../graph" },
+    { "path": "../builder" },
+    { "path": "../parser" },
+    { "path": "../serializer" },
     { "path": "../transformer" }
   ]
 }

@@ -39,6 +39,8 @@
 
     @blockml/graph — authored structural graph. CLI wraps as RunGraph.
 
+    @blockml/builder — BomBuilder session. CLI wraps as RunNew.
+
     Target packages (@blockml/blockdoc-target, xsd-target, fatblock-target) — RenderTarget impls
     and targetOptions types. CLI registers via bootstrapTargets; does not own render algorithms.
 
