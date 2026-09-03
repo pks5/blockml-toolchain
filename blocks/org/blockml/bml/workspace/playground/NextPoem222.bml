@@ -13,33 +13,33 @@
   <name>NextPoem222</name>
   <type>playground:NextPoem222</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, translated into Spanish, about a tree and a mushroom</is>
 
   <documentation>
-    Am Waldrand steht ein alter Ahornbaum,
-    er wiegt sein Laub seit hundert stillen Jahren.
-    Die Wurzeln greifen tief ins dunkle Erdreich,
-    sein Schatten deckt den Boden weich und kühl.
+    Al borde del bosque se alza un viejo arce,
+    mece su follaje desde hace cien años callados.
+    Sus raíces se hunden hondo en la tierra oscura,
+    su sombra cubre el suelo, suave y fresca.
 
-    Ein kleiner Pilz erwacht im feuchten Moose,
-    sein brauner Hut noch schwer vom Morgentau.
-    Er reckt sich zaghaft aus dem Laub zur Sonne
-    und lauscht dem Rauschen in der hohen Krone.
+    Un pequeño hongo despierta en el musgo húmedo,
+    su sombrero pardo aún pesado por el rocío del alba.
+    Se estira tímido entre las hojas hacia el sol
+    y escucha el murmullo en la alta copa.
 
-    "Sei mir gegrüßt", so spricht der Baum ganz leise,
-    "ich halte Wacht in jeder Sturmesnacht.
-    Mein Blätterdach hält Regen, Reif und Schnee ab,
-    bleib ruhig hier, kein Wetter tut dir weh."
+    "Yo te saludo", dice el árbol muy quedo,
+    "monto guardia en cada noche de tormenta.
+    Mi techo de hojas detiene lluvia, escarcha y nieve,
+    quédate tranquilo aquí, ningún tiempo te hará daño."
 
-    So stehn die beiden durch den Lauf der Zeiten,
-    der Ahorn stark, der Pilz sein stilles Glück.
-    Und wer vorübergeht auf schmalem Pfade,
-    sieht eine Freundschaft, die zusammenhält.
+    Así siguen los dos por el correr de los tiempos,
+    el arce fuerte, el hongo su dicha callada.
+    Y quien pasa por el estrecho sendero
+    ve una amistad que se mantiene unida.
   </documentation>
 
   <properties>
     <title>
-      <value>Der Ahorn und der Pilz</value>
+      <value>El arce y el hongo</value>
     </title>
     <author>
       <value>John Doe</value>
