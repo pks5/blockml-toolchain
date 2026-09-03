@@ -1,0 +1,108 @@
+<!--Workspace pending transform — JokeTest
+  FQN: org.blockml.bml.workspace._meta.transform.succeeded.T00001_JokeTest_20260830T014020-->
+<block xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
+
+  <name>
+    T00019_PoemTestTemplate_20260903T235647
+  </name>
+  <type>
+    running:T00019_PoemTestTemplate_20260903T235647
+  </type>
+  <baseType>
+    workflow:ModelTransformation(running:T00019_PoemTestTemplate_20260903T235647.Parameters)
+  </baseType>
+  <is>
+    A pending ModelTransformation that creates a playground Poem block
+  </is>
+  <properties>
+    <description override="true">
+      <value>A transformation that creates a playground Poem block</value>
+    </description>
+    <status override="true" type="workflow:ExecutionStatus">
+      <value>Running</value>
+    </status>
+    <createdAt override="true" type="type:DateTime">
+      <value>2026-08-30T01:40:20</value>
+    </createdAt>
+    <template override="true" type="type:Boolean">
+      <value>false</value>
+    </template>
+    <parameters override="true" type="running:T00019_PoemTestTemplate_20260903T235647.Parameters">
+      <value>{author:"John Doe",language:"German"}</value>
+    </parameters>
+    <executionId override="true" type="type:UUID">
+      <value>b5710eb0-0a3e-46dc-8d58-79b5dd4017cf</value>
+    </executionId>
+    <sequence override="true" type="type:Integer">
+      <value>19</value>
+    </sequence>
+    <startedAt override="true" type="type:DateTime">
+      <value>2026-09-03T23:56:47</value>
+    </startedAt>
+    <baseCommit override="true" type="type:Text">
+      <value>a505b3d1fbde5d48ba0b1eddaea20c9ed3b6ca37</value>
+    </baseCommit>
+  </properties>
+  <aggregations>
+    <operations override="true">
+      <composition>
+        <workflow:ModelOperation name="Create Poem" status="Pending" captureOutput="true">
+          <task>
+            <workflow:InstructionTask>
+              <instructions>Create or update the block 
+org.blockml.bml.workspace.playground.StructuredPoem.bml 
+that contains a random poem in german 
+about a tree and a mushroom. 
+For each execution create a new poem.
+The poem should be structured with the following properties:
+- title (type:Text)
+- author (type:Text)
+- poem (type:Text)
+- language (type:Text)
+- date (type:DateTime)
+- time (type:DateTime)
+- location (type:Text)
+- weather (type:Text)</instructions>
+            </workflow:InstructionTask>
+          </task>
+        </workflow:ModelOperation>
+        <workflow:ModelOperation name="Translate Poem" status="Pending">
+          <task>
+            <workflow:InstructionTask>
+              <instructions>Translate the poem in 
+org.blockml.bml.workspace.playground.NextPoem222.bml 
+to spanish.</instructions>
+            </workflow:InstructionTask>
+          </task>
+        </workflow:ModelOperation>
+      </composition>
+    </operations>
+  </aggregations>
+  <subBlocks>
+    <block>
+      <name>
+        Parameters
+      </name>
+      <type>
+        running:T00019_PoemTestTemplate_20260903T235647.Parameters
+      </type>
+      <baseType>
+        type:StructType
+      </baseType>
+      <is>
+        Run parameters for this poem transformation
+      </is>
+      <properties>
+        <author type="type:Text" />
+        <subject type="type:Text" />
+        <language type="type:Text" />
+      </properties>
+    </block>
+  </subBlocks>
+</block>
