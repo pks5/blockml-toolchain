@@ -871,9 +871,10 @@ The poem should be structured with the following properties:
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/" />
           </changedFiles>
         </workflow:ModelOperation>
-        <workflow:ModelOperation name="Translate Poem" status="Running">
+        <workflow:ModelOperation name="Translate Poem" status="Succeeded">
           <startedAt>2026-09-04T00:00:49</startedAt>
           <baseCommit>ac41ec5841a89a1517df39b02c409efbc37f9a7c</baseCommit>
+          <completedAt>2026-09-04T00:03:05</completedAt>
           <task>
             <workflow:InstructionTask>
               <instructions>Translate the poem in 
@@ -881,6 +882,9 @@ org.blockml.bml.workspace.playground.NextPoem222.bml
 to spanish.</instructions>
             </workflow:InstructionTask>
           </task>
+          <changedFiles>
+            <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/StructuredPoem.bml" />
+          </changedFiles>
         </workflow:ModelOperation>
       </composition>
     </operations>
