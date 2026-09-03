@@ -14,38 +14,38 @@
   <name>MyStory</name>
   <type>playground:MyStory</type>
   <baseType>core:Documentation</baseType>
-  <is>A random structured story produced by a workspace transform execution, in German, about a tree and a mushroom</is>
+  <is>A random structured story produced by a workspace transform execution, in Chinese, about a tree and a mushroom</is>
 
   <documentation>
-    A structured German story about a tree and a mushroom. The story text and its
+    A structured Chinese story about a tree and a mushroom. The story text and its
     metadata are carried as typed properties. Each transform execution replaces
     this block with a freshly composed story.
   </documentation>
 
   <properties>
     <title type="type:Text">
-      <value>Die alte Kiefer und der Pfifferling</value>
+      <value>老松树与鸡油菌</value>
     </title>
     <author type="type:Text">
       <value>John Doe</value>
     </author>
     <story type="type:Text">
-      <value>Hoch auf einem sandigen Hügel stand eine krumme Kiefer, die der Wind über die Jahre schief gebogen hatte. Ihre Rinde war rissig wie eine alte Landkarte, und ihre Nadeln rauschten selbst dann, wenn kein Lüftchen ging. Eines hellen Septembermorgens kitzelte es an einer Wurzel, die sich flach unter der Erde entlangzog.
+      <value>在一座沙丘的高处，长着一棵弯曲的松树，多年来的风把它吹得歪斜。它的树皮皲裂得像一张古旧的地图，即使没有一丝风，它的针叶也沙沙作响。一个明亮的九月清晨，一条在地下浅浅延伸的树根上传来一阵瘙痒。
 
-"Was krabbelt da an mir herum?", knarrte die Kiefer.
+"是什么在我身上爬来爬去？"松树嘎吱作响地问。
 
-"Ich krabbele nicht, ich wachse", sagte ein kleiner Pfifferling, der sich leuchtend gelb durch die Nadeldecke geschoben hatte. Sein Hut war gewellt wie ein Trichter, und er roch schwach nach Aprikose. "Gestern war hier nur Boden. Heute stehe ich hier und weiß nicht recht, warum."
+"我没有爬，我在生长，"一朵小小的鸡油菌说道，它鲜黄鲜黄地从针叶层里钻了出来。它的菌帽像漏斗一样起伏卷曲，隐隐散发着杏子的香味。"昨天这里只有泥土。今天我站在这里，却不太明白这是为什么。"
 
-Die Kiefer ließ sich Zeit mit der Antwort, so wie alte Bäume es tun. "Du bist kein Zufall, kleiner Pilz. Deine Fäden liegen längst um meine Wurzeln. Wenn der Regen ausbleibt, reichst du mir Wasser aus Ritzen, die ich nie finden würde. Und ich schicke dir Zucker hinab, den das Licht in meinen Nadeln backt."
+松树像所有老树那样，不慌不忙地回答。"你不是偶然出现的，小蘑菇。你的菌丝早已缠绕在我的根上。当雨水迟迟不来时，你从我永远找不到的缝隙里为我送来水。而我把阳光在我针叶里酿出的糖分送下去给你。"
 
-Der Pfifferling richtete sich ein wenig auf. "Dann bin ich also mehr als ein gelber Fleck im Moos?"
+鸡油菌微微挺直了身子。"这么说，我不只是苔藓里的一块黄斑？"
 
-"Viel mehr", sagte die Kiefer. "Der Eichelhäher schreit, die Ameisen tragen, der Nebel zieht durch, und wir beide halten diesen mageren Sandboden zusammen. Bleib, solange die Nächte noch mild sind."
+"远不止如此，"松树说。"松鸦鸣叫，蚂蚁搬运，雾气穿行而过，而我们两个一起守护着这片贫瘠的沙土。趁着夜晚还温和，就留下来吧。"
 
-Und so stand der kleine Pfifferling im Windschatten der krummen Kiefer. Als mittags eine Pilzsammlerin den Hügel heraufstieg, sah sie nur einen wetterharten Baum und einen einzelnen gelben Pilz. Sie ließ ihn stehen und ging weiter, ohne zu ahnen, dass unter ihren Stiefeln zwei stille Verbündete einander durch den Herbst trugen.</value>
+于是小鸡油菌就在弯曲松树的背风处伫立着。正午时分，一位采蘑菇的女人爬上山丘，她只看到一棵饱经风霜的树和一朵孤零零的黄蘑菇。她没有采它，继续往前走，没有察觉在她的靴子底下，两个沉默的盟友正彼此扶持着走过秋天。</value>
     </story>
     <language type="type:Text">
-      <value>German</value>
+      <value>Chinese</value>
     </language>
     <date type="type:DateTime">
       <value>2026-09-04T00:00:00</value>
@@ -54,10 +54,10 @@ Und so stand der kleine Pfifferling im Windschatten der krummen Kiefer. Als mitt
       <value>2026-09-04T00:56:25</value>
     </time>
     <location type="type:Text">
-      <value>Sandhügel in der Lüneburger Heide, Deutschland</value>
+      <value>德国，吕内堡草原的沙丘</value>
     </location>
     <weather type="type:Text">
-      <value>Klarer, kühler Septembermorgen mit dünnem Bodennebel zwischen den Kiefern</value>
+      <value>晴朗凉爽的九月清晨，松树之间飘着一层薄薄的地面雾</value>
     </weather>
   </properties>
 
