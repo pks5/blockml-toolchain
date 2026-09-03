@@ -52,7 +52,9 @@
   <aggregations>
     <operations override="true">
       <composition>
-        <workflow:ModelOperation name="Create Poem" status="Pending" captureOutput="true">
+        <workflow:ModelOperation name="Create Poem" status="Running" captureOutput="true">
+          <startedAt>2026-09-03T23:56:48</startedAt>
+          <baseCommit>bf54322ba1c20dd92dd7a9d2d1bd1c8954eda6ee</baseCommit>
           <task>
             <workflow:InstructionTask>
               <instructions>Create or update the block 
