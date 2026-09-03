@@ -27,18 +27,6 @@ describe("parseReflectionOutput", () => {
     ).toEqual({ changedFiles: ["a.bml"], feedback: "added a" });
   });
 
-  it("keeps an optional result value", () => {
-    expect(
-      parseReflectionOutput(
-        '{"changedFiles":["a.bml"],"feedback":"added a","result":"poem summary"}',
-      ),
-    ).toEqual({
-      changedFiles: ["a.bml"],
-      feedback: "added a",
-      result: "poem summary",
-    });
-  });
-
   it("parses JSON inside a markdown fence and surrounding prose", () => {
     const stdout = [
       "Here you go:",
@@ -96,7 +84,6 @@ describe("ClaudeReflectAgent", () => {
     expect(prompt).toContain("execute did the work");
     expect(prompt).toContain("blocks/com/example/model/Face.bml");
     expect(prompt).toContain("must NOT change");
-    expect(prompt).toContain("no ResultProducer");
     expect(captured?.args).toContain("--allowedTools");
     expect(captured?.args).toContain("Read");
     expect(captured?.args).toContain("--disallowedTools");
@@ -133,59 +120,6 @@ describe("ClaudeReflectAgent", () => {
     });
     expect(parsed.success).toBe(false);
   });
-
-  it("requires result in JSON when a ResultProducer is present", async () => {
-    const captured: string[] = [];
-    const agent = new ClaudeReflectAgent({
-      runProcess: async (request) => {
-        captured.push(request.args.find((arg, i) => request.args[i - 1] === "-p") ?? "");
-        return {
-          exitCode: 0,
-          stdout:
-            '{"changedFiles":["model.bml"],"feedback":"ok","result":"a tree and a mushroom"}',
-          stderr: "",
-        };
-      },
-    });
-    const producer = {
-      typeFqn: "com.example.model.TestResultProducer",
-      resultTypeFqn: "org.blockml.bml.type.Text",
-      produceImplementation: "Returns a summary of the poem.",
-    };
-    const result = await agent.reflect({
-      workspaceRoot: TMP,
-      executionFqn: "com.example.model._meta.transform.running.X",
-      stageIndex: 0,
-      trace: TRACE,
-      resultProducer: producer,
-    });
-    expect(result).toEqual({
-      success: true,
-      changedFiles: ["model.bml"],
-      feedback: "ok",
-      result: "a tree and a mushroom",
-    });
-    expect(captured[0]).toContain("Returns a summary of the poem.");
-
-    const missing = new ClaudeReflectAgent({
-      runProcess: async () => ({
-        exitCode: 0,
-        stdout: '{"changedFiles":["model.bml"],"feedback":"ok"}',
-        stderr: "",
-      }),
-    });
-    const failed = await missing.reflect({
-      workspaceRoot: TMP,
-      executionFqn: "com.example.model._meta.transform.running.X",
-      stageIndex: 0,
-      trace: TRACE,
-      resultProducer: producer,
-    });
-    expect(failed.success).toBe(false);
-    if (!failed.success) {
-      expect(failed.error).toMatch(/did not return a result/);
-    }
-  });
 });
 
 describe("buildClaudeReflectPrompt", () => {
@@ -195,20 +129,6 @@ describe("buildClaudeReflectPrompt", () => {
     expect(prompt).toContain("Face.bml");
     expect(prompt).toContain("execute did the work");
     expect(prompt).toContain("changedFiles");
-    expect(prompt).toContain("no ResultProducer");
-  });
-
-  it("includes ResultProducer produce instructions when present", () => {
-    const prompt = buildClaudeReflectPrompt("lib._meta.transform.running.T1", 0, TRACE, {
-      typeFqn: "lib.TestResultProducer",
-      resultTypeFqn: "org.blockml.bml.type.Text",
-      produceImplementation: "Returns a summary of the poem.",
-    });
-    expect(prompt).toContain("ResultProducer");
-    expect(prompt).toContain("lib.TestResultProducer");
-    expect(prompt).toContain("org.blockml.bml.type.Text");
-    expect(prompt).toContain("Returns a summary of the poem.");
-    expect(prompt).toContain('"result"');
-    expect(prompt).not.toContain("no ResultProducer");
+    expect(prompt).not.toContain("ResultProducer");
   });
 });

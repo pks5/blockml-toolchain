@@ -4,9 +4,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
-  xmlns:cap="org.blockml.bml.capability"
   xmlns:type="org.blockml.bml.type"
-  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:pending="org.blockml.bml.workspace._meta.transform.pending"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
@@ -33,18 +31,6 @@
         <language type="type:Text" />
       </properties>
     </block>
-    <block>
-      <name>TestResultProducer</name>
-      <baseType>workflow:ResultProducer(type:Text)</baseType>
-      <is>A test result producer that produces a result of type type:Text</is>
-      <capabilities>
-        <produce override="true" type="cap:Outbound" outputType="type:Text">
-          <implementation language="English">
-            Returns a summary of the poem that is created during stage 1.
-          </implementation>
-        </produce>
-      </capabilities>
-    </block>
   </subBlocks>
   <properties>
     <description override="true">
@@ -70,13 +56,10 @@
   <aggregations>
     <stages override="true">
       <composition>
-        <workflow:Stage bml:generics="(type:Text)" name="Create Poem" status="Pending">
+        <workflow:Stage name="Create Poem" status="Pending">
           <task>
             <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.NextPoem222.bml that contains a random poem in german about a tree and a mushroom. For each execution create a new poem." />
           </task>
-          <resultProducer>
-            <TestResultProducer />
-          </resultProducer>
         </workflow:Stage>
         <workflow:Stage name="Translate Poem" status="Pending">
           <task>

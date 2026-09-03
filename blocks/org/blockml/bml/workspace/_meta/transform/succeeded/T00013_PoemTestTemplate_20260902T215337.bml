@@ -4,9 +4,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
-  xmlns:cap="org.blockml.bml.capability"
   xmlns:type="org.blockml.bml.type"
-  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
@@ -57,18 +55,14 @@
   <aggregations>
     <stages override="true">
       <composition>
-        <workflow:Stage bml:generics="(type:Text)" name="Create Poem" status="Succeeded">
+        <workflow:Stage name="Create Poem" status="Succeeded">
           <startedAt>2026-09-02T21:53:38</startedAt>
           <baseCommit>a03a041c3f8c1b739dfb1e51516de0b07da6e57b</baseCommit>
           <feedback>Stage 1 (&quot;Create Poem&quot;) completed as instructed. Execute rewrote blocks/org/blockml/bml/workspace/playground/NextPoem222.bml: the prior Spanish poem was replaced with a fresh, original German poem about a tree and a mushroom, the `&lt;is>` line updated to &quot;written in German&quot;, the documentation body replaced with the German verses, and the title property changed to &quot;Die Tanne und der Pilz&quot; (author unchanged: John Doe). Content matches the Stage 1 instruction (German poem about a tree and a mushroom, regenerated per execution) and the run parameters (language:&quot;German&quot;, author:&quot;John Doe&quot;). Only the playground block was modified; the ModelTransformation file under _meta/transform/running/ was read but not written. Structure/format of the block appears consistent with the previous version (same block name, type, baseType core:Documentation, properties layout).</feedback>
-          <result>German-language poem &quot;Die Tanne und der Pilz&quot; (author: John Doe). At the forest edge stands an old, broad fir whose dark needled canopy holds summer light and time; its bark is grey and heavy with many years, yet it withstands storm, frost and driving rain. At its feet, still in the wet moss, grows a small bare mushroom with no defense, its brown cap barely glistening in the early dew, ducking from the wind in the grey expanse. The fir speaks to the little one: stay close, my shade cools when the midday glows hot, I spread my crown like a tent and shelter you when hard rain pours. So they grew through autumn and winter snow — the fir standing tall, the mushroom small in the clover — and whoever sits within their green spell finds two companions one can love.</result>
           <completedAt>2026-09-02T21:54:54</completedAt>
           <task>
             <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.NextPoem222.bml that contains a random poem in german about a tree and a mushroom. For each execution create a new poem." />
           </task>
-          <resultProducer>
-            <succeeded:T00013_PoemTestTemplate_20260902T215337.TestResultProducer />
-          </resultProducer>
           <changedFiles>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/NextPoem222.bml" />
           </changedFiles>
@@ -107,27 +101,6 @@
         <subject type="type:Text" />
         <language type="type:Text" />
       </properties>
-    </block>
-    <block>
-      <name>
-        TestResultProducer
-      </name>
-      <type>
-        succeeded:T00013_PoemTestTemplate_20260902T215337.TestResultProducer
-      </type>
-      <baseType>
-        workflow:ResultProducer(type:Text)
-      </baseType>
-      <is>
-        A test result producer that produces a result of type type:Text
-      </is>
-      <capabilities>
-        <produce override="true" type="cap:Outbound" outputType="type:Text">
-          <implementation language="org.blockml.bml.language.English">
-            Returns a summary of the poem that is created during stage 1.
-          </implementation>
-        </produce>
-      </capabilities>
     </block>
   </subBlocks>
 </block>

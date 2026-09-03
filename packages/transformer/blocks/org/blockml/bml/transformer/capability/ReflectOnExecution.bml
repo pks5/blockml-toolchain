@@ -10,8 +10,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
-  xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation"
-  xmlns:workflow="org.blockml.bml.transformer.workflow">
+  xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation">
 
   <name>ReflectOnExecution</name>
   <type>transformercap:ReflectOnExecution</type>
@@ -22,13 +21,12 @@
     # Reflect on Execution
 
     Read Execute output (trace and git diff) for the current Stage and
-    produce changedFiles and feedback. When the Stage aggregates a
-    ResultProducer, interpret produce against that Execute output and
-    return a result of bound T. Must not change the model — Persist
-    writes Stage.result. Runs in a new isolated agent process per Stage.
+    produce changedFiles and feedback. Must not change the model —
+    Persist writes those fields onto the Stage. Runs in a new isolated
+    agent process per Stage.
 
     - Default: Claude Worker #2 (read-only: Read/Glob/Grep; Edit/Write/Bash denied).
-    - Tests without a reflectAgent keep a no-op (empty changedFiles; no result).
+    - Tests without a reflectAgent keep a no-op (empty changedFiles).
     - TS: pipeline/reflect.ts.
   </documentation>
 
@@ -36,7 +34,6 @@
     <see type="transformerdocumentation:ArchitectureOverview" relation="SeeAlso" />
     <see type="transformercap:ExecuteTask" relation="SeeAlso" />
     <see type="transformercap:PersistExecution" relation="SeeAlso" />
-    <see type="workflow:ResultProducer" relation="SeeAlso" />
   </references>
 
   <properties>
@@ -46,12 +43,6 @@
     <feedback type="type:Text">
       <documentation>Reflection feedback. Absent when the no-op default is used. (optional)</documentation>
     </feedback>
-    <result type="type:Text">
-      <documentation>
-        Typed produce outcome for this Stage. Present when a ResultProducer
-        is aggregated; Persist writes it onto Stage.result. (optional)
-      </documentation>
-    </result>
   </properties>
 
 </block>

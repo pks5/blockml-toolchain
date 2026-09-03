@@ -155,7 +155,7 @@ export function applyExecutionParameters(block, registry, cliParameters = {}) {
 /**
  * Rewrite FQNs rooted at this execution Block after a lifecycle relocate.
  * Covers SubBlocks, the parameters property, and composition instances
- * (e.g. a ResultProducer SubBlock referenced from a Stage).
+ * nested under a Stage.
  */
 export function rewriteParameterTypeFqns(block, fromFqn, toFqn) {
     const rewrite = (value) => value === fromFqn || value.startsWith(`${fromFqn}.`)

@@ -9,9 +9,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
-  xmlns:type="org.blockml.bml.type"
-  xmlns:lang="org.blockml.bml.language"
-  xmlns:cap="org.blockml.bml.capability">
+  xmlns:type="org.blockml.bml.type">
 
   <name>Stage</name>
   <type>workflow:Stage</type>
@@ -28,29 +26,19 @@
     * `startedAt` / `completedAt` — the interval of this Stage.
     * `baseCommit` — Git HEAD commit when this Stage started.
     * `task` — the Task that ran in this Stage.
-    * `resultProducer` — optional strategy that produces `result` of bound
-      `T` (`workflow:ResultProducer(T)`). After a successful Task, Reflect
-      interprets `produce`; Persist writes the value onto `result`.
     * `feedback` — Stage-local feedback from its agent process.
     * `changedFiles` — workspace-relative paths modified during this Stage
       (`type:FilePathEntity[]`).
-    * `result` — typed outcome of this Stage, produced by `resultProducer`
-      when that aggregation is present.
     * `exception` — present if and only if `status` is Failed.
   </documentation>
 
   <references>
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
-    <see type="workflow:ResultProducer" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
     <see type="core:Exception" relation="SeeAlso" />
     <see type="type:FilePathEntity" relation="SeeAlso" />
   </references>
-
-  <genericTypes>
-    <T baseType="core:ValueType" defaultType="type:Text" />
-  </genericTypes>
 
   <properties>
     <name type="type:Text">
@@ -68,30 +56,19 @@
     <completedAt type="type:DateTime">
       <documentation>When this Stage finished.</documentation>
     </completedAt>
+    <captureOutput type="type:Boolean">
+      <documentation>Whether to capture output from this Stage's agent process.</documentation>
+      <value>false</value>
+    </captureOutput>
     <feedback type="type:Text">
       <documentation>Feedback from this Stage's agent process.</documentation>
     </feedback>
-    <result type="T">
-      <documentation>
-        Typed outcome of this Stage. Written from resultProducer.produce
-        after a successful Task when that aggregation is present.
-        Reflect interprets produce; Persist writes this property.
-      </documentation>
-    </result>
   </properties>
 
   <aggregations>
     <task type="workflow:Task">
       <documentation>The Task that ran in this Stage.</documentation>
     </task>
-    <resultProducer type="workflow:ResultProducer(T)">
-      <documentation>
-        How this Stage's result is produced. When present, Reflect
-        interprets produce after a successful Task and Persist writes
-        the returned value onto result. Absent when this Stage has no
-        typed result.
-      </documentation>
-    </resultProducer>
     <changedFiles type="type:FilePathEntity[]">
       <documentation>Workspace-relative paths modified during this Stage.</documentation>
     </changedFiles>
@@ -100,5 +77,4 @@
     </exception>
   </aggregations>
 
-  
 </block>

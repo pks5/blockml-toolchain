@@ -3,7 +3,7 @@ import { TYPE_PACKAGE_FQN } from "./constants.js";
 import { TransformError } from "./errors.js";
 import { persistDocument } from "./relocate.js";
 import { loadRunningExecution } from "./load-running.js";
-import { getStageInstance, setStageChangedFiles, setStageCompletedAt, setStageException, setStageFeedback, setStageResult, setStageStatus, } from "./properties.js";
+import { getStageInstance, setStageChangedFiles, setStageCompletedAt, setStageException, setStageFeedback, setStageStatus, } from "./properties.js";
 import { commitWorktree } from "../pipeline/git.js";
 export function persistReflection(workspaceRoot, input) {
     const { document } = loadRunningExecution(workspaceRoot, input.started);
@@ -14,11 +14,6 @@ export function persistReflection(workspaceRoot, input) {
     }
     if (input.feedback !== undefined) {
         setStageFeedback(stage, input.feedback);
-    }
-    if (input.outcome === "succeeded" &&
-        input.result !== undefined &&
-        input.resultTypeFqn) {
-        setStageResult(stage, input.resultTypeFqn, input.result);
     }
     if (input.changedFiles.length > 0) {
         ensureTypeNamespace(forked);

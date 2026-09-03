@@ -49,7 +49,7 @@ describe("rewriteParameterTypeFqns", () => {
   it("rewrites SubBlock instance typeFqns nested under a Stage", () => {
     const fromFqn = "pkg._meta.transform.pending.Poem";
     const toFqn = "pkg._meta.transform.running.T00001_Poem";
-    const producerFqn = `${fromFqn}.TestResultProducer`;
+    const nestedFqn = `${fromFqn}.CustomTask`;
     const block = {
       name: "Poem",
       type: toFqn,
@@ -67,14 +67,14 @@ describe("rewriteParameterTypeFqns", () => {
                   memberValues: {},
                   aggregationCompositions: [
                     {
-                      aggregationName: "resultProducer",
+                      aggregationName: "task",
                       composition: {
-                        aggregationName: "resultProducer",
+                        aggregationName: "task",
                         children: [
                           {
                             kind: "blockInstance",
                             instance: {
-                              typeFqn: producerFqn,
+                              typeFqn: nestedFqn,
                               memberValues: {},
                             },
                           },
@@ -90,8 +90,8 @@ describe("rewriteParameterTypeFqns", () => {
       ],
       subBlocks: [
         {
-          name: "TestResultProducer",
-          type: producerFqn,
+          name: "CustomTask",
+          type: nestedFqn,
           members: [],
         },
       ],
@@ -100,13 +100,13 @@ describe("rewriteParameterTypeFqns", () => {
 
     rewriteParameterTypeFqns(block, fromFqn, toFqn);
 
-    expect(block.subBlocks[0]?.type).toBe(`${toFqn}.TestResultProducer`);
+    expect(block.subBlocks[0]?.type).toBe(`${toFqn}.CustomTask`);
     const stages = block.members[0] as {
       composition: { children: Array<{ instance: { aggregationCompositions: Array<{ composition: { children: Array<{ instance: { typeFqn: string } }> } }> } }> };
     };
     expect(
       stages.composition.children[0]?.instance.aggregationCompositions[0]
         ?.composition.children[0]?.instance.typeFqn,
-    ).toBe(`${toFqn}.TestResultProducer`);
+    ).toBe(`${toFqn}.CustomTask`);
   });
 });

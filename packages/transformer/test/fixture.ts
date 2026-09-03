@@ -69,30 +69,6 @@ function gitOrThrow(dir: string, args: string[]): string {
   return result.stdout ?? "";
 }
 
-export function resultProducerXml(implementation: string): string {
-  return [
-    `<block xmlns="http://blockml.org/bml"`,
-    ` xmlns:core="org.blockml.bml.core"`,
-    ` xmlns:workflow="org.blockml.bml.transformer.workflow"`,
-    ` xmlns:cap="org.blockml.bml.capability"`,
-    ` xmlns:type="org.blockml.bml.type"`,
-    ` xmlns:test="${LIBRARY}">`,
-    `  <name>TestResultProducer</name>`,
-    `  <type>test:TestResultProducer</type>`,
-    `  <baseType>workflow:ResultProducer(type:Text)</baseType>`,
-    `  <is>a test result producer</is>`,
-    `  <capabilities>`,
-    `    <produce override="true" type="cap:Outbound" outputType="type:Text">`,
-    `      <implementation language="English">`,
-    `        ${implementation}`,
-    `      </implementation>`,
-    `    </produce>`,
-    `  </capabilities>`,
-    `</block>`,
-    ``,
-  ].join("\n");
-}
-
 export function pendingExecutionXml(opts: {
   name: string;
   executionId?: string;
@@ -101,8 +77,6 @@ export function pendingExecutionXml(opts: {
   template?: boolean;
   parameterFields?: readonly string[];
   pendingParameters?: string;
-  resultProducerImplementation?: string;
-  resultProducerAsSubBlock?: boolean;
 }): string {
   const refs = opts.extraRefs
     ? `  <references>\n${opts.extraRefs}\n  </references>\n`
@@ -131,18 +105,9 @@ export function pendingExecutionXml(opts: {
     : "";
   const parameterFields = opts.parameterFields ?? [];
   const bindParameters = parameterFields.length > 0;
-  const withResultProducer = opts.resultProducerImplementation !== undefined;
-  const producerAsSubBlock = withResultProducer && opts.resultProducerAsSubBlock === true;
   const baseType = bindParameters
     ? "workflow:ModelTransformation(Parameters)"
     : "workflow:ModelTransformation";
-  const extraNs = withResultProducer
-    ? [
-        ` xmlns:cap="org.blockml.bml.capability"`,
-        ` xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"`,
-        ...(producerAsSubBlock ? [] : [` xmlns:test="${LIBRARY}"`]),
-      ]
-    : [];
   const parameterBlock = bindParameters
     ? [
         `    <block>`,
@@ -157,59 +122,27 @@ export function pendingExecutionXml(opts: {
         `    </block>`,
       ]
     : [];
-  const producerBlock = producerAsSubBlock
-    ? [
-        `    <block>`,
-        `      <name>TestResultProducer</name>`,
-        `      <baseType>workflow:ResultProducer(type:Text)</baseType>`,
-        `      <is>a test result producer</is>`,
-        `      <capabilities>`,
-        `        <produce override="true" type="cap:Outbound" outputType="type:Text">`,
-        `          <implementation language="English">`,
-        `            ${opts.resultProducerImplementation}`,
-        `          </implementation>`,
-        `        </produce>`,
-        `      </capabilities>`,
-        `    </block>`,
-      ]
-    : [];
-  const nested = [...parameterBlock, ...producerBlock];
   const subBlocks =
-    nested.length > 0 ? [`  <subBlocks>`, ...nested, `  </subBlocks>`].join("\n") : "";
+    parameterBlock.length > 0
+      ? [`  <subBlocks>`, ...parameterBlock, `  </subBlocks>`].join("\n")
+      : "";
   const instructions = opts.stageInstructions ?? ["Do the task."];
   const stages = instructions
-    .map((text, index) => {
-      const producerTag = producerAsSubBlock
-        ? "<TestResultProducer />"
-        : "<test:TestResultProducer />";
-      const producerXml =
-        withResultProducer && index === 0
-          ? [
-              `          <resultProducer>`,
-              `            ${producerTag}`,
-              `          </resultProducer>`,
-            ].join("\n")
-          : "";
-      const generics =
-        withResultProducer && index === 0 ? ` bml:generics="(type:Text)"` : "";
-      return [
-        `        <workflow:Stage${generics}>`,
+    .map((text) =>
+      [
+        `        <workflow:Stage>`,
         `          <status>Pending</status>`,
         `          <task>`,
         `            <workflow:InstructionTask instructions="${text}" />`,
         `          </task>`,
-        producerXml,
         `        </workflow:Stage>`,
-      ]
-        .filter(Boolean)
-        .join("\n");
-    })
+      ].join("\n"),
+    )
     .join("\n");
   return [
     `<block xmlns="http://blockml.org/bml"`,
     ` xmlns:core="org.blockml.bml.core"`,
     ` xmlns:workflow="org.blockml.bml.transformer.workflow"`,
-    ...extraNs,
     ` xmlns:pending="${LIBRARY}._meta.transform.pending"`,
     ` xmlns:type="org.blockml.bml.type">`,
     `  <name>${opts.name}</name>`,

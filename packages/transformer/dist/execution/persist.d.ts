@@ -4,8 +4,6 @@ export interface PersistReflectionInput {
     stageIndex: number;
     changedFiles: readonly string[];
     feedback: string | undefined;
-    result?: unknown;
-    resultTypeFqn?: string;
     exceptionMessage?: string;
     outcome: "succeeded" | "failed";
     completedAtIso: string;

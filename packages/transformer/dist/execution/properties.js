@@ -101,9 +101,6 @@ export function setStageCompletedAt(instance, iso) {
 export function setStageFeedback(instance, feedback) {
     setStageMember(instance, "feedback", TEXT_TYPE_FQN, feedback);
 }
-export function setStageResult(instance, typeFqn, value) {
-    setStageMember(instance, "result", typeFqn, value);
-}
 export function setStageChangedFiles(instance, paths) {
     upsertInstanceAggregation(instance, "changedFiles", paths.map((path) => ({
         kind: "blockInstance",

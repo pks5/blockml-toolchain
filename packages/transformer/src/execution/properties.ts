@@ -172,14 +172,6 @@ export function setStageFeedback(instance: BlockInstance, feedback: string): voi
   setStageMember(instance, "feedback", TEXT_TYPE_FQN, feedback);
 }
 
-export function setStageResult(
-  instance: BlockInstance,
-  typeFqn: string,
-  value: unknown,
-): void {
-  setStageMember(instance, "result", typeFqn, value);
-}
-
 export function setStageChangedFiles(
   instance: BlockInstance,
   paths: readonly string[],

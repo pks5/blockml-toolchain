@@ -1,7 +1,7 @@
 import { CLAUDE_REFLECT_PERMISSIONS, claudePermissionCliArgs, } from "./claude-permissions.js";
 import { ensureAgentsMarkdown, runClaudeProcess, } from "./claude-code-agent.js";
 const TRACE_CHAR_LIMIT = 24_000;
-export function buildClaudeReflectPrompt(executionFqn, stageIndex, trace, resultProducer) {
+export function buildClaudeReflectPrompt(executionFqn, stageIndex, trace) {
     const changed = trace.changedFiles.length > 0
         ? trace.changedFiles.map((path) => `- ${path}`).join("\n")
         : "(none detected from git)";
@@ -25,13 +25,10 @@ export function buildClaudeReflectPrompt(executionFqn, stageIndex, trace, result
         "Execute stdout:",
         clip(trace.stdout) || "(empty)",
         "",
+        "Return ONLY a JSON object:",
+        '{ "changedFiles": ["relative/path.bml"], "feedback": "summary" }',
+        "",
     ];
-    if (resultProducer) {
-        lines.push("This Stage aggregates a ResultProducer. Interpret produce against the", "Execute output above. Do not write Stage.result yourself; return it in JSON.", "", `ResultProducer type: ${resultProducer.typeFqn}`, `Bound T: ${resultProducer.resultTypeFqn}`, "produce implementation:", resultProducer.produceImplementation || "(none authored)", "", "Return ONLY a JSON object:", '{ "changedFiles": ["relative/path.bml"], "feedback": "summary", "result": <value of T> }', "", `"result" must be a JSON value of bound T (${resultProducer.resultTypeFqn}).`, "Text-like types are JSON strings. Boolean is JSON boolean. Integer is JSON number.", "StructType is a JSON object.", "");
-    }
-    else {
-        lines.push("Return ONLY a JSON object:", '{ "changedFiles": ["relative/path.bml"], "feedback": "summary" }', "", "Do not include a result field. This Stage has no ResultProducer.", "");
-    }
     lines.push("changedFiles must be workspace-relative paths Execute actually modified.", "Do not include _meta/transform/ ModelTransformation files unless Execute wrongly", "touched them; mention that in feedback if so.");
     return lines.join("\n");
 }
@@ -49,14 +46,10 @@ export function parseReflectionOutput(stdout) {
     if (typeof feedback !== "string") {
         throw new Error("Reflect output feedback must be a string");
     }
-    const parsed = {
+    return {
         changedFiles: files.map((entry) => String(entry).replaceAll("\\", "/")),
         feedback,
     };
-    if ("result" in record) {
-        parsed.result = record.result;
-    }
-    return parsed;
 }
 export class ClaudeReflectAgent {
     command;
@@ -71,7 +64,7 @@ export class ClaudeReflectAgent {
     }
     async reflect(request) {
         const agents = ensureAgentsMarkdown(request.workspaceRoot);
-        const prompt = buildClaudeReflectPrompt(request.executionFqn, request.stageIndex, request.trace, request.resultProducer);
+        const prompt = buildClaudeReflectPrompt(request.executionFqn, request.stageIndex, request.trace);
         const args = [
             "-p",
             prompt,
@@ -100,18 +93,10 @@ export class ClaudeReflectAgent {
             }
             try {
                 const parsed = parseReflectionOutput(result.stdout);
-                if (request.resultProducer && parsed.result === undefined) {
-                    return {
-                        success: false,
-                        exitCode: 1,
-                        error: "ResultProducer.produce did not return a result",
-                    };
-                }
                 return {
                     success: true,
                     changedFiles: parsed.changedFiles,
                     feedback: parsed.feedback,
-                    ...(parsed.result !== undefined ? { result: parsed.result } : {}),
                 };
             }
             catch (error) {

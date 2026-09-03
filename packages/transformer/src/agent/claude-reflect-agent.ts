@@ -13,7 +13,6 @@ import type {
   ReflectRequest,
   ReflectResult,
   ReflectionAgent,
-  ResultProducerSpec,
 } from "./reflection-agent.js";
 
 const TRACE_CHAR_LIMIT = 24_000;
@@ -29,7 +28,6 @@ export function buildClaudeReflectPrompt(
   executionFqn: string,
   stageIndex: number,
   trace: ExecutionTrace,
-  resultProducer?: ResultProducerSpec,
 ): string {
   const changed =
     trace.changedFiles.length > 0
@@ -55,34 +53,10 @@ export function buildClaudeReflectPrompt(
     "Execute stdout:",
     clip(trace.stdout) || "(empty)",
     "",
+    "Return ONLY a JSON object:",
+    '{ "changedFiles": ["relative/path.bml"], "feedback": "summary" }',
+    "",
   ];
-  if (resultProducer) {
-    lines.push(
-      "This Stage aggregates a ResultProducer. Interpret produce against the",
-      "Execute output above. Do not write Stage.result yourself; return it in JSON.",
-      "",
-      `ResultProducer type: ${resultProducer.typeFqn}`,
-      `Bound T: ${resultProducer.resultTypeFqn}`,
-      "produce implementation:",
-      resultProducer.produceImplementation || "(none authored)",
-      "",
-      "Return ONLY a JSON object:",
-      '{ "changedFiles": ["relative/path.bml"], "feedback": "summary", "result": <value of T> }',
-      "",
-      `"result" must be a JSON value of bound T (${resultProducer.resultTypeFqn}).`,
-      "Text-like types are JSON strings. Boolean is JSON boolean. Integer is JSON number.",
-      "StructType is a JSON object.",
-      "",
-    );
-  } else {
-    lines.push(
-      "Return ONLY a JSON object:",
-      '{ "changedFiles": ["relative/path.bml"], "feedback": "summary" }',
-      "",
-      "Do not include a result field. This Stage has no ResultProducer.",
-      "",
-    );
-  }
   lines.push(
     "changedFiles must be workspace-relative paths Execute actually modified.",
     "Do not include _meta/transform/ ModelTransformation files unless Execute wrongly",
@@ -94,7 +68,6 @@ export function buildClaudeReflectPrompt(
 export function parseReflectionOutput(stdout: string): {
   changedFiles: string[];
   feedback: string;
-  result?: unknown;
 } {
   const value = extractJsonObject(stdout);
   if (!value || typeof value !== "object" || Array.isArray(value)) {
@@ -109,18 +82,10 @@ export function parseReflectionOutput(stdout: string): {
   if (typeof feedback !== "string") {
     throw new Error("Reflect output feedback must be a string");
   }
-  const parsed: {
-    changedFiles: string[];
-    feedback: string;
-    result?: unknown;
-  } = {
+  return {
     changedFiles: files.map((entry) => String(entry).replaceAll("\\", "/")),
     feedback,
   };
-  if ("result" in record) {
-    parsed.result = record.result;
-  }
-  return parsed;
 }
 
 export class ClaudeReflectAgent implements ReflectionAgent {
@@ -142,7 +107,6 @@ export class ClaudeReflectAgent implements ReflectionAgent {
       request.executionFqn,
       request.stageIndex,
       request.trace,
-      request.resultProducer,
     );
     const args = [
       "-p",
@@ -174,18 +138,10 @@ export class ClaudeReflectAgent implements ReflectionAgent {
       }
       try {
         const parsed = parseReflectionOutput(result.stdout);
-        if (request.resultProducer && parsed.result === undefined) {
-          return {
-            success: false,
-            exitCode: 1,
-            error: "ResultProducer.produce did not return a result",
-          };
-        }
         return {
           success: true,
           changedFiles: parsed.changedFiles,
           feedback: parsed.feedback,
-          ...(parsed.result !== undefined ? { result: parsed.result } : {}),
         };
       } catch (error) {
         return {

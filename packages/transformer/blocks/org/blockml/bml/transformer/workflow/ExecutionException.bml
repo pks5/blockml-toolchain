@@ -16,10 +16,10 @@
   <is>A thrown condition for an unforeseen execution failure</is>
 
   <documentation>
-    Unforeseen Criterion.isSatisfied, Prerequisite.require, or
-    ResultProducer.produce failure — not declared in advance (missing
-    context, I/O, …). Distinct from PrerequisiteNotMetException
-    (known unmet precondition). Inherits message from core:Exception.
+    Unforeseen Criterion.isSatisfied or Prerequisite.require failure —
+    not declared in advance (missing context, I/O, …). Distinct from
+    PrerequisiteNotMetException (known unmet precondition). Inherits
+    message from core:Exception.
   </documentation>
 
   <isNot>Not PrerequisiteNotMetException (known unmet prerequisite) and not a
@@ -30,7 +30,6 @@
     <see type="workflow:PrerequisiteNotMetException" relation="ContrastsWith" />
     <see type="workflow:Criterion" relation="SeeAlso" />
     <see type="workflow:Prerequisite" relation="SeeAlso" />
-    <see type="workflow:ResultProducer" relation="SeeAlso" />
   </references>
 
 </block>

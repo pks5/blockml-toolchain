@@ -10,7 +10,6 @@ import {
   setStageCompletedAt,
   setStageException,
   setStageFeedback,
-  setStageResult,
   setStageStatus,
 } from "./properties.js";
 import type { StartedExecution } from "./start.js";
@@ -21,8 +20,6 @@ export interface PersistReflectionInput {
   stageIndex: number;
   changedFiles: readonly string[];
   feedback: string | undefined;
-  result?: unknown;
-  resultTypeFqn?: string;
   exceptionMessage?: string;
   outcome: "succeeded" | "failed";
   completedAtIso: string;
@@ -43,13 +40,6 @@ export function persistReflection(
   }
   if (input.feedback !== undefined) {
     setStageFeedback(stage, input.feedback);
-  }
-  if (
-    input.outcome === "succeeded" &&
-    input.result !== undefined &&
-    input.resultTypeFqn
-  ) {
-    setStageResult(stage, input.resultTypeFqn, input.result);
   }
   if (input.changedFiles.length > 0) {
     ensureTypeNamespace(forked);

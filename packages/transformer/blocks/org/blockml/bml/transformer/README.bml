@@ -33,8 +33,8 @@
     are deterministic. Default Execute is a TransformationAgent that
     changes BML model source only (not ModelTransformation /
     `_meta/transform/`). Default Reflect is a second Claude worker
-    (read-only; changedFiles + feedback; result when a ResultProducer is
-    present). Default Persist writes those fields onto the Stage that just
+    (read-only; changedFiles + feedback). Default Persist writes those
+    fields onto the Stage that just
     ran. After a started execution,
     Finalize relocates the Block to `_meta.transform.succeeded` only when
     every Stage succeeded, otherwise `_meta.transform.failed`. A failed
@@ -51,7 +51,6 @@
     <see type="transformercap:RunTransformation" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="workflow:Stage" relation="SeeAlso" />
-    <see type="workflow:ResultProducer" relation="SeeAlso" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:CompositeTask" relation="SeeAlso" />
     <see type="workflow:Prerequisite" relation="SeeAlso" />
