@@ -13,33 +13,33 @@
   <name>NextPoem222</name>
   <type>playground:NextPoem222</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, written in Spanish, about a tree and a mushroom</is>
 
   <documentation>
-    Am Hang des Waldes steht die Birke hell,
-    ihr weißer Stamm glänzt wie ein stiller Quell.
-    Der Wind fährt sacht durch ihr bewegtes Haar,
-    sie steht schon lang und bleibt es manches Jahr.
+    En la ladera el abedul se alza brillante,
+    su tronco blanco luce como un manantial constante.
+    El viento cruza suave su ramaje al pasar;
+    lleva en pie muchos años y así ha de continuar.
 
-    Zu ihren Füßen, wo das Moos gedeiht,
-    ein Fliegenpilz sein rotes Dach ausbreit'.
-    Mit weißen Punkten, klein und kugelrund,
-    grüßt er den Morgen aus dem kühlen Grund.
+    A sus pies, donde el musgo se extiende sin fin,
+    un matamoscas abre su tejado carmín.
+    Con puntos blancos, pequeño y bien redondo,
+    saluda a la mañana desde el fresco fondo.
 
-    "Fürcht nicht den Sturm", so spricht der Baum ihn an,
-    "ich halte über dir, so gut ich kann.
-    Mein Laub fängt Tau und schweren Regen auf,
-    bleib ruhig stehn und nimm den Tag in Kauf."
+    "No temas la tormenta", le habla el árbol así,
+    "yo velo por tu sombra tan bien como hay en mí.
+    Mi fronda atrapa el rocío y la lluvia al caer;
+    quédate quieto y deja que pase el amanecer."
 
-    Der Pilz nickt zu und leuchtet durch die Nacht,
-    die Birke hält getreu für ihn die Wacht.
-    Zwei Freunde, ungleich groß und doch vertraut,
-    auf einem Fleck des Waldes fest gebaut.
+    El hongo asiente y brilla en medio de la noche,
+    y el abedul vigila por él, sin un reproche.
+    Dos amigos, dispares de talla, mas hermanados,
+    en un solo lugar del bosque bien plantados.
   </documentation>
 
   <properties>
     <title>
-      <value>Birke und Fliegenpilz</value>
+      <value>Abedul y matamoscas</value>
     </title>
     <author>
       <value>John Doe</value>
