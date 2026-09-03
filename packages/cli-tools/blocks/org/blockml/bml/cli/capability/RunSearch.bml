@@ -34,7 +34,8 @@
     search QUERY — openIndex (auto-build if missing/stale) then search.
 
     Human output: score, FQN, file (project-relative). --json: SearchResult[].
-    Missing query and not index → exit 2.
+    Missing query and not index → exit 2 with short USAGE.
+    --help / -h print search help page and exit 0.
   </documentation>
 
   <references>

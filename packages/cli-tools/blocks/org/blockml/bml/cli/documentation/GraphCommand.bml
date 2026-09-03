@@ -27,7 +27,7 @@
   <baseType>core:Documentation</baseType>
   <is>blockml graph specification</is>
 
-  <documentation>Syntax:
+  <documentation><![CDATA[Syntax:
     blockml graph index [--force] [--src dir] [--libraries a,b]
     blockml graph neighbors|uses|used-by FQN [--json] [--depth n] [--origin o] [--relation r] [--limit n]
     blockml graph ancestors|descendants|members FQN [--json] [--depth n]
@@ -42,10 +42,40 @@
     uses, used-by, and neighbors --depth n walks n hops (default 1). ancestors, descendants, and path use --depth as max hops (default 16). members ignores --depth.
     --origin workspace|dependency|unresolved and --relation BASE_TYPE|MEMBER_TYPE|… (comma-separated) filter uses/used-by/neighbors; --limit caps the list after those filters.
     graph schema names the Ladybug Cypher subset and prints a working MATCH example. No type() or shortestPath().
-    --help and -h print this syntax and exit 0.
+    --help and -h print the Printed help page and exit 0.
     The graph database is exclusive; the CLI waits if another graph process holds the index.
     --json prints the corresponding Graph API objects.
-    Human lines: relation, FQN, relative file path and line.</documentation>
+    Human lines: relation, FQN, relative file path and line.
+
+Printed help:
+Usage: blockml graph index [--force] [--src dir] [--libraries a,b]
+       blockml graph neighbors|uses|used-by <fqn> [--json] [--depth n] [--origin o] [--relation r] [--limit n]
+       blockml graph ancestors|descendants|members <fqn> [--json] [--depth n]
+       blockml graph path <from> <to> [--json] [--depth n]
+       blockml graph query <cypher> [--json]
+       blockml graph schema [--json]
+       blockml graph --help
+
+When: inheritance, uses / used-by, members, or paths.
+
+Prefer named operations. Use graph schema before Cypher.
+Rebuild with graph index if the index is missing or stale.
+Unknown FQN exits 2 (same as inspect). May print Did you mean …?
+path follows outgoing authored edges only (the same direction as uses); reverse questions use used-by.
+The graph database is exclusive; the CLI waits if another graph process holds the index.
+
+Flags:
+  --depth n     uses / used-by / neighbors: hops (default 1). ancestors / descendants / path: max hops (default 16). members ignores --depth.
+  --origin      workspace|dependency|unresolved (comma-separated); uses/used-by/neighbors only
+  --relation    BASE_TYPE|MEMBER_TYPE|… (comma-separated); uses/used-by/neighbors only
+  --limit n     cap the list after origin/relation filters (uses/used-by/neighbors)
+  --json        machine-readable Graph API objects
+  --force       full rebuild for graph index
+  --src / --libraries   corpus overrides
+
+graph schema names the Ladybug Cypher subset (no type(), no shortestPath()) and prints a working MATCH example.
+
+Related: search, inspect.]]></documentation>
   <references>
     <see type="clidocumentation:Commands" relation="SeeAlso" />
     <see type="clicap:RunGraph" relation="SeeAlso" />

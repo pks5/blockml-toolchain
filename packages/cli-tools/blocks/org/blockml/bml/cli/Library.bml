@@ -124,6 +124,7 @@
         <clidocumentation:PublicApi />
         <clidocumentation:RuntimeBootstrap />
         <clidocumentation:Commands />
+        <clidocumentation:Help />
         <clidocumentation:CompileCommand />
         <clidocumentation:ValidateCommand />
         <clidocumentation:SearchCommand />

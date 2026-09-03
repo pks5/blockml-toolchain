@@ -28,7 +28,8 @@
   <documentation>
     # Public CLI entry: argv + cwd to exit code and stderr
 
-    CLI18: validate command to RunValidate; compile to RunCompile; search to RunSearch; graph to RunGraph; inspect to RunInspect; transform apply to RunTransform; unknown command or transform subcommand exit 2 with USAGE.
+    CLI18: validate command to RunValidate; compile to RunCompile; search to RunSearch; graph to RunGraph; inspect to RunInspect; transform apply to RunTransform; unknown command or transform subcommand exit 2 with short USAGE.
+    --help / -h / help print the help page (clidocumentation:Help, or the command Printed help) and exit 0. Help does not load config or the TypeRegistry.
 
     Uncaught throws → Internal CLI error: message, exit 2 (application error, not BML diagnostics).
 
@@ -40,6 +41,7 @@
 
   <references>
     <see type="clidocumentation:PublicApi" relation="SeeAlso" />
+    <see type="clidocumentation:Help" relation="SeeAlso" />
     <see type="clicap:RunValidate" relation="SeeAlso" />
     <see type="clicap:RunCompile" relation="SeeAlso" />
     <see type="clicap:RunSearch" relation="SeeAlso" />

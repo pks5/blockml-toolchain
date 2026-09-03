@@ -26,7 +26,7 @@
   <baseType>core:Documentation</baseType>
   <is>blockml compile specification</is>
 
-  <documentation>Syntax (V1 minimal CLI):
+  <documentation><![CDATA[Syntax (V1 minimal CLI):
     blockml compile blockdoc|xsd [--out dir] [--src dir] [--libraries a,b]
     blockml compile fatblock [--include a,b] [--out dir] [--per-package]
     blockml compile file.bml fatblock [--src dir] [--include a,b] [--out dir]
@@ -47,7 +47,27 @@
 
     After diagnostics, always a status line: Compilation succeeded. Wrote … or
     Compilation failed with K error(s). Empty output without errors:
-    Compilation failed: no output files produced.</documentation>
+    Compilation failed: no output files produced.
+
+Printed help:
+Usage: blockml compile <target> [--out dir] [--src dir] [--libraries a,b]
+       blockml compile fatblock [--include a,b] [--out dir] [--per-package]
+       blockml compile <file> <document-target> [--src dir] [--include a,b] [--out dir]
+       blockml compile --help
+
+When: a companion is a compile target. Change BML first, then recompile. Do not patch compile output to fix the model. Companions with no target are updated by direct edit after the BML change.
+
+Targets: blockdoc (default), xsd, fatblock. Custom targets via targetPackages.
+
+Flags:
+  --out dir         output directory (defaults: blockdoc, schemas, invocation directory)
+  --src / --libraries   corpus overrides
+  --include a,b     fatblock embed include patterns
+  --per-package     one {hostFqn}.fat.bml per local package with blockml.library (fatblock only; not with host file or --src)
+
+fatblock without a host file uses package.json blockml.library as host.
+
+Related: validate.]]></documentation>
   <references>
     <see type="clidocumentation:ValidateCommand" relation="ReadNext" />
   </references>

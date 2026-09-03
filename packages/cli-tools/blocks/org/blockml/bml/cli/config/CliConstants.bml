@@ -26,7 +26,8 @@
   <is>Well-known CLI constants</is>
 
   <properties>
-    <USAGE type="type:Text"><documentation>Usage string printed on configuration errors.</documentation></USAGE>
+    <USAGE type="type:Text"><documentation>Short syntax printed on configuration errors. Not the --help page.</documentation></USAGE>
+    <HELP type="type:Text"><documentation>Root help page printed by --help / -h / help. SSOT: clidocumentation:Help.</documentation></HELP>
     <SUPPORTED_TARGETS type="type:Text"><documentation>V1: blockdoc, xsd, fatblock.</documentation></SUPPORTED_TARGETS>
     <DOCUMENT_TARGETS type="type:Text"><documentation>Document target fatblock: host file or package.json blockml.library.</documentation></DOCUMENT_TARGETS>
     <DEFAULT_TARGETS type="type:Text"><documentation>targets[] default when omitted: ["blockdoc"].</documentation></DEFAULT_TARGETS>

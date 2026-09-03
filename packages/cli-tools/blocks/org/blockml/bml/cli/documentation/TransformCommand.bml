@@ -69,7 +69,27 @@
     model changes with the Stage terminal state. Finalize commits the
     succeeded or failed relocation.
 
-    Pending-contract violations never start the execution (exit 2).]]></documentation>
+    Pending-contract violations never start the execution (exit 2).
+
+Printed help:
+Usage: blockml transform apply <execution-fqn> [--verbose] [--parameters json]
+       blockml transform --help
+
+When: run a pending ModelTransformation.
+
+transform is a parent command. V1 defines apply only.
+EXECUTION-FQN is the FQN of a ModelTransformation under {library}._meta.transform.pending. Tasks are not accepted directly.
+
+Pipeline stage constraints belong to the Execute / Reflect prompts, not here.
+
+Flags:
+  --verbose         stream additional agent-session detail
+  --parameters json JSON object merged over pending parameters
+
+Only one transform may run at a time in the same Git worktree.
+The worktree must be clean at start and before each Stage.
+
+Related: validate, inspect.]]></documentation>
   <references>
     <see type="clidocumentation:Commands" relation="SeeAlso" />
     <see type="clicommand:TransformCommand" relation="SeeAlso" />

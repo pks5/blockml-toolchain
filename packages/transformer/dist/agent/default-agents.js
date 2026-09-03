@@ -18,83 +18,11 @@ npx blockml <command>
 
 Do not install or upgrade \`@blockml/cli\` unless asked. If the CLI is missing, run \`npm ci\` first. If \`@blockml/cli\` is not a project dependency, report that and stop.
 
+Run \`npx blockml --help\` for commands, workflow, and flags. Run \`npx blockml <command> --help\` before first use of a command (search, inspect, graph, new, validate, compile, transform).
+
 Search answers where something is. Inspect answers: give me this Block already resolved. Graph answers how it connects.
 
 Generic grep, find, and file reads remain allowed. They are not the first way into the model.
-
-### search — find it
-
-Find FQNs before scanning directories. Corpus is the same as \`validate --all\`.
-
-\`\`\`bash
-npx blockml search "<query>"
-npx blockml search index
-\`\`\`
-
-Rebuild the index if results look stale or sources have changed.
-
-### inspect — understand a known FQN
-
-Once search returns FQNs, inspect the relevant Block before opening a large \`.bml\` file. Members in the JSON are the **effective** set (inherited included). Expansion follows declared member types, contracts, subBlocks, and generic type arguments — not a copy of the ancestor chain; ancestors are FQN refs. \`genericTypes\` are declared parameters; bound types on an instance are SubBlocks of that instance, not of the generic parent.
-
-\`\`\`bash
-npx blockml inspect <fqn> [--depth n]
-\`\`\`
-
-JSON only (default). Depth 0 is that Block only; default 1; cap 3. Budget 48 blocks. If \`truncated\` is non-empty, inspect the needed child FQN instead of raising depth. Live TypeRegistry — no cache file. Not a write format; do not round-trip Inspect JSON to BML. Unknown FQN exits 2. A \`.bml\` path is not an FQN; inspect may print \`Did you mean <root FQN>?\`. Documentation longer than 400 characters is truncated with an ellipsis and \`documentationTruncated=true\`. Aggregation members include authored composition instances (enum literals, Library catalog FQNs, nested Stage/Task fills). Capability members include \`implementation\` (language + truncated source).
-
-### graph — how it connects
-
-Inheritance, uses / used-by, members, and paths. Prefer named operations. Use \`graph schema\` before Cypher. Rebuild with \`graph index\` if the index is missing or stale. Unknown FQN exits 2 (same as inspect). \`path\` follows outgoing authored edges only (the same direction as \`uses\`); reverse questions use \`used-by\`. The graph database is exclusive; the CLI waits if another graph process holds the index.
-
-\`\`\`bash
-npx blockml graph index
-npx blockml graph uses <fqn> [--depth n]
-npx blockml graph used-by <fqn> [--depth n] [--origin workspace|dependency] [--relation REL] [--limit n]
-npx blockml graph neighbors <fqn> [--depth n]
-npx blockml graph ancestors <fqn>
-npx blockml graph descendants <fqn>
-npx blockml graph members <fqn>
-npx blockml graph path <from-fqn> <to-fqn>
-npx blockml graph query <cypher>
-npx blockml graph schema
-\`\`\`
-
-\`uses\` / \`used-by\` / \`neighbors\` \`--depth\` is hops (default 1). \`members\` ignores \`--depth\`. \`--origin\`, \`--relation\`, and \`--limit\` filter those three operations (comma-separated origin/relation). Unknown FQN may print \`Did you mean …?\` (last-segment search, or a \`.bml\` path that maps to a corpus file). \`--help\` prints command usage and exits 0. \`graph schema\` names the Ladybug Cypher subset (no \`type()\`, no \`shortestPath()\`) and prints a working \`MATCH\` example.
-
-### new — create a Block
-
-Writes a \`.bml\` file and adds it to the owning Library catalog.
-
-\`\`\`bash
-npx blockml new <fqn> [--baseType FQN] [--is text]
-\`\`\`
-
-### validate — check after edits
-
-\`\`\`bash
-npx blockml validate
-npx blockml validate <file>
-npx blockml validate --all
-\`\`\`
-
-\`validate\` is ordinary project work. \`--all\` is the complete reachable corpus, including npm libraries under \`node_modules\`. Do not use \`--all\` as the default after every edit. Do not ignore validation errors caused by your changes.
-
-### compile — render when a target exists
-
-Renders derived output for registered targets (\`blockdoc\`, \`xsd\`, \`fatblock\`, …). Use this when the companion is a compile target: change BML, then recompile. Do not patch compile output to fix the model. Companions with no target are updated by direct edit after the BML change.
-
-\`\`\`bash
-npx blockml compile blockdoc|xsd|fatblock
-\`\`\`
-
-### transform — run a ModelTransformation
-
-\`\`\`bash
-npx blockml transform apply <execution-fqn>
-\`\`\`
-
-Pipeline stage constraints belong to the Execute / Reflect prompts, not here.
 
 ## Workflow
 

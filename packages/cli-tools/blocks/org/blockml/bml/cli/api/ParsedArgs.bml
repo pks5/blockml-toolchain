@@ -52,7 +52,7 @@
     <newFqn type="type:Text"><documentation>FQN for blockml new. (optional)</documentation></newFqn>
     <newBaseType type="type:Text"><documentation>--baseType for blockml new. (optional)</documentation></newBaseType>
     <newIs type="type:Text"><documentation>--is for blockml new. (optional)</documentation></newIs>
-    <help type="type:Boolean"><documentation>--help / -h: print command usage and exit 0. (optional)</documentation></help>
+    <help type="type:Boolean"><documentation>--help / -h: print help page and exit 0. (optional)</documentation></help>
     <origin type="type:Text"><documentation>--origin: comma-separated workspace|dependency|unresolved filter for graph uses/used-by/neighbors. (optional)</documentation></origin>
     <relation type="type:Text"><documentation>--relation: comma-separated GraphRelation filter for graph uses/used-by/neighbors. (optional)</documentation></relation>
   </properties>

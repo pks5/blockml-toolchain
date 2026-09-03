@@ -37,7 +37,7 @@
     Unknown FQN → exit 2 (same as inspect); may print Did you mean …? when search finds a matching last segment, or when the token is a .bml path whose document-root FQN is in the corpus.
     uses/used-by/neighbors --depth n walks n hops (default 1). path is outgoing-only; hops include direction.
     --origin, --relation, and --limit filter uses/used-by/neighbors. schema() documents the Ladybug Cypher subset.
-    --help / -h / help print graph usage and exit 0.
+    --help / -h / help print graph help page and exit 0. Missing subcommand prints short USAGE.
     The index is exclusive; OpenIndex waits on a lock and retries Ladybug lock contention.
     Missing subcommand → exit 2.
   </documentation>

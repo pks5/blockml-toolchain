@@ -16,6 +16,7 @@ const EXPECTED_DOC_BLOCKS = [
   "PublicApi",
   "RuntimeBootstrap",
   "Commands",
+  "Help",
     "CompileCommand",
     "ValidateCommand",
     "SearchCommand",

@@ -34,7 +34,9 @@
     --all, --per-package, --verbose, --json, --force, --limit, --depth,
     --origin and --relation (graph uses/used-by/neighbors, comma-split),
     --parameters (transform apply JSON object), --baseType and --is (new),
-    --help / -h (print usage, exit 0). The token help as command or graph subcommand is the same.
+    --help / -h (print help page, exit 0). The token help as command or graph subcommand is the same.
+    Root help is clidocumentation:Help. Command help is the Printed help section of that command documentation.
+    Error paths print short USAGE, not the help page.
 
     Positional: validate=file; compile=target or file+target; search=query
     tokens or subcommand index; graph=subcommand then args; inspect=FQN; transform=subcommand then args
@@ -43,6 +45,7 @@
 
   <references>
     <see type="cliapi:ParsedArgs" relation="SeeAlso" />
+    <see type="clidocumentation:Help" relation="SeeAlso" />
   </references>
 
   <properties>

@@ -36,9 +36,11 @@
     • new — create a Block .bml file via @blockml/builder and export it from the owning Library
 
     Planned commands (not V1): init, watch, activate-config.
-    See cliconfig:CommandRegistry for implementation flags.</documentation>
+    See cliconfig:CommandRegistry for implementation flags.
+    Printed operator help: clidocumentation:Help (root) and each command documentation Printed help section.</documentation>
   <references>
-    <see type="clidocumentation:CompileCommand" relation="ReadNext" />
+    <see type="clidocumentation:Help" relation="ReadNext" />
+    <see type="clidocumentation:CompileCommand" relation="SeeAlso" />
   </references>
 
 </block>

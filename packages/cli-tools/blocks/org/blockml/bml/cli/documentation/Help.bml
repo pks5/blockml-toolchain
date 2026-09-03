@@ -1,0 +1,84 @@
+<!--
+  CLI Documentation — Help
+  FQN: org.blockml.bml.cli.documentation.Help
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>Help</name>
+  <type>clidocumentation:Help</type>
+  <baseType>core:Documentation</baseType>
+  <is>Printed root help page for blockml --help</is>
+
+  <documentation><![CDATA[Usage: blockml <command> [options]
+       blockml --help
+
+blockml is the BlockML toolchain CLI.
+
+BML is the editable source of truth. Companions (TypeScript, HTML, XSD, …) are derived.
+Change BML first, then compile or edit companions to match. Do not invent model semantics.
+
+Invocation: npx blockml <command>
+Do not install or upgrade @blockml/cli unless asked. If the CLI is missing, run npm ci.
+If @blockml/cli is not a project dependency, report that and stop.
+
+Discover the model with the CLI, not grep:
+  search    where something is (find FQNs)
+  inspect   give me this Block already resolved (effective members)
+  graph     how it connects (inheritance, uses, used-by)
+Generic grep, find, and file reads remain allowed. They are not the first way into the model.
+
+Workflow:
+  task → search → FQNs → inspect (graph if structure) → targeted BML read → smallest BML edit → validate
+       → update companions to match (compile and/or edit)
+
+Commands:
+  search      Find FQNs. Corpus is validate --all.
+              blockml search <query> [--json] [--limit n]
+              blockml search index [--force]
+  inspect     Resolved Block JSON (effective members).
+              blockml inspect <fqn> [--depth n]
+  graph       Inheritance, uses / used-by, members, paths.
+              blockml graph uses|used-by|neighbors|ancestors|descendants|members <fqn>
+              blockml graph path <from> <to>
+              blockml graph query <cypher> | schema | index
+  new         Create a Block .bml and export it from the owning Library.
+              blockml new <fqn> [--baseType FQN] [--is text]
+  validate    Parser + semantic check. Default: project sources, not npm.
+              blockml validate [--all] [<file>]
+  compile     Render derived output for a registered target.
+              blockml compile blockdoc|xsd|fatblock
+  transform   Run a pending ModelTransformation.
+              blockml transform apply <execution-fqn>
+
+Shared flags: --src dir, --libraries a,b, --json, --help / -h
+Corpus for search, inspect, and graph is the same as validate --all.
+Exit codes: 0 success, 1 diagnostic errors, 2 usage or configuration error.
+
+Run `blockml <command> --help` for flags, defaults, output, and constraints.]]></documentation>
+  <references>
+    <see type="clidocumentation:Commands" relation="SeeAlso" />
+    <see type="clidocumentation:SearchCommand" relation="SeeAlso" />
+    <see type="clidocumentation:InspectCommand" relation="SeeAlso" />
+    <see type="clidocumentation:GraphCommand" relation="SeeAlso" />
+    <see type="clicap:ParseArgs" relation="SeeAlso" />
+    <see type="clicap:RunCli" relation="SeeAlso" />
+  </references>
+
+</block>
