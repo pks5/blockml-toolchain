@@ -14,7 +14,7 @@ export function buildClaudeReflectPrompt(executionFqn, stageIndex, trace) {
         executionFqn,
         "",
         "You must NOT change the model, ModelTransformation, or any other files.",
-        "Read only. Produce changedFiles and feedback for this Stage only.",
+        "Read only. Produce changedFiles and output for this Stage only.",
         "",
         "Git-detected changed files:",
         changed,
@@ -26,10 +26,10 @@ export function buildClaudeReflectPrompt(executionFqn, stageIndex, trace) {
         clip(trace.stdout) || "(empty)",
         "",
         "Return ONLY a JSON object:",
-        '{ "changedFiles": ["relative/path.bml"], "feedback": "summary" }',
+        '{ "changedFiles": ["relative/path.bml"], "output": "summary" }',
         "",
     ];
-    lines.push("changedFiles must be workspace-relative paths Execute actually modified.", "Do not include _meta/transform/ ModelTransformation files unless Execute wrongly", "touched them; mention that in feedback if so.");
+    lines.push("changedFiles must be workspace-relative paths Execute actually modified.", "Do not include _meta/transform/ ModelTransformation files unless Execute wrongly", "touched them; mention that in output if so.");
     return lines.join("\n");
 }
 export function parseReflectionOutput(stdout) {
@@ -39,16 +39,16 @@ export function parseReflectionOutput(stdout) {
     }
     const record = value;
     const files = record.changedFiles;
-    const feedback = record.feedback;
+    const output = record.output;
     if (!Array.isArray(files) || files.some((entry) => typeof entry !== "string")) {
         throw new Error("Reflect output changedFiles must be a string array");
     }
-    if (typeof feedback !== "string") {
-        throw new Error("Reflect output feedback must be a string");
+    if (typeof output !== "string") {
+        throw new Error("Reflect output output must be a string");
     }
     return {
         changedFiles: files.map((entry) => String(entry).replaceAll("\\", "/")),
-        feedback,
+        output,
     };
 }
 export class ClaudeReflectAgent {
@@ -96,7 +96,7 @@ export class ClaudeReflectAgent {
                 return {
                     success: true,
                     changedFiles: parsed.changedFiles,
-                    feedback: parsed.feedback,
+                    output: parsed.output,
                 };
             }
             catch (error) {

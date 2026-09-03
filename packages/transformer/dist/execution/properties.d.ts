@@ -15,7 +15,7 @@ export declare function setStageStatus(instance: BlockInstance, status: Executio
 export declare function setStageStartedAt(instance: BlockInstance, iso: string): void;
 export declare function setStageBaseCommit(instance: BlockInstance, commit: string): void;
 export declare function setStageCompletedAt(instance: BlockInstance, iso: string): void;
-export declare function setStageFeedback(instance: BlockInstance, feedback: string): void;
+export declare function setStageOutput(instance: BlockInstance, output: string): void;
 export declare function setStageChangedFiles(instance: BlockInstance, paths: readonly string[]): void;
 export declare function setStageException(instance: BlockInstance, message: string): void;
 export declare function hasAggregationComposition(block: BlockDefinition, name: string): boolean;

@@ -98,8 +98,8 @@ export function setStageBaseCommit(instance, commit) {
 export function setStageCompletedAt(instance, iso) {
     setStageMember(instance, "completedAt", DATETIME_TYPE_FQN, iso);
 }
-export function setStageFeedback(instance, feedback) {
-    setStageMember(instance, "feedback", TEXT_TYPE_FQN, feedback);
+export function setStageOutput(instance, output) {
+    setStageMember(instance, "output", TEXT_TYPE_FQN, output);
 }
 export function setStageChangedFiles(instance, paths) {
     upsertInstanceAggregation(instance, "changedFiles", paths.map((path) => ({

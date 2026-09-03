@@ -14,7 +14,7 @@ export function createPersistStage() {
                 started: reflected.started,
                 stageIndex: reflected.stageIndex,
                 changedFiles: reflected.changedFiles,
-                feedback: reflected.feedback,
+                output: reflected.output,
                 outcome: reflected.outcome,
                 completedAtIso: formatDateTimeProperty(context.now()),
                 ...(reflected.exceptionMessage !== undefined

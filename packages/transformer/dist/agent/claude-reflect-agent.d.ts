@@ -11,7 +11,7 @@ export interface ClaudeReflectAgentOptions {
 export declare function buildClaudeReflectPrompt(executionFqn: string, stageIndex: number, trace: ExecutionTrace): string;
 export declare function parseReflectionOutput(stdout: string): {
     changedFiles: string[];
-    feedback: string;
+    output: string;
 };
 export declare class ClaudeReflectAgent implements ReflectionAgent {
     private readonly command;

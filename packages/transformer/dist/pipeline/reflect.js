@@ -1,17 +1,25 @@
 import { TransformError } from "../execution/errors.js";
-export function createNoopReflectStage() {
+import { loadRunningExecution } from "../execution/load-running.js";
+import { getStageInstance, getStagePropertyLiteral, } from "../execution/properties.js";
+export function createReflectStage() {
     return {
-        async run(executed) {
+        async run(executed, context) {
+            const output = stageCapturesOutput(context.workspaceRoot, executed.started, executed.stageIndex)
+                ? agentOutput(executed.trace.stdout)
+                : undefined;
             return {
                 ...executed,
-                changedFiles: [],
-                feedback: undefined,
+                changedFiles: executed.trace.changedFiles,
+                output,
                 outcome: "succeeded",
             };
         },
     };
 }
-export function createReflectStage(agent) {
+export function createNoopReflectStage() {
+    return createReflectStage();
+}
+export function createAgentReflectStage(agent) {
     return {
         async run(executed, context) {
             const result = await agent.reflect({
@@ -29,10 +37,25 @@ export function createReflectStage(agent) {
             return {
                 ...executed,
                 changedFiles,
-                feedback: result.feedback,
+                output: result.output,
                 outcome: "succeeded",
             };
         },
     };
+}
+function stageCapturesOutput(workspaceRoot, started, stageIndex) {
+    const { document } = loadRunningExecution(workspaceRoot, started);
+    const stage = getStageInstance(document.block, stageIndex);
+    if (!stage) {
+        return false;
+    }
+    const value = getStagePropertyLiteral(stage, "captureOutput");
+    if (value === true) {
+        return true;
+    }
+    return typeof value === "string" && value.toLowerCase() === "true";
+}
+function agentOutput(stdout) {
+    return stdout.length > 0 ? stdout : undefined;
 }
 //# sourceMappingURL=reflect.js.map

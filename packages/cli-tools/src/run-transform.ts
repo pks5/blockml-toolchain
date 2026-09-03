@@ -1,6 +1,5 @@
 import {
   ClaudeCodeAgent,
-  ClaudeReflectAgent,
   formatTransformLifecycle,
   parseParametersJson,
   runTransformation,
@@ -115,11 +114,4 @@ export function defaultTransformAgent(verbose = false): TransformationAgent {
     return new ClaudeCodeAgent({ verbose: true });
   }
   return new ClaudeCodeAgent();
-}
-
-export function defaultReflectAgent(verbose = false): ReflectionAgent {
-  if (verbose) {
-    return new ClaudeReflectAgent({ verbose: true });
-  }
-  return new ClaudeReflectAgent();
 }

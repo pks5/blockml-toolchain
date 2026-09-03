@@ -19,14 +19,17 @@
   <documentation>
     An isolated part of a ModelTransformation.
 
-    A Stage runs in its own agent process. It owns `feedback` and
+    A Stage runs in its own agent process. It owns `output` and
     `changedFiles` independently of other Stages in the same transformation.
 
     * `status` — lifecycle state (`workflow:ExecutionStatus`).
     * `startedAt` / `completedAt` — the interval of this Stage.
     * `baseCommit` — Git HEAD commit when this Stage started.
     * `task` — the Task that ran in this Stage.
-    * `feedback` — Stage-local feedback from its agent process.
+    * `captureOutput` — when true, Reflect copies Execute agent stdout
+      onto `output`. Default false: `output` stays unset.
+    * `output` — Execute agent stdout for this Stage. Present only when
+      `captureOutput` is true.
     * `changedFiles` — workspace-relative paths modified during this Stage
       (`type:FilePathEntity[]`).
     * `exception` — present if and only if `status` is Failed.
@@ -57,12 +60,18 @@
       <documentation>When this Stage finished.</documentation>
     </completedAt>
     <captureOutput type="type:Boolean">
-      <documentation>Whether to capture output from this Stage's agent process.</documentation>
+      <documentation>
+        When true, Reflect copies Execute agent stdout onto output.
+        Default false.
+      </documentation>
       <value>false</value>
     </captureOutput>
-    <feedback type="type:Text">
-      <documentation>Feedback from this Stage's agent process.</documentation>
-    </feedback>
+    <output type="type:Text">
+      <documentation>
+        Execute agent stdout for this Stage. Written by Reflect when
+        captureOutput is true. Absent otherwise.
+      </documentation>
+    </output>
   </properties>
 
   <aggregations>

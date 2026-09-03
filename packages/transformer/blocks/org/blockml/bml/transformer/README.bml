@@ -32,9 +32,10 @@
     Persist results onto that Stage, commit. Default Prepare and Finalize
     are deterministic. Default Execute is a TransformationAgent that
     changes BML model source only (not ModelTransformation /
-    `_meta/transform/`). Default Reflect is a second Claude worker
-    (read-only; changedFiles + feedback). Default Persist writes those
-    fields onto the Stage that just
+    `_meta/transform/`). Default Reflect is deterministic: git
+    `changedFiles` from Execute, and `output` when the Stage's
+    `captureOutput` is true. Default Persist writes those fields onto
+    the Stage that just
     ran. After a started execution,
     Finalize relocates the Block to `_meta.transform.succeeded` only when
     every Stage succeeded, otherwise `_meta.transform.failed`. A failed

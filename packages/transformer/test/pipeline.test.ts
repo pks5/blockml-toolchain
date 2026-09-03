@@ -58,7 +58,7 @@ describe("Transformer pipeline", () => {
             return {
               ...executed,
               changedFiles: ["model.bml"],
-              feedback: "ok",
+              output: "ok",
               outcome: "succeeded" as const,
             };
           },
@@ -82,7 +82,7 @@ describe("Transformer pipeline", () => {
             return {
               ...executed,
               changedFiles: ["model.bml"],
-              feedback: "ok",
+              output: "ok",
               outcome: "succeeded" as const,
             };
           },
@@ -118,10 +118,10 @@ describe("Transformer pipeline", () => {
     expect(running).toContain(
       '<type:FilePathEntity value="model.bml" />',
     );
-    expect(running).toContain(">ok</feedback>");
+    expect(running).toContain(">ok</output>");
   });
 
-  it("keeps persisted changedFiles and feedback after finalize", async () => {
+  it("keeps persisted changedFiles and output after finalize", async () => {
     writePending();
     const generated = "T00001_JokeTest_20260830T011702";
     const transformer = new Transformer({
@@ -133,7 +133,7 @@ describe("Transformer pipeline", () => {
             return {
               ...executed,
               changedFiles: ["model.bml"],
-              feedback: "ok",
+              output: "ok",
               outcome: "succeeded" as const,
             };
           },
@@ -149,11 +149,11 @@ describe("Transformer pipeline", () => {
     expect(succeeded).toContain(
       '<type:FilePathEntity value="model.bml" />',
     );
-    expect(succeeded).toContain(">ok</feedback>");
+    expect(succeeded).toContain(">ok</output>");
     expect(succeeded).not.toContain(`_meta/transform/running/${generated}`);
   });
 
-  it("does not write changedFiles or feedback when reflection is empty", async () => {
+  it("does not write changedFiles or output when captureOutput is false", async () => {
     writePending();
     const generated = "T00001_JokeTest_20260830T011702";
     const transformer = new Transformer({
@@ -167,7 +167,32 @@ describe("Transformer pipeline", () => {
       "utf8",
     );
     expect(succeeded).not.toContain("<changedFiles");
-    expect(succeeded).not.toContain("<feedback");
+    expect(succeeded).not.toContain("<output");
+  });
+
+  it("writes Execute stdout onto Stage.output when captureOutput is true", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        captureOutput: true,
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: {
+        async execute() {
+          return { success: true, stdout: "agent said hello" };
+        },
+      },
+      now: () => FIXED_NOW,
+    });
+    await transformer.run(pendingFqn("JokeTest"));
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).toContain(">agent said hello</output>");
   });
 
   it("skips reflect and still persists and finalizes when execute fails", async () => {
@@ -219,7 +244,7 @@ describe("Transformer pipeline", () => {
     const reflectAgent: ReflectionAgent = {
       async reflect(request) {
         received = request.trace;
-        return { success: true, changedFiles: ["model.bml"], feedback: "ok" };
+        return { success: true, changedFiles: ["model.bml"], output: "ok" };
       },
     };
     const transformer = new Transformer({

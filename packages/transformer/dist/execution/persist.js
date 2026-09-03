@@ -3,7 +3,7 @@ import { TYPE_PACKAGE_FQN } from "./constants.js";
 import { TransformError } from "./errors.js";
 import { persistDocument } from "./relocate.js";
 import { loadRunningExecution } from "./load-running.js";
-import { getStageInstance, setStageChangedFiles, setStageCompletedAt, setStageException, setStageFeedback, setStageStatus, } from "./properties.js";
+import { getStageInstance, setStageChangedFiles, setStageCompletedAt, setStageException, setStageOutput, setStageStatus, } from "./properties.js";
 import { commitWorktree } from "../pipeline/git.js";
 export function persistReflection(workspaceRoot, input) {
     const { document } = loadRunningExecution(workspaceRoot, input.started);
@@ -12,8 +12,8 @@ export function persistReflection(workspaceRoot, input) {
     if (!stage) {
         throw new TransformError("execution", `Running ModelTransformation has no Stage at index ${input.stageIndex}`);
     }
-    if (input.feedback !== undefined) {
-        setStageFeedback(stage, input.feedback);
+    if (input.output !== undefined) {
+        setStageOutput(stage, input.output);
     }
     if (input.changedFiles.length > 0) {
         ensureTypeNamespace(forked);

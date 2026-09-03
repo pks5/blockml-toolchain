@@ -67,13 +67,14 @@
             Edit(**/node_modules/**), Bash limited to npx blockml.
 
         [3] Reflect on Execution — transformercap:ReflectOnExecution
-            Default: Claude Worker #2, new process per Stage. Must not
-            change the model. Receives the Execute trace and returns
-            changedFiles and feedback for this Stage. Skipped when
-            Execute throws; feedback never decides Succeeded vs Failed.
+            Default: deterministic. No agent process. Must not change
+            the model. Reads the Execute git trace for changedFiles.
+            When the Stage's captureOutput is true, copies Execute
+            agent stdout onto output. Skipped when Execute throws;
+            output never decides Succeeded vs Failed.
 
         [4] Persist Execution — transformercap:PersistExecution
-            Default: deterministic. Writes changedFiles, feedback, status,
+            Default: deterministic. Writes changedFiles, output, status,
             completedAt, and on failure a BML exception onto this Stage.
             Commits model changes together with the Stage terminal state.
             Must not relocate the ModelTransformation. A Failed Stage

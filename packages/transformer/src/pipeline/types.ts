@@ -38,7 +38,7 @@ export type ExecutionOutcome = "succeeded" | "failed";
 
 export interface Reflection extends ExecutedWork {
   changedFiles: readonly string[];
-  feedback: string | undefined;
+  output: string | undefined;
   outcome: ExecutionOutcome;
   exceptionMessage?: string;
 }

@@ -3,7 +3,7 @@ export interface PersistReflectionInput {
     started: StartedExecution;
     stageIndex: number;
     changedFiles: readonly string[];
-    feedback: string | undefined;
+    output: string | undefined;
     exceptionMessage?: string;
     outcome: "succeeded" | "failed";
     completedAtIso: string;

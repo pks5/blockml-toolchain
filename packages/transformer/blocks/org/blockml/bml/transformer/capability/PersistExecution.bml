@@ -21,7 +21,7 @@
   <documentation>
     # Persist Execution
 
-    Write `changedFiles`, `feedback`, `status`, `completedAt`, and on
+    Write `changedFiles`, `output`, `status`, `completedAt`, and on
     failure the BML exception into the current `workflow:Stage`. Then
     commit model changes together with that Stage terminal state. Must
     not relocate the ModelTransformation and must not write those fields
@@ -43,9 +43,9 @@
     <changedFiles type="type:Text[]">
       <documentation>Workspace-relative paths persisted as FilePathEntity children of Stage.changedFiles. (required)</documentation>
     </changedFiles>
-    <feedback type="type:Text">
-      <documentation>Text to persist onto Stage.feedback. (optional)</documentation>
-    </feedback>
+    <output type="type:Text">
+      <documentation>Text to persist onto Stage.output when captureOutput was true. (optional)</documentation>
+    </output>
   </properties>
 
 </block>

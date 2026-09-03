@@ -11,7 +11,7 @@ export type ReflectResult =
   | {
       success: true;
       changedFiles: readonly string[];
-      feedback: string | undefined;
+      output: string | undefined;
     }
   | { success: false; exitCode: number; error: string };
 

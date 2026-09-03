@@ -2,7 +2,7 @@ export { Transformer, runTransformation } from "./runtime/transformer.js";
 export { createDefaultPipeline } from "./pipeline/default-pipeline.js";
 export { createPrepareStage } from "./pipeline/prepare.js";
 export { createExecuteStage } from "./pipeline/execute.js";
-export { createNoopReflectStage, createReflectStage } from "./pipeline/reflect.js";
+export { createAgentReflectStage, createNoopReflectStage, createReflectStage, } from "./pipeline/reflect.js";
 export { createNoopPersistStage, createPersistStage } from "./pipeline/persist.js";
 export { createFinalizeStage } from "./pipeline/finalize.js";
 export { collectWorktreeTrace } from "./pipeline/worktree-trace.js";

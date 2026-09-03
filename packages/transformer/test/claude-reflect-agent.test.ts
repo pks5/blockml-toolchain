@@ -22,21 +22,21 @@ describe("parseReflectionOutput", () => {
   it("parses a bare JSON object", () => {
     expect(
       parseReflectionOutput(
-        '{"changedFiles":["a.bml"],"feedback":"added a"}',
+        '{"changedFiles":["a.bml"],"output":"added a"}',
       ),
-    ).toEqual({ changedFiles: ["a.bml"], feedback: "added a" });
+    ).toEqual({ changedFiles: ["a.bml"], output: "added a" });
   });
 
   it("parses JSON inside a markdown fence and surrounding prose", () => {
     const stdout = [
       "Here you go:",
       "```json",
-      '{ "changedFiles": ["x.bml"], "feedback": "ok" }',
+      '{ "changedFiles": ["x.bml"], "output": "ok" }',
       "```",
     ].join("\n");
     expect(parseReflectionOutput(stdout)).toEqual({
       changedFiles: ["x.bml"],
-      feedback: "ok",
+      output: "ok",
     });
   });
 
@@ -62,7 +62,7 @@ describe("ClaudeReflectAgent", () => {
         captured = { args: request.args, cwd: request.cwd };
         return {
           exitCode: 0,
-          stdout: '{"changedFiles":["model.bml"],"feedback":"looks good"}',
+          stdout: '{"changedFiles":["model.bml"],"output":"looks good"}',
           stderr: "",
         };
       },
@@ -76,7 +76,7 @@ describe("ClaudeReflectAgent", () => {
     expect(result).toEqual({
       success: true,
       changedFiles: ["model.bml"],
-      feedback: "looks good",
+      output: "looks good",
     });
     const prompt = captured?.args.find((arg, i) => captured?.args[i - 1] === "-p");
     expect(prompt).toContain("Reflect step");

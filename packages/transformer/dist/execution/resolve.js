@@ -10,14 +10,14 @@ const FORBIDDEN_PROPERTIES = [
     "baseCommit",
     "completedAt",
     "sequence",
-    "feedback",
+    "output",
 ];
 const FORBIDDEN_AGGREGATIONS = ["task", "changedFiles", "exception"];
 const STAGE_FORBIDDEN_PROPERTIES = [
     "startedAt",
     "baseCommit",
     "completedAt",
-    "feedback",
+    "output",
 ];
 const STAGE_FORBIDDEN_AGGREGATIONS = ["changedFiles", "exception"];
 export function resolvePendingExecution(executionFqn, workspaceRoot) {

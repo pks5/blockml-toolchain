@@ -77,6 +77,7 @@ export function pendingExecutionXml(opts: {
   template?: boolean;
   parameterFields?: readonly string[];
   pendingParameters?: string;
+  captureOutput?: boolean;
 }): string {
   const refs = opts.extraRefs
     ? `  <references>\n${opts.extraRefs}\n  </references>\n`
@@ -132,6 +133,9 @@ export function pendingExecutionXml(opts: {
       [
         `        <workflow:Stage>`,
         `          <status>Pending</status>`,
+        ...(opts.captureOutput === true
+          ? [`          <captureOutput>true</captureOutput>`]
+          : []),
         `          <task>`,
         `            <workflow:InstructionTask instructions="${text}" />`,
         `          </task>`,

@@ -168,8 +168,8 @@ export function setStageCompletedAt(instance: BlockInstance, iso: string): void 
   setStageMember(instance, "completedAt", DATETIME_TYPE_FQN, iso);
 }
 
-export function setStageFeedback(instance: BlockInstance, feedback: string): void {
-  setStageMember(instance, "feedback", TEXT_TYPE_FQN, feedback);
+export function setStageOutput(instance: BlockInstance, output: string): void {
+  setStageMember(instance, "output", TEXT_TYPE_FQN, output);
 }
 
 export function setStageChangedFiles(

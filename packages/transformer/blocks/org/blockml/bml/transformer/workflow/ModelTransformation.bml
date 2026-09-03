@@ -42,7 +42,7 @@
     * `startedAt` / `completedAt` — the execution interval.
     * `baseCommit` — Git HEAD commit when this execution started. Set only
       after Prepare confirms a clean worktree and sets `status=Running`.
-    * `stages` — the Stages of this execution, in order. Feedback,
+    * `stages` — the Stages of this execution, in order. `output`,
       `changedFiles`, and `exception` live on each Stage, not on this Block.
   </documentation>
 

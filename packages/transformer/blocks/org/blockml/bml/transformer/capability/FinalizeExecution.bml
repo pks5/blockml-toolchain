@@ -26,7 +26,7 @@
     Stage succeeded. After that relocation, commit.
 
     Default implementation is deterministic. Runs after every started execution,
-    including a failed Stage. Does not write feedback, changedFiles, result,
+    including a failed Stage. Does not write output, changedFiles,
     or exception onto the ModelTransformation. TS: pipeline/finalize.ts.
   </documentation>
 

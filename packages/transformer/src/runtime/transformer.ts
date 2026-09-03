@@ -216,7 +216,7 @@ function failedReflection(
       changedFiles,
     },
     changedFiles,
-    feedback: undefined,
+    output: undefined,
     outcome: "failed",
     exceptionMessage,
   };

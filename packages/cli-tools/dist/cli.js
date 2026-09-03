@@ -13,7 +13,7 @@ import { runSearch } from "./run-search.js";
 import { runGraph } from "./run-graph.js";
 import { runInspect } from "./run-inspect.js";
 import { runNew } from "./run-new.js";
-import { defaultReflectAgent, defaultTransformAgent, runTransform } from "./run-transform.js";
+import { defaultTransformAgent, runTransform } from "./run-transform.js";
 import { writeOutputFiles } from "./write-output.js";
 import { GRAPH_USAGE, INSPECT_USAGE, SEARCH_USAGE, USAGE, helpFor, } from "./help.js";
 function workspaceRoot(from) {
@@ -714,9 +714,7 @@ async function executeCli(argv, cwd, options = {}) {
             }
             const verbose = parsed.verbose === true;
             const agent = options.transformAgent ?? defaultTransformAgent(verbose);
-            const reflectAgent = options.reflectAgent ??
-                (options.transformAgent ? undefined : defaultReflectAgent(verbose));
-            const code = await runTransform(parsed.executionFqn, cwd, lines, USAGE, agent, reflectAgent, options.onOutputLine, parsed.parametersJson);
+            const code = await runTransform(parsed.executionFqn, cwd, lines, USAGE, agent, options.reflectAgent, options.onOutputLine, parsed.parametersJson);
             return { code, lines };
         }
         if (parsed.command === "new") {

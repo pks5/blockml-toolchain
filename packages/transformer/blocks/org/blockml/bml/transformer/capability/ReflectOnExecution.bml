@@ -20,14 +20,18 @@
   <documentation>
     # Reflect on Execution
 
-    Read Execute output (trace and git diff) for the current Stage and
-    produce changedFiles and feedback. Must not change the model —
-    Persist writes those fields onto the Stage. Runs in a new isolated
-    agent process per Stage.
+    Read the Execute trace for the current Stage and produce
+    `changedFiles` plus optional `output`. Deterministic. No agent
+    process. Must not change the model — Persist writes those fields
+    onto the Stage.
 
-    - Default: Claude Worker #2 (read-only: Read/Glob/Grep; Edit/Write/Bash denied).
-    - Tests without a reflectAgent keep a no-op (empty changedFiles).
-    - TS: pipeline/reflect.ts.
+    * `changedFiles` — workspace-relative paths from the Execute git
+      worktree trace (excluding `_meta/transform/`).
+    * `output` — Execute agent stdout, only when this Stage's
+      `captureOutput` is true.
+
+    Skipped when Execute throws. `output` never decides Succeeded vs
+    Failed. TS: pipeline/reflect.ts.
   </documentation>
 
   <references>
@@ -38,11 +42,14 @@
 
   <properties>
     <changedFiles type="type:Text[]">
-      <documentation>Paths modified during Execute. (required)</documentation>
+      <documentation>Paths modified during Execute, from the git worktree trace. (required)</documentation>
     </changedFiles>
-    <feedback type="type:Text">
-      <documentation>Reflection feedback. Absent when the no-op default is used. (optional)</documentation>
-    </feedback>
+    <output type="type:Text">
+      <documentation>
+        Execute agent stdout. Present when Stage.captureOutput is true.
+        (optional)
+      </documentation>
+    </output>
   </properties>
 
 </block>

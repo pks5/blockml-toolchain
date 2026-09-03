@@ -9,7 +9,7 @@ import {
   setStageChangedFiles,
   setStageCompletedAt,
   setStageException,
-  setStageFeedback,
+  setStageOutput,
   setStageStatus,
 } from "./properties.js";
 import type { StartedExecution } from "./start.js";
@@ -19,7 +19,7 @@ export interface PersistReflectionInput {
   started: StartedExecution;
   stageIndex: number;
   changedFiles: readonly string[];
-  feedback: string | undefined;
+  output: string | undefined;
   exceptionMessage?: string;
   outcome: "succeeded" | "failed";
   completedAtIso: string;
@@ -38,8 +38,8 @@ export function persistReflection(
       `Running ModelTransformation has no Stage at index ${input.stageIndex}`,
     );
   }
-  if (input.feedback !== undefined) {
-    setStageFeedback(stage, input.feedback);
+  if (input.output !== undefined) {
+    setStageOutput(stage, input.output);
   }
   if (input.changedFiles.length > 0) {
     ensureTypeNamespace(forked);

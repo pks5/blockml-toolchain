@@ -47,9 +47,10 @@
     Stage Running, Execute its Task in an isolated agent process, Reflect,
     Persist results onto that Stage. Default Prepare/Finalize are
     deterministic. Default Execute is a TransformationAgent (Claude Code)
-    that changes BML only. Default Reflect is a second Claude worker
-    (read-only; changedFiles + feedback). Default Persist writes those
-    fields onto the Stage. Finalize relocates to _meta.transform.succeeded
+    that changes BML only. Default Reflect is deterministic (git
+    changedFiles from Execute; output when Stage.captureOutput is true).
+    Default Persist writes those fields onto the Stage. Finalize relocates
+    to _meta.transform.succeeded
     only when every Stage succeeded; otherwise _meta.transform.failed and a
     non-zero exit. A failed Stage aborts the rest.
 
