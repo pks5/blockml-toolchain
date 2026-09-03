@@ -13,33 +13,33 @@
   <name>NextPoem222</name>
   <type>playground:NextPoem222</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, translated into Spanish, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
 
   <documentation>
-    Al borde del bosque se alza la haya, ancha y vieja,
-    su bóveda de hojas sostiene luz de verano y frío.
-    El tronco es gris por cien años callados,
-    ya ha soportado tormenta, escarcha y nieve.
+    Im tiefen Wald ragt eine Eiche hoch,
+    seit hundert Jahren hält sie Wacht und Joch.
+    Ihr Astwerk greift wie Hände in den Wind,
+    und unter ihr die Schatten kühl und lind.
 
-    A sus pies, sobre el musgo húmedo,
-    crece en silencio una amanita, aún pequeña y desnuda.
-    Su sombrero rojo de puntos blancos arde,
-    y tiembla cuando el viento de la mañana lo atraviesa.
+    Ein Fliegenpilz erwacht im weichen Grund,
+    sein roter Hut mit weißem Tupfen rund.
+    Er streckt sich aus dem Laub ans Tageslicht
+    und lauscht, wie hoch der Wipfel Lieder spricht.
 
-    "Quédate tranquila aquí conmigo", así habla el árbol,
-    "mi sombra te refresca cuando arde el mediodía.
-    Extiendo mi copa como una tienda
-    y te sostengo cuando cae la lluvia pesada."
+    "Sei mir gegrüßt", so raunt die Eiche sacht,
+    "ich hüte dich durch jede Sturmesnacht.
+    Mein Blätterdach fängt Regen, Reif und Schnee,
+    bleib ruhig hier, dann tut kein Wetter weh."
 
-    Así permanecen ambos a lo largo del año,
-    la haya en lo alto, el hongo abajo en la hierba.
-    Y quien se recuesta en la sombra verde,
-    encuentra dos compañeros que vigilan el camino.
+    So stehn die zwei durch Frühling, Herbst und Frost,
+    die Eiche stark, der Pilz ihr kleiner Trost.
+    Und wer vorbeikommt auf dem Waldespfad,
+    sieht Freundschaft, die seit je zusammensteht.
   </documentation>
 
   <properties>
     <title>
-      <value>La haya y la amanita matamoscas</value>
+      <value>Die Eiche und der Fliegenpilz</value>
     </title>
     <author>
       <value>John Doe</value>
