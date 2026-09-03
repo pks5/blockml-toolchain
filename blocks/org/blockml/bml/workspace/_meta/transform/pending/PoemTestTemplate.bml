@@ -58,12 +58,35 @@
       <composition>
         <workflow:ModelOperation name="Create Poem" status="Pending" captureOutput="true">
           <task>
-            <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.NextPoem222.bml that contains a random poem in german about a tree and a mushroom. For each execution create a new poem." />
+            <workflow:InstructionTask>
+              <instructions>
+                Create or update the block 
+                org.blockml.bml.workspace.playground.StructuredPoem.bml 
+                that contains a random poem in german 
+                about a tree and a mushroom. 
+                For each execution create a new poem.
+                The poem should be structured with the following properties:
+                - title (type:Text)
+                - author (type:Text)
+                - poem (type:Text)
+                - language (type:Text)
+                - date (type:DateTime)
+                - time (type:DateTime)
+                - location (type:Text)
+                - weather (type:Text)
+              </instructions>
+            </workflow:InstructionTask>
           </task>
         </workflow:ModelOperation>
         <workflow:ModelOperation name="Translate Poem" status="Pending">
           <task>
-            <workflow:InstructionTask instructions="Translate the poem in org.blockml.bml.workspace.playground.NextPoem222.bml to spanish." />
+            <workflow:InstructionTask>
+              <instructions>
+                Translate the poem in 
+                org.blockml.bml.workspace.playground.NextPoem222.bml 
+                to spanish.
+              </instructions>
+            </workflow:InstructionTask>
           </task>
         </workflow:ModelOperation>
       </composition>
