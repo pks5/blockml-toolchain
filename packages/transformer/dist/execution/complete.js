@@ -1,7 +1,8 @@
 import { forkBom } from "@blockml/framework";
+import { RESULT_EXCEPTION_FQN } from "./constants.js";
 import { formatDateTimeProperty } from "./lifecycle.js";
 import { loadRunningExecution } from "./load-running.js";
-import { setCompletedAt, setResultException, setStatus, modelTransformationHasCompletedAt, allStagesSucceeded, } from "./properties.js";
+import { setCompletedAt, setException, setStatus, modelTransformationHasCompletedAt, allStagesSucceeded, } from "./properties.js";
 import { rewriteParameterTypeFqns } from "./parameters.js";
 import { applyTransformationResult, ResultResolutionError, } from "./result.js";
 import { applyExecutionIdentity, persistDocument, removeFile, rewriteInboundReferences, } from "./relocate.js";
@@ -23,7 +24,7 @@ export function finalizeExecution(workspaceRoot, started, now) {
             if (!(error instanceof ResultResolutionError)) {
                 throw error;
             }
-            setResultException(forked.block, error.message);
+            setException(forked.block, RESULT_EXCEPTION_FQN, error.message);
             resultError = error.message;
         }
     }

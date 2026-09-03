@@ -1,10 +1,17 @@
 import { forkBom } from "@blockml/framework";
 import { allocateUniqueExecutionId } from "./execution-id.js";
 import { formatDateTimeProperty, generateExecutionName } from "./lifecycle.js";
-import { applyExecutionParameters, rewriteParameterTypeFqns } from "./parameters.js";
+import {
+  applyExecutionParameters,
+  ParametersResolutionError,
+  rewriteParameterTypeFqns,
+  type ParameterApplyOptions,
+} from "./parameters.js";
+import { PARAMETERS_EXCEPTION_FQN } from "./constants.js";
 import {
   isTemplate,
   setBaseCommit,
+  setException,
   setExecutionId,
   setSequence,
   setStartedAt,
@@ -33,6 +40,7 @@ export interface StartedExecution {
   runningFqn: string;
   runningFilePath: string;
   pendingFilePath: string;
+  parameterError?: string;
 }
 
 export function startExecution(
@@ -40,7 +48,7 @@ export function startExecution(
   now: Date,
   workspaceRoot: string,
   allocator = new SequenceAllocator(),
-  cliParameters: Record<string, unknown> = {},
+  parameterOptions: ParameterApplyOptions = {},
 ): StartedExecution {
   const baseCommit = assertWorktreeClean(workspaceRoot);
   const sequence = allocator.nextSequence(resolved.libraryFqn, resolved.registry);
@@ -54,7 +62,16 @@ export function startExecution(
   if (keepPending) {
     setTemplate(forked.block, false);
   }
-  applyExecutionParameters(forked.block, resolved.registry, cliParameters);
+  let parameterError: string | undefined;
+  try {
+    applyExecutionParameters(forked.block, resolved.registry, parameterOptions);
+  } catch (error) {
+    if (!(error instanceof ParametersResolutionError)) {
+      throw error;
+    }
+    setException(forked.block, PARAMETERS_EXCEPTION_FQN, error.message);
+    parameterError = error.message;
+  }
   setExecutionId(forked.block, executionId);
   setSequence(forked.block, sequence);
   setStatus(forked.block, "Running");
@@ -96,5 +113,6 @@ export function startExecution(
     runningFqn,
     runningFilePath: forked.source.filePath,
     pendingFilePath,
+    ...(parameterError !== undefined ? { parameterError } : {}),
   };
 }

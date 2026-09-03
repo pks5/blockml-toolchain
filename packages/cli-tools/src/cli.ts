@@ -87,6 +87,7 @@ export interface ParsedArgs {
   depth?: number;
   executionFqn?: string;
   parametersJson?: string;
+  parametersSource?: string;
   newFqn?: string;
   newBaseType?: string;
   newIs?: string;
@@ -169,6 +170,9 @@ export function parseArgs(argv: string[]): ParsedArgs {
     } else if (flag === "--parameters") {
       const value = args.shift();
       result.parametersJson = value ?? "";
+    } else if (flag === "--parameters-source") {
+      const value = args.shift();
+      result.parametersSource = value ?? "";
     } else if (flag === "--baseType") {
       const value = args.shift();
       if (value) {
@@ -982,6 +986,7 @@ async function executeCli(
         options.reflectAgent,
         options.onOutputLine,
         parsed.parametersJson,
+        parsed.parametersSource,
       );
       return { code, lines };
     }

@@ -1,4 +1,4 @@
-import type { TerminalLifecycleStage } from "./constants.js";
+import { type TerminalLifecycleStage } from "./constants.js";
 import type { StartedExecution } from "./start.js";
 export interface FinalizedExecution {
     terminalFqn: string;

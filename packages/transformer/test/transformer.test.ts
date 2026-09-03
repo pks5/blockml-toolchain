@@ -275,7 +275,7 @@ describe("Transformer lifecycle", () => {
     ).toBe(true);
   });
 
-  it("writes empty parameters for the default EmptyStruct binding", async () => {
+  it("does not write a parameters value when T is default Text and none is provided", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
@@ -293,11 +293,10 @@ describe("Transformer lifecycle", () => {
       join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
       "utf8",
     );
-    expect(succeeded).toContain("EmptyStruct");
-    expect(succeeded).toMatch(/<parameters[\s\S]*<value>\{\}<\/value>/);
+    expect(succeeded).not.toMatch(/<parameters[\s\S]*<value>/);
   });
 
-  it("rejects CLI parameters when T is EmptyStruct", async () => {
+  it("rejects a CLI object when T is Text", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
@@ -313,13 +312,60 @@ describe("Transformer lifecycle", () => {
       (error: unknown) => {
         expect(error).toBeInstanceOf(TransformError);
         expect((error as TransformError).kind).toBe("resolve");
-        expect((error as TransformError).message).toMatch(/Unknown parameter language/);
+        expect((error as TransformError).message).toMatch(/not compatible|must be a string/);
         return true;
       },
     );
     expect(
       existsSync(join(TMP, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml")),
     ).toBe(true);
+  });
+
+  it("replaces pending Text parameters with the CLI value", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        pendingParameters: "pending text",
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+      parameters: "from cli",
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.status).toBe("Succeeded");
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).toContain("from cli");
+    expect(succeeded).not.toContain("pending text");
+  });
+
+  it("clears an empty pending parameters object", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        parameterFields: ["topic"],
+        pendingParameters: "{}",
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.status).toBe("Succeeded");
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).not.toMatch(/<parameters[\s\S]*<value>\{\}<\/value>/);
   });
 
   it("deep-merges CLI parameters over pending defaults for a bound T", async () => {
@@ -688,7 +734,7 @@ describe("Transformer lifecycle", () => {
       "utf8",
     );
     expect(succeeded).toMatch(/<result[\s>][\s\S]*El roble/);
-    expect(succeeded).not.toContain("<resultException");
+    expect(succeeded).not.toMatch(/<exception[\s>]/);
   });
 
   it("fails with ResultException when resultSource block is missing", async () => {
@@ -712,9 +758,9 @@ describe("Transformer lifecycle", () => {
       join(TMP, `blocks/com/example/model/_meta/transform/failed/${generated}.bml`),
       "utf8",
     );
-    expect(failed).toContain("<resultException");
+    expect(failed).toMatch(/<exception[\s>]/);
     expect(failed).toContain("was not found");
-    expect(failed).not.toContain("<exception");
+    expect(failed).not.toContain("workflow:ExecutionException");
   });
 
   it("fails with ResultException when resultSource property is missing", async () => {
@@ -760,7 +806,7 @@ describe("Transformer lifecycle", () => {
     expect(result.error).toMatch(/does not match result type/);
   });
 
-  it("leaves resultException empty when a Stage fails", async () => {
+  it("leaves ModelTransformation exception empty when a Stage fails", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
@@ -781,6 +827,85 @@ describe("Transformer lifecycle", () => {
       "utf8",
     );
     expect(failed).toContain("<exception");
-    expect(failed).not.toContain("<resultException");
+    expect(failed).not.toContain("ParametersException");
+    expect(failed).not.toContain("ResultException");
+  });
+
+  it("copies parameters from parametersSource and ignores CLI parameters", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        parametersSource: "com.example.model.Poem.properties.title",
+      }),
+      "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
+        name: "Poem",
+        properties: [{ name: "title", type: "type:Text", value: "El roble" }],
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+      parameters: "ignored",
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(true);
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).toMatch(/<parameters[\s\S]*El roble/);
+    expect(succeeded).not.toContain("ignored");
+  });
+
+  it("fails with ParametersException when parametersSource block is missing", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        parametersSource: "com.example.model.Missing.properties.title",
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(false);
+    expect(result.status).toBe("Failed");
+    expect(result.error).toMatch(/parametersSource block .* was not found/);
+    const failed = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/failed/${generated}.bml`),
+      "utf8",
+    );
+    expect(failed).toMatch(/<exception[\s>]/);
+    expect(failed).toContain("ParametersException");
+    expect(failed).not.toContain("ExecutionException");
+    expect(
+      existsSync(join(TMP, `blocks/com/example/model/_meta/transform/running/${generated}.bml`)),
+    ).toBe(false);
+  });
+
+  it("fails with ParametersException when parametersSource property type differs from T", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        parametersSource: "com.example.model.Poem.properties.count",
+      }),
+      "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
+        name: "Poem",
+        properties: [{ name: "count", type: "type:Integer", value: "3" }],
+      }),
+    });
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(false);
+    expect(result.error).toMatch(/does not match parameters type/);
   });
 });

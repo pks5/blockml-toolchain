@@ -1,14 +1,15 @@
 import { ClaudeCodeAgent, formatTransformLifecycle, parseParametersJson, runTransformation, TransformError, } from "@blockml/transformer";
 import { pushLines, } from "./cli-style.js";
-export async function runTransform(executionFqn, rootDir, lines, usage, agent, reflectAgent, onOutputLine, parametersJson) {
+export async function runTransform(executionFqn, rootDir, lines, usage, agent, reflectAgent, onOutputLine, parametersJson, parametersSource) {
     const fqn = executionFqn?.trim() ?? "";
     if (!fqn) {
         emit(lines, onOutputLine, "Specify a ModelTransformation FQN.", "error");
         emit(lines, onOutputLine, usage, "info");
         return 2;
     }
+    const source = parametersSource?.trim() || undefined;
     let parameters;
-    if (parametersJson !== undefined) {
+    if (source === undefined && parametersJson !== undefined) {
         try {
             parameters = parseParametersJson(parametersJson);
         }
@@ -23,7 +24,8 @@ export async function runTransform(executionFqn, rootDir, lines, usage, agent, r
         executionFqn: fqn,
         agent,
         ...(reflectAgent ? { reflectAgent } : {}),
-        ...(parameters ? { parameters } : {}),
+        ...(parameters !== undefined ? { parameters } : {}),
+        ...(source !== undefined ? { parametersSource: source } : {}),
         onLifecycle: (event) => {
             const line = lifecycleOutput(event);
             if (line) {

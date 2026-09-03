@@ -13,7 +13,6 @@ import {
   DATETIME_TYPE_FQN,
   EXECUTION_EXCEPTION_FQN,
   EXECUTION_STATUS_FQN,
-  RESULT_EXCEPTION_FQN,
   FILE_PATH_ENTITY_FQN,
   FILE_PATH_TYPE_FQN,
   INTEGER_TYPE_FQN,
@@ -430,7 +429,11 @@ export function setChangedFiles(
   upsertAggregation(block, aggregation);
 }
 
-export function setException(block: BlockDefinition, message: string): void {
+export function setException(
+  block: BlockDefinition,
+  typeFqn: string,
+  message: string,
+): void {
   const aggregation: AggregationDefinition = {
     kind: "aggregation",
     name: "exception",
@@ -442,7 +445,7 @@ export function setException(block: BlockDefinition, message: string): void {
         {
           kind: "blockInstance",
           instance: {
-            typeFqn: EXECUTION_EXCEPTION_FQN,
+            typeFqn,
             memberValues: {
               message: {
                 kind: "literal",
@@ -467,33 +470,16 @@ export function setResult(
   setOverrideProperty(block, "result", typeFqn, value);
 }
 
-export function setResultException(block: BlockDefinition, message: string): void {
-  const aggregation: AggregationDefinition = {
-    kind: "aggregation",
-    name: "resultException",
-    override: true,
-    authoredInAggregationsSection: true,
-    composition: {
-      aggregationName: "resultException",
-      children: [
-        {
-          kind: "blockInstance",
-          instance: {
-            typeFqn: RESULT_EXCEPTION_FQN,
-            memberValues: {
-              message: {
-                kind: "literal",
-                value: message,
-                typeFqn: TEXT_TYPE_FQN,
-                authoredPlacement: "element",
-              },
-            },
-          },
-        },
-      ],
-    },
-  };
-  upsertAggregation(block, aggregation);
+export function clearProperty(block: BlockDefinition, name: string): void {
+  const member = block.members.find(
+    (entry): entry is PropertyDefinition =>
+      entry.kind === "property" && entry.name === name,
+  );
+  if (!member) {
+    return;
+  }
+  delete member.value;
+  delete member.values;
 }
 
 export function modelTransformationHasCompletedAt(registry: TypeRegistry): boolean {

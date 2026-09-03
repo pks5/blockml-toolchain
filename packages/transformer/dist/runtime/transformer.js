@@ -10,19 +10,24 @@ export class Transformer {
     now;
     onLifecycle;
     parameters;
+    parametersSource;
     constructor(options) {
         this.workspaceRoot = options.workspaceRoot;
         this.pipeline = resolvePipeline(options);
         this.now = options.now ?? (() => new Date());
         this.onLifecycle = options.onLifecycle;
-        this.parameters = options.parameters ?? {};
+        this.parameters = options.parameters;
+        this.parametersSource = options.parametersSource;
     }
     async run(executionFqn) {
         const lock = await acquireWorktreeLock(this.workspaceRoot, executionFqn);
         const context = {
             workspaceRoot: this.workspaceRoot,
             now: this.now,
-            parameters: this.parameters,
+            ...(this.parameters !== undefined ? { parameters: this.parameters } : {}),
+            ...(this.parametersSource !== undefined
+                ? { parametersSource: this.parametersSource }
+                : {}),
             ...(this.onLifecycle ? { onLifecycle: this.onLifecycle } : {}),
         };
         try {
@@ -39,6 +44,28 @@ export class Transformer {
             status: "Running",
             fqn: prepared.started.runningFqn,
         });
+        if (prepared.started.parameterError) {
+            const result = await this.pipeline.finalize.run({
+                ...prepared,
+                stageIndex: 0,
+                trace: { stdout: "", stderr: "", diff: "", changedFiles: [] },
+                changedFiles: [],
+                output: undefined,
+                outcome: "failed",
+                exceptionMessage: prepared.started.parameterError,
+            }, context);
+            emitLifecycle(this.onLifecycle, {
+                kind: "transformationStatus",
+                status: result.status,
+                fqn: result.terminalFqn,
+            });
+            emitLifecycle(this.onLifecycle, {
+                kind: "transformationComplete",
+                status: result.status,
+                terminalFqn: result.terminalFqn,
+            });
+            return result;
+        }
         let last;
         for (let stageIndex = 0; stageIndex < prepared.stageCount; stageIndex++) {
             const scoped = { ...prepared, stageIndex };
@@ -191,8 +218,11 @@ export async function runTransformation(options) {
     if (options.onLifecycle) {
         transformerOptions.onLifecycle = options.onLifecycle;
     }
-    if (options.parameters) {
+    if (options.parameters !== undefined) {
         transformerOptions.parameters = options.parameters;
+    }
+    if (options.parametersSource !== undefined) {
+        transformerOptions.parametersSource = options.parametersSource;
     }
     const transformer = new Transformer(transformerOptions);
     try {

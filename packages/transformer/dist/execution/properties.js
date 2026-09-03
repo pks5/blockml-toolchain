@@ -1,5 +1,5 @@
 import { collectBaseTypeChain } from "@blockml/framework";
-import { BOOLEAN_TYPE_FQN, DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, RESULT_EXCEPTION_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, MODEL_TRANSFORMATION_FQN, STAGE_FQN, TEXT_TYPE_FQN, UUID_TYPE_FQN, } from "./constants.js";
+import { BOOLEAN_TYPE_FQN, DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, MODEL_TRANSFORMATION_FQN, STAGE_FQN, TEXT_TYPE_FQN, UUID_TYPE_FQN, } from "./constants.js";
 export function isModelTransformation(block, registry) {
     if (block.type === MODEL_TRANSFORMATION_FQN || block.baseType === MODEL_TRANSFORMATION_FQN) {
         return true;
@@ -294,7 +294,7 @@ export function setChangedFiles(block, paths) {
     };
     upsertAggregation(block, aggregation);
 }
-export function setException(block, message) {
+export function setException(block, typeFqn, message) {
     const aggregation = {
         kind: "aggregation",
         name: "exception",
@@ -306,7 +306,7 @@ export function setException(block, message) {
                 {
                     kind: "blockInstance",
                     instance: {
-                        typeFqn: EXECUTION_EXCEPTION_FQN,
+                        typeFqn,
                         memberValues: {
                             message: {
                                 kind: "literal",
@@ -325,33 +325,13 @@ export function setException(block, message) {
 export function setResult(block, typeFqn, value) {
     setOverrideProperty(block, "result", typeFqn, value);
 }
-export function setResultException(block, message) {
-    const aggregation = {
-        kind: "aggregation",
-        name: "resultException",
-        override: true,
-        authoredInAggregationsSection: true,
-        composition: {
-            aggregationName: "resultException",
-            children: [
-                {
-                    kind: "blockInstance",
-                    instance: {
-                        typeFqn: RESULT_EXCEPTION_FQN,
-                        memberValues: {
-                            message: {
-                                kind: "literal",
-                                value: message,
-                                typeFqn: TEXT_TYPE_FQN,
-                                authoredPlacement: "element",
-                            },
-                        },
-                    },
-                },
-            ],
-        },
-    };
-    upsertAggregation(block, aggregation);
+export function clearProperty(block, name) {
+    const member = block.members.find((entry) => entry.kind === "property" && entry.name === name);
+    if (!member) {
+        return;
+    }
+    delete member.value;
+    delete member.values;
 }
 export function modelTransformationHasCompletedAt(registry) {
     const type = registry.get(MODEL_TRANSFORMATION_FQN)?.block;

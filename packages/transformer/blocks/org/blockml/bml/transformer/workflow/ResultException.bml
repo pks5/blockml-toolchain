@@ -23,17 +23,19 @@
     * the path points at an unknown Block or Property
     * or the Property type does not match the bound result generic `R`
 
-    Distinct from ExecutionException (a Stage fault). Inherits message from
-    core:Exception. Written only onto
-    `workflow:ModelTransformation.resultException`. A Stage failure leaves
-    that aggregation empty.
+    Distinct from ParametersException (Prepare parameter fault) and
+    ExecutionException (a Stage fault). Inherits message from
+    core:Exception. Written only onto `workflow:ModelTransformation.exception`.
+    A Stage failure leaves that aggregation empty.
   </documentation>
 
-  <isNot>Not ExecutionException (Stage execution fault) and not a
+  <isNot>Not ParametersException (Prepare parameter fault), not
+    ExecutionException (Stage execution fault), and not a
     validator diagnostic (org.blockml.bml.core.Diagnostic).</isNot>
 
   <references>
     <see type="core:Exception" relation="Extends" />
+    <see type="workflow:ParametersException" relation="ContrastsWith" />
     <see type="workflow:ExecutionException" relation="ContrastsWith" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
   </references>

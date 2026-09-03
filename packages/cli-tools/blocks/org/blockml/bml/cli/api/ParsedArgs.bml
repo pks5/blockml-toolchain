@@ -48,7 +48,8 @@
     <depth type="type:Integer"><documentation>--depth: uses/used-by/neighbors hops (default 1); ancestors/descendants/path max hops (default 16); inspect expansion (0 allowed). members ignores --depth. (optional)</documentation></depth>
     <inspectFqn type="type:Text"><documentation>Block FQN for inspect. (optional)</documentation></inspectFqn>
     <executionFqn type="type:Text"><documentation>FQN of a pending ModelTransformation for transform apply. (optional)</documentation></executionFqn>
-    <parametersJson type="type:Text"><documentation>Raw --parameters JSON object for transform apply. (optional)</documentation></parametersJson>
+    <parametersJson type="type:Text"><documentation>Raw --parameters JSON value for transform apply. (optional)</documentation></parametersJson>
+    <parametersSource type="type:Text"><documentation>Raw --parameters-source PropertyReference path for transform apply. (optional)</documentation></parametersSource>
     <newFqn type="type:Text"><documentation>FQN for blockml new. (optional)</documentation></newFqn>
     <newBaseType type="type:Text"><documentation>--baseType for blockml new. (optional)</documentation></newBaseType>
     <newIs type="type:Text"><documentation>--is for blockml new. (optional)</documentation></newIs>

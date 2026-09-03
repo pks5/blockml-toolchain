@@ -1,12 +1,13 @@
 import { forkBom } from "@blockml/framework";
 import { allocateUniqueExecutionId } from "./execution-id.js";
 import { formatDateTimeProperty, generateExecutionName } from "./lifecycle.js";
-import { applyExecutionParameters, rewriteParameterTypeFqns } from "./parameters.js";
-import { isTemplate, setBaseCommit, setExecutionId, setSequence, setStartedAt, setStatus, setTemplate, } from "./properties.js";
+import { applyExecutionParameters, ParametersResolutionError, rewriteParameterTypeFqns, } from "./parameters.js";
+import { PARAMETERS_EXCEPTION_FQN } from "./constants.js";
+import { isTemplate, setBaseCommit, setException, setExecutionId, setSequence, setStartedAt, setStatus, setTemplate, } from "./properties.js";
 import { applyExecutionIdentity, persistDocument, removeFile, rewriteInboundReferences, } from "./relocate.js";
 import { SequenceAllocator } from "./sequence.js";
 import { assertWorktreeClean, commitWorktree } from "../pipeline/git.js";
-export function startExecution(resolved, now, workspaceRoot, allocator = new SequenceAllocator(), cliParameters = {}) {
+export function startExecution(resolved, now, workspaceRoot, allocator = new SequenceAllocator(), parameterOptions = {}) {
     const baseCommit = assertWorktreeClean(workspaceRoot);
     const sequence = allocator.nextSequence(resolved.libraryFqn, resolved.registry);
     const generatedName = generateExecutionName(sequence, resolved.originalName, now);
@@ -18,7 +19,17 @@ export function startExecution(resolved, now, workspaceRoot, allocator = new Seq
     if (keepPending) {
         setTemplate(forked.block, false);
     }
-    applyExecutionParameters(forked.block, resolved.registry, cliParameters);
+    let parameterError;
+    try {
+        applyExecutionParameters(forked.block, resolved.registry, parameterOptions);
+    }
+    catch (error) {
+        if (!(error instanceof ParametersResolutionError)) {
+            throw error;
+        }
+        setException(forked.block, PARAMETERS_EXCEPTION_FQN, error.message);
+        parameterError = error.message;
+    }
     setExecutionId(forked.block, executionId);
     setSequence(forked.block, sequence);
     setStatus(forked.block, "Running");
@@ -52,6 +63,7 @@ export function startExecution(resolved, now, workspaceRoot, allocator = new Seq
         runningFqn,
         runningFilePath: forked.source.filePath,
         pendingFilePath,
+        ...(parameterError !== undefined ? { parameterError } : {}),
     };
 }
 //# sourceMappingURL=start.js.map

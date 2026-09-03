@@ -112,11 +112,12 @@ describe("resolvePendingExecution", () => {
     );
   });
 
-  it("allows resultSource on a pending execution", () => {
+  it("allows resultSource and parametersSource on a pending execution", () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
         resultSource: "com.example.model.Poem.properties.title",
+        parametersSource: "com.example.model.Poem.properties.title",
       }),
     });
     const resolved = resolvePendingExecution(pendingFqn("JokeTest"), TMP);
@@ -136,6 +137,26 @@ describe("resolvePendingExecution", () => {
     });
     expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
       /must not have result/,
+    );
+  });
+
+  it("rejects a pending execution that already has exception", () => {
+    const xml = pendingExecutionXml({ name: "JokeTest" }).replace(
+      "</aggregations>",
+      `    <exception override="true">
+      <composition>
+        <workflow:ResultException>
+          <message>too early</message>
+        </workflow:ResultException>
+      </composition>
+    </exception>
+  </aggregations>`,
+    );
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": xml,
+    });
+    expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
+      /must not have exception/,
     );
   });
 });

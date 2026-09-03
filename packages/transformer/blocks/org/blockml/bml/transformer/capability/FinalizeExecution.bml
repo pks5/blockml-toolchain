@@ -28,9 +28,10 @@
     When every Stage succeeded and `resultSource` is set, read that Property
     from the current model and write it onto `result`. Unset `resultSource`
     skips this. Unknown Block or Property, or a type that is not bound `R`,
-    throws `workflow:ResultException`, fills `resultException`, and fails
+    throws `workflow:ResultException`, fills `exception`, and fails
     the transformation. A Stage failure skips result and leaves
-    `resultException` empty.
+    `exception` empty. Prepare may already have written
+    `workflow:ParametersException` onto `exception`.
 
     Default implementation is deterministic. Runs after every started execution,
     including a failed Stage. Does not write output, changedFiles,

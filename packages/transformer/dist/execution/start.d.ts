@@ -1,3 +1,4 @@
+import { type ParameterApplyOptions } from "./parameters.js";
 import type { ResolvedExecution } from "./resolve.js";
 import { SequenceAllocator } from "./sequence.js";
 export interface StartedExecution {
@@ -12,6 +13,7 @@ export interface StartedExecution {
     runningFqn: string;
     runningFilePath: string;
     pendingFilePath: string;
+    parameterError?: string;
 }
-export declare function startExecution(resolved: ResolvedExecution, now: Date, workspaceRoot: string, allocator?: SequenceAllocator, cliParameters?: Record<string, unknown>): StartedExecution;
+export declare function startExecution(resolved: ResolvedExecution, now: Date, workspaceRoot: string, allocator?: SequenceAllocator, parameterOptions?: ParameterApplyOptions): StartedExecution;
 //# sourceMappingURL=start.d.ts.map

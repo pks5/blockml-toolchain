@@ -13,7 +13,14 @@ export function createPrepareStage(): TransformStage<string, PreparedExecution> 
         context.now(),
         context.workspaceRoot,
         new SequenceAllocator(),
-        context.parameters ?? {},
+        {
+          ...(context.parameters !== undefined
+            ? { parameters: context.parameters }
+            : {}),
+          ...(context.parametersSource !== undefined
+            ? { parametersSource: context.parametersSource }
+            : {}),
+        },
       );
       const stageCount = getStageInstances(resolved.document.block).length;
       return { pendingFqn, started, stageCount };

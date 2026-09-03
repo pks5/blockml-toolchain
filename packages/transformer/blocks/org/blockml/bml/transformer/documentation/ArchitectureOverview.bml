@@ -46,8 +46,12 @@
         (including SubBlocks / bound T), set template=false on the copy,
         rewrite local type FQNs onto the copy, and relocate that copy
         instead.
-        Merge CLI --parameters JSON over pending parameters, check bound T
-        (default type:EmptyStruct), and write the result onto the running copy.
+        Resolve parameters: parametersSource (CLI --parameters-source
+        over pending) copies that Property onto parameters and ignores
+        --parameters. Otherwise StructType merges CLI JSON over pending;
+        other types replace. Write a value only when one exists.
+        Bound T defaults to type:Text. parametersSource faults write
+        ParametersException onto exception; Stages are skipped.
         If the contract is violated or the worktree is dirty, do not start.
 
     Then for each workflow Stage, in order:
@@ -87,9 +91,9 @@
         optional result from resultSource, relocate running to
         succeeded. Otherwise status=Failed, completedAt, relocate
         running to failed. Stage exception lives on the failed Stage.
-        ResultException lives on ModelTransformation.resultException
-        and only when result resolution fails. Commits after the
-        terminal relocation.
+        ParametersException and ResultException live on
+        ModelTransformation.exception. A Stage failure leaves that
+        aggregation empty. Commits after the terminal relocation.
 
     TypeScript:
     • runtime/transformer.ts → transformercap:RunTransformation
@@ -105,8 +109,9 @@
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:Stage" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
-    <see type="type:EmptyStruct" relation="SeeAlso" />
     <see type="type:UUID" relation="SeeAlso" />
+    <see type="workflow:ParametersException" relation="SeeAlso" />
+    <see type="workflow:ResultException" relation="SeeAlso" />
   </references>
 
 </block>

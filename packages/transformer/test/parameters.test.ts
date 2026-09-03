@@ -7,20 +7,24 @@ import {
 } from "../src/execution/parameters.js";
 
 describe("parseParametersJson", () => {
-  it("treats a missing flag as an empty object", () => {
-    expect(parseParametersJson(undefined)).toEqual({});
+  it("treats a missing flag as undefined", () => {
+    expect(parseParametersJson(undefined)).toBeUndefined();
   });
 
   it("parses a JSON object", () => {
     expect(parseParametersJson('{"language":"de"}')).toEqual({ language: "de" });
   });
 
-  it("rejects invalid JSON", () => {
-    expect(() => parseParametersJson("{")).toThrow(TransformError);
+  it("parses a JSON string", () => {
+    expect(parseParametersJson('"hello"')).toBe("hello");
   });
 
-  it("rejects a JSON array", () => {
-    expect(() => parseParametersJson("[1]")).toThrow(/JSON object/);
+  it("parses a JSON array", () => {
+    expect(parseParametersJson("[1]")).toEqual([1]);
+  });
+
+  it("rejects invalid JSON", () => {
+    expect(() => parseParametersJson("{")).toThrow(TransformError);
   });
 });
 

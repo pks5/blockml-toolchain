@@ -26,7 +26,7 @@
     org.blockml.bml.transformer.capability.*.
 
     The TypeScript engine executes ModelTransformation instances via
-    `blockml transform apply EXECUTION-FQN [--parameters JSON]`. Transformer.run prepares the
+    `blockml transform apply EXECUTION-FQN [--parameters JSON] [--parameters-source PATH]`. Transformer.run prepares the
     execution, then runs each `workflow:Stage` in order: persist Stage
     Running, Execute its Task in an isolated agent process, Reflect,
     Persist results onto that Stage, commit. Default Prepare and Finalize
@@ -41,8 +41,10 @@
     every Stage succeeded and result resolution did not throw, otherwise
     `_meta.transform.failed`. When `resultSource` is set, Finalize copies
     that Property onto `result`; a ResultException fills
-    `resultException` and fails the transformation. A Stage failure
-    leaves `resultException` empty and aborts remaining Stages. Prepare requires
+    `exception` and fails the transformation. Prepare
+    `parametersSource` faults fill `exception` with ParametersException
+    and skip Stages. A Stage failure
+    leaves `exception` empty and aborts remaining Stages. Prepare requires
     a clean Git worktree, records `baseCommit`, and commits the running
     relocation. Each Stage commits Running first (recovery boundary), then
     commits model changes together with the Stage terminal state. Finalize
@@ -61,12 +63,12 @@
     <see type="workflow:PrerequisiteNotMetException" relation="SeeAlso" />
     <see type="workflow:Criterion" relation="SeeAlso" />
     <see type="workflow:ExecutionException" relation="SeeAlso" />
+    <see type="workflow:ParametersException" relation="SeeAlso" />
     <see type="workflow:ResultException" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
     <see type="workflow:Rule" relation="SeeAlso" />
     <see type="workflow:InstructionRule" relation="SeeAlso" />
     <see type="workflow:InstructionTask" relation="SeeAlso" />
-    <see type="type:EmptyStruct" relation="SeeAlso" />
   </references>
 
 </block>

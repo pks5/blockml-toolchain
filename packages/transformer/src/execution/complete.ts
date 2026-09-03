@@ -1,10 +1,10 @@
 import { forkBom } from "@blockml/framework";
-import type { TerminalLifecycleStage } from "./constants.js";
+import { RESULT_EXCEPTION_FQN, type TerminalLifecycleStage } from "./constants.js";
 import { formatDateTimeProperty } from "./lifecycle.js";
 import { loadRunningExecution } from "./load-running.js";
 import {
   setCompletedAt,
-  setResultException,
+  setException,
   setStatus,
   modelTransformationHasCompletedAt,
   allStagesSucceeded,
@@ -51,7 +51,7 @@ export function finalizeExecution(
       if (!(error instanceof ResultResolutionError)) {
         throw error;
       }
-      setResultException(forked.block, error.message);
+      setException(forked.block, RESULT_EXCEPTION_FQN, error.message);
       resultError = error.message;
     }
   }

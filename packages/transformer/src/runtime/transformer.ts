@@ -29,7 +29,8 @@ export interface TransformerOptions {
   pipeline?: Partial<TransformPipeline>;
   now?: () => Date;
   onLifecycle?: TransformLifecycleListener;
-  parameters?: Record<string, unknown>;
+  parameters?: unknown;
+  parametersSource?: string;
 }
 
 export class Transformer {
@@ -37,14 +38,16 @@ export class Transformer {
   private readonly pipeline: TransformPipeline;
   private readonly now: () => Date;
   private readonly onLifecycle: TransformLifecycleListener | undefined;
-  private readonly parameters: Record<string, unknown>;
+  private readonly parameters: unknown | undefined;
+  private readonly parametersSource: string | undefined;
 
   constructor(options: TransformerOptions) {
     this.workspaceRoot = options.workspaceRoot;
     this.pipeline = resolvePipeline(options);
     this.now = options.now ?? (() => new Date());
     this.onLifecycle = options.onLifecycle;
-    this.parameters = options.parameters ?? {};
+    this.parameters = options.parameters;
+    this.parametersSource = options.parametersSource;
   }
 
   async run(executionFqn: string): Promise<TransformRunResult> {
@@ -52,7 +55,10 @@ export class Transformer {
     const context: StageContext = {
       workspaceRoot: this.workspaceRoot,
       now: this.now,
-      parameters: this.parameters,
+      ...(this.parameters !== undefined ? { parameters: this.parameters } : {}),
+      ...(this.parametersSource !== undefined
+        ? { parametersSource: this.parametersSource }
+        : {}),
       ...(this.onLifecycle ? { onLifecycle: this.onLifecycle } : {}),
     };
     try {
@@ -72,6 +78,32 @@ export class Transformer {
       status: "Running",
       fqn: prepared.started.runningFqn,
     });
+
+    if (prepared.started.parameterError) {
+      const result = await this.pipeline.finalize.run(
+        {
+          ...prepared,
+          stageIndex: 0,
+          trace: { stdout: "", stderr: "", diff: "", changedFiles: [] },
+          changedFiles: [],
+          output: undefined,
+          outcome: "failed",
+          exceptionMessage: prepared.started.parameterError,
+        },
+        context,
+      );
+      emitLifecycle(this.onLifecycle, {
+        kind: "transformationStatus",
+        status: result.status,
+        fqn: result.terminalFqn,
+      });
+      emitLifecycle(this.onLifecycle, {
+        kind: "transformationComplete",
+        status: result.status,
+        terminalFqn: result.terminalFqn,
+      });
+      return result;
+    }
 
     let last: PersistedExecution | undefined;
     for (let stageIndex = 0; stageIndex < prepared.stageCount; stageIndex++) {
@@ -237,7 +269,8 @@ export interface RunTransformationOptions {
   pipeline?: Partial<TransformPipeline>;
   now?: () => Date;
   onLifecycle?: TransformLifecycleListener;
-  parameters?: Record<string, unknown>;
+  parameters?: unknown;
+  parametersSource?: string;
 }
 
 export type RunTransformationResult =
@@ -271,8 +304,11 @@ export async function runTransformation(
   if (options.onLifecycle) {
     transformerOptions.onLifecycle = options.onLifecycle;
   }
-  if (options.parameters) {
+  if (options.parameters !== undefined) {
     transformerOptions.parameters = options.parameters;
+  }
+  if (options.parametersSource !== undefined) {
+    transformerOptions.parametersSource = options.parametersSource;
   }
   const transformer = new Transformer(transformerOptions);
   try {

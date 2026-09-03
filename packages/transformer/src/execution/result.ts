@@ -1,10 +1,17 @@
-import type { BlockDefinition, PropertyDefinition, TypeExpression } from "@blockml/bom";
-import { resolveEffectiveMembers, type TypeRegistry } from "@blockml/framework";
+import type { BlockDefinition, TypeExpression } from "@blockml/bom";
+import type { TypeRegistry } from "@blockml/framework";
 import {
   MODEL_TRANSFORMATION_FQN,
   TEXT_TYPE_FQN,
 } from "./constants.js";
 import { getPropertyLiteral, setResult } from "./properties.js";
+import {
+  lookupReferencedProperty,
+  propertyLiteral,
+  propertyTypeFqn,
+} from "./property-reference.js";
+
+export { parsePropertyReference } from "./property-reference.js";
 
 export class ResultResolutionError extends Error {
   constructor(message: string) {
@@ -12,8 +19,6 @@ export class ResultResolutionError extends Error {
     this.name = "ResultResolutionError";
   }
 }
-
-const PROPERTIES_SEGMENT = ".properties.";
 
 export function resolveResultTypeFqn(block: BlockDefinition): string {
   const fromExpression = resultArgumentFqn(block.baseTypeExpression);
@@ -29,39 +34,6 @@ function resultArgumentFqn(expr: TypeExpression | undefined): string | undefined
   }
   const arg = expr.typeArguments?.[1];
   return arg?.kind === "named" ? arg.fqn : undefined;
-}
-
-export function parsePropertyReference(
-  raw: string,
-): { blockFqn: string; propertyName: string } | undefined {
-  const index = raw.lastIndexOf(PROPERTIES_SEGMENT);
-  if (index <= 0) {
-    return undefined;
-  }
-  const blockFqn = raw.slice(0, index);
-  const propertyName = raw.slice(index + PROPERTIES_SEGMENT.length);
-  if (!blockFqn || !propertyName || propertyName.includes(".")) {
-    return undefined;
-  }
-  return { blockFqn, propertyName };
-}
-
-function propertyTypeFqn(property: PropertyDefinition): string | undefined {
-  if (property.typeFqn) {
-    return property.typeFqn;
-  }
-  if (property.type?.kind === "named") {
-    return property.type.fqn;
-  }
-  return undefined;
-}
-
-function propertyLiteral(property: PropertyDefinition): unknown | undefined {
-  const value = property.value ?? property.values?.[0]?.value;
-  if (value?.kind === "literal") {
-    return value.value;
-  }
-  return undefined;
 }
 
 /**
@@ -82,42 +54,23 @@ export function applyTransformationResult(
     );
   }
 
-  const parsed = parsePropertyReference(raw);
-  if (!parsed) {
-    throw new ResultResolutionError(
-      `resultSource "${raw}" is not a valid PropertyReference (expected BlockFqn.properties.name)`,
-    );
-  }
-
-  const target = registry.get(parsed.blockFqn);
-  if (!target) {
-    throw new ResultResolutionError(
-      `resultSource block ${parsed.blockFqn} was not found`,
-    );
-  }
-
-  const property = resolveEffectiveMembers(target.block, registry).find(
-    (member): member is PropertyDefinition =>
-      member.kind === "property" && member.name === parsed.propertyName,
-  );
-  if (!property) {
-    throw new ResultResolutionError(
-      `resultSource property ${parsed.propertyName} was not found on ${parsed.blockFqn}`,
-    );
+  const lookedUp = lookupReferencedProperty(raw, registry, "resultSource");
+  if ("error" in lookedUp) {
+    throw new ResultResolutionError(lookedUp.error);
   }
 
   const resultTypeFqn = resolveResultTypeFqn(transformation);
-  const sourceTypeFqn = propertyTypeFqn(property);
+  const sourceTypeFqn = propertyTypeFqn(lookedUp.property);
   if (sourceTypeFqn !== resultTypeFqn) {
     throw new ResultResolutionError(
       `resultSource property type ${sourceTypeFqn ?? "(unknown)"} does not match result type ${resultTypeFqn}`,
     );
   }
 
-  const value = propertyLiteral(property);
+  const value = propertyLiteral(lookedUp.property);
   if (value === undefined) {
     throw new ResultResolutionError(
-      `resultSource property ${parsed.blockFqn}.properties.${parsed.propertyName} has no value`,
+      `resultSource property ${lookedUp.blockFqn}.properties.${lookedUp.propertyName} has no value`,
     );
   }
 

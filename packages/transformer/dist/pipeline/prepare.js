@@ -6,7 +6,14 @@ export function createPrepareStage() {
     return {
         async run(pendingFqn, context) {
             const resolved = resolvePendingExecution(pendingFqn, context.workspaceRoot);
-            const started = startExecution(resolved, context.now(), context.workspaceRoot, new SequenceAllocator(), context.parameters ?? {});
+            const started = startExecution(resolved, context.now(), context.workspaceRoot, new SequenceAllocator(), {
+                ...(context.parameters !== undefined
+                    ? { parameters: context.parameters }
+                    : {}),
+                ...(context.parametersSource !== undefined
+                    ? { parametersSource: context.parametersSource }
+                    : {}),
+            });
             const stageCount = getStageInstances(resolved.document.block).length;
             return { pendingFqn, started, stageCount };
         },

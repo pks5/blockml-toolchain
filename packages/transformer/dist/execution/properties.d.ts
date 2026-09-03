@@ -36,8 +36,8 @@ export declare function setBaseCommit(block: BlockDefinition, commit: string): v
 export declare function setCompletedAt(block: BlockDefinition, iso: string): void;
 export declare function setFeedback(block: BlockDefinition, feedback: string): void;
 export declare function setChangedFiles(block: BlockDefinition, paths: readonly string[]): void;
-export declare function setException(block: BlockDefinition, message: string): void;
+export declare function setException(block: BlockDefinition, typeFqn: string, message: string): void;
 export declare function setResult(block: BlockDefinition, typeFqn: string, value: unknown): void;
-export declare function setResultException(block: BlockDefinition, message: string): void;
+export declare function clearProperty(block: BlockDefinition, name: string): void;
 export declare function modelTransformationHasCompletedAt(registry: TypeRegistry): boolean;
 //# sourceMappingURL=properties.d.ts.map

@@ -27,24 +27,30 @@
       and rewritten onto the copy, so later template edits cannot change
       recorded executions. Default false: the pending Block is relocated
       and removed.
-    * `parameters` — run values of generic `T` (`type:StructType`, default
-      `type:EmptyStruct`). Bind `T` with
+    * `parameters` — run value of generic `T` (`core:ValueType`, default
+      `type:Text`). Bind a Struct with
       `baseType=workflow:ModelTransformation(Parameters)` and a same-Block
-      SubBlock `Parameters`. Prepare deep-merges CLI `--parameters` JSON
-      over pending defaults, checks the bound `T`, and writes the result
-      onto the running copy. Execute does not interpret this property.
+      SubBlock `Parameters`. Prepare writes a value only when one exists
+      (not `""`, not `{}`). `StructType`: deep-merge CLI `--parameters`
+      over pending. Other types: CLI replaces pending. Execute does not
+      interpret this property.
+    * `parametersSource` — optional `type:PropertyReference` whose current
+      value Prepare copies onto `parameters`. Canonical path
+      `BlockFqn.properties.name`. CLI `--parameters-source` wins over
+      pending. Any effective source ignores `--parameters`. Type of the
+      source Property must equal bound `T`.
     * `resultSource` — optional `type:PropertyReference` to the Property
       whose current value Finalize copies onto `result`. Canonical path
       `BlockFqn.properties.name`. Absent or empty: Finalize skips result.
     * `result` — value of generic `R` (`core:ValueType`, default
       `type:Text`). Bind `R` as the second type argument, e.g.
-      `workflow:ModelTransformation(Parameters, type:Integer)`. `T` is
-      already parameters, so the result generic is `R`. Written only at
-      Finalize after every Stage succeeded. Type of the source Property
-      must equal bound `R`.
-    * `resultException` — `workflow:ResultException` when Finalize cannot
-      resolve `resultSource` (unknown Block or Property, or type mismatch).
-      Empty when a Stage fails; Stage faults stay on that Stage.
+      `workflow:ModelTransformation(Parameters, type:Integer)`. Written
+      only at Finalize after every Stage succeeded. Type of the source
+      Property must equal bound `R`.
+    * `exception` — `core:Exception` when Prepare cannot resolve
+      `parametersSource` (`workflow:ParametersException`) or Finalize
+      cannot resolve `resultSource` (`workflow:ResultException`). Empty
+      when a Stage fails; Stage faults stay on that Stage.
     * `status` — lifecycle state (`workflow:ExecutionStatus`). Matches the
       `_meta.transform` package: Pending, Running, Succeeded, Failed.
       `Succeeded` only when every Stage succeeded and result resolution
@@ -55,22 +61,22 @@
     * `startedAt` / `completedAt` — the execution interval.
     * `baseCommit` — Git HEAD commit when this execution started. Set only
       after Prepare confirms a clean worktree and sets `status=Running`.
-    * `stages` — the Stages of this execution, in order. `output`,
-      `changedFiles`, and `exception` live on each Stage, not on this Block.
+    * `stages` — the Stages of this execution, in order. Stage `output`,
+      `changedFiles`, and Stage `exception` live on each Stage.
   </documentation>
 
   <references>
     <see type="workflow:Stage" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
-    <see type="type:EmptyStruct" relation="SeeAlso" />
     <see type="type:PropertyReference" relation="SeeAlso" />
     <see type="type:UUID" relation="SeeAlso" />
+    <see type="workflow:ParametersException" relation="SeeAlso" />
     <see type="workflow:ResultException" relation="SeeAlso" />
   </references>
 
   <genericTypes>
-    <T baseType="type:StructType" defaultType="type:EmptyStruct" />
+    <T baseType="core:ValueType" defaultType="type:Text" />
     <R baseType="core:ValueType" defaultType="type:Text" />
   </genericTypes>
 
@@ -89,12 +95,18 @@
     </template>
     <parameters type="T">
       <documentation>
-        Run parameters of bound T. Default type:EmptyStruct (empty object).
-        Prepare merges CLI JSON over pending values and writes the result
-        when setting Running. Tasks do not read this; map it later with
-        expressions.
+        Run value of bound T. Default type:Text. Written only when a
+        value exists. StructType: merge CLI over pending. Other types:
+        CLI replaces pending. Tasks do not read this.
       </documentation>
     </parameters>
+    <parametersSource type="type:PropertyReference">
+      <documentation>
+        Optional path to the Property Prepare copies onto parameters.
+        Canonical form BlockFqn.properties.name. Any effective source
+        ignores --parameters.
+      </documentation>
+    </parametersSource>
     <resultSource type="type:PropertyReference">
       <documentation>
         Optional path to the Property Finalize copies onto result.
@@ -135,12 +147,12 @@
     <stages type="workflow:Stage[]">
       <documentation>The stages that ran in this execution.</documentation>
     </stages>
-    <resultException type="workflow:ResultException">
+    <exception type="core:Exception">
       <documentation>
-        Set only when Finalize throws ResultException. Empty when a Stage
-        fails or resultSource is unset.
+        ParametersException from Prepare or ResultException from Finalize.
+        Empty when a Stage fails.
       </documentation>
-    </resultException>
+    </exception>
   </aggregations>
 
 </block>

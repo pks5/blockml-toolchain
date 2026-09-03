@@ -23,6 +23,7 @@ export async function runTransform(
   reflectAgent?: ReflectionAgent,
   onOutputLine?: (line: CliOutputLine) => void,
   parametersJson?: string,
+  parametersSource?: string,
 ): Promise<number> {
   const fqn = executionFqn?.trim() ?? "";
   if (!fqn) {
@@ -31,8 +32,9 @@ export async function runTransform(
     return 2;
   }
 
-  let parameters: Record<string, unknown> | undefined;
-  if (parametersJson !== undefined) {
+  const source = parametersSource?.trim() || undefined;
+  let parameters: unknown | undefined;
+  if (source === undefined && parametersJson !== undefined) {
     try {
       parameters = parseParametersJson(parametersJson);
     } catch (error) {
@@ -48,7 +50,8 @@ export async function runTransform(
     executionFqn: fqn,
     agent,
     ...(reflectAgent ? { reflectAgent } : {}),
-    ...(parameters ? { parameters } : {}),
+    ...(parameters !== undefined ? { parameters } : {}),
+    ...(source !== undefined ? { parametersSource: source } : {}),
     onLifecycle: (event) => {
       const line = lifecycleOutput(event);
       if (line) {

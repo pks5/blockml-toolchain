@@ -3,6 +3,7 @@ export declare const STAGE_FQN = "org.blockml.bml.transformer.workflow.Stage";
 export declare const EXECUTION_STATUS_FQN = "org.blockml.bml.transformer.workflow.ExecutionStatus";
 export declare const EXECUTION_EXCEPTION_FQN = "org.blockml.bml.transformer.workflow.ExecutionException";
 export declare const RESULT_EXCEPTION_FQN = "org.blockml.bml.transformer.workflow.ResultException";
+export declare const PARAMETERS_EXCEPTION_FQN = "org.blockml.bml.transformer.workflow.ParametersException";
 export declare const PROPERTY_REFERENCE_FQN = "org.blockml.bml.type.PropertyReference";
 export declare const INTEGER_TYPE_FQN = "org.blockml.bml.type.Integer";
 export declare const DATETIME_TYPE_FQN = "org.blockml.bml.type.DateTime";

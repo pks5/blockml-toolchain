@@ -32,10 +32,14 @@
        true, leave the pending Block in place, copy it (including
        SubBlocks / bound `T`), set `template=false` on the copy, rewrite
        local type FQNs onto the copy, and relocate that copy instead.
-    5. Deep-merge CLI `--parameters` JSON over pending `parameters`, check
-       the bound generic `T`, and write the result onto the running copy.
-       Omitted CLI parameters are `{}`. Bound `T` defaults to
-       `type:EmptyStruct`.
+    5. Resolve `parameters`. CLI `--parameters-source` or pending
+       `parametersSource` wins and ignores `--parameters`: copy that
+       Property onto `parameters` (type must equal bound `T`). Otherwise
+       `StructType` deep-merges CLI JSON over pending; other types replace.
+       Write a value only when one exists (not `""`, not `{}`). Bound `T`
+       defaults to `type:Text`. Unknown source Block/Property or type
+       mismatch: write `workflow:ParametersException` onto `exception`,
+       persist Running, skip Stages.
     6. Commit the running relocation.
 
     Default implementation is deterministic. TS: pipeline/prepare.ts.

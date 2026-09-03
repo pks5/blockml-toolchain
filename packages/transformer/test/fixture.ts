@@ -79,6 +79,7 @@ export function pendingExecutionXml(opts: {
   pendingParameters?: string;
   captureOutput?: boolean;
   resultSource?: string;
+  parametersSource?: string;
 }): string {
   const refs = opts.extraRefs
     ? `  <references>\n${opts.extraRefs}\n  </references>\n`
@@ -110,6 +111,13 @@ export function pendingExecutionXml(opts: {
         `    <resultSource override="true" type="org.blockml.bml.type.PropertyReference">`,
         `      <value>${opts.resultSource}</value>`,
         `    </resultSource>`,
+      ].join("\n")
+    : "";
+  const parametersSourceXml = opts.parametersSource
+    ? [
+        `    <parametersSource override="true" type="org.blockml.bml.type.PropertyReference">`,
+        `      <value>${opts.parametersSource}</value>`,
+        `    </parametersSource>`,
       ].join("\n")
     : "";
   const parameterFields = opts.parameterFields ?? [];
@@ -167,6 +175,7 @@ export function pendingExecutionXml(opts: {
     executionIdXml,
     templateXml,
     pendingParametersXml,
+    parametersSourceXml,
     resultSourceXml,
     `    <status override="true" type="org.blockml.bml.transformer.workflow.ExecutionStatus">`,
     `      <value>Pending</value>`,

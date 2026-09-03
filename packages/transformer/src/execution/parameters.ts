@@ -15,8 +15,26 @@ import {
   BOOLEAN_TYPE_FQN,
   INTEGER_TYPE_FQN,
   MODEL_TRANSFORMATION_FQN,
+  PROPERTY_REFERENCE_FQN,
+  TEXT_TYPE_FQN,
 } from "./constants.js";
-import { getPropertyLiteral, setOverrideProperty } from "./properties.js";
+import {
+  clearProperty,
+  getPropertyLiteral,
+  setOverrideProperty,
+} from "./properties.js";
+import {
+  lookupReferencedProperty,
+  propertyLiteral,
+  propertyTypeFqn as referencedPropertyTypeFqn,
+} from "./property-reference.js";
+
+export class ParametersResolutionError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "ParametersResolutionError";
+  }
+}
 
 export const EMPTY_STRUCT_FQN = "org.blockml.bml.type.EmptyStruct";
 export const STRUCT_TYPE_FQN = "org.blockml.bml.type.StructType";
@@ -27,20 +45,15 @@ export function isPlainObject(value: unknown): value is Record<string, unknown> 
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-export function parseParametersJson(raw: string | undefined): Record<string, unknown> {
+export function parseParametersJson(raw: string | undefined): unknown {
   if (raw === undefined) {
-    return {};
+    return undefined;
   }
-  let parsed: unknown;
   try {
-    parsed = JSON.parse(raw);
+    return JSON.parse(raw);
   } catch {
     throw new TransformError("resolve", "Invalid --parameters JSON");
   }
-  if (!isPlainObject(parsed)) {
-    throw new TransformError("resolve", "--parameters must be a JSON object");
-  }
-  return parsed;
 }
 
 export function deepMergeParameters(
@@ -59,18 +72,8 @@ export function deepMergeParameters(
   return result;
 }
 
-export function pendingParametersObject(block: BlockDefinition): Record<string, unknown> {
-  const value = getPropertyLiteral(block, "parameters");
-  if (value === undefined) {
-    return {};
-  }
-  if (!isPlainObject(value)) {
-    throw new TransformError(
-      "resolve",
-      "pending parameters must be a JSON object",
-    );
-  }
-  return value;
+export function pendingParametersValue(block: BlockDefinition): unknown {
+  return getPropertyLiteral(block, "parameters");
 }
 
 export function resolveParametersTypeFqn(block: BlockDefinition): string {
@@ -78,7 +81,17 @@ export function resolveParametersTypeFqn(block: BlockDefinition): string {
   if (fromExpression) {
     return fromExpression;
   }
-  return EMPTY_STRUCT_FQN;
+  return TEXT_TYPE_FQN;
+}
+
+export function isEmptyParameterValue(value: unknown): boolean {
+  if (value === undefined) {
+    return true;
+  }
+  if (value === "") {
+    return true;
+  }
+  return isPlainObject(value) && Object.keys(value).length === 0;
 }
 
 function namedArgumentFqn(expr: TypeExpression | undefined): string | undefined {
@@ -210,19 +223,91 @@ function extendsType(
   );
 }
 
+export interface ParameterApplyOptions {
+  parameters?: unknown;
+  parametersSource?: string;
+}
+
+function effectiveParametersSource(
+  block: BlockDefinition,
+  cliSource: string | undefined,
+): string | undefined {
+  const trimmed = cliSource?.trim();
+  if (trimmed) {
+    return trimmed;
+  }
+  const pending = getPropertyLiteral(block, "parametersSource");
+  if (typeof pending === "string" && pending.trim() !== "") {
+    return pending.trim();
+  }
+  return undefined;
+}
+
+function readParametersSource(
+  raw: string,
+  typeFqn: string,
+  registry: TypeRegistry,
+): unknown {
+  const lookedUp = lookupReferencedProperty(raw, registry, "parametersSource");
+  if ("error" in lookedUp) {
+    throw new ParametersResolutionError(lookedUp.error);
+  }
+  const sourceTypeFqn = referencedPropertyTypeFqn(lookedUp.property);
+  if (sourceTypeFqn !== typeFqn) {
+    throw new ParametersResolutionError(
+      `parametersSource property type ${sourceTypeFqn ?? "(unknown)"} does not match parameters type ${typeFqn}`,
+    );
+  }
+  return propertyLiteral(lookedUp.property);
+}
+
+function isStructParametersType(typeFqn: string, registry: TypeRegistry): boolean {
+  return extendsType(typeFqn, STRUCT_TYPE_FQN, registry) || typeFqn === EMPTY_STRUCT_FQN;
+}
+
 export function applyExecutionParameters(
   block: BlockDefinition,
   registry: TypeRegistry,
-  cliParameters: Record<string, unknown> = {},
-): Record<string, unknown> {
+  options: ParameterApplyOptions = {},
+): unknown {
   const typeFqn = resolveParametersTypeFqn(block);
-  const merged = deepMergeParameters(
-    pendingParametersObject(block),
-    cliParameters,
-  );
-  assertParametersCompatible(merged, typeFqn, registry);
-  setOverrideProperty(block, "parameters", typeFqn, merged);
-  return merged;
+  const cliSource = options.parametersSource?.trim() || undefined;
+  if (cliSource) {
+    setOverrideProperty(block, "parametersSource", PROPERTY_REFERENCE_FQN, cliSource);
+  }
+  const source = effectiveParametersSource(block, cliSource);
+
+  let value: unknown;
+  if (source !== undefined) {
+    value = readParametersSource(source, typeFqn, registry);
+  } else if (options.parameters === undefined) {
+    value = pendingParametersValue(block);
+  } else if (isStructParametersType(typeFqn, registry)) {
+    if (!isPlainObject(options.parameters)) {
+      throw new TransformError("resolve", "parameters must be an object");
+    }
+    const pending = pendingParametersValue(block);
+    if (pending !== undefined && !isPlainObject(pending)) {
+      throw new TransformError(
+        "resolve",
+        "pending parameters must be a JSON object",
+      );
+    }
+    value = deepMergeParameters(
+      pending === undefined ? {} : pending,
+      options.parameters,
+    );
+  } else {
+    value = options.parameters;
+  }
+
+  if (isEmptyParameterValue(value)) {
+    clearProperty(block, "parameters");
+    return undefined;
+  }
+  assertCompatibleValue(value, typeFqn, registry, "parameters");
+  setOverrideProperty(block, "parameters", typeFqn, value);
+  return value;
 }
 
 /**

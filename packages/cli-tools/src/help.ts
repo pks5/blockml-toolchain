@@ -13,7 +13,7 @@ export const USAGE =
   "       blockml graph query <cypher> [--json]\n" +
   "       blockml graph schema [--json]\n" +
   "       blockml inspect <fqn> [--depth n] [--json] [--src dir] [--libraries a,b]\n" +
-  "       blockml transform apply <execution-fqn> [--verbose] [--parameters json]\n" +
+  "       blockml transform apply <execution-fqn> [--verbose] [--parameters json] [--parameters-source path]\n" +
   "       blockml new <fqn> [--baseType fqn] [--is text] [--src dir] [--libraries a,b]\n" +
   "       blockml --help";
 
@@ -217,7 +217,7 @@ Prefer existing Blocks over new duplicates.
 Related: inspect, validate.`;
 
 /** Printed help. SSOT: org.blockml.bml.cli.documentation.TransformCommand */
-export const TRANSFORM_HELP = `Usage: blockml transform apply <execution-fqn> [--verbose] [--parameters json]
+export const TRANSFORM_HELP = `Usage: blockml transform apply <execution-fqn> [--verbose] [--parameters json] [--parameters-source path]
        blockml transform --help
 
 When: run a pending ModelTransformation.
@@ -229,7 +229,8 @@ Pipeline stage constraints belong to the Execute / Reflect prompts, not here.
 
 Flags:
   --verbose         stream additional agent-session detail
-  --parameters json JSON object merged over pending parameters
+  --parameters json           JSON value for parameters (object merge when T is StructType)
+  --parameters-source path    PropertyReference copied onto parameters; ignores --parameters
 
 Only one transform may run at a time in the same Git worktree.
 The worktree must be clean at start and before each Stage.

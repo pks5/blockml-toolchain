@@ -109,6 +109,17 @@ describe("parseArgs transform", () => {
     ]);
     expect(parsed.parametersJson).toBe('{"language":"de"}');
   });
+
+  it("parses transform apply --parameters-source", () => {
+    const parsed = parseArgs([
+      "transform",
+      "apply",
+      "org.blockml.bml.workspace._meta.transform.pending.JokeTest",
+      "--parameters-source",
+      "com.example.model.Poem.properties.title",
+    ]);
+    expect(parsed.parametersSource).toBe("com.example.model.Poem.properties.title");
+  });
 });
 
 describe("blockml transform CLI", () => {

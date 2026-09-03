@@ -10,7 +10,8 @@ export interface TransformerOptions {
     pipeline?: Partial<TransformPipeline>;
     now?: () => Date;
     onLifecycle?: TransformLifecycleListener;
-    parameters?: Record<string, unknown>;
+    parameters?: unknown;
+    parametersSource?: string;
 }
 export declare class Transformer {
     private readonly workspaceRoot;
@@ -18,6 +19,7 @@ export declare class Transformer {
     private readonly now;
     private readonly onLifecycle;
     private readonly parameters;
+    private readonly parametersSource;
     constructor(options: TransformerOptions);
     run(executionFqn: string): Promise<TransformRunResult>;
     private runAfterPrepare;
@@ -31,7 +33,8 @@ export interface RunTransformationOptions {
     pipeline?: Partial<TransformPipeline>;
     now?: () => Date;
     onLifecycle?: TransformLifecycleListener;
-    parameters?: Record<string, unknown>;
+    parameters?: unknown;
+    parametersSource?: string;
 }
 export type RunTransformationResult = (TransformRunResult & {
     success: true;
