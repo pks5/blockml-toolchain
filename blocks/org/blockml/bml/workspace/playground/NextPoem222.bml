@@ -13,33 +13,33 @@
   <name>NextPoem222</name>
   <type>playground:NextPoem222</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, written in Spanish, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
 
   <documentation>
-    En la ladera el abedul se alza brillante,
-    su tronco blanco luce como un manantial constante.
-    El viento cruza suave su ramaje al pasar;
-    lleva en pie muchos años y así ha de continuar.
+    Am Waldrand steht die Buche, breit und alt,
+    ihr Blätterdach trägt Sommerlicht und Kälte.
+    Der Stamm ist grau von hundert stillen Jahren,
+    er hat schon Sturm und Frost und Schnee ertragen.
 
-    A sus pies, donde el musgo se extiende sin fin,
-    un matamoscas abre su tejado carmín.
-    Con puntos blancos, pequeño y bien redondo,
-    saluda a la mañana desde el fresco fondo.
+    Zu ihren Füßen, auf dem feuchten Moos,
+    wächst still ein Fliegenpilz, noch klein und bloß.
+    Sein roter Hut mit weißen Punkten glüht,
+    und zittert, wenn der Morgenwind durchzieht.
 
-    "No temas la tormenta", le habla el árbol así,
-    "yo velo por tu sombra tan bien como hay en mí.
-    Mi fronda atrapa el rocío y la lluvia al caer;
-    quédate quieto y deja que pase el amanecer."
+    "Bleib ruhig hier bei mir", so spricht der Baum,
+    "mein Schatten kühlt dich, wenn der Mittag brennt.
+    Ich breite meine Krone wie ein Zelt
+    und halte dich, wenn schwerer Regen fällt."
 
-    El hongo asiente y brilla en medio de la noche,
-    y el abedul vigila por él, sin un reproche.
-    Dos amigos, dispares de talla, mas hermanados,
-    en un solo lugar del bosque bien plantados.
+    So stehen beide durch den Jahreslauf,
+    die Buche hoch, der Pilz im Grase drunter.
+    Und wer sich in den grünen Schatten legt,
+    trifft zwei Gefährten, die den Weg bewachen.
   </documentation>
 
   <properties>
     <title>
-      <value>Abedul y matamoscas</value>
+      <value>Die Buche und der Fliegenpilz</value>
     </title>
     <author>
       <value>John Doe</value>
