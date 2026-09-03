@@ -26,9 +26,9 @@
       <baseType>type:StructType</baseType>
       <is>Run parameters for this poem transformation</is>
       <properties>
-        <author type="type:Text" />
-        <subject type="type:Text" />
-        <language type="type:Text" />
+        <topic type="type:Text" />
+        <storyLanguage type="type:Text" />
+        <translationLanguage type="type:Text" />
       </properties>
     </block>
   </subBlocks>
@@ -45,13 +45,6 @@
     <template override="true" type="type:Boolean">
       <value>true</value>
     </template>
-    <parameters override="true">
-      <value>
-        {
-          "author": "John Doe"
-        }
-      </value>
-    </parameters>
   </properties>
   <aggregations>
     <operations override="true">
@@ -62,8 +55,8 @@
               <instructions>
                 Create or update the block 
                 org.blockml.bml.workspace.playground.MyStory.bml 
-                that contains a random story in german 
-                about a tree and a mushroom. 
+                that contains a random story in ${ this.parameters.storyLanguage } 
+                about ${ this.parameters.topic }. 
                 For each execution create a new poem.
                 The story should be structured with the following properties:
                 - title (type:Text)
@@ -87,7 +80,7 @@
               <instructions>
                 Translate the story in 
                 org.blockml.bml.workspace.playground.MyStory.bml 
-                to chinese.
+                to ${ this.parameters.translationLanguage }.
               </instructions>
             </workflow:InstructionTask>
           </task>
