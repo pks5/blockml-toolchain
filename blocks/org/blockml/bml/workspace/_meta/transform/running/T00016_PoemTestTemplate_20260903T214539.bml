@@ -294,12 +294,16 @@
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/NextPoem222.bml" />
           </changedFiles>
         </workflow:Stage>
-        <workflow:Stage name="Translate Poem" status="Running">
+        <workflow:Stage name="Translate Poem" status="Succeeded">
           <startedAt>2026-09-03T21:46:25</startedAt>
           <baseCommit>555bfaf94b1538c6a48eeef39e4a9054b7146a23</baseCommit>
+          <completedAt>2026-09-03T21:47:12</completedAt>
           <task>
             <workflow:InstructionTask instructions="Translate the poem in org.blockml.bml.workspace.playground.NextPoem222.bml to spanish." />
           </task>
+          <changedFiles>
+            <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/NextPoem222.bml" />
+          </changedFiles>
         </workflow:Stage>
       </composition>
     </stages>

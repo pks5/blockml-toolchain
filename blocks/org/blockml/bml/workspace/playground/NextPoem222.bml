@@ -13,33 +13,33 @@
   <name>NextPoem222</name>
   <type>playground:NextPoem222</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, translated into Spanish, about a tree and a mushroom</is>
 
   <documentation>
-    Am Waldrand steht die Buche, breit und alt,
-    ihr Blätterdach trägt Sommerlicht und Kälte.
-    Der Stamm ist grau von hundert stillen Jahren,
-    er hat schon Sturm und Frost und Schnee ertragen.
+    Al borde del bosque se alza la haya, ancha y vieja,
+    su bóveda de hojas sostiene luz de verano y frío.
+    El tronco es gris por cien años callados,
+    ya ha soportado tormenta, escarcha y nieve.
 
-    Zu ihren Füßen, auf dem feuchten Moos,
-    wächst still ein Fliegenpilz, noch klein und bloß.
-    Sein roter Hut mit weißen Punkten glüht,
-    und zittert, wenn der Morgenwind durchzieht.
+    A sus pies, sobre el musgo húmedo,
+    crece en silencio una amanita, aún pequeña y desnuda.
+    Su sombrero rojo de puntos blancos arde,
+    y tiembla cuando el viento de la mañana lo atraviesa.
 
-    "Bleib ruhig hier bei mir", so spricht der Baum,
-    "mein Schatten kühlt dich, wenn der Mittag brennt.
-    Ich breite meine Krone wie ein Zelt
-    und halte dich, wenn schwerer Regen fällt."
+    "Quédate tranquila aquí conmigo", así habla el árbol,
+    "mi sombra te refresca cuando arde el mediodía.
+    Extiendo mi copa como una tienda
+    y te sostengo cuando cae la lluvia pesada."
 
-    So stehen beide durch den Jahreslauf,
-    die Buche hoch, der Pilz im Grase drunter.
-    Und wer sich in den grünen Schatten legt,
-    trifft zwei Gefährten, die den Weg bewachen.
+    Así permanecen ambos a lo largo del año,
+    la haya en lo alto, el hongo abajo en la hierba.
+    Y quien se recuesta en la sombra verde,
+    encuentra dos compañeros que vigilan el camino.
   </documentation>
 
   <properties>
     <title>
-      <value>Die Buche und der Fliegenpilz</value>
+      <value>La haya y la amanita matamoscas</value>
     </title>
     <author>
       <value>John Doe</value>
