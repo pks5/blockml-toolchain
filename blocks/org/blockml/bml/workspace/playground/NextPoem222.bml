@@ -13,33 +13,33 @@
   <name>NextPoem222</name>
   <type>playground:NextPoem222</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, translated into Spanish, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
 
   <documentation>
-    En lo profundo del bosque se alza un roble,
-    desde hace cien años monta guardia y lleva su yugo.
-    Su ramaje se aferra como manos al viento,
-    y bajo él las sombras, frescas y suaves.
+    Am Waldrand steht ein alter Ahornbaum,
+    er wiegt sein Laub seit hundert stillen Jahren.
+    Die Wurzeln greifen tief ins dunkle Erdreich,
+    sein Schatten deckt den Boden weich und kühl.
 
-    Una amanita despierta en el suelo blando,
-    su sombrero rojo con redondas motas blancas.
-    Se estira desde la hojarasca hacia la luz del día
-    y escucha cómo allá en lo alto la copa canta canciones.
+    Ein kleiner Pilz erwacht im feuchten Moose,
+    sein brauner Hut noch schwer vom Morgentau.
+    Er reckt sich zaghaft aus dem Laub zur Sonne
+    und lauscht dem Rauschen in der hohen Krone.
 
-    "Yo te saludo", susurra el roble con dulzura,
-    "te protejo en cada noche de tormenta.
-    Mi techo de hojas detiene lluvia, escarcha y nieve,
-    quédate tranquila aquí, y ningún tiempo te hará daño."
+    "Sei mir gegrüßt", so spricht der Baum ganz leise,
+    "ich halte Wacht in jeder Sturmesnacht.
+    Mein Blätterdach hält Regen, Reif und Schnee ab,
+    bleib ruhig hier, kein Wetter tut dir weh."
 
-    Así permanecen los dos por primavera, otoño y helada,
-    el roble fuerte, el hongo su pequeño consuelo.
-    Y quien pasa por el sendero del bosque,
-    ve una amistad que desde siempre se mantiene unida.
+    So stehn die beiden durch den Lauf der Zeiten,
+    der Ahorn stark, der Pilz sein stilles Glück.
+    Und wer vorübergeht auf schmalem Pfade,
+    sieht eine Freundschaft, die zusammenhält.
   </documentation>
 
   <properties>
     <title>
-      <value>El roble y la amanita matamoscas</value>
+      <value>Der Ahorn und der Pilz</value>
     </title>
     <author>
       <value>John Doe</value>
