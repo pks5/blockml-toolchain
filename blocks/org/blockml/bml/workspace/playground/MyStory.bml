@@ -14,50 +14,50 @@
   <name>MyStory</name>
   <type>playground:MyStory</type>
   <baseType>core:Documentation</baseType>
-  <is>A random structured story produced by a workspace transform execution, in Chinese, about a tree and a mushroom</is>
+  <is>A random structured story produced by a workspace transform execution, in German, about a tree and a mushroom</is>
 
   <documentation>
-    A structured Chinese story about a tree and a mushroom. The story text and its
+    A structured German story about a tree and a mushroom. The story text and its
     metadata are carried as typed properties. Each transform execution replaces
     this block with a freshly composed story.
   </documentation>
 
   <properties>
     <title type="type:Text">
-      <value>橡树与小牛肝菌</value>
+      <value>Die alte Kiefer und der Pfifferling</value>
     </title>
     <author type="type:Text">
       <value>John Doe</value>
     </author>
     <story type="type:Text">
-      <value>在一片林间空地的边缘，几百年来生长着一棵雄伟的橡树。它的枝干托着天空，它的根深深扎进黑暗的泥土里。一个潮湿的早晨，橡树感到自己一条最粗的根上传来怯生生的叩击。
+      <value>Hoch auf einem sandigen Hügel stand eine krumme Kiefer, die der Wind über die Jahre schief gebogen hatte. Ihre Rinde war rissig wie eine alte Landkarte, und ihre Nadeln rauschten selbst dann, wenn kein Lüftchen ging. Eines hellen Septembermorgens kitzelte es an einer Wurzel, die sich flach unter der Erde entlangzog.
 
-"是谁扰了我的睡眠？"它低声嘟囔道。
+"Was krabbelt da an mir herum?", knarrte die Kiefer.
 
-"只是我而已，"一个细小的声音答道。一夜之间，一棵年幼的牛肝菌从树根之间的苔藓里钻了出来，戴着圆圆的棕色菌帽，长着粗壮浅色的菌柄。"我今天才刚长出来，还不知道自己来这里是为了什么。"
+"Ich krabbele nicht, ich wachse", sagte ein kleiner Pfifferling, der sich leuchtend gelb durch die Nadeldecke geschoben hatte. Sein Hut war gewellt wie ein Trichter, und er roch schwach nach Aprikose. "Gestern war hier nur Boden. Heute stehe ich hier und weiß nicht recht, warum."
 
-橡树像所有老树那样，沉默了很久。然后它说："你和我是相连的，小蘑菇。你那些细细的菌丝缠绕着我的根，我们彼此交换各自拥有的东西。我把叶子在阳光里酿出的糖分给你，你把我独自够不到的深处的水和盐分给我。"
+Die Kiefer ließ sich Zeit mit der Antwort, so wie alte Bäume es tun. "Du bist kein Zufall, kleiner Pilz. Deine Fäden liegen längst um meine Wurzeln. Wenn der Regen ausbleibt, reichst du mir Wasser aus Ritzen, die ich nie finden würde. Und ich schicke dir Zucker hinab, den das Licht in meinen Nadeln backt."
 
-牛肝菌惊讶极了。"这么说，我并不渺小，也不是没有用处？"
+Der Pfifferling richtete sich ein wenig auf. "Dann bin ich also mehr als ein gelber Fleck im Moos?"
 
-"森林里没有谁是没有用的，"橡树说。"雨落下来，啄木鸟敲击着，狍子从旁边经过，而我们两个让土壤保持活力。只要秋天允许，就留在我身边吧。"
+"Viel mehr", sagte die Kiefer. "Der Eichelhäher schreit, die Ameisen tragen, der Nebel zieht durch, und wir beide halten diesen mageren Sandboden zusammen. Bleib, solange die Nächte noch mild sind."
 
-于是小牛肝菌就在大橡树的庇护下伫立着。午后，一个徒步的人沿着狭窄的小路走来，他只看到一棵老树和苔藓里的一朵蘑菇。他没有察觉，在他的鞋底之下，两位老朋友正彼此维系着对方的生命。</value>
+Und so stand der kleine Pfifferling im Windschatten der krummen Kiefer. Als mittags eine Pilzsammlerin den Hügel heraufstieg, sah sie nur einen wetterharten Baum und einen einzelnen gelben Pilz. Sie ließ ihn stehen und ging weiter, ohne zu ahnen, dass unter ihren Stiefeln zwei stille Verbündete einander durch den Herbst trugen.</value>
     </story>
     <language type="type:Text">
-      <value>Chinese</value>
+      <value>German</value>
     </language>
     <date type="type:DateTime">
       <value>2026-09-04T00:00:00</value>
     </date>
     <time type="type:DateTime">
-      <value>2026-09-04T00:27:41</value>
+      <value>2026-09-04T00:56:25</value>
     </time>
     <location type="type:Text">
-      <value>德国，巴伐利亚森林</value>
+      <value>Sandhügel in der Lüneburger Heide, Deutschland</value>
     </location>
     <weather type="type:Text">
-      <value>潮湿凉爽的早晨，林间空地上笼罩着低垂的浓雾</value>
+      <value>Klarer, kühler Septembermorgen mit dünnem Bodennebel zwischen den Kiefern</value>
     </weather>
   </properties>
 
