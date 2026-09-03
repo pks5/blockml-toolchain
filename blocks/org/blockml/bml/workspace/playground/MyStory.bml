@@ -14,40 +14,40 @@
   <name>MyStory</name>
   <type>playground:MyStory</type>
   <baseType>core:Documentation</baseType>
-  <is>A random structured story produced by a workspace transform execution, in English, about a squirrel and a mouse</is>
+  <is>A random structured story produced by a workspace transform execution, in German, about a squirrel and a mouse</is>
 
   <documentation>
-    A structured English story about a squirrel and a mouse. The story text and its
+    A structured German story about a squirrel and a mouse. The story text and its
     metadata are carried as typed properties. Each transform execution replaces
     this block with a freshly composed story.
   </documentation>
 
   <properties>
     <title type="type:Text">
-      <value>The Acorn Ledger</value>
+      <value>Das Eichel-Hauptbuch</value>
     </title>
     <author type="type:Text">
       <value>John Doe</value>
     </author>
     <story type="type:Text">
-      <value>High in the split trunk of an old beech, a red squirrel named Pindle kept what he proudly called his ledger: a hollow packed with acorns, each one counted twice before winter. He trusted the count more than he trusted the weather.
+      <value>Hoch oben im gespaltenen Stamm einer alten Buche führte ein rotes Eichhörnchen namens Pindle, was er stolz sein Hauptbuch nannte: eine Höhlung, vollgestopft mit Eicheln, jede einzelne vor dem Winter zweimal gezählt. Er vertraute der Zählung mehr als dem Wetter.
 
-One grey afternoon a house mouse climbed the beech, shaking rain from her whiskers. "You have more acorns than a squirrel can chew," she said. "I am Tamsin. I would trade you three fat hazelnuts for one."
+An einem grauen Nachmittag kletterte eine Hausmaus die Buche hinauf und schüttelte sich den Regen von den Schnurrhaaren. „Du hast mehr Eicheln, als ein Eichhörnchen kauen kann“, sagte sie. „Ich bin Tamsin. Ich würde dir drei fette Haselnüsse für eine geben.“
 
-"Trade?" Pindle bristled. "I do not trade. I hoard. That is the whole point of a ledger."
+„Tauschen?“ Pindle sträubte sich das Fell. „Ich tausche nicht. Ich horte. Das ist der ganze Sinn eines Hauptbuchs.“
 
-Tamsin sat down on a knot of bark, unbothered. "A ledger only helps if you can read it in the snow. Last year the frost came early and your cousins forgot half their holes. The forest ate their savings."
+Tamsin setzte sich unbeeindruckt auf einen Rindenknorren. „Ein Hauptbuch hilft nur, wenn man es im Schnee lesen kann. Letztes Jahr kam der Frost früh, und deine Vettern vergaßen die Hälfte ihrer Verstecke. Der Wald hat ihre Ersparnisse gefressen.“
 
-Pindle's tail twitched, because this was true, and truths that arrive with wet whiskers are the hardest to argue with. "Suppose I did trade," he said slowly. "What would a mouse do with a single acorn?"
+Pindles Schwanz zuckte, denn das war wahr, und Wahrheiten, die mit nassen Schnurrhaaren ankommen, lassen sich am schwersten bestreiten. „Angenommen, ich würde tauschen“, sagte er langsam. „Was fängt eine Maus mit einer einzigen Eichel an?“
 
-"Plant it," said Tamsin. "By the stream, where you never dig. In ten years it is an oak, and an oak is a bank that pays every autumn, to every small creature that asks."
+„Pflanz sie ein“, sagte Tamsin. „Am Bach, wo du niemals gräbst. In zehn Jahren ist sie eine Eiche, und eine Eiche ist eine Bank, die jeden Herbst auszahlt, an jedes kleine Geschöpf, das darum bittet.“
 
-They argued until the rain stopped, and then, mostly to end the argument, Pindle rolled one acorn out of the hollow. Tamsin took it in both paws, thanked him gravely, and carried it down to the soft ground by the water.
+Sie stritten, bis der Regen aufhörte, und dann, hauptsächlich um den Streit zu beenden, rollte Pindle eine Eichel aus der Höhlung. Tamsin nahm sie in beide Pfoten, dankte ihm ernst und trug sie hinab zum weichen Boden am Wasser.
 
-Pindle told himself he had lost an acorn. But that night he slept badly, and in the morning he found himself counting a different way — not how many he had kept, but how many he could afford to give. By spring a green shoot stood by the stream, and Pindle, who still called himself a hoarder, visited it more often than he would admit.</value>
+Pindle redete sich ein, er habe eine Eichel verloren. Doch in jener Nacht schlief er schlecht, und am Morgen ertappte er sich dabei, wie er auf andere Weise zählte — nicht, wie viele er behalten hatte, sondern wie viele er sich zu verschenken leisten konnte. Bis zum Frühjahr stand ein grüner Trieb am Bach, und Pindle, der sich noch immer einen Horter nannte, besuchte ihn öfter, als er zugegeben hätte.</value>
     </story>
     <language type="type:Text">
-      <value>English</value>
+      <value>German</value>
     </language>
     <date type="type:DateTime">
       <value>2026-09-04T00:00:00</value>
@@ -56,10 +56,10 @@ Pindle told himself he had lost an acorn. But that night he slept badly, and in 
       <value>2026-09-04T01:49:02</value>
     </time>
     <location type="type:Text">
-      <value>A hollow beech at the edge of Wistman's Wood, Dartmoor, England</value>
+      <value>Eine hohle Buche am Rand von Wistman's Wood, Dartmoor, England</value>
     </location>
     <weather type="type:Text">
-      <value>Overcast and cool, with a steady autumn drizzle easing to mist by late afternoon</value>
+      <value>Bedeckt und kühl, mit stetigem herbstlichem Nieselregen, der am späten Nachmittag in Nebel überging</value>
     </weather>
   </properties>
 
