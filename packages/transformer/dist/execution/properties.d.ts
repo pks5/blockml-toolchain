@@ -8,10 +8,12 @@ export declare function getOperationInstances(block: BlockDefinition, registry: 
 export declare function isModelOperationInstance(typeFqn: string, registry: TypeRegistry): boolean;
 export declare function getOperationInstance(block: BlockDefinition, operationIndex: number, registry: TypeRegistry): BlockInstance | undefined;
 export declare function isAgenticOperationType(typeFqn: string, registry: TypeRegistry): boolean;
+export declare function isToolOperationType(typeFqn: string, registry: TypeRegistry): boolean;
 export declare function operationHasTask(instance: BlockInstance): boolean;
 export declare function operationHasAggregation(instance: BlockInstance, name: string): boolean;
 export declare function hasOperationProperty(instance: BlockInstance, name: string): boolean;
 export declare function getOperationPropertyLiteral(instance: BlockInstance, name: string): unknown | undefined;
+export declare function getOperationStringList(instance: BlockInstance, name: string): string[] | undefined;
 export declare function getOperationStatus(instance: BlockInstance): string | undefined;
 export declare function allOperationsSucceeded(block: BlockDefinition, registry: TypeRegistry): boolean;
 export declare function setOperationStatus(instance: BlockInstance, status: ExecutionStatusId): void;

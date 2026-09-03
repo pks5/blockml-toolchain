@@ -74,6 +74,8 @@
         <blockml:transformer.workflow.ResultException />
         <blockml:transformer.workflow.Rule />
         <blockml:transformer.workflow.Task />
+        <blockml:transformer.workflow.ToolExecutor />
+        <blockml:transformer.workflow.ToolOperation />
         <blockml:transformer.capability.ExecuteTask />
         <blockml:transformer.capability.FinalizeExecution />
         <blockml:transformer.capability.PersistExecution />

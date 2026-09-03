@@ -78,6 +78,9 @@
             </workflow:InstructionTask>
           </task>
         </workflow:AgenticOperation>
+        <workflow:ToolOperation name="Validate" status="Pending" captureOutput="true" command="blockml">
+          <args>["validate"]</args>
+        </workflow:ToolOperation>
         <workflow:AgenticOperation name="Translate Poem" status="Pending">
           <task>
             <workflow:InstructionTask>

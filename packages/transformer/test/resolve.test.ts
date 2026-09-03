@@ -164,6 +164,32 @@ describe("resolvePendingExecution", () => {
     );
   });
 
+  it("rejects a ToolOperation that has no command", () => {
+    const xml = pendingExecutionXml({ name: "JokeTest" })
+      .replaceAll("workflow:AgenticOperation", "workflow:ToolOperation")
+      .replace(/<task>[\s\S]*?<\/task>/, "");
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": xml,
+    });
+    expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
+      /ToolOperation 1 must have command set/,
+    );
+  });
+
+  it("resolves a pending ToolOperation with command", () => {
+    const xml = pendingExecutionXml({ name: "JokeTest" })
+      .replaceAll("workflow:AgenticOperation", "workflow:ToolOperation")
+      .replace(
+        /<task>[\s\S]*?<\/task>/,
+        "<command>blockml</command>\n          <args>validate</args>",
+      );
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": xml,
+    });
+    const resolved = resolvePendingExecution(pendingFqn("JokeTest"), TMP);
+    expect(resolved.fqn).toBe(pendingFqn("JokeTest"));
+  });
+
   it("rejects a pending execution that already has exception", () => {
     const xml = pendingExecutionXml({ name: "JokeTest" }).replace(
       "</aggregations>",

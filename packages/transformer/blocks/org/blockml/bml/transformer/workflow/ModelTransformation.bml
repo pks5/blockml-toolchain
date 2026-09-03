@@ -20,7 +20,8 @@
     One transformation of the model driven by sequential
     `workflow:ModelOperation` instances. Operations may be mixed concrete
     subtypes. `workflow:AgenticOperation` runs a Task in an isolated
-    agent process; other subtypes use their registered executor.
+    agent process. `workflow:ToolOperation` runs an npm CLI tool
+    via npx. Other subtypes use their registered executor.
 
     * `template` — when true, this Block is a reusable template. Prepare
       leaves it in `_meta.transform.pending`, copies it, sets
@@ -72,6 +73,7 @@
   <references>
     <see type="workflow:ModelOperation" relation="SeeAlso" />
     <see type="workflow:AgenticOperation" relation="SeeAlso" />
+    <see type="workflow:ToolOperation" relation="SeeAlso" />
     <see type="workflow:OperationExecutor" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />

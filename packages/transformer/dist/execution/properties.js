@@ -1,5 +1,5 @@
 import { collectBaseTypeChain } from "@blockml/framework";
-import { BOOLEAN_TYPE_FQN, DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, AGENTIC_OPERATION_FQN, MODEL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN, TEXT_TYPE_FQN, UUID_TYPE_FQN, } from "./constants.js";
+import { BOOLEAN_TYPE_FQN, DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, AGENTIC_OPERATION_FQN, MODEL_OPERATION_FQN, TOOL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN, TEXT_TYPE_FQN, UUID_TYPE_FQN, } from "./constants.js";
 export function isModelTransformation(block, registry) {
     if (block.type === MODEL_TRANSFORMATION_FQN || block.baseType === MODEL_TRANSFORMATION_FQN) {
         return true;
@@ -35,6 +35,7 @@ export function getOperationInstances(block, registry) {
 export function isModelOperationInstance(typeFqn, registry) {
     return (typeFqn === MODEL_OPERATION_FQN ||
         typeFqn === AGENTIC_OPERATION_FQN ||
+        typeFqn === TOOL_OPERATION_FQN ||
         isAssignableToType(typeFqn, MODEL_OPERATION_FQN, registry));
 }
 export function getOperationInstance(block, operationIndex, registry) {
@@ -43,6 +44,10 @@ export function getOperationInstance(block, operationIndex, registry) {
 export function isAgenticOperationType(typeFqn, registry) {
     return (typeFqn === AGENTIC_OPERATION_FQN ||
         isAssignableToType(typeFqn, AGENTIC_OPERATION_FQN, registry));
+}
+export function isToolOperationType(typeFqn, registry) {
+    return (typeFqn === TOOL_OPERATION_FQN ||
+        isAssignableToType(typeFqn, TOOL_OPERATION_FQN, registry));
 }
 export function operationHasTask(instance) {
     return operationHasAggregation(instance, "task");
@@ -65,6 +70,19 @@ export function getOperationPropertyLiteral(instance, name) {
     const value = instance.memberValues[name];
     if (value?.kind === "literal") {
         return value.value;
+    }
+    return undefined;
+}
+export function getOperationStringList(instance, name) {
+    const value = getOperationPropertyLiteral(instance, name);
+    if (value === undefined) {
+        return undefined;
+    }
+    if (typeof value === "string") {
+        return value === "" ? [] : [value];
+    }
+    if (Array.isArray(value) && value.every((item) => typeof item === "string")) {
+        return value;
     }
     return undefined;
 }

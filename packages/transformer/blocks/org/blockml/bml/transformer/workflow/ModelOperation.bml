@@ -20,7 +20,8 @@
   <documentation>
     Abstract envelope for one self-contained (Model-)Operation of a
     ModelTransformation. Concrete subtypes (for example
-    `workflow:AgenticOperation`) add type-specific members. Instances
+    `workflow:AgenticOperation`, `workflow:ToolOperation`) add
+    type-specific members. Instances
     must be a concrete subtype; this type itself is not instantiated.
 
     The transformer writes envelope fields the same way for every
@@ -43,6 +44,7 @@
   <references>
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:AgenticOperation" relation="SeeAlso" />
+    <see type="workflow:ToolOperation" relation="SeeAlso" />
     <see type="workflow:OperationExecutor" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
     <see type="core:Exception" relation="SeeAlso" />

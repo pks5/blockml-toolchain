@@ -2,7 +2,7 @@ import { bootstrapFullProjectRegistry, } from "@blockml/framework";
 import { MODEL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN } from "./constants.js";
 import { TransformError } from "./errors.js";
 import { parseExecutionFqn } from "./lifecycle.js";
-import { getOperationInstances, getOperationStatus, getPropertyLiteral, getStatus, hasAggregationComposition, hasOperationProperty, hasPropertyValue, isAgenticOperationType, isModelTransformation, operationHasAggregation, operationHasTask, } from "./properties.js";
+import { getOperationInstances, getOperationStatus, getPropertyLiteral, getStatus, hasAggregationComposition, hasOperationProperty, hasPropertyValue, isAgenticOperationType, isModelTransformation, isToolOperationType, operationHasAggregation, operationHasTask, } from "./properties.js";
 const REQUIRED_PRESENT = ["createdAt"];
 const FORBIDDEN_PROPERTIES = [
     "executionId",
@@ -58,6 +58,9 @@ function assertPendingContract(fqn, block, registry) {
         }
         if (isAgenticOperationType(operation.typeFqn, registry) && !operationHasTask(operation)) {
             throw new TransformError("resolve", `${fqn} AgenticOperation ${index + 1} has no configured task aggregation`);
+        }
+        if (isToolOperationType(operation.typeFqn, registry) && !hasOperationProperty(operation, "command")) {
+            throw new TransformError("resolve", `${fqn} ToolOperation ${index + 1} must have command set`);
         }
         const operationStatus = getOperationStatus(operation);
         if (operationStatus !== undefined && operationStatus !== "Pending") {

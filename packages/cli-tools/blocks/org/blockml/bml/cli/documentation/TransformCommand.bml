@@ -51,7 +51,8 @@
     Reflect, Persist results onto that operation. Default
     Prepare/Finalize are deterministic. Default executor for
     AgenticOperation is AgenticExecutor (Claude Code) that changes BML
-    only. Default Reflect is deterministic (git changedFiles after the
+    only. Default executor for ToolOperation is ToolExecutor (npm CLI
+    via npx). Default Reflect is deterministic (git changedFiles after the)
     executor; output when ModelOperation.captureOutput is true). Default
     Persist writes those fields onto the operation.
     Finalize relocates to _meta.transform.succeeded only when every

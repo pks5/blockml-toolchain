@@ -6,6 +6,9 @@ import { createDefaultPipeline } from "../src/pipeline/default-pipeline.js";
 import type { ExecutionTrace, TransformPipeline } from "../src/pipeline/types.js";
 import type { TransformationAgent } from "../src/agent/transformation-agent.js";
 import type { ReflectionAgent } from "../src/agent/reflection-agent.js";
+import { TOOL_OPERATION_FQN } from "../src/execution/constants.js";
+import { ExecutorRegistry } from "../src/executor/registry.js";
+import { ToolExecutor } from "../src/executor/tool-executor.js";
 import {
   FIXED_NOW,
   pendingExecutionXml,
@@ -193,6 +196,40 @@ describe("Transformer pipeline", () => {
       "utf8",
     );
     expect(succeeded).toContain(">agent said hello</output>");
+  });
+
+  it("writes ToolExecutor output onto ToolOperation.output when captureOutput is true", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        captureOutput: true,
+        tool: { command: "blockml", args: ["validate"] },
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      executors: new ExecutorRegistry().register(
+        TOOL_OPERATION_FQN,
+        new ToolExecutor(async () => ({
+          exitCode: 0,
+          stdout: "Validation succeeded. Tested 1 blocks, 0 with errors.\n",
+          stderr: "",
+        })),
+      ),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(true);
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).toContain("workflow:ToolOperation");
+    expect(succeeded).toContain(
+      ">Validation succeeded. Tested 1 blocks, 0 with errors.</output>",
+    );
   });
 
   it("skips reflect and still persists and finalizes when execute fails", async () => {

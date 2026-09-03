@@ -33,7 +33,8 @@
     commit. Default Prepare and Finalize are deterministic. Default
     executor for AgenticOperation is AgenticExecutor (isolated agent;
     changes BML model source only, not ModelTransformation /
-    `_meta/transform/`). Default Reflect is deterministic: git
+    `_meta/transform/`). Default executor for ToolOperation is
+    ToolExecutor (npm CLI via npx). Default Reflect is deterministic: git
     `changedFiles` after the executor, and `output` when the
     operation's `captureOutput` is true. Default Persist writes those
     fields onto the ModelOperation that just ran. After a started
@@ -60,6 +61,8 @@
     <see type="workflow:AgenticOperation" relation="SeeAlso" />
     <see type="workflow:OperationExecutor" relation="SeeAlso" />
     <see type="workflow:AgenticExecutor" relation="SeeAlso" />
+    <see type="workflow:ToolOperation" relation="SeeAlso" />
+    <see type="workflow:ToolExecutor" relation="SeeAlso" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:CompositeTask" relation="SeeAlso" />
     <see type="workflow:Prerequisite" relation="SeeAlso" />

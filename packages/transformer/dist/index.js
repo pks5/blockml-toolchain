@@ -24,6 +24,7 @@ export { parseExecutionFqn, generateExecutionName, executionFilePath, padSequenc
 export { MODEL_TRANSFORMATION_FQN } from "./execution/constants.js";
 export { parseParametersJson } from "./execution/parameters.js";
 export { AgenticExecutor } from "./executor/agentic-executor.js";
+export { ToolExecutor } from "./executor/tool-executor.js";
 export { ExecutorRegistry } from "./executor/registry.js";
 export { createDefaultExecutorRegistry } from "./executor/default-registry.js";
 //# sourceMappingURL=index.js.map

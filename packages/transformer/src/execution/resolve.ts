@@ -16,6 +16,7 @@ import {
   hasPropertyValue,
   isAgenticOperationType,
   isModelTransformation,
+  isToolOperationType,
   operationHasAggregation,
   operationHasTask,
 } from "./properties.js";
@@ -117,6 +118,12 @@ function assertPendingContract(
       throw new TransformError(
         "resolve",
         `${fqn} AgenticOperation ${index + 1} has no configured task aggregation`,
+      );
+    }
+    if (isToolOperationType(operation.typeFqn, registry) && !hasOperationProperty(operation, "command")) {
+      throw new TransformError(
+        "resolve",
+        `${fqn} ToolOperation ${index + 1} must have command set`,
       );
     }
     const operationStatus = getOperationStatus(operation);

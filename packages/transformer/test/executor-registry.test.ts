@@ -1,9 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { TypeRegistry } from "@blockml/framework";
-import { AGENTIC_OPERATION_FQN, MODEL_OPERATION_FQN } from "../src/execution/constants.js";
+import {
+  AGENTIC_OPERATION_FQN,
+  MODEL_OPERATION_FQN,
+  TOOL_OPERATION_FQN,
+} from "../src/execution/constants.js";
 import { TransformError } from "../src/execution/errors.js";
+import { createDefaultExecutorRegistry } from "../src/executor/default-registry.js";
 import { ExecutorRegistry } from "../src/executor/registry.js";
+import { ToolExecutor } from "../src/executor/tool-executor.js";
 import type { OperationExecutor } from "../src/executor/operation-executor.js";
+import type { TransformationAgent } from "../src/agent/transformation-agent.js";
 
 function stubExecutor(): OperationExecutor {
   return {
@@ -56,6 +63,23 @@ describe("ExecutorRegistry", () => {
     expect(() => executors.resolve(MODEL_OPERATION_FQN, types)).toThrow(
       /abstract/,
     );
+  });
+
+  it("resolves ToolOperation to ToolExecutor from the default registry", () => {
+    const types = registryWith({
+      [MODEL_OPERATION_FQN]: { type: MODEL_OPERATION_FQN },
+      [TOOL_OPERATION_FQN]: {
+        type: TOOL_OPERATION_FQN,
+        baseType: MODEL_OPERATION_FQN,
+      },
+    });
+    const agent = {
+      async execute() {
+        return { success: true as const, stdout: "" };
+      },
+    } satisfies TransformationAgent;
+    const executors = createDefaultExecutorRegistry(agent);
+    expect(executors.resolve(TOOL_OPERATION_FQN, types)).toBeInstanceOf(ToolExecutor);
   });
 
   it("rejects an unknown operation type with no registered executor", () => {

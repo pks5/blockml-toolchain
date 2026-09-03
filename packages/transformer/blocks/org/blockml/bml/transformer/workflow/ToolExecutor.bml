@@ -1,0 +1,47 @@
+<!--
+  Transformer Workflow — ToolExecutor
+  FQN: org.blockml.bml.transformer.workflow.ToolExecutor
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:cap="org.blockml.bml.capability"
+  xmlns:lang="org.blockml.bml.language"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>ToolExecutor</name>
+  <type>workflow:ToolExecutor</type>
+  <baseType>workflow:OperationExecutor</baseType>
+  <is>Executor for ToolOperation — run npx command args and return output text</is>
+
+  <documentation>
+    Default `workflow:OperationExecutor` for `workflow:ToolOperation`.
+    Intended argv: `npx`, `command`, then `args`. Deterministic. No
+    agent process. cwd is the worktree. Must not write envelope fields,
+    commit, or write files under `_meta/transform/`. Combined
+    stdout/stderr is the output candidate. TS: executor/tool-executor.ts.
+  </documentation>
+
+  <references>
+    <see type="workflow:OperationExecutor" relation="Extends" />
+    <see type="workflow:ToolOperation" relation="SeeAlso" />
+  </references>
+
+  <capabilities>
+    <execute override="true" type="cap:Action">
+      <documentation>
+        Run npx command args in the worktree. Return combined
+        stdout/stderr as the output candidate. Non-zero exit fails
+        the operation.
+      </documentation>
+      <implementation language="lang:English">
+        <![CDATA[Load the ToolOperation. Spawn npx with command then args in the worktree. Return combined stdout/stderr as the output candidate. Non-zero exit fails the operation.]]>
+      </implementation>
+    </execute>
+  </capabilities>
+
+</block>

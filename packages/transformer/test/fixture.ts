@@ -80,6 +80,7 @@ export function pendingExecutionXml(opts: {
   captureOutput?: boolean;
   resultSource?: string;
   parametersSource?: string;
+  tool?: { command: string; args?: readonly string[] };
 }): string {
   const refs = opts.extraRefs
     ? `  <references>\n${opts.extraRefs}\n  </references>\n`
@@ -144,21 +145,33 @@ export function pendingExecutionXml(opts: {
       ? [`  <subBlocks>`, ...parameterBlock, `  </subBlocks>`].join("\n")
       : "";
   const instructions = opts.operationInstructions ?? ["Do the task."];
-  const operations = instructions
-    .map((text) =>
-      [
-        `        <workflow:AgenticOperation>`,
+  const capture =
+    opts.captureOutput === true
+      ? [`          <captureOutput>true</captureOutput>`]
+      : [];
+  const operations = opts.tool
+    ? [
+        `        <workflow:ToolOperation name="Validate" command="${opts.tool.command}">`,
         `          <status>Pending</status>`,
-        ...(opts.captureOutput === true
-          ? [`          <captureOutput>true</captureOutput>`]
+        ...capture,
+        ...(opts.tool.args !== undefined
+          ? [`          <args>${JSON.stringify([...opts.tool.args])}</args>`]
           : []),
-        `          <task>`,
-        `            <workflow:InstructionTask instructions="${text}" />`,
-        `          </task>`,
-        `        </workflow:AgenticOperation>`,
-      ].join("\n"),
-    )
-    .join("\n");
+        `        </workflow:ToolOperation>`,
+      ].join("\n")
+    : instructions
+        .map((text) =>
+          [
+            `        <workflow:AgenticOperation>`,
+            `          <status>Pending</status>`,
+            ...capture,
+            `          <task>`,
+            `            <workflow:InstructionTask instructions="${text}" />`,
+            `          </task>`,
+            `        </workflow:AgenticOperation>`,
+          ].join("\n"),
+        )
+        .join("\n");
   return [
     `<block xmlns="http://blockml.org/bml"`,
     ` xmlns:core="org.blockml.bml.core"`,
