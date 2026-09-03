@@ -3,7 +3,7 @@ import {
   bootstrapFullProjectRegistry,
   type TypeRegistry,
 } from "@blockml/framework";
-import { MODEL_TRANSFORMATION_FQN } from "./constants.js";
+import { MODEL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN } from "./constants.js";
 import { TransformError } from "./errors.js";
 import { parseExecutionFqn } from "./lifecycle.js";
 import {
@@ -14,6 +14,7 @@ import {
   hasAggregationComposition,
   hasOperationProperty,
   hasPropertyValue,
+  isAgenticOperationType,
   isModelTransformation,
   operationHasAggregation,
   operationHasTask,
@@ -81,7 +82,7 @@ export function resolvePendingExecutionInRegistry(
     );
   }
 
-  assertPendingContract(executionFqn, document.block);
+  assertPendingContract(executionFqn, document.block, registry);
 
   return {
     fqn: executionFqn,
@@ -92,8 +93,12 @@ export function resolvePendingExecutionInRegistry(
   };
 }
 
-function assertPendingContract(fqn: string, block: BlockDefinition): void {
-  const operations = getOperationInstances(block);
+function assertPendingContract(
+  fqn: string,
+  block: BlockDefinition,
+  registry: TypeRegistry,
+): void {
+  const operations = getOperationInstances(block, registry);
   if (operations.length === 0) {
     throw new TransformError(
       "resolve",
@@ -102,10 +107,16 @@ function assertPendingContract(fqn: string, block: BlockDefinition): void {
   }
   for (let index = 0; index < operations.length; index++) {
     const operation = operations[index]!;
-    if (!operationHasTask(operation)) {
+    if (operation.typeFqn === MODEL_OPERATION_FQN) {
       throw new TransformError(
         "resolve",
-        `${fqn} ModelOperation ${index + 1} has no configured task aggregation`,
+        `${fqn} ModelOperation ${index + 1} must be a concrete subtype of ${MODEL_OPERATION_FQN}`,
+      );
+    }
+    if (isAgenticOperationType(operation.typeFqn, registry) && !operationHasTask(operation)) {
+      throw new TransformError(
+        "resolve",
+        `${fqn} AgenticOperation ${index + 1} has no configured task aggregation`,
       );
     }
     const operationStatus = getOperationStatus(operation);

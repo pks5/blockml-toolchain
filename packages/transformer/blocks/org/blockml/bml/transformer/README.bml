@@ -27,13 +27,14 @@
 
     The TypeScript engine executes ModelTransformation instances via
     `blockml transform apply EXECUTION-FQN [--parameters JSON] [--parameters-source PATH]`. Transformer.run prepares the
-    execution, then runs each `workflow:ModelOperation` in order: persist
-    operation Running, Execute its Task in an isolated agent process,
-    Reflect, Persist results onto that operation, commit. Default Prepare
-    and Finalize are deterministic. Default Execute is a
-    TransformationAgent that changes BML model source only (not
-    ModelTransformation / `_meta/transform/`). Default Reflect is
-    deterministic: git `changedFiles` from Execute, and `output` when the
+    execution, then runs each concrete `workflow:ModelOperation` in
+    order: persist operation Running, dispatch the registered
+    OperationExecutor, Reflect, Persist results onto that operation,
+    commit. Default Prepare and Finalize are deterministic. Default
+    executor for AgenticOperation is AgenticExecutor (isolated agent;
+    changes BML model source only, not ModelTransformation /
+    `_meta/transform/`). Default Reflect is deterministic: git
+    `changedFiles` after the executor, and `output` when the
     operation's `captureOutput` is true. Default Persist writes those
     fields onto the ModelOperation that just ran. After a started
     execution, Finalize relocates the Block to `_meta.transform.succeeded`
@@ -56,6 +57,9 @@
     <see type="transformercap:RunTransformation" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="workflow:ModelOperation" relation="SeeAlso" />
+    <see type="workflow:AgenticOperation" relation="SeeAlso" />
+    <see type="workflow:OperationExecutor" relation="SeeAlso" />
+    <see type="workflow:AgenticExecutor" relation="SeeAlso" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:CompositeTask" relation="SeeAlso" />
     <see type="workflow:Prerequisite" relation="SeeAlso" />

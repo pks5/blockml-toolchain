@@ -14,7 +14,7 @@ export function finalizeExecution(workspaceRoot, started, now) {
     if (modelTransformationHasCompletedAt(registry)) {
         setCompletedAt(forked.block, completedAtIso);
     }
-    const operationsSucceeded = allOperationsSucceeded(forked.block);
+    const operationsSucceeded = allOperationsSucceeded(forked.block, registry);
     let resultError;
     if (operationsSucceeded) {
         try {

@@ -21,11 +21,11 @@
     # Run Transformation
 
     Public engine entry. Acquires the worktree lock, then runs Prepare,
-    each ModelOperation (Running commit, Execute, Reflect, Persist), and
-    Finalize. A failed ModelOperation aborts the rest. Does not implement any
-    process step. Emits lifecycle events at status and execute/reflect
-    boundaries regardless of --verbose. TS: Transformer.run /
-    runTransformation.
+    each ModelOperation (Running commit, registered executor, Reflect,
+    Persist), and Finalize. A failed ModelOperation aborts the rest.
+    Does not implement any process step. Emits lifecycle events at
+    status and execute/reflect boundaries regardless of --verbose.
+    TS: Transformer.run / runTransformation.
   </documentation>
 
   <references>

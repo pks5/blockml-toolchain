@@ -73,8 +73,8 @@ function operationCapturesOutput(
   started: StartedExecution,
   operationIndex: number,
 ): boolean {
-  const { document } = loadRunningExecution(workspaceRoot, started);
-  const operation = getOperationInstance(document.block, operationIndex);
+  const { document, registry } = loadRunningExecution(workspaceRoot, started);
+  const operation = getOperationInstance(document.block, operationIndex, registry);
   if (!operation) {
     return false;
   }

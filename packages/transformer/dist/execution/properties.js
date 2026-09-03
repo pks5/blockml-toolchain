@@ -1,5 +1,5 @@
 import { collectBaseTypeChain } from "@blockml/framework";
-import { BOOLEAN_TYPE_FQN, DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, MODEL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN, TEXT_TYPE_FQN, UUID_TYPE_FQN, } from "./constants.js";
+import { BOOLEAN_TYPE_FQN, DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, AGENTIC_OPERATION_FQN, MODEL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN, TEXT_TYPE_FQN, UUID_TYPE_FQN, } from "./constants.js";
 export function isModelTransformation(block, registry) {
     if (block.type === MODEL_TRANSFORMATION_FQN || block.baseType === MODEL_TRANSFORMATION_FQN) {
         return true;
@@ -9,7 +9,20 @@ export function isModelTransformation(block, registry) {
 export function hasTaskComposition(block) {
     return hasAggregationComposition(block, "task");
 }
-export function getOperationInstances(block) {
+export function isAssignableToType(typeFqn, boundFqn, registry) {
+    if (typeFqn === boundFqn) {
+        return true;
+    }
+    const start = registry.get(typeFqn)?.block;
+    if (!start) {
+        return false;
+    }
+    if (start.baseType === boundFqn) {
+        return true;
+    }
+    return collectBaseTypeChain(start, registry).some((entry) => entry.type === boundFqn);
+}
+export function getOperationInstances(block, registry) {
     const aggregation = block.members.find((member) => member.kind === "aggregation" && member.name === "operations");
     if (!aggregation?.composition) {
         return [];
@@ -17,10 +30,19 @@ export function getOperationInstances(block) {
     return aggregation.composition.children
         .filter((child) => child.kind === "blockInstance")
         .map((child) => child.instance)
-        .filter((instance) => instance.typeFqn === MODEL_OPERATION_FQN);
+        .filter((instance) => isModelOperationInstance(instance.typeFqn, registry));
 }
-export function getOperationInstance(block, operationIndex) {
-    return getOperationInstances(block)[operationIndex];
+export function isModelOperationInstance(typeFqn, registry) {
+    return (typeFqn === MODEL_OPERATION_FQN ||
+        typeFqn === AGENTIC_OPERATION_FQN ||
+        isAssignableToType(typeFqn, MODEL_OPERATION_FQN, registry));
+}
+export function getOperationInstance(block, operationIndex, registry) {
+    return getOperationInstances(block, registry)[operationIndex];
+}
+export function isAgenticOperationType(typeFqn, registry) {
+    return (typeFqn === AGENTIC_OPERATION_FQN ||
+        isAssignableToType(typeFqn, AGENTIC_OPERATION_FQN, registry));
 }
 export function operationHasTask(instance) {
     return operationHasAggregation(instance, "task");
@@ -54,8 +76,8 @@ export function getOperationStatus(instance) {
     const separator = value.lastIndexOf("::");
     return separator >= 0 ? value.slice(separator + 2) : value;
 }
-export function allOperationsSucceeded(block) {
-    const operations = getOperationInstances(block);
+export function allOperationsSucceeded(block, registry) {
+    const operations = getOperationInstances(block, registry);
     if (operations.length === 0) {
         return false;
     }

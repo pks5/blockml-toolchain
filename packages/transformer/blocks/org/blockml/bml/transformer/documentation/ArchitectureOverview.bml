@@ -23,22 +23,26 @@
     worktree lock. The orchestrator sequences process steps; it does not
     implement them.
 
-    workflow:ModelOperation is the self-contained unit of work inside a
-    ModelTransformation. Process steps (Prepare, Execute, Reflect,
-    Persist, Finalize) are not the same as ModelOperations. Lifecycle
-    packages of the ModelTransformation live under the library-local
-    `_meta.transform` package (pending / running / succeeded / failed)
-    and match its status. `_meta` is the shared metadata package for the
-    library; it is created when missing. Future extensions use other
-    packages under `_meta`.
+    workflow:ModelOperation is the abstract envelope for one unit of
+    work inside a ModelTransformation. Concrete subtypes (today
+    workflow:AgenticOperation) are instantiated. Process steps
+    (Prepare, executor, Reflect, Persist, Finalize) are not the same as
+    ModelOperations. Lifecycle packages of the ModelTransformation live
+    under the library-local `_meta.transform` package (pending /
+    running / succeeded / failed) and match its status. `_meta` is the
+    shared metadata package for the library; it is created when missing.
+    Future extensions use other packages under `_meta`.
 
-    Each ModelOperation runs in its own isolated agent process. Agent
-    context from a previous operation is never reused.
+    The orchestrator writes envelope fields the same way for every
+    subtype. A registered workflow:OperationExecutor does only
+    type-specific work. Default: AgenticExecutor for AgenticOperation
+    (isolated agent process; output candidate is agent stdout).
 
     [1] Prepare Execution — transformercap:PrepareExecution
         Default: deterministic. Validate the pending contract (status=
-        Pending, operations with a Task each, createdAt; no executionId
-        or start/finish fields on the ModelTransformation), require a
+        Pending, concrete operations, AgenticOperation requires a Task,
+        createdAt; no executionId or start/finish fields on the
+        ModelTransformation), require a
         clean Git worktree, assign a unique executionId (type:UUID),
         sequence, startedAt, and baseCommit (HEAD),
         set status=Running, relocate to _meta.transform.running, then commit.
@@ -61,23 +65,24 @@
         boundary: after a crash it is clear which operation started and
         on which commit.
 
-        [2] Execute Task — transformercap:ExecuteTask
-            Default: TransformationAgent (Claude Code at the CLI). New
-            process per ModelOperation. Receives the running execution
-            and performs the Task of the currently Running operation.
-            May change BML model source. Must not write
-            ModelTransformation metadata (including operations) or files
-            under _meta/transform/. Does not commit; model changes stay
-            uncommitted until Persist. Claude default:
-            Edit(**/*.bml), deny Edit(**/_meta/transform/**) and
-            Edit(**/node_modules/**), Bash limited to npx blockml.
+        [2] Operation executor — workflow:OperationExecutor
+            Lookup by the instance type FQN (most specific match).
+            Default AgenticExecutor (transformercap:ExecuteTask): new
+            isolated agent process per AgenticOperation. Performs the
+            Task. May change BML model source. Returns output text.
+            Must not write ModelTransformation metadata (including
+            operations) or files under _meta/transform/. Does not
+            commit; model changes stay uncommitted until Persist.
+            Claude default: Edit(**/*.bml), deny
+            Edit(**/_meta/transform/**) and Edit(**/node_modules/**),
+            Bash limited to npx blockml.
 
         [3] Reflect on Execution — transformercap:ReflectOnExecution
-            Default: deterministic. No agent process. Must not change
-            the model. Reads the Execute git trace for changedFiles.
-            When the operation's captureOutput is true, copies Execute
-            agent stdout onto output. Skipped when Execute throws;
-            output never decides Succeeded vs Failed.
+            Envelope. Default: deterministic. No agent process. Must
+            not change the model. Reads the git trace for changedFiles.
+            When the operation's captureOutput is true, writes the
+            executor output text onto output. Skipped when the
+            executor throws; output never decides Succeeded vs Failed.
 
         [4] Persist Execution — transformercap:PersistExecution
             Default: deterministic. Writes changedFiles, output, status,
@@ -101,7 +106,8 @@
     TypeScript:
     • runtime/transformer.ts → transformercap:RunTransformation
     • pipeline/prepare.ts → transformercap:PrepareExecution
-    • pipeline/execute.ts → transformercap:ExecuteTask
+    • executor/agentic-executor.ts → workflow:AgenticExecutor
+    • pipeline/execute.ts → executor dispatch
     • pipeline/reflect.ts → transformercap:ReflectOnExecution
     • pipeline/persist.ts → transformercap:PersistExecution
     • pipeline/finalize.ts → transformercap:FinalizeExecution
@@ -111,6 +117,9 @@
     <see type="transformercap:RunTransformation" relation="Defines" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:ModelOperation" relation="SeeAlso" />
+    <see type="workflow:AgenticOperation" relation="SeeAlso" />
+    <see type="workflow:OperationExecutor" relation="SeeAlso" />
+    <see type="workflow:AgenticExecutor" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="type:UUID" relation="SeeAlso" />
     <see type="workflow:ParametersException" relation="SeeAlso" />

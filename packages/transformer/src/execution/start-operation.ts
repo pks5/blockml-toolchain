@@ -19,9 +19,9 @@ export function startWorkflowOperation(
   now: Date,
 ): string {
   const baseCommit = assertWorktreeClean(workspaceRoot);
-  const { document } = loadRunningExecution(workspaceRoot, started);
+  const { document, registry } = loadRunningExecution(workspaceRoot, started);
   const forked = forkBom(document);
-  const operation = getOperationInstance(forked.block, operationIndex);
+  const operation = getOperationInstance(forked.block, operationIndex, registry);
   if (!operation) {
     throw new TransformError(
       "execution",

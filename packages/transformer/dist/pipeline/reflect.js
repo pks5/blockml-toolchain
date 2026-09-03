@@ -44,8 +44,8 @@ export function createAgentReflectStage(agent) {
     };
 }
 function operationCapturesOutput(workspaceRoot, started, operationIndex) {
-    const { document } = loadRunningExecution(workspaceRoot, started);
-    const operation = getOperationInstance(document.block, operationIndex);
+    const { document, registry } = loadRunningExecution(workspaceRoot, started);
+    const operation = getOperationInstance(document.block, operationIndex, registry);
     if (!operation) {
         return false;
     }

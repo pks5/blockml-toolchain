@@ -15,22 +15,26 @@
   <type>workflow:ModelOperation</type>
   <baseType>core:Block</baseType>
   <is>A self-contained operation of a ModelTransformation</is>
+  <abstract>true</abstract>
 
   <documentation>
-    A completed, self-contained (Model-)Operation of a ModelTransformation.
+    Abstract envelope for one self-contained (Model-)Operation of a
+    ModelTransformation. Concrete subtypes (for example
+    `workflow:AgenticOperation`) add type-specific members. Instances
+    must be a concrete subtype; this type itself is not instantiated.
 
-    Each ModelOperation runs in its own agent process. It owns `output`
-    and `changedFiles` independently of other operations in the same
-    transformation.
+    The transformer writes envelope fields the same way for every
+    subtype. A registered `workflow:OperationExecutor` does only the
+    type-specific work and may return output text.
 
     * `status` — lifecycle state (`workflow:ExecutionStatus`).
     * `startedAt` / `completedAt` — the interval of this operation.
     * `baseCommit` — Git HEAD commit when this operation started.
-    * `task` — the Task that ran in this operation.
-    * `captureOutput` — when true, Reflect copies Execute agent stdout
-      onto `output`. Default false: `output` stays unset.
-    * `output` — Execute agent stdout for this operation. Present only
-      when `captureOutput` is true.
+    * `captureOutput` — when true, the envelope writes the executor's
+      output text onto `output`. Default false: `output` stays unset.
+    * `output` — optional text this operation produced (agent stdout,
+      tool stdout, or a deterministic summary). Present only when
+      `captureOutput` is true.
     * `changedFiles` — workspace-relative paths modified during this
       operation (`type:FilePathEntity[]`).
     * `exception` — present if and only if `status` is Failed.
@@ -38,7 +42,8 @@
 
   <references>
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
-    <see type="workflow:Task" relation="SeeAlso" />
+    <see type="workflow:AgenticOperation" relation="SeeAlso" />
+    <see type="workflow:OperationExecutor" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
     <see type="core:Exception" relation="SeeAlso" />
     <see type="type:FilePathEntity" relation="SeeAlso" />
@@ -62,23 +67,20 @@
     </completedAt>
     <captureOutput type="type:Boolean">
       <documentation>
-        When true, Reflect copies Execute agent stdout onto output.
-        Default false.
+        When true, the envelope writes the executor output text onto
+        output. Default false.
       </documentation>
       <value>false</value>
     </captureOutput>
     <output type="type:Text">
       <documentation>
-        Execute agent stdout for this ModelOperation. Written by Reflect
-        when captureOutput is true. Absent otherwise.
+        Optional text this ModelOperation produced. Written by the
+        envelope when captureOutput is true. Absent otherwise.
       </documentation>
     </output>
   </properties>
 
   <aggregations>
-    <task type="workflow:Task">
-      <documentation>The Task that ran in this ModelOperation.</documentation>
-    </task>
     <changedFiles type="type:FilePathEntity[]">
       <documentation>Workspace-relative paths modified during this ModelOperation.</documentation>
     </changedFiles>

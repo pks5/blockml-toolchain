@@ -147,7 +147,7 @@ export function pendingExecutionXml(opts: {
   const operations = instructions
     .map((text) =>
       [
-        `        <workflow:ModelOperation>`,
+        `        <workflow:AgenticOperation>`,
         `          <status>Pending</status>`,
         ...(opts.captureOutput === true
           ? [`          <captureOutput>true</captureOutput>`]
@@ -155,7 +155,7 @@ export function pendingExecutionXml(opts: {
         `          <task>`,
         `            <workflow:InstructionTask instructions="${text}" />`,
         `          </task>`,
-        `        </workflow:ModelOperation>`,
+        `        </workflow:AgenticOperation>`,
       ].join("\n"),
     )
     .join("\n");
@@ -219,12 +219,12 @@ export function historyExecutionXml(opts: {
     `  <aggregations>`,
     `    <operations override="true">`,
     `      <composition>`,
-    `        <workflow:ModelOperation>`,
+    `        <workflow:AgenticOperation>`,
     `          <status>Pending</status>`,
     `          <task>`,
     `            <workflow:InstructionTask instructions="Already ran." />`,
     `          </task>`,
-    `        </workflow:ModelOperation>`,
+    `        </workflow:AgenticOperation>`,
     `      </composition>`,
     `    </operations>`,
     `  </aggregations>`,

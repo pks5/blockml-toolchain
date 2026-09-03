@@ -61,10 +61,13 @@
         <blockml:transformer.workflow.Criterion />
         <blockml:transformer.workflow.ExecutionException />
         <blockml:transformer.workflow.ExecutionStatus />
+        <blockml:transformer.workflow.AgenticExecutor />
+        <blockml:transformer.workflow.AgenticOperation />
         <blockml:transformer.workflow.InstructionRule />
         <blockml:transformer.workflow.InstructionTask />
         <blockml:transformer.workflow.ModelOperation />
         <blockml:transformer.workflow.ModelTransformation />
+        <blockml:transformer.workflow.OperationExecutor />
         <blockml:transformer.workflow.Prerequisite />
         <blockml:transformer.workflow.ParametersException />
         <blockml:transformer.workflow.PrerequisiteNotMetException />

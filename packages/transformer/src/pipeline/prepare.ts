@@ -22,7 +22,10 @@ export function createPrepareStage(): TransformStage<string, PreparedExecution> 
             : {}),
         },
       );
-      const operationCount = getOperationInstances(resolved.document.block).length;
+      const operationCount = getOperationInstances(
+        resolved.document.block,
+        resolved.registry,
+      ).length;
       return { pendingFqn, started, operationCount };
     },
   };

@@ -56,7 +56,7 @@
   <aggregations>
     <operations override="true">
       <composition>
-        <workflow:ModelOperation name="Create Poem" status="Pending" captureOutput="true">
+        <workflow:AgenticOperation name="Create Poem" status="Pending" captureOutput="true">
           <task>
             <workflow:InstructionTask>
               <instructions>
@@ -77,8 +77,8 @@
               </instructions>
             </workflow:InstructionTask>
           </task>
-        </workflow:ModelOperation>
-        <workflow:ModelOperation name="Translate Poem" status="Pending">
+        </workflow:AgenticOperation>
+        <workflow:AgenticOperation name="Translate Poem" status="Pending">
           <task>
             <workflow:InstructionTask>
               <instructions>
@@ -88,7 +88,7 @@
               </instructions>
             </workflow:InstructionTask>
           </task>
-        </workflow:ModelOperation>
+        </workflow:AgenticOperation>
       </composition>
     </operations>
   </aggregations>

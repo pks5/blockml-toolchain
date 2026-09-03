@@ -29,9 +29,9 @@
     * `Succeeded` — finished successfully (`_meta.transform.succeeded`).
 
     A ModelOperation uses the same values. Its `Running` state is
-    persisted and committed before the operation's Task runs (recovery
-    boundary). A ModelOperation `Failed` aborts the remaining operations
-    and fails the transformation.
+    persisted and committed before the registered executor runs
+    (recovery boundary). A ModelOperation `Failed` aborts the remaining
+    operations and fails the transformation.
   </documentation>
 
   <references>

@@ -209,6 +209,9 @@ export async function runTransformation(options) {
     if (options.reflectAgent) {
         transformerOptions.reflectAgent = options.reflectAgent;
     }
+    if (options.executors) {
+        transformerOptions.executors = options.executors;
+    }
     if (options.pipeline) {
         transformerOptions.pipeline = options.pipeline;
     }
@@ -256,7 +259,7 @@ export async function runTransformation(options) {
 function resolvePipeline(options) {
     if (options.agent) {
         return {
-            ...createDefaultPipeline(options.agent, options.reflectAgent),
+            ...createDefaultPipeline(options.agent, options.reflectAgent, options.executors),
             ...options.pipeline,
         };
     }

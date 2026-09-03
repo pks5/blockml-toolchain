@@ -67,7 +67,7 @@ describe("rewriteParameterTypeFqns", () => {
               {
                 kind: "blockInstance",
                 instance: {
-                  typeFqn: "org.blockml.bml.transformer.workflow.ModelOperation",
+                  typeFqn: "org.blockml.bml.transformer.workflow.AgenticOperation",
                   memberValues: {},
                   aggregationCompositions: [
                     {

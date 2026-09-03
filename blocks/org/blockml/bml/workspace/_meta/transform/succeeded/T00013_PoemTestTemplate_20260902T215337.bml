@@ -55,7 +55,7 @@
   <aggregations>
     <operations override="true">
       <composition>
-        <workflow:ModelOperation name="Create Poem" status="Succeeded">
+        <workflow:AgenticOperation name="Create Poem" status="Succeeded">
           <startedAt>2026-09-02T21:53:38</startedAt>
           <baseCommit>a03a041c3f8c1b739dfb1e51516de0b07da6e57b</baseCommit>
           <output>Stage 1 (&quot;Create Poem&quot;) completed as instructed. Execute rewrote blocks/org/blockml/bml/workspace/playground/NextPoem222.bml: the prior Spanish poem was replaced with a fresh, original German poem about a tree and a mushroom, the `&lt;is>` line updated to &quot;written in German&quot;, the documentation body replaced with the German verses, and the title property changed to &quot;Die Tanne und der Pilz&quot; (author unchanged: John Doe). Content matches the Stage 1 instruction (German poem about a tree and a mushroom, regenerated per execution) and the run parameters (language:&quot;German&quot;, author:&quot;John Doe&quot;). Only the playground block was modified; the ModelTransformation file under _meta/transform/running/ was read but not written. Structure/format of the block appears consistent with the previous version (same block name, type, baseType core:Documentation, properties layout).</output>
@@ -66,8 +66,8 @@
           <changedFiles>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/NextPoem222.bml" />
           </changedFiles>
-        </workflow:ModelOperation>
-        <workflow:ModelOperation name="Translate Poem" status="Succeeded">
+        </workflow:AgenticOperation>
+        <workflow:AgenticOperation name="Translate Poem" status="Succeeded">
           <startedAt>2026-09-02T21:54:55</startedAt>
           <baseCommit>c77f49d764b8c8f3cfcd487244355c51bd12dd7e</baseCommit>
           <output>Stage 2 (&quot;Translate Poem&quot;) completed as instructed. Execute rewrote blocks/org/blockml/bml/workspace/playground/NextPoem222.bml, translating the Stage 1 German poem &quot;Die Tanne und der Pilz&quot; into Spanish: the `&lt;is>` line was updated from &quot;written in German&quot; to &quot;written in Spanish&quot;; the four stanzas in the documentation body were replaced with faithful Spanish translations that preserve the tree-and-mushroom subject, the fir's speech to the mushroom, and the closing image of two companions; and the title property was changed to &quot;El abeto y el hongo&quot;. The author property is unchanged (John Doe). Block structure/format is consistent with the previous version (same name, type playground:NextPoem222, baseType core:Documentation, properties layout). Only the playground block was modified; no _meta/transform/ ModelTransformation files were touched by Execute (the running transformation file was read only). This matches the Stage 2 instruction (translate the poem to Spanish) and run parameters.</output>
@@ -78,7 +78,7 @@
           <changedFiles>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/NextPoem222.bml" />
           </changedFiles>
-        </workflow:ModelOperation>
+        </workflow:AgenticOperation>
       </composition>
     </operations>
   </aggregations>

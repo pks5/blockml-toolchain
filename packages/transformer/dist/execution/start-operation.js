@@ -7,9 +7,9 @@ import { persistDocument } from "./relocate.js";
 import { assertWorktreeClean, commitWorktree } from "../pipeline/git.js";
 export function startWorkflowOperation(workspaceRoot, started, operationIndex, now) {
     const baseCommit = assertWorktreeClean(workspaceRoot);
-    const { document } = loadRunningExecution(workspaceRoot, started);
+    const { document, registry } = loadRunningExecution(workspaceRoot, started);
     const forked = forkBom(document);
-    const operation = getOperationInstance(forked.block, operationIndex);
+    const operation = getOperationInstance(forked.block, operationIndex, registry);
     if (!operation) {
         throw new TransformError("execution", `Running ModelTransformation has no ModelOperation at index ${operationIndex}`);
     }

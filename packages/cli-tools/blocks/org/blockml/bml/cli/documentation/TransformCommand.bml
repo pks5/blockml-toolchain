@@ -47,12 +47,13 @@
 
     The transformer takes an exclusive worktree lock, then prepares the
     ModelTransformation and runs each ModelOperation in order: persist
-    operation Running, Execute its Task in an isolated agent process,
-    Reflect, Persist results onto that operation. Default Prepare/Finalize
-    are deterministic. Default Execute is a TransformationAgent (Claude
-    Code) that changes BML only. Default Reflect is deterministic (git
-    changedFiles from Execute; output when ModelOperation.captureOutput
-    is true). Default Persist writes those fields onto the operation.
+    operation Running, dispatch the registered OperationExecutor,
+    Reflect, Persist results onto that operation. Default
+    Prepare/Finalize are deterministic. Default executor for
+    AgenticOperation is AgenticExecutor (Claude Code) that changes BML
+    only. Default Reflect is deterministic (git changedFiles after the
+    executor; output when ModelOperation.captureOutput is true). Default
+    Persist writes those fields onto the operation.
     Finalize relocates to _meta.transform.succeeded only when every
     ModelOperation succeeded and result resolution did not throw;
     otherwise _meta.transform.failed and a

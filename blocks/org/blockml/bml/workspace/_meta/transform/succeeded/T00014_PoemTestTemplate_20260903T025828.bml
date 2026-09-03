@@ -55,7 +55,7 @@
   <aggregations>
     <operations override="true">
       <composition>
-        <workflow:ModelOperation name="Create Poem" status="Succeeded">
+        <workflow:AgenticOperation name="Create Poem" status="Succeeded">
           <startedAt>2026-09-03T02:58:28</startedAt>
           <baseCommit>4fd07d9e655e9fb782c1ff941ebb027cf145a5ac</baseCommit>
           <output>Stage 1 rewrote the single playground Block org.blockml.bml.workspace.playground.NextPoem222 (blocks/org/blockml/bml/workspace/playground/NextPoem222.bml). The previous Spanish poem was replaced with a new German poem about a tree and a mushroom: the &lt;is> descriptor changed 'written in Spanish' -> 'written in German', the &lt;documentation> body was replaced with four German quatrains, and the &lt;title> property changed from 'El abeto y el hongo' to 'Tanne und Täubling'. Author (John Doe) and year (2026) were left unchanged. No _meta/transform/ ModelTransformation files were touched; the change is correctly scoped to the target Block. Git detected exactly one changed file, matching the diff.</output>
@@ -66,8 +66,8 @@
           <changedFiles>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/NextPoem222.bml" />
           </changedFiles>
-        </workflow:ModelOperation>
-        <workflow:ModelOperation name="Translate Poem" status="Succeeded">
+        </workflow:AgenticOperation>
+        <workflow:AgenticOperation name="Translate Poem" status="Succeeded">
           <startedAt>2026-09-03T02:59:57</startedAt>
           <baseCommit>8926aed8dfc8918b5dcd3f90532eb006e209a2c7</baseCommit>
           <output>Stage 2 (&quot;Translate Poem&quot;, task: translate org.blockml.bml.workspace.playground.NextPoem222 to Spanish) is correctly executed. Execute rewrote the single target Block blocks/org/blockml/bml/workspace/playground/NextPoem222.bml: the &lt;is> descriptor changed 'written in Spanish'... wait — actually 'written in German' -> 'written in Spanish'; the &lt;documentation> body was replaced, translating all four German quatrains into four rhymed Spanish quatrains that preserve the meaning and stanza structure (a few word choices are poetic adaptations for rhyme, e.g. Schnee->'hielo', 'altes Kind'->'niño soñoliento'); and the &lt;title> property changed from 'Tanne und Täubling' to 'El abeto y la rúsula' (Täubling = russula = rúsula, an accurate rendering). Author (John Doe) and year (2026) were left unchanged, and the Block's type/baseType/structure are untouched. Scope is correct: exactly one file changed, matching the git diff. No _meta/transform/ ModelTransformation files were modified by Execute — the running T00014 transform file was not touched. Note: `npx blockml validate` could not be run in this read-only Reflect step (Bash disabled), but the edit only changes leaf text/title on an otherwise well-formed Block identical in shape to Stage 1's validated output. Minor observation, not a defect: the transform's Parameters still carry language:&quot;German&quot;, which now diverges from the Stage 2 intent to end in Spanish; the stage tasks (create German, then translate to Spanish) drive the behavior, so this is expected for this template.</output>
@@ -78,7 +78,7 @@
           <changedFiles>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/NextPoem222.bml" />
           </changedFiles>
-        </workflow:ModelOperation>
+        </workflow:AgenticOperation>
       </composition>
     </operations>
   </aggregations>

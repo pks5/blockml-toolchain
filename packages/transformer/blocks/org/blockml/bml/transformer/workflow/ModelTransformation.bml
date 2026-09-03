@@ -18,8 +18,9 @@
 
   <documentation>
     One transformation of the model driven by sequential
-    `workflow:ModelOperation` instances. Each operation is self-contained
-    and runs one Task in an isolated agent process.
+    `workflow:ModelOperation` instances. Operations may be mixed concrete
+    subtypes. `workflow:AgenticOperation` runs a Task in an isolated
+    agent process; other subtypes use their registered executor.
 
     * `template` — when true, this Block is a reusable template. Prepare
       leaves it in `_meta.transform.pending`, copies it, sets
@@ -63,12 +64,15 @@
     * `startedAt` / `completedAt` — the execution interval.
     * `baseCommit` — Git HEAD commit when this execution started. Set only
       after Prepare confirms a clean worktree and sets `status=Running`.
-    * `operations` — the ModelOperations of this execution, in order.
-      `output`, `changedFiles`, and `exception` live on each operation.
+    * `operations` — concrete ModelOperation subtypes of this execution,
+      in order. `output`, `changedFiles`, and `exception` live on each
+      operation. Agent Task work applies only to AgenticOperation.
   </documentation>
 
   <references>
     <see type="workflow:ModelOperation" relation="SeeAlso" />
+    <see type="workflow:AgenticOperation" relation="SeeAlso" />
+    <see type="workflow:OperationExecutor" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
     <see type="type:PropertyReference" relation="SeeAlso" />
@@ -147,7 +151,7 @@
 
   <aggregations>
     <operations type="workflow:ModelOperation[]">
-      <documentation>The self-contained ModelOperations of this execution, in order.</documentation>
+      <documentation>Concrete ModelOperation subtypes of this execution, in order.</documentation>
     </operations>
     <exception type="core:Exception">
       <documentation>

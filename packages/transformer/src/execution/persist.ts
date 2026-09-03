@@ -29,9 +29,9 @@ export function persistReflection(
   workspaceRoot: string,
   input: PersistReflectionInput,
 ): void {
-  const { document } = loadRunningExecution(workspaceRoot, input.started);
+  const { document, registry } = loadRunningExecution(workspaceRoot, input.started);
   const forked = forkBom(document);
-  const operation = getOperationInstance(forked.block, input.operationIndex);
+  const operation = getOperationInstance(forked.block, input.operationIndex, registry);
   if (!operation) {
     throw new TransformError(
       "execution",

@@ -42,7 +42,7 @@ export function finalizeExecution(
   if (modelTransformationHasCompletedAt(registry)) {
     setCompletedAt(forked.block, completedAtIso);
   }
-  const operationsSucceeded = allOperationsSucceeded(forked.block);
+  const operationsSucceeded = allOperationsSucceeded(forked.block, registry);
   let resultError: string | undefined;
   if (operationsSucceeded) {
     try {

@@ -21,9 +21,10 @@
   <documentation>
     # Prepare Execution
 
-    1. Validate the pending contract: `status=Pending`, `operations` with a
-       Task on each ModelOperation, and `createdAt` must be set; `executionId` and
-       start/finish fields must be absent on the ModelTransformation.
+    1. Validate the pending contract: `status=Pending`, `operations` of
+       concrete ModelOperation subtypes (AgenticOperation requires a
+       Task), and `createdAt` must be set; `executionId` and start/finish
+       fields must be absent on the ModelTransformation.
     2. Require a clean Git worktree (including HEAD). Abort without starting
        if the worktree is dirty or not a Git toplevel.
     3. Assign a unique `executionId` (`type:UUID`), `sequence`, `startedAt`,

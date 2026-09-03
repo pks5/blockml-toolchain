@@ -1,8 +1,8 @@
 import { bootstrapFullProjectRegistry, } from "@blockml/framework";
-import { MODEL_TRANSFORMATION_FQN } from "./constants.js";
+import { MODEL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN } from "./constants.js";
 import { TransformError } from "./errors.js";
 import { parseExecutionFqn } from "./lifecycle.js";
-import { getOperationInstances, getOperationStatus, getPropertyLiteral, getStatus, hasAggregationComposition, hasOperationProperty, hasPropertyValue, isModelTransformation, operationHasAggregation, operationHasTask, } from "./properties.js";
+import { getOperationInstances, getOperationStatus, getPropertyLiteral, getStatus, hasAggregationComposition, hasOperationProperty, hasPropertyValue, isAgenticOperationType, isModelTransformation, operationHasAggregation, operationHasTask, } from "./properties.js";
 const REQUIRED_PRESENT = ["createdAt"];
 const FORBIDDEN_PROPERTIES = [
     "executionId",
@@ -37,7 +37,7 @@ export function resolvePendingExecutionInRegistry(executionFqn, registry) {
     if (!isModelTransformation(document.block, registry)) {
         throw new TransformError("resolve", `${executionFqn} is not a ${MODEL_TRANSFORMATION_FQN}`);
     }
-    assertPendingContract(executionFqn, document.block);
+    assertPendingContract(executionFqn, document.block, registry);
     return {
         fqn: executionFqn,
         libraryFqn: parsed.libraryFqn,
@@ -46,15 +46,18 @@ export function resolvePendingExecutionInRegistry(executionFqn, registry) {
         registry,
     };
 }
-function assertPendingContract(fqn, block) {
-    const operations = getOperationInstances(block);
+function assertPendingContract(fqn, block, registry) {
+    const operations = getOperationInstances(block, registry);
     if (operations.length === 0) {
         throw new TransformError("resolve", `${fqn} has no configured operations aggregation`);
     }
     for (let index = 0; index < operations.length; index++) {
         const operation = operations[index];
-        if (!operationHasTask(operation)) {
-            throw new TransformError("resolve", `${fqn} ModelOperation ${index + 1} has no configured task aggregation`);
+        if (operation.typeFqn === MODEL_OPERATION_FQN) {
+            throw new TransformError("resolve", `${fqn} ModelOperation ${index + 1} must be a concrete subtype of ${MODEL_OPERATION_FQN}`);
+        }
+        if (isAgenticOperationType(operation.typeFqn, registry) && !operationHasTask(operation)) {
+            throw new TransformError("resolve", `${fqn} AgenticOperation ${index + 1} has no configured task aggregation`);
         }
         const operationStatus = getOperationStatus(operation);
         if (operationStatus !== undefined && operationStatus !== "Pending") {

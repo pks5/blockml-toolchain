@@ -1,5 +1,6 @@
 import type { TransformationAgent } from "../agent/transformation-agent.js";
 import type { ReflectionAgent } from "../agent/reflection-agent.js";
+import type { ExecutorRegistry } from "../executor/registry.js";
 import { type TransformLifecycleListener } from "../execution/lifecycle-events.js";
 import type { TransformPipeline, TransformRunResult } from "../pipeline/types.js";
 export type { TransformRunResult };
@@ -7,6 +8,7 @@ export interface TransformerOptions {
     workspaceRoot: string;
     agent?: TransformationAgent;
     reflectAgent?: ReflectionAgent;
+    executors?: ExecutorRegistry;
     pipeline?: Partial<TransformPipeline>;
     now?: () => Date;
     onLifecycle?: TransformLifecycleListener;
@@ -30,6 +32,7 @@ export interface RunTransformationOptions {
     executionFqn: string;
     agent?: TransformationAgent;
     reflectAgent?: ReflectionAgent;
+    executors?: ExecutorRegistry;
     pipeline?: Partial<TransformPipeline>;
     now?: () => Date;
     onLifecycle?: TransformLifecycleListener;

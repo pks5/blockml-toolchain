@@ -140,6 +140,30 @@ describe("resolvePendingExecution", () => {
     );
   });
 
+  it("rejects an abstract ModelOperation instance", () => {
+    const xml = pendingExecutionXml({ name: "JokeTest" })
+      .replaceAll("workflow:AgenticOperation", "workflow:ModelOperation");
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": xml,
+    });
+    expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
+      /concrete subtype/,
+    );
+  });
+
+  it("rejects an AgenticOperation that has no task", () => {
+    const xml = pendingExecutionXml({ name: "JokeTest" }).replace(
+      /<task>[\s\S]*?<\/task>/,
+      "",
+    );
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": xml,
+    });
+    expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
+      /AgenticOperation 1 has no configured task/,
+    );
+  });
+
   it("rejects a pending execution that already has exception", () => {
     const xml = pendingExecutionXml({ name: "JokeTest" }).replace(
       "</aggregations>",

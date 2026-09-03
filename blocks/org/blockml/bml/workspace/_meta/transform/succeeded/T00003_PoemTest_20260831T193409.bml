@@ -49,7 +49,7 @@
   <aggregations>
     <operations override="true">
       <composition>
-        <workflow:ModelOperation name="Create Poem" status="Succeeded">
+        <workflow:AgenticOperation name="Create Poem" status="Succeeded">
           <startedAt>2026-08-31T19:34:09</startedAt>
           <baseCommit>db929ccb4ceaea628ed9ec5f85ae41de493e4d75</baseCommit>
           <output>Stage 1 (&quot;Create Poem&quot;) of T00003_PoemTest_20260831T193409 completed as specified. The InstructionTask required creating/updating org.blockml.bml.workspace.playground.Poem.bml with a fresh random German poem per execution. Execute produced exactly one model file: blocks/org/blockml/bml/workspace/playground/Poem.bml (currently untracked, hence the empty git diff; the whole playground/ dir shows as ??). The block is well-formed: FQN org.blockml.bml.workspace.playground.Poem, type playground:Poem, baseType core:Documentation, &lt;is> summary present. The &lt;documentation> element contains an original German poem of three four-line stanzas (&quot;Der Morgen legt sich grau ...&quot;), and &lt;properties> carry title=&quot;Der Morgen legt sich grau&quot;, author=&quot;John Doe&quot; (placeholder, consistent with prior poem runs), year=2026. The change is minimal and scoped to the single expected file; structure and conventions match the T00002 precedent. Execute did NOT modify any _meta/transform/ ModelTransformation files (the running/T00003 block reflects only the pre-existing stage-start commit). Note: `npx blockml validate` could not be run in this Reflect step (Bash disabled), so BML validity was not independently re-confirmed, but the file is well-formed XML consistent with surrounding definitions and ready for Stage 2 (&quot;Translate Poem&quot;).</output>
@@ -60,8 +60,8 @@
           <changedFiles>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/Poem.bml" />
           </changedFiles>
-        </workflow:ModelOperation>
-        <workflow:ModelOperation name="Translate Poem" status="Succeeded">
+        </workflow:AgenticOperation>
+        <workflow:AgenticOperation name="Translate Poem" status="Succeeded">
           <startedAt>2026-08-31T19:35:27</startedAt>
           <baseCommit>84a6f2ec92150bbe8a5d1a10a149dfc2518dc022</baseCommit>
           <output>Stage 2 translated the poem in org.blockml.bml.workspace.playground.Poem from German to French. All three &lt;documentation> stanzas were replaced with French equivalents, and the &lt;title> property value changed from 'Der Morgen legt sich grau' to 'Le matin se dépose gris'. Block structure and other properties (author='John Doe', year=2026), name, type (playground:Poem), and baseType (core:Documentation) were preserved. Only the target playground file was modified; Execute did not touch any _meta/transform/ ModelTransformation files. Change is scoped and coherent with the running transformation's intent; no model/schema violations apparent in the edited BML.</output>
@@ -72,7 +72,7 @@
           <changedFiles>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/Poem.bml" />
           </changedFiles>
-        </workflow:ModelOperation>
+        </workflow:AgenticOperation>
       </composition>
     </operations>
   </aggregations>

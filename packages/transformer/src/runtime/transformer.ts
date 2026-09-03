@@ -1,5 +1,6 @@
 import type { TransformationAgent } from "../agent/transformation-agent.js";
 import type { ReflectionAgent } from "../agent/reflection-agent.js";
+import type { ExecutorRegistry } from "../executor/registry.js";
 import { TransformError } from "../execution/errors.js";
 import {
   emitLifecycle,
@@ -26,6 +27,7 @@ export interface TransformerOptions {
   workspaceRoot: string;
   agent?: TransformationAgent;
   reflectAgent?: ReflectionAgent;
+  executors?: ExecutorRegistry;
   pipeline?: Partial<TransformPipeline>;
   now?: () => Date;
   onLifecycle?: TransformLifecycleListener;
@@ -266,6 +268,7 @@ export interface RunTransformationOptions {
   executionFqn: string;
   agent?: TransformationAgent;
   reflectAgent?: ReflectionAgent;
+  executors?: ExecutorRegistry;
   pipeline?: Partial<TransformPipeline>;
   now?: () => Date;
   onLifecycle?: TransformLifecycleListener;
@@ -294,6 +297,9 @@ export async function runTransformation(
   }
   if (options.reflectAgent) {
     transformerOptions.reflectAgent = options.reflectAgent;
+  }
+  if (options.executors) {
+    transformerOptions.executors = options.executors;
   }
   if (options.pipeline) {
     transformerOptions.pipeline = options.pipeline;
@@ -342,7 +348,11 @@ export async function runTransformation(
 function resolvePipeline(options: TransformerOptions): TransformPipeline {
   if (options.agent) {
     return {
-      ...createDefaultPipeline(options.agent, options.reflectAgent),
+      ...createDefaultPipeline(
+        options.agent,
+        options.reflectAgent,
+        options.executors,
+      ),
       ...options.pipeline,
     };
   }

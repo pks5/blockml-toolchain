@@ -23,4 +23,7 @@ export { allocateUniqueExecutionId, usedExecutionIds } from "./execution/executi
 export { parseExecutionFqn, generateExecutionName, executionFilePath, padSequence, formatNameTimestamp, formatDateTimeProperty, } from "./execution/lifecycle.js";
 export { MODEL_TRANSFORMATION_FQN } from "./execution/constants.js";
 export { parseParametersJson } from "./execution/parameters.js";
+export { AgenticExecutor } from "./executor/agentic-executor.js";
+export { ExecutorRegistry } from "./executor/registry.js";
+export { createDefaultExecutorRegistry } from "./executor/default-registry.js";
 //# sourceMappingURL=index.js.map
