@@ -14,38 +14,38 @@
   <name>MyStory</name>
   <type>playground:MyStory</type>
   <baseType>core:Documentation</baseType>
-  <is>A random structured story produced by a workspace transform execution, in German, about a tree and a mushroom</is>
+  <is>A random structured story produced by a workspace transform execution, in Chinese, about a tree and a mushroom</is>
 
   <documentation>
-    A structured German story about a tree and a mushroom. The story text and its
+    A structured Chinese story about a tree and a mushroom. The story text and its
     metadata are carried as typed properties. Each transform execution replaces
     this block with a freshly composed story.
   </documentation>
 
   <properties>
     <title type="type:Text">
-      <value>Die Eiche und der kleine Steinpilz</value>
+      <value>橡树与小牛肝菌</value>
     </title>
     <author type="type:Text">
       <value>John Doe</value>
     </author>
     <story type="type:Text">
-      <value>Am Rand einer Lichtung wuchs seit vielen hundert Jahren eine mächtige Eiche. Ihre Äste trugen den Himmel, und ihre Wurzeln griffen tief in die dunkle Erde. Eines feuchten Morgens spürte die Eiche ein zaghaftes Klopfen an einer ihrer größten Wurzeln.
+      <value>在一片林间空地的边缘，几百年来生长着一棵雄伟的橡树。它的枝干托着天空，它的根深深扎进黑暗的泥土里。一个潮湿的早晨，橡树感到自己一条最粗的根上传来怯生生的叩击。
 
-"Wer stört meinen Schlaf?", brummte sie.
+"是谁扰了我的睡眠？"它低声嘟囔道。
 
-"Ich bin es nur", antwortete eine dünne Stimme. Zwischen den Wurzeln hatte sich über Nacht ein junger Steinpilz aus dem Moos geschoben, mit rundem braunem Hut und dickem hellem Fuß. "Ich bin heute erst gewachsen und weiß noch nicht, wozu ich hier bin."
+"只是我而已，"一个细小的声音答道。一夜之间，一棵年幼的牛肝菌从树根之间的苔藓里钻了出来，戴着圆圆的棕色菌帽，长着粗壮浅色的菌柄。"我今天才刚长出来，还不知道自己来这里是为了什么。"
 
-Die Eiche schwieg lange, wie es alte Bäume tun. Dann sagte sie: "Du bist mit mir verbunden, kleiner Pilz. Deine feinen Fäden umspielen meine Wurzeln, und wir tauschen, was wir haben. Ich gebe dir Zucker aus dem Licht der Blätter, und du gibst mir Wasser und Salze aus der Tiefe, die ich allein nicht erreiche."
+橡树像所有老树那样，沉默了很久。然后它说："你和我是相连的，小蘑菇。你那些细细的菌丝缠绕着我的根，我们彼此交换各自拥有的东西。我把叶子在阳光里酿出的糖分给你，你把我独自够不到的深处的水和盐分给我。"
 
-Der Steinpilz staunte. "Dann bin ich also nicht klein und nutzlos?"
+牛肝菌惊讶极了。"这么说，我并不渺小，也不是没有用处？"
 
-"Niemand im Wald ist nutzlos", sagte die Eiche. "Der Regen fällt, der Specht klopft, das Reh zieht vorbei, und wir beide halten den Boden lebendig. Bleib bei mir, solange der Herbst es erlaubt."
+"森林里没有谁是没有用的，"橡树说。"雨落下来，啄木鸟敲击着，狍子从旁边经过，而我们两个让土壤保持活力。只要秋天允许，就留在我身边吧。"
 
-Und so stand der kleine Steinpilz im Schutz der großen Eiche. Als am Nachmittag ein Wanderer den schmalen Pfad entlangkam, sah er nur einen alten Baum und einen Pilz im Moos. Er ahnte nicht, dass unter seinen Schuhen zwei alte Freunde einander am Leben hielten.</value>
+于是小牛肝菌就在大橡树的庇护下伫立着。午后，一个徒步的人沿着狭窄的小路走来，他只看到一棵老树和苔藓里的一朵蘑菇。他没有察觉，在他的鞋底之下，两位老朋友正彼此维系着对方的生命。</value>
     </story>
     <language type="type:Text">
-      <value>German</value>
+      <value>Chinese</value>
     </language>
     <date type="type:DateTime">
       <value>2026-09-04T00:00:00</value>
@@ -54,10 +54,10 @@ Und so stand der kleine Steinpilz im Schutz der großen Eiche. Als am Nachmittag
       <value>2026-09-04T00:27:41</value>
     </time>
     <location type="type:Text">
-      <value>Bayerischer Wald, Deutschland</value>
+      <value>德国，巴伐利亚森林</value>
     </location>
     <weather type="type:Text">
-      <value>Feuchter, kühler Morgen mit tief hängendem Nebel über der Lichtung</value>
+      <value>潮湿凉爽的早晨，林间空地上笼罩着低垂的浓雾</value>
     </weather>
   </properties>
 

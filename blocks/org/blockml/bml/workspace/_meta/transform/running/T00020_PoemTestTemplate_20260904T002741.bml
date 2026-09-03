@@ -478,9 +478,10 @@ The story should be structured with the following properties:
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/" />
           </changedFiles>
         </workflow:AgenticOperation>
-        <workflow:AgenticOperation name="Translate Poem" status="Running">
+        <workflow:AgenticOperation name="Translate Poem" status="Succeeded">
           <startedAt>2026-09-04T00:28:52</startedAt>
           <baseCommit>7bbf8682b4b96a708a32dd269629318c3b09cfa1</baseCommit>
+          <completedAt>2026-09-04T00:30:40</completedAt>
           <task>
             <workflow:InstructionTask>
               <instructions>Translate the story in 
@@ -488,6 +489,9 @@ org.blockml.bml.workspace.playground.MyStory.bml
 to chinese.</instructions>
             </workflow:InstructionTask>
           </task>
+          <changedFiles>
+            <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/MyStory.bml" />
+          </changedFiles>
         </workflow:AgenticOperation>
       </composition>
     </operations>
