@@ -61,14 +61,14 @@
             <workflow:InstructionTask>
               <instructions>
                 Create or update the block 
-                org.blockml.bml.workspace.playground.StructuredPoem.bml 
-                that contains a random poem in german 
+                org.blockml.bml.workspace.playground.MyStory.bml 
+                that contains a random story in german 
                 about a tree and a mushroom. 
                 For each execution create a new poem.
-                The poem should be structured with the following properties:
+                The story should be structured with the following properties:
                 - title (type:Text)
                 - author (type:Text)
-                - poem (type:Text)
+                - story (type:Text)
                 - language (type:Text)
                 - date (type:DateTime)
                 - time (type:DateTime)
@@ -82,9 +82,9 @@
           <task>
             <workflow:InstructionTask>
               <instructions>
-                Translate the poem in 
-                org.blockml.bml.workspace.playground.NextPoem222.bml 
-                to spanish.
+                Translate the story in 
+                org.blockml.bml.workspace.playground.MyStory.bml 
+                to chinese.
               </instructions>
             </workflow:InstructionTask>
           </task>
