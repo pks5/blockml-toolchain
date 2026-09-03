@@ -35,7 +35,7 @@ Rebuild the index if results look stale or sources have changed.
 
 ### inspect — understand a known FQN
 
-Once search returns FQNs, inspect the relevant Block before opening a large `.bml` file. Members in the JSON are the **effective** set (inherited included). Expansion follows declared member types, contracts, and subBlocks — not a copy of the ancestor chain; ancestors are FQN refs.
+Once search returns FQNs, inspect the relevant Block before opening a large `.bml` file. Members in the JSON are the **effective** set (inherited included). Expansion follows declared member types, contracts, subBlocks, and generic type arguments — not a copy of the ancestor chain; ancestors are FQN refs. `genericTypes` are declared parameters; bound types on an instance are SubBlocks of that instance, not of the generic parent.
 
 ```bash
 npx blockml inspect <fqn> [--depth n]

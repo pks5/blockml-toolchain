@@ -50,6 +50,11 @@ export interface InspectedInstance {
     members?: Record<string, unknown>;
     aggregations?: Record<string, InspectedInstance[]>;
 }
+export interface InspectedGenericType {
+    name: string;
+    baseType: InspectTypeRef;
+    defaultType?: InspectTypeRef;
+}
 export interface InspectedBlock {
     fqn: string;
     name: string;
@@ -58,9 +63,8 @@ export interface InspectedBlock {
     is?: string;
     documentation?: string;
     documentationTruncated?: boolean;
-    baseType?: {
-        ref: string;
-    };
+    baseType?: InspectTypeRef;
+    genericTypes?: InspectedGenericType[];
     ancestors?: string[];
     contracts?: string[];
     members: InspectedMember[];

@@ -38,7 +38,7 @@
 
     INSPECT4 Members are effective; inheritedFrom from findLocalMember plus baseType/contract owners.
 
-    INSPECT5 Expansion follows declared member types, contracts, and subBlocks — not the baseType chain and not inherited member types.
+    INSPECT5 Expansion follows declared member types, contracts, subBlocks, baseType generic arguments, and genericTypes defaultType FQNs — not the baseType parent, not generic bounds, and not inherited member types.
 
     INSPECT6 Leaf FQNs: org.blockml.bml.type.* and org.blockml.bml.core.ValueType.
 

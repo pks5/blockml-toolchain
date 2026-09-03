@@ -5,6 +5,7 @@ import type {
   BomDocument,
   CompositionNode,
   CompositionTemplate,
+  GenericType,
   MemberDefinition,
   MemberValue,
   TypeExpression,
@@ -28,12 +29,14 @@ import {
   VALUE_TYPE_FQN,
   type InspectBlockOptions,
   type InspectedBlock,
+  type InspectedGenericType,
   type InspectedImplementation,
   type InspectedInstance,
   type InspectedMember,
   type InspectOrigin,
   type InspectProjectOptions,
   type InspectResult,
+  type InspectTypeRef,
 } from "./types.js";
 
 function clampDepth(depth: number | undefined): number {
@@ -93,6 +96,78 @@ function firstDocumentation(block: BlockDefinition): { text: string; truncated: 
 function lastSegment(fqn: string): string {
   const parts = fqn.split(".");
   return parts[parts.length - 1] || fqn;
+}
+
+function resolveAuthoredTypeName(
+  raw: string,
+  bindings: Record<string, string> | undefined,
+): string {
+  const trimmed = raw.trim();
+  const colon = trimmed.indexOf(":");
+  if (colon <= 0 || /[()|, \[]/.test(trimmed)) {
+    return trimmed;
+  }
+  const prefix = trimmed.slice(0, colon);
+  const local = trimmed.slice(colon + 1);
+  if (!local || local.includes(":")) {
+    return trimmed;
+  }
+  const ns = bindings?.[prefix];
+  return ns ? `${ns}.${local}` : trimmed;
+}
+
+function projectDeclaredTypeRef(
+  raw: string | undefined,
+  bindings: Record<string, string> | undefined,
+): InspectTypeRef | undefined {
+  if (!raw?.trim()) {
+    return undefined;
+  }
+  const resolved = resolveAuthoredTypeName(raw, bindings);
+  if (resolved.includes(".") || resolved.includes(":")) {
+    return { kind: "named", ref: resolved };
+  }
+  return { kind: "genericParam", name: resolved };
+}
+
+function projectGenericTypes(
+  params: GenericType[] | undefined,
+  bindings: Record<string, string> | undefined,
+): InspectedGenericType[] | undefined {
+  if (!params?.length) {
+    return undefined;
+  }
+  return params.map((param) => {
+    const entry: InspectedGenericType = {
+      name: param.name,
+      baseType: projectDeclaredTypeRef(param.baseType, bindings) ?? {
+        kind: "named",
+        ref: param.baseType,
+      },
+    };
+    const defaultType = projectDeclaredTypeRef(param.defaultType, bindings);
+    if (defaultType) {
+      entry.defaultType = defaultType;
+    }
+    return entry;
+  });
+}
+
+function projectBaseType(block: BlockDefinition): InspectTypeRef | undefined {
+  if (block.baseTypeExpression) {
+    return projectTypeExpression(block.baseTypeExpression);
+  }
+  if (block.baseType) {
+    return { kind: "named", ref: block.baseType };
+  }
+  return undefined;
+}
+
+function baseTypeParentFqn(block: BlockDefinition): string | undefined {
+  if (block.baseTypeExpression?.kind === "named") {
+    return block.baseTypeExpression.fqn;
+  }
+  return block.baseType;
 }
 
 function projectImplementation(
@@ -286,7 +361,8 @@ function projectMember(member: MemberDefinition, inheritedFrom?: string): Inspec
   return projected;
 }
 
-function collectDeclaredExpansionRefs(block: BlockDefinition): string[] {
+function collectDeclaredExpansionRefs(doc: BomDocument): string[] {
+  const block = doc.block;
   const refs: string[] = [];
   for (const contract of block.contracts ?? []) {
     if (contract.value) {
@@ -296,6 +372,21 @@ function collectDeclaredExpansionRefs(block: BlockDefinition): string[] {
   for (const sub of block.subBlocks) {
     if (sub.type) {
       refs.push(sub.type);
+    }
+  }
+  if (block.baseTypeExpression) {
+    const parent = baseTypeParentFqn(block);
+    for (const fqn of collectNamedFqns(block.baseTypeExpression)) {
+      if (fqn !== parent) {
+        refs.push(fqn);
+      }
+    }
+  }
+  const bindings = doc.source.namespaceBindings;
+  for (const param of block.genericTypes ?? []) {
+    const defaultType = projectDeclaredTypeRef(param.defaultType, bindings);
+    if (defaultType?.ref) {
+      refs.push(defaultType.ref);
     }
   }
   for (const member of block.members) {
@@ -345,8 +436,13 @@ function projectBlock(
       projected.documentationTruncated = true;
     }
   }
-  if (block.baseType) {
-    projected.baseType = { ref: block.baseType };
+  const baseType = projectBaseType(block);
+  if (baseType) {
+    projected.baseType = baseType;
+  }
+  const genericTypes = projectGenericTypes(block.genericTypes, doc.source.namespaceBindings);
+  if (genericTypes) {
+    projected.genericTypes = genericTypes;
   }
   const chain = collectBaseTypeChain(block, registry);
   const ancestorFqns = chain.slice(0, -1).map((item) => item.type).filter(Boolean);
@@ -421,7 +517,7 @@ export function inspectBlock(
     expanded.add(currentFqn);
 
     if (remaining > 0) {
-      for (const ref of collectDeclaredExpansionRefs(doc.block)) {
+      for (const ref of collectDeclaredExpansionRefs(doc)) {
         expand(ref, remaining - 1);
       }
     }

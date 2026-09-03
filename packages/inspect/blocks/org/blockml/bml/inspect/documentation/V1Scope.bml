@@ -30,7 +30,7 @@
   <documentation>In scope V1:
     • inspectBlock / inspectProject over the validate --all TypeRegistry
     • Effective members with inheritedFrom
-    • Compact TypeExpression projection
+    • Compact TypeExpression projection; baseType keeps generic arguments; genericTypes on InspectedBlock
     • depth 0..3 (default 1), cycle detection, 48-block budget
     • Aggregation composition instances (enum literals, Library catalog FQNs, nested fills)
     • Capability implementation language and truncated source

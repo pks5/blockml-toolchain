@@ -367,4 +367,78 @@ describe("inspectProject", () => {
     expect(go?.implementation?.source.startsWith("Do the thing.")).toBe(true);
     expect(go?.implementation?.source.endsWith("…")).toBe(true);
   });
+
+  it("projects genericTypes without inventing subBlocks", () => {
+    const dir = join(TMP, "generics");
+    writeProject(dir, {
+      "blocks/Widget.bml": blockXml({ name: "Widget" }),
+      "blocks/Box.bml": blockXml({
+        name: "Box",
+        extra: [
+          "  <documentation>box</documentation>",
+          "  <genericTypes>",
+          '    <T baseType="core:Block" defaultType="test:Widget" />',
+          "  </genericTypes>",
+          "  <properties>",
+          '    <item type="T"/>',
+          "  </properties>",
+        ].join("\n"),
+      }),
+    });
+    const d0 = inspectProject(`${NS}.Box`, { rootDir: dir, depth: 0 });
+    const box = d0.blocks[`${NS}.Box`];
+    expect(box?.subBlocks).toBeUndefined();
+    expect(box?.genericTypes).toEqual([
+      {
+        name: "T",
+        baseType: { kind: "named", ref: "org.blockml.bml.core.Block" },
+        defaultType: { kind: "named", ref: `${NS}.Widget` },
+      },
+    ]);
+    const item = box?.members.find((m) => m.name === "item");
+    expect(item?.type).toEqual({ kind: "genericParam", name: "T" });
+    expect(d0.blocks[`${NS}.Widget`]).toBeUndefined();
+    expect(d0.blocks["org.blockml.bml.core.Block"]).toBeUndefined();
+
+    const d1 = inspectProject(`${NS}.Box`, { rootDir: dir, depth: 1 });
+    expect(d1.blocks[`${NS}.Widget`]).toBeDefined();
+    expect(d1.blocks["org.blockml.bml.core.Block"]).toBeUndefined();
+  });
+
+  it("keeps generic arguments on baseType and expands the argument, not the parent", () => {
+    const dir = join(TMP, "generic-base");
+    writeProject(dir, {
+      "blocks/Payload.bml": blockXml({ name: "Payload" }),
+      "blocks/Holder.bml": blockXml({
+        name: "Holder",
+        extra: [
+          "  <documentation>holder</documentation>",
+          "  <genericTypes>",
+          '    <T baseType="core:Block" />',
+          "  </genericTypes>",
+          "  <properties>",
+          '    <item type="T"/>',
+          "  </properties>",
+        ].join("\n"),
+      }),
+      "blocks/Filled.bml": blockXml({
+        name: "Filled",
+        baseType: "test:Holder(test:Payload)",
+        extra: "  <documentation>filled</documentation>",
+      }),
+    });
+    const d0 = inspectProject(`${NS}.Filled`, { rootDir: dir, depth: 0 });
+    expect(d0.blocks[`${NS}.Filled`]?.baseType).toEqual({
+      kind: "generic",
+      ref: `${NS}.Holder`,
+      args: [{ kind: "named", ref: `${NS}.Payload` }],
+    });
+    expect(d0.blocks[`${NS}.Filled`]?.subBlocks).toBeUndefined();
+    expect(d0.blocks[`${NS}.Holder`]).toBeUndefined();
+    expect(d0.blocks[`${NS}.Payload`]).toBeUndefined();
+
+    const d1 = inspectProject(`${NS}.Filled`, { rootDir: dir, depth: 1 });
+    expect(d1.blocks[`${NS}.Payload`]).toBeDefined();
+    expect(d1.blocks[`${NS}.Holder`]).toBeUndefined();
+  });
 });

@@ -64,6 +64,7 @@
         <inspect:InspectedMember />
         <inspect:InspectedInstance />
         <inspect:InspectedImplementation />
+        <inspect:InspectedGenericType />
         <inspect:InspectedBlock />
         <inspect:InspectResult />
         <inspect:InspectOptions />
