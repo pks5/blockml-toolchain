@@ -205,7 +205,7 @@ const blocks = [
     prefix: "bomvalue",
     name: "MemberValue",
     is: "Abstract union of authored member values",
-    doc: "Discriminated union: LiteralValue | ExpressionValue | AddressValue.",
+    doc: "Discriminated union: LiteralValue | ExpressionValue | InterpolatedTextValue | AddressValue.",
     abstract: true,
   },
   {
@@ -233,6 +233,21 @@ const blocks = [
     kind: "expression",
     fields: [
       { name: "kind", type: "type:Text", required: true, literal: "expression" },
+      { name: "raw", type: "type:Text", required: true },
+      { name: "authoredPlacement", type: "type:Text" },
+      { name: "source", type: "bomcommon:SourceLocation" },
+    ],
+  },
+  {
+    pkg: "value",
+    prefix: "bomvalue",
+    name: "InterpolatedTextValue",
+    is: "Authored interpolated text member value",
+    doc: "raw is the full authored text including ${} holes. AST via parseInterpolatedText() — not stored.",
+    baseType: "bomvalue:MemberValue",
+    kind: "interpolated",
+    fields: [
+      { name: "kind", type: "type:Text", required: true, literal: "interpolated" },
       { name: "raw", type: "type:Text", required: true },
       { name: "authoredPlacement", type: "type:Text" },
       { name: "source", type: "bomcommon:SourceLocation" },
@@ -1209,7 +1224,7 @@ writeFileSync(
       unions: {
         MemberDefinition: ["PropertyDefinition", "AggregationDefinition", "AssociationDefinition", "CapabilityDefinition"],
         TypeExpression: ["NamedTypeReference", "UnionTypeExpression", "GroupedTypeExpression", "GenericParameterReference", "SelfTypeReference", "AnonymousStructType"],
-        MemberValue: ["LiteralValue", "ExpressionValue", "AddressValue"],
+        MemberValue: ["LiteralValue", "ExpressionValue", "InterpolatedTextValue", "AddressValue"],
         CompositionNode: ["BlockInstanceNode", "VirtualContainerNode"],
         DirectiveAttribute: ["EachDirective", "IfDirective", "UnlessDirective", "WithDirective"],
       },

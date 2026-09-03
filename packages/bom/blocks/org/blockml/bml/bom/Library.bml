@@ -84,6 +84,7 @@
         <bomvalue:MemberValue />
         <bomvalue:LiteralValue />
         <bomvalue:ExpressionValue />
+        <bomvalue:InterpolatedTextValue />
         <bomvalue:AddressValue />
         <bomtype:Multiplicity />
         <bomtype:InstanceConfiguration />

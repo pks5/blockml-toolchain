@@ -9,7 +9,7 @@ import type {
   WithDirective,
 } from "@blockml/bom";
 import type { Element } from "@xmldom/xmldom";
-import { expressionFromRaw } from "./member-value.js";
+import { containsUnescapedInterpolation, expressionFromRaw } from "./member-value.js";
 import {
   elementChildren,
   elementLocalName,
@@ -184,6 +184,15 @@ function parseMetaValue(
 ) {
   if (raw.startsWith("${") && raw.endsWith("}")) {
     return expressionFromRaw(raw, loc);
+  }
+  const trimmed = raw.trim();
+  const looksLikeJson = trimmed.startsWith("[") || trimmed.startsWith("{");
+  if (!looksLikeJson && containsUnescapedInterpolation(raw)) {
+    return {
+      kind: "interpolated" as const,
+      raw,
+      source: loc,
+    };
   }
   return {
     kind: "literal" as const,

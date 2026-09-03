@@ -4,7 +4,7 @@ export type { TypeReferenceEntityInstance, GenericType, BlockDefinition, Keyword
 export type { TypeExpression, TypeDescriptor, Multiplicity, InstanceConfiguration, NamedTypeReference, UnionTypeExpression, GroupedTypeExpression, GenericParameterReference, SelfTypeReference, AnonymousStructType, StructField, } from "./types/type-expression.js";
 export type { MemberDefinition, ConstrainableDefinition, MemberDefinitionBase, PropertyDefinition, PropertyValueEntry, AggregationDefinition, AssociationDefinition, CapabilityDefinition, ImplementationBlock, EmbeddedExpression, } from "./types/member-definition.js";
 export type { CompositionTemplate, InstanceAggregationComposition, CompositionNode, BlockInstanceNode, VirtualContainerNode, BlockInstance, GenericsBinding, DirectiveAttribute, EachDirective, IfDirective, UnlessDirective, WithDirective, WithBinding, } from "./types/composition.js";
-export type { MemberValue, LiteralValue, ExpressionValue, AddressValue, Address, } from "./types/values.js";
+export type { MemberValue, LiteralValue, ExpressionValue, InterpolatedTextValue, AddressValue, Address, } from "./types/values.js";
 export type { ParseResult, SerializeResult, ParseOptions, SerializeOptions, ValidateResult, ValidateOptions, TypeRegistryReader, } from "./types/api.js";
 export { bomEquals, stripProvenance } from "./equals.js";
 //# sourceMappingURL=index.d.ts.map

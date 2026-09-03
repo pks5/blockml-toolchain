@@ -1,10 +1,14 @@
 import { spawn } from "node:child_process";
-import type { BlockInstance } from "@blockml/bom";
+import type { BlockDefinition, BlockInstance } from "@blockml/bom";
 import { bootstrapFullProjectRegistry } from "@blockml/framework";
+import {
+  buildBlockEvaluationScope,
+  resolveMemberStringList,
+  resolveMemberText,
+} from "../execution/interpolate.js";
 import {
   getOperationInstance,
   getOperationPropertyLiteral,
-  getOperationStringList,
 } from "../execution/properties.js";
 import type {
   OperationExecuteRequest,
@@ -38,7 +42,7 @@ export class ToolExecutor implements OperationExecutor {
     if (loaded.error) {
       return loaded.error;
     }
-    const invocation = readToolInvocation(loaded.operation);
+    const invocation = readToolInvocation(loaded.operation, loaded.block);
     if (invocation.error) {
       return invocation.error;
     }
@@ -73,7 +77,9 @@ export class ToolExecutor implements OperationExecutor {
 
 function loadToolOperation(
   request: OperationExecuteRequest,
-): { operation: BlockInstance; error?: undefined } | { error: OperationExecuteResult } {
+):
+  | { operation: BlockInstance; block: BlockDefinition; error?: undefined }
+  | { error: OperationExecuteResult } {
   const { registry } = bootstrapFullProjectRegistry({
     rootDir: request.workspaceRoot,
   });
@@ -101,15 +107,21 @@ function loadToolOperation(
       },
     };
   }
-  return { operation };
+  return { operation, block: document.block };
 }
 
 function readToolInvocation(
   operation: BlockInstance,
+  block: BlockDefinition,
 ):
   | { command: string; args: string[]; error?: undefined }
   | { error: OperationExecuteResult } {
-  const rawCommand = getOperationPropertyLiteral(operation, "command");
+  const scope = buildBlockEvaluationScope(block);
+  const rawCommand =
+    resolveMemberText(operation.memberValues.command, scope) ??
+    (typeof getOperationPropertyLiteral(operation, "command") === "string"
+      ? (getOperationPropertyLiteral(operation, "command") as string)
+      : undefined);
   if (typeof rawCommand !== "string" || rawCommand.trim() === "") {
     return {
       error: {
@@ -129,8 +141,8 @@ function readToolInvocation(
       },
     };
   }
-  if (getOperationPropertyLiteral(operation, "args") !== undefined) {
-    const args = getOperationStringList(operation, "args");
+  if (operation.memberValues.args !== undefined) {
+    const args = resolveMemberStringList(operation.memberValues.args, scope);
     if (args === undefined) {
       return {
         error: {

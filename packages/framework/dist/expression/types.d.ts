@@ -1,4 +1,4 @@
-export type ExpressionNode = LiteralExpressionNode | ArrayExpressionNode | ObjectExpressionNode | PropertyExpressionNode | CallExpressionNode | BinaryExpressionNode;
+export type ExpressionNode = LiteralExpressionNode | ArrayExpressionNode | ObjectExpressionNode | PropertyExpressionNode | CallExpressionNode | BinaryExpressionNode | InterpolatedStringNode;
 export interface BinaryExpressionNode {
     kind: "binary";
     operator: "+" | "-" | "*" | "/";
@@ -25,6 +25,10 @@ export interface CallExpressionNode {
     kind: "call";
     callee: string;
     args: ExpressionNode[];
+}
+export interface InterpolatedStringNode {
+    kind: "interpolated";
+    parts: ExpressionNode[];
 }
 export interface ParseExpressionResult {
     ast: ExpressionNode;

@@ -1,0 +1,1 @@
+{"version":3,"file":"restricted.d.ts","sourceRoot":"","sources":["../../src/expression/restricted.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,cAAc,EAAE,MAAM,YAAY,CAAC;AAEjD,eAAO,MAAM,yBAAyB,qCACF,CAAC;AAIrC,wBAAgB,yBAAyB,CAAC,IAAI,EAAE,cAAc,GAAG,MAAM,GAAG,SAAS,CAyDlF;AAED,wBAAgB,yBAAyB,CAAC,GAAG,EAAE,MAAM,GAAG,OAAO,CAE9D"}

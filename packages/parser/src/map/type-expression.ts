@@ -447,6 +447,9 @@ function memberValueToConfig(v: { kind: string; value?: unknown; raw?: string })
   if (v.kind === "expression") {
     return `\${ ${v.raw} }`;
   }
+  if (v.kind === "interpolated") {
+    return v.raw ?? "";
+  }
   if (typeof v.value === "string") {
     return `"${v.value}"`;
   }

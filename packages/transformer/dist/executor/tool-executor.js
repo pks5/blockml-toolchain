@@ -1,6 +1,7 @@
 import { spawn } from "node:child_process";
 import { bootstrapFullProjectRegistry } from "@blockml/framework";
-import { getOperationInstance, getOperationPropertyLiteral, getOperationStringList, } from "../execution/properties.js";
+import { buildBlockEvaluationScope, resolveMemberStringList, resolveMemberText, } from "../execution/interpolate.js";
+import { getOperationInstance, getOperationPropertyLiteral, } from "../execution/properties.js";
 const COMMAND_TOKEN = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 export class ToolExecutor {
     runProcess;
@@ -12,7 +13,7 @@ export class ToolExecutor {
         if (loaded.error) {
             return loaded.error;
         }
-        const invocation = readToolInvocation(loaded.operation);
+        const invocation = readToolInvocation(loaded.operation, loaded.block);
         if (invocation.error) {
             return invocation.error;
         }
@@ -69,10 +70,14 @@ function loadToolOperation(request) {
             },
         };
     }
-    return { operation };
+    return { operation, block: document.block };
 }
-function readToolInvocation(operation) {
-    const rawCommand = getOperationPropertyLiteral(operation, "command");
+function readToolInvocation(operation, block) {
+    const scope = buildBlockEvaluationScope(block);
+    const rawCommand = resolveMemberText(operation.memberValues.command, scope) ??
+        (typeof getOperationPropertyLiteral(operation, "command") === "string"
+            ? getOperationPropertyLiteral(operation, "command")
+            : undefined);
     if (typeof rawCommand !== "string" || rawCommand.trim() === "") {
         return {
             error: {
@@ -92,8 +97,8 @@ function readToolInvocation(operation) {
             },
         };
     }
-    if (getOperationPropertyLiteral(operation, "args") !== undefined) {
-        const args = getOperationStringList(operation, "args");
+    if (operation.memberValues.args !== undefined) {
+        const args = resolveMemberStringList(operation.memberValues.args, scope);
         if (args === undefined) {
             return {
                 error: {

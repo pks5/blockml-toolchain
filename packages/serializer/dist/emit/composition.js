@@ -1,5 +1,5 @@
 import { fqnToQName, visibilityPrefix } from "./qname.js";
-import { emitCharacterData, escapeAttr, formatBoolean, formatMemberValue, XmlWriter, } from "./xml.js";
+import { emitCharacterData, escapeAttr, escapeText, formatBoolean, formatMemberValue, XmlWriter, } from "./xml.js";
 export function emitCompositionTemplate(writer, template, ctx, wrapInAggregation) {
     if (wrapInAggregation) {
         const prefix = visibilityPrefix(undefined);
@@ -154,6 +154,9 @@ function emitMetaAttr(name, val) {
     if (val.kind === "expression") {
         return [`${name}="\${ ${escapeAttr(val.raw)} }"`];
     }
+    if (val.kind === "interpolated") {
+        return [`${name}="${escapeAttr(val.raw)}"`];
+    }
     if (val.kind === "address") {
         return [`${name}="${escapeAttr(val.address.raw)}"`];
     }
@@ -162,6 +165,9 @@ function emitMetaAttr(name, val) {
 function emitMemberValueAttr(val) {
     if (val.kind === "expression") {
         return `\${ ${val.raw} }`;
+    }
+    if (val.kind === "interpolated") {
+        return escapeAttr(val.raw);
     }
     if (val.kind === "address") {
         return val.address.raw;
@@ -177,6 +183,9 @@ function emitMemberValueAttr(val) {
 function emitMemberValueElement(name, val) {
     if (val.kind === "expression") {
         return `<${name}>\${ ${val.raw} }</${name}>`;
+    }
+    if (val.kind === "interpolated") {
+        return `<${name}>${escapeText(val.raw)}</${name}>`;
     }
     if (val.kind === "address") {
         return `<${name}>${escapeAttr(val.address.raw)}</${name}>`;

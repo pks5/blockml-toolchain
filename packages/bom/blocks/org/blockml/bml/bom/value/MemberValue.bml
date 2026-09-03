@@ -28,7 +28,7 @@
   <baseType>bom:UrmodellType</baseType>
   <is>Abstract union of authored member values</is>
 
-  <documentation>Discriminated union: LiteralValue | ExpressionValue | AddressValue.</documentation>
+  <documentation>Discriminated union: LiteralValue | ExpressionValue | InterpolatedTextValue | AddressValue.</documentation>
 
   <abstract>true</abstract>
 

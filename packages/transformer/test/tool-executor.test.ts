@@ -13,12 +13,20 @@ const TMP = join(import.meta.dirname, ".tmp-transformer-tool-executor");
 function writeToolPending(opts?: {
   command?: string;
   args?: readonly string[];
+  parameterFields?: readonly string[];
+  pendingParameters?: string;
 }): string {
   writeProject(TMP, {
     "blocks/com/example/model/_meta/transform/pending/JokeTest.bml":
       pendingExecutionXml({
         name: "JokeTest",
         captureOutput: true,
+        ...(opts?.parameterFields !== undefined
+          ? { parameterFields: opts.parameterFields }
+          : {}),
+        ...(opts?.pendingParameters !== undefined
+          ? { pendingParameters: opts.pendingParameters }
+          : {}),
         tool: {
           command: opts?.command ?? "blockml",
           ...(opts?.args !== undefined ? { args: opts.args } : { args: ["validate"] }),
@@ -105,5 +113,26 @@ describe("ToolExecutor", () => {
       return;
     }
     expect(result.error).toMatch(/single npm bin token/);
+  });
+
+  it("interpolates ${} holes in Text[] args against this.parameters", async () => {
+    const executionFqn = writeToolPending({
+      parameterFields: ["mode"],
+      pendingParameters: '{"mode":"validate"}',
+      args: ["${ this.parameters.mode }"],
+    });
+    const calls: ToolProcessRequest[] = [];
+    const executor = new ToolExecutor(async (request) => {
+      calls.push(request);
+      return { exitCode: 0, stdout: "ok\n", stderr: "" };
+    });
+    const result = await executor.execute({
+      workspaceRoot: TMP,
+      executionFqn,
+      operationIndex: 0,
+      operationTypeFqn: TOOL_OPERATION_FQN,
+    });
+    expect(result.success).toBe(true);
+    expect(calls).toEqual([{ cwd: TMP, command: "blockml", args: ["validate"] }]);
   });
 });

@@ -87,6 +87,7 @@
         <fwexpression:PropertyExpressionNode />
         <fwexpression:CallExpressionNode />
         <fwexpression:BinaryExpressionNode />
+        <fwexpression:InterpolatedStringNode />
         <fwexpression:ParseExpressionResult />
         <fwexpression:ParseExpressionError />
         <fwexpression:ParseExpressionOutcome />
@@ -107,6 +108,9 @@
         <fwcap:CollectBaseTypeChain />
         <fwcap:MemberIdentityKey />
         <fwcap:ParseExpression />
+        <fwcap:ParseInterpolatedText />
+        <fwcap:EvaluateExpression />
+        <fwcap:EvaluateInterpolatedText />
         <fwcap:ValidateTypes />
         <fwcap:ValidateConstraints />
         <fwcap:ValidateVersions />

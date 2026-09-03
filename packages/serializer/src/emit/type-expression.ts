@@ -58,6 +58,9 @@ function emitConfigValue(v: { kind: string; value?: unknown; raw?: string }): st
   if (v.kind === "expression") {
     return `\${ ${v.raw} }`;
   }
+  if (v.kind === "interpolated") {
+    return v.raw ?? "";
+  }
   if (typeof v.value === "string") {
     return `"${v.value}"`;
   }

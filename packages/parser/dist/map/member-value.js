@@ -1,4 +1,14 @@
 import { isBooleanLiteral, normalizeBooleanValue } from "../util/boolean.js";
+export function containsUnescapedInterpolation(raw) {
+    for (let i = 0; i < raw.length - 1; i++) {
+        if (raw[i] === "$" && raw[i + 1] === "{") {
+            if (i === 0 || raw[i - 1] !== "\\") {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 function parseJsonLike(raw) {
     const trimmed = raw.trim();
     if (trimmed.startsWith("[") || trimmed.startsWith("{")) {
@@ -29,6 +39,18 @@ export function parseMemberValue(raw, typeFqn, file, line = 1, column = 1, place
             expr.authoredPlacement = placement;
         }
         return expr;
+    }
+    const looksLikeJson = trimmed.startsWith("[") || trimmed.startsWith("{");
+    if (!looksLikeJson && containsUnescapedInterpolation(raw)) {
+        const interpolated = {
+            kind: "interpolated",
+            raw,
+            source: { file, line, column },
+        };
+        if (placement) {
+            interpolated.authoredPlacement = placement;
+        }
+        return interpolated;
     }
     if (isBooleanLiteral(trimmed)) {
         const lit = {

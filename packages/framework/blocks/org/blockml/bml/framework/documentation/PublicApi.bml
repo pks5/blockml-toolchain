@@ -60,6 +60,9 @@
     memberIdentityKey(member) → string
     findLocalMember(block, member) → MemberDefinition | undefined
     parseExpression(source) → ParseExpressionOutcome
+    parseInterpolatedText(source) → ParseExpressionOutcome
+    evaluateExpression(node, scope) → value
+    evaluateInterpolatedText(source, scope) → Text
     validateTypes(document, registry) → Diagnostic[]
     validateVersions(document, registry) → Diagnostic[]
     validateInstances(document, registry) → Diagnostic[]

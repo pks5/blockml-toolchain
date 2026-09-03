@@ -545,6 +545,7 @@ Value classification within rule 3:
 
 ```text
 ${ ... }                     → ExpressionValue { raw }  (AST via parseExpression() utility)
+mixed text with ${ ... }     → InterpolatedTextValue { raw }  (AST via parseInterpolatedText() utility)
 address-shaped capability    → AddressValue
 otherwise                    → LiteralValue (authored value preserved — type-checked in Stage 2)
 ```

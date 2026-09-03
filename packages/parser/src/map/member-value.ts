@@ -1,10 +1,22 @@
 import type {
   ExpressionValue,
+  InterpolatedTextValue,
   LiteralValue,
   MemberValue,
   SourceLocation,
 } from "@blockml/bom";
 import { isBooleanLiteral, normalizeBooleanValue } from "../util/boolean.js";
+
+export function containsUnescapedInterpolation(raw: string): boolean {
+  for (let i = 0; i < raw.length - 1; i++) {
+    if (raw[i] === "$" && raw[i + 1] === "{") {
+      if (i === 0 || raw[i - 1] !== "\\") {
+        return true;
+      }
+    }
+  }
+  return false;
+}
 
 function parseJsonLike(raw: string): unknown {
   const trimmed = raw.trim();
@@ -44,6 +56,19 @@ export function parseMemberValue(
       expr.authoredPlacement = placement;
     }
     return expr;
+  }
+
+  const looksLikeJson = trimmed.startsWith("[") || trimmed.startsWith("{");
+  if (!looksLikeJson && containsUnescapedInterpolation(raw)) {
+    const interpolated: InterpolatedTextValue = {
+      kind: "interpolated",
+      raw,
+      source: { file, line, column },
+    };
+    if (placement) {
+      interpolated.authoredPlacement = placement;
+    }
+    return interpolated;
   }
 
   if (isBooleanLiteral(trimmed)) {

@@ -41,15 +41,20 @@ export interface ClaudeCodeAgentOptions {
 export function buildClaudeExecutionPrompt(
   executionFqn: string,
   operationIndex: number,
+  instructions?: string,
 ): string {
   const operationNumber = operationIndex + 1;
+  const taskLines =
+    instructions && instructions.trim().length > 0
+      ? ["", "Task instructions:", "", instructions.trim(), ""]
+      : [""];
   return [
     "You are the Execute step of a BlockML transformer pipeline.",
     "",
     `Perform the Task of the currently Running ModelOperation (Operation ${operationNumber}) in this ModelTransformation:`,
     "",
     executionFqn,
-    "",
+    ...taskLines,
     "Read the ModelTransformation only to identify the Running ModelOperation and its Task.",
     "Change BML model source so the Task is done. Change nothing else.",
     "",
@@ -89,6 +94,7 @@ export class ClaudeCodeAgent implements TransformationAgent {
     const prompt = buildClaudeExecutionPrompt(
       request.executionFqn,
       request.operationIndex,
+      request.instructions,
     );
     const args = [
       "-p",

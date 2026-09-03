@@ -7,6 +7,8 @@ export { peekLibraryTypeFqn } from "./registry/library-bootstrap.js";
 export { forkBom } from "./fork/fork-bom.js";
 export { resolveEffectiveMembers, resolveContracts, collectBaseTypeChain, memberIdentityKey, findLocalMember, } from "./resolve/resolve-effective-members.js";
 export { parseExpression } from "./expression/parse-expression.js";
+export { parseInterpolatedText } from "./expression/parse-interpolated-text.js";
+export { evaluateExpression, evaluateInterpolatedText, ExpressionEvaluationError, } from "./expression/evaluate-expression.js";
 export { validateTypes, getPropertyNumericValue, isLiteralValue, } from "./validate/validate-types.js";
 export { validateVersions } from "./validate/validate-versions.js";
 export { validateConstraints } from "./validate/validate-constraints.js";

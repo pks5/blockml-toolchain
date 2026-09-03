@@ -26,8 +26,16 @@ export {
   findLocalMember,
 } from "./resolve/resolve-effective-members.js";
 export { parseExpression } from "./expression/parse-expression.js";
+export { parseInterpolatedText } from "./expression/parse-interpolated-text.js";
+export {
+  evaluateExpression,
+  evaluateInterpolatedText,
+  ExpressionEvaluationError,
+} from "./expression/evaluate-expression.js";
+export type { ExpressionScope } from "./expression/evaluate-expression.js";
 export type {
   ExpressionNode,
+  InterpolatedStringNode,
   ParseExpressionResult,
   ParseExpressionOutcome,
 } from "./expression/types.js";

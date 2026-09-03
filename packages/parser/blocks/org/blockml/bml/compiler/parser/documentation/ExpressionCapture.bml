@@ -36,10 +36,12 @@
   <is>Raw expression storage — no AST in Urmodell (B4)</is>
 
   <documentation>${ … } attribute/element values → ExpressionValue { raw, source }.
+    Mixed text with ${ … } holes → InterpolatedTextValue { raw, source }.
     Implementation CDATA → embeddedExpressions[] with source offsets.
 
     Parser step [5] captures raw text only. AST construction via parseExpression()
-    in @blockml/framework (Stage 2 utility) — never stored on Urmodell.
+    / parseInterpolatedText() in @blockml/framework (Stage 2 utility) — never stored
+    on Urmodell.
 
     inputType/outputType on capabilities → TypeExpression at map time (B3).</documentation>
 

@@ -1,4 +1,4 @@
-import { expressionFromRaw } from "./member-value.js";
+import { containsUnescapedInterpolation, expressionFromRaw } from "./member-value.js";
 import { elementChildren, elementLocalName, elementPrefix, getAttribute, getCharacterData, } from "../util/xml.js";
 import { collectUnknownBmlAttributes, reportDiagnostic } from "./structural.js";
 import { parseGenericArgumentList, } from "./type-expression.js";
@@ -125,6 +125,15 @@ export function parseBmlMeta(element, typeFqn, file, loc) {
 function parseMetaValue(raw, typeFqn, file, loc) {
     if (raw.startsWith("${") && raw.endsWith("}")) {
         return expressionFromRaw(raw, loc);
+    }
+    const trimmed = raw.trim();
+    const looksLikeJson = trimmed.startsWith("[") || trimmed.startsWith("{");
+    if (!looksLikeJson && containsUnescapedInterpolation(raw)) {
+        return {
+            kind: "interpolated",
+            raw,
+            source: loc,
+        };
     }
     return {
         kind: "literal",

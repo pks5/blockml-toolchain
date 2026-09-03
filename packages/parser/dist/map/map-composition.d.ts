@@ -11,9 +11,17 @@ export declare function mapTypeReferenceEntityInstance(element: Element, ctx: Ma
         value: string;
     };
     version: import("@blockml/bom").ExpressionValue | {
+        kind: "interpolated";
+        raw: string;
+        source: import("@blockml/bom").SourceLocation;
+        value?: never;
+        typeFqn?: never;
+    } | {
         kind: "literal";
         value: string;
         typeFqn: string;
+        raw?: never;
+        source?: never;
     } | undefined;
 };
 export declare function buildSubBlockIndex(subBlocks: {

@@ -41,6 +41,7 @@
     - Text vs CDATA → authoredCharacterDataForm (D8) → emit CDATA when needed or authored
     - Literal syntax [5,5,6] vs {x:5,…} → LiteralValue authored form → Renderer serializes
     - ${ expr } → ExpressionValue { raw } — AST via parseExpression(), not evaluated
+    - Hello ${ expr } → InterpolatedTextValue { raw } — AST via parseInterpolatedText()
     - aggregations declaration → AggregationDefinition declared only → TypeRegistry metadata
     - composition children → CompositionNode tree → Renderer assembly patterns
     - baseType FQN → string reference → TypeRegistry effective members

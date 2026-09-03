@@ -75,6 +75,7 @@ export type {
   MemberValue,
   LiteralValue,
   ExpressionValue,
+  InterpolatedTextValue,
   AddressValue,
   Address,
 } from "./types/values.js";

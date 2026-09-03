@@ -18,6 +18,9 @@ function memberValueLabel(value: BlockInstance["id"]): string | undefined {
   if (value.kind === "expression") {
     return value.raw;
   }
+  if (value.kind === "interpolated") {
+    return value.raw;
+  }
   return value.address.raw;
 }
 

@@ -1,6 +1,10 @@
 import type { SourceLocation } from "./common.js";
 
-export type MemberValue = LiteralValue | ExpressionValue | AddressValue;
+export type MemberValue =
+  | LiteralValue
+  | ExpressionValue
+  | InterpolatedTextValue
+  | AddressValue;
 
 export interface LiteralValue {
   kind: "literal";
@@ -19,6 +23,15 @@ export interface ExpressionValue {
   /** Raw source inside ${ } — the only expression field in Canonical BOM. */
   raw: string;
   /** Which form carried this expression when element|attribute dual placement is legal (D9). */
+  authoredPlacement?: "attribute" | "element";
+  source?: SourceLocation;
+}
+
+export interface InterpolatedTextValue {
+  kind: "interpolated";
+  /** Full authored text including ${} holes — the only interpolation field in Canonical BOM. */
+  raw: string;
+  /** Which form carried this text when element|attribute dual placement is legal (D9). */
   authoredPlacement?: "attribute" | "element";
   source?: SourceLocation;
 }

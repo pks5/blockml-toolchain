@@ -234,6 +234,26 @@
       ]
     },
     {
+      "fqn": "org.blockml.bml.framework.expression.InterpolatedStringNode",
+      "tsExport": "InterpolatedStringNode",
+      "pkg": "expression",
+      "abstract": false,
+      "baseType": "fwexpression:ExpressionNode",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "value": "interpolated"
+        },
+        {
+          "name": "parts",
+          "type": "fwexpression:ExpressionNode[]",
+          "required": true
+        }
+      ]
+    },
+    {
       "fqn": "org.blockml.bml.framework.expression.ParseExpressionResult",
       "tsExport": "ParseExpressionResult",
       "pkg": "expression",
@@ -512,6 +532,57 @@
       "output": {
         "name": "outcome",
         "type": "fwexpression:ParseExpressionOutcome",
+        "required": true
+      }
+    },
+    {
+      "name": "ParseInterpolatedText",
+      "tsExport": "parseInterpolatedText",
+      "fqn": "org.blockml.bml.framework.capability.ParseInterpolatedText",
+      "inputs": [
+        {
+          "name": "source",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "outcome",
+        "type": "fwexpression:ParseExpressionOutcome",
+        "required": true
+      }
+    },
+    {
+      "name": "EvaluateExpression",
+      "tsExport": "evaluateExpression",
+      "fqn": "org.blockml.bml.framework.capability.EvaluateExpression",
+      "inputs": [
+        {
+          "name": "node",
+          "type": "fwexpression:ExpressionNode",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "value",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
+      "name": "EvaluateInterpolatedText",
+      "tsExport": "evaluateInterpolatedText",
+      "fqn": "org.blockml.bml.framework.capability.EvaluateInterpolatedText",
+      "inputs": [
+        {
+          "name": "source",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "value",
+        "type": "type:Text",
         "required": true
       }
     },
@@ -938,6 +1009,9 @@
     "BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT",
     "BML_EMBEDDED_BLOCKS_ON_SUBBLOCK",
     "BML_EXPRESSION_PARSE_ERROR",
+    "BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION",
+    "BML_EXPR_SYNTAX_ERROR",
+    "BML_EXPR_TYPE_MISMATCH",
     "BML_GENERIC_CONSTRAINT_VIOLATION",
     "BML_GENERICS_ARGUMENT_MISMATCH",
     "BML_GENERICS_DIRECTIVE_NOT_ALLOWED",

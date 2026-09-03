@@ -403,6 +403,37 @@
       ]
     },
     {
+      "fqn": "org.blockml.bml.bom.value.InterpolatedTextValue",
+      "tsExport": "InterpolatedTextValue",
+      "pkg": "value",
+      "abstract": false,
+      "baseType": "bomvalue:MemberValue",
+      "kind": "interpolated",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "literal": "interpolated"
+        },
+        {
+          "name": "raw",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "authoredPlacement",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ]
+    },
+    {
       "fqn": "org.blockml.bml.bom.value.AddressValue",
       "tsExport": "AddressValue",
       "pkg": "value",
@@ -2128,6 +2159,7 @@
     "MemberValue": [
       "LiteralValue",
       "ExpressionValue",
+      "InterpolatedTextValue",
       "AddressValue"
     ],
     "CompositionNode": [

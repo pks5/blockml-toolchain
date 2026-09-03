@@ -48,6 +48,9 @@
     • BML_OVERRIDE_WITHOUT_PARENT — override without resolvable base member
     • BML_OVERRIDE_REQUIRED — override on non-overridable member
     • BML_EXPRESSION_PARSE_ERROR — parseExpression failed on ExpressionValue.raw
+    • BML_EXPR_SYNTAX_ERROR — unclosed ${} in interpolated text
+    • BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION — hole uses @model, @bean, or a forbidden call
+    • BML_EXPR_TYPE_MISMATCH — interpolated text on a non-Text member
 
     validateInstances:
     • BML_UNKNOWN_TYPE — composition instance typeFqn not in TypeRegistry

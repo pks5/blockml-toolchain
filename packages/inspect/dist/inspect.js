@@ -136,6 +136,9 @@ function projectMemberValue(value) {
     if (value.kind === "expression") {
         return { expression: value.raw };
     }
+    if (value.kind === "interpolated") {
+        return { interpolated: value.raw };
+    }
     return value.address.raw;
 }
 function projectInstanceId(id) {

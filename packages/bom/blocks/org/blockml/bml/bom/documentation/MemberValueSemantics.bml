@@ -37,6 +37,7 @@
 
     LiteralValue: kind literal, opaque value, typeFqn, optional authoredPlacement (D9).
     ExpressionValue: kind expression, raw ${} text only in BOM; AST via parseExpression().
+    InterpolatedTextValue: kind interpolated, full authored text with ${} holes; AST via parseInterpolatedText().
     AddressValue: parsed org.blockml.bml.type.Address shape.
 
     Preset/config merge copies into render-time view — never writes references back to BomDocument.</documentation>

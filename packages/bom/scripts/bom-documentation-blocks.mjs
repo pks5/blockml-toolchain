@@ -85,6 +85,7 @@ export const documentationBlocks = [
     Text vs CDATA → authoredCharacterDataForm (D8) → emit CDATA when needed or authored
     Literal syntax [5,5,6] vs {x:5,…} → LiteralValue authored form → Renderer serializes
     \${ expr } → ExpressionValue { raw } — AST via parseExpression(), not evaluated
+    Hello \${ expr } → InterpolatedTextValue { raw } — AST via parseInterpolatedText()
     aggregations declaration → AggregationDefinition declared only → TypeRegistry metadata
     composition children → CompositionNode tree → Renderer assembly patterns
     baseType FQN → string reference → TypeRegistry effective members
@@ -244,6 +245,7 @@ export const documentationBlocks = [
 
     LiteralValue: kind literal, opaque value, typeFqn, optional authoredPlacement (D9).
     ExpressionValue: kind expression, raw \${} text only in BOM; AST via parseExpression().
+    InterpolatedTextValue: kind interpolated, full authored text with \${} holes; AST via parseInterpolatedText().
     AddressValue: parsed org.blockml.bml.type.Address shape.
 
     Preset/config merge copies into render-time view — never writes references back to BomDocument.`,

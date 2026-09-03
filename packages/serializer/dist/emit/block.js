@@ -674,11 +674,17 @@ function emitLiteralAttr(val) {
     if (val.kind === "expression") {
         return `\${ ${val.raw} }`;
     }
+    if (val.kind === "interpolated") {
+        return escapeAttr(val.raw ?? "");
+    }
     return escapeAttr(formatLiteralValue(val.value));
 }
 function emitLiteralBody(val) {
     if (val.kind === "expression") {
         return `\${ ${val.raw} }`;
+    }
+    if (val.kind === "interpolated") {
+        return escapeText(val.raw ?? "");
     }
     return escapeText(formatLiteralValue(val.value));
 }

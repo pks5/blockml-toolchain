@@ -97,6 +97,9 @@ export const documentationBlocks = [
     collectBaseTypeChain(block, registry) → BlockDefinition[]
     memberIdentityKey(member) → string
     parseExpression(source) → ParseExpressionOutcome
+    parseInterpolatedText(source) → ParseExpressionOutcome
+    evaluateExpression(node, scope) → value
+    evaluateInterpolatedText(source, scope) → Text
     validateTypes(document, registry) → Diagnostic[]
     validateVersions(document, registry) → Diagnostic[]
     validateConstraints(document, registry) → Diagnostic[]
@@ -185,12 +188,14 @@ export const documentationBlocks = [
     name: "ExpressionParsing",
     is: "parseExpression AST — no Urmodell writeback (B4)",
     doc: `parseExpression(source) parses expression text into an ExpressionNode AST.
+    parseInterpolatedText(source) scans Text for \${} holes (restricted profile).
     Returns ParseExpressionOutcome: { ok: true, result } | { ok: false, error }.
 
-    Parser stores ExpressionValue.raw only (B4). validateTypes re-parses expressions
-    at validation time and emits BML_EXPRESSION_PARSE_ERROR on failure.
+    Parser stores ExpressionValue.raw / InterpolatedTextValue.raw only (B4).
+    validateTypes re-parses at validation time and emits BML_EXPRESSION_PARSE_ERROR
+    or BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION on failure.
 
-    AST node kinds: literal, array, object, property, call, binary.
+    AST node kinds: literal, array, object, property, call, binary, interpolated.
     Optional resultTypeFqn on ParseExpressionResult for typed expression metadata.
 
     Expression AST is a Stage-2 utility — never written back to Urmodell member values.`,
@@ -237,6 +242,9 @@ export const documentationBlocks = [
     • BML_OVERRIDE_WITHOUT_PARENT — override without resolvable base member
     • BML_OVERRIDE_REQUIRED — override on non-overridable member
     • BML_EXPRESSION_PARSE_ERROR — parseExpression failed on ExpressionValue.raw
+    • BML_EXPR_SYNTAX_ERROR — unclosed \${} in interpolated text
+    • BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION — hole uses @model, @bean, or a forbidden call
+    • BML_EXPR_TYPE_MISMATCH — interpolated text on a non-Text member
 
     validateInstances:
     • BML_UNKNOWN_TYPE — composition instance typeFqn not in TypeRegistry

@@ -2,6 +2,7 @@ export interface AgentExecutionRequest {
   workspaceRoot: string;
   executionFqn: string;
   operationIndex: number;
+  instructions?: string;
 }
 
 export type AgentExecutionResult =

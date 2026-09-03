@@ -36,7 +36,7 @@
   <baseType>framework:FrameworkType</baseType>
   <is>Abstract union of expression AST node variants</is>
 
-  <documentation>Discriminated by kind: literal | array | object | property | call | binary.</documentation>
+  <documentation>Discriminated by kind: literal | array | object | property | call | binary | interpolated.</documentation>
 
   <references>
     <see type="fwexpression:LiteralExpressionNode" relation="SeeAlso" />

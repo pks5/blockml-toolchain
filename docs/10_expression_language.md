@@ -233,6 +233,55 @@ Expression parse/type errors inside an embedded region reuse existing `BML_EXPR_
 
 ---
 
+## Text Interpolation
+
+Restricted `${ … }` holes may appear **inside** a Text member value that is not itself a whole-value expression:
+
+```xml
+myText="Hello this is ${ this.label } bla bla"
+```
+
+Classification:
+
+```text
+"${ expr }"                 → ExpressionValue          (full expression language)
+"Hello ${ expr } world"     → InterpolatedTextValue    (restricted profile)
+"Hello world"               → LiteralValue
+```
+
+`InterpolatedTextValue.raw` is the **full authored text** including holes. The serializer emits that raw text unchanged — it does not wrap the value in `${ }`. AST construction is a Stage-2 utility (`parseInterpolatedText()`) — never stored on Canonical BOM.
+
+`this.x` in a hole is surface sugar for `#this.x` (outer Block instance; binding does not change inside nested compositions). Unqualified `x` remains valid and resolves the same member.
+
+### Restricted profile
+
+Allowed in interpolation holes (same idea as `value` expressions):
+
+```text
+✓  Property access (x, this.x, #this.x, nested this.parameters.author)
+✓  Literals
+✓  + (string / number)
+✓  #strings.* and #math.* built-ins
+```
+
+Forbidden — `BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION`:
+
+```text
+✗  @model bindings
+✗  @bean references
+✗  Capability linking
+✗  own Capability calls
+✗  bml:each / bml:with variables
+```
+
+Top-level interpolation is legal only on `type:Text`. On `type:Text[]`, the member stays a `LiteralValue` array; string elements that contain `${` are validated and evaluated as interpolated text.
+
+Escape: `\${` is a literal `${`. An unclosed `${` is `BML_EXPR_SYNTAX_ERROR`. Nested `${` inside a hole is out of scope.
+
+Evaluation (`evaluateInterpolatedText()`) happens at read time — Canonical BOM is not rewritten.
+
+---
+
 ## Expression vs BOM Data Layer
 
 > **Expressions and BOM member values are separate layers.** See `01_bom_core.md` — Expression layer vs BOM data layer.
@@ -1519,6 +1568,7 @@ BML_EXPR_LINK_PAYLOAD_MISMATCH — linked Capabilities have incompatible inputTy
 BML_EXPR_MODEL_NO_CONTEXT      — relative model path used without binding context
 BML_EXPR_BUILTIN_NOT_V1        — built-in called that is excluded from V1 scope
 BML_EXPR_DIVISION_BY_ZERO      — compile-time division by zero (literal operands only)
+BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION — hole uses @model, @bean, capability call/link, or loop/with
 ```
 
 ---

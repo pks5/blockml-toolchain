@@ -1,7 +1,47 @@
 import { parseExpression } from "../expression/parse-expression.js";
+import { parseInterpolatedText } from "../expression/parse-interpolated-text.js";
+import { INTERPOLATION_NOT_ALLOWED } from "../expression/restricted.js";
 import { memberIdentityKey, resolveEffectiveMembers, } from "../resolve/resolve-effective-members.js";
 import { satisfiesTypeBound } from "../resolve/satisfies-type-bound.js";
 import { isWellKnownTypeFqn } from "@blockml/parser";
+const TEXT_TYPE_FQN = "org.blockml.bml.type.Text";
+function containsUnescapedInterpolation(raw) {
+    for (let i = 0; i < raw.length - 1; i++) {
+        if (raw[i] === "$" && raw[i + 1] === "{") {
+            if (i === 0 || raw[i - 1] !== "\\") {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+function namedTypeFqn(expr, fallback) {
+    if (expr?.kind === "named") {
+        return expr.fqn;
+    }
+    if (expr?.kind === "grouped") {
+        return namedTypeFqn(expr.expression, fallback);
+    }
+    return fallback;
+}
+function isTextType(expr, fallback) {
+    return namedTypeFqn(expr, fallback) === TEXT_TYPE_FQN && !hasMultiplicity(expr);
+}
+function isTextListType(expr, fallback) {
+    if (namedTypeFqn(expr, fallback) !== TEXT_TYPE_FQN) {
+        return false;
+    }
+    return hasMultiplicity(expr);
+}
+function hasMultiplicity(expr) {
+    if (!expr) {
+        return false;
+    }
+    if (expr.kind === "named" || expr.kind === "grouped") {
+        return expr.multiplicity !== undefined;
+    }
+    return false;
+}
 function diag(code, message, file, loc) {
     const source = {
         file: loc?.file ?? file,
@@ -141,51 +181,99 @@ function validateBlockDefinition(block, registry, file, diagnostics) {
         if (member.kind === "property") {
             validatePropertyExpressions(member, file, diagnostics);
         }
+        if (member.kind === "aggregation" && member.composition) {
+            walkCompositionNodes(member.composition.children, registry, file, diagnostics);
+        }
     }
     for (const sub of block.subBlocks) {
         validateBlockDefinition(sub, registry, file, diagnostics);
     }
 }
-function validatePropertyExpressions(prop, file, diagnostics) {
-    const checkVal = (val, label) => {
-        if (!val || val.kind !== "expression") {
-            return;
+function interpolationParseCode(message) {
+    if (message === INTERPOLATION_NOT_ALLOWED) {
+        return "BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION";
+    }
+    if (message === "Unclosed interpolation") {
+        return "BML_EXPR_SYNTAX_ERROR";
+    }
+    return "BML_EXPRESSION_PARSE_ERROR";
+}
+function validateInterpolatedRaw(raw, label, file, diagnostics, loc) {
+    const parsed = parseInterpolatedText(raw);
+    if (!parsed.ok) {
+        diagnostics.push(diag(interpolationParseCode(parsed.error.message), `${label}: ${parsed.error.message}`, file, loc));
+    }
+}
+function validateTextListLeaves(value, label, file, diagnostics, loc) {
+    if (!Array.isArray(value)) {
+        return;
+    }
+    for (const item of value) {
+        if (typeof item === "string" && containsUnescapedInterpolation(item)) {
+            validateInterpolatedRaw(item, label, file, diagnostics, loc);
         }
+    }
+}
+function validateMemberValueExpressions(val, label, file, diagnostics, type, typeFqn) {
+    if (!val) {
+        return;
+    }
+    if (val.kind === "expression") {
         const expr = val;
         const parsed = parseExpression(expr.raw);
         if (!parsed.ok) {
             diagnostics.push(diag("BML_EXPRESSION_PARSE_ERROR", `${label}: ${parsed.error.message}`, file, expr.source));
         }
+        return;
+    }
+    if (val.kind === "interpolated") {
+        const interpolated = val;
+        if (type !== undefined || typeFqn !== undefined) {
+            if (!isTextType(type, typeFqn)) {
+                diagnostics.push(diag("BML_EXPR_TYPE_MISMATCH", `${label}: interpolated text is only allowed on type:Text`, file, interpolated.source));
+                return;
+            }
+        }
+        validateInterpolatedRaw(interpolated.raw, label, file, diagnostics, interpolated.source);
+        return;
+    }
+    if (val.kind === "literal" && isTextListType(type, typeFqn)) {
+        validateTextListLeaves(val.value, label, file, diagnostics);
+    }
+}
+function validatePropertyExpressions(prop, file, diagnostics) {
+    const checkVal = (val) => {
+        validateMemberValueExpressions(val, prop.name, file, diagnostics, prop.type, prop.typeFqn);
     };
-    checkVal(prop.value, prop.name);
+    checkVal(prop.value);
     for (const entry of prop.values ?? []) {
-        checkVal(entry.value, prop.name);
+        checkVal(entry.value);
     }
 }
-function validateInstanceExpressions(instance, file, diagnostics) {
+function validateInstanceExpressions(instance, registry, file, diagnostics) {
+    const typeBlock = registry.get(instance.typeFqn)?.block;
+    const members = typeBlock ? resolveEffectiveMembers(typeBlock, registry) : [];
     for (const [name, val] of Object.entries(instance.memberValues)) {
-        if (val.kind === "expression") {
-            const parsed = parseExpression(val.raw);
-            if (!parsed.ok) {
-                diagnostics.push(diag("BML_EXPRESSION_PARSE_ERROR", `${name}: ${parsed.error.message}`, file, val.source));
+        const prop = members.find((member) => member.kind === "property" && member.name === name);
+        validateMemberValueExpressions(val, name, file, diagnostics, prop?.type, prop?.typeFqn);
+    }
+}
+function walkCompositionNodes(nodes, registry, file, diagnostics) {
+    for (const child of nodes) {
+        if (child.kind === "blockInstance") {
+            validateInstanceExpressions(child.instance, registry, file, diagnostics);
+            for (const agg of child.instance.aggregationCompositions ?? []) {
+                walkCompositionNodes(agg.composition.children, registry, file, diagnostics);
             }
+        }
+        else {
+            walkCompositionNodes(child.children, registry, file, diagnostics);
         }
     }
 }
-function walkCompositions(block, file, diagnostics) {
+function walkCompositions(block, registry, file, diagnostics) {
     for (const template of block.compositions) {
-        for (const child of template.children) {
-            if (child.kind === "blockInstance") {
-                validateInstanceExpressions(child.instance, file, diagnostics);
-            }
-            else {
-                for (const nested of child.children) {
-                    if (nested.kind === "blockInstance") {
-                        validateInstanceExpressions(nested.instance, file, diagnostics);
-                    }
-                }
-            }
-        }
+        walkCompositionNodes(template.children, registry, file, diagnostics);
     }
 }
 export function validateTypes(document, registry) {
@@ -195,7 +283,7 @@ export function validateTypes(document, registry) {
         registry.register(document);
     }
     validateBlockDefinition(document.block, registry, file, diagnostics);
-    walkCompositions(document.block, file, diagnostics);
+    walkCompositions(document.block, registry, file, diagnostics);
     return diagnostics;
 }
 export function getLiteralNumericValue(val) {

@@ -38,12 +38,14 @@
   <is>parseExpression AST — no Urmodell writeback (B4)</is>
 
   <documentation>parseExpression(source) parses expression text into an ExpressionNode AST.
+    parseInterpolatedText(source) scans Text for ${} holes (restricted profile).
     Returns ParseExpressionOutcome: { ok: true, result } | { ok: false, error }.
 
-    Parser stores ExpressionValue.raw only (B4). validateTypes re-parses expressions
-    at validation time and emits BML_EXPRESSION_PARSE_ERROR on failure.
+    Parser stores ExpressionValue.raw / InterpolatedTextValue.raw only (B4).
+    validateTypes re-parses at validation time and emits BML_EXPRESSION_PARSE_ERROR
+    or BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION on failure.
 
-    AST node kinds: literal, array, object, property, call, binary.
+    AST node kinds: literal, array, object, property, call, binary, interpolated.
     Optional resultTypeFqn on ParseExpressionResult for typed expression metadata.
 
     Expression AST is a Stage-2 utility — never written back to Urmodell member values.</documentation>

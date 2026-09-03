@@ -21,6 +21,7 @@ const TS_TYPE_EXPORTS = [
   "BootstrapTrace",
   "BootstrapOptions",
   "ExpressionNode",
+  "InterpolatedStringNode",
   "ParseExpressionResult",
   "ParseExpressionOutcome",
 ];
@@ -36,6 +37,9 @@ const TS_CAPABILITY_EXPORTS = [
   "collectBaseTypeChain",
   "memberIdentityKey",
   "parseExpression",
+  "parseInterpolatedText",
+  "evaluateExpression",
+  "evaluateInterpolatedText",
   "validateTypes",
   "validateEmbeddedBlocks",
   "validateVersions",
@@ -64,6 +68,7 @@ const TS_FILE_MAP: Record<string, string> = {
   BootstrapOptions: "registry/bootstrap.ts",
   ParseExpressionResult: "expression/types.ts",
   ParseExpressionOutcome: "expression/types.ts",
+  InterpolatedStringNode: "expression/types.ts",
 };
 
 function walkBmlFiles(dir: string): string[] {
