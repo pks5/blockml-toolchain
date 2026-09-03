@@ -14,50 +14,52 @@
   <name>MyStory</name>
   <type>playground:MyStory</type>
   <baseType>core:Documentation</baseType>
-  <is>A random structured story produced by a workspace transform execution, in Chinese, about a tree and a mushroom</is>
+  <is>A random structured story produced by a workspace transform execution, in English, about a squirrel and a mouse</is>
 
   <documentation>
-    A structured Chinese story about a tree and a mushroom. The story text and its
+    A structured English story about a squirrel and a mouse. The story text and its
     metadata are carried as typed properties. Each transform execution replaces
     this block with a freshly composed story.
   </documentation>
 
   <properties>
     <title type="type:Text">
-      <value>老松树与鸡油菌</value>
+      <value>The Acorn Ledger</value>
     </title>
     <author type="type:Text">
       <value>John Doe</value>
     </author>
     <story type="type:Text">
-      <value>在一座沙丘的高处，长着一棵弯曲的松树，多年来的风把它吹得歪斜。它的树皮皲裂得像一张古旧的地图，即使没有一丝风，它的针叶也沙沙作响。一个明亮的九月清晨，一条在地下浅浅延伸的树根上传来一阵瘙痒。
+      <value>High in the split trunk of an old beech, a red squirrel named Pindle kept what he proudly called his ledger: a hollow packed with acorns, each one counted twice before winter. He trusted the count more than he trusted the weather.
 
-"是什么在我身上爬来爬去？"松树嘎吱作响地问。
+One grey afternoon a house mouse climbed the beech, shaking rain from her whiskers. "You have more acorns than a squirrel can chew," she said. "I am Tamsin. I would trade you three fat hazelnuts for one."
 
-"我没有爬，我在生长，"一朵小小的鸡油菌说道，它鲜黄鲜黄地从针叶层里钻了出来。它的菌帽像漏斗一样起伏卷曲，隐隐散发着杏子的香味。"昨天这里只有泥土。今天我站在这里，却不太明白这是为什么。"
+"Trade?" Pindle bristled. "I do not trade. I hoard. That is the whole point of a ledger."
 
-松树像所有老树那样，不慌不忙地回答。"你不是偶然出现的，小蘑菇。你的菌丝早已缠绕在我的根上。当雨水迟迟不来时，你从我永远找不到的缝隙里为我送来水。而我把阳光在我针叶里酿出的糖分送下去给你。"
+Tamsin sat down on a knot of bark, unbothered. "A ledger only helps if you can read it in the snow. Last year the frost came early and your cousins forgot half their holes. The forest ate their savings."
 
-鸡油菌微微挺直了身子。"这么说，我不只是苔藓里的一块黄斑？"
+Pindle's tail twitched, because this was true, and truths that arrive with wet whiskers are the hardest to argue with. "Suppose I did trade," he said slowly. "What would a mouse do with a single acorn?"
 
-"远不止如此，"松树说。"松鸦鸣叫，蚂蚁搬运，雾气穿行而过，而我们两个一起守护着这片贫瘠的沙土。趁着夜晚还温和，就留下来吧。"
+"Plant it," said Tamsin. "By the stream, where you never dig. In ten years it is an oak, and an oak is a bank that pays every autumn, to every small creature that asks."
 
-于是小鸡油菌就在弯曲松树的背风处伫立着。正午时分，一位采蘑菇的女人爬上山丘，她只看到一棵饱经风霜的树和一朵孤零零的黄蘑菇。她没有采它，继续往前走，没有察觉在她的靴子底下，两个沉默的盟友正彼此扶持着走过秋天。</value>
+They argued until the rain stopped, and then, mostly to end the argument, Pindle rolled one acorn out of the hollow. Tamsin took it in both paws, thanked him gravely, and carried it down to the soft ground by the water.
+
+Pindle told himself he had lost an acorn. But that night he slept badly, and in the morning he found himself counting a different way — not how many he had kept, but how many he could afford to give. By spring a green shoot stood by the stream, and Pindle, who still called himself a hoarder, visited it more often than he would admit.</value>
     </story>
     <language type="type:Text">
-      <value>Chinese</value>
+      <value>English</value>
     </language>
     <date type="type:DateTime">
       <value>2026-09-04T00:00:00</value>
     </date>
     <time type="type:DateTime">
-      <value>2026-09-04T00:56:25</value>
+      <value>2026-09-04T01:49:02</value>
     </time>
     <location type="type:Text">
-      <value>德国，吕内堡草原的沙丘</value>
+      <value>A hollow beech at the edge of Wistman's Wood, Dartmoor, England</value>
     </location>
     <weather type="type:Text">
-      <value>晴朗凉爽的九月清晨，松树之间飘着一层薄薄的地面雾</value>
+      <value>Overcast and cool, with a steady autumn drizzle easing to mist by late afternoon</value>
     </weather>
   </properties>
 
