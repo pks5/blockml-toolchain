@@ -7,17 +7,17 @@
   xmlns:cap="org.blockml.bml.capability"
   xmlns:type="org.blockml.bml.type"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
-  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
+  xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
   <name>
     T00015_PoemTestTemplate_20260903T050525
   </name>
   <type>
-    running:T00015_PoemTestTemplate_20260903T050525
+    succeeded:T00015_PoemTestTemplate_20260903T050525
   </type>
   <baseType>
-    workflow:ModelTransformation(running:T00015_PoemTestTemplate_20260903T050525.Parameters)
+    workflow:ModelTransformation(succeeded:T00015_PoemTestTemplate_20260903T050525.Parameters)
   </baseType>
   <is>
     A pending ModelTransformation that creates a playground Poem block
@@ -27,7 +27,7 @@
       <value>A transformation that creates a playground Poem block</value>
     </description>
     <status override="true" type="workflow:ExecutionStatus">
-      <value>Running</value>
+      <value>Succeeded</value>
     </status>
     <createdAt override="true" type="type:DateTime">
       <value>2026-08-30T01:40:20</value>
@@ -35,7 +35,7 @@
     <template override="true" type="type:Boolean">
       <value>false</value>
     </template>
-    <parameters override="true" type="running:T00015_PoemTestTemplate_20260903T050525.Parameters">
+    <parameters override="true" type="succeeded:T00015_PoemTestTemplate_20260903T050525.Parameters">
       <value>{author:"John Doe",language:"German"}</value>
     </parameters>
     <executionId override="true" type="type:UUID">
@@ -50,6 +50,9 @@
     <baseCommit override="true" type="type:Text">
       <value>65f927adeb7a13ffef8424d413784326ae084b04</value>
     </baseCommit>
+    <completedAt override="true" type="type:DateTime">
+      <value>2026-09-03T05:08:24</value>
+    </completedAt>
   </properties>
   <aggregations>
     <stages override="true">
@@ -64,7 +67,7 @@
             <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.NextPoem222.bml that contains a random poem in german about a tree and a mushroom. For each execution create a new poem." />
           </task>
           <resultProducer>
-            <running:T00015_PoemTestTemplate_20260903T050525.TestResultProducer />
+            <succeeded:T00015_PoemTestTemplate_20260903T050525.TestResultProducer />
           </resultProducer>
           <changedFiles>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/NextPoem222.bml" />
@@ -91,7 +94,7 @@
         Parameters
       </name>
       <type>
-        running:T00015_PoemTestTemplate_20260903T050525.Parameters
+        succeeded:T00015_PoemTestTemplate_20260903T050525.Parameters
       </type>
       <baseType>
         type:StructType
@@ -110,7 +113,7 @@
         TestResultProducer
       </name>
       <type>
-        running:T00015_PoemTestTemplate_20260903T050525.TestResultProducer
+        succeeded:T00015_PoemTestTemplate_20260903T050525.TestResultProducer
       </type>
       <baseType>
         workflow:ResultProducer(type:Text)
