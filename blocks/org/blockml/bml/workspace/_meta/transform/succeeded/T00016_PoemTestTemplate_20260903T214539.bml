@@ -5,17 +5,17 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
+  xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
   <name>
     T00016_PoemTestTemplate_20260903T214539
   </name>
   <type>
-    running:T00016_PoemTestTemplate_20260903T214539
+    succeeded:T00016_PoemTestTemplate_20260903T214539
   </type>
   <baseType>
-    workflow:ModelTransformation(running:T00016_PoemTestTemplate_20260903T214539.Parameters)
+    workflow:ModelTransformation(succeeded:T00016_PoemTestTemplate_20260903T214539.Parameters)
   </baseType>
   <is>
     A pending ModelTransformation that creates a playground Poem block
@@ -25,7 +25,7 @@
       <value>A transformation that creates a playground Poem block</value>
     </description>
     <status override="true" type="workflow:ExecutionStatus">
-      <value>Running</value>
+      <value>Succeeded</value>
     </status>
     <createdAt override="true" type="type:DateTime">
       <value>2026-08-30T01:40:20</value>
@@ -33,7 +33,7 @@
     <template override="true" type="type:Boolean">
       <value>false</value>
     </template>
-    <parameters override="true" type="running:T00016_PoemTestTemplate_20260903T214539.Parameters">
+    <parameters override="true" type="succeeded:T00016_PoemTestTemplate_20260903T214539.Parameters">
       <value>{author:"John Doe",language:"German"}</value>
     </parameters>
     <executionId override="true" type="type:UUID">
@@ -48,6 +48,9 @@
     <baseCommit override="true" type="type:Text">
       <value>fa94de1b18834fa9be33fcad16a3ae4ed2037df2</value>
     </baseCommit>
+    <completedAt override="true" type="type:DateTime">
+      <value>2026-09-03T21:47:12</value>
+    </completedAt>
   </properties>
   <aggregations>
     <stages override="true">
@@ -314,7 +317,7 @@
         Parameters
       </name>
       <type>
-        running:T00016_PoemTestTemplate_20260903T214539.Parameters
+        succeeded:T00016_PoemTestTemplate_20260903T214539.Parameters
       </type>
       <baseType>
         type:StructType
