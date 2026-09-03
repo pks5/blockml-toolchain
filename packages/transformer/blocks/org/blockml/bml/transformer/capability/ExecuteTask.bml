@@ -16,17 +16,18 @@
   <name>ExecuteTask</name>
   <type>transformercap:ExecuteTask</type>
   <baseType>core:Capability</baseType>
-  <is>Process stage [2] — perform the Task against the model</is>
+  <is>Process step [2] — perform the Task against the model</is>
 
   <documentation>
     # Execute Task
 
     Receive the running ModelTransformation and the repository. Perform the
-    Task of the currently Running Stage in a new isolated agent process.
-    Change BML model source so that Task is done. Do not commit; Persist
-    commits model changes together with the Stage terminal state.
+    Task of the currently Running ModelOperation in a new isolated agent
+    process. Change BML model source so that Task is done. Do not commit;
+    Persist commits model changes together with the operation terminal
+    state.
 
-    - Must not write ModelTransformation metadata (including Stages) or any
+    - Must not write ModelTransformation metadata (including operations) or any
       file under `_meta/transform/`.
     - Default Claude implementation: Edit on *.bml only; deny
       `_meta/transform/` and node_modules/; Bash limited to npx blockml.
@@ -45,7 +46,7 @@
       <documentation>Running ModelTransformation FQN from Prepare. (required)</documentation>
     </runningFqn>
     <workspaceRoot type="type:Text">
-      <documentation>Repository root this stage may modify. (required)</documentation>
+      <documentation>Repository root this operation may modify. (required)</documentation>
     </workspaceRoot>
   </properties>
 

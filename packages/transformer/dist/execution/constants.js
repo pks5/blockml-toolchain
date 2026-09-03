@@ -1,5 +1,5 @@
 export const MODEL_TRANSFORMATION_FQN = "org.blockml.bml.transformer.workflow.ModelTransformation";
-export const STAGE_FQN = "org.blockml.bml.transformer.workflow.Stage";
+export const MODEL_OPERATION_FQN = "org.blockml.bml.transformer.workflow.ModelOperation";
 export const EXECUTION_STATUS_FQN = "org.blockml.bml.transformer.workflow.ExecutionStatus";
 export const EXECUTION_EXCEPTION_FQN = "org.blockml.bml.transformer.workflow.ExecutionException";
 export const RESULT_EXCEPTION_FQN = "org.blockml.bml.transformer.workflow.ResultException";

@@ -46,20 +46,21 @@
     ignores --parameters.
 
     The transformer takes an exclusive worktree lock, then prepares the
-    ModelTransformation and runs each workflow Stage in order: persist
-    Stage Running, Execute its Task in an isolated agent process, Reflect,
-    Persist results onto that Stage. Default Prepare/Finalize are
-    deterministic. Default Execute is a TransformationAgent (Claude Code)
-    that changes BML only. Default Reflect is deterministic (git
-    changedFiles from Execute; output when Stage.captureOutput is true).
-    Default Persist writes those fields onto the Stage. Finalize relocates
-    to _meta.transform.succeeded
-    only when every Stage succeeded and result resolution did not throw;
+    ModelTransformation and runs each ModelOperation in order: persist
+    operation Running, Execute its Task in an isolated agent process,
+    Reflect, Persist results onto that operation. Default Prepare/Finalize
+    are deterministic. Default Execute is a TransformationAgent (Claude
+    Code) that changes BML only. Default Reflect is deterministic (git
+    changedFiles from Execute; output when ModelOperation.captureOutput
+    is true). Default Persist writes those fields onto the operation.
+    Finalize relocates to _meta.transform.succeeded only when every
+    ModelOperation succeeded and result resolution did not throw;
     otherwise _meta.transform.failed and a
-    non-zero exit. A failed Stage aborts the rest.
+    non-zero exit. A failed ModelOperation aborts the rest.
 
-    Lifecycle lines (ModelTransformation and Stage status, execute/reflect
-    start and done) always print so progress is visible without --verbose.
+    Lifecycle lines (ModelTransformation and operation status,
+    execute/reflect start and done) always print so progress is visible
+    without --verbose.
 
     Only one transform may run at a time in the same Git worktree. A second
     call fails immediately (exit 2) with no wait. Different worktrees may
@@ -68,10 +69,10 @@
     --verbose streams additional agent-session detail (thinking, tools, text).
     It does not control the lifecycle lines.
 
-    The worktree must be clean at start and before each Stage (exit 2
-    otherwise). Prepare records baseCommit from HEAD and commits the
-    running relocation. Each Stage commits Running first, then commits
-    model changes with the Stage terminal state. Finalize commits the
+    The worktree must be clean at start and before each ModelOperation
+    (exit 2 otherwise). Prepare records baseCommit from HEAD and commits
+    the running relocation. Each ModelOperation commits Running first,
+    then commits model changes with the operation terminal state. Finalize commits the
     succeeded or failed relocation.
 
     Pending-contract violations never start the execution (exit 2).
@@ -93,7 +94,7 @@ Flags:
   --parameters-source path    PropertyReference copied onto parameters; ignores --parameters
 
 Only one transform may run at a time in the same Git worktree.
-The worktree must be clean at start and before each Stage.
+The worktree must be clean at start and before each ModelOperation.
 
 Related: validate, inspect.]]></documentation>
   <references>

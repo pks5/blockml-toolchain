@@ -1,7 +1,7 @@
 import { resolvePendingExecution } from "../execution/resolve.js";
 import { startExecution } from "../execution/start.js";
 import { SequenceAllocator } from "../execution/sequence.js";
-import { getStageInstances } from "../execution/properties.js";
+import { getOperationInstances } from "../execution/properties.js";
 export function createPrepareStage() {
     return {
         async run(pendingFqn, context) {
@@ -14,8 +14,8 @@ export function createPrepareStage() {
                     ? { parametersSource: context.parametersSource }
                     : {}),
             });
-            const stageCount = getStageInstances(resolved.document.block).length;
-            return { pendingFqn, started, stageCount };
+            const operationCount = getOperationInstances(resolved.document.block).length;
+            return { pendingFqn, started, operationCount };
         },
     };
 }

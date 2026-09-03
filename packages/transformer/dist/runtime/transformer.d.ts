@@ -23,7 +23,7 @@ export declare class Transformer {
     constructor(options: TransformerOptions);
     run(executionFqn: string): Promise<TransformRunResult>;
     private runAfterPrepare;
-    private runStage;
+    private runOperation;
 }
 export interface RunTransformationOptions {
     workspaceRoot: string;

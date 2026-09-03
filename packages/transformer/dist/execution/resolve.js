@@ -2,7 +2,7 @@ import { bootstrapFullProjectRegistry, } from "@blockml/framework";
 import { MODEL_TRANSFORMATION_FQN } from "./constants.js";
 import { TransformError } from "./errors.js";
 import { parseExecutionFqn } from "./lifecycle.js";
-import { getPropertyLiteral, getStageInstances, getStageStatus, getStatus, hasAggregationComposition, hasPropertyValue, hasStageProperty, isModelTransformation, stageHasAggregation, stageHasTask, } from "./properties.js";
+import { getOperationInstances, getOperationStatus, getPropertyLiteral, getStatus, hasAggregationComposition, hasOperationProperty, hasPropertyValue, isModelTransformation, operationHasAggregation, operationHasTask, } from "./properties.js";
 const REQUIRED_PRESENT = ["createdAt"];
 const FORBIDDEN_PROPERTIES = [
     "executionId",
@@ -14,13 +14,13 @@ const FORBIDDEN_PROPERTIES = [
     "result",
 ];
 const FORBIDDEN_AGGREGATIONS = ["task", "changedFiles", "exception"];
-const STAGE_FORBIDDEN_PROPERTIES = [
+const OPERATION_FORBIDDEN_PROPERTIES = [
     "startedAt",
     "baseCommit",
     "completedAt",
     "output",
 ];
-const STAGE_FORBIDDEN_AGGREGATIONS = ["changedFiles", "exception"];
+const OPERATION_FORBIDDEN_AGGREGATIONS = ["changedFiles", "exception"];
 export function resolvePendingExecution(executionFqn, workspaceRoot) {
     const { registry } = bootstrapFullProjectRegistry({ rootDir: workspaceRoot });
     return resolvePendingExecutionInRegistry(executionFqn, registry);
@@ -47,27 +47,27 @@ export function resolvePendingExecutionInRegistry(executionFqn, registry) {
     };
 }
 function assertPendingContract(fqn, block) {
-    const stages = getStageInstances(block);
-    if (stages.length === 0) {
-        throw new TransformError("resolve", `${fqn} has no configured stages aggregation`);
+    const operations = getOperationInstances(block);
+    if (operations.length === 0) {
+        throw new TransformError("resolve", `${fqn} has no configured operations aggregation`);
     }
-    for (let index = 0; index < stages.length; index++) {
-        const stage = stages[index];
-        if (!stageHasTask(stage)) {
-            throw new TransformError("resolve", `${fqn} Stage ${index + 1} has no configured task aggregation`);
+    for (let index = 0; index < operations.length; index++) {
+        const operation = operations[index];
+        if (!operationHasTask(operation)) {
+            throw new TransformError("resolve", `${fqn} ModelOperation ${index + 1} has no configured task aggregation`);
         }
-        const stageStatus = getStageStatus(stage);
-        if (stageStatus !== undefined && stageStatus !== "Pending") {
-            throw new TransformError("resolve", `${fqn} Stage ${index + 1} must have status=Pending before it can be started`);
+        const operationStatus = getOperationStatus(operation);
+        if (operationStatus !== undefined && operationStatus !== "Pending") {
+            throw new TransformError("resolve", `${fqn} ModelOperation ${index + 1} must have status=Pending before it can be started`);
         }
-        for (const name of STAGE_FORBIDDEN_PROPERTIES) {
-            if (hasStageProperty(stage, name)) {
-                throw new TransformError("resolve", `${fqn} Stage ${index + 1} must not have ${name} set while pending`);
+        for (const name of OPERATION_FORBIDDEN_PROPERTIES) {
+            if (hasOperationProperty(operation, name)) {
+                throw new TransformError("resolve", `${fqn} ModelOperation ${index + 1} must not have ${name} set while pending`);
             }
         }
-        for (const name of STAGE_FORBIDDEN_AGGREGATIONS) {
-            if (stageHasAggregation(stage, name)) {
-                throw new TransformError("resolve", `${fqn} Stage ${index + 1} must not have ${name} set while pending`);
+        for (const name of OPERATION_FORBIDDEN_AGGREGATIONS) {
+            if (operationHasAggregation(operation, name)) {
+                throw new TransformError("resolve", `${fqn} ModelOperation ${index + 1} must not have ${name} set while pending`);
             }
         }
     }

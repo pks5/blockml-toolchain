@@ -17,11 +17,11 @@ export interface TransformStage<Input, Output> {
 export interface PreparedExecution {
   pendingFqn: string;
   started: StartedExecution;
-  stageCount: number;
+  operationCount: number;
 }
 
-export interface StageBoundExecution extends PreparedExecution {
-  stageIndex: number;
+export interface OperationBoundExecution extends PreparedExecution {
+  operationIndex: number;
 }
 
 export interface ExecutionTrace {
@@ -31,7 +31,7 @@ export interface ExecutionTrace {
   changedFiles: readonly string[];
 }
 
-export interface ExecutedWork extends StageBoundExecution {
+export interface ExecutedWork extends OperationBoundExecution {
   trace: ExecutionTrace;
 }
 
@@ -59,7 +59,7 @@ export interface TransformRunResult {
 
 export interface TransformPipeline {
   prepare: TransformStage<string, PreparedExecution>;
-  execute: TransformStage<StageBoundExecution, ExecutedWork>;
+  execute: TransformStage<OperationBoundExecution, ExecutedWork>;
   reflect: TransformStage<ExecutedWork, Reflection>;
   persist: TransformStage<Reflection, PersistedExecution>;
   finalize: TransformStage<PersistedExecution, TransformRunResult>;

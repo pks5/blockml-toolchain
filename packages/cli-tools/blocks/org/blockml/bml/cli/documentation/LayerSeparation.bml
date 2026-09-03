@@ -35,7 +35,7 @@
 
     @blockml/framework — bootstrapTypeRegistry, TypeRegistry. CLI wraps as bootstrapProjectTypeRegistry.
 
-    @blockml/transformer — sequential workflow Stages on a ModelTransformation. CLI wraps as RunTransform and supplies default Execute and Reflect agents.
+    @blockml/transformer — sequential ModelOperations on a ModelTransformation. CLI wraps as RunTransform and supplies default Execute and Reflect agents.
 
     @blockml/graph — authored structural graph. CLI wraps as RunGraph.
 

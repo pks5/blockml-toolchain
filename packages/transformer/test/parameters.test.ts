@@ -50,7 +50,7 @@ describe("deepMergeParameters", () => {
 });
 
 describe("rewriteParameterTypeFqns", () => {
-  it("rewrites SubBlock instance typeFqns nested under a Stage", () => {
+  it("rewrites SubBlock instance typeFqns nested under a ModelOperation", () => {
     const fromFqn = "pkg._meta.transform.pending.Poem";
     const toFqn = "pkg._meta.transform.running.T00001_Poem";
     const nestedFqn = `${fromFqn}.CustomTask`;
@@ -60,14 +60,14 @@ describe("rewriteParameterTypeFqns", () => {
       members: [
         {
           kind: "aggregation",
-          name: "stages",
+          name: "operations",
           composition: {
-            aggregationName: "stages",
+            aggregationName: "operations",
             children: [
               {
                 kind: "blockInstance",
                 instance: {
-                  typeFqn: "org.blockml.bml.transformer.workflow.Stage",
+                  typeFqn: "org.blockml.bml.transformer.workflow.ModelOperation",
                   memberValues: {},
                   aggregationCompositions: [
                     {
@@ -105,11 +105,11 @@ describe("rewriteParameterTypeFqns", () => {
     rewriteParameterTypeFqns(block, fromFqn, toFqn);
 
     expect(block.subBlocks[0]?.type).toBe(`${toFqn}.CustomTask`);
-    const stages = block.members[0] as {
+    const operations = block.members[0] as {
       composition: { children: Array<{ instance: { aggregationCompositions: Array<{ composition: { children: Array<{ instance: { typeFqn: string } }> } }> } }> };
     };
     expect(
-      stages.composition.children[0]?.instance.aggregationCompositions[0]
+      operations.composition.children[0]?.instance.aggregationCompositions[0]
         ?.composition.children[0]?.instance.typeFqn,
     ).toBe(`${toFqn}.CustomTask`);
   });

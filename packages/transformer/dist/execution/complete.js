@@ -2,7 +2,7 @@ import { forkBom } from "@blockml/framework";
 import { RESULT_EXCEPTION_FQN } from "./constants.js";
 import { formatDateTimeProperty } from "./lifecycle.js";
 import { loadRunningExecution } from "./load-running.js";
-import { setCompletedAt, setException, setStatus, modelTransformationHasCompletedAt, allStagesSucceeded, } from "./properties.js";
+import { setCompletedAt, setException, setStatus, modelTransformationHasCompletedAt, allOperationsSucceeded, } from "./properties.js";
 import { rewriteParameterTypeFqns } from "./parameters.js";
 import { applyTransformationResult, ResultResolutionError, } from "./result.js";
 import { applyExecutionIdentity, persistDocument, removeFile, rewriteInboundReferences, } from "./relocate.js";
@@ -14,9 +14,9 @@ export function finalizeExecution(workspaceRoot, started, now) {
     if (modelTransformationHasCompletedAt(registry)) {
         setCompletedAt(forked.block, completedAtIso);
     }
-    const stagesSucceeded = allStagesSucceeded(forked.block);
+    const operationsSucceeded = allOperationsSucceeded(forked.block);
     let resultError;
-    if (stagesSucceeded) {
+    if (operationsSucceeded) {
         try {
             applyTransformationResult(forked.block, registry);
         }
@@ -28,7 +28,7 @@ export function finalizeExecution(workspaceRoot, started, now) {
             resultError = error.message;
         }
     }
-    const succeeded = stagesSucceeded && resultError === undefined;
+    const succeeded = operationsSucceeded && resultError === undefined;
     const stage = succeeded ? "succeeded" : "failed";
     setStatus(forked.block, succeeded ? "Succeeded" : "Failed");
     const runningFilePath = forked.source.filePath;

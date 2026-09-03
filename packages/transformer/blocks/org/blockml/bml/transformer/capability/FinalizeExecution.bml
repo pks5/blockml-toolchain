@@ -16,26 +16,26 @@
   <name>FinalizeExecution</name>
   <type>transformercap:FinalizeExecution</type>
   <baseType>core:Capability</baseType>
-  <is>Process stage [5] — complete the ModelTransformation lifecycle</is>
+  <is>Process step [5] — complete the ModelTransformation lifecycle</is>
 
   <documentation>
     # Finalize Execution
 
     Set completedAt and status, then relocate the running ModelTransformation to
     `_meta.transform.succeeded` or `_meta.transform.failed`. `Succeeded` only when every
-    Stage succeeded and result resolution did not throw. After that relocation, commit.
+    ModelOperation succeeded and result resolution did not throw. After that relocation, commit.
 
-    When every Stage succeeded and `resultSource` is set, read that Property
+    When every ModelOperation succeeded and `resultSource` is set, read that Property
     from the current model and write it onto `result`. Unset `resultSource`
     skips this. Unknown Block or Property, or a type that is not bound `R`,
     throws `workflow:ResultException`, fills `exception`, and fails
-    the transformation. A Stage failure skips result and leaves
+    the transformation. A ModelOperation failure skips result and leaves
     `exception` empty. Prepare may already have written
     `workflow:ParametersException` onto `exception`.
 
     Default implementation is deterministic. Runs after every started execution,
-    including a failed Stage. Does not write output, changedFiles,
-    or Stage exception onto the ModelTransformation. TS: pipeline/finalize.ts.
+    including a failed ModelOperation. Does not write output, changedFiles,
+    or operation exception onto the ModelTransformation. TS: pipeline/finalize.ts.
   </documentation>
 
   <references>

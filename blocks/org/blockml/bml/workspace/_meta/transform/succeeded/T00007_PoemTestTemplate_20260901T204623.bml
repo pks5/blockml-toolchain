@@ -66,9 +66,9 @@
     </completedAt>
   </properties>
   <aggregations>
-    <stages override="true">
+    <operations override="true">
       <composition>
-        <workflow:Stage name="Create Poem" status="Succeeded">
+        <workflow:ModelOperation name="Create Poem" status="Succeeded">
           <startedAt>2026-09-01T20:46:23</startedAt>
           <baseCommit>19947af0b4a6c1252672fc4c30527f34a2526a99</baseCommit>
           <output>Stage 1 executed as expected. Execute modified exactly one model file, blocks/org/blockml/bml/workspace/playground/PoemNew.bml, and touched no _meta/transform/ ModelTransformation files. Changes are coherent and self-consistent: the `&lt;is>` summary was updated from 'translated into Russian from German, about a tree and a mushroom' to 'written in German, about a tree and a mushroom'; the `&lt;documentation>` body was replaced with a 4-stanza original German poem about a beech tree (Buche) and a mushroom (Pilz), matching the tree+mushroom theme; the `&lt;title>` property was updated from the Russian 'Дерево и гриб' to the German 'Im Schatten der Buche', consistent with the new content. The `&lt;author>` value ('John Doe') and all surrounding structure (name, type, baseType, properties layout) were preserved. Stanza count (4) and general structure are unchanged from the prior version. No validation was run in this Reflect step (read-only), but the diff is structurally sound BML with balanced tags. One minor note: the closing quote in the third stanza uses a straight double-quote (&quot;) to close a German opening quote („), a slight typographic inconsistency, but it is inside documentation text and harmless.</output>
@@ -79,8 +79,8 @@
           <changedFiles>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/PoemNew.bml" />
           </changedFiles>
-        </workflow:Stage>
-        <workflow:Stage name="Translate Poem" status="Succeeded">
+        </workflow:ModelOperation>
+        <workflow:ModelOperation name="Translate Poem" status="Succeeded">
           <startedAt>2026-09-01T20:47:14</startedAt>
           <baseCommit>02dd2db01864e740fb61b32f0157e8be6743ffd6</baseCommit>
           <output>Stage 2 modified exactly one model file: blocks/org/blockml/bml/workspace/playground/PoemNew.bml. Execute replaced the German poem with a Russian translation: (1) the &lt;is> line now reads 'translated into Russian from German, about a tree and a mushroom'; (2) all four stanzas in &lt;documentation> were rewritten in Russian, preserving the four-quatrain structure, the tree/mushroom subjects, and the beech's spoken passage; (3) the properties/title/value changed from 'Im Schatten der Buche' to 'В тени бука'. The author value ('John Doe') and the block name/type/baseType were left unchanged. No ModelTransformation or _meta/transform/ files were touched, and no other files were modified. The change is self-contained and consistent with a German→Russian translation stage; recommend running `npx blockml validate` to confirm the block still parses (core:Documentation baseType, unchanged structure — expected to pass).</output>
@@ -91,8 +91,8 @@
           <changedFiles>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/PoemNew.bml" />
           </changedFiles>
-        </workflow:Stage>
+        </workflow:ModelOperation>
       </composition>
-    </stages>
+    </operations>
   </aggregations>
 </block>

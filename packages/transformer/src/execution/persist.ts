@@ -5,19 +5,19 @@ import { TransformError } from "./errors.js";
 import { persistDocument } from "./relocate.js";
 import { loadRunningExecution } from "./load-running.js";
 import {
-  getStageInstance,
-  setStageChangedFiles,
-  setStageCompletedAt,
-  setStageException,
-  setStageOutput,
-  setStageStatus,
+  getOperationInstance,
+  setOperationChangedFiles,
+  setOperationCompletedAt,
+  setOperationException,
+  setOperationOutput,
+  setOperationStatus,
 } from "./properties.js";
 import type { StartedExecution } from "./start.js";
 import { commitWorktree } from "../pipeline/git.js";
 
 export interface PersistReflectionInput {
   started: StartedExecution;
-  stageIndex: number;
+  operationIndex: number;
   changedFiles: readonly string[];
   output: string | undefined;
   exceptionMessage?: string;
@@ -31,29 +31,29 @@ export function persistReflection(
 ): void {
   const { document } = loadRunningExecution(workspaceRoot, input.started);
   const forked = forkBom(document);
-  const stage = getStageInstance(forked.block, input.stageIndex);
-  if (!stage) {
+  const operation = getOperationInstance(forked.block, input.operationIndex);
+  if (!operation) {
     throw new TransformError(
       "execution",
-      `Running ModelTransformation has no Stage at index ${input.stageIndex}`,
+      `Running ModelTransformation has no ModelOperation at index ${input.operationIndex}`,
     );
   }
   if (input.output !== undefined) {
-    setStageOutput(stage, input.output);
+    setOperationOutput(operation, input.output);
   }
   if (input.changedFiles.length > 0) {
     ensureTypeNamespace(forked);
-    setStageChangedFiles(stage, input.changedFiles);
+    setOperationChangedFiles(operation, input.changedFiles);
   }
   if (input.exceptionMessage !== undefined) {
-    setStageException(stage, input.exceptionMessage);
+    setOperationException(operation, input.exceptionMessage);
   }
-  setStageStatus(stage, input.outcome === "failed" ? "Failed" : "Succeeded");
-  setStageCompletedAt(stage, input.completedAtIso);
+  setOperationStatus(operation, input.outcome === "failed" ? "Failed" : "Succeeded");
+  setOperationCompletedAt(operation, input.completedAtIso);
   persistDocument(forked);
   commitWorktree(
     workspaceRoot,
-    `transform(stage): ${input.started.generatedName} #${input.stageIndex + 1}`,
+    `transform(operation): ${input.started.generatedName} #${input.operationIndex + 1}`,
     { required: true },
   );
 }

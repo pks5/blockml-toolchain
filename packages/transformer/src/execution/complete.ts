@@ -7,7 +7,7 @@ import {
   setException,
   setStatus,
   modelTransformationHasCompletedAt,
-  allStagesSucceeded,
+  allOperationsSucceeded,
 } from "./properties.js";
 import { rewriteParameterTypeFqns } from "./parameters.js";
 import {
@@ -42,9 +42,9 @@ export function finalizeExecution(
   if (modelTransformationHasCompletedAt(registry)) {
     setCompletedAt(forked.block, completedAtIso);
   }
-  const stagesSucceeded = allStagesSucceeded(forked.block);
+  const operationsSucceeded = allOperationsSucceeded(forked.block);
   let resultError: string | undefined;
-  if (stagesSucceeded) {
+  if (operationsSucceeded) {
     try {
       applyTransformationResult(forked.block, registry);
     } catch (error) {
@@ -55,7 +55,7 @@ export function finalizeExecution(
       resultError = error.message;
     }
   }
-  const succeeded = stagesSucceeded && resultError === undefined;
+  const succeeded = operationsSucceeded && resultError === undefined;
   const stage: TerminalLifecycleStage = succeeded ? "succeeded" : "failed";
   setStatus(forked.block, succeeded ? "Succeeded" : "Failed");
 

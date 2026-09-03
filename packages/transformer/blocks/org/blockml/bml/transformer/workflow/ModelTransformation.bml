@@ -14,11 +14,12 @@
   <name>ModelTransformation</name>
   <type>workflow:ModelTransformation</type>
   <baseType>core:Block</baseType>
-  <is>A recorded transformation of the model by sequential workflow Stages</is>
+  <is>A recorded transformation of the model by sequential ModelOperations</is>
 
   <documentation>
-    One transformation of the model driven by sequential `workflow:Stage`
-    instances. Each Stage runs one Task in an isolated agent process.
+    One transformation of the model driven by sequential
+    `workflow:ModelOperation` instances. Each operation is self-contained
+    and runs one Task in an isolated agent process.
 
     * `template` — when true, this Block is a reusable template. Prepare
       leaves it in `_meta.transform.pending`, copies it, sets
@@ -45,28 +46,29 @@
     * `result` — value of generic `R` (`core:ValueType`, default
       `type:Text`). Bind `R` as the second type argument, e.g.
       `workflow:ModelTransformation(Parameters, type:Integer)`. Written
-      only at Finalize after every Stage succeeded. Type of the source
-      Property must equal bound `R`.
+      only at Finalize after every ModelOperation succeeded. Type of the
+      source Property must equal bound `R`.
     * `exception` — `core:Exception` when Prepare cannot resolve
       `parametersSource` (`workflow:ParametersException`) or Finalize
       cannot resolve `resultSource` (`workflow:ResultException`). Empty
-      when a Stage fails; Stage faults stay on that Stage.
+      when a ModelOperation fails; operation faults stay on that
+      ModelOperation.
     * `status` — lifecycle state (`workflow:ExecutionStatus`). Matches the
       `_meta.transform` package: Pending, Running, Succeeded, Failed.
-      `Succeeded` only when every Stage succeeded and result resolution
-      did not throw.
+      `Succeeded` only when every ModelOperation succeeded and result
+      resolution did not throw.
     * `executionId` — globally unique identifier (`type:UUID`). Absent
       while pending. Assigned when Prepare sets `status=Running`
       (random UUID, unique among other ModelTransformations).
     * `startedAt` / `completedAt` — the execution interval.
     * `baseCommit` — Git HEAD commit when this execution started. Set only
       after Prepare confirms a clean worktree and sets `status=Running`.
-    * `stages` — the Stages of this execution, in order. Stage `output`,
-      `changedFiles`, and Stage `exception` live on each Stage.
+    * `operations` — the ModelOperations of this execution, in order.
+      `output`, `changedFiles`, and `exception` live on each operation.
   </documentation>
 
   <references>
-    <see type="workflow:Stage" relation="SeeAlso" />
+    <see type="workflow:ModelOperation" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
     <see type="type:PropertyReference" relation="SeeAlso" />
@@ -136,21 +138,21 @@
     </completedAt>
     <result type="R">
       <documentation>
-        Value copied from resultSource at Finalize after every Stage
-        succeeded. Type is bound R (default type:Text). Absent when
-        resultSource is unset or a Stage failed.
+        Value copied from resultSource at Finalize after every
+        ModelOperation succeeded. Type is bound R (default type:Text).
+        Absent when resultSource is unset or a ModelOperation failed.
       </documentation>
     </result>
   </properties>
 
   <aggregations>
-    <stages type="workflow:Stage[]">
-      <documentation>The stages that ran in this execution.</documentation>
-    </stages>
+    <operations type="workflow:ModelOperation[]">
+      <documentation>The self-contained ModelOperations of this execution, in order.</documentation>
+    </operations>
     <exception type="core:Exception">
       <documentation>
         ParametersException from Prepare or ResultException from Finalize.
-        Empty when a Stage fails.
+        Empty when a ModelOperation fails.
       </documentation>
     </exception>
   </aggregations>

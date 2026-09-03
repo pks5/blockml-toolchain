@@ -7,16 +7,16 @@ import { MODEL_TRANSFORMATION_FQN } from "./constants.js";
 import { TransformError } from "./errors.js";
 import { parseExecutionFqn } from "./lifecycle.js";
 import {
+  getOperationInstances,
+  getOperationStatus,
   getPropertyLiteral,
-  getStageInstances,
-  getStageStatus,
   getStatus,
   hasAggregationComposition,
+  hasOperationProperty,
   hasPropertyValue,
-  hasStageProperty,
   isModelTransformation,
-  stageHasAggregation,
-  stageHasTask,
+  operationHasAggregation,
+  operationHasTask,
 } from "./properties.js";
 
 export interface ResolvedExecution {
@@ -38,13 +38,13 @@ const FORBIDDEN_PROPERTIES = [
   "result",
 ] as const;
 const FORBIDDEN_AGGREGATIONS = ["task", "changedFiles", "exception"] as const;
-const STAGE_FORBIDDEN_PROPERTIES = [
+const OPERATION_FORBIDDEN_PROPERTIES = [
   "startedAt",
   "baseCommit",
   "completedAt",
   "output",
 ] as const;
-const STAGE_FORBIDDEN_AGGREGATIONS = ["changedFiles", "exception"] as const;
+const OPERATION_FORBIDDEN_AGGREGATIONS = ["changedFiles", "exception"] as const;
 
 export function resolvePendingExecution(
   executionFqn: string,
@@ -93,41 +93,41 @@ export function resolvePendingExecutionInRegistry(
 }
 
 function assertPendingContract(fqn: string, block: BlockDefinition): void {
-  const stages = getStageInstances(block);
-  if (stages.length === 0) {
+  const operations = getOperationInstances(block);
+  if (operations.length === 0) {
     throw new TransformError(
       "resolve",
-      `${fqn} has no configured stages aggregation`,
+      `${fqn} has no configured operations aggregation`,
     );
   }
-  for (let index = 0; index < stages.length; index++) {
-    const stage = stages[index]!;
-    if (!stageHasTask(stage)) {
+  for (let index = 0; index < operations.length; index++) {
+    const operation = operations[index]!;
+    if (!operationHasTask(operation)) {
       throw new TransformError(
         "resolve",
-        `${fqn} Stage ${index + 1} has no configured task aggregation`,
+        `${fqn} ModelOperation ${index + 1} has no configured task aggregation`,
       );
     }
-    const stageStatus = getStageStatus(stage);
-    if (stageStatus !== undefined && stageStatus !== "Pending") {
+    const operationStatus = getOperationStatus(operation);
+    if (operationStatus !== undefined && operationStatus !== "Pending") {
       throw new TransformError(
         "resolve",
-        `${fqn} Stage ${index + 1} must have status=Pending before it can be started`,
+        `${fqn} ModelOperation ${index + 1} must have status=Pending before it can be started`,
       );
     }
-    for (const name of STAGE_FORBIDDEN_PROPERTIES) {
-      if (hasStageProperty(stage, name)) {
+    for (const name of OPERATION_FORBIDDEN_PROPERTIES) {
+      if (hasOperationProperty(operation, name)) {
         throw new TransformError(
           "resolve",
-          `${fqn} Stage ${index + 1} must not have ${name} set while pending`,
+          `${fqn} ModelOperation ${index + 1} must not have ${name} set while pending`,
         );
       }
     }
-    for (const name of STAGE_FORBIDDEN_AGGREGATIONS) {
-      if (stageHasAggregation(stage, name)) {
+    for (const name of OPERATION_FORBIDDEN_AGGREGATIONS) {
+      if (operationHasAggregation(operation, name)) {
         throw new TransformError(
           "resolve",
-          `${fqn} Stage ${index + 1} must not have ${name} set while pending`,
+          `${fqn} ModelOperation ${index + 1} must not have ${name} set while pending`,
         );
       }
     }

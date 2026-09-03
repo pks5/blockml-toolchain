@@ -3,29 +3,29 @@ import { TYPE_PACKAGE_FQN } from "./constants.js";
 import { TransformError } from "./errors.js";
 import { persistDocument } from "./relocate.js";
 import { loadRunningExecution } from "./load-running.js";
-import { getStageInstance, setStageChangedFiles, setStageCompletedAt, setStageException, setStageOutput, setStageStatus, } from "./properties.js";
+import { getOperationInstance, setOperationChangedFiles, setOperationCompletedAt, setOperationException, setOperationOutput, setOperationStatus, } from "./properties.js";
 import { commitWorktree } from "../pipeline/git.js";
 export function persistReflection(workspaceRoot, input) {
     const { document } = loadRunningExecution(workspaceRoot, input.started);
     const forked = forkBom(document);
-    const stage = getStageInstance(forked.block, input.stageIndex);
-    if (!stage) {
-        throw new TransformError("execution", `Running ModelTransformation has no Stage at index ${input.stageIndex}`);
+    const operation = getOperationInstance(forked.block, input.operationIndex);
+    if (!operation) {
+        throw new TransformError("execution", `Running ModelTransformation has no ModelOperation at index ${input.operationIndex}`);
     }
     if (input.output !== undefined) {
-        setStageOutput(stage, input.output);
+        setOperationOutput(operation, input.output);
     }
     if (input.changedFiles.length > 0) {
         ensureTypeNamespace(forked);
-        setStageChangedFiles(stage, input.changedFiles);
+        setOperationChangedFiles(operation, input.changedFiles);
     }
     if (input.exceptionMessage !== undefined) {
-        setStageException(stage, input.exceptionMessage);
+        setOperationException(operation, input.exceptionMessage);
     }
-    setStageStatus(stage, input.outcome === "failed" ? "Failed" : "Succeeded");
-    setStageCompletedAt(stage, input.completedAtIso);
+    setOperationStatus(operation, input.outcome === "failed" ? "Failed" : "Succeeded");
+    setOperationCompletedAt(operation, input.completedAtIso);
     persistDocument(forked);
-    commitWorktree(workspaceRoot, `transform(stage): ${input.started.generatedName} #${input.stageIndex + 1}`, { required: true });
+    commitWorktree(workspaceRoot, `transform(operation): ${input.started.generatedName} #${input.operationIndex + 1}`, { required: true });
 }
 function ensureTypeNamespace(document) {
     const bindings = { ...(document.source.namespaceBindings ?? {}) };

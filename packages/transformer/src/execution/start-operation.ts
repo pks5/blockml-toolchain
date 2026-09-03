@@ -3,38 +3,38 @@ import { TransformError } from "./errors.js";
 import { formatDateTimeProperty } from "./lifecycle.js";
 import { loadRunningExecution } from "./load-running.js";
 import {
-  getStageInstance,
-  setStageBaseCommit,
-  setStageStartedAt,
-  setStageStatus,
+  getOperationInstance,
+  setOperationBaseCommit,
+  setOperationStartedAt,
+  setOperationStatus,
 } from "./properties.js";
 import { persistDocument } from "./relocate.js";
 import type { StartedExecution } from "./start.js";
 import { assertWorktreeClean, commitWorktree } from "../pipeline/git.js";
 
-export function startWorkflowStage(
+export function startWorkflowOperation(
   workspaceRoot: string,
   started: StartedExecution,
-  stageIndex: number,
+  operationIndex: number,
   now: Date,
 ): string {
   const baseCommit = assertWorktreeClean(workspaceRoot);
   const { document } = loadRunningExecution(workspaceRoot, started);
   const forked = forkBom(document);
-  const stage = getStageInstance(forked.block, stageIndex);
-  if (!stage) {
+  const operation = getOperationInstance(forked.block, operationIndex);
+  if (!operation) {
     throw new TransformError(
       "execution",
-      `Running ModelTransformation has no Stage at index ${stageIndex}`,
+      `Running ModelTransformation has no ModelOperation at index ${operationIndex}`,
     );
   }
-  setStageStatus(stage, "Running");
-  setStageStartedAt(stage, formatDateTimeProperty(now));
-  setStageBaseCommit(stage, baseCommit);
+  setOperationStatus(operation, "Running");
+  setOperationStartedAt(operation, formatDateTimeProperty(now));
+  setOperationBaseCommit(operation, baseCommit);
   persistDocument(forked);
   commitWorktree(
     workspaceRoot,
-    `transform(stage-start): ${started.generatedName} #${stageIndex + 1}`,
+    `transform(operation-start): ${started.generatedName} #${operationIndex + 1}`,
     { required: true },
   );
   return baseCommit;

@@ -47,9 +47,9 @@
     </completedAt>
   </properties>
   <aggregations>
-    <stages override="true">
+    <operations override="true">
       <composition>
-        <workflow:Stage name="Create Poem" status="Succeeded">
+        <workflow:ModelOperation name="Create Poem" status="Succeeded">
           <startedAt>2026-08-30T23:28:31</startedAt>
           <baseCommit>e18e9d060e9da30a1e5f39f4d650aa872e87665c</baseCommit>
           <output>Stage 1 task was: 'Create or update the block org.blockml.bml.workspace.playground.Poem.bml that contains a random poem.' Execute created exactly one new file, blocks/org/blockml/bml/workspace/playground/Poem.bml (previously the playground/ directory was untracked/empty). It is a well-formed BML block: FQN header comment, standard namespace declarations, name=Poem, type=playground:Poem, baseType=core:Documentation, an &lt;is> line, and a &lt;documentation> element holding an original 8-line poem. Naming and structure match sibling workspace BML files. The Execute stdout (as captured) shows only read-only exploration commands (ls, find) and is truncated before the write, but the on-disk result is consistent with the instruction. No _transform/ ModelTransformation files were modified — T00001_PoemTest_20260830T232831.bml is unchanged. Stage 2 (translate the poem to Chinese) has not been started. Note: git diff is empty only because the new file is untracked, not because nothing changed.</output>
@@ -60,8 +60,8 @@
           <changedFiles>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/Poem.bml" />
           </changedFiles>
-        </workflow:Stage>
-        <workflow:Stage name="Translate Poem" status="Succeeded">
+        </workflow:ModelOperation>
+        <workflow:ModelOperation name="Translate Poem" status="Succeeded">
           <startedAt>2026-08-30T23:29:45</startedAt>
           <baseCommit>e28465c0a1479c2cf79f01b9fa87328384159aaa</baseCommit>
           <output>Stage 2 task was: 'Translate the poem in org.blockml.bml.workspace.playground.Poem.bml to chinese.' Execute modified exactly one file, blocks/org/blockml/bml/workspace/playground/Poem.bml. The change is confined to the &lt;documentation> element: the original 8-line English poem was replaced with an 8-line Chinese translation, preserving the two-quatrain structure and the blank-line stanza break. All surrounding block structure is untouched — FQN header comment, namespace declarations, name=Poem, type=playground:Poem, baseType=core:Documentation, and the &lt;is> line are unchanged. The translation is faithful line-for-line to the Stage 1 poem (harbour waking before sunrise, fishing boats, grey water at the pier, gulls announcing morning; kettle singing, window opening, spring walking barefoot through the town shaking down the last of winter). No _transform/ ModelTransformation files were modified: T00001_PoemTest_20260830T232831.bml still shows Stage 2 as status=Running with no changedFiles/feedback/completedAt written by Execute. Execute stdout captured only read-only exploration (find, git log, ls) and is truncated before the write, but the on-disk result matches the instruction. Note: this file was newly tracked by the Stage 1 commit, so the git diff here correctly reflects the translation edit.</output>
@@ -72,8 +72,8 @@
           <changedFiles>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/Poem.bml" />
           </changedFiles>
-        </workflow:Stage>
+        </workflow:ModelOperation>
       </composition>
-    </stages>
+    </operations>
   </aggregations>
 </block>

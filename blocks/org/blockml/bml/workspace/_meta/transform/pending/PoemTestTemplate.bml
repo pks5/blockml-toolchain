@@ -54,19 +54,19 @@
     </parameters>
   </properties>
   <aggregations>
-    <stages override="true">
+    <operations override="true">
       <composition>
-        <workflow:Stage name="Create Poem" status="Pending" captureOutput="true">
+        <workflow:ModelOperation name="Create Poem" status="Pending" captureOutput="true">
           <task>
             <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.NextPoem222.bml that contains a random poem in german about a tree and a mushroom. For each execution create a new poem." />
           </task>
-        </workflow:Stage>
-        <workflow:Stage name="Translate Poem" status="Pending">
+        </workflow:ModelOperation>
+        <workflow:ModelOperation name="Translate Poem" status="Pending">
           <task>
             <workflow:InstructionTask instructions="Translate the poem in org.blockml.bml.workspace.playground.NextPoem222.bml to spanish." />
           </task>
-        </workflow:Stage>
+        </workflow:ModelOperation>
       </composition>
-    </stages>
+    </operations>
   </aggregations>
 </block>

@@ -12,7 +12,7 @@ export function createPersistStage() {
         async run(reflected, context) {
             persistReflection(context.workspaceRoot, {
                 started: reflected.started,
-                stageIndex: reflected.stageIndex,
+                operationIndex: reflected.operationIndex,
                 changedFiles: reflected.changedFiles,
                 output: reflected.output,
                 outcome: reflected.outcome,

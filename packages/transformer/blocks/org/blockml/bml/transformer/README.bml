@@ -22,41 +22,40 @@
   <documentation>
     The @blockml/transformer package owns the BlockML transformer library
     (org.blockml.bml.transformer.*). Workflow types live in
-    org.blockml.bml.transformer.workflow.*. Process stages live in
+    org.blockml.bml.transformer.workflow.*. Process steps live in
     org.blockml.bml.transformer.capability.*.
 
     The TypeScript engine executes ModelTransformation instances via
     `blockml transform apply EXECUTION-FQN [--parameters JSON] [--parameters-source PATH]`. Transformer.run prepares the
-    execution, then runs each `workflow:Stage` in order: persist Stage
-    Running, Execute its Task in an isolated agent process, Reflect,
-    Persist results onto that Stage, commit. Default Prepare and Finalize
-    are deterministic. Default Execute is a TransformationAgent that
-    changes BML model source only (not ModelTransformation /
-    `_meta/transform/`). Default Reflect is deterministic: git
-    `changedFiles` from Execute, and `output` when the Stage's
-    `captureOutput` is true. Default Persist writes those fields onto
-    the Stage that just
-    ran. After a started execution,
-    Finalize relocates the Block to `_meta.transform.succeeded` only when
-    every Stage succeeded and result resolution did not throw, otherwise
-    `_meta.transform.failed`. When `resultSource` is set, Finalize copies
-    that Property onto `result`; a ResultException fills
-    `exception` and fails the transformation. Prepare
+    execution, then runs each `workflow:ModelOperation` in order: persist
+    operation Running, Execute its Task in an isolated agent process,
+    Reflect, Persist results onto that operation, commit. Default Prepare
+    and Finalize are deterministic. Default Execute is a
+    TransformationAgent that changes BML model source only (not
+    ModelTransformation / `_meta/transform/`). Default Reflect is
+    deterministic: git `changedFiles` from Execute, and `output` when the
+    operation's `captureOutput` is true. Default Persist writes those
+    fields onto the ModelOperation that just ran. After a started
+    execution, Finalize relocates the Block to `_meta.transform.succeeded`
+    only when every ModelOperation succeeded and result resolution did
+    not throw, otherwise `_meta.transform.failed`. When `resultSource` is
+    set, Finalize copies that Property onto `result`; a ResultException
+    fills `exception` and fails the transformation. Prepare
     `parametersSource` faults fill `exception` with ParametersException
-    and skip Stages. A Stage failure
-    leaves `exception` empty and aborts remaining Stages. Prepare requires
-    a clean Git worktree, records `baseCommit`, and commits the running
-    relocation. Each Stage commits Running first (recovery boundary), then
-    commits model changes together with the Stage terminal state. Finalize
-    commits the terminal relocation. Transformation intelligence lives in
-    the model, not in the engine.
+    and skip operations. A ModelOperation failure leaves `exception`
+    empty and aborts remaining operations. Prepare requires a clean Git
+    worktree, records `baseCommit`, and commits the running relocation.
+    Each ModelOperation commits Running first (recovery boundary), then
+    commits model changes together with the operation terminal state.
+    Finalize commits the terminal relocation. Transformation intelligence
+    lives in the model, not in the engine.
   </documentation>
 
   <references>
     <see type="transformerdocumentation:ArchitectureOverview" relation="ReadFirst" />
     <see type="transformercap:RunTransformation" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
-    <see type="workflow:Stage" relation="SeeAlso" />
+    <see type="workflow:ModelOperation" relation="SeeAlso" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:CompositeTask" relation="SeeAlso" />
     <see type="workflow:Prerequisite" relation="SeeAlso" />

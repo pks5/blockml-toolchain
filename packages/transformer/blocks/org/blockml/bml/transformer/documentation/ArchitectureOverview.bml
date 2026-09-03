@@ -16,31 +16,31 @@
   <name>ArchitectureOverview</name>
   <type>transformerdocumentation:ArchitectureOverview</type>
   <baseType>core:Documentation</baseType>
-  <is>Stage-based transformer process and module map</is>
+  <is>Operation-based transformer process and module map</is>
 
   <documentation><![CDATA[
     Entry: transformercap:RunTransformation (Transformer.run). Exclusive
     worktree lock. The orchestrator sequences process steps; it does not
     implement them.
 
-    workflow:Stage is the unit of work inside a ModelTransformation.
-    Process steps (Prepare, Execute, Reflect, Persist, Finalize) are not
-    the same as workflow Stages. Lifecycle packages of the
-    ModelTransformation live under the library-local `_meta.transform`
-    package (pending / running / succeeded / failed) and match its
-    status. `_meta` is the shared metadata package for the library; it is
-    created when missing. Future extensions use other packages under
-    `_meta`.
+    workflow:ModelOperation is the self-contained unit of work inside a
+    ModelTransformation. Process steps (Prepare, Execute, Reflect,
+    Persist, Finalize) are not the same as ModelOperations. Lifecycle
+    packages of the ModelTransformation live under the library-local
+    `_meta.transform` package (pending / running / succeeded / failed)
+    and match its status. `_meta` is the shared metadata package for the
+    library; it is created when missing. Future extensions use other
+    packages under `_meta`.
 
-    Each workflow Stage runs in its own isolated agent process. Agent
-    context from a previous Stage is never reused.
+    Each ModelOperation runs in its own isolated agent process. Agent
+    context from a previous operation is never reused.
 
     [1] Prepare Execution — transformercap:PrepareExecution
         Default: deterministic. Validate the pending contract (status=
-        Pending, stages with a Task each, createdAt; no executionId or
-        start/finish fields on the ModelTransformation), require a clean
-        Git worktree, assign a unique executionId (type:UUID), sequence,
-        startedAt, and baseCommit (HEAD),
+        Pending, operations with a Task each, createdAt; no executionId
+        or start/finish fields on the ModelTransformation), require a
+        clean Git worktree, assign a unique executionId (type:UUID),
+        sequence, startedAt, and baseCommit (HEAD),
         set status=Running, relocate to _meta.transform.running, then commit.
         When template is true, leave the pending Block in place, copy it
         (including SubBlocks / bound T), set template=false on the copy,
@@ -51,49 +51,52 @@
         --parameters. Otherwise StructType merges CLI JSON over pending;
         other types replace. Write a value only when one exists.
         Bound T defaults to type:Text. parametersSource faults write
-        ParametersException onto exception; Stages are skipped.
+        ParametersException onto exception; operations are skipped.
         If the contract is violated or the worktree is dirty, do not start.
 
-    Then for each workflow Stage, in order:
+    Then for each ModelOperation, in order:
 
-        Persist Stage Running — clean worktree, Stage status=Running,
-        Stage baseCommit=HEAD, commit. Recovery boundary: after a crash
-        it is clear which Stage started and on which commit.
+        Persist operation Running — clean worktree, operation
+        status=Running, operation baseCommit=HEAD, commit. Recovery
+        boundary: after a crash it is clear which operation started and
+        on which commit.
 
         [2] Execute Task — transformercap:ExecuteTask
             Default: TransformationAgent (Claude Code at the CLI). New
-            process per Stage. Receives the running execution and performs
-            the Task of the currently Running Stage. May change BML model
-            source. Must not write ModelTransformation metadata (including
-            Stages) or files under _meta/transform/. Does not commit; model
-            changes stay uncommitted until Persist. Claude default:
+            process per ModelOperation. Receives the running execution
+            and performs the Task of the currently Running operation.
+            May change BML model source. Must not write
+            ModelTransformation metadata (including operations) or files
+            under _meta/transform/. Does not commit; model changes stay
+            uncommitted until Persist. Claude default:
             Edit(**/*.bml), deny Edit(**/_meta/transform/**) and
             Edit(**/node_modules/**), Bash limited to npx blockml.
 
         [3] Reflect on Execution — transformercap:ReflectOnExecution
             Default: deterministic. No agent process. Must not change
             the model. Reads the Execute git trace for changedFiles.
-            When the Stage's captureOutput is true, copies Execute
+            When the operation's captureOutput is true, copies Execute
             agent stdout onto output. Skipped when Execute throws;
             output never decides Succeeded vs Failed.
 
         [4] Persist Execution — transformercap:PersistExecution
             Default: deterministic. Writes changedFiles, output, status,
-            completedAt, and on failure a BML exception onto this Stage.
-            Commits model changes together with the Stage terminal state.
-            Must not relocate the ModelTransformation. A Failed Stage
-            aborts remaining Stages.
+            completedAt, and on failure a BML exception onto this
+            ModelOperation. Commits model changes together with the
+            operation terminal state. Must not relocate the
+            ModelTransformation. A Failed ModelOperation aborts
+            remaining operations.
 
     [5] Finalize Execution — transformercap:FinalizeExecution
         Default: deterministic. Always runs after a started execution.
-        Succeeded only when every Stage succeeded and result
+        Succeeded only when every ModelOperation succeeded and result
         resolution did not throw: status=Succeeded, completedAt,
         optional result from resultSource, relocate running to
         succeeded. Otherwise status=Failed, completedAt, relocate
-        running to failed. Stage exception lives on the failed Stage.
-        ParametersException and ResultException live on
-        ModelTransformation.exception. A Stage failure leaves that
-        aggregation empty. Commits after the terminal relocation.
+        running to failed. Operation exception lives on the failed
+        ModelOperation. ParametersException and ResultException live on
+        ModelTransformation.exception. A ModelOperation failure leaves
+        that aggregation empty. Commits after the terminal relocation.
 
     TypeScript:
     • runtime/transformer.ts → transformercap:RunTransformation
@@ -107,7 +110,7 @@
   <references>
     <see type="transformercap:RunTransformation" relation="Defines" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
-    <see type="workflow:Stage" relation="SeeAlso" />
+    <see type="workflow:ModelOperation" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="type:UUID" relation="SeeAlso" />
     <see type="workflow:ParametersException" relation="SeeAlso" />

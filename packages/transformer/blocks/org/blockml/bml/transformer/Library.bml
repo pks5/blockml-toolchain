@@ -27,7 +27,7 @@
   </version>
   <documentation>
     Canonical transformer specification for BlockML — sequential
-    workflow Stages over ModelTransformation. TypeScript in
+    ModelOperations over ModelTransformation. TypeScript in
     packages/transformer/src/ implements this library. Membership is defined
     exclusively by this blocks list.
   </documentation>
@@ -63,13 +63,13 @@
         <blockml:transformer.workflow.ExecutionStatus />
         <blockml:transformer.workflow.InstructionRule />
         <blockml:transformer.workflow.InstructionTask />
+        <blockml:transformer.workflow.ModelOperation />
         <blockml:transformer.workflow.ModelTransformation />
         <blockml:transformer.workflow.Prerequisite />
         <blockml:transformer.workflow.ParametersException />
         <blockml:transformer.workflow.PrerequisiteNotMetException />
         <blockml:transformer.workflow.ResultException />
         <blockml:transformer.workflow.Rule />
-        <blockml:transformer.workflow.Stage />
         <blockml:transformer.workflow.Task />
         <blockml:transformer.capability.ExecuteTask />
         <blockml:transformer.capability.FinalizeExecution />

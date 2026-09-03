@@ -16,8 +16,8 @@ import {
   FILE_PATH_ENTITY_FQN,
   FILE_PATH_TYPE_FQN,
   INTEGER_TYPE_FQN,
+  MODEL_OPERATION_FQN,
   MODEL_TRANSFORMATION_FQN,
-  STAGE_FQN,
   TEXT_TYPE_FQN,
   UUID_TYPE_FQN,
   type ExecutionStatusId,
@@ -39,10 +39,10 @@ export function hasTaskComposition(block: BlockDefinition): boolean {
   return hasAggregationComposition(block, "task");
 }
 
-export function getStageInstances(block: BlockDefinition): BlockInstance[] {
+export function getOperationInstances(block: BlockDefinition): BlockInstance[] {
   const aggregation = block.members.find(
     (member): member is AggregationDefinition =>
-      member.kind === "aggregation" && member.name === "stages",
+      member.kind === "aggregation" && member.name === "operations",
   );
   if (!aggregation?.composition) {
     return [];
@@ -50,21 +50,21 @@ export function getStageInstances(block: BlockDefinition): BlockInstance[] {
   return aggregation.composition.children
     .filter((child): child is BlockInstanceNode => child.kind === "blockInstance")
     .map((child) => child.instance)
-    .filter((instance) => instance.typeFqn === STAGE_FQN);
+    .filter((instance) => instance.typeFqn === MODEL_OPERATION_FQN);
 }
 
-export function getStageInstance(
+export function getOperationInstance(
   block: BlockDefinition,
-  stageIndex: number,
+  operationIndex: number,
 ): BlockInstance | undefined {
-  return getStageInstances(block)[stageIndex];
+  return getOperationInstances(block)[operationIndex];
 }
 
-export function stageHasTask(instance: BlockInstance): boolean {
-  return stageHasAggregation(instance, "task");
+export function operationHasTask(instance: BlockInstance): boolean {
+  return operationHasAggregation(instance, "task");
 }
 
-export function stageHasAggregation(
+export function operationHasAggregation(
   instance: BlockInstance,
   name: string,
 ): boolean {
@@ -74,7 +74,7 @@ export function stageHasAggregation(
   return (aggregation?.composition.children.length ?? 0) > 0;
 }
 
-export function hasStageProperty(instance: BlockInstance, name: string): boolean {
+export function hasOperationProperty(instance: BlockInstance, name: string): boolean {
   const value = instance.memberValues[name];
   if (!value) {
     return false;
@@ -85,7 +85,7 @@ export function hasStageProperty(instance: BlockInstance, name: string): boolean
   return true;
 }
 
-export function getStagePropertyLiteral(
+export function getOperationPropertyLiteral(
   instance: BlockInstance,
   name: string,
 ): unknown | undefined {
@@ -96,8 +96,8 @@ export function getStagePropertyLiteral(
   return undefined;
 }
 
-export function getStageStatus(instance: BlockInstance): string | undefined {
-  const value = getStagePropertyLiteral(instance, "status");
+export function getOperationStatus(instance: BlockInstance): string | undefined {
+  const value = getOperationPropertyLiteral(instance, "status");
   if (typeof value !== "string") {
     return undefined;
   }
@@ -105,15 +105,15 @@ export function getStageStatus(instance: BlockInstance): string | undefined {
   return separator >= 0 ? value.slice(separator + 2) : value;
 }
 
-export function allStagesSucceeded(block: BlockDefinition): boolean {
-  const stages = getStageInstances(block);
-  if (stages.length === 0) {
+export function allOperationsSucceeded(block: BlockDefinition): boolean {
+  const operations = getOperationInstances(block);
+  if (operations.length === 0) {
     return false;
   }
-  return stages.every((stage) => getStageStatus(stage) === "Succeeded");
+  return operations.every((operation) => getOperationStatus(operation) === "Succeeded");
 }
 
-function setStageMember(
+function setOperationMember(
   instance: BlockInstance,
   name: string,
   typeFqn: string,
@@ -128,13 +128,13 @@ function setStageMember(
   };
 }
 
-export function setStageStatus(
+export function setOperationStatus(
   instance: BlockInstance,
   status: ExecutionStatusId,
 ): void {
   // `status` is a reserved metadata element name on composition instances;
   // persist it as an attribute so it round-trips through parse.
-  setStageMember(instance, "status", EXECUTION_STATUS_FQN, status, "attribute");
+  setOperationMember(instance, "status", EXECUTION_STATUS_FQN, status, "attribute");
 }
 
 function upsertInstanceAggregation(
@@ -156,23 +156,23 @@ function upsertInstanceAggregation(
   instance.aggregationCompositions = existing;
 }
 
-export function setStageStartedAt(instance: BlockInstance, iso: string): void {
-  setStageMember(instance, "startedAt", DATETIME_TYPE_FQN, iso);
+export function setOperationStartedAt(instance: BlockInstance, iso: string): void {
+  setOperationMember(instance, "startedAt", DATETIME_TYPE_FQN, iso);
 }
 
-export function setStageBaseCommit(instance: BlockInstance, commit: string): void {
-  setStageMember(instance, "baseCommit", TEXT_TYPE_FQN, commit);
+export function setOperationBaseCommit(instance: BlockInstance, commit: string): void {
+  setOperationMember(instance, "baseCommit", TEXT_TYPE_FQN, commit);
 }
 
-export function setStageCompletedAt(instance: BlockInstance, iso: string): void {
-  setStageMember(instance, "completedAt", DATETIME_TYPE_FQN, iso);
+export function setOperationCompletedAt(instance: BlockInstance, iso: string): void {
+  setOperationMember(instance, "completedAt", DATETIME_TYPE_FQN, iso);
 }
 
-export function setStageOutput(instance: BlockInstance, output: string): void {
-  setStageMember(instance, "output", TEXT_TYPE_FQN, output);
+export function setOperationOutput(instance: BlockInstance, output: string): void {
+  setOperationMember(instance, "output", TEXT_TYPE_FQN, output);
 }
 
-export function setStageChangedFiles(
+export function setOperationChangedFiles(
   instance: BlockInstance,
   paths: readonly string[],
 ): void {
@@ -196,7 +196,7 @@ export function setStageChangedFiles(
   );
 }
 
-export function setStageException(instance: BlockInstance, message: string): void {
+export function setOperationException(instance: BlockInstance, message: string): void {
   upsertInstanceAggregation(instance, "exception", [
     {
       kind: "blockInstance",

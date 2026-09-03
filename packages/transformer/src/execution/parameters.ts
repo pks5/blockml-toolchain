@@ -313,7 +313,7 @@ export function applyExecutionParameters(
 /**
  * Rewrite FQNs rooted at this execution Block after a lifecycle relocate.
  * Covers SubBlocks, the parameters property, and composition instances
- * nested under a Stage.
+ * nested under a ModelOperation.
  */
 export function rewriteParameterTypeFqns(
   block: BlockDefinition,

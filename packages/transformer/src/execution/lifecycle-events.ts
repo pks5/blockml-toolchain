@@ -7,34 +7,34 @@ export type TransformLifecycleEvent =
       fqn: string;
     }
   | {
-      kind: "stageStatus";
-      stageIndex: number;
-      stageCount: number;
+      kind: "operationStatus";
+      operationIndex: number;
+      operationCount: number;
       status: ExecutionStatusId;
       fqn: string;
     }
   | {
-      kind: "stageExecuteStart";
-      stageIndex: number;
-      stageCount: number;
+      kind: "operationExecuteStart";
+      operationIndex: number;
+      operationCount: number;
       fqn: string;
     }
   | {
-      kind: "stageExecuteEnd";
-      stageIndex: number;
-      stageCount: number;
+      kind: "operationExecuteEnd";
+      operationIndex: number;
+      operationCount: number;
       fqn: string;
     }
   | {
-      kind: "stageReflectStart";
-      stageIndex: number;
-      stageCount: number;
+      kind: "operationReflectStart";
+      operationIndex: number;
+      operationCount: number;
       fqn: string;
     }
   | {
-      kind: "stageReflectEnd";
-      stageIndex: number;
-      stageCount: number;
+      kind: "operationReflectEnd";
+      operationIndex: number;
+      operationCount: number;
       fqn: string;
     }
   | {
@@ -52,24 +52,27 @@ export function emitLifecycle(
   listener?.(event);
 }
 
-function stageLabel(event: { stageIndex: number; stageCount: number }): string {
-  return `Stage ${event.stageIndex + 1}/${event.stageCount}`;
+function operationLabel(event: {
+  operationIndex: number;
+  operationCount: number;
+}): string {
+  return `Operation ${event.operationIndex + 1}/${event.operationCount}`;
 }
 
 export function formatTransformLifecycle(event: TransformLifecycleEvent): string {
   switch (event.kind) {
     case "transformationStatus":
       return `ModelTransformation ${event.status}  ${event.fqn}`;
-    case "stageStatus":
-      return `${stageLabel(event)} ${event.status}`;
-    case "stageExecuteStart":
-      return `${stageLabel(event)} execute start`;
-    case "stageExecuteEnd":
-      return `${stageLabel(event)} execute done`;
-    case "stageReflectStart":
-      return `${stageLabel(event)} reflect start`;
-    case "stageReflectEnd":
-      return `${stageLabel(event)} reflect done`;
+    case "operationStatus":
+      return `${operationLabel(event)} ${event.status}`;
+    case "operationExecuteStart":
+      return `${operationLabel(event)} execute start`;
+    case "operationExecuteEnd":
+      return `${operationLabel(event)} execute done`;
+    case "operationReflectStart":
+      return `${operationLabel(event)} reflect start`;
+    case "operationReflectEnd":
+      return `${operationLabel(event)} reflect done`;
     case "transformationComplete":
       return event.status === "Succeeded"
         ? `Transformed ${event.terminalFqn}`

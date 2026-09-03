@@ -2,7 +2,7 @@ import type { TransformationAgent } from "../agent/transformation-agent.js";
 import { TransformError } from "../execution/errors.js";
 import type {
   ExecutedWork,
-  StageBoundExecution,
+  OperationBoundExecution,
   StageContext,
   TransformStage,
 } from "./types.js";
@@ -10,16 +10,16 @@ import { collectWorktreeTrace, modelChangedFiles } from "./worktree-trace.js";
 
 export function createExecuteStage(
   agent: TransformationAgent,
-): TransformStage<StageBoundExecution, ExecutedWork> {
+): TransformStage<OperationBoundExecution, ExecutedWork> {
   return {
     async run(
-      prepared: StageBoundExecution,
+      prepared: OperationBoundExecution,
       context: StageContext,
     ): Promise<ExecutedWork> {
       const agentResult = await agent.execute({
         workspaceRoot: context.workspaceRoot,
         executionFqn: prepared.started.runningFqn,
-        stageIndex: prepared.stageIndex,
+        operationIndex: prepared.operationIndex,
       });
       if (!agentResult.success) {
         throw new TransformError(

@@ -4,30 +4,30 @@ export type TransformLifecycleEvent = {
     status: ExecutionStatusId;
     fqn: string;
 } | {
-    kind: "stageStatus";
-    stageIndex: number;
-    stageCount: number;
+    kind: "operationStatus";
+    operationIndex: number;
+    operationCount: number;
     status: ExecutionStatusId;
     fqn: string;
 } | {
-    kind: "stageExecuteStart";
-    stageIndex: number;
-    stageCount: number;
+    kind: "operationExecuteStart";
+    operationIndex: number;
+    operationCount: number;
     fqn: string;
 } | {
-    kind: "stageExecuteEnd";
-    stageIndex: number;
-    stageCount: number;
+    kind: "operationExecuteEnd";
+    operationIndex: number;
+    operationCount: number;
     fqn: string;
 } | {
-    kind: "stageReflectStart";
-    stageIndex: number;
-    stageCount: number;
+    kind: "operationReflectStart";
+    operationIndex: number;
+    operationCount: number;
     fqn: string;
 } | {
-    kind: "stageReflectEnd";
-    stageIndex: number;
-    stageCount: number;
+    kind: "operationReflectEnd";
+    operationIndex: number;
+    operationCount: number;
     fqn: string;
 } | {
     kind: "transformationComplete";

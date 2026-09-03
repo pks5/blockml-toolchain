@@ -1,7 +1,7 @@
 import type { StartedExecution } from "./start.js";
 export interface PersistReflectionInput {
     started: StartedExecution;
-    stageIndex: number;
+    operationIndex: number;
     changedFiles: readonly string[];
     output: string | undefined;
     exceptionMessage?: string;

@@ -124,7 +124,7 @@ If truncated is non-empty, inspect the needed child FQN instead of raising depth
 Not a write format; do not round-trip Inspect JSON to BML.
 A .bml path is not an FQN; inspect may print Did you mean <root FQN>?
 Unknown FQN exits 2. Documentation longer than 400 characters is truncated with an ellipsis and documentationTruncated=true.
-Aggregation members include authored composition instances (enum literals, Library catalog FQNs, nested Stage/Task fills).
+Aggregation members include authored composition instances (enum literals, Library catalog FQNs, nested ModelOperation/Task fills).
 Capability members include implementation (language + truncated source).
 
 Related: search (find the FQN), graph (how it connects).`;
@@ -233,7 +233,7 @@ Flags:
   --parameters-source path    PropertyReference copied onto parameters; ignores --parameters
 
 Only one transform may run at a time in the same Git worktree.
-The worktree must be clean at start and before each Stage.
+The worktree must be clean at start and before each ModelOperation.
 
 Related: validate, inspect.`;
 

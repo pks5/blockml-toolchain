@@ -1,5 +1,5 @@
 /**
- * Claude Code permissions for transformer stages.
+ * Claude Code permissions for transformer operations.
  *
  * Execute may change BML model source. It must not write ModelTransformation
  * files under `_meta/transform/`. Bash is limited to the BlockML CLI.

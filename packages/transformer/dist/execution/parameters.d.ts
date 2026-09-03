@@ -23,7 +23,7 @@ export declare function applyExecutionParameters(block: BlockDefinition, registr
 /**
  * Rewrite FQNs rooted at this execution Block after a lifecycle relocate.
  * Covers SubBlocks, the parameters property, and composition instances
- * nested under a Stage.
+ * nested under a ModelOperation.
  */
 export declare function rewriteParameterTypeFqns(block: BlockDefinition, fromFqn: string, toFqn: string): void;
 //# sourceMappingURL=parameters.d.ts.map

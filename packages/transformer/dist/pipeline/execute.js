@@ -6,7 +6,7 @@ export function createExecuteStage(agent) {
             const agentResult = await agent.execute({
                 workspaceRoot: context.workspaceRoot,
                 executionFqn: prepared.started.runningFqn,
-                stageIndex: prepared.stageIndex,
+                operationIndex: prepared.operationIndex,
             });
             if (!agentResult.success) {
                 throw new TransformError("execution", agentResult.error || "Transformation agent failed");

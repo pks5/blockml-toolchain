@@ -1,23 +1,23 @@
 export function emitLifecycle(listener, event) {
     listener?.(event);
 }
-function stageLabel(event) {
-    return `Stage ${event.stageIndex + 1}/${event.stageCount}`;
+function operationLabel(event) {
+    return `Operation ${event.operationIndex + 1}/${event.operationCount}`;
 }
 export function formatTransformLifecycle(event) {
     switch (event.kind) {
         case "transformationStatus":
             return `ModelTransformation ${event.status}  ${event.fqn}`;
-        case "stageStatus":
-            return `${stageLabel(event)} ${event.status}`;
-        case "stageExecuteStart":
-            return `${stageLabel(event)} execute start`;
-        case "stageExecuteEnd":
-            return `${stageLabel(event)} execute done`;
-        case "stageReflectStart":
-            return `${stageLabel(event)} reflect start`;
-        case "stageReflectEnd":
-            return `${stageLabel(event)} reflect done`;
+        case "operationStatus":
+            return `${operationLabel(event)} ${event.status}`;
+        case "operationExecuteStart":
+            return `${operationLabel(event)} execute start`;
+        case "operationExecuteEnd":
+            return `${operationLabel(event)} execute done`;
+        case "operationReflectStart":
+            return `${operationLabel(event)} reflect start`;
+        case "operationReflectEnd":
+            return `${operationLabel(event)} reflect done`;
         case "transformationComplete":
             return event.status === "Succeeded"
                 ? `Transformed ${event.terminalFqn}`

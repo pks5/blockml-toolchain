@@ -8,7 +8,7 @@ export { createNoopPersistStage, createPersistStage } from "./pipeline/persist.j
 export { createFinalizeStage } from "./pipeline/finalize.js";
 export { collectWorktreeTrace } from "./pipeline/worktree-trace.js";
 export type { WorktreeTrace } from "./pipeline/worktree-trace.js";
-export type { StageContext, TransformStage, TransformPipeline, PreparedExecution, StageBoundExecution, ExecutionTrace, ExecutedWork, Reflection, PersistedExecution, } from "./pipeline/types.js";
+export type { StageContext, TransformStage, TransformPipeline, PreparedExecution, OperationBoundExecution, ExecutionTrace, ExecutedWork, Reflection, PersistedExecution, } from "./pipeline/types.js";
 export type { TransformationAgent, AgentExecutionRequest, AgentExecutionResult, } from "./agent/transformation-agent.js";
 export type { ReflectionAgent, ReflectRequest, ReflectResult, } from "./agent/reflection-agent.js";
 export { ClaudeCodeAgent, buildClaudeExecutionPrompt, ensureAgentsMarkdown, runClaudeProcess, } from "./agent/claude-code-agent.js";
@@ -25,7 +25,7 @@ export { resolvePendingExecution } from "./execution/resolve.js";
 export { startExecution } from "./execution/start.js";
 export { persistReflection } from "./execution/persist.js";
 export { finalizeExecution } from "./execution/complete.js";
-export { startWorkflowStage } from "./execution/start-stage.js";
+export { startWorkflowOperation } from "./execution/start-operation.js";
 export { formatTransformLifecycle, emitLifecycle, } from "./execution/lifecycle-events.js";
 export type { TransformLifecycleEvent, TransformLifecycleListener, } from "./execution/lifecycle-events.js";
 export { SequenceAllocator } from "./execution/sequence.js";

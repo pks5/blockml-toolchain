@@ -28,16 +28,16 @@ function pendingXml(name: string): string {
     `    </createdAt>`,
     `  </properties>`,
     `  <aggregations>`,
-    `    <stages override="true">`,
+    `    <operations override="true">`,
     `      <composition>`,
-    `        <workflow:Stage>`,
+    `        <workflow:ModelOperation>`,
     `          <status>Pending</status>`,
     `          <task>`,
     `            <workflow:InstructionTask instructions="Do the task." />`,
     `          </task>`,
-    `        </workflow:Stage>`,
+    `        </workflow:ModelOperation>`,
     `      </composition>`,
-    `    </stages>`,
+    `    </operations>`,
     `  </aggregations>`,
     `</block>`,
     ``,
@@ -146,8 +146,8 @@ describe("blockml transform CLI", () => {
     );
     expect(code).toBe(1);
     expect(stderr).toMatch(/claude failed/);
-    expect(stderr).toMatch(/Stage 1\/1 Running/);
-    expect(stderr).toMatch(/Stage 1\/1 execute start/);
+    expect(stderr).toMatch(/Operation 1\/1 Running/);
+    expect(stderr).toMatch(/Operation 1\/1 execute start/);
     expect(stderr).toMatch(/ModelTransformation Failed/);
     expect(
       existsSync(join(TMP, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml")),
@@ -191,7 +191,7 @@ describe("blockml transform CLI", () => {
     expect(code).toBe(2);
   });
 
-  it("prints Stage lifecycle lines without --verbose on success", async () => {
+  it("prints Operation lifecycle lines without --verbose on success", async () => {
     const { code, stderr } = await runCli(
       ["transform", "apply", `${LIBRARY}._meta.transform.pending.JokeTest`],
       TMP,
@@ -205,10 +205,10 @@ describe("blockml transform CLI", () => {
     );
     expect(code).toBe(0);
     expect(stderr).toMatch(/ModelTransformation Running/);
-    expect(stderr).toMatch(/Stage 1\/1 Running/);
-    expect(stderr).toMatch(/Stage 1\/1 execute start/);
-    expect(stderr).toMatch(/Stage 1\/1 execute done/);
-    expect(stderr).toMatch(/Stage 1\/1 Succeeded/);
+    expect(stderr).toMatch(/Operation 1\/1 Running/);
+    expect(stderr).toMatch(/Operation 1\/1 execute start/);
+    expect(stderr).toMatch(/Operation 1\/1 execute done/);
+    expect(stderr).toMatch(/Operation 1\/1 Succeeded/);
     expect(stderr).toMatch(/ModelTransformation Succeeded/);
     expect(stderr).toMatch(/Transformed /);
     expect(stderr).not.toMatch(/--verbose/);

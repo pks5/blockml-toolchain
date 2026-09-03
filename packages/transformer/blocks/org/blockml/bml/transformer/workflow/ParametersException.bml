@@ -24,13 +24,13 @@
     * or the Property type does not match the bound parameter generic `T`
 
     Distinct from ResultException (Finalize result fault) and
-    ExecutionException (a Stage fault). Inherits message from
+    ExecutionException (a ModelOperation fault). Inherits message from
     core:Exception. Written only onto `workflow:ModelTransformation.exception`.
-    A Stage failure leaves that aggregation empty.
+    A ModelOperation failure leaves that aggregation empty.
   </documentation>
 
   <isNot>Not ResultException (Finalize result fault), not ExecutionException
-    (Stage execution fault), and not a validator diagnostic
+    (ModelOperation execution fault), and not a validator diagnostic
     (org.blockml.bml.core.Diagnostic).</isNot>
 
   <references>

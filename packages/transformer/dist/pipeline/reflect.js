@@ -1,10 +1,10 @@
 import { TransformError } from "../execution/errors.js";
 import { loadRunningExecution } from "../execution/load-running.js";
-import { getStageInstance, getStagePropertyLiteral, } from "../execution/properties.js";
+import { getOperationInstance, getOperationPropertyLiteral, } from "../execution/properties.js";
 export function createReflectStage() {
     return {
         async run(executed, context) {
-            const output = stageCapturesOutput(context.workspaceRoot, executed.started, executed.stageIndex)
+            const output = operationCapturesOutput(context.workspaceRoot, executed.started, executed.operationIndex)
                 ? agentOutput(executed.trace.stdout)
                 : undefined;
             return {
@@ -25,7 +25,7 @@ export function createAgentReflectStage(agent) {
             const result = await agent.reflect({
                 workspaceRoot: context.workspaceRoot,
                 executionFqn: executed.started.runningFqn,
-                stageIndex: executed.stageIndex,
+                operationIndex: executed.operationIndex,
                 trace: executed.trace,
             });
             if (!result.success) {
@@ -43,13 +43,13 @@ export function createAgentReflectStage(agent) {
         },
     };
 }
-function stageCapturesOutput(workspaceRoot, started, stageIndex) {
+function operationCapturesOutput(workspaceRoot, started, operationIndex) {
     const { document } = loadRunningExecution(workspaceRoot, started);
-    const stage = getStageInstance(document.block, stageIndex);
-    if (!stage) {
+    const operation = getOperationInstance(document.block, operationIndex);
+    if (!operation) {
         return false;
     }
-    const value = getStagePropertyLiteral(stage, "captureOutput");
+    const value = getOperationPropertyLiteral(operation, "captureOutput");
     if (value === true) {
         return true;
     }

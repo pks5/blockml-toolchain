@@ -73,7 +73,7 @@ export function pendingExecutionXml(opts: {
   name: string;
   executionId?: string;
   extraRefs?: string;
-  stageInstructions?: readonly string[];
+  operationInstructions?: readonly string[];
   template?: boolean;
   parameterFields?: readonly string[];
   pendingParameters?: string;
@@ -143,11 +143,11 @@ export function pendingExecutionXml(opts: {
     parameterBlock.length > 0
       ? [`  <subBlocks>`, ...parameterBlock, `  </subBlocks>`].join("\n")
       : "";
-  const instructions = opts.stageInstructions ?? ["Do the task."];
-  const stages = instructions
+  const instructions = opts.operationInstructions ?? ["Do the task."];
+  const operations = instructions
     .map((text) =>
       [
-        `        <workflow:Stage>`,
+        `        <workflow:ModelOperation>`,
         `          <status>Pending</status>`,
         ...(opts.captureOutput === true
           ? [`          <captureOutput>true</captureOutput>`]
@@ -155,7 +155,7 @@ export function pendingExecutionXml(opts: {
         `          <task>`,
         `            <workflow:InstructionTask instructions="${text}" />`,
         `          </task>`,
-        `        </workflow:Stage>`,
+        `        </workflow:ModelOperation>`,
       ].join("\n"),
     )
     .join("\n");
@@ -185,11 +185,11 @@ export function pendingExecutionXml(opts: {
     `    </createdAt>`,
     `  </properties>`,
     `  <aggregations>`,
-    `    <stages override="true">`,
+    `    <operations override="true">`,
     `      <composition>`,
-    stages,
+    operations,
     `      </composition>`,
-    `    </stages>`,
+    `    </operations>`,
     `  </aggregations>`,
     `</block>`,
     ``,
@@ -217,16 +217,16 @@ export function historyExecutionXml(opts: {
     `    <sequence override="true"><value>${opts.sequence}</value></sequence>`,
     `  </properties>`,
     `  <aggregations>`,
-    `    <stages override="true">`,
+    `    <operations override="true">`,
     `      <composition>`,
-    `        <workflow:Stage>`,
+    `        <workflow:ModelOperation>`,
     `          <status>Pending</status>`,
     `          <task>`,
     `            <workflow:InstructionTask instructions="Already ran." />`,
     `          </task>`,
-    `        </workflow:Stage>`,
+    `        </workflow:ModelOperation>`,
     `      </composition>`,
-    `    </stages>`,
+    `    </operations>`,
     `  </aggregations>`,
     `</block>`,
     ``,

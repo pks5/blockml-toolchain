@@ -1,6 +1,6 @@
 <!--
-  Transformer Workflow — Stage
-  FQN: org.blockml.bml.transformer.workflow.Stage
+  Transformer Workflow — ModelOperation
+  FQN: org.blockml.bml.transformer.workflow.ModelOperation
 -->
 <block
   xmlns="http://blockml.org/bml"
@@ -11,27 +11,28 @@
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Stage</name>
-  <type>workflow:Stage</type>
+  <name>ModelOperation</name>
+  <type>workflow:ModelOperation</type>
   <baseType>core:Block</baseType>
-  <is>An isolated part of a ModelTransformation</is>
+  <is>A self-contained operation of a ModelTransformation</is>
 
   <documentation>
-    An isolated part of a ModelTransformation.
+    A completed, self-contained (Model-)Operation of a ModelTransformation.
 
-    A Stage runs in its own agent process. It owns `output` and
-    `changedFiles` independently of other Stages in the same transformation.
+    Each ModelOperation runs in its own agent process. It owns `output`
+    and `changedFiles` independently of other operations in the same
+    transformation.
 
     * `status` — lifecycle state (`workflow:ExecutionStatus`).
-    * `startedAt` / `completedAt` — the interval of this Stage.
-    * `baseCommit` — Git HEAD commit when this Stage started.
-    * `task` — the Task that ran in this Stage.
+    * `startedAt` / `completedAt` — the interval of this operation.
+    * `baseCommit` — Git HEAD commit when this operation started.
+    * `task` — the Task that ran in this operation.
     * `captureOutput` — when true, Reflect copies Execute agent stdout
       onto `output`. Default false: `output` stays unset.
-    * `output` — Execute agent stdout for this Stage. Present only when
-      `captureOutput` is true.
-    * `changedFiles` — workspace-relative paths modified during this Stage
-      (`type:FilePathEntity[]`).
+    * `output` — Execute agent stdout for this operation. Present only
+      when `captureOutput` is true.
+    * `changedFiles` — workspace-relative paths modified during this
+      operation (`type:FilePathEntity[]`).
     * `exception` — present if and only if `status` is Failed.
   </documentation>
 
@@ -45,19 +46,19 @@
 
   <properties>
     <name type="type:Text">
-      <documentation>Name of this Stage.</documentation>
+      <documentation>Name of this ModelOperation.</documentation>
     </name>
     <status type="workflow:ExecutionStatus">
-      <documentation>Lifecycle state of this Stage.</documentation>
+      <documentation>Lifecycle state of this ModelOperation.</documentation>
     </status>
     <startedAt type="type:DateTime">
-      <documentation>When this Stage started.</documentation>
+      <documentation>When this ModelOperation started.</documentation>
     </startedAt>
     <baseCommit type="type:Text">
-      <documentation>Git HEAD commit when this Stage started.</documentation>
+      <documentation>Git HEAD commit when this ModelOperation started.</documentation>
     </baseCommit>
     <completedAt type="type:DateTime">
-      <documentation>When this Stage finished.</documentation>
+      <documentation>When this ModelOperation finished.</documentation>
     </completedAt>
     <captureOutput type="type:Boolean">
       <documentation>
@@ -68,21 +69,21 @@
     </captureOutput>
     <output type="type:Text">
       <documentation>
-        Execute agent stdout for this Stage. Written by Reflect when
-        captureOutput is true. Absent otherwise.
+        Execute agent stdout for this ModelOperation. Written by Reflect
+        when captureOutput is true. Absent otherwise.
       </documentation>
     </output>
   </properties>
 
   <aggregations>
     <task type="workflow:Task">
-      <documentation>The Task that ran in this Stage.</documentation>
+      <documentation>The Task that ran in this ModelOperation.</documentation>
     </task>
     <changedFiles type="type:FilePathEntity[]">
-      <documentation>Workspace-relative paths modified during this Stage.</documentation>
+      <documentation>Workspace-relative paths modified during this ModelOperation.</documentation>
     </changedFiles>
     <exception type="core:Exception">
-      <documentation>The Exception thrown during this Stage, if any.</documentation>
+      <documentation>The Exception thrown during this ModelOperation, if any.</documentation>
     </exception>
   </aggregations>
 

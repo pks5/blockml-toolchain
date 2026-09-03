@@ -15,14 +15,14 @@
   <name>RunTransformation</name>
   <type>transformercap:RunTransformation</type>
   <baseType>core:Capability</baseType>
-  <is>Orchestrate a ModelTransformation over sequential workflow Stages</is>
+  <is>Orchestrate a ModelTransformation over sequential ModelOperations</is>
 
   <documentation>
     # Run Transformation
 
     Public engine entry. Acquires the worktree lock, then runs Prepare,
-    each workflow Stage (Running commit, Execute, Reflect, Persist), and
-    Finalize. A failed Stage aborts the rest. Does not implement any
+    each ModelOperation (Running commit, Execute, Reflect, Persist), and
+    Finalize. A failed ModelOperation aborts the rest. Does not implement any
     process step. Emits lifecycle events at status and execute/reflect
     boundaries regardless of --verbose. TS: Transformer.run /
     runTransformation.

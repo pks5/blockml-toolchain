@@ -15,19 +15,19 @@
   <name>ReflectOnExecution</name>
   <type>transformercap:ReflectOnExecution</type>
   <baseType>core:Capability</baseType>
-  <is>Process stage [3] — observe Execute output without changing the model</is>
+  <is>Process step [3] — observe Execute output without changing the model</is>
 
   <documentation>
     # Reflect on Execution
 
-    Read the Execute trace for the current Stage and produce
+    Read the Execute trace for the current ModelOperation and produce
     `changedFiles` plus optional `output`. Deterministic. No agent
     process. Must not change the model — Persist writes those fields
-    onto the Stage.
+    onto the ModelOperation.
 
     * `changedFiles` — workspace-relative paths from the Execute git
       worktree trace (excluding `_meta/transform/`).
-    * `output` — Execute agent stdout, only when this Stage's
+    * `output` — Execute agent stdout, only when this operation's
       `captureOutput` is true.
 
     Skipped when Execute throws. `output` never decides Succeeded vs
@@ -46,7 +46,7 @@
     </changedFiles>
     <output type="type:Text">
       <documentation>
-        Execute agent stdout. Present when Stage.captureOutput is true.
+        Execute agent stdout. Present when ModelOperation.captureOutput is true.
         (optional)
       </documentation>
     </output>

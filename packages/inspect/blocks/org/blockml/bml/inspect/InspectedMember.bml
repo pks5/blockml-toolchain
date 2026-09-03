@@ -77,7 +77,7 @@
   </properties>
   <aggregations>
     <instances type="inspect:InspectedInstance[]">
-      <documentation>Authored composition children. Enum literals, Library catalog refs, nested Stage fills. (optional)</documentation>
+      <documentation>Authored composition children. Enum literals, Library catalog refs, nested ModelOperation/Task fills. (optional)</documentation>
     </instances>
   </aggregations>
 

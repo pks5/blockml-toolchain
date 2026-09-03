@@ -85,7 +85,7 @@ function lifecycleKind(event: TransformLifecycleEvent): CliStreamKind {
   if (event.kind === "transformationComplete") {
     return "success";
   }
-  if (event.kind === "transformationStatus" || event.kind === "stageStatus") {
+  if (event.kind === "transformationStatus" || event.kind === "operationStatus") {
     if (event.status === "Succeeded") {
       return "success";
     }

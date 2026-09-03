@@ -1,20 +1,20 @@
 import { CLAUDE_REFLECT_PERMISSIONS, claudePermissionCliArgs, } from "./claude-permissions.js";
 import { ensureAgentsMarkdown, runClaudeProcess, } from "./claude-code-agent.js";
 const TRACE_CHAR_LIMIT = 24_000;
-export function buildClaudeReflectPrompt(executionFqn, stageIndex, trace) {
+export function buildClaudeReflectPrompt(executionFqn, operationIndex, trace) {
     const changed = trace.changedFiles.length > 0
         ? trace.changedFiles.map((path) => `- ${path}`).join("\n")
         : "(none detected from git)";
-    const stageNumber = stageIndex + 1;
+    const operationNumber = operationIndex + 1;
     const lines = [
         "You are the Reflect step of a BlockML transformer pipeline.",
         "",
-        `The Execute step has finished Stage ${stageNumber} of this running ModelTransformation:`,
+        `The Execute step has finished Operation ${operationNumber} of this running ModelTransformation:`,
         "",
         executionFqn,
         "",
         "You must NOT change the model, ModelTransformation, or any other files.",
-        "Read only. Produce changedFiles and output for this Stage only.",
+        "Read only. Produce changedFiles and output for this ModelOperation only.",
         "",
         "Git-detected changed files:",
         changed,
@@ -64,7 +64,7 @@ export class ClaudeReflectAgent {
     }
     async reflect(request) {
         const agents = ensureAgentsMarkdown(request.workspaceRoot);
-        const prompt = buildClaudeReflectPrompt(request.executionFqn, request.stageIndex, request.trace);
+        const prompt = buildClaudeReflectPrompt(request.executionFqn, request.operationIndex, request.trace);
         const args = [
             "-p",
             prompt,

@@ -50,9 +50,9 @@
     </completedAt>
   </properties>
   <aggregations>
-    <stages override="true">
+    <operations override="true">
       <composition>
-        <workflow:Stage name="Create Poem" status="Succeeded">
+        <workflow:ModelOperation name="Create Poem" status="Succeeded">
           <startedAt>2026-09-01T19:19:30</startedAt>
           <baseCommit>685095eca41fbca150b053be238bd86de0028082</baseCommit>
           <output>Stage 1 (&quot;Create Poem&quot;) completed as instructed. Execute created exactly one new file, blocks/org/blockml/bml/workspace/playground/PoemNew.bml (FQN org.blockml.bml.workspace.playground.PoemNew), a previously non-existent block. It is untracked (the whole playground/ directory is new), which is why `git diff` is empty. The block is well-formed BML: baseType core:Documentation, matching type/name (playground:PoemNew / PoemNew), an `is` line, a 12-line original Latin poem in &lt;documentation>, and title/author/year properties. Content matches the Stage 1 instruction (a random Latin poem, freshly authored for this execution). No ModelTransformation/_meta/transform/ files were modified by Execute — the running transform BML T00005_PoemTest_20260901T191930.bml was left untouched, as required. Stage 2 (&quot;Translate Poem&quot; to Japanese) remains Pending and will operate on this same file. Note: validation could not be run in this Reflect step (Bash disabled), so `npx blockml validate` was not executed here; recommend the pipeline validate before committing.</output>
@@ -63,8 +63,8 @@
           <changedFiles>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/PoemNew.bml" />
           </changedFiles>
-        </workflow:Stage>
-        <workflow:Stage name="Translate Poem" status="Succeeded">
+        </workflow:ModelOperation>
+        <workflow:ModelOperation name="Translate Poem" status="Succeeded">
           <startedAt>2026-09-01T19:20:55</startedAt>
           <baseCommit>6d40272776933d78d95a8da4b9006795ec16ac05</baseCommit>
           <output>Stage 2 (&quot;Translate Poem&quot;) completed as instructed. Execute modified exactly one file, blocks/org/blockml/bml/workspace/playground/PoemNew.bml (FQN org.blockml.bml.workspace.playground.PoemNew), translating the 12-line poem from Latin to Japanese. Changes are scoped and coherent: the &lt;documentation> body is now three Japanese quatrains, the &lt;is> line was updated to &quot;A random poem produced by a workspace transform execution, translated into Japanese&quot;, and the &lt;title> property value was translated to 夜明けの最初の光のもと. Structure and untranslated metadata were preserved correctly — baseType core:Documentation, type/name (playground:PoemNew / PoemNew), and the author (John Doe) and year (2026) properties are unchanged. The block remains well-formed BML. No ModelTransformation / _meta/transform/ files were modified by Execute; the running transform BML T00005_PoemTest_20260901T191930.bml was left untouched (its Stage 2 status change is pipeline bookkeeping, not an Execute edit). Note: validation was not run in this Reflect step (read-only); recommend `npx blockml validate` before committing.</output>
@@ -75,8 +75,8 @@
           <changedFiles>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/PoemNew.bml" />
           </changedFiles>
-        </workflow:Stage>
+        </workflow:ModelOperation>
       </composition>
-    </stages>
+    </operations>
   </aggregations>
 </block>

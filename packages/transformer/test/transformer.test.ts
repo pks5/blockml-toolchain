@@ -538,14 +538,14 @@ describe("Transformer lifecycle", () => {
     expect(succeeded).toContain(`<value>${headBefore}</value>`);
     expect(gitLogSubjects(TMP)).toEqual([
       `transform(succeeded): ${generated}`,
-      `transform(stage): ${generated} #1`,
-      `transform(stage-start): ${generated} #1`,
+      `transform(operation): ${generated} #1`,
+      `transform(operation-start): ${generated} #1`,
       `transform(start): ${generated}`,
       "fixture",
     ]);
   });
 
-  it("persists Stage Running and baseCommit before the agent runs", async () => {
+  it("persists ModelOperation Running and baseCommit before the agent runs", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
@@ -576,11 +576,11 @@ describe("Transformer lifecycle", () => {
     expect(observedHead).toBeDefined();
   });
 
-  it("runs every Stage in an isolated execute call and stops after a failure", async () => {
+  it("runs every ModelOperation in an isolated execute call and stops after a failure", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
-        stageInstructions: ["First stage task.", "Second stage task."],
+        operationInstructions: ["First operation task.", "Second operation task."],
       }),
     });
     const generated = "T00001_JokeTest_20260830T011702";
@@ -589,9 +589,9 @@ describe("Transformer lifecycle", () => {
       workspaceRoot: TMP,
       agent: {
         async execute(request) {
-          calls.push(request.stageIndex);
-          if (request.stageIndex === 0) {
-            return { success: false, exitCode: 1, error: "stage one failed" };
+          calls.push(request.operationIndex);
+          if (request.operationIndex === 0) {
+            return { success: false, exitCode: 1, error: "operation one failed" };
           }
           return { success: true };
         },
@@ -605,23 +605,23 @@ describe("Transformer lifecycle", () => {
       join(TMP, `blocks/com/example/model/_meta/transform/failed/${generated}.bml`),
       "utf8",
     );
-    expect(failed).toContain("stage one failed");
+    expect(failed).toContain("operation one failed");
     expect(failed).toContain('status="Failed"');
-    expect(failed).toContain("Second stage task.");
+    expect(failed).toContain("Second operation task.");
     expect(gitLogSubjects(TMP)).toEqual([
       `transform(failed): ${generated}`,
-      `transform(stage): ${generated} #1`,
-      `transform(stage-start): ${generated} #1`,
+      `transform(operation): ${generated} #1`,
+      `transform(operation-start): ${generated} #1`,
       `transform(start): ${generated}`,
       "fixture",
     ]);
   });
 
-  it("succeeds only when every Stage succeeds and emits lifecycle events", async () => {
+  it("succeeds only when every ModelOperation succeeds and emits lifecycle events", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
-        stageInstructions: ["First stage task.", "Second stage task."],
+        operationInstructions: ["First operation task.", "Second operation task."],
       }),
     });
     const generated = "T00001_JokeTest_20260830T011702";
@@ -630,13 +630,13 @@ describe("Transformer lifecycle", () => {
       workspaceRoot: TMP,
       agent: {
         async execute(request) {
-          events.push(`execute:${request.stageIndex}`);
+          events.push(`execute:${request.operationIndex}`);
           return { success: true };
         },
       },
       onLifecycle: (event) => {
         events.push(
-          event.kind === "transformationStatus" || event.kind === "stageStatus"
+          event.kind === "transformationStatus" || event.kind === "operationStatus"
             ? `${event.kind}:${event.status}`
             : event.kind,
         );
@@ -648,29 +648,29 @@ describe("Transformer lifecycle", () => {
     expect(result.status).toBe("Succeeded");
     expect(events).toEqual([
       "transformationStatus:Running",
-      "stageStatus:Running",
-      "stageExecuteStart",
+      "operationStatus:Running",
+      "operationExecuteStart",
       "execute:0",
-      "stageExecuteEnd",
-      "stageReflectStart",
-      "stageReflectEnd",
-      "stageStatus:Succeeded",
-      "stageStatus:Running",
-      "stageExecuteStart",
+      "operationExecuteEnd",
+      "operationReflectStart",
+      "operationReflectEnd",
+      "operationStatus:Succeeded",
+      "operationStatus:Running",
+      "operationExecuteStart",
       "execute:1",
-      "stageExecuteEnd",
-      "stageReflectStart",
-      "stageReflectEnd",
-      "stageStatus:Succeeded",
+      "operationExecuteEnd",
+      "operationReflectStart",
+      "operationReflectEnd",
+      "operationStatus:Succeeded",
       "transformationStatus:Succeeded",
       "transformationComplete",
     ]);
     expect(gitLogSubjects(TMP)).toEqual([
       `transform(succeeded): ${generated}`,
-      `transform(stage): ${generated} #2`,
-      `transform(stage-start): ${generated} #2`,
-      `transform(stage): ${generated} #1`,
-      `transform(stage-start): ${generated} #1`,
+      `transform(operation): ${generated} #2`,
+      `transform(operation-start): ${generated} #2`,
+      `transform(operation): ${generated} #1`,
+      `transform(operation-start): ${generated} #1`,
       `transform(start): ${generated}`,
       "fixture",
     ]);
@@ -709,7 +709,7 @@ describe("Transformer lifecycle", () => {
     ).toBe(true);
   });
 
-  it("writes result from resultSource when every Stage succeeded", async () => {
+  it("writes result from resultSource when every ModelOperation succeeded", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
@@ -806,7 +806,7 @@ describe("Transformer lifecycle", () => {
     expect(result.error).toMatch(/does not match result type/);
   });
 
-  it("leaves ModelTransformation exception empty when a Stage fails", async () => {
+  it("leaves ModelTransformation exception empty when a ModelOperation fails", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
@@ -816,12 +816,12 @@ describe("Transformer lifecycle", () => {
     const generated = "T00001_JokeTest_20260830T011702";
     const transformer = new Transformer({
       workspaceRoot: TMP,
-      agent: failingAgent("stage failed"),
+      agent: failingAgent("operation failed"),
       now: () => FIXED_NOW,
     });
     const result = await transformer.run(pendingFqn("JokeTest"));
     expect(result.success).toBe(false);
-    expect(result.error).toMatch(/stage failed/);
+    expect(result.error).toMatch(/operation failed/);
     const failed = readFileSync(
       join(TMP, `blocks/com/example/model/_meta/transform/failed/${generated}.bml`),
       "utf8",

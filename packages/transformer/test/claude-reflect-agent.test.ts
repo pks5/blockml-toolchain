@@ -70,7 +70,7 @@ describe("ClaudeReflectAgent", () => {
     const result = await agent.reflect({
       workspaceRoot: TMP,
       executionFqn: "com.example.model._meta.transform.running.T00001_X",
-      stageIndex: 0,
+      operationIndex: 0,
       trace: TRACE,
     });
     expect(result).toEqual({
@@ -101,7 +101,7 @@ describe("ClaudeReflectAgent", () => {
     const failed = await failing.reflect({
       workspaceRoot: TMP,
       executionFqn: "com.example.model._meta.transform.running.X",
-      stageIndex: 0,
+      operationIndex: 0,
       trace: TRACE,
     });
     expect(failed.success).toBe(false);
@@ -115,7 +115,7 @@ describe("ClaudeReflectAgent", () => {
     const parsed = await invalid.reflect({
       workspaceRoot: TMP,
       executionFqn: "com.example.model._meta.transform.running.X",
-      stageIndex: 0,
+      operationIndex: 0,
       trace: TRACE,
     });
     expect(parsed.success).toBe(false);

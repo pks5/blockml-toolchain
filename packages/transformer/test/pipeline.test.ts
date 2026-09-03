@@ -170,7 +170,7 @@ describe("Transformer pipeline", () => {
     expect(succeeded).not.toContain("<output");
   });
 
-  it("writes Execute stdout onto Stage.output when captureOutput is true", async () => {
+  it("writes Execute stdout onto ModelOperation.output when captureOutput is true", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",

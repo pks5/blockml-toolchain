@@ -1,7 +1,7 @@
 import { resolvePendingExecution } from "../execution/resolve.js";
 import { startExecution } from "../execution/start.js";
 import { SequenceAllocator } from "../execution/sequence.js";
-import { getStageInstances } from "../execution/properties.js";
+import { getOperationInstances } from "../execution/properties.js";
 import type { PreparedExecution, StageContext, TransformStage } from "./types.js";
 
 export function createPrepareStage(): TransformStage<string, PreparedExecution> {
@@ -22,8 +22,8 @@ export function createPrepareStage(): TransformStage<string, PreparedExecution> 
             : {}),
         },
       );
-      const stageCount = getStageInstances(resolved.document.block).length;
-      return { pendingFqn, started, stageCount };
+      const operationCount = getOperationInstances(resolved.document.block).length;
+      return { pendingFqn, started, operationCount };
     },
   };
 }
