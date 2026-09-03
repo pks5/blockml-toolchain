@@ -34,7 +34,7 @@
   </references>
   <properties>
     <subcommand type="type:Text"><documentation>Graph subcommand. (required)</documentation></subcommand>
-    <graphFqn type="type:Text"><documentation>Block FQN, or path start FQN. (optional)</documentation></graphFqn>
+    <graphFqn type="type:Text"><documentation>Block FQN, or path start FQN. A .bml path is not an FQN; unknown tokens may suggest the file's root FQN. (optional)</documentation></graphFqn>
     <graphTo type="type:Text"><documentation>Path end FQN. (optional)</documentation></graphTo>
     <query type="type:Text"><documentation>Cypher for graph query. (optional)</documentation></query>
     <json type="type:Boolean"><documentation>Print JSON. (optional)</documentation></json>

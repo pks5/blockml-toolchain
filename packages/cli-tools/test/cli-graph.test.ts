@@ -137,6 +137,14 @@ describe("blockml graph CLI", () => {
     expect(stderr).toMatch(/Did you mean com\.blockml\.test\.cligraph\.Omega\?/);
   });
 
+  it("suggests the document-root FQN for a .bml path and still exits 2", async () => {
+    await runCli(["graph", "index"], TMP);
+    const { code, stderr } = await runCli(["graph", "uses", "blocks/Omega.bml"], TMP);
+    expect(code).toBe(2);
+    expect(stderr).toMatch(/Unknown Block FQN: blocks\/Omega\.bml/);
+    expect(stderr).toMatch(/Did you mean com\.blockml\.test\.cligraph\.Omega\?/);
+  });
+
   it("prints an outgoing path and no reverse path through Block", async () => {
     await runCli(["graph", "index"], TMP);
     const omega = "com.blockml.test.cligraph.Omega";

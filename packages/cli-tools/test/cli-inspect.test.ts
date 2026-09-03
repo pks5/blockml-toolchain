@@ -89,4 +89,18 @@ describe("blockml inspect CLI", () => {
     expect(stderr).toMatch(/Unknown Block FQN: Widget/);
     expect(stderr).toMatch(/Did you mean com\.blockml\.test\.cliinspect\.Widget\?/);
   });
+
+  it("suggests the document-root FQN for a .bml path and still exits 2", async () => {
+    const { code, stderr } = await runCli(["inspect", "blocks/Widget.bml"], TMP);
+    expect(code).toBe(2);
+    expect(stderr).toMatch(/Unknown Block FQN: blocks\/Widget\.bml/);
+    expect(stderr).toMatch(/Did you mean com\.blockml\.test\.cliinspect\.Widget\?/);
+  });
+
+  it("does not suggest an FQN for a .bml path that is not in the corpus", async () => {
+    const { code, stderr } = await runCli(["inspect", "blocks/Missing.bml"], TMP);
+    expect(code).toBe(2);
+    expect(stderr).toMatch(/Unknown Block FQN: blocks\/Missing\.bml/);
+    expect(stderr).not.toMatch(/Did you mean/);
+  });
 });

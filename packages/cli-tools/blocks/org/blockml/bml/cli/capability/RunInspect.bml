@@ -32,7 +32,7 @@
 
     inspect FQN — inspectProject via @blockml/inspect (validate --all corpus).
     Always prints InspectResult JSON. Missing FQN or unknown FQN → exit 2.
-    Unknown FQN may print Did you mean …? when search finds a Block whose last segment matches.
+    Unknown FQN may print Did you mean …? when search finds a Block whose last segment matches, or when the token is a .bml path whose document-root FQN is in the corpus.
     --help / -h print inspect usage and exit 0.
     --json is accepted and implied. Default depth 1.
   </documentation>

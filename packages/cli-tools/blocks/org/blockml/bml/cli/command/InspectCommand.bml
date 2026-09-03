@@ -32,7 +32,7 @@
     <see type="clicap:RunInspect" relation="SeeAlso" />
   </references>
   <properties>
-    <inspectFqn type="type:Text"><documentation>Block FQN to inspect. (required)</documentation></inspectFqn>
+    <inspectFqn type="type:Text"><documentation>Block FQN to inspect. A .bml path is not an FQN; unknown tokens may suggest the file's root FQN. (required)</documentation></inspectFqn>
     <depth type="type:Integer"><documentation>Expansion depth 0..3. Default 1. (optional)</documentation></depth>
     <json type="type:Boolean"><documentation>Accepted and implied; output is always JSON. (optional)</documentation></json>
   </properties>

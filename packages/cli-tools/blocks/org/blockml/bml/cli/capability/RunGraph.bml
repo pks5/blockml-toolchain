@@ -34,7 +34,7 @@
     Other subcommands — openGraph (auto-build if missing/stale) then the named operation.
 
     Human output: FQN, relation, file:line. --json: GraphNeighbor[] / GraphNode[] / GraphPath / GraphQueryResult.
-    Unknown FQN → exit 2 (same as inspect); may print Did you mean …? when search finds a matching last segment.
+    Unknown FQN → exit 2 (same as inspect); may print Did you mean …? when search finds a matching last segment, or when the token is a .bml path whose document-root FQN is in the corpus.
     uses/used-by/neighbors --depth n walks n hops (default 1). path is outgoing-only; hops include direction.
     --origin, --relation, and --limit filter uses/used-by/neighbors. schema() documents the Ladybug Cypher subset.
     --help / -h / help print graph usage and exit 0.

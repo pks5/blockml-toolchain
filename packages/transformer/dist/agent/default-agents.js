@@ -41,7 +41,7 @@ Once search returns FQNs, inspect the relevant Block before opening a large \`.b
 npx blockml inspect <fqn> [--depth n]
 \`\`\`
 
-JSON only (default). Depth 0 is that Block only; default 1; cap 3. Budget 48 blocks. If \`truncated\` is non-empty, inspect the needed child FQN instead of raising depth. Live TypeRegistry — no cache file. Not a write format; do not round-trip Inspect JSON to BML. Unknown FQN exits 2. Documentation longer than 400 characters is truncated with an ellipsis and \`documentationTruncated=true\`. Aggregation members include authored composition instances (enum literals, Library catalog FQNs, nested Stage/Task fills). Capability members include \`implementation\` (language + truncated source).
+JSON only (default). Depth 0 is that Block only; default 1; cap 3. Budget 48 blocks. If \`truncated\` is non-empty, inspect the needed child FQN instead of raising depth. Live TypeRegistry — no cache file. Not a write format; do not round-trip Inspect JSON to BML. Unknown FQN exits 2. A \`.bml\` path is not an FQN; inspect may print \`Did you mean <root FQN>?\`. Documentation longer than 400 characters is truncated with an ellipsis and \`documentationTruncated=true\`. Aggregation members include authored composition instances (enum literals, Library catalog FQNs, nested Stage/Task fills). Capability members include \`implementation\` (language + truncated source).
 
 ### graph — how it connects
 
@@ -60,7 +60,7 @@ npx blockml graph query <cypher>
 npx blockml graph schema
 \`\`\`
 
-\`uses\` / \`used-by\` / \`neighbors\` \`--depth\` is hops (default 1). \`members\` ignores \`--depth\`. \`--origin\`, \`--relation\`, and \`--limit\` filter those three operations (comma-separated origin/relation). Unknown FQN may print \`Did you mean …?\`. \`--help\` prints command usage and exits 0. \`graph schema\` names the Ladybug Cypher subset (no \`type()\`, no \`shortestPath()\`) and prints a working \`MATCH\` example.
+\`uses\` / \`used-by\` / \`neighbors\` \`--depth\` is hops (default 1). \`members\` ignores \`--depth\`. \`--origin\`, \`--relation\`, and \`--limit\` filter those three operations (comma-separated origin/relation). Unknown FQN may print \`Did you mean …?\` (last-segment search, or a \`.bml\` path that maps to a corpus file). \`--help\` prints command usage and exits 0. \`graph schema\` names the Ladybug Cypher subset (no \`type()\`, no \`shortestPath()\`) and prints a working \`MATCH\` example.
 
 ### new — create a Block
 
