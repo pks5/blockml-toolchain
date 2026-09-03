@@ -54,15 +54,21 @@
   <aggregations>
     <stages override="true">
       <composition>
-        <workflow:Stage bml:generics="(type:Text)" name="Create Poem" status="Running">
+        <workflow:Stage bml:generics="(type:Text)" name="Create Poem" status="Succeeded">
           <startedAt>2026-09-03T02:58:28</startedAt>
           <baseCommit>4fd07d9e655e9fb782c1ff941ebb027cf145a5ac</baseCommit>
+          <feedback>Stage 1 rewrote the single playground Block org.blockml.bml.workspace.playground.NextPoem222 (blocks/org/blockml/bml/workspace/playground/NextPoem222.bml). The previous Spanish poem was replaced with a new German poem about a tree and a mushroom: the &lt;is> descriptor changed 'written in Spanish' -> 'written in German', the &lt;documentation> body was replaced with four German quatrains, and the &lt;title> property changed from 'El abeto y el hongo' to 'Tanne und Täubling'. Author (John Doe) and year (2026) were left unchanged. No _meta/transform/ ModelTransformation files were touched; the change is correctly scoped to the target Block. Git detected exactly one changed file, matching the diff.</feedback>
+          <result>German-language poem 'Tanne und Täubling' (Fir and Russula), attributed to John Doe, 2026. Four rhymed quatrains. Stanza 1: a fir tree stands silently in mist, needles and snow, not counting years but the wind, cradling its branches like an old child. Stanza 2: in its shade, where moss weaves the ground, a small russula mushroom pushes up from the earth, its red cap glowing in the grey morning like a drop of light. Stanza 3: the tree whispers to the mushroom not to fear the frost, promising to hold the wide space above it and shelter it through the long winter with its resin, its roof and its branching cloak. Stanza 4: the mushroom nods quietly and grows overnight while the tree keeps watch until day breaks - two unequal friends, yet kin, both rooted in the same land.</result>
+          <completedAt>2026-09-03T02:59:57</completedAt>
           <task>
             <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.NextPoem222.bml that contains a random poem in german about a tree and a mushroom. For each execution create a new poem." />
           </task>
           <resultProducer>
             <running:T00014_PoemTestTemplate_20260903T025828.TestResultProducer />
           </resultProducer>
+          <changedFiles>
+            <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/NextPoem222.bml" />
+          </changedFiles>
         </workflow:Stage>
         <workflow:Stage name="Translate Poem" status="Pending">
           <task>

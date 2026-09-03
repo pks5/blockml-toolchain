@@ -13,33 +13,33 @@
   <name>NextPoem222</name>
   <type>playground:NextPoem222</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, written in Spanish, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
 
   <documentation>
-    Al borde del bosque se alza el viejo y ancho abeto,
-    su oscura copa de agujas guarda la luz del verano y el tiempo.
-    La corteza gris y pesada de muchos años,
-    mas resiste la tormenta, la escarcha y la lluvia sin fin.
+    Ein Tannenbaum ragt schweigend in die Höh,
+    umringt von Nebel, Nadeln und von Schnee.
+    Er zählt die Jahre nicht, er zählt den Wind
+    und wiegt die Äste wie ein altes Kind.
 
-    A sus pies, callado en el musgo mojado,
-    crece pequeño un hongo, desnudo y sin defensa.
-    Su sombrero pardo apenas brilla en el rocío temprano,
-    y se agacha ante el viento en el mar gris.
+    Im Schatten, wo das Moos den Boden webt,
+    ein kleiner Täubling aus der Erde hebt.
+    Rot leuchtet ihm der Hut im Morgengrau,
+    ein Tropfen Licht auf seiner runden Schau.
 
-    "Quédate cerca de mí", dice el árbol al pequeño,
-    "mi sombra refresca cuando arde el mediodía.
-    Extiendo mi copa como una tienda
-    y te protejo cuando cae la lluvia dura."
+    "Fürchte den Frost nicht", flüstert ihm der Baum,
+    "ich halte über dir den weiten Raum.
+    Mein Harz, mein Dach, mein tief verzweigtes Kleid
+    bewahrt dich vor der langen Winterzeit."
 
-    Así crecieron por el otoño y la nieve del invierno,
-    alto se alzaba el abeto, pequeño el hongo en el trébol.
-    Y quien se sienta bajo su verde hechizo,
-    halla dos compañeros a los que se puede amar.
+    Der Pilz nickt still und wächst in einer Nacht,
+    der Baum steht Wache, bis der Tag erwacht.
+    Zwei Freunde, ungleich groß und doch verwandt,
+    verwurzelt beide in demselben Land.
   </documentation>
 
   <properties>
     <title>
-      <value>El abeto y el hongo</value>
+      <value>Tanne und Täubling</value>
     </title>
     <author>
       <value>John Doe</value>
