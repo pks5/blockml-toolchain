@@ -13,33 +13,33 @@
   <name>NextPoem222</name>
   <type>playground:NextPoem222</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, written in Spanish, about a tree and a mushroom</is>
 
   <documentation>
-    Ein Tannenbaum ragt schweigend in die Höh,
-    umringt von Nebel, Nadeln und von Schnee.
-    Er zählt die Jahre nicht, er zählt den Wind
-    und wiegt die Äste wie ein altes Kind.
+    Un abeto se alza en silencio hacia el cielo,
+    rodeado de niebla, de agujas y de hielo.
+    No cuenta ya los años, solo cuenta el viento,
+    y mece sus ramas como un niño soñoliento.
 
-    Im Schatten, wo das Moos den Boden webt,
-    ein kleiner Täubling aus der Erde hebt.
-    Rot leuchtet ihm der Hut im Morgengrau,
-    ein Tropfen Licht auf seiner runden Schau.
+    En la penumbra, donde el musgo teje el suelo,
+    una pequeña rúsula emerge sin recelo.
+    Rojo le brilla el sombrero al alborear,
+    una gota de luz en su redondo mirar.
 
-    "Fürchte den Frost nicht", flüstert ihm der Baum,
-    "ich halte über dir den weiten Raum.
-    Mein Harz, mein Dach, mein tief verzweigtes Kleid
-    bewahrt dich vor der langen Winterzeit."
+    "No temas a la escarcha —le susurra el abeto—,
+    yo sostengo sobre ti el ancho firmamento.
+    Mi resina, mi techo, mi manto ramificado
+    te guardan del invierno largo y helado."
 
-    Der Pilz nickt still und wächst in einer Nacht,
-    der Baum steht Wache, bis der Tag erwacht.
-    Zwei Freunde, ungleich groß und doch verwandt,
-    verwurzelt beide in demselben Land.
+    El hongo asiente en calma y en la noche ha crecido,
+    y el abeto hace guardia hasta que el día ha venido.
+    Dos amigos, dispares de tamaño mas hermanos,
+    arraigados los dos en los mismos llanos.
   </documentation>
 
   <properties>
     <title>
-      <value>Tanne und Täubling</value>
+      <value>El abeto y la rúsula</value>
     </title>
     <author>
       <value>John Doe</value>
