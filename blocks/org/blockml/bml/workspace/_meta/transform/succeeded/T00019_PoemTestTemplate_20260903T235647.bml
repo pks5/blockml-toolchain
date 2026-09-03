@@ -5,17 +5,17 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
+  xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
   <name>
     T00019_PoemTestTemplate_20260903T235647
   </name>
   <type>
-    running:T00019_PoemTestTemplate_20260903T235647
+    succeeded:T00019_PoemTestTemplate_20260903T235647
   </type>
   <baseType>
-    workflow:ModelTransformation(running:T00019_PoemTestTemplate_20260903T235647.Parameters)
+    workflow:ModelTransformation(succeeded:T00019_PoemTestTemplate_20260903T235647.Parameters)
   </baseType>
   <is>
     A pending ModelTransformation that creates a playground Poem block
@@ -25,7 +25,7 @@
       <value>A transformation that creates a playground Poem block</value>
     </description>
     <status override="true" type="workflow:ExecutionStatus">
-      <value>Running</value>
+      <value>Succeeded</value>
     </status>
     <createdAt override="true" type="type:DateTime">
       <value>2026-08-30T01:40:20</value>
@@ -33,7 +33,7 @@
     <template override="true" type="type:Boolean">
       <value>false</value>
     </template>
-    <parameters override="true" type="running:T00019_PoemTestTemplate_20260903T235647.Parameters">
+    <parameters override="true" type="succeeded:T00019_PoemTestTemplate_20260903T235647.Parameters">
       <value>{author:"John Doe",language:"German"}</value>
     </parameters>
     <executionId override="true" type="type:UUID">
@@ -48,6 +48,9 @@
     <baseCommit override="true" type="type:Text">
       <value>a505b3d1fbde5d48ba0b1eddaea20c9ed3b6ca37</value>
     </baseCommit>
+    <completedAt override="true" type="type:DateTime">
+      <value>2026-09-04T00:03:05</value>
+    </completedAt>
   </properties>
   <aggregations>
     <operations override="true">
@@ -895,7 +898,7 @@ to spanish.</instructions>
         Parameters
       </name>
       <type>
-        running:T00019_PoemTestTemplate_20260903T235647.Parameters
+        succeeded:T00019_PoemTestTemplate_20260903T235647.Parameters
       </type>
       <baseType>
         type:StructType
