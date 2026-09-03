@@ -13,33 +13,33 @@
   <name>NextPoem222</name>
   <type>playground:NextPoem222</type>
   <baseType>core:Documentation</baseType>
-  <is>A random poem produced by a workspace transform execution, written in German, about a tree and a mushroom</is>
+  <is>A random poem produced by a workspace transform execution, translated into Spanish, about a tree and a mushroom</is>
 
   <documentation>
-    Im tiefen Wald ragt eine Eiche hoch,
-    seit hundert Jahren hält sie Wacht und Joch.
-    Ihr Astwerk greift wie Hände in den Wind,
-    und unter ihr die Schatten kühl und lind.
+    En lo profundo del bosque se alza un roble,
+    desde hace cien años monta guardia y lleva su yugo.
+    Su ramaje se aferra como manos al viento,
+    y bajo él las sombras, frescas y suaves.
 
-    Ein Fliegenpilz erwacht im weichen Grund,
-    sein roter Hut mit weißem Tupfen rund.
-    Er streckt sich aus dem Laub ans Tageslicht
-    und lauscht, wie hoch der Wipfel Lieder spricht.
+    Una amanita despierta en el suelo blando,
+    su sombrero rojo con redondas motas blancas.
+    Se estira desde la hojarasca hacia la luz del día
+    y escucha cómo allá en lo alto la copa canta canciones.
 
-    "Sei mir gegrüßt", so raunt die Eiche sacht,
-    "ich hüte dich durch jede Sturmesnacht.
-    Mein Blätterdach fängt Regen, Reif und Schnee,
-    bleib ruhig hier, dann tut kein Wetter weh."
+    "Yo te saludo", susurra el roble con dulzura,
+    "te protejo en cada noche de tormenta.
+    Mi techo de hojas detiene lluvia, escarcha y nieve,
+    quédate tranquila aquí, y ningún tiempo te hará daño."
 
-    So stehn die zwei durch Frühling, Herbst und Frost,
-    die Eiche stark, der Pilz ihr kleiner Trost.
-    Und wer vorbeikommt auf dem Waldespfad,
-    sieht Freundschaft, die seit je zusammensteht.
+    Así permanecen los dos por primavera, otoño y helada,
+    el roble fuerte, el hongo su pequeño consuelo.
+    Y quien pasa por el sendero del bosque,
+    ve una amistad que desde siempre se mantiene unida.
   </documentation>
 
   <properties>
     <title>
-      <value>Die Eiche und der Fliegenpilz</value>
+      <value>El roble y la amanita matamoscas</value>
     </title>
     <author>
       <value>John Doe</value>
