@@ -24,6 +24,7 @@ import {
   pendingFqn,
   recordingAgent,
   referrerXml,
+  resultSourceBlockXml,
   successfulAgent,
   writeProject,
 } from "./fixture.js";
@@ -158,6 +159,8 @@ describe("Transformer lifecycle", () => {
     expect(succeeded).toContain("workflow:InstructionTask");
     expect(succeeded).toContain(">Succeeded</value>");
     expect(succeeded).not.toContain("<exception");
+    expect(succeeded).not.toContain("<result");
+    expect(succeeded).not.toContain("<resultException");
 
     const referrerPath = join(TMP, "blocks/com/example/model/Referrer.bml");
     const referrer = readFileSync(referrerPath, "utf8");
@@ -658,5 +661,126 @@ describe("Transformer lifecycle", () => {
         ),
       ),
     ).toBe(true);
+  });
+
+  it("writes result from resultSource when every Stage succeeded", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        resultSource: "com.example.model.Poem.properties.title",
+      }),
+      "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
+        name: "Poem",
+        properties: [{ name: "title", type: "type:Text", value: "El roble" }],
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(true);
+    expect(result.status).toBe("Succeeded");
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).toMatch(/<result[\s>][\s\S]*El roble/);
+    expect(succeeded).not.toContain("<resultException");
+  });
+
+  it("fails with ResultException when resultSource block is missing", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        resultSource: "com.example.model.Missing.properties.title",
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(false);
+    expect(result.status).toBe("Failed");
+    expect(result.error).toMatch(/resultSource block .* was not found/);
+    const failed = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/failed/${generated}.bml`),
+      "utf8",
+    );
+    expect(failed).toContain("<resultException");
+    expect(failed).toContain("was not found");
+    expect(failed).not.toContain("<exception");
+  });
+
+  it("fails with ResultException when resultSource property is missing", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        resultSource: "com.example.model.Poem.properties.missing",
+      }),
+      "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
+        name: "Poem",
+        properties: [{ name: "title", type: "type:Text", value: "El roble" }],
+      }),
+    });
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(false);
+    expect(result.error).toMatch(/property missing was not found/);
+    expect(result.terminalFqn).toContain("._meta.transform.failed.");
+  });
+
+  it("fails with ResultException when resultSource property type differs from R", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        resultSource: "com.example.model.Poem.properties.count",
+      }),
+      "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
+        name: "Poem",
+        properties: [{ name: "count", type: "type:Integer", value: "3" }],
+      }),
+    });
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(false);
+    expect(result.error).toMatch(/does not match result type/);
+  });
+
+  it("leaves resultException empty when a Stage fails", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        resultSource: "com.example.model.Missing.properties.title",
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: failingAgent("stage failed"),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(false);
+    expect(result.error).toMatch(/stage failed/);
+    const failed = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/failed/${generated}.bml`),
+      "utf8",
+    );
+    expect(failed).toContain("<exception");
+    expect(failed).not.toContain("<resultException");
   });
 });

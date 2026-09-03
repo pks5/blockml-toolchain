@@ -82,11 +82,14 @@
 
     [5] Finalize Execution — transformercap:FinalizeExecution
         Default: deterministic. Always runs after a started execution.
-        Succeeded only when every Stage succeeded: status=Succeeded,
-        completedAt, relocate running to succeeded. Otherwise
-        status=Failed, completedAt, relocate running to failed.
-        Exception lives on the failed Stage, not on the
-        ModelTransformation. Commits after the terminal relocation.
+        Succeeded only when every Stage succeeded and result
+        resolution did not throw: status=Succeeded, completedAt,
+        optional result from resultSource, relocate running to
+        succeeded. Otherwise status=Failed, completedAt, relocate
+        running to failed. Stage exception lives on the failed Stage.
+        ResultException lives on ModelTransformation.resultException
+        and only when result resolution fails. Commits after the
+        terminal relocation.
 
     TypeScript:
     • runtime/transformer.ts → transformercap:RunTransformation

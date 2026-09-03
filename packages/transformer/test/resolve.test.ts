@@ -111,4 +111,31 @@ describe("resolvePendingExecution", () => {
       /must not have sequence/,
     );
   });
+
+  it("allows resultSource on a pending execution", () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        resultSource: "com.example.model.Poem.properties.title",
+      }),
+    });
+    const resolved = resolvePendingExecution(pendingFqn("JokeTest"), TMP);
+    expect(resolved.fqn).toBe(pendingFqn("JokeTest"));
+  });
+
+  it("rejects a pending execution that already has result", () => {
+    const xml = pendingExecutionXml({ name: "JokeTest" }).replace(
+      "</properties>",
+      `    <result override="true" type="org.blockml.bml.type.Text">
+      <value>too early</value>
+    </result>
+  </properties>`,
+    );
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": xml,
+    });
+    expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
+      /must not have result/,
+    );
+  });
 });

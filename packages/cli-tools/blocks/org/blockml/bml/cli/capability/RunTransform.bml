@@ -35,7 +35,8 @@
     Acquire an exclusive worktree lock first. If a transform is already
     running in this worktree, exit 2 immediately (no wait). Resolve/config/busy
     → exit 2. After a started execution, Finalize relocates to succeeded
-    (exit 0) only when every Stage succeeded; otherwise failed (exit 1).
+    (exit 0) only when every Stage succeeded and result resolution did
+    not throw; otherwise failed (exit 1).
     Pending-contract violations do not start (exit 2). Missing FQN → exit 2.
 
     Lifecycle status and execute/reflect boundary lines always print.

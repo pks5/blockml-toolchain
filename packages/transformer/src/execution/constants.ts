@@ -5,6 +5,8 @@ export const EXECUTION_STATUS_FQN =
   "org.blockml.bml.transformer.workflow.ExecutionStatus";
 export const EXECUTION_EXCEPTION_FQN =
   "org.blockml.bml.transformer.workflow.ExecutionException";
+export const RESULT_EXCEPTION_FQN =
+  "org.blockml.bml.transformer.workflow.ResultException";
 
 export const INTEGER_TYPE_FQN = "org.blockml.bml.type.Integer";
 export const DATETIME_TYPE_FQN = "org.blockml.bml.type.DateTime";

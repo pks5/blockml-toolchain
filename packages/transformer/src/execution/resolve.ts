@@ -35,8 +35,14 @@ const FORBIDDEN_PROPERTIES = [
   "completedAt",
   "sequence",
   "output",
+  "result",
 ] as const;
-const FORBIDDEN_AGGREGATIONS = ["task", "changedFiles", "exception"] as const;
+const FORBIDDEN_AGGREGATIONS = [
+  "task",
+  "changedFiles",
+  "exception",
+  "resultException",
+] as const;
 const STAGE_FORBIDDEN_PROPERTIES = [
   "startedAt",
   "baseCommit",

@@ -13,6 +13,7 @@ import {
   DATETIME_TYPE_FQN,
   EXECUTION_EXCEPTION_FQN,
   EXECUTION_STATUS_FQN,
+  RESULT_EXCEPTION_FQN,
   FILE_PATH_ENTITY_FQN,
   FILE_PATH_TYPE_FQN,
   INTEGER_TYPE_FQN,
@@ -442,6 +443,43 @@ export function setException(block: BlockDefinition, message: string): void {
           kind: "blockInstance",
           instance: {
             typeFqn: EXECUTION_EXCEPTION_FQN,
+            memberValues: {
+              message: {
+                kind: "literal",
+                value: message,
+                typeFqn: TEXT_TYPE_FQN,
+                authoredPlacement: "element",
+              },
+            },
+          },
+        },
+      ],
+    },
+  };
+  upsertAggregation(block, aggregation);
+}
+
+export function setResult(
+  block: BlockDefinition,
+  typeFqn: string,
+  value: unknown,
+): void {
+  setOverrideProperty(block, "result", typeFqn, value);
+}
+
+export function setResultException(block: BlockDefinition, message: string): void {
+  const aggregation: AggregationDefinition = {
+    kind: "aggregation",
+    name: "resultException",
+    override: true,
+    authoredInAggregationsSection: true,
+    composition: {
+      aggregationName: "resultException",
+      children: [
+        {
+          kind: "blockInstance",
+          instance: {
+            typeFqn: RESULT_EXCEPTION_FQN,
             memberValues: {
               message: {
                 kind: "literal",

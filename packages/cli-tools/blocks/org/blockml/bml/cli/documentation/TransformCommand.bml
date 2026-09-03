@@ -51,7 +51,8 @@
     changedFiles from Execute; output when Stage.captureOutput is true).
     Default Persist writes those fields onto the Stage. Finalize relocates
     to _meta.transform.succeeded
-    only when every Stage succeeded; otherwise _meta.transform.failed and a
+    only when every Stage succeeded and result resolution did not throw;
+    otherwise _meta.transform.failed and a
     non-zero exit. A failed Stage aborts the rest.
 
     Lifecycle lines (ModelTransformation and Stage status, execute/reflect

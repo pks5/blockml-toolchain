@@ -1,8 +1,9 @@
 import { forkBom } from "@blockml/framework";
 import { formatDateTimeProperty } from "./lifecycle.js";
 import { loadRunningExecution } from "./load-running.js";
-import { setCompletedAt, setStatus, modelTransformationHasCompletedAt, allStagesSucceeded, } from "./properties.js";
+import { setCompletedAt, setResultException, setStatus, modelTransformationHasCompletedAt, allStagesSucceeded, } from "./properties.js";
 import { rewriteParameterTypeFqns } from "./parameters.js";
+import { applyTransformationResult, ResultResolutionError, } from "./result.js";
 import { applyExecutionIdentity, persistDocument, removeFile, rewriteInboundReferences, } from "./relocate.js";
 import { commitWorktree } from "../pipeline/git.js";
 export function finalizeExecution(workspaceRoot, started, now) {
@@ -12,7 +13,21 @@ export function finalizeExecution(workspaceRoot, started, now) {
     if (modelTransformationHasCompletedAt(registry)) {
         setCompletedAt(forked.block, completedAtIso);
     }
-    const succeeded = allStagesSucceeded(forked.block);
+    const stagesSucceeded = allStagesSucceeded(forked.block);
+    let resultError;
+    if (stagesSucceeded) {
+        try {
+            applyTransformationResult(forked.block, registry);
+        }
+        catch (error) {
+            if (!(error instanceof ResultResolutionError)) {
+                throw error;
+            }
+            setResultException(forked.block, error.message);
+            resultError = error.message;
+        }
+    }
+    const succeeded = stagesSucceeded && resultError === undefined;
     const stage = succeeded ? "succeeded" : "failed";
     setStatus(forked.block, succeeded ? "Succeeded" : "Failed");
     const runningFilePath = forked.source.filePath;
@@ -35,6 +50,7 @@ export function finalizeExecution(workspaceRoot, started, now) {
         terminalFilePath: forked.source.filePath,
         completedAtIso,
         stage,
+        ...(resultError !== undefined ? { error: resultError } : {}),
     };
 }
 //# sourceMappingURL=complete.js.map

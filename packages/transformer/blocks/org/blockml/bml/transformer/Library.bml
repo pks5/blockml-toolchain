@@ -1,53 +1,53 @@
-<!--
-  BlockML Transformer Library Descriptor
-  FQN: org.blockml.bml.transformer.Library
--->
-<block
-  xmlns="http://blockml.org/bml"
+<!--BlockML Transformer Library Descriptor
+  FQN: org.blockml.bml.transformer.Library-->
+<block xmlns="http://blockml.org/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:transformer="org.blockml.bml.transformer"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation"
-  xmlns:workflow="org.blockml.bml.transformer.workflow">
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
-  <name>Library</name>
-  <type>transformer:Library</type>
-  <baseType>core:BlockLibrary</baseType>
-  <is>The BlockML Transformer package library catalog</is>
-
+  <name>
+    Library
+  </name>
+  <type>
+    blockml:transformer.Library
+  </type>
+  <baseType>
+    blockml:core.BlockLibrary
+  </baseType>
+  <is>
+    The BlockML Transformer package library catalog
+  </is>
+  <version>
+    0.9.0
+  </version>
   <documentation>
     Canonical transformer specification for BlockML — sequential
     workflow Stages over ModelTransformation. TypeScript in
     packages/transformer/src/ implements this library. Membership is defined
     exclusively by this blocks list.
   </documentation>
-
   <references>
-    <see type="transformer:README" relation="ReadFirst">
+    <see type="blockml:transformer.README" relation="ReadFirst">
       Human/LLM reading entry for this library.
     </see>
   </references>
-
-  <version>0.9.0</version>
-
   <language>
-    <English />
+    <blockml:transformer.Library.English />
   </language>
-
   <properties>
     <description override="true">
       <value>BlockML Transformer library</value>
     </description>
   </properties>
-
   <aggregations>
     <readMe>
       <composition>
-        <transformer:README />
+        <blockml:transformer.README />
       </composition>
     </readMe>
     <dependencies>
@@ -57,27 +57,27 @@
     </dependencies>
     <blocks>
       <composition>
-        <workflow:CompositeTask />
-        <workflow:Criterion />
-        <workflow:ExecutionException />
-        <workflow:ExecutionStatus />
-        <workflow:InstructionRule />
-        <workflow:InstructionTask />
-        <workflow:ModelTransformation />
-        <workflow:Prerequisite />
-        <workflow:PrerequisiteNotMetException />
-        <workflow:Rule />
-        <workflow:Stage />
-        <workflow:Task />
-        <transformercap:ExecuteTask />
-        <transformercap:FinalizeExecution />
-        <transformercap:PersistExecution />
-        <transformercap:PrepareExecution />
-        <transformercap:ReflectOnExecution />
-        <transformercap:RunTransformation />
-        <transformerdocumentation:ArchitectureOverview />
+        <blockml:transformer.workflow.CompositeTask />
+        <blockml:transformer.workflow.Criterion />
+        <blockml:transformer.workflow.ExecutionException />
+        <blockml:transformer.workflow.ExecutionStatus />
+        <blockml:transformer.workflow.InstructionRule />
+        <blockml:transformer.workflow.InstructionTask />
+        <blockml:transformer.workflow.ModelTransformation />
+        <blockml:transformer.workflow.Prerequisite />
+        <blockml:transformer.workflow.PrerequisiteNotMetException />
+        <blockml:transformer.workflow.ResultException />
+        <blockml:transformer.workflow.Rule />
+        <blockml:transformer.workflow.Stage />
+        <blockml:transformer.workflow.Task />
+        <blockml:transformer.capability.ExecuteTask />
+        <blockml:transformer.capability.FinalizeExecution />
+        <blockml:transformer.capability.PersistExecution />
+        <blockml:transformer.capability.PrepareExecution />
+        <blockml:transformer.capability.ReflectOnExecution />
+        <blockml:transformer.capability.RunTransformation />
+        <blockml:transformer.documentation.ArchitectureOverview />
       </composition>
     </blocks>
   </aggregations>
-
 </block>

@@ -4,11 +4,16 @@ import { formatDateTimeProperty } from "./lifecycle.js";
 import { loadRunningExecution } from "./load-running.js";
 import {
   setCompletedAt,
+  setResultException,
   setStatus,
   modelTransformationHasCompletedAt,
   allStagesSucceeded,
 } from "./properties.js";
 import { rewriteParameterTypeFqns } from "./parameters.js";
+import {
+  applyTransformationResult,
+  ResultResolutionError,
+} from "./result.js";
 import {
   applyExecutionIdentity,
   persistDocument,
@@ -23,6 +28,7 @@ export interface FinalizedExecution {
   terminalFilePath: string;
   completedAtIso: string;
   stage: TerminalLifecycleStage;
+  error?: string;
 }
 
 export function finalizeExecution(
@@ -36,7 +42,20 @@ export function finalizeExecution(
   if (modelTransformationHasCompletedAt(registry)) {
     setCompletedAt(forked.block, completedAtIso);
   }
-  const succeeded = allStagesSucceeded(forked.block);
+  const stagesSucceeded = allStagesSucceeded(forked.block);
+  let resultError: string | undefined;
+  if (stagesSucceeded) {
+    try {
+      applyTransformationResult(forked.block, registry);
+    } catch (error) {
+      if (!(error instanceof ResultResolutionError)) {
+        throw error;
+      }
+      setResultException(forked.block, error.message);
+      resultError = error.message;
+    }
+  }
+  const succeeded = stagesSucceeded && resultError === undefined;
   const stage: TerminalLifecycleStage = succeeded ? "succeeded" : "failed";
   setStatus(forked.block, succeeded ? "Succeeded" : "Failed");
 
@@ -62,5 +81,6 @@ export function finalizeExecution(
     terminalFilePath: forked.source.filePath,
     completedAtIso,
     stage,
+    ...(resultError !== undefined ? { error: resultError } : {}),
   };
 }

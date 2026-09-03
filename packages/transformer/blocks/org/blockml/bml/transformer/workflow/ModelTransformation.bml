@@ -33,9 +33,22 @@
       SubBlock `Parameters`. Prepare deep-merges CLI `--parameters` JSON
       over pending defaults, checks the bound `T`, and writes the result
       onto the running copy. Execute does not interpret this property.
+    * `resultSource` — optional `type:PropertyReference` to the Property
+      whose current value Finalize copies onto `result`. Canonical path
+      `BlockFqn.properties.name`. Absent or empty: Finalize skips result.
+    * `result` — value of generic `R` (`core:ValueType`, default
+      `type:Text`). Bind `R` as the second type argument, e.g.
+      `workflow:ModelTransformation(Parameters, type:Integer)`. `T` is
+      already parameters, so the result generic is `R`. Written only at
+      Finalize after every Stage succeeded. Type of the source Property
+      must equal bound `R`.
+    * `resultException` — `workflow:ResultException` when Finalize cannot
+      resolve `resultSource` (unknown Block or Property, or type mismatch).
+      Empty when a Stage fails; Stage faults stay on that Stage.
     * `status` — lifecycle state (`workflow:ExecutionStatus`). Matches the
       `_meta.transform` package: Pending, Running, Succeeded, Failed.
-      `Succeeded` only when every Stage succeeded.
+      `Succeeded` only when every Stage succeeded and result resolution
+      did not throw.
     * `executionId` — globally unique identifier (`type:UUID`). Absent
       while pending. Assigned when Prepare sets `status=Running`
       (random UUID, unique among other ModelTransformations).
@@ -51,11 +64,14 @@
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
     <see type="type:EmptyStruct" relation="SeeAlso" />
+    <see type="type:PropertyReference" relation="SeeAlso" />
     <see type="type:UUID" relation="SeeAlso" />
+    <see type="workflow:ResultException" relation="SeeAlso" />
   </references>
 
   <genericTypes>
     <T baseType="type:StructType" defaultType="type:EmptyStruct" />
+    <R baseType="core:ValueType" defaultType="type:Text" />
   </genericTypes>
 
   <properties>
@@ -79,6 +95,12 @@
         expressions.
       </documentation>
     </parameters>
+    <resultSource type="type:PropertyReference">
+      <documentation>
+        Optional path to the Property Finalize copies onto result.
+        Canonical form BlockFqn.properties.name. Unset: skip result.
+      </documentation>
+    </resultSource>
     <executionId type="type:UUID">
       <documentation>Globally unique identifier. Absent while pending; assigned at Running.</documentation>
     </executionId>
@@ -100,12 +122,25 @@
     <completedAt type="type:DateTime">
       <documentation>When this execution finished.</documentation>
     </completedAt>
+    <result type="R">
+      <documentation>
+        Value copied from resultSource at Finalize after every Stage
+        succeeded. Type is bound R (default type:Text). Absent when
+        resultSource is unset or a Stage failed.
+      </documentation>
+    </result>
   </properties>
 
   <aggregations>
     <stages type="workflow:Stage[]">
       <documentation>The stages that ran in this execution.</documentation>
     </stages>
+    <resultException type="workflow:ResultException">
+      <documentation>
+        Set only when Finalize throws ResultException. Empty when a Stage
+        fails or resultSource is unset.
+      </documentation>
+    </resultException>
   </aggregations>
 
 </block>

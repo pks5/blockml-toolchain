@@ -28,9 +28,11 @@ export function createFinalizeStage(): TransformStage<
         status: finalized.stage === "succeeded" ? "Succeeded" : "Failed",
         sequence: persisted.started.sequence,
         executionId: persisted.started.executionId,
-        ...(persisted.exceptionMessage !== undefined
-          ? { error: persisted.exceptionMessage }
-          : {}),
+        ...(finalized.error !== undefined
+          ? { error: finalized.error }
+          : persisted.exceptionMessage !== undefined
+            ? { error: persisted.exceptionMessage }
+            : {}),
       };
     },
   };

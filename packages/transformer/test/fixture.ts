@@ -78,6 +78,7 @@ export function pendingExecutionXml(opts: {
   parameterFields?: readonly string[];
   pendingParameters?: string;
   captureOutput?: boolean;
+  resultSource?: string;
 }): string {
   const refs = opts.extraRefs
     ? `  <references>\n${opts.extraRefs}\n  </references>\n`
@@ -102,6 +103,13 @@ export function pendingExecutionXml(opts: {
         `    <parameters override="true">`,
         `      <value>${opts.pendingParameters}</value>`,
         `    </parameters>`,
+      ].join("\n")
+    : "";
+  const resultSourceXml = opts.resultSource
+    ? [
+        `    <resultSource override="true" type="org.blockml.bml.type.PropertyReference">`,
+        `      <value>${opts.resultSource}</value>`,
+        `    </resultSource>`,
       ].join("\n")
     : "";
   const parameterFields = opts.parameterFields ?? [];
@@ -159,6 +167,7 @@ export function pendingExecutionXml(opts: {
     executionIdXml,
     templateXml,
     pendingParametersXml,
+    resultSourceXml,
     `    <status override="true" type="org.blockml.bml.transformer.workflow.ExecutionStatus">`,
     `      <value>Pending</value>`,
     `    </status>`,
@@ -210,6 +219,31 @@ export function historyExecutionXml(opts: {
     `      </composition>`,
     `    </stages>`,
     `  </aggregations>`,
+    `</block>`,
+    ``,
+  ].join("\n");
+}
+
+export function resultSourceBlockXml(opts: {
+  name: string;
+  properties: readonly { name: string; type: string; value: string }[];
+}): string {
+  return [
+    `<block xmlns="http://blockml.org/bml"`,
+    ` xmlns:core="org.blockml.bml.core"`,
+    ` xmlns:type="org.blockml.bml.type"`,
+    ` xmlns:test="${LIBRARY}">`,
+    `  <name>${opts.name}</name>`,
+    `  <type>test:${opts.name}</type>`,
+    `  <baseType>core:Block</baseType>`,
+    `  <is>result source fixture</is>`,
+    `  <properties>`,
+    ...opts.properties.flatMap((property) => [
+      `    <${property.name} type="${property.type}">`,
+      `      <value>${property.value}</value>`,
+      `    </${property.name}>`,
+    ]),
+    `  </properties>`,
     `</block>`,
     ``,
   ].join("\n");
