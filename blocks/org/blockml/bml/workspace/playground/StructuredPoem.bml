@@ -1,0 +1,70 @@
+<!--
+  Workspace Playground — StructuredPoem
+  FQN: org.blockml.bml.workspace.playground.StructuredPoem
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:playground="org.blockml.bml.workspace.playground">
+
+  <name>StructuredPoem</name>
+  <type>playground:StructuredPoem</type>
+  <baseType>core:Documentation</baseType>
+  <is>A random structured poem produced by a workspace transform execution, in German, about a tree and a mushroom</is>
+
+  <documentation>
+    A structured German poem about a tree and a mushroom. The poem text and its
+    metadata are carried as typed properties. Each transform execution replaces
+    this block with a freshly composed poem.
+  </documentation>
+
+  <properties>
+    <title type="type:Text">
+      <value>Die Buche und der Pfifferling</value>
+    </title>
+    <author type="type:Text">
+      <value>John Doe</value>
+    </author>
+    <poem type="type:Text">
+      <value>Am Waldrand steht die alte Buche,
+graues Kleid und breite Krone.
+Ihre Wurzeln halten Erde,
+ihre Blätter fangen Sonne.
+
+Klein im Moos, im kühlen Schatten,
+reckt ein Pfifferling den Hut.
+Golden leuchtet er nach oben,
+zaghaft, doch mit stillem Mut.
+
+"Sei gegrüßt", so raunt die Buche,
+"ich bewache Nacht und Wind.
+Bleib in Ruhe hier im Dunkel,
+bis die hellen Tage sind."
+
+Und so stehen sie zusammen,
+Baum und Pilz durch Jahr und Zeit.
+Wer den schmalen Pfad entlanggeht,
+sieht zwei Freunde, treu bereit.</value>
+    </poem>
+    <language type="type:Text">
+      <value>German</value>
+    </language>
+    <date type="type:DateTime">
+      <value>2026-09-03T00:00:00</value>
+    </date>
+    <time type="type:DateTime">
+      <value>2026-09-03T23:56:48</value>
+    </time>
+    <location type="type:Text">
+      <value>Schwarzwald, Deutschland</value>
+    </location>
+    <weather type="type:Text">
+      <value>Kühler Herbstmorgen mit Nebel zwischen den Stämmen</value>
+    </weather>
+  </properties>
+
+</block>
