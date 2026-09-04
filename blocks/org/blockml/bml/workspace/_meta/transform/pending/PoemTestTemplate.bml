@@ -56,18 +56,15 @@
               <instructions>
                 Create or update the block 
                 ${ #this.parameters.targetBlock } 
-                that contains a random story in ${ #this.parameters.storyLanguage } 
+                that contains a random song in ${ #this.parameters.storyLanguage } 
                 about ${ #this.parameters.topic }. 
-                For each execution create a new poem.
-                The story should be structured with the following properties:
+                For each execution create a new song.
+                The song should be structured with the following properties:
                 - title (type:Text)
-                - author (type:Text)
-                - story (type:Text)
+                - artist (type:Text)
+                - song (type:Text)
                 - language (type:Text)
                 - date (type:DateTime)
-                - time (type:DateTime)
-                - location (type:Text)
-                - weather (type:Text)
               </instructions>
             </workflow:InstructionTask>
           </task>
@@ -79,7 +76,7 @@
           <task>
             <workflow:InstructionTask>
               <instructions>
-                Translate the story in 
+                Translate the song in 
                 ${ #this.parameters.targetBlock } 
                 to ${ #this.parameters.translationLanguage }.
               </instructions>
