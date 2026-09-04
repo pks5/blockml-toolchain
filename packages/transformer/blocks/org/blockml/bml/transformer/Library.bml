@@ -23,7 +23,7 @@
     The BlockML Transformer package library catalog
   </is>
   <version>
-    0.9.0
+    0.9.1
   </version>
   <documentation>
     Canonical transformer specification for BlockML — sequential
