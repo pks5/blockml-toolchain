@@ -39,12 +39,19 @@
       interpret this property.
     * `parametersSource` — optional `type:PropertyReference` whose current
       value Prepare copies onto `parameters`. Canonical path
-      `BlockFqn.properties.name`. CLI `--parameters-source` wins over
-      pending. Any effective source ignores `--parameters`. Type of the
-      source Property must equal bound `T`.
+      `BlockFqn.properties.name`. Interpolated or expression values are
+      closed against this ModelTransformation (`#this.parameters` and
+      other literal properties) before lookup. CLI `--parameters-source`
+      is already a path and is not closed. CLI source wins over pending.
+      Any effective source ignores `--parameters`. Type of the source
+      Property must equal bound `T`. A close or lookup fault is
+      `workflow:ParametersException`.
     * `resultSource` — optional `type:PropertyReference` to the Property
       whose current value Finalize copies onto `result`. Canonical path
-      `BlockFqn.properties.name`. Absent or empty: Finalize skips result.
+      `BlockFqn.properties.name`. Interpolated or expression values are
+      closed against this ModelTransformation before lookup. Absent or
+      empty after close: Finalize skips result. A close or lookup fault
+      is `workflow:ResultException`.
     * `result` — value of generic `R` (`core:ValueType`, default
       `type:Text`). Bind `R` as the second type argument, e.g.
       `workflow:ModelTransformation(Parameters, type:Integer)`. Written
@@ -111,14 +118,17 @@
     <parametersSource type="type:PropertyReference">
       <documentation>
         Optional path to the Property Prepare copies onto parameters.
-        Canonical form BlockFqn.properties.name. Any effective source
-        ignores --parameters.
+        Canonical form BlockFqn.properties.name. Expressions close
+        against this Block before lookup. Any effective source ignores
+        --parameters.
       </documentation>
     </parametersSource>
     <resultSource type="type:PropertyReference">
       <documentation>
         Optional path to the Property Finalize copies onto result.
-        Canonical form BlockFqn.properties.name. Unset: skip result.
+        Canonical form BlockFqn.properties.name. Expressions close
+        against this Block before lookup. Unset or empty after close:
+        skip result.
       </documentation>
     </resultSource>
     <executionId type="type:UUID">

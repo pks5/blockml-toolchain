@@ -7,10 +7,12 @@ import type {
 } from "@blockml/bom";
 import {
   collectBaseTypeChain,
+  ExpressionEvaluationError,
   resolveEffectiveMembers,
   type TypeRegistry,
 } from "@blockml/framework";
 import { TransformError } from "./errors.js";
+import { closePropertyReferencePath } from "./interpolate.js";
 import {
   BOOLEAN_TYPE_FQN,
   INTEGER_TYPE_FQN,
@@ -236,11 +238,14 @@ function effectiveParametersSource(
   if (trimmed) {
     return trimmed;
   }
-  const pending = getPropertyLiteral(block, "parametersSource");
-  if (typeof pending === "string" && pending.trim() !== "") {
-    return pending.trim();
+  try {
+    return closePropertyReferencePath(block, "parametersSource");
+  } catch (error) {
+    if (error instanceof ExpressionEvaluationError) {
+      throw new ParametersResolutionError(error.message);
+    }
+    throw error;
   }
-  return undefined;
 }
 
 function readParametersSource(

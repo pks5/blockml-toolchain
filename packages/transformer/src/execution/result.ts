@@ -1,10 +1,11 @@
 import type { BlockDefinition, TypeExpression } from "@blockml/bom";
-import type { TypeRegistry } from "@blockml/framework";
+import { ExpressionEvaluationError, type TypeRegistry } from "@blockml/framework";
 import {
   MODEL_TRANSFORMATION_FQN,
   TEXT_TYPE_FQN,
 } from "./constants.js";
-import { getPropertyLiteral, setResult } from "./properties.js";
+import { closePropertyReferencePath } from "./interpolate.js";
+import { setResult } from "./properties.js";
 import {
   lookupReferencedProperty,
   propertyLiteral,
@@ -44,14 +45,17 @@ export function applyTransformationResult(
   transformation: BlockDefinition,
   registry: TypeRegistry,
 ): void {
-  const raw = getPropertyLiteral(transformation, "resultSource");
+  let raw: string | undefined;
+  try {
+    raw = closePropertyReferencePath(transformation, "resultSource");
+  } catch (error) {
+    if (error instanceof ExpressionEvaluationError) {
+      throw new ResultResolutionError(error.message);
+    }
+    throw error;
+  }
   if (raw === undefined || raw === "") {
     return;
-  }
-  if (typeof raw !== "string") {
-    throw new ResultResolutionError(
-      "resultSource must be a PropertyReference path",
-    );
   }
 
   const lookedUp = lookupReferencedProperty(raw, registry, "resultSource");

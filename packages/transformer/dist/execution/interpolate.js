@@ -117,6 +117,28 @@ function assertClosedLiteral(value) {
         }
     }
 }
+export function getPropertyMemberValue(block, name) {
+    const member = block.members.find((entry) => entry.kind === "property" && entry.name === name);
+    return member?.value ?? member?.values?.[0]?.value;
+}
+export function closePropertyReferencePath(block, name) {
+    const value = getPropertyMemberValue(block, name);
+    if (!value) {
+        return undefined;
+    }
+    const closed = closeMemberValue(value, buildBlockEvaluationScope(block));
+    if (closed.kind !== "literal") {
+        throw new ExpressionEvaluationError("BML_EXPR_UNCLOSED", `${name} must close to a PropertyReference path`);
+    }
+    if (closed.value === undefined || closed.value === "") {
+        return undefined;
+    }
+    if (typeof closed.value !== "string") {
+        throw new ExpressionEvaluationError("BML_EXPR_UNCLOSED", `${name} must close to a PropertyReference path`);
+    }
+    const trimmed = closed.value.trim();
+    return trimmed === "" ? undefined : trimmed;
+}
 export function closeMemberValue(value, scope) {
     if (value.kind === "address") {
         if (value.address.isExpression) {

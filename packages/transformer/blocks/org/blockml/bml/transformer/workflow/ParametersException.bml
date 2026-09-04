@@ -20,6 +20,7 @@
 
     Prepare could not copy `parametersSource` onto `parameters`:
 
+    * the path expression could not be closed
     * the path points at an unknown Block or Property
     * or the Property type does not match the bound parameter generic `T`
 

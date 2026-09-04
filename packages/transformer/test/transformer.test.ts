@@ -714,6 +714,52 @@ describe("Transformer lifecycle", () => {
     ).toBe(true);
   });
 
+  it("closes a resultSource expression before copying result", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        parameterFields: ["targetBlock"],
+        pendingParameters: '{"targetBlock":"com.example.model.Poem"}',
+        resultSource:
+          "${ #strings.concat(#this.parameters.targetBlock, '.properties.title') }",
+      }),
+      "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
+        name: "Poem",
+        properties: [{ name: "title", type: "type:Text", value: "El roble" }],
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(true);
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).toMatch(/<result[\s>][\s\S]*El roble/);
+  });
+
+  it("fails when a resultSource expression cannot be closed", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        resultSource: "${ #this.parameters.missing }",
+      }),
+    });
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(false);
+    expect(result.error).toMatch(/Unknown property/);
+  });
+
   it("writes result from resultSource when every ModelOperation succeeded", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
@@ -834,6 +880,36 @@ describe("Transformer lifecycle", () => {
     expect(failed).toContain("<exception");
     expect(failed).not.toContain("ParametersException");
     expect(failed).not.toContain("ResultException");
+  });
+
+  it("closes a parametersSource expression before copying parameters", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        pendingParameters: "com.example.model.Poem",
+        parametersSource:
+          "${ #strings.concat(#this.parameters, '.properties.title') }",
+      }),
+      "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
+        name: "Poem",
+        properties: [{ name: "title", type: "type:Text", value: "El roble" }],
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+      parameters: "ignored",
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(true);
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).toMatch(/<parameters[\s\S]*El roble/);
+    expect(succeeded).not.toContain("ignored");
   });
 
   it("copies parameters from parametersSource and ignores CLI parameters", async () => {

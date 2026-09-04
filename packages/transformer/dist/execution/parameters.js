@@ -1,5 +1,6 @@
-import { collectBaseTypeChain, resolveEffectiveMembers, } from "@blockml/framework";
+import { collectBaseTypeChain, ExpressionEvaluationError, resolveEffectiveMembers, } from "@blockml/framework";
 import { TransformError } from "./errors.js";
+import { closePropertyReferencePath } from "./interpolate.js";
 import { BOOLEAN_TYPE_FQN, INTEGER_TYPE_FQN, MODEL_TRANSFORMATION_FQN, PROPERTY_REFERENCE_FQN, TEXT_TYPE_FQN, } from "./constants.js";
 import { clearProperty, getPropertyLiteral, setOverrideProperty, } from "./properties.js";
 import { lookupReferencedProperty, propertyLiteral, propertyTypeFqn as referencedPropertyTypeFqn, } from "./property-reference.js";
@@ -154,11 +155,15 @@ function effectiveParametersSource(block, cliSource) {
     if (trimmed) {
         return trimmed;
     }
-    const pending = getPropertyLiteral(block, "parametersSource");
-    if (typeof pending === "string" && pending.trim() !== "") {
-        return pending.trim();
+    try {
+        return closePropertyReferencePath(block, "parametersSource");
     }
-    return undefined;
+    catch (error) {
+        if (error instanceof ExpressionEvaluationError) {
+            throw new ParametersResolutionError(error.message);
+        }
+        throw error;
+    }
 }
 function readParametersSource(raw, typeFqn, registry) {
     const lookedUp = lookupReferencedProperty(raw, registry, "parametersSource");

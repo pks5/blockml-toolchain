@@ -53,9 +53,10 @@
         rewrite local type FQNs onto the copy, and relocate that copy
         instead.
         Resolve parameters: parametersSource (CLI --parameters-source
-        over pending) copies that Property onto parameters and ignores
-        --parameters. Otherwise StructType merges CLI JSON over pending;
-        other types replace. Write a value only when one exists.
+        over pending) closes a pending expression against this Block,
+        copies that Property onto parameters, and ignores --parameters.
+        Otherwise StructType merges CLI JSON over pending; other types
+        replace. Write a value only when one exists.
         Bound T defaults to type:Text. parametersSource faults write
         ParametersException onto exception; operations are skipped.
         If the contract is violated or the worktree is dirty, do not start.
@@ -101,8 +102,8 @@
         Default: deterministic. Always runs after a started execution.
         Succeeded only when every ModelOperation succeeded and result
         resolution did not throw: status=Succeeded, completedAt,
-        optional result from resultSource, relocate running to
-        succeeded. Otherwise status=Failed, completedAt, relocate
+        optional result from resultSource (expressions closed first),
+        relocate running to succeeded. Otherwise status=Failed, completedAt, relocate
         running to failed. Operation exception lives on the failed
         ModelOperation. ParametersException and ResultException live on
         ModelTransformation.exception. A ModelOperation failure leaves

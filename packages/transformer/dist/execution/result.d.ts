@@ -1,5 +1,5 @@
 import type { BlockDefinition } from "@blockml/bom";
-import type { TypeRegistry } from "@blockml/framework";
+import { type TypeRegistry } from "@blockml/framework";
 export { parsePropertyReference } from "./property-reference.js";
 export declare class ResultResolutionError extends Error {
     constructor(message: string);

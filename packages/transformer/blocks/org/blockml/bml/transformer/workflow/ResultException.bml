@@ -20,6 +20,7 @@
 
     Finalize could not copy `resultSource` onto `result`:
 
+    * the path expression could not be closed
     * the path points at an unknown Block or Property
     * or the Property type does not match the bound result generic `R`
 

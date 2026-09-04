@@ -34,8 +34,9 @@
        SubBlocks / bound `T`), set `template=false` on the copy, rewrite
        local type FQNs onto the copy, and relocate that copy instead.
     5. Resolve `parameters`. CLI `--parameters-source` or pending
-       `parametersSource` wins and ignores `--parameters`: copy that
-       Property onto `parameters` (type must equal bound `T`). Otherwise
+       `parametersSource` wins and ignores `--parameters`: close a
+       pending expression against this Block, then copy that Property
+       onto `parameters` (type must equal bound `T`). Otherwise
        `StructType` deep-merges CLI JSON over pending; other types replace.
        Write a value only when one exists (not `""`, not `{}`). Bound `T`
        defaults to `type:Text`. Unknown source Block/Property or type

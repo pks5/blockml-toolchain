@@ -1,5 +1,7 @@
+import { ExpressionEvaluationError } from "@blockml/framework";
 import { MODEL_TRANSFORMATION_FQN, TEXT_TYPE_FQN, } from "./constants.js";
-import { getPropertyLiteral, setResult } from "./properties.js";
+import { closePropertyReferencePath } from "./interpolate.js";
+import { setResult } from "./properties.js";
 import { lookupReferencedProperty, propertyLiteral, propertyTypeFqn, } from "./property-reference.js";
 export { parsePropertyReference } from "./property-reference.js";
 export class ResultResolutionError extends Error {
@@ -27,12 +29,18 @@ function resultArgumentFqn(expr) {
  * Throws ResultResolutionError when the path, Block, Property, type, or value is invalid.
  */
 export function applyTransformationResult(transformation, registry) {
-    const raw = getPropertyLiteral(transformation, "resultSource");
+    let raw;
+    try {
+        raw = closePropertyReferencePath(transformation, "resultSource");
+    }
+    catch (error) {
+        if (error instanceof ExpressionEvaluationError) {
+            throw new ResultResolutionError(error.message);
+        }
+        throw error;
+    }
     if (raw === undefined || raw === "") {
         return;
-    }
-    if (typeof raw !== "string") {
-        throw new ResultResolutionError("resultSource must be a PropertyReference path");
     }
     const lookedUp = lookupReferencedProperty(raw, registry, "resultSource");
     if ("error" in lookedUp) {

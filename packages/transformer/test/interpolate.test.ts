@@ -3,6 +3,7 @@ import type { BlockDefinition } from "@blockml/bom";
 import {
   buildBlockEvaluationScope,
   closeMemberValue,
+  closePropertyReferencePath,
   resolveMemberStringList,
   resolveMemberText,
 } from "../src/execution/interpolate.js";
@@ -45,6 +46,37 @@ describe("transformer interpolation", () => {
     expect(
       resolveMemberText({ kind: "expression", raw: "#this.parameters.mode" }, scope),
     ).toBe("oak");
+  });
+
+  it("closes a PropertyReference expression against #this.parameters", () => {
+    const block: BlockDefinition = {
+      name: "T",
+      type: "org.blockml.bml.transformer.workflow.ModelTransformation",
+      members: [
+        {
+          kind: "property",
+          name: "parameters",
+          typeFqn: "org.blockml.bml.type.Text",
+          value: {
+            kind: "literal",
+            value: { targetBlock: "com.example.model.Poem" },
+            typeFqn: "org.blockml.bml.type.Text",
+          },
+        },
+        {
+          kind: "property",
+          name: "resultSource",
+          typeFqn: "org.blockml.bml.type.PropertyReference",
+          value: {
+            kind: "expression",
+            raw: "#strings.concat(#this.parameters.targetBlock, '.properties.title')",
+          },
+        },
+      ],
+    };
+    expect(closePropertyReferencePath(block, "resultSource")).toBe(
+      "com.example.model.Poem.properties.title",
+    );
   });
 
   it("closes interpolated text to a literal without leftover ${}", () => {
