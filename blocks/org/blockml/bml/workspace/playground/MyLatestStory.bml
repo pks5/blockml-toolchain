@@ -1,0 +1,62 @@
+<!--
+  Workspace Playground — MyLatestStory
+  FQN: org.blockml.bml.workspace.playground.MyLatestStory
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:playground="org.blockml.bml.workspace.playground">
+
+  <name>MyLatestStory</name>
+  <type>playground:MyLatestStory</type>
+  <baseType>core:Documentation</baseType>
+  <is>A random structured story produced by a workspace transform execution, in Spanish, about a futuristic city and a dog</is>
+
+  <documentation>
+    A structured Spanish story about a futuristic city and a dog. The story text and its
+    metadata are carried as typed properties. Each transform execution replaces
+    this block with a freshly composed story.
+  </documentation>
+
+  <properties>
+    <title type="type:Text">
+      <value>El perro que contaba luces</value>
+    </title>
+    <author type="type:Text">
+      <value>John Doe</value>
+    </author>
+    <story type="type:Text">
+      <value>En la última planta de una torre de Neo-Marena, donde los ascensores subían sin cables y las ventanas se oscurecían solas al mediodía, vivía un perro pequeño y canoso llamado Brío. No tenía collar inteligente ni chip de rastreo; su dueña, una técnica de drones llamada Ariadna, decía que un perro no necesitaba que la ciudad supiera dónde estaba a cada segundo.
+
+Cada anochecer, cuando las autopistas elevadas se encendían como ríos de ámbar, Brío se sentaba junto al cristal y miraba. Ariadna creía que dormitaba, pero el perro estaba contando: las luces de los taxis voladores, los letreros que cambiaban de idioma, la única estrella que lograba atravesar la cúpula de neblina luminosa.
+
+Una noche la ciudad se apagó. No poco a poco, sino de golpe, como si alguien hubiera cerrado los ojos. Los vecinos salieron a los pasillos con linternas de mano, y las voces de los asistentes automáticos callaron por primera vez en años. Ariadna buscó una vela que no encontró.
+
+Brío, en cambio, fue hasta la puerta y ladró tres veces, midiendo el eco. Luego echó a andar por la escalera de emergencia, que nadie usaba nunca, guiándose por el olor a lluvia vieja y a metal. Ariadna lo siguió, doce pisos hacia abajo, agarrada al pasamanos.
+
+En el vestíbulo encontraron a otros: una anciana con su nieto, un repartidor sin su moto, dos estudiantes que reían de puro nervio. El perro los reunió a todos con vueltas pacientes, como si hubiera hecho esto en otra vida, en otra ciudad menos alta.
+
+Cuando la energía volvió, tres horas después, la gente ya se sabía los nombres. Ariadna miró a Brío, que se había vuelto a tumbar junto a la ventana, contando otra vez las luces que regresaban una por una. «Tú ya sabías dónde estaba todo el mundo», le dijo. El perro bostezó, porque los perros no presumen, y siguió su recuento sereno hasta que la última farola de la avenida se encendió y la cuenta quedó completa.</value>
+    </story>
+    <language type="type:Text">
+      <value>Spanish</value>
+    </language>
+    <date type="type:DateTime">
+      <value>2026-09-04T00:00:00</value>
+    </date>
+    <time type="type:DateTime">
+      <value>2026-09-04T02:15:20</value>
+    </time>
+    <location type="type:Text">
+      <value>Planta 47 de la Torre Alba, distrito de las torres de Neo-Marena</value>
+    </location>
+    <weather type="type:Text">
+      <value>Noche cálida y sin viento, con neblina luminosa suspendida sobre la cúpula de la ciudad y una llovizna fina que nunca llegó a caer</value>
+    </weather>
+  </properties>
+
+</block>
