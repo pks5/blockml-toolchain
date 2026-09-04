@@ -5,17 +5,17 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
+  xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
   <name>
     T00025_PoemTestTemplate_20260904T235328
   </name>
   <type>
-    running:T00025_PoemTestTemplate_20260904T235328
+    succeeded:T00025_PoemTestTemplate_20260904T235328
   </type>
   <baseType>
-    workflow:ModelTransformation(running:T00025_PoemTestTemplate_20260904T235328.Parameters, type:Text)
+    workflow:ModelTransformation(succeeded:T00025_PoemTestTemplate_20260904T235328.Parameters, type:Text)
   </baseType>
   <is>
     A pending ModelTransformation that creates a playground Poem block
@@ -25,7 +25,7 @@
       <value>A transformation that creates a playground Poem block</value>
     </description>
     <status override="true" type="workflow:ExecutionStatus">
-      <value>Running</value>
+      <value>Succeeded</value>
     </status>
     <createdAt override="true" type="type:DateTime">
       <value>2026-08-30T01:40:20</value>
@@ -36,7 +36,7 @@
     <resultSource override="true" type="type:PropertyReference">
       <value>${ #strings.concat( #this.parameters.targetBlock, '.properties.song') }</value>
     </resultSource>
-    <parameters override="true" type="running:T00025_PoemTestTemplate_20260904T235328.Parameters">
+    <parameters override="true" type="succeeded:T00025_PoemTestTemplate_20260904T235328.Parameters">
       <value>{translationLanguage:"German",storyLanguage:"Spanish",topic:"A Futuristic city and a dog",targetBlock:"org.blockml.bml.workspace.playground.MyLatestStory"}</value>
     </parameters>
     <executionId override="true" type="type:UUID">
@@ -51,6 +51,52 @@
     <baseCommit override="true" type="type:Text">
       <value>bae3034d4190ea50ab39ee96db18e4986d6a0e8f</value>
     </baseCommit>
+    <completedAt override="true" type="type:DateTime">
+      <value>2026-09-04T23:55:29</value>
+    </completedAt>
+    <result override="true" type="type:Text">
+      <value>(Strophe 1)
+Zwischen Türmen, die blaues Licht atmen,
+und Zügen, die den Asphalt nicht mehr berühren,
+geht ein Hund ohne Herrn und ohne Uhr,
+auf der Suche nach Schatten unter der Plasmasonne.
+
+(Strophe 2)
+Sein Bellen hallt von den Bildschirmen wider,
+weckt eine Drohne, die auf dem Dach schläft,
+die ganze Stadt bewahrt ihr Schweigen,
+um die Stimme der alten Straße zu hören.
+
+(Refrain)
+Stadt aus Glas, Stadt von morgen,
+ein treuer Hund wandert durch deine Adern,
+er braucht keine Karten noch Antennen,
+nur den Geruchssinn und einen fernen Mond.
+
+(Strophe 3)
+Die Hologramme erzählen eine andere Geschichte,
+von grünen Parks, die niemand mehr betritt,
+der Hund läuft zum letzten Baum,
+und bellt laut, wie einer, der nicht vergisst.
+
+(Refrain)
+Stadt aus Glas, Stadt von morgen,
+ein treuer Hund wandert durch deine Adern,
+er braucht keine Karten noch Antennen,
+nur den Geruchssinn und einen fernen Mond.
+
+(Brücke)
+Sollte eines Tages die ganze Stadt erlöschen,
+wird er weiter durch die Ruinen traben,
+und jeden führen, der seinem Schatten folgt,
+der letzte Herzschlag der alten Straßenecke.
+
+(Finale)
+Zwischen Türmen, die blaues Licht atmen,
+durchquert ein Hund die Zeit ohne Eile,
+und in jedem Funken, der die Nacht entzündet,
+hört man sein Bellen, klar und rein.</value>
+    </result>
   </properties>
   <aggregations>
     <operations override="true">
@@ -288,7 +334,7 @@ to ${ #this.parameters.translationLanguage }.</instructions>
         Parameters
       </name>
       <type>
-        running:T00025_PoemTestTemplate_20260904T235328.Parameters
+        succeeded:T00025_PoemTestTemplate_20260904T235328.Parameters
       </type>
       <baseType>
         type:StructType
