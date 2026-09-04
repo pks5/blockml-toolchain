@@ -373,9 +373,10 @@ recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/
 Validation succeeded. Tested 720 blocks, 0 with errors, 0 warnings, 3 recommendations.</output>
           <completedAt>2026-09-04T02:16:58</completedAt>
         </workflow:ToolOperation>
-        <workflow:AgenticOperation name="Translate Poem" status="Running">
+        <workflow:AgenticOperation name="Translate Poem" status="Succeeded">
           <startedAt>2026-09-04T02:16:59</startedAt>
           <baseCommit>ba736c445769228b66366dd8bdb2ba60b012e405</baseCommit>
+          <completedAt>2026-09-04T02:19:06</completedAt>
           <task>
             <workflow:InstructionTask>
               <instructions>Translate the story in 
@@ -383,6 +384,9 @@ ${ #this.parameters.targetBlock }
 to ${ #this.parameters.translationLanguage }.</instructions>
             </workflow:InstructionTask>
           </task>
+          <changedFiles>
+            <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/MyLatestStory.bml" />
+          </changedFiles>
         </workflow:AgenticOperation>
       </composition>
     </operations>

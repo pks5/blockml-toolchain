@@ -14,36 +14,36 @@
   <name>MyLatestStory</name>
   <type>playground:MyLatestStory</type>
   <baseType>core:Documentation</baseType>
-  <is>A random structured story produced by a workspace transform execution, in Spanish, about a futuristic city and a dog</is>
+  <is>A random structured story produced by a workspace transform execution, in German, about a futuristic city and a dog</is>
 
   <documentation>
-    A structured Spanish story about a futuristic city and a dog. The story text and its
+    A structured German story about a futuristic city and a dog. The story text and its
     metadata are carried as typed properties. Each transform execution replaces
     this block with a freshly composed story.
   </documentation>
 
   <properties>
     <title type="type:Text">
-      <value>El perro que contaba luces</value>
+      <value>Der Hund, der Lichter zählte</value>
     </title>
     <author type="type:Text">
       <value>John Doe</value>
     </author>
     <story type="type:Text">
-      <value>En la última planta de una torre de Neo-Marena, donde los ascensores subían sin cables y las ventanas se oscurecían solas al mediodía, vivía un perro pequeño y canoso llamado Brío. No tenía collar inteligente ni chip de rastreo; su dueña, una técnica de drones llamada Ariadna, decía que un perro no necesitaba que la ciudad supiera dónde estaba a cada segundo.
+      <value>Im obersten Stockwerk eines Turms von Neo-Marena, wo die Aufzüge ohne Seile hinauffuhren und die Fenster sich mittags von selbst verdunkelten, lebte ein kleiner, ergrauter Hund namens Brío. Er hatte weder ein intelligentes Halsband noch einen Ortungschip; seine Halterin, eine Drohnentechnikerin namens Ariadna, sagte, ein Hund brauche es nicht, dass die Stadt jede Sekunde wisse, wo er sei.
 
-Cada anochecer, cuando las autopistas elevadas se encendían como ríos de ámbar, Brío se sentaba junto al cristal y miraba. Ariadna creía que dormitaba, pero el perro estaba contando: las luces de los taxis voladores, los letreros que cambiaban de idioma, la única estrella que lograba atravesar la cúpula de neblina luminosa.
+Jeden Abend, wenn die Hochstraßen wie Ströme aus Bernstein aufleuchteten, setzte sich Brío ans Glas und schaute hinaus. Ariadna glaubte, er döse, doch der Hund zählte: die Lichter der fliegenden Taxis, die Schilder, die die Sprache wechselten, den einzigen Stern, der es schaffte, die Kuppel aus leuchtendem Dunst zu durchdringen.
 
-Una noche la ciudad se apagó. No poco a poco, sino de golpe, como si alguien hubiera cerrado los ojos. Los vecinos salieron a los pasillos con linternas de mano, y las voces de los asistentes automáticos callaron por primera vez en años. Ariadna buscó una vela que no encontró.
+Eines Nachts fiel die Stadt aus. Nicht nach und nach, sondern mit einem Schlag, als hätte jemand die Augen geschlossen. Die Nachbarn traten mit Taschenlampen auf die Flure, und die Stimmen der automatischen Assistenten verstummten zum ersten Mal seit Jahren. Ariadna suchte eine Kerze, die sie nicht fand.
 
-Brío, en cambio, fue hasta la puerta y ladró tres veces, midiendo el eco. Luego echó a andar por la escalera de emergencia, que nadie usaba nunca, guiándose por el olor a lluvia vieja y a metal. Ariadna lo siguió, doce pisos hacia abajo, agarrada al pasamanos.
+Brío hingegen ging zur Tür und bellte dreimal, wobei er das Echo abmaß. Dann lief er die Nottreppe hinunter, die niemand je benutzte, und ließ sich vom Geruch nach altem Regen und Metall leiten. Ariadna folgte ihm, zwölf Stockwerke hinab, ans Geländer geklammert.
 
-En el vestíbulo encontraron a otros: una anciana con su nieto, un repartidor sin su moto, dos estudiantes que reían de puro nervio. El perro los reunió a todos con vueltas pacientes, como si hubiera hecho esto en otra vida, en otra ciudad menos alta.
+In der Eingangshalle trafen sie auf andere: eine alte Frau mit ihrem Enkel, einen Lieferboten ohne sein Motorrad, zwei Studenten, die vor lauter Nervosität lachten. Der Hund versammelte sie alle mit geduldigen Runden, als hätte er das in einem anderen Leben getan, in einer anderen, weniger hohen Stadt.
 
-Cuando la energía volvió, tres horas después, la gente ya se sabía los nombres. Ariadna miró a Brío, que se había vuelto a tumbar junto a la ventana, contando otra vez las luces que regresaban una por una. «Tú ya sabías dónde estaba todo el mundo», le dijo. El perro bostezó, porque los perros no presumen, y siguió su recuento sereno hasta que la última farola de la avenida se encendió y la cuenta quedó completa.</value>
+Als der Strom drei Stunden später zurückkehrte, kannten die Leute bereits die Namen der anderen. Ariadna sah Brío an, der sich wieder ans Fenster gelegt hatte und erneut die Lichter zählte, die eines nach dem anderen zurückkamen. »Du wusstest schon die ganze Zeit, wo alle waren«, sagte sie. Der Hund gähnte, denn Hunde geben nicht an, und setzte seine ruhige Zählung fort, bis die letzte Laterne der Allee aufleuchtete und die Zählung vollständig war.</value>
     </story>
     <language type="type:Text">
-      <value>Spanish</value>
+      <value>German</value>
     </language>
     <date type="type:DateTime">
       <value>2026-09-04T00:00:00</value>
@@ -52,10 +52,10 @@ Cuando la energía volvió, tres horas después, la gente ya se sabía los nombr
       <value>2026-09-04T02:15:20</value>
     </time>
     <location type="type:Text">
-      <value>Planta 47 de la Torre Alba, distrito de las torres de Neo-Marena</value>
+      <value>47. Stockwerk des Torre Alba, Turmviertel von Neo-Marena</value>
     </location>
     <weather type="type:Text">
-      <value>Noche cálida y sin viento, con neblina luminosa suspendida sobre la cúpula de la ciudad y una llovizna fina que nunca llegó a caer</value>
+      <value>Warme, windstille Nacht mit leuchtendem Dunst über der Stadtkuppel und einem feinen Nieselregen, der nie fiel</value>
     </weather>
   </properties>
 
