@@ -21,13 +21,21 @@
 
   <documentation>
     Default `workflow:OperationExecutor` for `workflow:AgenticOperation`.
-    Performs `transformercap:ExecuteTask` in a new isolated agent process
-    and returns agent stdout as the output candidate. The envelope
-    decides whether to persist that text (`captureOutput`) and always
-    collects `changedFiles` from git.
+    Closes the Task tree against the ModelTransformation (literal
+    properties, including `#this.parameters`). Every interpolated or
+    expression MemberValue must become a literal; otherwise the executor
+    throws and does not start an agent. Emits the closed instances as a
+    BML snippet whose element names are type FQNs (no xmlns prefixes).
+    Performs `transformercap:ExecuteTask` in a new isolated agent
+    process: the agent executes `Task.run` on that snippet. Returns
+    agent stdout as the output candidate. The envelope decides whether
+    to persist that text (`captureOutput`) and always collects
+    `changedFiles` from git.
 
     Must not write ModelOperation envelope fields, commit, or write
-    files under `_meta/transform/`. TS: executor/agentic-executor.ts.
+    files under `_meta/transform/`. Does not write the closed snippet
+    back onto the running ModelTransformation. TS:
+    executor/agentic-executor.ts.
   </documentation>
 
   <references>
@@ -39,11 +47,11 @@
   <capabilities>
     <execute override="true" type="cap:Action">
       <documentation>
-        Run the AgenticOperation Task in an isolated agent process.
-        Return agent stdout as the output candidate.
+        Close the Task, hand the FQN snippet to an isolated agent, and
+        return agent stdout as the output candidate.
       </documentation>
       <implementation language="lang:English">
-        <![CDATA[Perform the Task in an isolated agent process. Return stdout as the output candidate.]]>
+        <![CDATA[Close the Task instance. Ask the agent to execute Task.run on the closed snippet. Return stdout as the output candidate.]]>
       </implementation>
     </execute>
   </capabilities>

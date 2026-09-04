@@ -10,7 +10,7 @@ export function restrictedExpressionError(node) {
             }
             return (restrictedExpressionError(node.left) ?? restrictedExpressionError(node.right));
         case "property": {
-            const head = node.path[0] ?? "";
+            const head = propertyPathHead(node.path);
             if (head.startsWith("@")) {
                 return INTERPOLATION_NOT_ALLOWED;
             }
@@ -58,5 +58,8 @@ export function restrictedExpressionError(node) {
 }
 export function holeLooksLikeModelBinding(raw) {
     return /@[A-Za-z_]\w*\s*:/.test(raw);
+}
+function propertyPathHead(path) {
+    return path.flatMap((seg) => seg.split(".")).filter(Boolean)[0] ?? "";
 }
 //# sourceMappingURL=restricted.js.map

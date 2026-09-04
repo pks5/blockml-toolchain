@@ -322,7 +322,7 @@ export function failingAgent(error = "agent failed"): TransformationAgent {
 export function recordingAgent(calls: string[]): TransformationAgent {
   return {
     async execute(request) {
-      calls.push(request.executionFqn);
+      calls.push(request.taskSnippet);
       return { success: true };
     },
   };

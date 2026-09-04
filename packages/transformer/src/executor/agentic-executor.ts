@@ -1,9 +1,7 @@
 import { bootstrapFullProjectRegistry } from "@blockml/framework";
 import type { TransformationAgent } from "../agent/transformation-agent.js";
-import {
-  buildBlockEvaluationScope,
-  getOperationTaskInstructions,
-} from "../execution/interpolate.js";
+import { closeOperationTask } from "../execution/close-task.js";
+import { TransformError } from "../execution/errors.js";
 import { getOperationInstance } from "../execution/properties.js";
 import type {
   OperationExecuteRequest,
@@ -17,9 +15,7 @@ export class AgenticExecutor implements OperationExecutor {
   async execute(request: OperationExecuteRequest): Promise<OperationExecuteResult> {
     const result = await this.agent.execute({
       workspaceRoot: request.workspaceRoot,
-      executionFqn: request.executionFqn,
-      operationIndex: request.operationIndex,
-      ...resolvedInstructions(request),
+      taskSnippet: closedTaskSnippet(request),
     });
     if (!result.success) {
       return {
@@ -35,15 +31,16 @@ export class AgenticExecutor implements OperationExecutor {
   }
 }
 
-function resolvedInstructions(
-  request: OperationExecuteRequest,
-): { instructions?: string } {
+function closedTaskSnippet(request: OperationExecuteRequest): string {
   const { registry } = bootstrapFullProjectRegistry({
     rootDir: request.workspaceRoot,
   });
   const document = registry.get(request.executionFqn);
   if (!document) {
-    return {};
+    throw new TransformError(
+      "execution",
+      `Running ModelTransformation ${request.executionFqn} was not found`,
+    );
   }
   const operation = getOperationInstance(
     document.block,
@@ -51,11 +48,10 @@ function resolvedInstructions(
     registry,
   );
   if (!operation) {
-    return {};
+    throw new TransformError(
+      "execution",
+      `Running ModelTransformation has no ModelOperation at index ${request.operationIndex}`,
+    );
   }
-  const instructions = getOperationTaskInstructions(
-    operation,
-    buildBlockEvaluationScope(document.block),
-  );
-  return instructions !== undefined ? { instructions } : {};
+  return closeOperationTask(operation, document.block);
 }

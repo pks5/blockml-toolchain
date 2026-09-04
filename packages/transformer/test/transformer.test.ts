@@ -136,7 +136,10 @@ describe("Transformer lifecycle", () => {
       `com.example.model._meta.transform.succeeded.${generated}`,
     );
     expect(result.status).toBe("Succeeded");
-    expect(calls).toEqual([result.runningFqn]);
+    expect(calls).toHaveLength(1);
+    expect(calls[0]).toContain("org.blockml.bml.transformer.workflow.InstructionTask");
+    expect(calls[0]).toContain("Do the task.");
+    expect(calls[0]).not.toContain("${");
 
     expect(
       existsSync(join(TMP, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml")),
@@ -589,8 +592,8 @@ describe("Transformer lifecycle", () => {
       workspaceRoot: TMP,
       agent: {
         async execute(request) {
-          calls.push(request.operationIndex);
-          if (request.operationIndex === 0) {
+          calls.push(request.taskSnippet.includes("First operation task.") ? 0 : 1);
+          if (request.taskSnippet.includes("First operation task.")) {
             return { success: false, exitCode: 1, error: "operation one failed" };
           }
           return { success: true };
@@ -630,7 +633,9 @@ describe("Transformer lifecycle", () => {
       workspaceRoot: TMP,
       agent: {
         async execute(request) {
-          events.push(`execute:${request.operationIndex}`);
+          events.push(
+            `execute:${request.taskSnippet.includes("First operation task.") ? 0 : 1}`,
+          );
           return { success: true };
         },
       },

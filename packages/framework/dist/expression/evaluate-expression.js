@@ -17,7 +17,7 @@ function asRecord(value) {
 function lookupPath(scope, path) {
     const segments = path.flatMap((seg) => seg.split(".")).filter(Boolean);
     let i = 0;
-    if (segments[0] === "this" || segments[0] === "#this") {
+    if (segments[0] === "#this") {
         i = 1;
     }
     let current = scope;

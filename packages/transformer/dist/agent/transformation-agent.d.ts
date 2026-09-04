@@ -1,8 +1,6 @@
 export interface AgentExecutionRequest {
     workspaceRoot: string;
-    executionFqn: string;
-    operationIndex: number;
-    instructions?: string;
+    taskSnippet: string;
 }
 export type AgentExecutionResult = {
     success: true;

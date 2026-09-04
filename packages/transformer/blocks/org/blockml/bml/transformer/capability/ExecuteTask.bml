@@ -21,12 +21,18 @@
   <documentation>
     # Execute Task
 
-    Inner work of `workflow:AgenticExecutor`. Receive the running
-    ModelTransformation and the repository. Perform the Task of the
-    currently Running AgenticOperation in a new isolated agent process.
-    Change BML model source so that Task is done. Return agent stdout as
-    the output candidate. Do not commit; the envelope persists model
+    Inner work of `workflow:AgenticExecutor`. Receive the closed Task
+    BML fragment and the repository. Execute `run` on that Task
+    instance in a new isolated agent process. Look up `Task.run`, the
+    concrete `_execute`, and nested Prerequisite / Rule / Criterion
+    implementations in the BlockML model (search / inspect). Change BML
+    model source so that Task is done. Return agent stdout as the
+    output candidate. Do not commit; the envelope persists model
     changes with the operation terminal state.
+
+    The agent does not receive the AgenticOperation or the Running
+    ModelTransformation identity. Expressions on the snippet are
+    already literals.
 
     - Must not write ModelTransformation metadata (including operations) or any
       file under `_meta/transform/`.
@@ -43,9 +49,12 @@
   </references>
 
   <properties>
-    <runningFqn type="type:Text">
-      <documentation>Running ModelTransformation FQN from Prepare. (required)</documentation>
-    </runningFqn>
+    <task type="type:Text">
+      <documentation>
+        Closed Task BML fragment (FQN element names, no expressions).
+        (required)
+      </documentation>
+    </task>
     <workspaceRoot type="type:Text">
       <documentation>Repository root this operation may modify. (required)</documentation>
     </workspaceRoot>

@@ -1,10 +1,24 @@
-import type { BlockDefinition, BlockInstance, MemberValue, PropertyDefinition } from "@blockml/bom";
+import type {
+  AddressValue,
+  BlockDefinition,
+  LiteralValue,
+  MemberValue,
+  PropertyDefinition,
+} from "@blockml/bom";
 import {
+  evaluateExpression,
   evaluateInterpolatedText,
+  ExpressionEvaluationError,
+  parseExpression,
   type ExpressionScope,
 } from "@blockml/framework";
+import {
+  BOOLEAN_TYPE_FQN,
+  INTEGER_TYPE_FQN,
+  TEXT_TYPE_FQN,
+} from "./constants.js";
 
-function containsUnescapedInterpolation(raw: string): boolean {
+export function containsUnescapedInterpolation(raw: string): boolean {
   for (let i = 0; i < raw.length - 1; i++) {
     if (raw[i] === "$" && raw[i + 1] === "{") {
       if (i === 0 || raw[i - 1] !== "\\") {
@@ -42,6 +56,24 @@ export function buildBlockEvaluationScope(block: BlockDefinition): ExpressionSco
   return scope;
 }
 
+function evaluateExpressionRaw(raw: string, scope: ExpressionScope): unknown {
+  const parsed = parseExpression(raw);
+  if (!parsed.ok) {
+    throw new ExpressionEvaluationError(
+      "BML_EXPRESSION_PARSE_ERROR",
+      parsed.error.message,
+    );
+  }
+  return evaluateExpression(parsed.result.ast, scope);
+}
+
+function closeStringLeaf(raw: string, scope: ExpressionScope): string {
+  if (!containsUnescapedInterpolation(raw)) {
+    return raw;
+  }
+  return evaluateInterpolatedText(raw, scope);
+}
+
 export function resolveMemberText(
   value: MemberValue | undefined,
   scope: ExpressionScope,
@@ -52,11 +84,12 @@ export function resolveMemberText(
   if (value.kind === "interpolated") {
     return evaluateInterpolatedText(value.raw, scope);
   }
+  if (value.kind === "expression") {
+    const resolved = evaluateExpressionRaw(value.raw, scope);
+    return resolved === undefined || resolved === null ? "" : String(resolved);
+  }
   if (value.kind === "literal" && typeof value.value === "string") {
-    if (containsUnescapedInterpolation(value.value)) {
-      return evaluateInterpolatedText(value.value, scope);
-    }
-    return value.value;
+    return closeStringLeaf(value.value, scope);
   }
   return undefined;
 }
@@ -72,41 +105,101 @@ export function resolveMemberStringList(
     const resolved = evaluateInterpolatedText(value.raw, scope);
     return resolved === "" ? [] : [resolved];
   }
+  if (value.kind === "expression") {
+    const resolved = evaluateExpressionRaw(value.raw, scope);
+    if (Array.isArray(resolved) && resolved.every((item) => typeof item === "string")) {
+      return resolved;
+    }
+    const text = resolved === undefined || resolved === null ? "" : String(resolved);
+    return text === "" ? [] : [text];
+  }
   if (value.kind !== "literal") {
     return undefined;
   }
   if (typeof value.value === "string") {
-    const item = containsUnescapedInterpolation(value.value)
-      ? evaluateInterpolatedText(value.value, scope)
-      : value.value;
+    const item = closeStringLeaf(value.value, scope);
     return item === "" ? [] : [item];
   }
   if (Array.isArray(value.value) && value.value.every((item) => typeof item === "string")) {
-    return value.value.map((item) =>
-      containsUnescapedInterpolation(item) ? evaluateInterpolatedText(item, scope) : item,
-    );
+    return value.value.map((item) => closeStringLeaf(item, scope));
   }
   return undefined;
 }
 
-export function getOperationTaskInstructions(
-  operation: BlockInstance,
+function literalTypeFqn(value: unknown, fallback?: string): string {
+  if (fallback) {
+    return fallback;
+  }
+  if (typeof value === "boolean") {
+    return BOOLEAN_TYPE_FQN;
+  }
+  if (typeof value === "number" && Number.isInteger(value)) {
+    return INTEGER_TYPE_FQN;
+  }
+  return TEXT_TYPE_FQN;
+}
+
+function assertClosedLiteral(value: unknown): void {
+  if (typeof value === "string" && containsUnescapedInterpolation(value)) {
+    throw new ExpressionEvaluationError(
+      "BML_EXPR_UNCLOSED",
+      "Closed Task still contains an interpolated string",
+    );
+  }
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      assertClosedLiteral(item);
+    }
+    return;
+  }
+  if (typeof value === "object" && value !== null) {
+    for (const item of Object.values(value)) {
+      assertClosedLiteral(item);
+    }
+  }
+}
+
+export function closeMemberValue(
+  value: MemberValue,
   scope: ExpressionScope,
-): string | undefined {
-  const task = operation.aggregationCompositions?.find(
-    (entry) => entry.aggregationName === "task",
-  );
-  if (!task) {
-    return undefined;
-  }
-  for (const child of task.composition.children) {
-    if (child.kind !== "blockInstance") {
-      continue;
+): LiteralValue | AddressValue {
+  if (value.kind === "address") {
+    if (value.address.isExpression) {
+      throw new ExpressionEvaluationError(
+        "BML_EXPR_UNCLOSED",
+        `Address still contains an expression: ${value.address.raw}`,
+      );
     }
-    const instructions = resolveMemberText(child.instance.memberValues.instructions, scope);
-    if (instructions !== undefined) {
-      return instructions;
+    return value;
+  }
+  let resolved: unknown;
+  let typeFqn = TEXT_TYPE_FQN;
+  if (value.kind === "interpolated") {
+    resolved = evaluateInterpolatedText(value.raw, scope);
+  } else if (value.kind === "expression") {
+    resolved = evaluateExpressionRaw(value.raw, scope);
+    typeFqn = literalTypeFqn(resolved);
+  } else {
+    typeFqn = value.typeFqn;
+    if (typeof value.value === "string") {
+      resolved = closeStringLeaf(value.value, scope);
+    } else if (
+      Array.isArray(value.value) &&
+      value.value.every((item) => typeof item === "string")
+    ) {
+      resolved = value.value.map((item) => closeStringLeaf(item, scope));
+    } else {
+      resolved = value.value;
     }
   }
-  return undefined;
+  assertClosedLiteral(resolved);
+  const closed: LiteralValue = {
+    kind: "literal",
+    value: resolved,
+    typeFqn,
+  };
+  if ("authoredPlacement" in value && value.authoredPlacement) {
+    closed.authoredPlacement = value.authoredPlacement;
+  }
+  return closed;
 }

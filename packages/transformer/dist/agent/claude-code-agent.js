@@ -4,19 +4,18 @@ import { join } from "node:path";
 import { CLAUDE_EXECUTE_PERMISSIONS, claudePermissionCliArgs, } from "./claude-permissions.js";
 import { ClaudeLiveFormatter } from "./claude-stream.js";
 import { DEFAULT_AGENTS_MD } from "./default-agents.js";
-export function buildClaudeExecutionPrompt(executionFqn, operationIndex, instructions) {
-    const operationNumber = operationIndex + 1;
-    const taskLines = instructions && instructions.trim().length > 0
-        ? ["", "Task instructions:", "", instructions.trim(), ""]
-        : [""];
+export function buildClaudeExecutionPrompt(taskSnippet) {
     return [
         "You are the Execute step of a BlockML transformer pipeline.",
         "",
-        `Perform the Task of the currently Running ModelOperation (Operation ${operationNumber}) in this ModelTransformation:`,
+        "This is the closed Task instance to perform. Expressions are already",
+        "resolved to literals. Execute run on this instance. Look up Task.run,",
+        "the concrete _execute, and any nested Prerequisite.require, Rule.apply,",
+        "or Criterion.isSatisfied implementations in the BlockML model",
+        "(search / inspect). Treat those implementations as the program.",
         "",
-        executionFqn,
-        ...taskLines,
-        "Read the ModelTransformation only to identify the Running ModelOperation and its Task.",
+        taskSnippet.trim(),
+        "",
         "Change BML model source so the Task is done. Change nothing else.",
         "",
         "Do not modify the ModelTransformation block, including its ModelOperations.",
@@ -48,7 +47,7 @@ export class ClaudeCodeAgent {
     }
     async execute(request) {
         const agents = ensureAgentsMarkdown(request.workspaceRoot);
-        const prompt = buildClaudeExecutionPrompt(request.executionFqn, request.operationIndex, request.instructions);
+        const prompt = buildClaudeExecutionPrompt(request.taskSnippet);
         const args = [
             "-p",
             prompt,

@@ -22,8 +22,11 @@
 
     The envelope fields (`status`, timestamps, `baseCommit`,
     `captureOutput`, `output`, `changedFiles`, `exception`) are inherited.
-    `task` is required while pending. Default executor: isolated agent
-    process; output candidate is agent stdout.
+    `task` is required while pending. The host closes the Task instance
+    against the ModelTransformation context (every expression becomes a
+    literal) and hands that prefix-free BML fragment to the agent. The
+    agent interprets `Task.run`; it does not see this envelope. Default
+    executor: isolated agent process; output candidate is agent stdout.
   </documentation>
 
   <references>

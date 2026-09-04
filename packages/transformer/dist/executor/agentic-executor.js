@@ -1,5 +1,6 @@
 import { bootstrapFullProjectRegistry } from "@blockml/framework";
-import { buildBlockEvaluationScope, getOperationTaskInstructions, } from "../execution/interpolate.js";
+import { closeOperationTask } from "../execution/close-task.js";
+import { TransformError } from "../execution/errors.js";
 import { getOperationInstance } from "../execution/properties.js";
 export class AgenticExecutor {
     agent;
@@ -9,9 +10,7 @@ export class AgenticExecutor {
     async execute(request) {
         const result = await this.agent.execute({
             workspaceRoot: request.workspaceRoot,
-            executionFqn: request.executionFqn,
-            operationIndex: request.operationIndex,
-            ...resolvedInstructions(request),
+            taskSnippet: closedTaskSnippet(request),
         });
         if (!result.success) {
             return {
@@ -26,19 +25,18 @@ export class AgenticExecutor {
         };
     }
 }
-function resolvedInstructions(request) {
+function closedTaskSnippet(request) {
     const { registry } = bootstrapFullProjectRegistry({
         rootDir: request.workspaceRoot,
     });
     const document = registry.get(request.executionFqn);
     if (!document) {
-        return {};
+        throw new TransformError("execution", `Running ModelTransformation ${request.executionFqn} was not found`);
     }
     const operation = getOperationInstance(document.block, request.operationIndex, registry);
     if (!operation) {
-        return {};
+        throw new TransformError("execution", `Running ModelTransformation has no ModelOperation at index ${request.operationIndex}`);
     }
-    const instructions = getOperationTaskInstructions(operation, buildBlockEvaluationScope(document.block));
-    return instructions !== undefined ? { instructions } : {};
+    return closeOperationTask(operation, document.block);
 }
 //# sourceMappingURL=agentic-executor.js.map

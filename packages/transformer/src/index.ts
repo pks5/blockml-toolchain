@@ -105,6 +105,12 @@ export {
 } from "./execution/lifecycle.js";
 export { MODEL_TRANSFORMATION_FQN } from "./execution/constants.js";
 export { parseParametersJson } from "./execution/parameters.js";
+export {
+  closeOperationTask,
+  closeTaskInstance,
+  emitClosedTaskSnippet,
+  getOperationTaskInstances,
+} from "./execution/close-task.js";
 export { AgenticExecutor } from "./executor/agentic-executor.js";
 export { ToolExecutor } from "./executor/tool-executor.js";
 export { ExecutorRegistry } from "./executor/registry.js";

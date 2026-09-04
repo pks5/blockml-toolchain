@@ -69,9 +69,12 @@
 
         [2] Operation executor — workflow:OperationExecutor
             Lookup by the instance type FQN (most specific match).
-            Default AgenticExecutor (transformercap:ExecuteTask): new
-            isolated agent process per AgenticOperation. Performs the
-            Task. May change BML model source. Returns output text.
+            Default AgenticExecutor (transformercap:ExecuteTask): close
+            the Task instance (all expressions become literals; element
+            names are type FQNs). New isolated agent process receives
+            only that snippet and executes Task.run. Does not receive
+            the AgenticOperation or Running ModelTransformation
+            identity. May change BML model source. Returns output text.
             Must not write ModelTransformation metadata (including
             operations) or files under _meta/transform/. Does not
             commit; model changes stay uncommitted until Persist.

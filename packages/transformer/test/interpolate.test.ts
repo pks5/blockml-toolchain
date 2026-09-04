@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
-import type { BlockDefinition, BlockInstance } from "@blockml/bom";
+import type { BlockDefinition } from "@blockml/bom";
 import {
   buildBlockEvaluationScope,
-  getOperationTaskInstructions,
+  closeMemberValue,
   resolveMemberStringList,
+  resolveMemberText,
 } from "../src/execution/interpolate.js";
 
 function blockWithParameters(mode: string): BlockDefinition {
@@ -39,34 +40,23 @@ describe("transformer interpolation", () => {
     expect(args).toEqual(["validate"]);
   });
 
-  it("resolves InstructionTask instructions against the outer block", () => {
+  it("resolves a bare expression MemberValue to text", () => {
     const scope = buildBlockEvaluationScope(blockWithParameters("oak"));
-    const operation: BlockInstance = {
-      typeFqn: "org.blockml.bml.transformer.workflow.AgenticOperation",
-      memberValues: {},
-      aggregationCompositions: [
-        {
-          aggregationName: "task",
-          composition: {
-            aggregationName: "task",
-            children: [
-              {
-                kind: "blockInstance",
-                instance: {
-                  typeFqn: "org.blockml.bml.transformer.workflow.InstructionTask",
-                  memberValues: {
-                    instructions: {
-                      kind: "interpolated",
-                      raw: "Write about ${ #this.parameters.mode }",
-                    },
-                  },
-                },
-              },
-            ],
-          },
-        },
-      ],
-    };
-    expect(getOperationTaskInstructions(operation, scope)).toBe("Write about oak");
+    expect(
+      resolveMemberText({ kind: "expression", raw: "#this.parameters.mode" }, scope),
+    ).toBe("oak");
+  });
+
+  it("closes interpolated text to a literal without leftover ${}", () => {
+    const scope = buildBlockEvaluationScope(blockWithParameters("oak"));
+    const closed = closeMemberValue(
+      { kind: "interpolated", raw: "Write about ${ #this.parameters.mode }" },
+      scope,
+    );
+    expect(closed).toMatchObject({
+      kind: "literal",
+      value: "Write about oak",
+    });
+    expect(String(closed.kind === "literal" ? closed.value : "")).not.toContain("${");
   });
 });
