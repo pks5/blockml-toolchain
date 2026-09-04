@@ -14,66 +14,66 @@
   <name>MyLatestStory</name>
   <type>playground:MyLatestStory</type>
   <baseType>core:Documentation</baseType>
-  <is>A random structured song produced by a workspace transform execution, in Spanish, about a futuristic city and a dog</is>
+  <is>A random structured song produced by a workspace transform execution, in German, about a futuristic city and a dog</is>
 
   <documentation>
-    A structured Spanish song about a futuristic city and a dog. The song text and its
+    A structured German song about a futuristic city and a dog. The song text and its
     metadata are carried as typed properties. Each transform execution replaces
     this block with a freshly composed song.
   </documentation>
 
   <properties>
     <title type="type:Text">
-      <value>Perro de Neón</value>
+      <value>Neonhund</value>
     </title>
     <artist type="type:Text">
       <value>Satélite Callejero</value>
     </artist>
     <song type="type:Text">
-      <value>(Verso 1)
-Entre torres que respiran luz azul,
-y trenes que no tocan ya el asfalto,
-camina un perro sin dueño ni reloj,
-buscando sombra bajo el sol de plasma.
+      <value>(Strophe 1)
+Zwischen Türmen, die blaues Licht atmen,
+und Zügen, die den Asphalt nicht mehr berühren,
+geht ein Hund ohne Herrn und ohne Uhr,
+auf der Suche nach Schatten unter der Plasmasonne.
 
-(Verso 2)
-Su ladrido rebota en las pantallas,
-despierta a un dron que duerme en la azotea,
-la ciudad entera guarda su silencio
-para escuchar la voz de la calle vieja.
+(Strophe 2)
+Sein Bellen hallt von den Bildschirmen wider,
+weckt eine Drohne, die auf dem Dach schläft,
+die ganze Stadt bewahrt ihr Schweigen,
+um die Stimme der alten Straße zu hören.
 
-(Coro)
-Ciudad de vidrio, ciudad de mañana,
-un perro fiel camina entre tus venas,
-no necesita mapas ni antenas,
-solo el olfato y una luna lejana.
+(Refrain)
+Stadt aus Glas, Stadt von morgen,
+ein treuer Hund wandert durch deine Adern,
+er braucht keine Karten noch Antennen,
+nur den Geruchssinn und einen fernen Mond.
 
-(Verso 3)
-Los hologramas cuentan otra historia,
-de parques verdes que ya nadie pisa,
-el perro corre hacia el último árbol,
-y ladra fuerte, como quien no olvida.
+(Strophe 3)
+Die Hologramme erzählen eine andere Geschichte,
+von grünen Parks, die niemand mehr betritt,
+der Hund läuft zum letzten Baum,
+und bellt laut, wie einer, der nicht vergisst.
 
-(Coro)
-Ciudad de vidrio, ciudad de mañana,
-un perro fiel camina entre tus venas,
-no necesita mapas ni antenas,
-solo el olfato y una luna lejana.
+(Refrain)
+Stadt aus Glas, Stadt von morgen,
+ein treuer Hund wandert durch deine Adern,
+er braucht keine Karten noch Antennen,
+nur den Geruchssinn und einen fernen Mond.
 
-(Puente)
-Si un día la ciudad se apaga entera,
-él seguirá trotando entre las ruinas,
-guiando a quien lo siga con su sombra,
-el último latido de la vieja esquina.
+(Brücke)
+Sollte eines Tages die ganze Stadt erlöschen,
+wird er weiter durch die Ruinen traben,
+und jeden führen, der seinem Schatten folgt,
+der letzte Herzschlag der alten Straßenecke.
 
-(Final)
-Entre torres que respiran luz azul,
-un perro cruza el tiempo sin apuro,
-y en cada chispa que enciende la noche,
-se escucha su ladrido, claro y puro.</value>
+(Finale)
+Zwischen Türmen, die blaues Licht atmen,
+durchquert ein Hund die Zeit ohne Eile,
+und in jedem Funken, der die Nacht entzündet,
+hört man sein Bellen, klar und rein.</value>
     </song>
     <language type="type:Text">
-      <value>Spanish</value>
+      <value>German</value>
     </language>
     <date type="type:DateTime">
       <value>2026-09-04T23:58:00</value>
