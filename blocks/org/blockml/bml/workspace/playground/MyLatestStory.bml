@@ -14,69 +14,69 @@
   <name>MyLatestStory</name>
   <type>playground:MyLatestStory</type>
   <baseType>core:Documentation</baseType>
-  <is>A random structured song produced by a workspace transform execution, in German, about a futuristic city and a dog</is>
+  <is>A random structured song produced by a workspace transform execution, in Spanish, about a futuristic city and a dog</is>
 
   <documentation>
-    A structured German song about a futuristic city and a dog. The song text and its
+    A structured Spanish song about a futuristic city and a dog. The song text and its
     metadata are carried as typed properties. Each transform execution replaces
     this block with a freshly composed song.
   </documentation>
 
   <properties>
     <title type="type:Text">
-      <value>Der Neonhund</value>
+      <value>Perro de Neón</value>
     </title>
     <artist type="type:Text">
-      <value>Los Circuitos Perdidos</value>
+      <value>Satélite Callejero</value>
     </artist>
     <song type="type:Text">
-      <value>(Strophe 1)
-Glastürme, die den Mond berühren,
-Straßen, die schweben, ohne Lärm, ohne Dunst,
-und zwischen Motoren, die im Chor singen,
-geht ein Hund aus Kupfer und Lehm.
+      <value>(Verso 1)
+Entre torres que respiran luz azul,
+y trenes que no tocan ya el asfalto,
+camina un perro sin dueño ni reloj,
+buscando sombra bajo el sol de plasma.
 
-(Strophe 2)
-Er hat keinen Herrn, keinen Chip, keine Kette,
-nur den Instinkt, der niemanden verdammt,
-er riecht das Ozon, setzt sich und wartet
-auf die Lichter, die herabkommen, um zu grüßen.
+(Verso 2)
+Su ladrido rebota en las pantallas,
+despierta a un dron que duerme en la azotea,
+la ciudad entera guarda su silencio
+para escuchar la voz de la calle vieja.
 
-(Refrain)
-Er bellt die Drohnen an, er bellt den Nebel an,
-er bellt die Stadt an, die nie schläft,
-in jeder Antenne, auf jedem Balkon,
-lebt wach sein Herz.
+(Coro)
+Ciudad de vidrio, ciudad de mañana,
+un perro fiel camina entre tus venas,
+no necesita mapas ni antenas,
+solo el olfato y una luna lejana.
 
-(Strophe 3)
-Die Hologramme erzählen ihm Geschichten
-von einer Zeit mit Bäumen und anderen Erinnerungen,
-er glaubt ihnen nicht, doch macht sich trotzdem auf den Weg,
-dem Echo hinterher, das zu träumen weiß.
+(Verso 3)
+Los hologramas cuentan otra historia,
+de parques verdes que ya nadie pisa,
+el perro corre hacia el último árbol,
+y ladra fuerte, como quien no olvida.
 
-(Refrain)
-Er bellt die Drohnen an, er bellt den Nebel an,
-er bellt die Stadt an, die nie schläft,
-in jeder Antenne, auf jedem Balkon,
-lebt wach sein Herz.
+(Coro)
+Ciudad de vidrio, ciudad de mañana,
+un perro fiel camina entre tus venas,
+no necesita mapas ni antenas,
+solo el olfato y una luna lejana.
 
-(Brücke)
-Wenn die Stadt eines Tages erlischt,
-wird er mit seinem eigenen sanften Licht weiterziehen,
-Schritte lenkend durch Straßen aus Stahl,
-treuer Gefährte der kommenden Welt.
+(Puente)
+Si un día la ciudad se apaga entera,
+él seguirá trotando entre las ruinas,
+guiando a quien lo siga con su sombra,
+el último latido de la vieja esquina.
 
-(Schluss)
-Glastürme, die den Mond berühren,
-ein Hund geht ohne Angst und ohne Wiege,
-und in der Stille, die der Motor hinterlässt,
-hört man nur sein altes Bellen der Liebe.</value>
+(Final)
+Entre torres que respiran luz azul,
+un perro cruza el tiempo sin apuro,
+y en cada chispa que enciende la noche,
+se escucha su ladrido, claro y puro.</value>
     </song>
     <language type="type:Text">
-      <value>German</value>
+      <value>Spanish</value>
     </language>
     <date type="type:DateTime">
-      <value>2026-09-04T22:39:00</value>
+      <value>2026-09-04T23:58:00</value>
     </date>
   </properties>
 
