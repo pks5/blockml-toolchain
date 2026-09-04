@@ -397,10 +397,16 @@ The song should be structured with the following properties:
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/MyLatestStory.bml" />
           </changedFiles>
         </workflow:AgenticOperation>
-        <workflow:ToolOperation name="Validate" status="Running" captureOutput="true" command="blockml">
+        <workflow:ToolOperation name="Validate" status="Succeeded" captureOutput="true" command="blockml">
           <args>[&quot;validate&quot;]</args>
           <startedAt>2026-09-04T22:29:50</startedAt>
           <baseCommit>d95f8285cba4b9e5cc6bf1a964137b43a197ab3d</baseCommit>
+          <output>recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/packages/graph/blocks/org/blockml/bml/graph/capability/Members.bml:28 — Structure long documentation with markdown (headings, lists, or paragraphs).
+recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/packages/inspect/blocks/org/blockml/bml/inspect/InspectedMember.bml:29 — Structure long documentation with markdown (headings, lists, or paragraphs).
+recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/packages/transformer/blocks/org/blockml/bml/transformer/workflow/ToolExecutor.bml:21 — Structure long documentation with markdown (headings, lists, or paragraphs).
+Validation succeeded. Tested 721 blocks, 0 with errors, 0 warnings, 3 recommendations.
+</output>
+          <completedAt>2026-09-04T22:29:55</completedAt>
         </workflow:ToolOperation>
         <workflow:AgenticOperation name="Translate Poem" status="Pending">
           <task>
