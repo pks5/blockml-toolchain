@@ -14,49 +14,70 @@
   <name>MyLatestStory</name>
   <type>playground:MyLatestStory</type>
   <baseType>core:Documentation</baseType>
-  <is>A random structured story produced by a workspace transform execution, in German, about a futuristic city and a dog</is>
+  <is>A random structured song produced by a workspace transform execution, in Spanish, about a futuristic city and a dog</is>
 
   <documentation>
-    A structured German story about a futuristic city and a dog. The story text and its
+    A structured Spanish song about a futuristic city and a dog. The song text and its
     metadata are carried as typed properties. Each transform execution replaces
-    this block with a freshly composed story.
+    this block with a freshly composed song.
   </documentation>
 
   <properties>
     <title type="type:Text">
-      <value>Der Hund, der Lichter zählte</value>
+      <value>El Perro de Neón</value>
     </title>
-    <author type="type:Text">
-      <value>John Doe</value>
-    </author>
-    <story type="type:Text">
-      <value>Im obersten Stockwerk eines Turms von Neo-Marena, wo die Aufzüge ohne Seile hinauffuhren und die Fenster sich mittags von selbst verdunkelten, lebte ein kleiner, ergrauter Hund namens Brío. Er hatte weder ein intelligentes Halsband noch einen Ortungschip; seine Halterin, eine Drohnentechnikerin namens Ariadna, sagte, ein Hund brauche es nicht, dass die Stadt jede Sekunde wisse, wo er sei.
+    <artist type="type:Text">
+      <value>Los Circuitos Perdidos</value>
+    </artist>
+    <song type="type:Text">
+      <value>(Verso 1)
+Torres de vidrio tocando la luna,
+calles que flotan sin ruido ni bruma,
+y entre motores que cantan en fila
+camina un perro de cobre y arcilla.
 
-Jeden Abend, wenn die Hochstraßen wie Ströme aus Bernstein aufleuchteten, setzte sich Brío ans Glas und schaute hinaus. Ariadna glaubte, er döse, doch der Hund zählte: die Lichter der fliegenden Taxis, die Schilder, die die Sprache wechselten, den einzigen Stern, der es schaffte, die Kuppel aus leuchtendem Dunst zu durchdringen.
+(Verso 2)
+No tiene dueño, ni chip, ni cadena,
+solo el instinto que a nadie condena,
+huele el ozono, se sienta a esperar
+las luces que bajan a saludar.
 
-Eines Nachts fiel die Stadt aus. Nicht nach und nach, sondern mit einem Schlag, als hätte jemand die Augen geschlossen. Die Nachbarn traten mit Taschenlampen auf die Flure, und die Stimmen der automatischen Assistenten verstummten zum ersten Mal seit Jahren. Ariadna suchte eine Kerze, die sie nicht fand.
+(Coro)
+Ladra a los drones, ladra a la niebla,
+ladra a la ciudad que nunca se vela,
+en cada antena, en cada balcón,
+vive despierto su corazón.
 
-Brío hingegen ging zur Tür und bellte dreimal, wobei er das Echo abmaß. Dann lief er die Nottreppe hinunter, die niemand je benutzte, und ließ sich vom Geruch nach altem Regen und Metall leiten. Ariadna folgte ihm, zwölf Stockwerke hinab, ans Geländer geklammert.
+(Verso 3)
+Los holograbados le cuentan historias
+de un tiempo con árboles y otras memorias,
+él no los cree, pero igual se echa a andar
+detrás del eco que sabe soñar.
 
-In der Eingangshalle trafen sie auf andere: eine alte Frau mit ihrem Enkel, einen Lieferboten ohne sein Motorrad, zwei Studenten, die vor lauter Nervosität lachten. Der Hund versammelte sie alle mit geduldigen Runden, als hätte er das in einem anderen Leben getan, in einer anderen, weniger hohen Stadt.
+(Coro)
+Ladra a los drones, ladra a la niebla,
+ladra a la ciudad que nunca se vela,
+en cada antena, en cada balcón,
+vive despierto su corazón.
 
-Als der Strom drei Stunden später zurückkehrte, kannten die Leute bereits die Namen der anderen. Ariadna sah Brío an, der sich wieder ans Fenster gelegt hatte und erneut die Lichter zählte, die eines nach dem anderen zurückkamen. »Du wusstest schon die ganze Zeit, wo alle waren«, sagte sie. Der Hund gähnte, denn Hunde geben nicht an, und setzte seine ruhige Zählung fort, bis die letzte Laterne der Allee aufleuchtete und die Zählung vollständig war.</value>
-    </story>
+(Puente)
+Si la ciudad un día se apaga,
+él seguirá con su propia luz mansa,
+guiando pasos por calles de acero,
+fiel compañero del mundo venidero.
+
+(Final)
+Torres de vidrio tocando la luna,
+un perro camina sin miedo ni cuna,
+y en el silencio que deja el motor,
+solo se escucha su viejo ladrido de amor.</value>
+    </song>
     <language type="type:Text">
-      <value>German</value>
+      <value>Spanish</value>
     </language>
     <date type="type:DateTime">
-      <value>2026-09-04T00:00:00</value>
+      <value>2026-09-04T22:39:00</value>
     </date>
-    <time type="type:DateTime">
-      <value>2026-09-04T02:15:20</value>
-    </time>
-    <location type="type:Text">
-      <value>47. Stockwerk des Torre Alba, Turmviertel von Neo-Marena</value>
-    </location>
-    <weather type="type:Text">
-      <value>Warme, windstille Nacht mit leuchtendem Dunst über der Stadtkuppel und einem feinen Nieselregen, der nie fiel</value>
-    </weather>
   </properties>
 
 </block>
