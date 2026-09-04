@@ -100,6 +100,7 @@
         <parcap:InferCardinality />
         <parcap:TypeExpressionToString />
         <parcap:ParseMemberValue />
+        <parcap:ContainsUnescapedInterpolation />
         <parcap:ExpressionFromRaw />
         <parcap:ParseDirectives />
         <parcap:ParseGenericsBinding />

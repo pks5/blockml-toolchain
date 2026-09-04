@@ -674,6 +674,23 @@
       }
     },
     {
+      "name": "ContainsUnescapedInterpolation",
+      "tsExport": "containsUnescapedInterpolation",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ContainsUnescapedInterpolation",
+      "inputs": [
+        {
+          "name": "raw",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "type:Boolean",
+        "required": true
+      }
+    },
+    {
       "name": "ExpressionFromRaw",
       "tsExport": "expressionFromRaw",
       "fqn": "org.blockml.bml.compiler.parser.capability.ExpressionFromRaw",

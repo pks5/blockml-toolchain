@@ -107,6 +107,7 @@
         <fwcap:ResolveEffectiveMembers />
         <fwcap:CollectBaseTypeChain />
         <fwcap:MemberIdentityKey />
+        <fwcap:FindLocalMember />
         <fwcap:ParseExpression />
         <fwcap:ParseInterpolatedText />
         <fwcap:EvaluateExpression />

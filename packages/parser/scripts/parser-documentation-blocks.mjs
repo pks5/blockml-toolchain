@@ -75,7 +75,7 @@ export const documentationBlocks = [
     • map/map-block.ts → parcap:MapDocumentBlock, MapBlock
     • map/map-composition.ts → composition tree mapping
     • map/type-expression.ts → parcap:ParseTypeExpression
-    • map/member-value.ts → parcap:ParseMemberValue
+    • map/member-value.ts → parcap:ParseMemberValue, ContainsUnescapedInterpolation, ExpressionFromRaw
     • map/directives.ts → parcap:ParseDirectives, ParseBmlMeta
     • util/* → visibility, boolean, qname, xml helpers`,
     refs: [

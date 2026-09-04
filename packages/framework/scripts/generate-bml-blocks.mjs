@@ -406,6 +406,20 @@ const capabilities = [
   {
     pkg: "capability",
     prefix: "fwcap",
+    name: "FindLocalMember",
+    is: "Find a member declared on this block, not inherited",
+    doc: "Looks up memberIdentityKey(member) in block.members only. Returns the local declaration, or undefined when the member is inherited or absent.",
+    tsExport: "findLocalMember",
+    inputs: [
+      { name: "block", type: "bomblock:BlockDefinition", required: true },
+      { name: "member", type: "bommember:MemberDefinition", required: true },
+    ],
+    output: { name: "local", type: "bommember:MemberDefinition", doc: "Declared member on this block, or undefined." },
+    refs: ["fwcap:MemberIdentityKey", "fwcap:ResolveEffectiveMembers"],
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
     name: "ParseExpression",
     is: "Parse expression source text into ExpressionNode AST",
     tsExport: "parseExpression",

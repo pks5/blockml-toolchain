@@ -519,6 +519,28 @@
       }
     },
     {
+      "name": "FindLocalMember",
+      "tsExport": "findLocalMember",
+      "fqn": "org.blockml.bml.framework.capability.FindLocalMember",
+      "inputs": [
+        {
+          "name": "block",
+          "type": "bomblock:BlockDefinition",
+          "required": true
+        },
+        {
+          "name": "member",
+          "type": "bommember:MemberDefinition",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "local",
+        "type": "bommember:MemberDefinition",
+        "required": false
+      }
+    },
+    {
       "name": "ParseExpression",
       "tsExport": "parseExpression",
       "fqn": "org.blockml.bml.framework.capability.ParseExpression",

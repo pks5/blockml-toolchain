@@ -36,6 +36,7 @@ const TS_CAPABILITY_EXPORTS = [
   "resolveContracts",
   "collectBaseTypeChain",
   "memberIdentityKey",
+  "findLocalMember",
   "parseExpression",
   "parseInterpolatedText",
   "evaluateExpression",

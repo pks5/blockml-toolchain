@@ -410,6 +410,16 @@ const capabilities = [
   {
     pkg: "capability",
     prefix: "parcap",
+    name: "ContainsUnescapedInterpolation",
+    is: "Detect unescaped ${…} interpolation in raw text",
+    doc: "True when raw contains ${ not preceded by a backslash. Used by ParseMemberValue and ParseDirectives to choose InterpolatedTextValue over a JSON-like literal.",
+    inputs: [{ name: "raw", type: "type:Text", required: true }],
+    output: { name: "result", type: "type:Boolean", required: true },
+    refs: ["pardocumentation:ExpressionCapture", "parcap:ParseMemberValue"],
+  },
+  {
+    pkg: "capability",
+    prefix: "parcap",
     name: "ExpressionFromRaw",
     is: "Wrap raw ${…} text as ExpressionValue (B4)",
     inputs: [

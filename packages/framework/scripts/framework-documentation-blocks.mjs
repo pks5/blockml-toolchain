@@ -96,6 +96,7 @@ export const documentationBlocks = [
     resolveContracts(block, registry) → MemberDefinition[] (contract slice; used by resolveEffectiveMembers)
     collectBaseTypeChain(block, registry) → BlockDefinition[]
     memberIdentityKey(member) → string
+    findLocalMember(block, member) → MemberDefinition | undefined
     parseExpression(source) → ParseExpressionOutcome
     parseInterpolatedText(source) → ParseExpressionOutcome
     evaluateExpression(node, scope) → value
@@ -172,6 +173,7 @@ export const documentationBlocks = [
     resolveContracts resolves each contracts[] FQN via TypeRegistry; unknown contract →
     BML_UNKNOWN_CONTRACT (validateTypes).
     memberIdentityKey(member) = (namespace ?? "") + ":" + name — collision detection key.
+    findLocalMember(block, member) looks up that key in block.members only (not inherited).
 
     Partial merge: later layer replaces only explicitly authored attributes on the member.
     Used by validateTypes (member collision, override rules) and validateConstraints (effective
@@ -182,6 +184,7 @@ export const documentationBlocks = [
       { type: "fwdocumentation:ExpressionParsing", relation: "ReadNext" },
       { type: "fwcap:ResolveEffectiveMembers", relation: "Defines" },
       { type: "fwcap:ResolveContracts", relation: "SeeAlso" },
+      { type: "fwcap:FindLocalMember", relation: "SeeAlso" },
     ],
   },
   {
