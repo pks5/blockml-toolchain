@@ -39,6 +39,7 @@
 
   <documentation>parseExpression(source) parses expression text into an ExpressionNode AST.
     parseInterpolatedText(source) scans Text for ${} holes (restricted profile).
+    Lookup is the same as full expressions: size ≡ #this.size, this ≡ #this.this.
     Returns ParseExpressionOutcome: { ok: true, result } | { ok: false, error }.
 
     Parser stores ExpressionValue.raw / InterpolatedTextValue.raw only (B4).

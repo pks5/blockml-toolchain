@@ -34,9 +34,9 @@
   <name>EvaluateExpression</name>
   <type>fwcap:EvaluateExpression</type>
   <baseType>core:Capability</baseType>
-  <is>Evaluate a restricted expression AST against a this-scope</is>
+  <is>Evaluate a restricted expression AST against the #this scope</is>
 
-  <documentation>this / #this resolve to the outer Block property map. Restricted profile only.</documentation>
+  <documentation>#this is the outer Block property map. Same lookup as full expressions: size ≡ #this.size, this ≡ #this.this, this.x ≡ #this.this.x. Restricted profile only.</documentation>
 
   <properties>
     <node type="fwexpression:ExpressionNode">

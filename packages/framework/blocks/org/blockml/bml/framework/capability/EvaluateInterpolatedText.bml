@@ -34,9 +34,9 @@
   <name>EvaluateInterpolatedText</name>
   <type>fwcap:EvaluateInterpolatedText</type>
   <baseType>core:Capability</baseType>
-  <is>Evaluate interpolated text against a this-scope</is>
+  <is>Evaluate interpolated text against the #this scope</is>
 
-  <documentation>Parses holes then evaluates them. Result is concatenated Text.</documentation>
+  <documentation>Parses holes then evaluates them with the same #this lookup as full expressions. Result is concatenated Text.</documentation>
 
   <properties>
     <source type="type:Text">

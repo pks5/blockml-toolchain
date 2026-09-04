@@ -238,7 +238,7 @@ Expression parse/type errors inside an embedded region reuse existing `BML_EXPR_
 Restricted `${ … }` holes may appear **inside** a Text member value that is not itself a whole-value expression:
 
 ```xml
-myText="Hello this is ${ this.label } bla bla"
+myText="Hello this is ${ #this.label } bla bla"
 ```
 
 Classification:
@@ -251,14 +251,23 @@ Classification:
 
 `InterpolatedTextValue.raw` is the **full authored text** including holes. The serializer emits that raw text unchanged — it does not wrap the value in `${ }`. AST construction is a Stage-2 utility (`parseInterpolatedText()`) — never stored on Canonical BOM.
 
-`this.x` in a hole is surface sugar for `#this.x` (outer Block instance; binding does not change inside nested compositions). Unqualified `x` remains valid and resolves the same member.
+`#this` is the outer Block instance (binding does not change inside nested compositions). Lookup is the **same** as in full `${ }` expressions:
+
+```text
+size      ≡  #this.size
+this      ≡  #this.this
+this.x    ≡  #this.this.x
+params.z  ≡  #this.params.z
+```
+
+The identifier `this` is a property, never the instance bean.
 
 ### Restricted profile
 
 Allowed in interpolation holes (same idea as `value` expressions):
 
 ```text
-✓  Property access (x, this.x, #this.x, nested this.parameters.author)
+✓  Property access (size, #this.size, this, this.x, params.z)
 ✓  Literals
 ✓  + (string / number)
 ✓  #strings.* and #math.* built-ins

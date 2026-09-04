@@ -31,7 +31,7 @@ describe("transformer interpolation", () => {
     const args = resolveMemberStringList(
       {
         kind: "literal",
-        value: ["${ this.parameters.mode }"],
+        value: ["${ #this.parameters.mode }"],
         typeFqn: "org.blockml.bml.type.Text",
       },
       scope,
@@ -57,7 +57,7 @@ describe("transformer interpolation", () => {
                   memberValues: {
                     instructions: {
                       kind: "interpolated",
-                      raw: "Write about ${ this.parameters.mode }",
+                      raw: "Write about ${ #this.parameters.mode }",
                     },
                   },
                 },

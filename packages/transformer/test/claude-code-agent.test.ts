@@ -61,10 +61,10 @@ describe("ClaudeCodeAgent", () => {
     expect(captured?.args).not.toContain("Bash");
     expect(captured?.args).not.toContain("--verbose");
     expect(captured?.live).toBeUndefined();
-    const prompt = buildClaudeExecutionPrompt(runningFqn, 0, "Write about ${ this.parameters.author }");
+    const prompt = buildClaudeExecutionPrompt(runningFqn, 0, "Write about ${ #this.parameters.author }");
     expect(prompt).toContain(runningFqn);
     expect(prompt).toContain("Task instructions:");
-    expect(prompt).toContain("Write about ${ this.parameters.author }");
+    expect(prompt).toContain("Write about ${ #this.parameters.author }");
     expect(prompt).toContain("Execute step");
     expect(prompt).toContain("Running ModelOperation");
     expect(prompt).toContain("Change BML model source");

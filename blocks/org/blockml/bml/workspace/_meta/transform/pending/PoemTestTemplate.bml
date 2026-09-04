@@ -29,6 +29,7 @@
         <topic type="type:Text" />
         <storyLanguage type="type:Text" />
         <translationLanguage type="type:Text" />
+        <targetBlock type="type:Text" />
       </properties>
     </block>
   </subBlocks>
@@ -54,9 +55,9 @@
             <workflow:InstructionTask>
               <instructions>
                 Create or update the block 
-                org.blockml.bml.workspace.playground.MyStory.bml 
-                that contains a random story in ${ this.parameters.storyLanguage } 
-                about ${ this.parameters.topic }. 
+                ${ #this.parameters.targetBlock } 
+                that contains a random story in ${ #this.parameters.storyLanguage } 
+                about ${ #this.parameters.topic }. 
                 For each execution create a new poem.
                 The story should be structured with the following properties:
                 - title (type:Text)
@@ -79,8 +80,8 @@
             <workflow:InstructionTask>
               <instructions>
                 Translate the story in 
-                org.blockml.bml.workspace.playground.MyStory.bml 
-                to ${ this.parameters.translationLanguage }.
+                ${ #this.parameters.targetBlock } 
+                to ${ #this.parameters.translationLanguage }.
               </instructions>
             </workflow:InstructionTask>
           </task>

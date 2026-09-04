@@ -115,11 +115,11 @@ describe("ToolExecutor", () => {
     expect(result.error).toMatch(/single npm bin token/);
   });
 
-  it("interpolates ${} holes in Text[] args against this.parameters", async () => {
+  it("interpolates ${} holes in Text[] args against #this.parameters", async () => {
     const executionFqn = writeToolPending({
       parameterFields: ["mode"],
       pendingParameters: '{"mode":"validate"}',
-      args: ["${ this.parameters.mode }"],
+      args: ["${ #this.parameters.mode }"],
     });
     const calls: ToolProcessRequest[] = [];
     const executor = new ToolExecutor(async (request) => {

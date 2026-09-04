@@ -6,7 +6,7 @@ import { parse } from "@blockml/parser";
 
 describe("interpolated text emit", () => {
   it("round-trips an interpolated attribute", () => {
-    const raw = "Hello this is ${ this.label } bla bla";
+    const raw = "Hello this is ${ #this.label } bla bla";
     const source = [
       `<block xmlns="http://blockml.org/bml"`,
       ` xmlns:core="org.blockml.bml.core"`,
@@ -40,7 +40,7 @@ describe("interpolated text emit", () => {
 describe("parseMemberValue used by serializer emit helpers", () => {
   it("keeps interpolated raw for attribute emission", () => {
     const val = parseMemberValue(
-      "Hello ${ this.label }",
+      "Hello ${ #this.label }",
       "org.blockml.bml.type.Text",
       "t.bml",
       1,
@@ -48,6 +48,6 @@ describe("parseMemberValue used by serializer emit helpers", () => {
       "attribute",
     ) as InterpolatedTextValue;
     expect(val.kind).toBe("interpolated");
-    expect(val.raw).toBe("Hello ${ this.label }");
+    expect(val.raw).toBe("Hello ${ #this.label }");
   });
 });

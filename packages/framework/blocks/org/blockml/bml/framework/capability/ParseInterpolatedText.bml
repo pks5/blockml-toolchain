@@ -36,7 +36,7 @@
   <baseType>core:Capability</baseType>
   <is>Parse interpolated text into an InterpolatedStringNode AST</is>
 
-  <documentation>Scan authored text for ${} holes. Restricted profile — no @model, @bean, or capability calls.</documentation>
+  <documentation>Scan authored text for ${} holes. Restricted profile — same #this lookup as full expressions; no @model, @bean, or capability calls.</documentation>
 
   <references>
     <see type="fwdocumentation:ExpressionParsing" relation="SeeAlso" />
