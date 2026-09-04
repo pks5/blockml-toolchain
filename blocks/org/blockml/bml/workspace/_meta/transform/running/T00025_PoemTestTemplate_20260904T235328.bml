@@ -1,0 +1,112 @@
+<!--Workspace pending transform — JokeTest
+  FQN: org.blockml.bml.workspace._meta.transform.succeeded.T00001_JokeTest_20260830T014020-->
+<block xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
+
+  <name>
+    T00025_PoemTestTemplate_20260904T235328
+  </name>
+  <type>
+    running:T00025_PoemTestTemplate_20260904T235328
+  </type>
+  <baseType>
+    workflow:ModelTransformation(running:T00025_PoemTestTemplate_20260904T235328.Parameters, type:Text)
+  </baseType>
+  <is>
+    A pending ModelTransformation that creates a playground Poem block
+  </is>
+  <properties>
+    <description override="true">
+      <value>A transformation that creates a playground Poem block</value>
+    </description>
+    <status override="true" type="workflow:ExecutionStatus">
+      <value>Running</value>
+    </status>
+    <createdAt override="true" type="type:DateTime">
+      <value>2026-08-30T01:40:20</value>
+    </createdAt>
+    <template override="true" type="type:Boolean">
+      <value>false</value>
+    </template>
+    <resultSource override="true" type="type:PropertyReference">
+      <value>${ #strings.concat( #this.parameters.targetBlock, '.properties.song') }</value>
+    </resultSource>
+    <parameters override="true" type="running:T00025_PoemTestTemplate_20260904T235328.Parameters">
+      <value>{translationLanguage:"German",storyLanguage:"Spanish",topic:"A Futuristic city and a dog",targetBlock:"org.blockml.bml.workspace.playground.MyLatestStory"}</value>
+    </parameters>
+    <executionId override="true" type="type:UUID">
+      <value>8a27d551-b035-42be-bd0e-eb6b4f196340</value>
+    </executionId>
+    <sequence override="true" type="type:Integer">
+      <value>25</value>
+    </sequence>
+    <startedAt override="true" type="type:DateTime">
+      <value>2026-09-04T23:53:28</value>
+    </startedAt>
+    <baseCommit override="true" type="type:Text">
+      <value>bae3034d4190ea50ab39ee96db18e4986d6a0e8f</value>
+    </baseCommit>
+  </properties>
+  <aggregations>
+    <operations override="true">
+      <composition>
+        <workflow:AgenticOperation name="Create Poem" status="Pending" captureOutput="true">
+          <task>
+            <workflow:InstructionTask>
+              <instructions>Create or update the block 
+${ #this.parameters.targetBlock } 
+that contains a random song in ${ #this.parameters.storyLanguage } 
+about ${ #this.parameters.topic }. 
+For each execution create a new song.
+The song should be structured with the following properties:
+- title (type:Text)
+- artist (type:Text)
+- song (type:Text)
+- language (type:Text)
+- date (type:DateTime)</instructions>
+            </workflow:InstructionTask>
+          </task>
+        </workflow:AgenticOperation>
+        <workflow:ToolOperation name="Validate" status="Pending" captureOutput="true" command="blockml">
+          <args>[&quot;validate&quot;]</args>
+        </workflow:ToolOperation>
+        <workflow:AgenticOperation name="Translate Poem" status="Pending">
+          <task>
+            <workflow:InstructionTask>
+              <instructions>Translate the song in 
+${ #this.parameters.targetBlock } 
+to ${ #this.parameters.translationLanguage }.</instructions>
+            </workflow:InstructionTask>
+          </task>
+        </workflow:AgenticOperation>
+      </composition>
+    </operations>
+  </aggregations>
+  <subBlocks>
+    <block>
+      <name>
+        Parameters
+      </name>
+      <type>
+        running:T00025_PoemTestTemplate_20260904T235328.Parameters
+      </type>
+      <baseType>
+        type:StructType
+      </baseType>
+      <is>
+        Run parameters for this poem transformation
+      </is>
+      <properties>
+        <topic type="type:Text" />
+        <storyLanguage type="type:Text" />
+        <translationLanguage type="type:Text" />
+        <targetBlock type="type:Text" />
+      </properties>
+    </block>
+  </subBlocks>
+</block>
