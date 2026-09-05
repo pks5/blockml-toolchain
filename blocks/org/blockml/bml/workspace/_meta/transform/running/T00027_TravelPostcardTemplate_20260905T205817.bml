@@ -68,8 +68,7 @@ Changes to `blocks/org/blockml/bml/workspace/playground/TravelPostcard.bml` (pro
 - **language**: English
 - **date**: `2026-09-05T20:58:17` (execution time)
 
-Validation: the block validates clean, and full project `validate` reports 0 errors / 0 warnings (3 pre-existing style recommendations in unrelated `packages/` files). No other files touched.
-</output>
+Validation: the block validates clean, and full project `validate` reports 0 errors / 0 warnings (3 pre-existing style recommendations in unrelated `packages/` files). No other files touched.</output>
           <completedAt>2026-09-05T20:59:15</completedAt>
           <resultMappings>
             <workflow:ResultMapping>
@@ -98,8 +97,10 @@ ModelTransformation metadata or files under _meta/transform/.</instructions>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/TravelPostcard.bml" />
           </changedFiles>
         </workflow:AgenticOperation>
-        <workflow:ToolOperation name="Validate" status="Pending" captureOutput="true" command="blockml">
+        <workflow:ToolOperation name="Validate" status="Running" captureOutput="true" command="blockml">
           <args>[&quot;validate&quot;]</args>
+          <startedAt>2026-09-05T20:59:16</startedAt>
+          <baseCommit>cd54977bd23d92b2f4037fad49006cb617a8a577</baseCommit>
         </workflow:ToolOperation>
         <workflow:AgenticOperation name="Polish Opening" status="Pending">
           <resultMappings>
