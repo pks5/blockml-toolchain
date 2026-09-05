@@ -24,26 +24,26 @@
 
   <properties>
     <title type="type:Text">
-      <value>Greetings from Lisbon</value>
+      <value>A Day Among the Seven Hills</value>
     </title>
     <destination type="type:Text">
       <value>Lisbon</value>
     </destination>
     <opening type="type:Text">
-      <value>Writing to you from a sunny little café in Alfama, where the old yellow tram just rattled past and the rooftops are all turning gold.</value>
+      <value>Greetings from a tiled bench above the Tagus, where the ferries leave silver trails and the whole waterfront smells of salt, coffee, and grilled chestnuts.</value>
     </opening>
     <body type="type:Text">
-      <value>Wish you were here! I spent the morning getting lost in the narrow lanes of Alfama, where laundry lines cross overhead and fado drifts out of open windows.
+      <value>This morning I rode the Elevador da Bica down streets so steep the houses seem to lean on one another, all pink, ochre and faded blue, while a knife-grinder's whistle echoed somewhere below.
 
-For lunch I found a tiny tasca by the river and ate grilled sardines with a glass of vinho verde while ferries crossed the Tagus.
+At a marble counter in the Baixa I ate a warm pastel de nata, dusting cinnamon over the top the way the locals do, then drifted into the Feira da Ladra to haggle over an old brass compass.
 
-Tonight I'll watch the sunset from Miradouro da Senhora do Monte, where the whole city turns pink and gold. Lisbon has a way of making you slow down.</value>
+Now the sun is dropping behind the 25 de Abril bridge and a busker in the square is playing fado on a twelve-string guitar. The light has turned everything to amber, and I already don't want to leave.</value>
     </body>
     <language type="type:Text">
       <value>English</value>
     </language>
     <date type="type:DateTime">
-      <value>2026-09-05T20:56:00</value>
+      <value>2026-09-05T20:58:17</value>
     </date>
   </properties>
 

@@ -48,13 +48,29 @@
     <baseCommit override="true" type="type:Text">
       <value>be851077adceccb8601106140e04e51ae1b53b57</value>
     </baseCommit>
+    <result override="true" type="running:T00027_TravelPostcardTemplate_20260905T205817.Result">
+      <value>{title:"A Day Among the Seven Hills"}</value>
+    </result>
   </properties>
   <aggregations>
     <operations override="true">
       <composition>
-        <workflow:AgenticOperation name="Create Postcard" status="Running" captureOutput="true">
+        <workflow:AgenticOperation name="Create Postcard" status="Succeeded" captureOutput="true">
           <startedAt>2026-09-05T20:58:17</startedAt>
           <baseCommit>55eb1748d0829c624a082e2e84c74212589b9f4d</baseCommit>
+          <output>Done. Updated `org.blockml.bml.workspace.playground.TravelPostcard` with a freshly invented Lisbon postcard.
+
+Changes to `blocks/org/blockml/bml/workspace/playground/TravelPostcard.bml` (properties only):
+- **title**: &quot;A Day Among the Seven Hills&quot;
+- **destination**: Lisbon (unchanged)
+- **opening**: one vivid sentence — a tiled bench above the Tagus, salt, coffee and grilled chestnuts
+- **body**: three short paragraphs — the Elevador da Bica descent, a pastel de nata and the Feira da Ladra, sunset behind the 25 de Abril bridge with fado
+- **language**: English
+- **date**: `2026-09-05T20:58:17` (execution time)
+
+Validation: the block validates clean, and full project `validate` reports 0 errors / 0 warnings (3 pre-existing style recommendations in unrelated `packages/` files). No other files touched.
+</output>
+          <completedAt>2026-09-05T20:59:15</completedAt>
           <resultMappings>
             <workflow:ResultMapping>
               <source>${ #strings.concat( #this.parameters.targetBlock, '.properties.title') }</source>
@@ -78,6 +94,9 @@ Write only under the playground package. Do not edit
 ModelTransformation metadata or files under _meta/transform/.</instructions>
             </workflow:InstructionTask>
           </task>
+          <changedFiles>
+            <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/TravelPostcard.bml" />
+          </changedFiles>
         </workflow:AgenticOperation>
         <workflow:ToolOperation name="Validate" status="Pending" captureOutput="true" command="blockml">
           <args>[&quot;validate&quot;]</args>
