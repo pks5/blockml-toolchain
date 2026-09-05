@@ -1,0 +1,73 @@
+<!--
+  Transformer Workflow — ResultMapping
+  FQN: org.blockml.bml.transformer.workflow.ResultMapping
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>ResultMapping</name>
+  <type>workflow:ResultMapping</type>
+  <baseType>core:Block</baseType>
+  <is>A mapping from a source Property onto the transformation result</is>
+
+  <documentation>
+    DTO that describes how a source Property maps onto a transformation
+    `result`. This type does not validate: it does not check that
+    `source` exists, that `sourcePath` / `resultPath` are well-formed,
+    or that the source type is a StructType.
+
+    Intended to replace `resultSource` on `workflow:ModelTransformation`.
+    That wiring is not applied yet.
+
+    * `source` — required `type:PropertyIdentifier` of the Property to
+      read. Unchecked: the owning type and property need not exist.
+    * `sourcePath` — optional OpenUI5 model path into `source` when
+      that Property is a `type:StructType` (or `StructType[]`).
+    * `resultPath` — optional OpenUI5 model path into the result
+      object, same format as `sourcePath`.
+
+    OpenUI5 model path examples:
+    * `/0/myProp` — `myProp` on the first object (`StructType[]` only)
+    * `/myProp/2` — third element of array `myProp` on the object
+    * `/myProp` — `myProp` on the object
+    * `/myProp/myChild` — nested `myChild` of `myProp`
+  </documentation>
+
+  <isNot>Not a validator or Constraint, and not an existence-checked
+    type:PropertyReference.</isNot>
+
+  <references>
+    <see type="type:PropertyIdentifier" relation="SeeAlso" />
+    <see type="type:StructType" relation="SeeAlso" />
+    <see type="workflow:ModelTransformation" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <source type="type:PropertyIdentifier">
+      <documentation>
+        Required path of the Property to read. Unchecked
+        PropertyIdentifier: syntax only; the property need not exist.
+      </documentation>
+    </source>
+    <sourcePath type="type:Text">
+      <documentation>
+        Optional OpenUI5 model path into source. Meaningful only when
+        source is a StructType or StructType[]. Examples: /0/myProp,
+        /myProp/2, /myProp, /myProp/myChild.
+      </documentation>
+    </sourcePath>
+    <resultPath type="type:Text">
+      <documentation>
+        Optional OpenUI5 model path into the result object. Same format
+        as sourcePath.
+      </documentation>
+    </resultPath>
+  </properties>
+
+</block>

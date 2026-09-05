@@ -37,7 +37,7 @@
     </see>
   </references>
   <language>
-    <English />
+    <blockml:language.English />
   </language>
   <properties>
     <description override="true">
@@ -70,6 +70,7 @@
         <blockml:transformer.workflow.ParametersException />
         <blockml:transformer.workflow.PrerequisiteNotMetException />
         <blockml:transformer.workflow.ResultException />
+        <blockml:transformer.workflow.ResultMapping />
         <blockml:transformer.workflow.Rule />
         <blockml:transformer.workflow.Task />
         <blockml:transformer.workflow.ToolOperation />
