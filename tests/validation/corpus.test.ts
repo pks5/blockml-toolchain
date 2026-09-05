@@ -29,15 +29,18 @@ const STRICT_CORPUS_FILES = [
     "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/core/CompositeBlock.bml",
   ]),
   corpusPath(["node_modules/@machineblocks/core/blocks/com/machineblocks/bml/core/Set.bml"]),
-];
-
-const T3_UNKNOWN_TYPE_FILES = [
   corpusPath([
     "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/examples/Cross.bml",
   ]),
+  corpusPath([
+    "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/bricks/Standard.bml",
+  ]),
+  corpusPath([
+    "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/calibration/Calibrator.bml",
+  ]),
 ];
 
-describe("validation corpus T0–T2", () => {
+describe("validation corpus", () => {
   it.each(STRICT_CORPUS_FILES)("parse → validate: %s", (filePath) => {
     const source = readFileSync(filePath, "utf8");
     const parsed = parse(source, { filePath });
@@ -52,40 +55,5 @@ describe("validation corpus T0–T2", () => {
     ).toEqual([]);
     expect(result.success).toBe(true);
     expect(result.pragmaticModel).toBeDefined();
-  });
-});
-
-describe("validation corpus T3 — published files lag closed registry/grammar", () => {
-  it.each(T3_UNKNOWN_TYPE_FILES)("parse succeeds; unregistered domain types are errors: %s", (filePath) => {
-    const source = readFileSync(filePath, "utf8");
-    const parsed = parse(source, { filePath });
-    expect(parsed.success, JSON.stringify(parsed.diagnostics)).toBe(true);
-    expect(parsed.document).not.toBeNull();
-
-    const result = validate(parsed.document!);
-    expect(result.diagnostics.some((d) => d.code === "BML_UNKNOWN_TYPE")).toBe(true);
-    expect(result.success).toBe(false);
-  });
-
-  it("Standard.bml trailing junk is unexpected text and keeps a BOM", () => {
-    const filePath = corpusPath([
-      "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/bricks/Standard.bml",
-    ]);
-    const source = readFileSync(filePath, "utf8");
-    const parsed = parse(source, { filePath, continueOnError: true });
-    expect(parsed.document).not.toBeNull();
-    expect(parsed.diagnostics.some((d) => d.code === "BML_UNEXPECTED_TEXT")).toBe(true);
-    expect(parsed.success).toBe(false);
-  });
-
-  it("Calibrator nested direct aggregations are structural errors", () => {
-    const filePath = corpusPath([
-      "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/calibration/Calibrator.bml",
-    ]);
-    const source = readFileSync(filePath, "utf8");
-    const parsed = parse(source, { filePath, continueOnError: true });
-    expect(parsed.document).not.toBeNull();
-    expect(parsed.diagnostics.some((d) => d.code === "BML_UNKNOWN_ELEMENT")).toBe(true);
-    expect(parsed.success).toBe(false);
   });
 });

@@ -80,41 +80,17 @@ describe("roundtrip T2 — Domain", () => {
 });
 
 describe("roundtrip T3 — Real-world", () => {
-  it("Cross.bml roundtrips despite unpublished domain types", () => {
-    roundtrip(
-      corpusPath([
-        "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/examples/Cross.bml",
-      ]),
-    );
-  });
-
-  it("Standard.bml keeps a BOM despite unexpected trailing text", () => {
-    const filePath = corpusPath([
+  const files = [
+    corpusPath([
+      "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/examples/Cross.bml",
+    ]),
+    corpusPath([
       "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/bricks/Standard.bml",
-    ]);
-    const source = readFileSync(filePath, "utf8");
-    const first = parse(source, { filePath, continueOnError: true });
-    expect(first.document).not.toBeNull();
-    expect(first.diagnostics.some((d) => d.code === "BML_UNEXPECTED_TEXT")).toBe(true);
-  });
-
-  it("Calibrator keeps a BOM despite nested direct-aggregation residuals", () => {
-    const filePath = corpusPath([
+    ]),
+    corpusPath([
       "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/calibration/Calibrator.bml",
-    ]);
-    const source = readFileSync(filePath, "utf8");
-    const first = parse(source, { filePath, continueOnError: true });
-    expect(first.document).not.toBeNull();
-    expect(first.diagnostics.some((d) => d.code === "BML_UNKNOWN_ELEMENT")).toBe(true);
-    expect(first.document!.block.unknownElements?.some((n) => n.localName === "_parts") ||
-      first.document!.block.subBlocks.some((s) =>
-        s.unknownElements?.some((n) => n.localName === "_parts"),
-      )).toBe(true);
+    ]),
+  ];
 
-    const ser = serialize(first.document!);
-    expect(ser.text).toContain("_parts");
-    const second = parse(ser.text, { filePath, continueOnError: true });
-    expect(second.document).not.toBeNull();
-    expect(bomEquals(first.document!, second.document!)).toBe(true);
-  });
+  it.each(files)("%s", (file) => roundtrip(file));
 });

@@ -88,6 +88,10 @@ function checkMember(member, ctx) {
     if (member.kind === "property") {
         checkLiteral(member.value, member.type, member.typeFqn, ctx, loc);
         for (const entry of member.values ?? []) {
+            // Prefixed values (scad:value, …) are target-language facets, not BML
+            // literals — skip parseValue against the property type. TODO: a matching
+            // prefixed type (scad:type for scad:value) so each facet can be validated
+            // in its own language. Today prefixed values are not validated.
             if (entry.namespace) {
                 continue;
             }

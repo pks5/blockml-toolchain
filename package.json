@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@blockml/core": "^1.1.1",
-    "@machineblocks/core": "^3.0.0-A1"
+    "@machineblocks/core": "^3.0.0-A2"
   },
   "devDependencies": {
     "@blockml/blockdoc-target": "workspace:*",
