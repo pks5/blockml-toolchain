@@ -36,7 +36,16 @@
   <baseType>core:Capability</baseType>
   <is>Semantic type checks on BomDocument using TypeRegistry</is>
 
-  <documentation>Semantic type checks on BomDocument using TypeRegistry</documentation>
+  <documentation>
+    Semantic type checks on BomDocument using TypeRegistry.
+
+    Existence is classified per declared ValueType — there is no shared MemberReference parent:
+
+    - TypeReference, PackageReference, InstanceReference, PropertyReference, AggregationReference,
+      AssociationReference, CapabilityReference, and the matching *ReferenceEntity wrappers
+    - Identifier types (`TypeIdentifier`, `MemberIdentifier`, …) are syntax-only and are not
+      existence-checked
+  </documentation>
 
   <references>
     <see type="fwcap:ResolveEffectiveMembers" relation="SeeAlso" />

@@ -167,6 +167,7 @@ function readDiagnosticCodesFromSrc(): string[] {
   const codes = new Set<string>();
   for (const rel of [
     "validate/validate-types.ts",
+    "validate/validate-references.ts",
     "validate/validate-constraints.ts",
     "validate/validate-versions.ts",
     "validate/validate-embedded-blocks.ts",

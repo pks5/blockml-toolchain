@@ -7,7 +7,6 @@ import type {
   ExpressionValue,
   InterpolatedTextValue,
   LiteralValue,
-  MemberDefinition,
   MemberValue,
   PropertyDefinition,
   SourceLocation,
@@ -21,8 +20,7 @@ import {
   memberIdentityKey,
   resolveEffectiveMembers,
 } from "../resolve/resolve-effective-members.js";
-import { satisfiesTypeBound } from "../resolve/satisfies-type-bound.js";
-import { isWellKnownTypeFqn } from "@blockml/parser";
+import { validateReferences } from "./validate-references.js";
 
 const TEXT_TYPE_FQN = "org.blockml.bml.type.Text";
 
@@ -88,100 +86,6 @@ function diag(
   return { severity: "error", code, message, source };
 }
 
-function typeIsKnown(fqn: string, registry: TypeRegistry): boolean {
-  return registry.has(fqn) || isWellKnownTypeFqn(fqn);
-}
-
-const CORE_EXCEPTION = "org.blockml.bml.core.Exception";
-
-function walkNamedTypes(expr: TypeExpression | undefined, visit: (fqn: string) => void): void {
-  if (!expr) {
-    return;
-  }
-  switch (expr.kind) {
-    case "named":
-      visit(expr.fqn);
-      for (const arg of expr.typeArguments ?? []) {
-        walkNamedTypes(arg, visit);
-      }
-      break;
-    case "union":
-      for (const alt of expr.alternatives) {
-        walkNamedTypes(alt, visit);
-      }
-      break;
-    case "grouped":
-      walkNamedTypes(expr.expression, visit);
-      break;
-    case "anonymousStruct":
-      for (const field of expr.fields) {
-        walkNamedTypes(field.type, visit);
-      }
-      break;
-    default:
-      break;
-  }
-}
-
-function validateMemberTypes(
-  member: MemberDefinition,
-  registry: TypeRegistry,
-  file: string,
-  diagnostics: Diagnostic[],
-): void {
-  const loc = member.typeSource ?? member.source;
-  const report = (fqn: string) => {
-    if (!typeIsKnown(fqn, registry)) {
-      diagnostics.push(diag("BML_UNKNOWN_TYPE", `Unknown type: ${fqn}`, file, loc));
-    }
-  };
-
-  if (member.kind === "property") {
-    if (member.type) {
-      walkNamedTypes(member.type, report);
-    } else if (member.typeFqn) {
-      report(member.typeFqn);
-    }
-  } else if (member.kind === "aggregation" || member.kind === "association") {
-    walkNamedTypes(member.type, report);
-  } else if (member.kind === "capability") {
-    if (member.typeFqn) {
-      report(member.typeFqn);
-    }
-    walkNamedTypes(member.inputType, (fqn) => {
-      if (!typeIsKnown(fqn, registry)) {
-        diagnostics.push(
-          diag("BML_UNKNOWN_TYPE", `Unknown type: ${fqn}`, file, member.inputTypeSource ?? loc),
-        );
-      }
-    });
-    walkNamedTypes(member.outputType, (fqn) => {
-      if (!typeIsKnown(fqn, registry)) {
-        diagnostics.push(
-          diag("BML_UNKNOWN_TYPE", `Unknown type: ${fqn}`, file, member.outputTypeSource ?? loc),
-        );
-      }
-    });
-    for (const thrown of member.throws ?? []) {
-      const fqn = thrown.value;
-      if (!typeIsKnown(fqn, registry)) {
-        diagnostics.push(diag("BML_UNKNOWN_TYPE", `Unknown type: ${fqn}`, file, loc));
-        continue;
-      }
-      if (!satisfiesTypeBound(fqn, CORE_EXCEPTION, registry)) {
-        diagnostics.push(
-          diag(
-            "BML_TYPE_BOUND_NOT_SATISFIED",
-            `Type ${fqn} does not satisfy bound ${CORE_EXCEPTION}`,
-            file,
-            loc,
-          ),
-        );
-      }
-    }
-  }
-}
-
 function literalNumber(val: MemberValue | undefined): number | undefined {
   if (!val || val.kind !== "literal") {
     return undefined;
@@ -195,30 +99,6 @@ function validateBlockDefinition(
   file: string,
   diagnostics: Diagnostic[],
 ): void {
-  if (block.baseType && !registry.has(block.baseType)) {
-    diagnostics.push(
-      diag(
-        "BML_UNKNOWN_BASE_TYPE",
-        `Unknown baseType: ${block.baseType}`,
-        file,
-        block.baseTypeSource ?? block.source,
-      ),
-    );
-  }
-
-  for (const ref of block.contracts ?? []) {
-    if (!registry.has(ref.value)) {
-      diagnostics.push(
-        diag(
-          "BML_UNKNOWN_CONTRACT",
-          `Unknown contract: ${ref.value}`,
-          file,
-          block.source,
-        ),
-      );
-    }
-  }
-
   const effective = resolveEffectiveMembers(block, registry);
   const seen = new Set<string>();
   for (const member of effective) {
@@ -237,7 +117,6 @@ function validateBlockDefinition(
   }
 
   for (const member of block.members) {
-    validateMemberTypes(member, registry, file, diagnostics);
     const skipOverrideCheck =
       member.kind === "aggregation" &&
       (member.composition !== undefined || member.default === true);
@@ -455,6 +334,7 @@ export function validateTypes(
     registry.register(document);
   }
 
+  diagnostics.push(...validateReferences(document, registry));
   validateBlockDefinition(document.block, registry, file, diagnostics);
   walkCompositions(document.block, registry, file, diagnostics);
 
