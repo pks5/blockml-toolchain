@@ -1,6 +1,6 @@
 {
   "name": "@blockml/transformer",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "BlockML transformer — sequential ModelOperations with registered executors",
   "license": "Apache-2.0",
   "repository": {
@@ -32,10 +32,10 @@
     "test": "vitest run packages/transformer/test"
   },
   "dependencies": {
-    "@blockml/bom": "^0.9.1",
+    "@blockml/bom": "^0.9.2",
     "@blockml/core": "^1.1.1",
-    "@blockml/framework": "^0.9.1",
-    "@blockml/serializer": "^0.9.1",
+    "@blockml/framework": "^0.9.2",
+    "@blockml/serializer": "^0.9.2",
     "proper-lockfile": "^4.1.2"
   },
   "engines": {

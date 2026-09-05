@@ -1,6 +1,6 @@
 {
   "name": "@blockml/search",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "BlockML local full-text search over the project BML corpus",
   "license": "Apache-2.0",
   "repository": {
@@ -32,9 +32,9 @@
     "test": "vitest run packages/search/test"
   },
   "dependencies": {
-    "@blockml/bom": "^0.9.1",
+    "@blockml/bom": "^0.9.2",
     "@blockml/core": "^1.1.1",
-    "@blockml/framework": "^0.9.1",
+    "@blockml/framework": "^0.9.2",
     "@orama/orama": "^3.1.18",
     "@orama/plugin-data-persistence": "^3.1.18"
   },
