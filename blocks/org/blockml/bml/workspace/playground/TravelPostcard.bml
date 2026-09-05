@@ -1,0 +1,50 @@
+<!--
+  Workspace Playground — TravelPostcard
+  FQN: org.blockml.bml.workspace.playground.TravelPostcard
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:playground="org.blockml.bml.workspace.playground">
+
+  <name>TravelPostcard</name>
+  <type>playground:TravelPostcard</type>
+  <baseType>core:Documentation</baseType>
+  <is>A short travel postcard in English about Lisbon</is>
+
+  <documentation>
+    A structured travel postcard produced by a workspace transform execution,
+    in English, about Lisbon. Each transform execution replaces this block
+    with a freshly composed postcard.
+  </documentation>
+
+  <properties>
+    <title type="type:Text">
+      <value>Greetings from Lisbon</value>
+    </title>
+    <destination type="type:Text">
+      <value>Lisbon</value>
+    </destination>
+    <opening type="type:Text">
+      <value>The tram groaned up the hill just as the sun spilled gold over the rooftops of Alfama.</value>
+    </opening>
+    <body type="type:Text">
+      <value>Wish you were here! I spent the morning getting lost in the narrow lanes of Alfama, where laundry lines cross overhead and fado drifts out of open windows.
+
+For lunch I found a tiny tasca by the river and ate grilled sardines with a glass of vinho verde while ferries crossed the Tagus.
+
+Tonight I'll watch the sunset from Miradouro da Senhora do Monte, where the whole city turns pink and gold. Lisbon has a way of making you slow down.</value>
+    </body>
+    <language type="type:Text">
+      <value>English</value>
+    </language>
+    <date type="type:DateTime">
+      <value>2026-09-05T20:56:00</value>
+    </date>
+  </properties>
+
+</block>
