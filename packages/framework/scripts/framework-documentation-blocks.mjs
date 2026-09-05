@@ -83,7 +83,7 @@ export const documentationBlocks = [
     is: "Framework public exports from index.ts",
     doc: `Public exports from @blockml/framework (packages/framework/src/index.ts):
 
-    TypeRegistry — class; register/get/has/keys/size on BomDocument index
+    TypeRegistry — class; register/get/has/keys/size/withOverlay on BomDocument index
     bootstrapTypeRegistry(options?) → BootstrapResult
     defaultBootstrapPaths(rootDir?) → string[]
     resolveLibrarySeeds(rootDir?, extras?) → string[]
@@ -127,7 +127,9 @@ export const documentationBlocks = [
     (dependencies, subLibraries) in order, then registers blocks from each library blocks root
     except trees already covered by options.paths (srcDir / corpus). Missing Library path →
     BML_LIBRARY_RESOLVE_ERROR. Outer re-export of inner-only block →
-    BML_LIBRARY_NESTING_VIOLATION (minimal check).
+    BML_LIBRARY_NESTING_VIOLATION (minimal check). Duplicate files of the same type FQN
+    are resolved by source priority: workspace (not node_modules) wins over npm;
+    same-origin last write wins.
 
     defaultBootstrapPaths(rootDir?) returns BlockML srcDir roots for production
     npm dependencies (package.json dependencies + optionalDependencies) of the nearest
@@ -140,10 +142,10 @@ export const documentationBlocks = [
     extras (config.libraries / --libraries), deduped by realpath.
 
     bootstrapTypeRegistry also indexes Library.bml under all BlockML packages found in
-    node_modules and workspace packages/ along the directory walk (FQN search space).
-    First Library.bml wins per type FQN unless that file is the current library
-    (self-loop); then another file with the same type is used. node_modules is
-    indexed before workspace packages.
+    workspace packages/ and node_modules along the directory walk (FQN search space).
+    Local srcDir and workspace packages are indexed before node_modules.
+    resolveDepCandidate / findLibraryFileForType pick workspace over npm when the same
+    Library type FQN exists in both (Core dogfooding against an installed copy).
 
     BootstrapResult: { registry, diagnostics, exportsByLibrary?, trace? }
     trace lists corpusPaths, seeds, searchRoots (index only), librariesVisited, and

@@ -1,4 +1,5 @@
 import { hitAt, memberTypeFqn } from "./hit-test.js";
+import { workspaceForOpenText } from "./workspace.js";
 function firstProse(entries) {
     const text = entries?.[0]?.text?.trim();
     return text ? text : undefined;
@@ -38,7 +39,8 @@ function languageMarkdown(metaFqn, member, workspace) {
     return typeMarkdown(metaFqn, registered?.is, registered?.documentations, registered?.summaries);
 }
 export function hoverAt(text, filePath, position, workspace) {
-    const hit = hitAt(text, filePath, position, workspace);
+    const scoped = workspaceForOpenText(workspace, text, filePath);
+    const hit = hitAt(text, filePath, position, scoped);
     if (!hit) {
         return null;
     }
@@ -47,10 +49,10 @@ export function hoverAt(text, filePath, position, workspace) {
         markdown = memberMarkdown(hit.member, hit.typeFqn ?? memberTypeFqn(hit.member));
     }
     else if (hit.kind === "language") {
-        markdown = languageMarkdown(hit.metaFqn, hit.member, workspace);
+        markdown = languageMarkdown(hit.metaFqn, hit.member, scoped);
     }
     else {
-        const registered = workspace.registry.get(hit.fqn)?.block;
+        const registered = scoped.registry.get(hit.fqn)?.block;
         if (hit.fqn === hit.block.type) {
             markdown = typeMarkdown(hit.fqn, registered?.is ?? hit.block.is, registered?.documentations ?? hit.block.documentations, registered?.summaries ?? hit.block.summaries);
         }

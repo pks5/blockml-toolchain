@@ -1,5 +1,5 @@
 import type { LspPosition, LspRange } from "./positions.js";
-import type { WorkspaceState } from "./workspace.js";
+import { type WorkspaceState } from "./workspace.js";
 export interface MarkupContent {
     kind: "markdown";
     value: string;

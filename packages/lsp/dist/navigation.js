@@ -1,6 +1,7 @@
 import { pathToFileURL } from "node:url";
 import { hitAt, memberTypeFqn, navigationFqn } from "./hit-test.js";
 import { bomLocationToRange } from "./positions.js";
+import { workspaceForOpenText } from "./workspace.js";
 function locationFromSource(loc) {
     if (!loc.file) {
         return undefined;
@@ -15,7 +16,8 @@ function definitionLocation(workspace, fqn) {
     return source ? locationFromSource(source) : undefined;
 }
 export function definitionAt(text, filePath, position, workspace) {
-    const hit = hitAt(text, filePath, position, workspace);
+    const scoped = workspaceForOpenText(workspace, text, filePath);
+    const hit = hitAt(text, filePath, position, scoped);
     if (!hit || hit.kind !== "typeRef") {
         return null;
     }
@@ -23,7 +25,7 @@ export function definitionAt(text, filePath, position, workspace) {
     if (!fqn) {
         return null;
     }
-    const target = definitionLocation(workspace, fqn);
+    const target = definitionLocation(scoped, fqn);
     if (!target) {
         return null;
     }
@@ -49,7 +51,8 @@ function collectUsages(block, fqn, includeDeclaration, out) {
     }
 }
 export function referencesAt(text, filePath, position, workspace, includeDeclaration = true) {
-    const hit = hitAt(text, filePath, position, workspace);
+    const scoped = workspaceForOpenText(workspace, text, filePath);
+    const hit = hitAt(text, filePath, position, scoped);
     if (!hit) {
         return null;
     }
@@ -58,8 +61,8 @@ export function referencesAt(text, filePath, position, workspace, includeDeclara
         return null;
     }
     const out = [];
-    for (const key of workspace.registry.keys()) {
-        const doc = workspace.registry.get(key);
+    for (const key of scoped.registry.keys()) {
+        const doc = scoped.registry.get(key);
         if (!doc) {
             continue;
         }

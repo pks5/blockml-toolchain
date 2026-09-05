@@ -37,7 +37,7 @@
 
   <documentation>Editor ↔ LSP (stdio) ↔ @blockml/lsp server.ts
     → analyzeDocument (language-service.ts)
-    → parse + validate with workspace TypeRegistry
+    → parse + validate with workspace TypeRegistry overlaid by the open document
     → Diagnostic[] mapped to LSP ranges (positions.ts)
 
     Format: onDocumentFormatting → formatDocument → parse + serialize → TextEdit.
@@ -57,8 +57,9 @@
 
     Workspace bootstrap reads blockml.config.json (srcDir, libraries) inline — no @blockml/cli dependency.
     Corpus-first: always scan srcDir. Seed = package.json blockml.library then config.libraries
-    (additive). FQN dependencies resolve via discovered BlockML npm/workspace packages
-    (source root = srcDir, default blocks). Library blocks trees inside srcDir are not scanned twice.</documentation>
+    (additive). FQN dependencies resolve via discovered BlockML workspace then npm packages
+    (source root = srcDir, default blocks). Same type FQN: workspace wins over node_modules.
+    Library blocks trees inside srcDir are not scanned twice.</documentation>
 
   <references>
     <see type="lspdocumentation:ServerLifecycle" relation="ReadNext" />

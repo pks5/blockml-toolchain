@@ -1,7 +1,8 @@
 import { readFileSync, existsSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
-import type { Diagnostic } from "@blockml/bom";
+import type { BomDocument, Diagnostic } from "@blockml/bom";
 import { bootstrapTypeRegistry, defaultBootstrapPaths, resolveLibrarySeeds, TypeRegistry } from "@blockml/framework";
+import { parse } from "@blockml/parser";
 
 /** Globs registered with the client for workspace/didChangeWatchedFiles. */
 export const WATCH_GLOBS = ["**/*.bml", "**/blockml.config.json", "**/package.json"] as const;
@@ -85,6 +86,27 @@ const workspaceCache = new Map<string, WorkspaceState>();
 
 export function invalidateWorkspace(rootDir: string): void {
   workspaceCache.delete(resolve(rootDir));
+}
+
+/** Workspace view with the open document overlaid. Does not mutate the cache. */
+export function workspaceWithOpenDocument(
+  workspace: WorkspaceState,
+  document: BomDocument,
+): WorkspaceState {
+  return {
+    ...workspace,
+    registry: workspace.registry.withOverlay(document),
+  };
+}
+
+/** Overlay the open buffer when it parses. Falls back to the cached workspace. */
+export function workspaceForOpenText(
+  workspace: WorkspaceState,
+  text: string,
+  filePath: string,
+): WorkspaceState {
+  const parsed = parse(text, { filePath, continueOnError: true });
+  return parsed.document ? workspaceWithOpenDocument(workspace, parsed.document) : workspace;
 }
 
 export function createWorkspace(rootDir: string): WorkspaceState {

@@ -2,7 +2,7 @@ import type { BomDocument, Diagnostic } from "@blockml/bom";
 import { parse } from "@blockml/parser";
 import { serialize } from "@blockml/serializer";
 import { validate } from "@blockml/validator";
-import type { WorkspaceState } from "./workspace.js";
+import { workspaceWithOpenDocument, type WorkspaceState } from "./workspace.js";
 
 export interface AnalysisResult {
   diagnostics: Diagnostic[];
@@ -21,8 +21,9 @@ export function analyzeDocument(
     return { diagnostics, document: null };
   }
 
+  const scoped = workspaceWithOpenDocument(workspace, parseResult.document);
   const validateResult = validate(parseResult.document, {
-    typeRegistry: workspace.registry,
+    typeRegistry: scoped.registry,
     continueOnError: true,
   });
   diagnostics.push(...validateResult.diagnostics);

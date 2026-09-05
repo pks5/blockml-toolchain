@@ -1,5 +1,5 @@
 import { type LspPosition, type LspRange } from "./positions.js";
-import type { WorkspaceState } from "./workspace.js";
+import { type WorkspaceState } from "./workspace.js";
 export interface LspLocation {
     uri: string;
     range: LspRange;

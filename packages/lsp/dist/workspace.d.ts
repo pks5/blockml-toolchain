@@ -1,4 +1,4 @@
-import type { Diagnostic } from "@blockml/bom";
+import type { BomDocument, Diagnostic } from "@blockml/bom";
 import { TypeRegistry } from "@blockml/framework";
 /** Globs registered with the client for workspace/didChangeWatchedFiles. */
 export declare const WATCH_GLOBS: readonly ["**/*.bml", "**/blockml.config.json", "**/package.json"];
@@ -20,5 +20,9 @@ export interface WorkspaceState {
     bootstrapDiagnostics: Diagnostic[];
 }
 export declare function invalidateWorkspace(rootDir: string): void;
+/** Workspace view with the open document overlaid. Does not mutate the cache. */
+export declare function workspaceWithOpenDocument(workspace: WorkspaceState, document: BomDocument): WorkspaceState;
+/** Overlay the open buffer when it parses. Falls back to the cached workspace. */
+export declare function workspaceForOpenText(workspace: WorkspaceState, text: string, filePath: string): WorkspaceState;
 export declare function createWorkspace(rootDir: string): WorkspaceState;
 //# sourceMappingURL=workspace.d.ts.map

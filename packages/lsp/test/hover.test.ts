@@ -1,5 +1,6 @@
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { parse } from "@blockml/parser";
 import { resolveEffectiveMembers } from "@blockml/framework";
 import { createWorkspace, hoverAt } from "../src/index.js";
 import { offsetRangeToLsp } from "../src/xml-token.js";
@@ -162,5 +163,23 @@ describe("hoverAt", () => {
       ),
     ).toBeNull();
     expect(hoverAt("<not-a-block>", "hover.bml", { line: 0, character: 0 }, workspace)).toBeNull();
+  });
+
+  it("hovers the open buffer is-text when the disk registry has an older copy", () => {
+    const workspace = createWorkspace(ROOT);
+    const disk = HOVER_BML.replace(">hover fixture<", ">disk fixture<");
+    const parsed = parse(disk, { filePath: "/proj/blocks/HoverMe.bml", continueOnError: true });
+    expect(parsed.document).not.toBeNull();
+    workspace.registry.register(parsed.document!);
+    const info = hoverAt(
+      HOVER_BML,
+      "/proj/blocks/HoverMe.bml",
+      positionAt(HOVER_BML, "test:HoverMe"),
+      workspace,
+    );
+    expect(info).not.toBeNull();
+    expect(info!.contents.value).toContain("hover fixture");
+    expect(info!.contents.value).not.toContain("disk fixture");
+    expect(workspace.registry.get("com.blockml.test.hover.HoverMe")?.block.is).toBe("disk fixture");
   });
 });

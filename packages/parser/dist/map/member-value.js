@@ -76,6 +76,7 @@ export function parseMemberValue(raw, typeFqn, file, line = 1, column = 1, place
         if ("value" in result) {
             return literal(result.value, typeFqn, placement);
         }
+        return literal(trimmed, typeFqn, placement);
     }
     if (isBooleanLiteral(trimmed)) {
         return literal(normalizeBooleanValue(trimmed), typeFqn, placement);

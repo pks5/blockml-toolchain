@@ -35,7 +35,8 @@
   <baseType>core:Capability</baseType>
   <is>Parse and validate a BML document in workspace context</is>
 
-  <documentation>Editor-neutral analysis: parse(text) then validate with workspace TypeRegistry.</documentation>
+  <documentation>Editor-neutral analysis: parse(text) then validate with a TypeRegistry copy that
+    overlays the open document (same FQN). Cached workspace registry stays disk-only.</documentation>
 
   <references>
     <see type="lspdocumentation:PublicApi" relation="SeeAlso" />

@@ -39,7 +39,7 @@
 
   <documentation><![CDATA[Public exports from @blockml/framework (packages/framework/src/index.ts):
 
-    TypeRegistry — class; register/get/has/keys/size on BomDocument index
+    TypeRegistry — class; register/get/has/keys/size/withOverlay on BomDocument index
     bootstrapTypeRegistry(options?) → BootstrapResult
     bootstrapFullProjectRegistry({ rootDir, srcDir?, libraries? }) → BootstrapResult
     defaultBootstrapPaths(rootDir?) → string[]

@@ -51,7 +51,7 @@ export const documentationBlocks = [
     is: "Data flow from editor to diagnostics",
     doc: `Editor ↔ LSP (stdio) ↔ @blockml/lsp server.ts
     → analyzeDocument (language-service.ts)
-    → parse + validate with workspace TypeRegistry
+    → parse + validate with workspace TypeRegistry overlaid by the open document
     → Diagnostic[] mapped to LSP ranges (positions.ts)
 
     Format: onDocumentFormatting → formatDocument → parse + serialize → TextEdit.
@@ -71,8 +71,9 @@ export const documentationBlocks = [
 
     Workspace bootstrap reads blockml.config.json (srcDir, libraries) inline — no @blockml/cli dependency.
     Corpus-first: always scan srcDir. Seed = package.json blockml.library then config.libraries
-    (additive). FQN dependencies resolve via discovered BlockML npm/workspace packages
-    (source root = srcDir, default blocks). Library blocks trees inside srcDir are not scanned twice.`,
+    (additive). FQN dependencies resolve via discovered BlockML workspace then npm packages
+    (source root = srcDir, default blocks). Same type FQN: workspace wins over node_modules.
+    Library blocks trees inside srcDir are not scanned twice.`,
     refs: [
       { type: "lspdocumentation:ServerLifecycle", relation: "ReadNext" },
     ],
@@ -212,8 +213,11 @@ export const documentationBlocks = [
     continueOnError true on parse and validate — diagnostics survive partial BOM.
 
     Workspace TypeRegistry cached per rootDir until invalidateWorkspace.
-    File watchers trigger a full bootstrap rebuild from disk (not incremental,
-    not unsaved-buffer overlay). Paths under node_modules are skipped.
+    File watchers trigger a full bootstrap rebuild from disk (not incremental).
+    Paths under node_modules are skipped. Analysis, hover, definition, and
+    references overlay the open document onto a TypeRegistry copy (same FQN).
+    The cached workspace registry stays disk-only. Same type FQN: workspace
+    sources win over node_modules.
 
     Format is full-document parse→serialize; spaces only (serializer XmlWriter).
     No edits when parse cannot produce a document. xmlDeclaration inferred from
@@ -224,7 +228,8 @@ export const documentationBlocks = [
     Urmodell element. Language tags use org.blockml.bml.definition.* member
     documentation; type QNames use the target TypeRegistry block; concrete
     member tags use that member. Range is the token (whole QName). Unknown FQN
-    is still shown. Referenced types come from the disk TypeRegistry.
+    is still shown. Referenced types come from the TypeRegistry with the open
+    document overlaid.
 
     Outline is parse-only (no validator, no TypeRegistry). Hierarchical
     DocumentSymbol tree: Block Class, property Property, aggregation/association
@@ -235,7 +240,7 @@ export const documentationBlocks = [
     offered on type QNames and returns LocationLink with originSelectionRange
     covering the whole prefix:Local, dotted FQN, or unqualified PascalCase in a
     type slot (implicit namespace). Language tags are not definitions. Targets
-    and usages come from the disk TypeRegistry (no unsaved overlay).
+    and usages come from the TypeRegistry with the open document overlaid.
     includeDeclaration defaults true.
 
     Semantic tokens are an XML-stack walk (no parser). Element names are classified

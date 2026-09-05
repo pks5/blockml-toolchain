@@ -1,14 +1,16 @@
 import { parse } from "@blockml/parser";
 import { serialize } from "@blockml/serializer";
 import { validate } from "@blockml/validator";
+import { workspaceWithOpenDocument } from "./workspace.js";
 export function analyzeDocument(text, filePath, workspace) {
     const parseResult = parse(text, { filePath, continueOnError: true });
     const diagnostics = [...parseResult.diagnostics];
     if (!parseResult.document) {
         return { diagnostics, document: null };
     }
+    const scoped = workspaceWithOpenDocument(workspace, parseResult.document);
     const validateResult = validate(parseResult.document, {
-        typeRegistry: workspace.registry,
+        typeRegistry: scoped.registry,
         continueOnError: true,
     });
     diagnostics.push(...validateResult.diagnostics);

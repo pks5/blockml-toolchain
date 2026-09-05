@@ -305,7 +305,14 @@ const capabilities = [
     prefix: "fwcap",
     name: "TypeRegistry",
     is: "In-memory index of BlockDefinition documents by type FQN",
-    doc: "Class exported from registry/type-registry.ts. Implements bomapi:TypeRegistryReader (get/has).",
+    doc: `# In-memory index of BlockDefinition documents by type FQN
+
+    Class exported from registry/type-registry.ts. Implements bomapi:TypeRegistryReader (get/has).
+
+    - register prefers a non-node_modules source over a node_modules source for the same type FQN
+      (workspace beats dependency). Same-origin last write wins.
+    - withOverlay(document) returns a copy with that document registered — open-buffer overlay;
+      does not mutate this registry.`,
     tsExport: "TypeRegistry",
     refs: ["bomapi:TypeRegistryReader", "fwdocumentation:TypeRegistryBootstrap"],
   },

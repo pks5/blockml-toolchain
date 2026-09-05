@@ -1,6 +1,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 import { bootstrapTypeRegistry, defaultBootstrapPaths, resolveLibrarySeeds, TypeRegistry } from "@blockml/framework";
+import { parse } from "@blockml/parser";
 /** Globs registered with the client for workspace/didChangeWatchedFiles. */
 export const WATCH_GLOBS = ["**/*.bml", "**/blockml.config.json", "**/package.json"];
 /** True when a disk path should invalidate the cached TypeRegistry. */
@@ -62,6 +63,18 @@ function resolveLibraryPaths(config, rootDir) {
 const workspaceCache = new Map();
 export function invalidateWorkspace(rootDir) {
     workspaceCache.delete(resolve(rootDir));
+}
+/** Workspace view with the open document overlaid. Does not mutate the cache. */
+export function workspaceWithOpenDocument(workspace, document) {
+    return {
+        ...workspace,
+        registry: workspace.registry.withOverlay(document),
+    };
+}
+/** Overlay the open buffer when it parses. Falls back to the cached workspace. */
+export function workspaceForOpenText(workspace, text, filePath) {
+    const parsed = parse(text, { filePath, continueOnError: true });
+    return parsed.document ? workspaceWithOpenDocument(workspace, parsed.document) : workspace;
 }
 export function createWorkspace(rootDir) {
     const absRoot = resolve(rootDir);

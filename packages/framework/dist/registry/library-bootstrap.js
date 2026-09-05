@@ -1,6 +1,7 @@
 import { existsSync, readdirSync, readFileSync, realpathSync, statSync } from "node:fs";
 import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { parse } from "@blockml/parser";
+import { isNodeModulesPath } from "./package-paths.js";
 import { TypeRegistry } from "./type-registry.js";
 function collectBmlFiles(dir, out = []) {
     let entries;
@@ -130,9 +131,15 @@ export function peekLibraryTypeFqn(libraryPath) {
         return undefined;
     }
 }
+function preferWorkspaceLibrary(a, b) {
+    return Number(isNodeModulesPath(a)) - Number(isNodeModulesPath(b));
+}
 function resolveDepCandidate(libraryIndex, typeFqn, selfPath) {
-    const candidates = libraryIndex.get(typeFqn) ?? [];
-    return candidates.find((file) => canonicalPath(file) !== selfPath);
+    const candidates = (libraryIndex.get(typeFqn) ?? []).filter((file) => canonicalPath(file) !== selfPath);
+    if (candidates.length === 0) {
+        return undefined;
+    }
+    return [...candidates].sort(preferWorkspaceLibrary)[0];
 }
 function transitiveNestedPaths(outerPath, subLibraryEdges) {
     const nested = [];
@@ -344,7 +351,11 @@ export function bootstrapFromCorpusPaths(paths, rootDir) {
     return { registry, diagnostics };
 }
 export function findLibraryFileForType(typeFqn, searchRoots) {
-    return indexLibraryFiles(searchRoots).get(typeFqn)?.[0];
+    const files = indexLibraryFiles(searchRoots).get(typeFqn) ?? [];
+    if (files.length === 0) {
+        return undefined;
+    }
+    return [...files].sort(preferWorkspaceLibrary)[0];
 }
 export function parseLibraryDocument(libraryPath) {
     const source = readFileSync(libraryPath, "utf8");

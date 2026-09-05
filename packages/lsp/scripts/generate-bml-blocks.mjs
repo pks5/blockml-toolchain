@@ -187,7 +187,7 @@ const capabilities = [
     prefix: "lspcap",
     name: "AnalyzeDocument",
     is: "Parse and validate a BML document in workspace context",
-    doc: "Editor-neutral analysis: parse(text) then validate with workspace TypeRegistry.",
+    doc: "Editor-neutral analysis: parse(text) then validate with a TypeRegistry copy that overlays the open document (same FQN). Cached workspace registry stays disk-only.",
     tsExport: "analyzeDocument",
     inputs: [
       { name: "text", type: "type:Text", required: true },
@@ -247,7 +247,7 @@ const capabilities = [
     prefix: "lspcap",
     name: "DefinitionAt",
     is: "Go-to-definition from a type QName via TypeRegistry",
-    doc: "Parse-only XML-token hit-test. Resolvable type QNames (prefix:Local, dotted FQN, or unqualified PascalCase in a type slot via implicit namespace) are jump targets. Returns LocationLink[]: originSelectionRange covers the whole QName; target is registry.get(fqn).block.source. Language tags and concrete member tags are not definitions. Unknown FQN, no hit, or no document → null. Disk TypeRegistry only.",
+    doc: "Parse-only XML-token hit-test. Resolvable type QNames (prefix:Local, dotted FQN, or unqualified PascalCase in a type slot via implicit namespace) are jump targets. Returns LocationLink[]: originSelectionRange covers the whole QName; target is registry.get(fqn).block.source with the open document overlaid. Language tags and concrete member tags are not definitions. Unknown FQN, no hit, or no document → null.",
     tsExport: "definitionAt",
     inputs: [
       { name: "text", type: "type:Text", required: true },
@@ -263,7 +263,7 @@ const capabilities = [
     prefix: "lspcap",
     name: "ReferencesAt",
     is: "Find references to a type FQN from an LSP position",
-    doc: "Parse-only hit-test, then scan the disk TypeRegistry. Usages: baseTypeSource and member typeFqn. includeDeclaration (default true) also includes the defining block.source. No hit / no document → null. Hit with no usages → empty list. Unsaved buffers are not overlayed into the scan.",
+    doc: "Parse-only hit-test, then scan the TypeRegistry with the open document overlaid. Usages: baseTypeSource and member typeFqn. includeDeclaration (default true) also includes the defining block.source. No hit / no document → null. Hit with no usages → empty list.",
     tsExport: "referencesAt",
     inputs: [
       { name: "text", type: "type:Text", required: true },

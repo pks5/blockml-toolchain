@@ -1,7 +1,7 @@
 import type { DocumentationProseEntry, MemberDefinition } from "@blockml/bom";
 import { hitAt, memberTypeFqn } from "./hit-test.js";
 import type { LspPosition, LspRange } from "./positions.js";
-import type { WorkspaceState } from "./workspace.js";
+import { workspaceForOpenText, type WorkspaceState } from "./workspace.js";
 
 export interface MarkupContent {
   kind: "markdown";
@@ -71,7 +71,8 @@ export function hoverAt(
   position: LspPosition,
   workspace: WorkspaceState,
 ): HoverInfo | null {
-  const hit = hitAt(text, filePath, position, workspace);
+  const scoped = workspaceForOpenText(workspace, text, filePath);
+  const hit = hitAt(text, filePath, position, scoped);
   if (!hit) {
     return null;
   }
@@ -80,9 +81,9 @@ export function hoverAt(
   if (hit.kind === "member") {
     markdown = memberMarkdown(hit.member, hit.typeFqn ?? memberTypeFqn(hit.member));
   } else if (hit.kind === "language") {
-    markdown = languageMarkdown(hit.metaFqn, hit.member, workspace);
+    markdown = languageMarkdown(hit.metaFqn, hit.member, scoped);
   } else {
-    const registered = workspace.registry.get(hit.fqn)?.block;
+    const registered = scoped.registry.get(hit.fqn)?.block;
     if (hit.fqn === hit.block.type) {
       markdown = typeMarkdown(
         hit.fqn,

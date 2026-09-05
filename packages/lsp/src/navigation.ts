@@ -2,7 +2,7 @@ import { pathToFileURL } from "node:url";
 import type { BlockDefinition, SourceLocation } from "@blockml/bom";
 import { hitAt, memberTypeFqn, navigationFqn } from "./hit-test.js";
 import { bomLocationToRange, type LspPosition, type LspRange } from "./positions.js";
-import type { WorkspaceState } from "./workspace.js";
+import { workspaceForOpenText, type WorkspaceState } from "./workspace.js";
 
 export interface LspLocation {
   uri: string;
@@ -35,7 +35,8 @@ export function definitionAt(
   position: LspPosition,
   workspace: WorkspaceState,
 ): LspLocationLink[] | null {
-  const hit = hitAt(text, filePath, position, workspace);
+  const scoped = workspaceForOpenText(workspace, text, filePath);
+  const hit = hitAt(text, filePath, position, scoped);
   if (!hit || hit.kind !== "typeRef") {
     return null;
   }
@@ -43,7 +44,7 @@ export function definitionAt(
   if (!fqn) {
     return null;
   }
-  const target = definitionLocation(workspace, fqn);
+  const target = definitionLocation(scoped, fqn);
   if (!target) {
     return null;
   }
@@ -83,7 +84,8 @@ export function referencesAt(
   workspace: WorkspaceState,
   includeDeclaration = true,
 ): LspLocation[] | null {
-  const hit = hitAt(text, filePath, position, workspace);
+  const scoped = workspaceForOpenText(workspace, text, filePath);
+  const hit = hitAt(text, filePath, position, scoped);
   if (!hit) {
     return null;
   }
@@ -93,8 +95,8 @@ export function referencesAt(
   }
 
   const out: LspLocation[] = [];
-  for (const key of workspace.registry.keys()) {
-    const doc = workspace.registry.get(key);
+  for (const key of scoped.registry.keys()) {
+    const doc = scoped.registry.get(key);
     if (!doc) {
       continue;
     }

@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync, realpathSync, statSync } from "n
 import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import type { BlockDefinition, BlockInstance, BomDocument, Diagnostic } from "@blockml/bom";
 import { parse } from "@blockml/parser";
+import { isNodeModulesPath } from "./package-paths.js";
 import { TypeRegistry } from "./type-registry.js";
 
 function collectBmlFiles(dir: string, out: string[] = []): string[] {
@@ -134,13 +135,22 @@ export function peekLibraryTypeFqn(libraryPath: string): string | undefined {
   }
 }
 
+function preferWorkspaceLibrary(a: string, b: string): number {
+  return Number(isNodeModulesPath(a)) - Number(isNodeModulesPath(b));
+}
+
 function resolveDepCandidate(
   libraryIndex: Map<string, string[]>,
   typeFqn: string,
   selfPath: string,
 ): string | undefined {
-  const candidates = libraryIndex.get(typeFqn) ?? [];
-  return candidates.find((file) => canonicalPath(file) !== selfPath);
+  const candidates = (libraryIndex.get(typeFqn) ?? []).filter(
+    (file) => canonicalPath(file) !== selfPath,
+  );
+  if (candidates.length === 0) {
+    return undefined;
+  }
+  return [...candidates].sort(preferWorkspaceLibrary)[0];
 }
 
 function transitiveNestedPaths(
@@ -413,7 +423,11 @@ export function findLibraryFileForType(
   typeFqn: string,
   searchRoots: string[],
 ): string | undefined {
-  return indexLibraryFiles(searchRoots).get(typeFqn)?.[0];
+  const files = indexLibraryFiles(searchRoots).get(typeFqn) ?? [];
+  if (files.length === 0) {
+    return undefined;
+  }
+  return [...files].sort(preferWorkspaceLibrary)[0];
 }
 
 export function parseLibraryDocument(libraryPath: string): BomDocument | null {

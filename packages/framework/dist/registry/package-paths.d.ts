@@ -1,6 +1,8 @@
 export declare const CONFIG_FILE = "blockml.config.json";
 export declare const DEFAULT_SRC_DIR = "blocks";
 export declare function readJson(path: string): unknown | undefined;
+/** True when a disk path is inside a node_modules tree (npm / dependency copy). */
+export declare function isNodeModulesPath(filePath: string | undefined): boolean;
 export declare function canonicalPath(path: string): string;
 /** srcDir for a package: blockml.config.json override, else default "blocks". */
 export declare function packageSrcDir(packageDir: string): string;

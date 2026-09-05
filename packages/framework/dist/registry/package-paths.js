@@ -10,6 +10,13 @@ export function readJson(path) {
         return undefined;
     }
 }
+/** True when a disk path is inside a node_modules tree (npm / dependency copy). */
+export function isNodeModulesPath(filePath) {
+    if (!filePath) {
+        return false;
+    }
+    return filePath.replaceAll("\\", "/").split("/").includes("node_modules");
+}
 export function canonicalPath(path) {
     const abs = resolve(path);
     try {

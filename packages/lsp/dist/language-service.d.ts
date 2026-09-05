@@ -1,5 +1,5 @@
 import type { BomDocument, Diagnostic } from "@blockml/bom";
-import type { WorkspaceState } from "./workspace.js";
+import { type WorkspaceState } from "./workspace.js";
 export interface AnalysisResult {
     diagnostics: Diagnostic[];
     document: BomDocument | null;

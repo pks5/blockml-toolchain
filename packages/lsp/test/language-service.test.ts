@@ -78,4 +78,25 @@ describe("analyzeDocument", () => {
     expect(lsp.range.start).toEqual({ line: textLine, character: 2 });
     expect(lsp.range.end).toEqual({ line: textLine, character: 5 });
   });
+
+  it("overlays the open document without mutating the cached registry", () => {
+    const workspace = createWorkspace(ROOT);
+    const disk = [
+      '<block xmlns="http://blockml.org/bml"',
+      ' xmlns:core="org.blockml.bml.core"',
+      ' xmlns:test="com.blockml.test.overlay">',
+      "  <name>OverlayMe</name>",
+      "  <type>test:OverlayMe</type>",
+      "  <baseType>core:Block</baseType>",
+      "  <is>disk</is>",
+      "</block>",
+    ].join("\n");
+    const buffer = disk.replace(">disk<", ">buffer<");
+    const parsed = parse(disk, { filePath: "/proj/blocks/OverlayMe.bml", continueOnError: true });
+    expect(parsed.document).not.toBeNull();
+    workspace.registry.register(parsed.document!);
+    const result = analyzeDocument(buffer, "/proj/blocks/OverlayMe.bml", workspace);
+    expect(result.document?.block.is).toBe("buffer");
+    expect(workspace.registry.get("com.blockml.test.overlay.OverlayMe")?.block.is).toBe("disk");
+  });
 });

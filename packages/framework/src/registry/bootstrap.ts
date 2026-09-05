@@ -133,9 +133,19 @@ function discoverBlockmlSearchRoots(rootDir: string): string[] {
     }
   }
   const local = blockmlPackageBlocksRoot(resolve(rootDir));
-  const out = [...npm, ...workspace];
-  if (local && !out.includes(local)) {
+  const out: string[] = [];
+  if (local) {
     out.push(local);
+  }
+  for (const root of workspace) {
+    if (!out.includes(root)) {
+      out.push(root);
+    }
+  }
+  for (const root of npm) {
+    if (!out.includes(root)) {
+      out.push(root);
+    }
   }
   return out;
 }
