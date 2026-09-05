@@ -59,6 +59,7 @@ const MAP_TIME_DIAGNOSTIC_CODES = [
   "BML_DUPLICATE_COMPOSITION",
   "BML_DUPLICATE_PROPERTY_VALUE",
   "BML_UNEXPECTED_TEXT",
+  "BML_INVALID_VALUE",
 ];
 
 /** @type {BlockDef[]} */
@@ -88,6 +89,7 @@ const blocks = [
       { name: "isRoot", type: "type:Boolean", required: true },
       { name: "isEmbedded", type: "type:Boolean", required: true },
       { name: "diagnostics", type: "bomcommon:Diagnostic[]", required: true, doc: "Shared map-time diagnostics; structural errors append here without aborting." },
+      { name: "parseValue", type: "type:Text", doc: "Optional host parseValue hook from ParseOptions." },
     ],
   },
   {
@@ -144,6 +146,7 @@ const blocks = [
       { name: "isRoot", type: "type:Boolean" },
       { name: "isEmbedded", type: "type:Boolean" },
       { name: "diagnostics", type: "bomcommon:Diagnostic[]" },
+      { name: "parseValue", type: "type:Text", doc: "Optional host parseValue hook from ParseOptions." },
     ],
   },
   {

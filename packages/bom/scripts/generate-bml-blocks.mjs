@@ -872,6 +872,11 @@ const blocks = [
     fields: [
       { name: "filePath", type: "type:Text", doc: 'Default: "<memory>".' },
       { name: "continueOnError", type: "type:Boolean", doc: "Default: true." },
+      {
+        name: "parseValue",
+        type: "type:Text",
+        doc: "Optional host hook (typeFqn, raw) → parseValue result. Injected after TypeRegistry bootstrap.",
+      },
     ],
   },
   {

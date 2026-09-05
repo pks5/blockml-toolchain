@@ -188,6 +188,7 @@ export function mapBlockInstanceNode(
         loc.line,
         loc.column,
         "attribute",
+        ctx,
       );
       if (val) {
         memberValues[attrLocal] = val;
@@ -240,6 +241,7 @@ export function mapBlockInstanceNode(
       loc.line,
       loc.column,
       "element",
+      ctx,
     );
     if (val) {
       memberValues[childLocal] = val;

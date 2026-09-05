@@ -1,7 +1,13 @@
 import { parse } from "@blockml/parser";
 import { validate } from "@blockml/validator";
+import { evaluateParseValue } from "@blockml/framework";
 export function compileBmlToBom(input, options = {}) {
-    const parseResult = parse(input.source, { filePath: input.filePath });
+    const parseOptions = { filePath: input.filePath };
+    if (options.typeRegistry) {
+        const registry = options.typeRegistry;
+        parseOptions.parseValue = (fqn, raw) => evaluateParseValue(fqn, raw, registry);
+    }
+    const parseResult = parse(input.source, parseOptions);
     const diagnostics = [...parseResult.diagnostics];
     if (!parseResult.document) {
         return {

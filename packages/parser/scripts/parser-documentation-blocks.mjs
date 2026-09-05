@@ -108,6 +108,7 @@ export const documentationBlocks = [
     ParseOptions (owned by @blockml/bom):
     • filePath — default "<memory>"; written to BomDocument.source.filePath
     • continueOnError — default true; keep mapping after errors when possible
+    • parseValue — optional host hook for PrimitiveType.parseValue (injected after registry bootstrap)
 
     ParseResult (owned by @blockml/bom):
     • document — BomDocument | null (null on hard fail)

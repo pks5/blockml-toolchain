@@ -164,7 +164,8 @@ export const documentationBlocks = [
 
     ValidateResult: optional pragmaticModel (forked BomDocument), diagnostics[], success.
 
-    ParseOptions: filePath (default "<memory>"), continueOnError (default true).
+    ParseOptions: filePath (default "<memory>"), continueOnError (default true),
+    optional parseValue host hook (injected after TypeRegistry bootstrap).
 
     SerializeOptions: indent (default 2; 0=compact B13), xmlDeclaration (default false B17/B24).
 

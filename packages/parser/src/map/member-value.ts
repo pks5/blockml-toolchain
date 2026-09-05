@@ -6,6 +6,7 @@ import type {
   SourceLocation,
 } from "@blockml/bom";
 import { isBooleanLiteral, normalizeBooleanValue } from "../util/boolean.js";
+import type { MapContext } from "./context.js";
 
 export function containsUnescapedInterpolation(raw: string): boolean {
   for (let i = 0; i < raw.length - 1; i++) {
@@ -33,6 +34,18 @@ function parseJsonLike(raw: string): unknown {
   return trimmed;
 }
 
+function literal(
+  value: unknown,
+  typeFqn: string,
+  placement?: "attribute" | "element",
+): LiteralValue {
+  const lit: LiteralValue = { kind: "literal", value, typeFqn };
+  if (placement) {
+    lit.authoredPlacement = placement;
+  }
+  return lit;
+}
+
 export function parseMemberValue(
   raw: string | undefined,
   typeFqn: string,
@@ -40,6 +53,7 @@ export function parseMemberValue(
   line = 1,
   column = 1,
   placement?: "attribute" | "element",
+  ctx?: MapContext,
 ): MemberValue | undefined {
   if (raw === undefined) {
     return undefined;
@@ -71,39 +85,35 @@ export function parseMemberValue(
     return interpolated;
   }
 
-  if (isBooleanLiteral(trimmed)) {
-    const lit: LiteralValue = {
-      kind: "literal",
-      value: normalizeBooleanValue(trimmed),
-      typeFqn,
-    };
-    if (placement) {
-      lit.authoredPlacement = placement;
+  if (looksLikeJson) {
+    return literal(parseJsonLike(trimmed), typeFqn, placement);
+  }
+
+  if (ctx?.parseValue) {
+    const result = ctx.parseValue(typeFqn, trimmed);
+    if (!result.ok) {
+      ctx.diagnostics.push({
+        severity: "error",
+        code: "BML_INVALID_VALUE",
+        message: result.message,
+        source: { file, line, column },
+      });
+      return literal(trimmed, typeFqn, placement);
     }
-    return lit;
+    if ("value" in result) {
+      return literal(result.value, typeFqn, placement);
+    }
+  }
+
+  if (isBooleanLiteral(trimmed)) {
+    return literal(normalizeBooleanValue(trimmed), typeFqn, placement);
   }
 
   if (/^-?\d+(\.\d+)?$/.test(trimmed)) {
-    const lit: LiteralValue = {
-      kind: "literal",
-      value: Number(trimmed),
-      typeFqn,
-    };
-    if (placement) {
-      lit.authoredPlacement = placement;
-    }
-    return lit;
+    return literal(Number(trimmed), typeFqn, placement);
   }
 
-  const lit: LiteralValue = {
-    kind: "literal",
-    value: parseJsonLike(trimmed),
-    typeFqn,
-  };
-  if (placement) {
-    lit.authoredPlacement = placement;
-  }
-  return lit;
+  return literal(parseJsonLike(trimmed), typeFqn, placement);
 }
 
 export function expressionFromRaw(

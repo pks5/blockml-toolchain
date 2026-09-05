@@ -54,6 +54,11 @@
           "name": "diagnostics",
           "type": "bomcommon:Diagnostic[]",
           "required": true
+        },
+        {
+          "name": "parseValue",
+          "type": "type:Text",
+          "required": false
         }
       ]
     },
@@ -162,6 +167,11 @@
         {
           "name": "diagnostics",
           "type": "bomcommon:Diagnostic[]",
+          "required": false
+        },
+        {
+          "name": "parseValue",
+          "type": "type:Text",
           "required": false
         }
       ]
@@ -1324,7 +1334,8 @@
     "BML_NESTED_COMPOSITION",
     "BML_DUPLICATE_COMPOSITION",
     "BML_DUPLICATE_PROPERTY_VALUE",
-    "BML_UNEXPECTED_TEXT"
+    "BML_UNEXPECTED_TEXT",
+    "BML_INVALID_VALUE"
   ],
   "documentationBlocks": [
     "Introduction",

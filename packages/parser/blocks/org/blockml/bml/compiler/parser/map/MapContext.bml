@@ -61,6 +61,9 @@
     <diagnostics type="bomcommon:Diagnostic[]">
       <documentation>Shared map-time diagnostics; structural errors append here without aborting. (required)</documentation>
     </diagnostics>
+    <parseValue type="type:Text">
+      <documentation>Optional host parseValue hook from ParseOptions. (optional)</documentation>
+    </parseValue>
   </properties>
 
 </block>

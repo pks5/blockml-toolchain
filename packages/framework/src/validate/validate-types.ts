@@ -20,6 +20,7 @@ import {
   memberIdentityKey,
   resolveEffectiveMembers,
 } from "../resolve/resolve-effective-members.js";
+import { validateParseValues } from "./validate-parse-values.js";
 import { validateReferences } from "./validate-references.js";
 
 const TEXT_TYPE_FQN = "org.blockml.bml.type.Text";
@@ -335,6 +336,7 @@ export function validateTypes(
   }
 
   diagnostics.push(...validateReferences(document, registry));
+  diagnostics.push(...validateParseValues(document, registry));
   validateBlockDefinition(document.block, registry, file, diagnostics);
   walkCompositions(document.block, registry, file, diagnostics);
 

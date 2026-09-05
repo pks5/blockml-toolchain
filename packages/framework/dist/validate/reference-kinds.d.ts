@@ -1,0 +1,50 @@
+import type { TypeExpression } from "@blockml/bom";
+import type { TypeRegistry } from "../registry/type-registry.js";
+export declare const TYPE_REFERENCE = "org.blockml.bml.type.TypeReference";
+export declare const TYPE_REFERENCE_ENTITY = "org.blockml.bml.type.TypeReferenceEntity";
+export declare const PACKAGE_REFERENCE = "org.blockml.bml.type.PackageReference";
+export declare const PACKAGE_REFERENCE_ENTITY = "org.blockml.bml.type.PackageReferenceEntity";
+export declare const INSTANCE_REFERENCE = "org.blockml.bml.type.InstanceReference";
+export declare const INSTANCE_REFERENCE_ENTITY = "org.blockml.bml.type.InstanceReferenceEntity";
+export declare const PROPERTY_REFERENCE = "org.blockml.bml.type.PropertyReference";
+export declare const PROPERTY_REFERENCE_ENTITY = "org.blockml.bml.type.PropertyReferenceEntity";
+export declare const AGGREGATION_REFERENCE = "org.blockml.bml.type.AggregationReference";
+export declare const AGGREGATION_REFERENCE_ENTITY = "org.blockml.bml.type.AggregationReferenceEntity";
+export declare const ASSOCIATION_REFERENCE = "org.blockml.bml.type.AssociationReference";
+export declare const ASSOCIATION_REFERENCE_ENTITY = "org.blockml.bml.type.AssociationReferenceEntity";
+export declare const CAPABILITY_REFERENCE = "org.blockml.bml.type.CapabilityReference";
+export declare const CAPABILITY_REFERENCE_ENTITY = "org.blockml.bml.type.CapabilityReferenceEntity";
+export declare const TYPE_IDENTIFIER = "org.blockml.bml.type.TypeIdentifier";
+export declare const TYPE_IDENTIFIER_ENTITY = "org.blockml.bml.type.TypeIdentifierEntity";
+export declare const PACKAGE_IDENTIFIER = "org.blockml.bml.type.PackageIdentifier";
+export declare const PACKAGE_IDENTIFIER_ENTITY = "org.blockml.bml.type.PackageIdentifierEntity";
+export declare const INSTANCE_IDENTIFIER = "org.blockml.bml.type.InstanceIdentifier";
+export declare const INSTANCE_IDENTIFIER_ENTITY = "org.blockml.bml.type.InstanceIdentifierEntity";
+export declare const MEMBER_IDENTIFIER = "org.blockml.bml.type.MemberIdentifier";
+export declare const MEMBER_IDENTIFIER_ENTITY = "org.blockml.bml.type.MemberIdentifierEntity";
+export declare const PROPERTY_IDENTIFIER = "org.blockml.bml.type.PropertyIdentifier";
+export declare const PROPERTY_IDENTIFIER_ENTITY = "org.blockml.bml.type.PropertyIdentifierEntity";
+export declare const AGGREGATION_IDENTIFIER = "org.blockml.bml.type.AggregationIdentifier";
+export declare const AGGREGATION_IDENTIFIER_ENTITY = "org.blockml.bml.type.AggregationIdentifierEntity";
+export declare const ASSOCIATION_IDENTIFIER = "org.blockml.bml.type.AssociationIdentifier";
+export declare const ASSOCIATION_IDENTIFIER_ENTITY = "org.blockml.bml.type.AssociationIdentifierEntity";
+export declare const CAPABILITY_IDENTIFIER = "org.blockml.bml.type.CapabilityIdentifier";
+export declare const CAPABILITY_IDENTIFIER_ENTITY = "org.blockml.bml.type.CapabilityIdentifierEntity";
+export type ReferenceKind = "type" | "package" | "instance" | "property" | "aggregation" | "association" | "capability";
+export type ClassifiedDeclaredType = {
+    role: "reference";
+    kind: ReferenceKind;
+    isEntity: boolean;
+    boundFqn?: string;
+} | {
+    role: "identifier";
+};
+export declare function unwrapNamed(expr: TypeExpression | undefined): {
+    fqn: string;
+    typeArguments?: TypeExpression[];
+} | undefined;
+export declare function namedTypeFqn(expr: TypeExpression | undefined, fallback?: string): string | undefined;
+export declare function firstTypeArgumentFqn(expr: TypeExpression | undefined): string | undefined;
+export declare function classifyDeclaredFqn(fqn: string, registry: TypeRegistry, boundFqn?: string): ClassifiedDeclaredType | undefined;
+export declare function classifyDeclaredType(expr: TypeExpression | undefined, registry: TypeRegistry, fallbackFqn?: string): ClassifiedDeclaredType | undefined;
+//# sourceMappingURL=reference-kinds.d.ts.map

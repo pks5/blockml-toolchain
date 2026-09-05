@@ -1953,6 +1953,11 @@
           "name": "continueOnError",
           "type": "type:Boolean",
           "required": false
+        },
+        {
+          "name": "parseValue",
+          "type": "type:Text",
+          "required": false
         }
       ]
     },

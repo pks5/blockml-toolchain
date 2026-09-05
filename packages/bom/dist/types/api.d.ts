@@ -13,11 +13,27 @@ export interface SerializeResult {
     diagnostics: Diagnostic[];
     success: boolean;
 }
+export type ParseValueResult = {
+    ok: true;
+    value: unknown;
+} | {
+    ok: true;
+    skipped: true;
+} | {
+    ok: false;
+    message: string;
+};
+export type ParseValueHook = (typeFqn: string, raw: string) => ParseValueResult;
 export interface ParseOptions {
     /** default: "<memory>" — written to BomDocument.source.filePath */
     filePath?: string;
     /** default true — keep mapping after errors; attach document when possible */
     continueOnError?: boolean;
+    /**
+     * Optional host hook for PrimitiveType.parseValue.
+     * Injected after TypeRegistry bootstrap; omitted during library bootstrap.
+     */
+    parseValue?: ParseValueHook;
 }
 export interface SerializeOptions {
     /** default 2 — pretty-print spaces (B13); 0 = compact */

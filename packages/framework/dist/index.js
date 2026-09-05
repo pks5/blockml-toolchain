@@ -10,6 +10,7 @@ export { parseExpression } from "./expression/parse-expression.js";
 export { parseInterpolatedText } from "./expression/parse-interpolated-text.js";
 export { evaluateExpression, evaluateInterpolatedText, ExpressionEvaluationError, } from "./expression/evaluate-expression.js";
 export { validateTypes, getPropertyNumericValue, isLiteralValue, } from "./validate/validate-types.js";
+export { evaluateParseValue } from "./validate/evaluate-parse-value.js";
 export { validateVersions } from "./validate/validate-versions.js";
 export { validateConstraints } from "./validate/validate-constraints.js";
 export { validateEmbeddedBlocks } from "./validate/validate-embedded-blocks.js";

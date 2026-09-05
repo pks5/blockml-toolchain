@@ -45,11 +45,15 @@
       AssociationReference, CapabilityReference, and the matching *ReferenceEntity wrappers
     - Identifier types (`TypeIdentifier`, `MemberIdentifier`, …) are syntax-only and are not
       existence-checked
+
+    After the reference walk, literal values with a declared PrimitiveType are checked via
+    fwcap:EvaluateParseValue. Failure → BML_INVALID_VALUE. Existence stays on the reference walk.
   </documentation>
 
   <references>
     <see type="fwcap:ResolveEffectiveMembers" relation="SeeAlso" />
     <see type="fwcap:ParseExpression" relation="SeeAlso" />
+    <see type="fwcap:EvaluateParseValue" relation="SeeAlso" />
   </references>
 
   <properties>

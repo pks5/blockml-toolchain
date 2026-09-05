@@ -122,7 +122,7 @@ export function mapBlockInstanceNode(element, ctx) {
             if (["id", "version", "bean", "scope"].includes(attrLocal) && attrName.startsWith("bml:")) {
                 continue;
             }
-            const val = parseMemberValue(attr.value, typeFqn, ctx.filePath, loc.line, loc.column, "attribute");
+            const val = parseMemberValue(attr.value, typeFqn, ctx.filePath, loc.line, loc.column, "attribute", ctx);
             if (val) {
                 memberValues[attrLocal] = val;
             }
@@ -163,7 +163,7 @@ export function mapBlockInstanceNode(element, ctx) {
             continue;
         }
         const { text } = getCharacterData(child);
-        const val = parseMemberValue(text || getAttribute(child, "value"), typeFqn, ctx.filePath, loc.line, loc.column, "element");
+        const val = parseMemberValue(text || getAttribute(child, "value"), typeFqn, ctx.filePath, loc.line, loc.column, "element", ctx);
         if (val) {
             memberValues[childLocal] = val;
         }

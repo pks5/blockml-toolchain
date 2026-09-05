@@ -24,7 +24,14 @@ function parseJsonLike(raw) {
     }
     return trimmed;
 }
-export function parseMemberValue(raw, typeFqn, file, line = 1, column = 1, placement) {
+function literal(value, typeFqn, placement) {
+    const lit = { kind: "literal", value, typeFqn };
+    if (placement) {
+        lit.authoredPlacement = placement;
+    }
+    return lit;
+}
+export function parseMemberValue(raw, typeFqn, file, line = 1, column = 1, placement, ctx) {
     if (raw === undefined) {
         return undefined;
     }
@@ -52,37 +59,31 @@ export function parseMemberValue(raw, typeFqn, file, line = 1, column = 1, place
         }
         return interpolated;
     }
-    if (isBooleanLiteral(trimmed)) {
-        const lit = {
-            kind: "literal",
-            value: normalizeBooleanValue(trimmed),
-            typeFqn,
-        };
-        if (placement) {
-            lit.authoredPlacement = placement;
+    if (looksLikeJson) {
+        return literal(parseJsonLike(trimmed), typeFqn, placement);
+    }
+    if (ctx?.parseValue) {
+        const result = ctx.parseValue(typeFqn, trimmed);
+        if (!result.ok) {
+            ctx.diagnostics.push({
+                severity: "error",
+                code: "BML_INVALID_VALUE",
+                message: result.message,
+                source: { file, line, column },
+            });
+            return literal(trimmed, typeFqn, placement);
         }
-        return lit;
+        if ("value" in result) {
+            return literal(result.value, typeFqn, placement);
+        }
+    }
+    if (isBooleanLiteral(trimmed)) {
+        return literal(normalizeBooleanValue(trimmed), typeFqn, placement);
     }
     if (/^-?\d+(\.\d+)?$/.test(trimmed)) {
-        const lit = {
-            kind: "literal",
-            value: Number(trimmed),
-            typeFqn,
-        };
-        if (placement) {
-            lit.authoredPlacement = placement;
-        }
-        return lit;
+        return literal(Number(trimmed), typeFqn, placement);
     }
-    const lit = {
-        kind: "literal",
-        value: parseJsonLike(trimmed),
-        typeFqn,
-    };
-    if (placement) {
-        lit.authoredPlacement = placement;
-    }
-    return lit;
+    return literal(parseJsonLike(trimmed), typeFqn, placement);
 }
 export function expressionFromRaw(raw, loc) {
     const inner = raw.startsWith("${") ? raw.slice(2, -1).trim() : raw.trim();

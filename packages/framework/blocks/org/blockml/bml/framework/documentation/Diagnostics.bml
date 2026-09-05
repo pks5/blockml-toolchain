@@ -54,6 +54,7 @@
     • BML_EXPR_SYNTAX_ERROR — unclosed ${} in interpolated text
     • BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION — hole uses @model, @bean, or a forbidden call
     • BML_EXPR_TYPE_MISMATCH — interpolated text on a non-Text member
+    • BML_INVALID_VALUE — PrimitiveType.parseValue threw on a literal (property value/values, instance memberValues, TypeReferenceEntity.value). Message is the thrown Error text. Expressions, interpolation, unions, StructType, and EnumType are skipped.
 
     validateInstances:
     • BML_UNKNOWN_TYPE — composition instance typeFqn not in TypeRegistry

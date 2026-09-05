@@ -127,6 +127,7 @@
         <fwcap:ValidateReadOnly />
         <fwcap:GetPropertyNumericValue />
         <fwcap:IsLiteralValue />
+        <fwcap:EvaluateParseValue />
         <fwdocumentation:Introduction />
         <fwdocumentation:LayerSeparation />
         <fwdocumentation:ArchitectureOverview />

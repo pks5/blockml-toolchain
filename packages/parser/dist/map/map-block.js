@@ -112,6 +112,7 @@ function mapBlockDefinition(element, ctx, parentType) {
             isRoot: false,
             isEmbedded: false,
             diagnostics: ctx.diagnostics,
+            ...(ctx.parseValue ? { parseValue: ctx.parseValue } : {}),
         });
         const sb = mapBlockDefinition(sbEl, sbCtx, block.type);
         if (!sb.type) {
@@ -127,6 +128,7 @@ function mapBlockDefinition(element, ctx, parentType) {
             isRoot: false,
             isEmbedded: true,
             diagnostics: ctx.diagnostics,
+            ...(ctx.parseValue ? { parseValue: ctx.parseValue } : {}),
         });
         block.embeddedBlocks.push(mapBlockDefinition(ebEl, ebCtx));
     }
@@ -893,14 +895,14 @@ function mapPropertyValues(element, prop, typeFqn, ctx) {
         const attrVal = local === "value" ? getAttribute(child, "value") : undefined;
         const { text } = getCharacterData(child);
         const raw = attrVal ?? text;
-        const val = parseMemberValue(raw, typeFqn, ctx.filePath, 1, 1, "element");
+        const val = parseMemberValue(raw, typeFqn, ctx.filePath, 1, 1, "element", ctx);
         if (val) {
             addEntry(ns, val, child);
         }
     }
     const attrVal = getAttribute(element, "value");
     if (attrVal !== undefined) {
-        const val = parseMemberValue(attrVal, typeFqn, ctx.filePath, 1, 1, "attribute");
+        const val = parseMemberValue(attrVal, typeFqn, ctx.filePath, 1, 1, "attribute", ctx);
         if (val) {
             const loc = attributeValueLoc(ctx.filePath, ctx.source, element, "value", attrVal);
             addEntry("", val, undefined, loc);
@@ -941,7 +943,7 @@ function mapSuggestions(element, prop, ctx) {
                 if (attr.name.startsWith("xmlns") || attr.name.startsWith("xsi:")) {
                     continue;
                 }
-                const val = parseMemberValue(attr.value, local, ctx.filePath, loc.line, loc.column, "attribute");
+                const val = parseMemberValue(attr.value, local, ctx.filePath, loc.line, loc.column, "attribute", ctx);
                 if (val !== undefined) {
                     memberValues[attr.name] = val;
                 }
@@ -1040,8 +1042,12 @@ function mapCapabilityThrows(element, cap, ctx) {
 export function mapBlock(element, ctx) {
     return mapBlockDefinition(element, ctx);
 }
-export function mapDocumentBlock(element, filePath, source, bindings, diagnostics = []) {
-    const ctx = createMapContext(filePath, source, bindings, { isRoot: true, diagnostics });
+export function mapDocumentBlock(element, filePath, source, bindings, diagnostics = [], parseValue) {
+    const ctx = createMapContext(filePath, source, bindings, {
+        isRoot: true,
+        diagnostics,
+        ...(parseValue ? { parseValue } : {}),
+    });
     return withElementLocation(filePath, source, element, () => mapBlockDefinition(element, ctx));
 }
 //# sourceMappingURL=map-block.js.map

@@ -28,6 +28,7 @@ const FRAMEWORK_DIAGNOSTIC_CODES = [
   "BML_GENERIC_CONSTRAINT_VIOLATION",
   "BML_GENERICS_ARGUMENT_MISMATCH",
   "BML_GENERICS_DIRECTIVE_NOT_ALLOWED",
+  "BML_INVALID_VALUE",
   "BML_LIBRARY_NESTING_VIOLATION",
   "BML_LIBRARY_RESOLVE_ERROR",
   "BML_MEMBER_COLLISION",
@@ -624,6 +625,20 @@ const capabilities = [
     tsExport: "isLiteralValue",
     inputs: [{ name: "value", type: "bomvalue:MemberValue", doc: "Member value or undefined." }],
     output: { name: "result", type: "type:Boolean", required: true },
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "EvaluateParseValue",
+    is: "Evaluate PrimitiveType.parseValue on authored text",
+    tsExport: "evaluateParseValue",
+    inputs: [
+      { name: "typeFqn", type: "type:Text", required: true, doc: "Declared primitive FQN or type expression." },
+      { name: "raw", type: "type:Text", required: true, doc: "Authored XML text." },
+      { name: "registry", type: "fwcap:TypeRegistry", required: true },
+    ],
+    output: { name: "result", type: "type:Text", required: true, doc: "ok+value, ok+skipped, or ok:false+message." },
+    refs: ["fwcap:ResolveEffectiveMembers", "fwcap:ValidateTypes"],
   },
   {
     pkg: "capability",

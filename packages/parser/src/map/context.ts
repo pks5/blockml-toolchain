@@ -1,4 +1,4 @@
-import type { Diagnostic } from "@blockml/bom";
+import type { Diagnostic, ParseValueHook } from "@blockml/bom";
 
 export interface MapContext {
   filePath: string;
@@ -9,6 +9,7 @@ export interface MapContext {
   isRoot: boolean;
   isEmbedded: boolean;
   diagnostics: Diagnostic[];
+  parseValue?: ParseValueHook;
 }
 
 export function createMapContext(
@@ -21,6 +22,7 @@ export function createMapContext(
     isRoot?: boolean;
     isEmbedded?: boolean;
     diagnostics?: Diagnostic[];
+    parseValue?: ParseValueHook;
   } = {},
 ): MapContext {
   const ctx: MapContext = {
@@ -34,6 +36,9 @@ export function createMapContext(
   };
   if (options.parentBlockType !== undefined) {
     ctx.parentBlockType = options.parentBlockType;
+  }
+  if (options.parseValue !== undefined) {
+    ctx.parseValue = options.parseValue;
   }
   return ctx;
 }

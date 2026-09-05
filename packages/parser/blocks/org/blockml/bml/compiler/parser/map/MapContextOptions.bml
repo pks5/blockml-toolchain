@@ -52,6 +52,9 @@
     <diagnostics type="bomcommon:Diagnostic[]">
       <documentation>diagnostics. TS type: bomcommon:Diagnostic[]. (optional)</documentation>
     </diagnostics>
+    <parseValue type="type:Text">
+      <documentation>Optional host parseValue hook from ParseOptions. (optional)</documentation>
+    </parseValue>
   </properties>
 
 </block>

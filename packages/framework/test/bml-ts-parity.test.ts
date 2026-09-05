@@ -56,6 +56,7 @@ const TS_CAPABILITY_EXPORTS = [
   "peekLibraryTypeFqn",
   "getPropertyNumericValue",
   "isLiteralValue",
+  "evaluateParseValue",
   "projectSourceRoots",
   "projectLibraryPackageRoots",
   "projectLibraryPackageDirs",
@@ -168,6 +169,8 @@ function readDiagnosticCodesFromSrc(): string[] {
   for (const rel of [
     "validate/validate-types.ts",
     "validate/validate-references.ts",
+    "validate/validate-parse-values.ts",
+    "validate/evaluate-parse-value.ts",
     "validate/validate-constraints.ts",
     "validate/validate-versions.ts",
     "validate/validate-embedded-blocks.ts",

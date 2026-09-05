@@ -127,6 +127,16 @@ function literalText(val: MemberValue | undefined): string | undefined {
   return undefined;
 }
 
+function memberValueSource(val: MemberValue | undefined): SourceLocation | undefined {
+  if (!val) {
+    return undefined;
+  }
+  if (val.kind === "expression" || val.kind === "interpolated") {
+    return val.source;
+  }
+  return undefined;
+}
+
 function packageIsKnown(pkg: string, registry: TypeRegistry): boolean {
   const prefix = `${pkg}.`;
   return registry.keys().some((fqn) => fqn.startsWith(prefix));
@@ -196,7 +206,9 @@ function parseMemberPath(raw: string): { ownerFqn?: string; name: string } {
       raw.trim(),
     );
   if (sectioned) {
-    return { ownerFqn: sectioned[1], name: sectioned[3]! };
+    const ownerFqn = sectioned[1];
+    const name = sectioned[3]!;
+    return ownerFqn ? { ownerFqn, name } : { name };
   }
   const trimmed = raw.trim();
   const lastDot = trimmed.lastIndexOf(".");
@@ -347,7 +359,7 @@ function checkMemberValue(
   if (text === undefined) {
     return;
   }
-  checkReferenceValue(classified, text, ctx, loc ?? val?.source);
+  checkReferenceValue(classified, text, ctx, loc ?? memberValueSource(val));
 }
 
 function checkMemberTypes(member: MemberDefinition, ctx: CheckCtx): void {
@@ -362,9 +374,9 @@ function checkMemberTypes(member: MemberDefinition, ctx: CheckCtx): void {
       checkTypeReferenceEntity(group, ctx, loc);
     }
     const classified = classifyDeclaredType(member.type, ctx.registry, member.typeFqn);
-    checkMemberValue(member.value, classified, ctx, member.value?.source ?? loc);
+    checkMemberValue(member.value, classified, ctx, memberValueSource(member.value) ?? loc);
     for (const entry of member.values ?? []) {
-      checkMemberValue(entry.value, classified, ctx, entry.value.source ?? loc);
+      checkMemberValue(entry.value, classified, ctx, memberValueSource(entry.value) ?? loc);
     }
     for (const suggestion of member.suggestions ?? []) {
       walkInstance(suggestion, ctx);
@@ -419,7 +431,7 @@ function walkInstance(instance: BlockInstance, ctx: CheckCtx): void {
         : undefined;
     const typeFqn = member.kind === "property" || member.kind === "capability" ? member.typeFqn : undefined;
     const classified = classifyDeclaredType(type, ctx.registry, typeFqn);
-    checkMemberValue(val, classified, ctx, val.source ?? instance.source);
+    checkMemberValue(val, classified, ctx, memberValueSource(val) ?? instance.source);
   }
 
   for (const agg of instance.aggregationCompositions ?? []) {

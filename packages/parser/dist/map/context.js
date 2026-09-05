@@ -11,6 +11,9 @@ export function createMapContext(filePath, source, bindings, options = {}) {
     if (options.parentBlockType !== undefined) {
         ctx.parentBlockType = options.parentBlockType;
     }
+    if (options.parseValue !== undefined) {
+        ctx.parseValue = options.parseValue;
+    }
     return ctx;
 }
 //# sourceMappingURL=context.js.map

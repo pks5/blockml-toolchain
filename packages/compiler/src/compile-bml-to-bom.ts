@@ -1,14 +1,19 @@
-import type { BomDocument, Diagnostic } from "@blockml/bom";
+import type { BomDocument, Diagnostic, ParseOptions } from "@blockml/bom";
 import { parse } from "@blockml/parser";
 import { validate } from "@blockml/validator";
-import type { TypeRegistry } from "@blockml/framework";
+import { evaluateParseValue, type TypeRegistry } from "@blockml/framework";
 import type { CompileInput, CompileOptions, CompilerResult, ValidateRegistryResult } from "./types.js";
 
 export function compileBmlToBom(
   input: CompileInput,
   options: CompileOptions = {},
 ): CompilerResult<BomDocument> {
-  const parseResult = parse(input.source, { filePath: input.filePath });
+  const parseOptions: ParseOptions = { filePath: input.filePath };
+  if (options.typeRegistry) {
+    const registry = options.typeRegistry;
+    parseOptions.parseValue = (fqn, raw) => evaluateParseValue(fqn, raw, registry);
+  }
+  const parseResult = parse(input.source, parseOptions);
   const diagnostics: Diagnostic[] = [...parseResult.diagnostics];
 
   if (!parseResult.document) {

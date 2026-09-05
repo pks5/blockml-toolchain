@@ -17,6 +17,7 @@ import type {
   KeywordEntry,
   MemberDefinition,
   MemberValue,
+  ParseValueHook,
   PropertyDefinition,
   PropertyValueEntry,
   SourceLocation,
@@ -203,6 +204,7 @@ function mapBlockDefinition(
       isRoot: false,
       isEmbedded: false,
       diagnostics: ctx.diagnostics,
+      ...(ctx.parseValue ? { parseValue: ctx.parseValue } : {}),
     });
     const sb = mapBlockDefinition(sbEl, sbCtx, block.type);
     if (!sb.type) {
@@ -223,6 +225,7 @@ function mapBlockDefinition(
       isRoot: false,
       isEmbedded: true,
       diagnostics: ctx.diagnostics,
+      ...(ctx.parseValue ? { parseValue: ctx.parseValue } : {}),
     });
     block.embeddedBlocks.push(mapBlockDefinition(ebEl, ebCtx));
   }
@@ -1186,14 +1189,14 @@ function mapPropertyValues(
     const attrVal = local === "value" ? getAttribute(child, "value") : undefined;
     const { text } = getCharacterData(child);
     const raw = attrVal ?? text;
-    const val = parseMemberValue(raw, typeFqn, ctx.filePath, 1, 1, "element");
+    const val = parseMemberValue(raw, typeFqn, ctx.filePath, 1, 1, "element", ctx);
     if (val) {
       addEntry(ns, val, child);
     }
   }
   const attrVal = getAttribute(element, "value");
   if (attrVal !== undefined) {
-    const val = parseMemberValue(attrVal, typeFqn, ctx.filePath, 1, 1, "attribute");
+    const val = parseMemberValue(attrVal, typeFqn, ctx.filePath, 1, 1, "attribute", ctx);
     if (val) {
       const loc = attributeValueLoc(ctx.filePath, ctx.source, element, "value", attrVal);
       addEntry("", val, undefined, loc);
@@ -1247,6 +1250,7 @@ function mapSuggestions(element: Element, prop: PropertyDefinition, ctx: MapCont
           loc.line,
           loc.column,
           "attribute",
+          ctx,
         );
         if (val !== undefined) {
           memberValues[attr.name] = val;
@@ -1368,7 +1372,12 @@ export function mapDocumentBlock(
   source: string,
   bindings: Record<string, string>,
   diagnostics: Diagnostic[] = [],
+  parseValue?: ParseValueHook,
 ): BlockDefinition {
-  const ctx = createMapContext(filePath, source, bindings, { isRoot: true, diagnostics });
+  const ctx = createMapContext(filePath, source, bindings, {
+    isRoot: true,
+    diagnostics,
+    ...(parseValue ? { parseValue } : {}),
+  });
   return withElementLocation(filePath, source, element, () => mapBlockDefinition(element, ctx));
 }

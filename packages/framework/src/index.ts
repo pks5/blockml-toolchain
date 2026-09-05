@@ -44,6 +44,8 @@ export {
   getPropertyNumericValue,
   isLiteralValue,
 } from "./validate/validate-types.js";
+export { evaluateParseValue } from "./validate/evaluate-parse-value.js";
+export type { EvaluateParseValueResult } from "./validate/evaluate-parse-value.js";
 export { validateVersions } from "./validate/validate-versions.js";
 export { validateConstraints } from "./validate/validate-constraints.js";
 export { validateEmbeddedBlocks } from "./validate/validate-embedded-blocks.js";

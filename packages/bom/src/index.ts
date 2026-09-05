@@ -84,6 +84,8 @@ export type {
   ParseResult,
   SerializeResult,
   ParseOptions,
+  ParseValueResult,
+  ParseValueHook,
   SerializeOptions,
   ValidateResult,
   ValidateOptions,

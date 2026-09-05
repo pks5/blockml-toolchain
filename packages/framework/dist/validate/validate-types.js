@@ -2,8 +2,8 @@ import { parseExpression } from "../expression/parse-expression.js";
 import { parseInterpolatedText } from "../expression/parse-interpolated-text.js";
 import { INTERPOLATION_NOT_ALLOWED } from "../expression/restricted.js";
 import { memberIdentityKey, resolveEffectiveMembers, } from "../resolve/resolve-effective-members.js";
-import { satisfiesTypeBound } from "../resolve/satisfies-type-bound.js";
-import { isWellKnownTypeFqn } from "@blockml/parser";
+import { validateParseValues } from "./validate-parse-values.js";
+import { validateReferences } from "./validate-references.js";
 const TEXT_TYPE_FQN = "org.blockml.bml.type.Text";
 function containsUnescapedInterpolation(raw) {
     for (let i = 0; i < raw.length - 1; i++) {
@@ -56,82 +56,6 @@ function diag(code, message, file, loc) {
     }
     return { severity: "error", code, message, source };
 }
-function typeIsKnown(fqn, registry) {
-    return registry.has(fqn) || isWellKnownTypeFqn(fqn);
-}
-const CORE_EXCEPTION = "org.blockml.bml.core.Exception";
-function walkNamedTypes(expr, visit) {
-    if (!expr) {
-        return;
-    }
-    switch (expr.kind) {
-        case "named":
-            visit(expr.fqn);
-            for (const arg of expr.typeArguments ?? []) {
-                walkNamedTypes(arg, visit);
-            }
-            break;
-        case "union":
-            for (const alt of expr.alternatives) {
-                walkNamedTypes(alt, visit);
-            }
-            break;
-        case "grouped":
-            walkNamedTypes(expr.expression, visit);
-            break;
-        case "anonymousStruct":
-            for (const field of expr.fields) {
-                walkNamedTypes(field.type, visit);
-            }
-            break;
-        default:
-            break;
-    }
-}
-function validateMemberTypes(member, registry, file, diagnostics) {
-    const loc = member.typeSource ?? member.source;
-    const report = (fqn) => {
-        if (!typeIsKnown(fqn, registry)) {
-            diagnostics.push(diag("BML_UNKNOWN_TYPE", `Unknown type: ${fqn}`, file, loc));
-        }
-    };
-    if (member.kind === "property") {
-        if (member.type) {
-            walkNamedTypes(member.type, report);
-        }
-        else if (member.typeFqn) {
-            report(member.typeFqn);
-        }
-    }
-    else if (member.kind === "aggregation" || member.kind === "association") {
-        walkNamedTypes(member.type, report);
-    }
-    else if (member.kind === "capability") {
-        if (member.typeFqn) {
-            report(member.typeFqn);
-        }
-        walkNamedTypes(member.inputType, (fqn) => {
-            if (!typeIsKnown(fqn, registry)) {
-                diagnostics.push(diag("BML_UNKNOWN_TYPE", `Unknown type: ${fqn}`, file, member.inputTypeSource ?? loc));
-            }
-        });
-        walkNamedTypes(member.outputType, (fqn) => {
-            if (!typeIsKnown(fqn, registry)) {
-                diagnostics.push(diag("BML_UNKNOWN_TYPE", `Unknown type: ${fqn}`, file, member.outputTypeSource ?? loc));
-            }
-        });
-        for (const thrown of member.throws ?? []) {
-            const fqn = thrown.value;
-            if (!typeIsKnown(fqn, registry)) {
-                diagnostics.push(diag("BML_UNKNOWN_TYPE", `Unknown type: ${fqn}`, file, loc));
-                continue;
-            }
-            if (!satisfiesTypeBound(fqn, CORE_EXCEPTION, registry)) {
-                diagnostics.push(diag("BML_TYPE_BOUND_NOT_SATISFIED", `Type ${fqn} does not satisfy bound ${CORE_EXCEPTION}`, file, loc));
-            }
-        }
-    }
-}
 function literalNumber(val) {
     if (!val || val.kind !== "literal") {
         return undefined;
@@ -139,14 +63,6 @@ function literalNumber(val) {
     return typeof val.value === "number" ? val.value : undefined;
 }
 function validateBlockDefinition(block, registry, file, diagnostics) {
-    if (block.baseType && !registry.has(block.baseType)) {
-        diagnostics.push(diag("BML_UNKNOWN_BASE_TYPE", `Unknown baseType: ${block.baseType}`, file, block.baseTypeSource ?? block.source));
-    }
-    for (const ref of block.contracts ?? []) {
-        if (!registry.has(ref.value)) {
-            diagnostics.push(diag("BML_UNKNOWN_CONTRACT", `Unknown contract: ${ref.value}`, file, block.source));
-        }
-    }
     const effective = resolveEffectiveMembers(block, registry);
     const seen = new Set();
     for (const member of effective) {
@@ -157,7 +73,6 @@ function validateBlockDefinition(block, registry, file, diagnostics) {
         seen.add(key);
     }
     for (const member of block.members) {
-        validateMemberTypes(member, registry, file, diagnostics);
         const skipOverrideCheck = member.kind === "aggregation" &&
             (member.composition !== undefined || member.default === true);
         if (member.override) {
@@ -282,6 +197,8 @@ export function validateTypes(document, registry) {
     if (document.block.type && !registry.has(document.block.type)) {
         registry.register(document);
     }
+    diagnostics.push(...validateReferences(document, registry));
+    diagnostics.push(...validateParseValues(document, registry));
     validateBlockDefinition(document.block, registry, file, diagnostics);
     walkCompositions(document.block, registry, file, diagnostics);
     return diagnostics;
