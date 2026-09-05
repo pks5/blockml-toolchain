@@ -24,26 +24,26 @@
 
   <properties>
     <title type="type:Text">
-      <value>A Day Among the Seven Hills</value>
+      <value>Greetings from the Alfama</value>
     </title>
     <destination type="type:Text">
       <value>Lisbon</value>
     </destination>
     <opening type="type:Text">
-      <value>Wish you were here! I'm scribbling this from a little tiled bench above the Tagus, watching the ferries draw silver lines across the water while the whole waterfront smells of salt, coffee, and roasting chestnuts.</value>
+      <value>Greetings from Lisbon, where I'm writing to you from a crooked step in the Alfama with a paper cup of ginjinha in one hand, church bells overhead, and a tangle of drying laundry snapping like flags between the balconies.</value>
     </opening>
     <body type="type:Text">
-      <value>This morning I rode the Elevador da Bica down streets so steep the houses seem to lean on one another, all pink, ochre and faded blue, while a knife-grinder's whistle echoed somewhere below.
+      <value>I let the number 28 tram haul me up the hill this morning, its wooden windows rattling past shrines and grocers no wider than a wardrobe, and got off at the Miradouro de Santa Luzia to watch the river open out beneath a wall of blue azulejos.
 
-At a marble counter in the Baixa I ate a warm pastel de nata, dusting cinnamon over the top the way the locals do, then drifted into the Feira da Ladra to haggle over an old brass compass.
+Lunch was grilled sardines and broad beans at a tin table in a side street, where an old man tuned a guitarra and the waiter kept topping up my glass of vinho verde without being asked.
 
-Now the sun is dropping behind the 25 de Abril bridge and a busker in the square is playing fado on a twelve-string guitar. The light has turned everything to amber, and I already don't want to leave.</value>
+This afternoon I walked out to Belem, ate two custard tarts still warm from the oven, and stood a long while under the tower with the Atlantic wind in my face. Tomorrow I think I will simply get lost on purpose.</value>
     </body>
     <language type="type:Text">
       <value>English</value>
     </language>
     <date type="type:DateTime">
-      <value>2026-09-05T20:58:17</value>
+      <value>2026-09-05T21:02:30</value>
     </date>
   </properties>
 
