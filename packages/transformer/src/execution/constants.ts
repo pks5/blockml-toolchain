@@ -12,6 +12,8 @@ export const EXECUTION_EXCEPTION_FQN =
   "org.blockml.bml.transformer.workflow.ExecutionException";
 export const RESULT_EXCEPTION_FQN =
   "org.blockml.bml.transformer.workflow.ResultException";
+export const RESULT_MAPPING_FQN =
+  "org.blockml.bml.transformer.workflow.ResultMapping";
 export const PARAMETERS_EXCEPTION_FQN =
   "org.blockml.bml.transformer.workflow.ParametersException";
 export const PROPERTY_REFERENCE_FQN = "org.blockml.bml.type.PropertyReference";

@@ -93,19 +93,22 @@
         [4] Persist Execution — transformercap:PersistExecution
             Default: deterministic. Writes changedFiles, output, status,
             completedAt, and on failure a BML exception onto this
-            ModelOperation. Commits model changes together with the
-            operation terminal state. Must not relocate the
-            ModelTransformation. A Failed ModelOperation aborts
-            remaining operations.
+            ModelOperation. When the executor succeeded, applies this
+            operation's resultMappings onto ModelTransformation.result
+            before status=Succeeded. A mapping fault writes
+            ResultException onto the operation and sets Failed.
+            Commits model changes together with the operation terminal
+            state. Must not relocate the ModelTransformation. A Failed
+            ModelOperation aborts remaining operations.
 
     [5] Finalize Execution — transformercap:FinalizeExecution
         Default: deterministic. Always runs after a started execution.
-        Succeeded only when every ModelOperation succeeded and result
-        resolution did not throw: status=Succeeded, completedAt,
-        optional result from resultSource (expressions closed first),
-        relocate running to succeeded. Otherwise status=Failed, completedAt, relocate
-        running to failed. Operation exception lives on the failed
-        ModelOperation. ParametersException and ResultException live on
+        Succeeded only when every ModelOperation succeeded:
+        status=Succeeded, completedAt, relocate running to succeeded.
+        Otherwise status=Failed, completedAt, relocate running to
+        failed. Does not resolve result. Operation exception, including
+        ResultException from resultMappings, lives on the failed
+        ModelOperation. ParametersException lives on
         ModelTransformation.exception. A ModelOperation failure leaves
         that aggregation empty. Commits after the terminal relocation.
 
@@ -124,6 +127,7 @@
     <see type="transformercap:RunTransformation" relation="Defines" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:ModelOperation" relation="SeeAlso" />
+    <see type="workflow:ResultMapping" relation="SeeAlso" />
     <see type="workflow:AgenticOperation" relation="SeeAlso" />
     <see type="transformercap:OperationExecutor" relation="SeeAlso" />
     <see type="transformercap:AgenticExecutor" relation="SeeAlso" />

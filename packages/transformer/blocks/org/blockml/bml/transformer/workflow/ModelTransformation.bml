@@ -47,26 +47,20 @@
       Any effective source ignores `--parameters`. Type of the source
       Property must equal bound `T`. A close or lookup fault is
       `workflow:ParametersException`.
-    * `resultSource` — optional `type:PropertyReference` to the Property
-      whose current value Finalize copies onto `result`. Canonical path
-      `BlockFqn.properties.name`. Interpolated or expression values are
-      closed against this ModelTransformation before lookup. Absent or
-      empty after close: Finalize skips result. A close or lookup fault
-      is `workflow:ResultException`.
     * `result` — value of generic `R` (`core:ValueType`, default
       `type:Text`). Bind `R` as the second type argument, e.g.
-      `workflow:ModelTransformation(Parameters, type:Integer)`. Written
-      only at Finalize after every ModelOperation succeeded. Type of the
-      source Property must equal bound `R`.
+      `workflow:ModelTransformation(Parameters, type:Integer)`. Persist
+      writes it from each succeeding ModelOperation's `resultMappings`.
+      Several mappings, across operations, build the value successively.
+      A mapping fault fails that operation (`workflow:ResultException`
+      on the operation) and leaves later operations unrun.
     * `exception` — `core:Exception` when Prepare cannot resolve
-      `parametersSource` (`workflow:ParametersException`) or Finalize
-      cannot resolve `resultSource` (`workflow:ResultException`). Empty
-      when a ModelOperation fails; operation faults stay on that
-      ModelOperation.
+      `parametersSource` (`workflow:ParametersException`). Empty when a
+      ModelOperation fails; operation faults, including ResultException
+      from `resultMappings`, stay on that ModelOperation.
     * `status` — lifecycle state (`workflow:ExecutionStatus`). Matches the
       `_meta.transform` package: Pending, Running, Succeeded, Failed.
-      `Succeeded` only when every ModelOperation succeeded and result
-      resolution did not throw.
+      `Succeeded` only when every ModelOperation succeeded.
     * `executionId` — globally unique identifier (`type:UUID`). Absent
       while pending. Assigned when Prepare sets `status=Running`
       (random UUID, unique among other ModelTransformations).
@@ -74,8 +68,9 @@
     * `baseCommit` — Git HEAD commit when this execution started. Set only
       after Prepare confirms a clean worktree and sets `status=Running`.
     * `operations` — concrete ModelOperation subtypes of this execution,
-      in order. `output`, `changedFiles`, and `exception` live on each
-      operation. Agent Task work applies only to AgenticOperation.
+      in order. `output`, `changedFiles`, `resultMappings`, and
+      `exception` live on each operation. Agent Task work applies only
+      to AgenticOperation.
   </documentation>
 
   <references>
@@ -84,6 +79,7 @@
     <see type="workflow:ToolOperation" relation="SeeAlso" />
     <see type="transformercap:OperationExecutor" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
+    <see type="workflow:ResultMapping" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
     <see type="type:PropertyReference" relation="SeeAlso" />
     <see type="type:UUID" relation="SeeAlso" />
@@ -124,14 +120,6 @@
         --parameters.
       </documentation>
     </parametersSource>
-    <resultSource type="type:PropertyReference">
-      <documentation>
-        Optional path to the Property Finalize copies onto result.
-        Canonical form BlockFqn.properties.name. Expressions close
-        against this Block before lookup. Unset or empty after close:
-        skip result.
-      </documentation>
-    </resultSource>
     <executionId type="type:UUID">
       <documentation>Globally unique identifier. Absent while pending; assigned at Running.</documentation>
     </executionId>
@@ -155,9 +143,9 @@
     </completedAt>
     <result type="R">
       <documentation>
-        Value copied from resultSource at Finalize after every
-        ModelOperation succeeded. Type is bound R (default type:Text).
-        Absent when resultSource is unset or a ModelOperation failed.
+        Value written from each succeeding ModelOperation's
+        resultMappings. Type is bound R (default type:Text). Absent
+        when no mapping ran or a ModelOperation failed before one did.
       </documentation>
     </result>
   </properties>
@@ -168,8 +156,9 @@
     </operations>
     <exception type="core:Exception">
       <documentation>
-        ParametersException from Prepare or ResultException from Finalize.
-        Empty when a ModelOperation fails.
+        ParametersException from Prepare. Empty when a ModelOperation
+        fails; ResultException from resultMappings stays on that
+        operation.
       </documentation>
     </exception>
   </aggregations>

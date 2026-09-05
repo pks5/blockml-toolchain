@@ -37,15 +37,16 @@
     ToolExecutor (npm CLI via npx). Default Reflect is deterministic: git
     `changedFiles` after the executor, and `output` when the
     operation's `captureOutput` is true. Default Persist writes those
-    fields onto the ModelOperation that just ran. After a started
-    execution, Finalize relocates the Block to `_meta.transform.succeeded`
-    only when every ModelOperation succeeded and result resolution did
-    not throw, otherwise `_meta.transform.failed`. When `resultSource` is
-    set, Finalize copies that Property onto `result`; a ResultException
-    fills `exception` and fails the transformation. Prepare
+    fields onto the ModelOperation that just ran. When that operation
+    succeeds, Persist applies its `resultMappings` onto `result`. A
+    mapping fault writes ResultException onto the operation, fails it,
+    and aborts remaining operations. After a started execution, Finalize
+    relocates the Block to `_meta.transform.succeeded` only when every
+    ModelOperation succeeded, otherwise `_meta.transform.failed`. Prepare
     `parametersSource` faults fill `exception` with ParametersException
-    and skip operations. A ModelOperation failure leaves `exception`
-    empty and aborts remaining operations. Prepare requires a clean Git
+    and skip operations. A ModelOperation failure leaves
+    `ModelTransformation.exception` empty and aborts remaining
+    operations. Prepare requires a clean Git
     worktree, records `baseCommit`, and commits the running relocation.
     Each ModelOperation commits Running first (recovery boundary), then
     commits model changes together with the operation terminal state.
@@ -64,6 +65,7 @@
     <see type="workflow:ToolOperation" relation="SeeAlso" />
     <see type="transformercap:ToolExecutor" relation="SeeAlso" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
+    <see type="workflow:ResultMapping" relation="SeeAlso" />
     <see type="workflow:CompositeTask" relation="SeeAlso" />
     <see type="workflow:Prerequisite" relation="SeeAlso" />
     <see type="workflow:PrerequisiteNotMetException" relation="SeeAlso" />

@@ -24,7 +24,7 @@ export function createPersistStage(): TransformStage<Reflection, PersistedExecut
       reflected: Reflection,
       context: StageContext,
     ): Promise<PersistedExecution> {
-      persistReflection(context.workspaceRoot, {
+      const persisted = persistReflection(context.workspaceRoot, {
         started: reflected.started,
         operationIndex: reflected.operationIndex,
         changedFiles: reflected.changedFiles,
@@ -35,7 +35,13 @@ export function createPersistStage(): TransformStage<Reflection, PersistedExecut
           ? { exceptionMessage: reflected.exceptionMessage }
           : {}),
       });
-      return { ...reflected };
+      return {
+        ...reflected,
+        outcome: persisted.outcome,
+        ...(persisted.exceptionMessage !== undefined
+          ? { exceptionMessage: persisted.exceptionMessage }
+          : {}),
+      };
     },
   };
 }

@@ -46,9 +46,6 @@
     <template override="true" type="type:Boolean">
       <value>true</value>
     </template>
-    <resultSource override="true" type="type:PropertyReference">
-      <value>${ #strings.concat( #this.parameters.targetBlock, '.properties.song') }</value>
-    </resultSource>
   </properties>
   <aggregations>
     <operations override="true">
@@ -76,6 +73,11 @@
           <args>["validate"]</args>
         </workflow:ToolOperation>
         <workflow:AgenticOperation name="Translate Poem" status="Pending">
+          <resultMappings>
+            <workflow:ResultMapping>
+              <source>${ #strings.concat( #this.parameters.targetBlock, '.properties.song') }</source>
+            </workflow:ResultMapping>
+          </resultMappings>
           <task>
             <workflow:InstructionTask>
               <instructions>

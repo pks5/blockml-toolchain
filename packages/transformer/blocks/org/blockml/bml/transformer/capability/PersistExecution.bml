@@ -27,6 +27,12 @@
     not relocate the ModelTransformation and must not write those fields
     onto the ModelTransformation.
 
+    When the executor succeeded, apply this operation's
+    `resultMappings` onto `ModelTransformation.result` before writing
+    `status=Succeeded`. A mapping fault writes
+    `workflow:ResultException` onto the operation, sets `status=Failed`,
+    and leaves `ModelTransformation.exception` empty.
+
     Default implementation is a deterministic BOM writer. Always writes
     ModelOperation status. TS: pipeline/persist.ts and execution/persist.ts.
   </documentation>
@@ -37,6 +43,8 @@
     <see type="transformercap:FinalizeExecution" relation="SeeAlso" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:ModelOperation" relation="SeeAlso" />
+    <see type="workflow:ResultMapping" relation="SeeAlso" />
+    <see type="workflow:ResultException" relation="SeeAlso" />
   </references>
 
   <properties>

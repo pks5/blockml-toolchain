@@ -22,7 +22,8 @@
     `workflow:Task` executed by `transformercap:AgenticExecutor`.
 
     The envelope fields (`status`, timestamps, `baseCommit`,
-    `captureOutput`, `output`, `changedFiles`, `exception`) are inherited.
+    `captureOutput`, `output`, `changedFiles`, `resultMappings`,
+    `exception`) are inherited.
     `task` is required while pending. The host closes the Task instance
     against the ModelTransformation context (every expression becomes a
     literal) and hands that prefix-free BML fragment to the agent. The

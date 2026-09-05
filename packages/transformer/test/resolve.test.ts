@@ -112,11 +112,11 @@ describe("resolvePendingExecution", () => {
     );
   });
 
-  it("allows resultSource and parametersSource on a pending execution", () => {
+  it("allows resultMappings and parametersSource on a pending execution", () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
-        resultSource: "com.example.model.Poem.properties.title",
+        resultMappings: [{ source: "com.example.model.Poem.properties.title" }],
         parametersSource: "com.example.model.Poem.properties.title",
       }),
     });

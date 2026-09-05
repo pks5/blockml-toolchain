@@ -69,6 +69,12 @@ function gitOrThrow(dir: string, args: string[]): string {
   return result.stdout ?? "";
 }
 
+export type ResultMappingSpec = {
+  source: string;
+  sourcePath?: string;
+  resultPath?: string;
+};
+
 export function pendingExecutionXml(opts: {
   name: string;
   executionId?: string;
@@ -78,7 +84,9 @@ export function pendingExecutionXml(opts: {
   parameterFields?: readonly string[];
   pendingParameters?: string;
   captureOutput?: boolean;
-  resultSource?: string;
+  resultMappings?: readonly ResultMappingSpec[];
+  resultType?: string;
+  resultFields?: readonly { name: string; type: string }[];
   parametersSource?: string;
   tool?: { command: string; args?: readonly string[] };
 }): string {
@@ -107,13 +115,6 @@ export function pendingExecutionXml(opts: {
         `    </parameters>`,
       ].join("\n")
     : "";
-  const resultSourceXml = opts.resultSource
-    ? [
-        `    <resultSource override="true" type="org.blockml.bml.type.PropertyReference">`,
-        `      <value>${opts.resultSource}</value>`,
-        `    </resultSource>`,
-      ].join("\n")
-    : "";
   const parametersSourceXml = opts.parametersSource
     ? [
         `    <parametersSource override="true" type="org.blockml.bml.type.PropertyReference">`,
@@ -123,9 +124,14 @@ export function pendingExecutionXml(opts: {
     : "";
   const parameterFields = opts.parameterFields ?? [];
   const bindParameters = parameterFields.length > 0;
-  const baseType = bindParameters
-    ? "workflow:ModelTransformation(Parameters)"
-    : "workflow:ModelTransformation";
+  const resultType = opts.resultType;
+  const baseType = resultType
+    ? bindParameters
+      ? `workflow:ModelTransformation(Parameters, ${resultType})`
+      : `workflow:ModelTransformation(type:Text, ${resultType})`
+    : bindParameters
+      ? "workflow:ModelTransformation(Parameters)"
+      : "workflow:ModelTransformation";
   const parameterBlock = bindParameters
     ? [
         `    <block>`,
@@ -140,15 +146,31 @@ export function pendingExecutionXml(opts: {
         `    </block>`,
       ]
     : [];
+  const resultBlock = (opts.resultFields ?? []).length > 0
+    ? [
+        `    <block>`,
+        `      <name>Result</name>`,
+        `      <baseType>type:StructType</baseType>`,
+        `      <is>result struct for this transformation</is>`,
+        `      <properties>`,
+        ...(opts.resultFields ?? []).map(
+          (field) => `        <${field.name} type="${field.type}" />`,
+        ),
+        `      </properties>`,
+        `    </block>`,
+      ]
+    : [];
+  const nestedBlocks = [...parameterBlock, ...resultBlock];
   const subBlocks =
-    parameterBlock.length > 0
-      ? [`  <subBlocks>`, ...parameterBlock, `  </subBlocks>`].join("\n")
+    nestedBlocks.length > 0
+      ? [`  <subBlocks>`, ...nestedBlocks, `  </subBlocks>`].join("\n")
       : "";
   const instructions = opts.operationInstructions ?? ["Do the task."];
   const capture =
     opts.captureOutput === true
       ? [`          <captureOutput>true</captureOutput>`]
       : [];
+  const mappings = resultMappingsXml(opts.resultMappings);
   const operations = opts.tool
     ? [
         `        <workflow:ToolOperation name="Validate" command="${opts.tool.command}">`,
@@ -157,14 +179,16 @@ export function pendingExecutionXml(opts: {
         ...(opts.tool.args !== undefined
           ? [`          <args>${JSON.stringify([...opts.tool.args])}</args>`]
           : []),
+        ...mappings,
         `        </workflow:ToolOperation>`,
       ].join("\n")
     : instructions
-        .map((text) =>
+        .map((text, index) =>
           [
             `        <workflow:AgenticOperation>`,
             `          <status>Pending</status>`,
             ...capture,
+            ...(index === instructions.length - 1 ? mappings : []),
             `          <task>`,
             `            <workflow:InstructionTask instructions="${text}" />`,
             `          </task>`,
@@ -189,7 +213,6 @@ export function pendingExecutionXml(opts: {
     templateXml,
     pendingParametersXml,
     parametersSourceXml,
-    resultSourceXml,
     `    <status override="true" type="org.blockml.bml.transformer.workflow.ExecutionStatus">`,
     `      <value>Pending</value>`,
     `    </status>`,
@@ -207,6 +230,29 @@ export function pendingExecutionXml(opts: {
     `</block>`,
     ``,
   ].join("\n");
+}
+
+function resultMappingsXml(
+  mappings: readonly ResultMappingSpec[] | undefined,
+): string[] {
+  if (!mappings || mappings.length === 0) {
+    return [];
+  }
+  return [
+    `          <resultMappings>`,
+    ...mappings.flatMap((mapping) => [
+      `            <workflow:ResultMapping>`,
+      `              <source>${mapping.source}</source>`,
+      ...(mapping.sourcePath
+        ? [`              <sourcePath>${mapping.sourcePath}</sourcePath>`]
+        : []),
+      ...(mapping.resultPath
+        ? [`              <resultPath>${mapping.resultPath}</resultPath>`]
+        : []),
+      `            </workflow:ResultMapping>`,
+    ]),
+    `          </resultMappings>`,
+  ];
 }
 
 export function historyExecutionXml(opts: {
@@ -249,7 +295,28 @@ export function historyExecutionXml(opts: {
 export function resultSourceBlockXml(opts: {
   name: string;
   properties: readonly { name: string; type: string; value: string }[];
+  structs?: readonly { name: string; fields: readonly { name: string; type: string }[] }[];
 }): string {
+  const structs = opts.structs ?? [];
+  const subBlocks =
+    structs.length > 0
+      ? [
+          `  <subBlocks>`,
+          ...structs.flatMap((struct) => [
+            `    <block>`,
+            `      <name>${struct.name}</name>`,
+            `      <baseType>type:StructType</baseType>`,
+            `      <is>${struct.name} struct</is>`,
+            `      <properties>`,
+            ...struct.fields.map(
+              (field) => `        <${field.name} type="${field.type}" />`,
+            ),
+            `      </properties>`,
+            `    </block>`,
+          ]),
+          `  </subBlocks>`,
+        ]
+      : [];
   return [
     `<block xmlns="http://blockml.org/bml"`,
     ` xmlns:core="org.blockml.bml.core"`,
@@ -259,6 +326,7 @@ export function resultSourceBlockXml(opts: {
     `  <type>test:${opts.name}</type>`,
     `  <baseType>core:Block</baseType>`,
     `  <is>result source fixture</is>`,
+    ...subBlocks,
     `  <properties>`,
     ...opts.properties.flatMap((property) => [
       `    <${property.name} type="${property.type}">`,

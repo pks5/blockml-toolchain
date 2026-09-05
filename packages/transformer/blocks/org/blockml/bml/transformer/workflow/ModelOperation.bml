@@ -39,6 +39,11 @@
       `captureOutput` is true.
     * `changedFiles` — workspace-relative paths modified during this
       operation (`type:FilePathEntity[]`).
+    * `resultMappings` — optional `workflow:ResultMapping` list. When
+      Persist would set `status=Succeeded`, it applies each mapping in
+      order onto the enclosing ModelTransformation `result`. A mapping
+      fault writes `workflow:ResultException` onto this operation,
+      sets `status=Failed`, and aborts remaining operations.
     * `exception` — present if and only if `status` is Failed.
   </documentation>
 
@@ -46,6 +51,8 @@
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:AgenticOperation" relation="SeeAlso" />
     <see type="workflow:ToolOperation" relation="SeeAlso" />
+    <see type="workflow:ResultMapping" relation="SeeAlso" />
+    <see type="workflow:ResultException" relation="SeeAlso" />
     <see type="transformercap:OperationExecutor" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
     <see type="core:Exception" relation="SeeAlso" />
@@ -87,6 +94,12 @@
     <changedFiles type="type:FilePathEntity[]">
       <documentation>Workspace-relative paths modified during this ModelOperation.</documentation>
     </changedFiles>
+    <resultMappings type="workflow:ResultMapping[]">
+      <documentation>
+        Mappings Persist applies onto ModelTransformation.result when
+        this operation succeeds. Empty: leave result unchanged.
+      </documentation>
+    </resultMappings>
     <exception type="core:Exception">
       <documentation>The Exception thrown during this ModelOperation, if any.</documentation>
     </exception>

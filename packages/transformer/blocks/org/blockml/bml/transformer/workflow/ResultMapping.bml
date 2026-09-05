@@ -20,23 +20,26 @@
     DTO that describes how a source Property maps onto a transformation
     `result`. This type does not validate: it does not check that
     `source` exists, that `sourcePath` / `resultPath` are well-formed,
-    or that the source type is a StructType.
-
-    Intended to replace `resultSource` on `workflow:ModelTransformation`.
-    That wiring is not applied yet.
+    or that types are compatible. Persist evaluates each mapping on a
+    succeeding `workflow:ModelOperation` and throws
+    `workflow:ResultException` on that operation when a rule fails.
 
     * `source` — required `type:PropertyIdentifier` of the Property to
-      read. Unchecked: the owning type and property need not exist.
-    * `sourcePath` — optional OpenUI5 model path into `source` when
-      that Property is a `type:StructType` (or `StructType[]`).
-    * `resultPath` — optional OpenUI5 model path into the result
-      object, same format as `sourcePath`.
+      read. Unchecked at authoring time. At runtime the path is closed
+      against the enclosing ModelTransformation, then looked up.
+    * `sourcePath` — optional OpenUI5 model path into `source`.
+    * `resultPath` — optional OpenUI5 model path into `result`.
 
-    OpenUI5 model path examples:
-    * `/0/myProp` — `myProp` on the first object (`StructType[]` only)
-    * `/myProp/2` — third element of array `myProp` on the object
-    * `/myProp` — `myProp` on the object
-    * `/myProp/myChild` — nested `myChild` of `myProp`
+    Paths are valid only on a `type:StructType` or an array. A numeric
+    segment selects an array index (0-based). A name segment selects a
+    Struct field. A non-array Struct's first segment must be a name.
+    A path into a scalar (for example `type:Text`) is invalid.
+
+    No paths: the whole source value replaces `result`. The source type
+    must equal bound `R`. `resultPath` on an unset `result` initializes
+    empty `R` (`{}` or `[]`). Writing creates missing Struct fields.
+    Array index equal to length appends; a greater index fails. Reading
+    a missing field or index fails. Selected leaf types must be equal.
   </documentation>
 
   <isNot>Not a validator or Constraint, and not an existence-checked
@@ -45,7 +48,9 @@
   <references>
     <see type="type:PropertyIdentifier" relation="SeeAlso" />
     <see type="type:StructType" relation="SeeAlso" />
+    <see type="workflow:ModelOperation" relation="SeeAlso" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
+    <see type="workflow:ResultException" relation="SeeAlso" />
   </references>
 
   <properties>
@@ -57,9 +62,9 @@
     </source>
     <sourcePath type="type:Text">
       <documentation>
-        Optional OpenUI5 model path into source. Meaningful only when
-        source is a StructType or StructType[]. Examples: /0/myProp,
-        /myProp/2, /myProp, /myProp/myChild.
+        Optional OpenUI5 model path into source. Valid on StructType or
+        an array. Examples: /0/myProp, /1, /myProp/2, /myProp,
+        /myProp/myChild.
       </documentation>
     </sourcePath>
     <resultPath type="type:Text">

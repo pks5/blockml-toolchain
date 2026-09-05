@@ -714,14 +714,18 @@ describe("Transformer lifecycle", () => {
     ).toBe(true);
   });
 
-  it("closes a resultSource expression before copying result", async () => {
+  it("closes a ResultMapping source expression before copying result", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
         parameterFields: ["targetBlock"],
         pendingParameters: '{"targetBlock":"com.example.model.Poem"}',
-        resultSource:
-          "${ #strings.concat(#this.parameters.targetBlock, '.properties.title') }",
+        resultMappings: [
+          {
+            source:
+              "${ #strings.concat(#this.parameters.targetBlock, '.properties.title') }",
+          },
+        ],
       }),
       "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
         name: "Poem",
@@ -743,11 +747,11 @@ describe("Transformer lifecycle", () => {
     expect(succeeded).toMatch(/<result[\s>][\s\S]*El roble/);
   });
 
-  it("fails when a resultSource expression cannot be closed", async () => {
+  it("fails when a ResultMapping source expression cannot be closed", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
-        resultSource: "${ #this.parameters.missing }",
+        resultMappings: [{ source: "${ #this.parameters.missing }" }],
       }),
     });
     const transformer = new Transformer({
@@ -760,11 +764,11 @@ describe("Transformer lifecycle", () => {
     expect(result.error).toMatch(/Unknown property/);
   });
 
-  it("writes result from resultSource when every ModelOperation succeeded", async () => {
+  it("writes result from ResultMapping when the ModelOperation succeeded", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
-        resultSource: "com.example.model.Poem.properties.title",
+        resultMappings: [{ source: "com.example.model.Poem.properties.title" }],
       }),
       "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
         name: "Poem",
@@ -788,11 +792,11 @@ describe("Transformer lifecycle", () => {
     expect(succeeded).not.toMatch(/<exception[\s>]/);
   });
 
-  it("fails with ResultException when resultSource block is missing", async () => {
+  it("fails with ResultException when ResultMapping source block is missing", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
-        resultSource: "com.example.model.Missing.properties.title",
+        resultMappings: [{ source: "com.example.model.Missing.properties.title" }],
       }),
     });
     const generated = "T00001_JokeTest_20260830T011702";
@@ -804,7 +808,7 @@ describe("Transformer lifecycle", () => {
     const result = await transformer.run(pendingFqn("JokeTest"));
     expect(result.success).toBe(false);
     expect(result.status).toBe("Failed");
-    expect(result.error).toMatch(/resultSource block .* was not found/);
+    expect(result.error).toMatch(/source block .* was not found/);
     const failed = readFileSync(
       join(TMP, `blocks/com/example/model/_meta/transform/failed/${generated}.bml`),
       "utf8",
@@ -814,11 +818,11 @@ describe("Transformer lifecycle", () => {
     expect(failed).not.toContain("workflow:ExecutionException");
   });
 
-  it("fails with ResultException when resultSource property is missing", async () => {
+  it("fails with ResultException when ResultMapping source property is missing", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
-        resultSource: "com.example.model.Poem.properties.missing",
+        resultMappings: [{ source: "com.example.model.Poem.properties.missing" }],
       }),
       "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
         name: "Poem",
@@ -836,11 +840,11 @@ describe("Transformer lifecycle", () => {
     expect(result.terminalFqn).toContain("._meta.transform.failed.");
   });
 
-  it("fails with ResultException when resultSource property type differs from R", async () => {
+  it("fails with ResultException when ResultMapping source type differs from R", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
-        resultSource: "com.example.model.Poem.properties.count",
+        resultMappings: [{ source: "com.example.model.Poem.properties.count" }],
       }),
       "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
         name: "Poem",
@@ -857,11 +861,185 @@ describe("Transformer lifecycle", () => {
     expect(result.error).toMatch(/does not match result type/);
   });
 
+  it("fails when resultPath is used on a Text result", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        resultMappings: [
+          {
+            source: "com.example.model.Poem.properties.title",
+            resultPath: "/foo",
+          },
+        ],
+      }),
+      "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
+        name: "Poem",
+        properties: [{ name: "title", type: "type:Text", value: "El roble" }],
+      }),
+    });
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(false);
+    expect(result.error).toMatch(/resultPath is not valid/);
+  });
+
+  it("fails when sourcePath is used on a Text source", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        resultMappings: [
+          {
+            source: "com.example.model.Poem.properties.title",
+            sourcePath: "/foo",
+          },
+        ],
+      }),
+      "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
+        name: "Poem",
+        properties: [{ name: "title", type: "type:Text", value: "El roble" }],
+      }),
+    });
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(false);
+    expect(result.error).toMatch(/sourcePath is not valid/);
+  });
+
+  it("reads a Struct field through sourcePath", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        resultMappings: [
+          {
+            source: "com.example.model.Poem.properties.meta",
+            sourcePath: "/title",
+          },
+        ],
+      }),
+      "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
+        name: "Poem",
+        structs: [{ name: "Meta", fields: [{ name: "title", type: "type:Text" }] }],
+        properties: [
+          {
+            name: "meta",
+            type: "test:Poem.Meta",
+            value: '{"title":"El roble"}',
+          },
+        ],
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(true);
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).toMatch(/<result[\s>][\s\S]*El roble/);
+  });
+
+  it("builds result successively from resultPath mappings", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        resultType: "Result",
+        resultFields: [
+          { name: "title", type: "type:Text" },
+          { name: "artist", type: "type:Text" },
+        ],
+        resultMappings: [
+          {
+            source: "com.example.model.Poem.properties.title",
+            resultPath: "/title",
+          },
+          {
+            source: "com.example.model.Poem.properties.artist",
+            resultPath: "/artist",
+          },
+        ],
+      }),
+      "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
+        name: "Poem",
+        properties: [
+          { name: "title", type: "type:Text", value: "El roble" },
+          { name: "artist", type: "type:Text", value: "Anon" },
+        ],
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(true);
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).toMatch(/<result[\s>][\s\S]*El roble/);
+    expect(succeeded).toMatch(/<result[\s>][\s\S]*Anon/);
+  });
+
+  it("appends to a Text[] result when resultPath index equals length", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        resultType: "type:Text[]",
+        resultMappings: [
+          {
+            source: "com.example.model.Poem.properties.title",
+            resultPath: "/0",
+          },
+          {
+            source: "com.example.model.Poem.properties.artist",
+            resultPath: "/1",
+          },
+        ],
+      }),
+      "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
+        name: "Poem",
+        properties: [
+          { name: "title", type: "type:Text", value: "El roble" },
+          { name: "artist", type: "type:Text", value: "Anon" },
+        ],
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(true);
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).toMatch(/<result[\s>][\s\S]*El roble/);
+    expect(succeeded).toMatch(/<result[\s>][\s\S]*Anon/);
+  });
+
   it("leaves ModelTransformation exception empty when a ModelOperation fails", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
-        resultSource: "com.example.model.Missing.properties.title",
+        resultMappings: [{ source: "com.example.model.Missing.properties.title" }],
       }),
     });
     const generated = "T00001_JokeTest_20260830T011702";

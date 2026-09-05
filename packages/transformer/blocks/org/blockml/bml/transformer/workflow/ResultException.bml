@@ -13,21 +13,26 @@
   <name>ResultException</name>
   <type>workflow:ResultException</type>
   <baseType>core:Exception</baseType>
-  <is>A thrown condition when ModelTransformation result cannot be resolved</is>
+  <is>A thrown condition when a ResultMapping cannot be applied</is>
 
   <documentation>
     # Result Exception
 
-    Finalize could not copy `resultSource` onto `result`:
+    Persist could not apply a `workflow:ResultMapping` onto
+    `result` while completing a succeeding ModelOperation:
 
-    * the path expression could not be closed
-    * the path points at an unknown Block or Property
-    * or the Property type does not match the bound result generic `R`
+    * the `source` expression could not be closed
+    * `source` points at an unknown Block or Property
+    * a path is invalid for the current type (scalar, wrong first
+      segment, out-of-range index)
+    * or the selected leaf types are not equal
 
     Distinct from ParametersException (Prepare parameter fault) and
-    ExecutionException (a ModelOperation fault). Inherits message from
-    core:Exception. Written only onto `workflow:ModelTransformation.exception`.
-    A ModelOperation failure leaves that aggregation empty.
+    ExecutionException (executor or other operation fault). Inherits
+    message from core:Exception. Written onto the failed
+    `workflow:ModelOperation.exception`. Leaves
+    `workflow:ModelTransformation.exception` empty and aborts remaining
+    operations.
   </documentation>
 
   <isNot>Not ParametersException (Prepare parameter fault), not
@@ -38,6 +43,8 @@
     <see type="core:Exception" relation="Extends" />
     <see type="workflow:ParametersException" relation="ContrastsWith" />
     <see type="workflow:ExecutionException" relation="ContrastsWith" />
+    <see type="workflow:ResultMapping" relation="SeeAlso" />
+    <see type="workflow:ModelOperation" relation="SeeAlso" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
   </references>
 

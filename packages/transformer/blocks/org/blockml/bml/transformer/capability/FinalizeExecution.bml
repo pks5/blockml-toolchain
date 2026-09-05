@@ -23,17 +23,13 @@
 
     Set completedAt and status, then relocate the running ModelTransformation to
     `_meta.transform.succeeded` or `_meta.transform.failed`. `Succeeded` only when every
-    ModelOperation succeeded and result resolution did not throw. After that relocation, commit.
+    ModelOperation succeeded. After that relocation, commit.
 
-    When every ModelOperation succeeded and `resultSource` is set, close
-    any expression against this Block, read that Property from the
-    current model and write it onto `result`. Unset or empty
-    `resultSource` after close skips this. Unknown Block or Property, a
-    close fault, or a type that is not bound `R`, throws
-    `workflow:ResultException`, fills `exception`, and fails
-    the transformation. A ModelOperation failure skips result and leaves
-    `exception` empty. Prepare may already have written
-    `workflow:ParametersException` onto `exception`.
+    Does not resolve `result`. Persist already applied each succeeding
+    operation's `resultMappings`. A ModelOperation failure, including a
+    ResultException from those mappings, leaves
+    `ModelTransformation.exception` empty. Prepare may already have
+    written `workflow:ParametersException` onto `exception`.
 
     Default implementation is deterministic. Runs after every started execution,
     including a failed ModelOperation. Does not write output, changedFiles,

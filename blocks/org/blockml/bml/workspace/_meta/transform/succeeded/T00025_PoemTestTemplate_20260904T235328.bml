@@ -33,9 +33,6 @@
     <template override="true" type="type:Boolean">
       <value>false</value>
     </template>
-    <resultSource override="true" type="type:PropertyReference">
-      <value>${ #strings.concat( #this.parameters.targetBlock, '.properties.song') }</value>
-    </resultSource>
     <parameters override="true" type="succeeded:T00025_PoemTestTemplate_20260904T235328.Parameters">
       <value>{translationLanguage:"German",storyLanguage:"Spanish",topic:"A Futuristic city and a dog",targetBlock:"org.blockml.bml.workspace.playground.MyLatestStory"}</value>
     </parameters>

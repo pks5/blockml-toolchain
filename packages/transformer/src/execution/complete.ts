@@ -1,19 +1,14 @@
 import { forkBom } from "@blockml/framework";
-import { RESULT_EXCEPTION_FQN, type TerminalLifecycleStage } from "./constants.js";
+import { type TerminalLifecycleStage } from "./constants.js";
 import { formatDateTimeProperty } from "./lifecycle.js";
 import { loadRunningExecution } from "./load-running.js";
 import {
   setCompletedAt,
-  setException,
   setStatus,
   modelTransformationHasCompletedAt,
   allOperationsSucceeded,
 } from "./properties.js";
 import { rewriteParameterTypeFqns } from "./parameters.js";
-import {
-  applyTransformationResult,
-  ResultResolutionError,
-} from "./result.js";
 import {
   applyExecutionIdentity,
   persistDocument,
@@ -42,20 +37,7 @@ export function finalizeExecution(
   if (modelTransformationHasCompletedAt(registry)) {
     setCompletedAt(forked.block, completedAtIso);
   }
-  const operationsSucceeded = allOperationsSucceeded(forked.block, registry);
-  let resultError: string | undefined;
-  if (operationsSucceeded) {
-    try {
-      applyTransformationResult(forked.block, registry);
-    } catch (error) {
-      if (!(error instanceof ResultResolutionError)) {
-        throw error;
-      }
-      setException(forked.block, RESULT_EXCEPTION_FQN, error.message);
-      resultError = error.message;
-    }
-  }
-  const succeeded = operationsSucceeded && resultError === undefined;
+  const succeeded = allOperationsSucceeded(forked.block, registry);
   const stage: TerminalLifecycleStage = succeeded ? "succeeded" : "failed";
   setStatus(forked.block, succeeded ? "Succeeded" : "Failed");
 
@@ -81,6 +63,5 @@ export function finalizeExecution(
     terminalFilePath: forked.source.filePath,
     completedAtIso,
     stage,
-    ...(resultError !== undefined ? { error: resultError } : {}),
   };
 }
