@@ -1,6 +1,7 @@
 import type { TransformationAgent } from "../agent/transformation-agent.js";
 import type { ReflectionAgent } from "../agent/reflection-agent.js";
 import type { ExecutorRegistry } from "../executor/registry.js";
+import type { ParameterMappingSpec } from "../execution/parameters.js";
 import { type TransformLifecycleListener } from "../execution/lifecycle-events.js";
 import type { TransformPipeline, TransformRunResult } from "../pipeline/types.js";
 export type { TransformRunResult };
@@ -13,7 +14,7 @@ export interface TransformerOptions {
     now?: () => Date;
     onLifecycle?: TransformLifecycleListener;
     parameters?: unknown;
-    parametersSource?: string;
+    parameterMappings?: readonly ParameterMappingSpec[];
 }
 export declare class Transformer {
     private readonly workspaceRoot;
@@ -21,7 +22,7 @@ export declare class Transformer {
     private readonly now;
     private readonly onLifecycle;
     private readonly parameters;
-    private readonly parametersSource;
+    private readonly parameterMappings;
     constructor(options: TransformerOptions);
     run(executionFqn: string): Promise<TransformRunResult>;
     private runAfterPrepare;
@@ -37,7 +38,7 @@ export interface RunTransformationOptions {
     now?: () => Date;
     onLifecycle?: TransformLifecycleListener;
     parameters?: unknown;
-    parametersSource?: string;
+    parameterMappings?: readonly ParameterMappingSpec[];
 }
 export type RunTransformationResult = (TransformRunResult & {
     success: true;

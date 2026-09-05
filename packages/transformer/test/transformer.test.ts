@@ -1064,13 +1064,16 @@ describe("Transformer lifecycle", () => {
     expect(failed).not.toContain("ResultException");
   });
 
-  it("closes a parametersSource expression before copying parameters", async () => {
+  it("closes a parameterMappings source expression before copying parameters", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
         pendingParameters: "com.example.model.Poem",
-        parametersSource:
-          "${ #strings.concat(#this.parameters, '.properties.title') }",
+        parameterMappings: [
+          {
+            source: "${ #strings.concat(#this.parameters, '.properties.title') }",
+          },
+        ],
       }),
       "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
         name: "Poem",
@@ -1094,11 +1097,13 @@ describe("Transformer lifecycle", () => {
     expect(succeeded).not.toContain("ignored");
   });
 
-  it("copies parameters from parametersSource and ignores CLI parameters", async () => {
+  it("copies parameters from parameterMappings and ignores CLI parameters", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
-        parametersSource: "com.example.model.Poem.properties.title",
+        parameterMappings: [
+          { source: "com.example.model.Poem.properties.title" },
+        ],
       }),
       "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
         name: "Poem",
@@ -1122,11 +1127,13 @@ describe("Transformer lifecycle", () => {
     expect(succeeded).not.toContain("ignored");
   });
 
-  it("fails with ParametersException when parametersSource block is missing", async () => {
+  it("fails with ParametersException when parameterMappings source block is missing", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
-        parametersSource: "com.example.model.Missing.properties.title",
+        parameterMappings: [
+          { source: "com.example.model.Missing.properties.title" },
+        ],
       }),
     });
     const generated = "T00001_JokeTest_20260830T011702";
@@ -1138,7 +1145,7 @@ describe("Transformer lifecycle", () => {
     const result = await transformer.run(pendingFqn("JokeTest"));
     expect(result.success).toBe(false);
     expect(result.status).toBe("Failed");
-    expect(result.error).toMatch(/parametersSource block .* was not found/);
+    expect(result.error).toMatch(/source block .* was not found/);
     const failed = readFileSync(
       join(TMP, `blocks/com/example/model/_meta/transform/failed/${generated}.bml`),
       "utf8",
@@ -1151,11 +1158,13 @@ describe("Transformer lifecycle", () => {
     ).toBe(false);
   });
 
-  it("fails with ParametersException when parametersSource property type differs from T", async () => {
+  it("fails with ParametersException when parameterMappings source type differs from T", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
-        parametersSource: "com.example.model.Poem.properties.count",
+        parameterMappings: [
+          { source: "com.example.model.Poem.properties.count" },
+        ],
       }),
       "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
         name: "Poem",
@@ -1170,5 +1179,76 @@ describe("Transformer lifecycle", () => {
     const result = await transformer.run(pendingFqn("JokeTest"));
     expect(result.success).toBe(false);
     expect(result.error).toMatch(/does not match parameters type/);
+  });
+
+  it("writes a parameterPath mapping into bound T", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        parameterFields: ["title"],
+        parameterMappings: [
+          {
+            source: "com.example.model.Poem.properties.title",
+            parameterPath: "/title",
+          },
+        ],
+      }),
+      "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
+        name: "Poem",
+        properties: [{ name: "title", type: "type:Text", value: "El roble" }],
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(true);
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).toMatch(/<parameters[\s\S]*El roble/);
+    expect(succeeded).toContain("parameterMappings");
+  });
+
+  it("lets CLI parameterMappings replace pending mappings and ignore --parameters", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        parameterMappings: [
+          { source: "com.example.model.Poem.properties.title" },
+        ],
+      }),
+      "blocks/com/example/model/Poem.bml": resultSourceBlockXml({
+        name: "Poem",
+        properties: [
+          { name: "title", type: "type:Text", value: "El roble" },
+          { name: "artist", type: "type:Text", value: "CLI wins" },
+        ],
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+      parameters: "ignored",
+      parameterMappings: [
+        { source: "com.example.model.Poem.properties.artist" },
+      ],
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(true);
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).toMatch(/<parameters[\s\S]*CLI wins/);
+    expect(succeeded).toContain("com.example.model.Poem.properties.artist");
+    expect(succeeded).not.toContain("com.example.model.Poem.properties.title");
+    expect(succeeded).not.toContain("ignored");
   });
 });

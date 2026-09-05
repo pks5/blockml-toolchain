@@ -28,7 +28,7 @@
   <is>blockml transform specification</is>
 
   <documentation><![CDATA[Syntax:
-    blockml transform apply EXECUTION-FQN [--verbose] [--parameters JSON] [--parameters-source PATH]
+    blockml transform apply EXECUTION-FQN [--verbose] [--parameters JSON] [--parameter-mappings JSON]
 
     transform is a parent command. V1 defines the apply subcommand only.
     Further transform subcommands are declared on clicommand:TransformCommand
@@ -41,9 +41,9 @@
     (CLI wins; nested objects merge; arrays replace). Other types: CLI
     replaces pending. Prepare checks the result against bound T (default
     type:Text) and writes a value only when one exists (not "" / {}).
-    Omitted --parameters is no overlay. --parameters-source is a
-    PropertyReference path; it wins over pending parametersSource and
-    ignores --parameters.
+    Omitted --parameters is no overlay. --parameter-mappings is a JSON
+    array of ParameterMapping objects; a non-empty CLI array wins over
+    pending parameterMappings and ignores --parameters.
 
     The transformer takes an exclusive worktree lock, then prepares the
     ModelTransformation and runs each ModelOperation in order: persist
@@ -80,7 +80,7 @@
     Pending-contract violations never start the execution (exit 2).
 
 Printed help:
-Usage: blockml transform apply <execution-fqn> [--verbose] [--parameters json] [--parameters-source path]
+Usage: blockml transform apply <execution-fqn> [--verbose] [--parameters json] [--parameter-mappings json]
        blockml transform --help
 
 When: run a pending ModelTransformation.
@@ -93,7 +93,7 @@ Pipeline stage constraints belong to the Execute / Reflect prompts, not here.
 Flags:
   --verbose         stream additional agent-session detail
   --parameters json           JSON value for parameters (object merge when T is StructType)
-  --parameters-source path    PropertyReference copied onto parameters; ignores --parameters
+  --parameter-mappings json   JSON array of ParameterMapping objects; ignores --parameters
 
 Only one transform may run at a time in the same Git worktree.
 The worktree must be clean at start and before each ModelOperation.

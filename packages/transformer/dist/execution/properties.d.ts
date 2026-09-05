@@ -23,6 +23,12 @@ export declare function setOperationCompletedAt(instance: BlockInstance, iso: st
 export declare function setOperationOutput(instance: BlockInstance, output: string): void;
 export declare function setOperationChangedFiles(instance: BlockInstance, paths: readonly string[]): void;
 export declare function getOperationResultMappings(instance: BlockInstance): BlockInstance[];
+export declare function getParameterMappings(block: BlockDefinition): BlockInstance[];
+export declare function setParameterMappings(block: BlockDefinition, mappings: readonly {
+    source: string;
+    sourcePath?: string;
+    parameterPath?: string;
+}[]): void;
 export declare function setOperationException(instance: BlockInstance, message: string, typeFqn?: string): void;
 export declare function hasAggregationComposition(block: BlockDefinition, name: string): boolean;
 export declare function hasPropertyValue(block: BlockDefinition, name: string): boolean;

@@ -20,6 +20,8 @@ import {
   MODEL_OPERATION_FQN,
   TOOL_OPERATION_FQN,
   MODEL_TRANSFORMATION_FQN,
+  PARAMETER_MAPPING_FQN,
+  PROPERTY_IDENTIFIER_FQN,
   RESULT_MAPPING_FQN,
   TEXT_TYPE_FQN,
   UUID_TYPE_FQN,
@@ -290,6 +292,78 @@ export function getOperationResultMappings(instance: BlockInstance): BlockInstan
         mapping.typeFqn === RESULT_MAPPING_FQN ||
         mapping.typeFqn.endsWith(".ResultMapping"),
     );
+}
+
+export function getParameterMappings(block: BlockDefinition): BlockInstance[] {
+  const aggregation = block.members.find(
+    (member): member is AggregationDefinition =>
+      member.kind === "aggregation" && member.name === "parameterMappings",
+  );
+  if (!aggregation?.composition) {
+    return [];
+  }
+  return aggregation.composition.children
+    .filter((child): child is BlockInstanceNode => child.kind === "blockInstance")
+    .map((child) => child.instance)
+    .filter(
+      (mapping) =>
+        mapping.typeFqn === PARAMETER_MAPPING_FQN ||
+        mapping.typeFqn.endsWith(".ParameterMapping"),
+    );
+}
+
+export function setParameterMappings(
+  block: BlockDefinition,
+  mappings: readonly {
+    source: string;
+    sourcePath?: string;
+    parameterPath?: string;
+  }[],
+): void {
+  const aggregation: AggregationDefinition = {
+    kind: "aggregation",
+    name: "parameterMappings",
+    override: true,
+    authoredInAggregationsSection: true,
+    composition: {
+      aggregationName: "parameterMappings",
+      children: mappings.map((mapping) => ({
+        kind: "blockInstance" as const,
+        instance: {
+          typeFqn: PARAMETER_MAPPING_FQN,
+          memberValues: {
+            source: {
+              kind: "literal" as const,
+              value: mapping.source,
+              typeFqn: PROPERTY_IDENTIFIER_FQN,
+              authoredPlacement: "element" as const,
+            },
+            ...(mapping.sourcePath
+              ? {
+                  sourcePath: {
+                    kind: "literal" as const,
+                    value: mapping.sourcePath,
+                    typeFqn: TEXT_TYPE_FQN,
+                    authoredPlacement: "element" as const,
+                  },
+                }
+              : {}),
+            ...(mapping.parameterPath
+              ? {
+                  parameterPath: {
+                    kind: "literal" as const,
+                    value: mapping.parameterPath,
+                    typeFqn: TEXT_TYPE_FQN,
+                    authoredPlacement: "element" as const,
+                  },
+                }
+              : {}),
+          },
+        },
+      })),
+    },
+  };
+  upsertAggregation(block, aggregation);
 }
 
 export function setOperationException(

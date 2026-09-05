@@ -33,15 +33,15 @@
        true, leave the pending Block in place, copy it (including
        SubBlocks / bound `T`), set `template=false` on the copy, rewrite
        local type FQNs onto the copy, and relocate that copy instead.
-    5. Resolve `parameters`. CLI `--parameters-source` or pending
-       `parametersSource` wins and ignores `--parameters`: close a
-       pending expression against this Block, then copy that Property
-       onto `parameters` (type must equal bound `T`). Otherwise
-       `StructType` deep-merges CLI JSON over pending; other types replace.
-       Write a value only when one exists (not `""`, not `{}`). Bound `T`
-       defaults to `type:Text`. Unknown source Block/Property or type
-       mismatch: write `workflow:ParametersException` onto `exception`,
-       persist Running, skip operations.
+    5. Resolve `parameters`. CLI `--parameter-mappings` or pending
+       `parameterMappings` wins and ignores `--parameters`: close each
+       mapping `source` against this Block, then apply the mappings in
+       order onto `parameters`. A non-empty CLI array replaces pending
+       mappings on the running copy. Otherwise `StructType` deep-merges
+       CLI JSON over pending; other types replace. Write a value only
+       when one exists (not `""`, not `{}`). Bound `T` defaults to
+       `type:Text`. Mapping fault: write `workflow:ParametersException`
+       onto `exception`, persist Running, skip operations.
     6. Commit the running relocation.
 
     Default implementation is deterministic. TS: pipeline/prepare.ts.

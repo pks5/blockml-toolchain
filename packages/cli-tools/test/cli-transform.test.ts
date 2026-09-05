@@ -110,15 +110,17 @@ describe("parseArgs transform", () => {
     expect(parsed.parametersJson).toBe('{"language":"de"}');
   });
 
-  it("parses transform apply --parameters-source", () => {
+  it("parses transform apply --parameter-mappings", () => {
     const parsed = parseArgs([
       "transform",
       "apply",
       "org.blockml.bml.workspace._meta.transform.pending.JokeTest",
-      "--parameters-source",
-      "com.example.model.Poem.properties.title",
+      "--parameter-mappings",
+      '[{"source":"com.example.model.Poem.properties.title"}]',
     ]);
-    expect(parsed.parametersSource).toBe("com.example.model.Poem.properties.title");
+    expect(parsed.parameterMappingsJson).toBe(
+      '[{"source":"com.example.model.Poem.properties.title"}]',
+    );
   });
 });
 

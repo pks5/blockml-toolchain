@@ -1,22 +1,18 @@
 import { collectBaseTypeChain, ExpressionEvaluationError, resolveEffectiveMembers, } from "@blockml/framework";
 import { TransformError } from "./errors.js";
-import { closePropertyReferencePath } from "./interpolate.js";
-import { BOOLEAN_TYPE_FQN, INTEGER_TYPE_FQN, MODEL_TRANSFORMATION_FQN, PROPERTY_REFERENCE_FQN, TEXT_TYPE_FQN, } from "./constants.js";
-import { clearProperty, getPropertyLiteral, setOverrideProperty, } from "./properties.js";
-import { lookupReferencedProperty, propertyLiteral, propertyTypeFqn as referencedPropertyTypeFqn, } from "./property-reference.js";
+import { buildBlockEvaluationScope, closeMemberValue, } from "./interpolate.js";
+import { BOOLEAN_TYPE_FQN, EMPTY_STRUCT_FQN, INTEGER_TYPE_FQN, isPlainObject, MODEL_TRANSFORMATION_FQN, NUMBER_TYPE_FQN, STRUCT_TYPE_FQN, TEXT_TYPE_FQN, } from "./constants.js";
+import { clearProperty, getParameterMappings, getPropertyLiteral, setOverrideProperty, setParameterMappings, } from "./properties.js";
+import { lookupReferencedProperty, propertyLiteral } from "./property-reference.js";
+import { parseModelPath, readPath, ResultResolutionError, typeFromExpression, walkType, writePath, } from "./result.js";
 export class ParametersResolutionError extends Error {
     constructor(message) {
         super(message);
         this.name = "ParametersResolutionError";
     }
 }
-export const EMPTY_STRUCT_FQN = "org.blockml.bml.type.EmptyStruct";
-export const STRUCT_TYPE_FQN = "org.blockml.bml.type.StructType";
-export const NUMBER_TYPE_FQN = "org.blockml.bml.type.Number";
+export { EMPTY_STRUCT_FQN, NUMBER_TYPE_FQN, STRUCT_TYPE_FQN, isPlainObject, } from "./constants.js";
 export const PRIMITIVE_TYPE_FQN = "org.blockml.bml.type.PrimitiveType";
-export function isPlainObject(value) {
-    return typeof value === "object" && value !== null && !Array.isArray(value);
-}
 export function parseParametersJson(raw) {
     if (raw === undefined) {
         return undefined;
@@ -45,11 +41,14 @@ export function pendingParametersValue(block) {
     return getPropertyLiteral(block, "parameters");
 }
 export function resolveParametersTypeFqn(block) {
-    const fromExpression = namedArgumentFqn(block.baseTypeExpression);
-    if (fromExpression) {
-        return fromExpression;
+    return resolveParametersType(block).fqn;
+}
+export function resolveParametersType(block) {
+    const arg = parametersTypeArgument(block.baseTypeExpression);
+    if (arg) {
+        return typeFromExpression(arg);
     }
-    return TEXT_TYPE_FQN;
+    return { fqn: TEXT_TYPE_FQN, array: false };
 }
 export function isEmptyParameterValue(value) {
     if (value === undefined) {
@@ -60,12 +59,11 @@ export function isEmptyParameterValue(value) {
     }
     return isPlainObject(value) && Object.keys(value).length === 0;
 }
-function namedArgumentFqn(expr) {
+function parametersTypeArgument(expr) {
     if (expr?.kind !== "named" || expr.fqn !== MODEL_TRANSFORMATION_FQN) {
         return undefined;
     }
-    const arg = expr.typeArguments?.[0];
-    return arg?.kind === "named" ? arg.fqn : undefined;
+    return expr.typeArguments?.[0];
 }
 export function assertParametersCompatible(value, typeFqn, registry, path = "parameters") {
     assertValueCompatible(value, typeFqn, registry, path);
@@ -150,45 +148,57 @@ function extendsType(typeFqn, targetFqn, registry) {
     }
     return collectBaseTypeChain(typeBlock, registry).some((entry) => entry.type === targetFqn || entry.baseType === targetFqn);
 }
-function effectiveParametersSource(block, cliSource) {
-    const trimmed = cliSource?.trim();
-    if (trimmed) {
-        return trimmed;
+export function parseParameterMappingsJson(raw) {
+    if (raw === undefined) {
+        return undefined;
     }
+    let parsed;
     try {
-        return closePropertyReferencePath(block, "parametersSource");
+        parsed = JSON.parse(raw);
     }
-    catch (error) {
-        if (error instanceof ExpressionEvaluationError) {
-            throw new ParametersResolutionError(error.message);
+    catch {
+        throw new TransformError("resolve", "Invalid --parameter-mappings JSON");
+    }
+    if (!Array.isArray(parsed)) {
+        throw new TransformError("resolve", "--parameter-mappings must be a JSON array");
+    }
+    return parsed.map((item, index) => {
+        if (!isPlainObject(item)) {
+            throw new TransformError("resolve", `--parameter-mappings[${index}] must be an object`);
         }
-        throw error;
-    }
-}
-function readParametersSource(raw, typeFqn, registry) {
-    const lookedUp = lookupReferencedProperty(raw, registry, "parametersSource");
-    if ("error" in lookedUp) {
-        throw new ParametersResolutionError(lookedUp.error);
-    }
-    const sourceTypeFqn = referencedPropertyTypeFqn(lookedUp.property);
-    if (sourceTypeFqn !== typeFqn) {
-        throw new ParametersResolutionError(`parametersSource property type ${sourceTypeFqn ?? "(unknown)"} does not match parameters type ${typeFqn}`);
-    }
-    return propertyLiteral(lookedUp.property);
+        if (typeof item.source !== "string" || item.source.trim() === "") {
+            throw new TransformError("resolve", `--parameter-mappings[${index}].source is required`);
+        }
+        const mapping = { source: item.source.trim() };
+        if (typeof item.sourcePath === "string" && item.sourcePath.trim() !== "") {
+            mapping.sourcePath = item.sourcePath.trim();
+        }
+        if (typeof item.parameterPath === "string" && item.parameterPath.trim() !== "") {
+            mapping.parameterPath = item.parameterPath.trim();
+        }
+        return mapping;
+    });
 }
 function isStructParametersType(typeFqn, registry) {
     return extendsType(typeFqn, STRUCT_TYPE_FQN, registry) || typeFqn === EMPTY_STRUCT_FQN;
 }
+function effectiveCliMappings(mappings) {
+    if (!mappings || mappings.length === 0) {
+        return undefined;
+    }
+    return [...mappings];
+}
 export function applyExecutionParameters(block, registry, options = {}) {
     const typeFqn = resolveParametersTypeFqn(block);
-    const cliSource = options.parametersSource?.trim() || undefined;
-    if (cliSource) {
-        setOverrideProperty(block, "parametersSource", PROPERTY_REFERENCE_FQN, cliSource);
+    const cliMappings = effectiveCliMappings(options.parameterMappings);
+    if (cliMappings) {
+        setParameterMappings(block, cliMappings);
     }
-    const source = effectiveParametersSource(block, cliSource);
+    const mappings = getParameterMappings(block);
     let value;
-    if (source !== undefined) {
-        value = readParametersSource(source, typeFqn, registry);
+    if (mappings.length > 0) {
+        applyParameterMappings(block, registry);
+        value = pendingParametersValue(block);
     }
     else if (options.parameters === undefined) {
         value = pendingParametersValue(block);
@@ -210,9 +220,130 @@ export function applyExecutionParameters(block, registry, options = {}) {
         clearProperty(block, "parameters");
         return undefined;
     }
-    assertCompatibleValue(value, typeFqn, registry, "parameters");
-    setOverrideProperty(block, "parameters", typeFqn, value);
+    if (mappings.length === 0) {
+        assertCompatibleValue(value, typeFqn, registry, "parameters");
+        setOverrideProperty(block, "parameters", typeFqn, value);
+    }
     return value;
+}
+function applyParameterMappings(block, registry) {
+    const mappings = getParameterMappings(block);
+    const parametersType = resolveParametersType(block);
+    for (const mapping of mappings) {
+        applyOneParameterMapping(block, mapping, parametersType, registry);
+    }
+}
+function applyOneParameterMapping(block, mapping, parametersType, registry) {
+    let raw;
+    try {
+        raw = closeMappingSource(block, mapping.memberValues.source);
+    }
+    catch (error) {
+        if (error instanceof ExpressionEvaluationError) {
+            throw new ParametersResolutionError(error.message);
+        }
+        throw error;
+    }
+    const lookedUp = lookupReferencedProperty(raw, registry, "source");
+    if ("error" in lookedUp) {
+        throw new ParametersResolutionError(lookedUp.error);
+    }
+    let sourcePath;
+    let parameterPath;
+    try {
+        sourcePath = parseModelPath(mappingText(mapping, "sourcePath"), "sourcePath");
+        parameterPath = parseModelPath(mappingText(mapping, "parameterPath"), "parameterPath");
+    }
+    catch (error) {
+        throw wrapMappingError(error);
+    }
+    let selectedType;
+    let selectedValue;
+    try {
+        selectedType = walkType(typeFromPropertyLike(lookedUp.property), sourcePath, registry, "sourcePath");
+        const sourceValue = propertyLiteral(lookedUp.property);
+        if (sourceValue === undefined) {
+            throw new ParametersResolutionError(`source property ${lookedUp.blockFqn}.properties.${lookedUp.propertyName} has no value`);
+        }
+        selectedValue = readPath(sourceValue, sourcePath, "sourcePath");
+    }
+    catch (error) {
+        throw wrapMappingError(error);
+    }
+    if (parameterPath.length === 0) {
+        if (!typesEqual(selectedType, parametersType)) {
+            throw new ParametersResolutionError(`source type ${formatType(selectedType)} does not match parameters type ${formatType(parametersType)}`);
+        }
+        setOverrideProperty(block, "parameters", parametersType.fqn, selectedValue);
+        return;
+    }
+    let targetType;
+    let next;
+    try {
+        targetType = walkType(parametersType, parameterPath, registry, "parameterPath");
+        if (!typesEqual(selectedType, targetType)) {
+            throw new ParametersResolutionError(`source type ${formatType(selectedType)} does not match parameter path type ${formatType(targetType)}`);
+        }
+        const current = getPropertyLiteral(block, "parameters");
+        next = writePath(current, parameterPath, selectedValue, parametersType, registry, "parameterPath");
+    }
+    catch (error) {
+        throw wrapMappingError(error);
+    }
+    setOverrideProperty(block, "parameters", parametersType.fqn, next);
+}
+function closeMappingSource(block, value) {
+    if (!value) {
+        throw new ParametersResolutionError("source is required");
+    }
+    const closed = closeMemberValue(value, buildBlockEvaluationScope(block));
+    if (closed.kind !== "literal" || typeof closed.value !== "string") {
+        throw new ParametersResolutionError("source must close to a PropertyIdentifier path");
+    }
+    const trimmed = closed.value.trim();
+    if (trimmed === "") {
+        throw new ParametersResolutionError("source is required");
+    }
+    return trimmed;
+}
+function mappingText(mapping, name) {
+    const value = mapping.memberValues[name];
+    if (!value) {
+        return undefined;
+    }
+    if (value.kind === "literal" && typeof value.value === "string") {
+        const trimmed = value.value.trim();
+        return trimmed === "" ? undefined : trimmed;
+    }
+    return undefined;
+}
+function typeFromPropertyLike(property) {
+    if (property.type) {
+        const fromExpr = typeFromExpression(property.type);
+        if (!fromExpr.fqn && property.typeFqn) {
+            return { fqn: property.typeFqn, array: fromExpr.array };
+        }
+        return fromExpr;
+    }
+    return { fqn: property.typeFqn ?? "", array: false };
+}
+function typesEqual(left, right) {
+    return left.fqn === right.fqn && left.array === right.array;
+}
+function formatType(type) {
+    return type.array ? `${type.fqn}[]` : type.fqn;
+}
+function wrapMappingError(error) {
+    if (error instanceof ParametersResolutionError) {
+        return error;
+    }
+    if (error instanceof ResultResolutionError) {
+        return new ParametersResolutionError(error.message);
+    }
+    if (error instanceof Error) {
+        return new ParametersResolutionError(error.message);
+    }
+    return new ParametersResolutionError(String(error));
 }
 /**
  * Rewrite FQNs rooted at this execution Block after a lifecycle relocate.

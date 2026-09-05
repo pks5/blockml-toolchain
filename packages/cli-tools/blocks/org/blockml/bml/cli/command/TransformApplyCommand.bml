@@ -26,7 +26,7 @@
   <baseType>cli:CliType</baseType>
   <is>blockml transform apply subcommand</is>
 
-  <documentation>blockml transform apply EXECUTION-FQN [--verbose] [--parameters JSON] [--parameters-source PATH]. The CLI token is apply. The argument is the FQN of a pending ModelTransformation. Delegates to @blockml/transformer.</documentation>
+  <documentation>blockml transform apply EXECUTION-FQN [--verbose] [--parameters JSON] [--parameter-mappings JSON]. The CLI token is apply. The argument is the FQN of a pending ModelTransformation. Delegates to @blockml/transformer.</documentation>
   <references>
     <see type="clicommand:TransformCommand" relation="SeeAlso" />
     <see type="clidocumentation:TransformCommand" relation="SeeAlso" />
@@ -34,8 +34,8 @@
   </references>
   <properties>
     <executionFqn type="type:Text"><documentation>FQN of a ModelTransformation in the library _meta.transform.pending package. (required)</documentation></executionFqn>
-    <parameters type="type:Text"><documentation>JSON value of run parameters. StructType: merged over pending. Other types: replaces pending. Ignored when parametersSource is set. (optional)</documentation></parameters>
-    <parametersSource type="type:Text"><documentation>PropertyReference path copied onto parameters. Ignores --parameters. (optional)</documentation></parametersSource>
+    <parameters type="type:Text"><documentation>JSON value of run parameters. StructType: merged over pending. Other types: replaces pending. Ignored when parameterMappings is non-empty. (optional)</documentation></parameters>
+    <parameterMappings type="type:Text"><documentation>JSON array of ParameterMapping objects applied onto parameters. Ignores --parameters. (optional)</documentation></parameterMappings>
     <verbose type="type:Boolean"><documentation>Stream the transformation agent output live. (optional)</documentation></verbose>
   </properties>
 

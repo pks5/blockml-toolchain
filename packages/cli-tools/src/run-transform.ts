@@ -1,6 +1,7 @@
 import {
   ClaudeCodeAgent,
   formatTransformLifecycle,
+  parseParameterMappingsJson,
   parseParametersJson,
   runTransformation,
   TransformError,
@@ -23,7 +24,7 @@ export async function runTransform(
   reflectAgent?: ReflectionAgent,
   onOutputLine?: (line: CliOutputLine) => void,
   parametersJson?: string,
-  parametersSource?: string,
+  parameterMappingsJson?: string,
 ): Promise<number> {
   const fqn = executionFqn?.trim() ?? "";
   if (!fqn) {
@@ -32,9 +33,23 @@ export async function runTransform(
     return 2;
   }
 
-  const source = parametersSource?.trim() || undefined;
+  let parameterMappings: ReturnType<typeof parseParameterMappingsJson> = undefined;
+  if (parameterMappingsJson !== undefined) {
+    try {
+      parameterMappings = parseParameterMappingsJson(parameterMappingsJson);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : String(error);
+      emit(lines, onOutputLine, message, "error");
+      return error instanceof TransformError ? error.exitCode : 2;
+    }
+  }
+  const mappings =
+    parameterMappings !== undefined && parameterMappings.length > 0
+      ? parameterMappings
+      : undefined;
   let parameters: unknown | undefined;
-  if (source === undefined && parametersJson !== undefined) {
+  if (mappings === undefined && parametersJson !== undefined) {
     try {
       parameters = parseParametersJson(parametersJson);
     } catch (error) {
@@ -51,7 +66,7 @@ export async function runTransform(
     agent,
     ...(reflectAgent ? { reflectAgent } : {}),
     ...(parameters !== undefined ? { parameters } : {}),
-    ...(source !== undefined ? { parametersSource: source } : {}),
+    ...(mappings !== undefined ? { parameterMappings: mappings } : {}),
     onLifecycle: (event) => {
       const line = lifecycleOutput(event);
       if (line) {

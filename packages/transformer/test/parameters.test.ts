@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { TransformError } from "../src/execution/errors.js";
 import {
   deepMergeParameters,
+  parseParameterMappingsJson,
   parseParametersJson,
   rewriteParameterTypeFqns,
 } from "../src/execution/parameters.js";
@@ -25,6 +26,33 @@ describe("parseParametersJson", () => {
 
   it("rejects invalid JSON", () => {
     expect(() => parseParametersJson("{")).toThrow(TransformError);
+  });
+});
+
+describe("parseParameterMappingsJson", () => {
+  it("treats a missing flag as undefined", () => {
+    expect(parseParameterMappingsJson(undefined)).toBeUndefined();
+  });
+
+  it("parses a mapping array", () => {
+    expect(
+      parseParameterMappingsJson(
+        '[{"source":"com.example.model.Poem.properties.title","parameterPath":"/title"}]',
+      ),
+    ).toEqual([
+      {
+        source: "com.example.model.Poem.properties.title",
+        parameterPath: "/title",
+      },
+    ]);
+  });
+
+  it("rejects a non-array", () => {
+    expect(() => parseParameterMappingsJson("{}")).toThrow(TransformError);
+  });
+
+  it("rejects a mapping without source", () => {
+    expect(() => parseParameterMappingsJson("[{}]")).toThrow(TransformError);
   });
 });
 

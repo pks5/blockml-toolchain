@@ -1,7 +1,7 @@
 import { collectBaseTypeChain, ExpressionEvaluationError, resolveEffectiveMembers, } from "@blockml/framework";
 import { MODEL_TRANSFORMATION_FQN, TEXT_TYPE_FQN, } from "./constants.js";
 import { buildBlockEvaluationScope, closeMemberValue, } from "./interpolate.js";
-import { EMPTY_STRUCT_FQN, isPlainObject, STRUCT_TYPE_FQN } from "./parameters.js";
+import { EMPTY_STRUCT_FQN, isPlainObject, STRUCT_TYPE_FQN, } from "./constants.js";
 import { getOperationResultMappings, getPropertyLiteral, setResult, } from "./properties.js";
 import { lookupReferencedProperty, propertyLiteral, propertyTypeFqn, } from "./property-reference.js";
 export class ResultResolutionError extends Error {
@@ -173,15 +173,15 @@ export function readPath(value, path, label) {
     }
     return current;
 }
-export function writePath(root, path, value, startType, registry) {
+export function writePath(root, path, value, startType, registry, label = "resultPath") {
     if (path.length === 0) {
         return value;
     }
-    const next = root === undefined ? emptyOf(startType, registry) : cloneValue(root);
-    writeInto(next, path, value, startType, registry);
+    const next = root === undefined ? emptyOf(startType, registry, label) : cloneValue(root);
+    writeInto(next, path, value, startType, registry, label);
     return next;
 }
-function writeInto(container, path, value, containerType, registry) {
+function writeInto(container, path, value, containerType, registry, label) {
     const [segment, ...rest] = path;
     if (!segment) {
         return;
@@ -189,34 +189,34 @@ function writeInto(container, path, value, containerType, registry) {
     const last = rest.length === 0;
     if (containerType.array) {
         if (segment.kind !== "index") {
-            throw new ResultResolutionError(`resultPath segment "${segment.value}" is not valid on an array; expected an index`);
+            throw new ResultResolutionError(`${label} segment "${segment.value}" is not valid on an array; expected an index`);
         }
         if (!Array.isArray(container)) {
-            throw new ResultResolutionError("resultPath expected an array");
+            throw new ResultResolutionError(`${label} expected an array`);
         }
         if (segment.value < 0 || segment.value > container.length) {
-            throw new ResultResolutionError(`resultPath index ${segment.value} is out of range`);
+            throw new ResultResolutionError(`${label} index ${segment.value} is out of range`);
         }
         const elementType = { fqn: containerType.fqn, array: false };
         if (segment.value === container.length) {
-            container.push(last ? value : emptyOf(elementType, registry));
+            container.push(last ? value : emptyOf(elementType, registry, label));
         }
         if (last) {
             container[segment.value] = value;
             return;
         }
-        writeInto(container[segment.value], rest, value, elementType, registry);
+        writeInto(container[segment.value], rest, value, elementType, registry, label);
         return;
     }
     if (segment.kind === "index") {
-        throw new ResultResolutionError(`resultPath segment "${segment.value}" is not valid; a non-array StructType path must start with a field name`);
+        throw new ResultResolutionError(`${label} segment "${segment.value}" is not valid; a non-array StructType path must start with a field name`);
     }
     if (!isPlainObject(container)) {
-        throw new ResultResolutionError("resultPath expected a struct");
+        throw new ResultResolutionError(`${label} expected a struct`);
     }
     const field = structField(containerType.fqn, segment.value, registry);
     if (!field) {
-        throw new ResultResolutionError(`resultPath field ${segment.value} was not found on ${containerType.fqn}`);
+        throw new ResultResolutionError(`${label} field ${segment.value} was not found on ${containerType.fqn}`);
     }
     const fieldType = typeFromProperty(field);
     if (last) {
@@ -224,18 +224,18 @@ function writeInto(container, path, value, containerType, registry) {
         return;
     }
     if (!(segment.value in container) || container[segment.value] === undefined) {
-        container[segment.value] = emptyOf(fieldType, registry);
+        container[segment.value] = emptyOf(fieldType, registry, label);
     }
-    writeInto(container[segment.value], rest, value, fieldType, registry);
+    writeInto(container[segment.value], rest, value, fieldType, registry, label);
 }
-function emptyOf(type, registry) {
+function emptyOf(type, registry, label) {
     if (type.array) {
         return [];
     }
     if (isStructType(type.fqn, registry)) {
         return {};
     }
-    throw new ResultResolutionError(`resultPath is not valid on ${formatType(type)}`);
+    throw new ResultResolutionError(`${label} is not valid on ${formatType(type)}`);
 }
 function typeFromProperty(property) {
     if (property.type) {
@@ -247,7 +247,7 @@ function typeFromProperty(property) {
     }
     return { fqn: propertyTypeFqn(property) ?? "", array: false };
 }
-function typeFromExpression(expr) {
+export function typeFromExpression(expr) {
     if (expr.kind === "named") {
         return { fqn: expr.fqn, array: isArrayMultiplicity(expr.multiplicity) };
     }

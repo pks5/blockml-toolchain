@@ -104,7 +104,10 @@ export {
   formatDateTimeProperty,
 } from "./execution/lifecycle.js";
 export { MODEL_TRANSFORMATION_FQN } from "./execution/constants.js";
-export { parseParametersJson } from "./execution/parameters.js";
+export {
+  parseParameterMappingsJson,
+  parseParametersJson,
+} from "./execution/parameters.js";
 export {
   closeOperationTask,
   closeTaskInstance,

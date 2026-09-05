@@ -10,14 +10,14 @@ export class Transformer {
     now;
     onLifecycle;
     parameters;
-    parametersSource;
+    parameterMappings;
     constructor(options) {
         this.workspaceRoot = options.workspaceRoot;
         this.pipeline = resolvePipeline(options);
         this.now = options.now ?? (() => new Date());
         this.onLifecycle = options.onLifecycle;
         this.parameters = options.parameters;
-        this.parametersSource = options.parametersSource;
+        this.parameterMappings = options.parameterMappings;
     }
     async run(executionFqn) {
         const lock = await acquireWorktreeLock(this.workspaceRoot, executionFqn);
@@ -25,8 +25,8 @@ export class Transformer {
             workspaceRoot: this.workspaceRoot,
             now: this.now,
             ...(this.parameters !== undefined ? { parameters: this.parameters } : {}),
-            ...(this.parametersSource !== undefined
-                ? { parametersSource: this.parametersSource }
+            ...(this.parameterMappings !== undefined
+                ? { parameterMappings: this.parameterMappings }
                 : {}),
             ...(this.onLifecycle ? { onLifecycle: this.onLifecycle } : {}),
         };
@@ -224,8 +224,8 @@ export async function runTransformation(options) {
     if (options.parameters !== undefined) {
         transformerOptions.parameters = options.parameters;
     }
-    if (options.parametersSource !== undefined) {
-        transformerOptions.parametersSource = options.parametersSource;
+    if (options.parameterMappings !== undefined) {
+        transformerOptions.parameterMappings = options.parameterMappings;
     }
     const transformer = new Transformer(transformerOptions);
     try {

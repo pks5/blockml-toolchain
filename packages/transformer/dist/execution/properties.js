@@ -1,5 +1,5 @@
 import { collectBaseTypeChain } from "@blockml/framework";
-import { BOOLEAN_TYPE_FQN, DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, AGENTIC_OPERATION_FQN, MODEL_OPERATION_FQN, TOOL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN, RESULT_MAPPING_FQN, TEXT_TYPE_FQN, UUID_TYPE_FQN, } from "./constants.js";
+import { BOOLEAN_TYPE_FQN, DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, AGENTIC_OPERATION_FQN, MODEL_OPERATION_FQN, TOOL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN, PARAMETER_MAPPING_FQN, PROPERTY_IDENTIFIER_FQN, RESULT_MAPPING_FQN, TEXT_TYPE_FQN, UUID_TYPE_FQN, } from "./constants.js";
 export function isModelTransformation(block, registry) {
     if (block.type === MODEL_TRANSFORMATION_FQN || block.baseType === MODEL_TRANSFORMATION_FQN) {
         return true;
@@ -167,6 +167,63 @@ export function getOperationResultMappings(instance) {
         .map((child) => child.instance)
         .filter((mapping) => mapping.typeFqn === RESULT_MAPPING_FQN ||
         mapping.typeFqn.endsWith(".ResultMapping"));
+}
+export function getParameterMappings(block) {
+    const aggregation = block.members.find((member) => member.kind === "aggregation" && member.name === "parameterMappings");
+    if (!aggregation?.composition) {
+        return [];
+    }
+    return aggregation.composition.children
+        .filter((child) => child.kind === "blockInstance")
+        .map((child) => child.instance)
+        .filter((mapping) => mapping.typeFqn === PARAMETER_MAPPING_FQN ||
+        mapping.typeFqn.endsWith(".ParameterMapping"));
+}
+export function setParameterMappings(block, mappings) {
+    const aggregation = {
+        kind: "aggregation",
+        name: "parameterMappings",
+        override: true,
+        authoredInAggregationsSection: true,
+        composition: {
+            aggregationName: "parameterMappings",
+            children: mappings.map((mapping) => ({
+                kind: "blockInstance",
+                instance: {
+                    typeFqn: PARAMETER_MAPPING_FQN,
+                    memberValues: {
+                        source: {
+                            kind: "literal",
+                            value: mapping.source,
+                            typeFqn: PROPERTY_IDENTIFIER_FQN,
+                            authoredPlacement: "element",
+                        },
+                        ...(mapping.sourcePath
+                            ? {
+                                sourcePath: {
+                                    kind: "literal",
+                                    value: mapping.sourcePath,
+                                    typeFqn: TEXT_TYPE_FQN,
+                                    authoredPlacement: "element",
+                                },
+                            }
+                            : {}),
+                        ...(mapping.parameterPath
+                            ? {
+                                parameterPath: {
+                                    kind: "literal",
+                                    value: mapping.parameterPath,
+                                    typeFqn: TEXT_TYPE_FQN,
+                                    authoredPlacement: "element",
+                                },
+                            }
+                            : {}),
+                    },
+                },
+            })),
+        },
+    };
+    upsertAggregation(block, aggregation);
 }
 export function setOperationException(instance, message, typeFqn = EXECUTION_EXCEPTION_FQN) {
     upsertInstanceAggregation(instance, "exception", [

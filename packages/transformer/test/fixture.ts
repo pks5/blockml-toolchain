@@ -75,6 +75,12 @@ export type ResultMappingSpec = {
   resultPath?: string;
 };
 
+export type ParameterMappingSpec = {
+  source: string;
+  sourcePath?: string;
+  parameterPath?: string;
+};
+
 export function pendingExecutionXml(opts: {
   name: string;
   executionId?: string;
@@ -87,7 +93,7 @@ export function pendingExecutionXml(opts: {
   resultMappings?: readonly ResultMappingSpec[];
   resultType?: string;
   resultFields?: readonly { name: string; type: string }[];
-  parametersSource?: string;
+  parameterMappings?: readonly ParameterMappingSpec[];
   tool?: { command: string; args?: readonly string[] };
 }): string {
   const refs = opts.extraRefs
@@ -113,13 +119,6 @@ export function pendingExecutionXml(opts: {
         `    <parameters override="true">`,
         `      <value>${opts.pendingParameters}</value>`,
         `    </parameters>`,
-      ].join("\n")
-    : "";
-  const parametersSourceXml = opts.parametersSource
-    ? [
-        `    <parametersSource override="true" type="org.blockml.bml.type.PropertyReference">`,
-        `      <value>${opts.parametersSource}</value>`,
-        `    </parametersSource>`,
       ].join("\n")
     : "";
   const parameterFields = opts.parameterFields ?? [];
@@ -212,7 +211,6 @@ export function pendingExecutionXml(opts: {
     executionIdXml,
     templateXml,
     pendingParametersXml,
-    parametersSourceXml,
     `    <status override="true" type="org.blockml.bml.transformer.workflow.ExecutionStatus">`,
     `      <value>Pending</value>`,
     `    </status>`,
@@ -221,6 +219,7 @@ export function pendingExecutionXml(opts: {
     `    </createdAt>`,
     `  </properties>`,
     `  <aggregations>`,
+    ...parameterMappingsXml(opts.parameterMappings),
     `    <operations override="true">`,
     `      <composition>`,
     operations,
@@ -230,6 +229,31 @@ export function pendingExecutionXml(opts: {
     `</block>`,
     ``,
   ].join("\n");
+}
+
+function parameterMappingsXml(
+  mappings: readonly ParameterMappingSpec[] | undefined,
+): string[] {
+  if (!mappings || mappings.length === 0) {
+    return [];
+  }
+  return [
+    `    <parameterMappings override="true">`,
+    `      <composition>`,
+    ...mappings.flatMap((mapping) => [
+      `        <workflow:ParameterMapping>`,
+      `          <source>${mapping.source}</source>`,
+      ...(mapping.sourcePath
+        ? [`          <sourcePath>${mapping.sourcePath}</sourcePath>`]
+        : []),
+      ...(mapping.parameterPath
+        ? [`          <parameterPath>${mapping.parameterPath}</parameterPath>`]
+        : []),
+      `        </workflow:ParameterMapping>`,
+    ]),
+    `      </composition>`,
+    `    </parameterMappings>`,
+  ];
 }
 
 function resultMappingsXml(

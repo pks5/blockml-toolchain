@@ -100,9 +100,9 @@ export function parseArgs(argv) {
             const value = args.shift();
             result.parametersJson = value ?? "";
         }
-        else if (flag === "--parameters-source") {
+        else if (flag === "--parameter-mappings") {
             const value = args.shift();
-            result.parametersSource = value ?? "";
+            result.parameterMappingsJson = value ?? "";
         }
         else if (flag === "--baseType") {
             const value = args.shift();
@@ -718,7 +718,7 @@ async function executeCli(argv, cwd, options = {}) {
             }
             const verbose = parsed.verbose === true;
             const agent = options.transformAgent ?? defaultTransformAgent(verbose);
-            const code = await runTransform(parsed.executionFqn, cwd, lines, USAGE, agent, options.reflectAgent, options.onOutputLine, parsed.parametersJson, parsed.parametersSource);
+            const code = await runTransform(parsed.executionFqn, cwd, lines, USAGE, agent, options.reflectAgent, options.onOutputLine, parsed.parametersJson, parsed.parameterMappingsJson);
             return { code, lines };
         }
         if (parsed.command === "new") {

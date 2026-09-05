@@ -19,7 +19,11 @@ import {
   buildBlockEvaluationScope,
   closeMemberValue,
 } from "./interpolate.js";
-import { EMPTY_STRUCT_FQN, isPlainObject, STRUCT_TYPE_FQN } from "./parameters.js";
+import {
+  EMPTY_STRUCT_FQN,
+  isPlainObject,
+  STRUCT_TYPE_FQN,
+} from "./constants.js";
 import {
   getOperationResultMappings,
   getPropertyLiteral,
@@ -261,12 +265,13 @@ export function writePath(
   value: unknown,
   startType: ResolvedType,
   registry: TypeRegistry,
+  label = "resultPath",
 ): unknown {
   if (path.length === 0) {
     return value;
   }
-  const next = root === undefined ? emptyOf(startType, registry) : cloneValue(root);
-  writeInto(next, path, value, startType, registry);
+  const next = root === undefined ? emptyOf(startType, registry, label) : cloneValue(root);
+  writeInto(next, path, value, startType, registry, label);
   return next;
 }
 
@@ -276,6 +281,7 @@ function writeInto(
   value: unknown,
   containerType: ResolvedType,
   registry: TypeRegistry,
+  label: string,
 ): void {
   const [segment, ...rest] = path;
   if (!segment) {
@@ -285,40 +291,40 @@ function writeInto(
   if (containerType.array) {
     if (segment.kind !== "index") {
       throw new ResultResolutionError(
-        `resultPath segment "${segment.value}" is not valid on an array; expected an index`,
+        `${label} segment "${segment.value}" is not valid on an array; expected an index`,
       );
     }
     if (!Array.isArray(container)) {
-      throw new ResultResolutionError("resultPath expected an array");
+      throw new ResultResolutionError(`${label} expected an array`);
     }
     if (segment.value < 0 || segment.value > container.length) {
       throw new ResultResolutionError(
-        `resultPath index ${segment.value} is out of range`,
+        `${label} index ${segment.value} is out of range`,
       );
     }
     const elementType: ResolvedType = { fqn: containerType.fqn, array: false };
     if (segment.value === container.length) {
-      container.push(last ? value : emptyOf(elementType, registry));
+      container.push(last ? value : emptyOf(elementType, registry, label));
     }
     if (last) {
       container[segment.value] = value;
       return;
     }
-    writeInto(container[segment.value], rest, value, elementType, registry);
+    writeInto(container[segment.value], rest, value, elementType, registry, label);
     return;
   }
   if (segment.kind === "index") {
     throw new ResultResolutionError(
-      `resultPath segment "${segment.value}" is not valid; a non-array StructType path must start with a field name`,
+      `${label} segment "${segment.value}" is not valid; a non-array StructType path must start with a field name`,
     );
   }
   if (!isPlainObject(container)) {
-    throw new ResultResolutionError("resultPath expected a struct");
+    throw new ResultResolutionError(`${label} expected a struct`);
   }
   const field = structField(containerType.fqn, segment.value, registry);
   if (!field) {
     throw new ResultResolutionError(
-      `resultPath field ${segment.value} was not found on ${containerType.fqn}`,
+      `${label} field ${segment.value} was not found on ${containerType.fqn}`,
     );
   }
   const fieldType = typeFromProperty(field);
@@ -327,12 +333,12 @@ function writeInto(
     return;
   }
   if (!(segment.value in container) || container[segment.value] === undefined) {
-    container[segment.value] = emptyOf(fieldType, registry);
+    container[segment.value] = emptyOf(fieldType, registry, label);
   }
-  writeInto(container[segment.value], rest, value, fieldType, registry);
+  writeInto(container[segment.value], rest, value, fieldType, registry, label);
 }
 
-function emptyOf(type: ResolvedType, registry: TypeRegistry): unknown {
+function emptyOf(type: ResolvedType, registry: TypeRegistry, label: string): unknown {
   if (type.array) {
     return [];
   }
@@ -340,7 +346,7 @@ function emptyOf(type: ResolvedType, registry: TypeRegistry): unknown {
     return {};
   }
   throw new ResultResolutionError(
-    `resultPath is not valid on ${formatType(type)}`,
+    `${label} is not valid on ${formatType(type)}`,
   );
 }
 
@@ -355,7 +361,7 @@ function typeFromProperty(property: PropertyDefinition): ResolvedType {
   return { fqn: propertyTypeFqn(property) ?? "", array: false };
 }
 
-function typeFromExpression(expr: TypeExpression): ResolvedType {
+export function typeFromExpression(expr: TypeExpression): ResolvedType {
   if (expr.kind === "named") {
     return { fqn: expr.fqn, array: isArrayMultiplicity(expr.multiplicity) };
   }

@@ -6,13 +6,21 @@ export const EXECUTION_STATUS_FQN = "org.blockml.bml.transformer.workflow.Execut
 export const EXECUTION_EXCEPTION_FQN = "org.blockml.bml.transformer.workflow.ExecutionException";
 export const RESULT_EXCEPTION_FQN = "org.blockml.bml.transformer.workflow.ResultException";
 export const RESULT_MAPPING_FQN = "org.blockml.bml.transformer.workflow.ResultMapping";
+export const PARAMETER_MAPPING_FQN = "org.blockml.bml.transformer.workflow.ParameterMapping";
 export const PARAMETERS_EXCEPTION_FQN = "org.blockml.bml.transformer.workflow.ParametersException";
 export const PROPERTY_REFERENCE_FQN = "org.blockml.bml.type.PropertyReference";
+export const PROPERTY_IDENTIFIER_FQN = "org.blockml.bml.type.PropertyIdentifier";
 export const INTEGER_TYPE_FQN = "org.blockml.bml.type.Integer";
 export const DATETIME_TYPE_FQN = "org.blockml.bml.type.DateTime";
 export const TEXT_TYPE_FQN = "org.blockml.bml.type.Text";
 export const UUID_TYPE_FQN = "org.blockml.bml.type.UUID";
 export const BOOLEAN_TYPE_FQN = "org.blockml.bml.type.Boolean";
+export const EMPTY_STRUCT_FQN = "org.blockml.bml.type.EmptyStruct";
+export const STRUCT_TYPE_FQN = "org.blockml.bml.type.StructType";
+export const NUMBER_TYPE_FQN = "org.blockml.bml.type.Number";
+export function isPlainObject(value) {
+    return typeof value === "object" && value !== null && !Array.isArray(value);
+}
 export const FILE_PATH_TYPE_FQN = "org.blockml.bml.type.FilePath";
 export const FILE_PATH_ENTITY_FQN = "org.blockml.bml.type.FilePathEntity";
 export const TYPE_PACKAGE_FQN = "org.blockml.bml.type";

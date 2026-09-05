@@ -10,8 +10,8 @@ export function createPrepareStage() {
                 ...(context.parameters !== undefined
                     ? { parameters: context.parameters }
                     : {}),
-                ...(context.parametersSource !== undefined
-                    ? { parametersSource: context.parametersSource }
+                ...(context.parameterMappings !== undefined
+                    ? { parameterMappings: context.parameterMappings }
                     : {}),
             });
             const operationCount = getOperationInstances(resolved.document.block, resolved.registry).length;

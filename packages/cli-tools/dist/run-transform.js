@@ -1,15 +1,28 @@
-import { ClaudeCodeAgent, formatTransformLifecycle, parseParametersJson, runTransformation, TransformError, } from "@blockml/transformer";
+import { ClaudeCodeAgent, formatTransformLifecycle, parseParameterMappingsJson, parseParametersJson, runTransformation, TransformError, } from "@blockml/transformer";
 import { pushLines, } from "./cli-style.js";
-export async function runTransform(executionFqn, rootDir, lines, usage, agent, reflectAgent, onOutputLine, parametersJson, parametersSource) {
+export async function runTransform(executionFqn, rootDir, lines, usage, agent, reflectAgent, onOutputLine, parametersJson, parameterMappingsJson) {
     const fqn = executionFqn?.trim() ?? "";
     if (!fqn) {
         emit(lines, onOutputLine, "Specify a ModelTransformation FQN.", "error");
         emit(lines, onOutputLine, usage, "info");
         return 2;
     }
-    const source = parametersSource?.trim() || undefined;
+    let parameterMappings = undefined;
+    if (parameterMappingsJson !== undefined) {
+        try {
+            parameterMappings = parseParameterMappingsJson(parameterMappingsJson);
+        }
+        catch (error) {
+            const message = error instanceof Error ? error.message : String(error);
+            emit(lines, onOutputLine, message, "error");
+            return error instanceof TransformError ? error.exitCode : 2;
+        }
+    }
+    const mappings = parameterMappings !== undefined && parameterMappings.length > 0
+        ? parameterMappings
+        : undefined;
     let parameters;
-    if (source === undefined && parametersJson !== undefined) {
+    if (mappings === undefined && parametersJson !== undefined) {
         try {
             parameters = parseParametersJson(parametersJson);
         }
@@ -25,7 +38,7 @@ export async function runTransform(executionFqn, rootDir, lines, usage, agent, r
         agent,
         ...(reflectAgent ? { reflectAgent } : {}),
         ...(parameters !== undefined ? { parameters } : {}),
-        ...(source !== undefined ? { parametersSource: source } : {}),
+        ...(mappings !== undefined ? { parameterMappings: mappings } : {}),
         onLifecycle: (event) => {
             const line = lifecycleOutput(event);
             if (line) {

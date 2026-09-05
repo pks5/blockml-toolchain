@@ -24,7 +24,7 @@ export interface ParsedArgs {
     depth?: number;
     executionFqn?: string;
     parametersJson?: string;
-    parametersSource?: string;
+    parameterMappingsJson?: string;
     newFqn?: string;
     newBaseType?: string;
     newIs?: string;

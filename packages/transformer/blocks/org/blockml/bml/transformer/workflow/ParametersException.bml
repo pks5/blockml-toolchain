@@ -18,13 +18,15 @@
   <documentation>
     # Parameters Exception
 
-    Prepare could not copy `parametersSource` onto `parameters`:
+    Prepare could not apply `parameterMappings` onto `parameters`:
 
-    * the path expression could not be closed
+    * a mapping `source` expression could not be closed
     * the path points at an unknown Block or Property
-    * or the Property type does not match the bound parameter generic `T`
+    * a `sourcePath` / `parameterPath` is invalid
+    * or a selected leaf type does not match bound `T` (or the
+      `parameterPath` target)
 
-    Distinct from ResultException (Finalize result fault) and
+    Distinct from ResultException (Persist result-mapping fault) and
     ExecutionException (a ModelOperation fault). Inherits message from
     core:Exception. Written only onto `workflow:ModelTransformation.exception`.
     A ModelOperation failure leaves that aggregation empty.

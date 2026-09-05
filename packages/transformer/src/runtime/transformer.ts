@@ -2,6 +2,7 @@ import type { TransformationAgent } from "../agent/transformation-agent.js";
 import type { ReflectionAgent } from "../agent/reflection-agent.js";
 import type { ExecutorRegistry } from "../executor/registry.js";
 import { TransformError } from "../execution/errors.js";
+import type { ParameterMappingSpec } from "../execution/parameters.js";
 import {
   emitLifecycle,
   type TransformLifecycleListener,
@@ -32,7 +33,7 @@ export interface TransformerOptions {
   now?: () => Date;
   onLifecycle?: TransformLifecycleListener;
   parameters?: unknown;
-  parametersSource?: string;
+  parameterMappings?: readonly ParameterMappingSpec[];
 }
 
 export class Transformer {
@@ -41,7 +42,7 @@ export class Transformer {
   private readonly now: () => Date;
   private readonly onLifecycle: TransformLifecycleListener | undefined;
   private readonly parameters: unknown | undefined;
-  private readonly parametersSource: string | undefined;
+  private readonly parameterMappings: readonly ParameterMappingSpec[] | undefined;
 
   constructor(options: TransformerOptions) {
     this.workspaceRoot = options.workspaceRoot;
@@ -49,7 +50,7 @@ export class Transformer {
     this.now = options.now ?? (() => new Date());
     this.onLifecycle = options.onLifecycle;
     this.parameters = options.parameters;
-    this.parametersSource = options.parametersSource;
+    this.parameterMappings = options.parameterMappings;
   }
 
   async run(executionFqn: string): Promise<TransformRunResult> {
@@ -58,8 +59,8 @@ export class Transformer {
       workspaceRoot: this.workspaceRoot,
       now: this.now,
       ...(this.parameters !== undefined ? { parameters: this.parameters } : {}),
-      ...(this.parametersSource !== undefined
-        ? { parametersSource: this.parametersSource }
+      ...(this.parameterMappings !== undefined
+        ? { parameterMappings: this.parameterMappings }
         : {}),
       ...(this.onLifecycle ? { onLifecycle: this.onLifecycle } : {}),
     };
@@ -273,7 +274,7 @@ export interface RunTransformationOptions {
   now?: () => Date;
   onLifecycle?: TransformLifecycleListener;
   parameters?: unknown;
-  parametersSource?: string;
+  parameterMappings?: readonly ParameterMappingSpec[];
 }
 
 export type RunTransformationResult =
@@ -313,8 +314,8 @@ export async function runTransformation(
   if (options.parameters !== undefined) {
     transformerOptions.parameters = options.parameters;
   }
-  if (options.parametersSource !== undefined) {
-    transformerOptions.parametersSource = options.parametersSource;
+  if (options.parameterMappings !== undefined) {
+    transformerOptions.parameterMappings = options.parameterMappings;
   }
   const transformer = new Transformer(transformerOptions);
   try {

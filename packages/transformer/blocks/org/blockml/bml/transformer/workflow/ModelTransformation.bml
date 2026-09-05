@@ -37,16 +37,17 @@
       SubBlock `Parameters`. Prepare writes a value only when one exists
       (not `""`, not `{}`). `StructType`: deep-merge CLI `--parameters`
       over pending. Other types: CLI replaces pending. Execute does not
-      interpret this property.
-    * `parametersSource` — optional `type:PropertyReference` whose current
-      value Prepare copies onto `parameters`. Canonical path
-      `BlockFqn.properties.name`. Interpolated or expression values are
-      closed against this ModelTransformation (`#this.parameters` and
-      other literal properties) before lookup. CLI `--parameters-source`
-      is already a path and is not closed. CLI source wins over pending.
-      Any effective source ignores `--parameters`. Type of the source
-      Property must equal bound `T`. A close or lookup fault is
-      `workflow:ParametersException`.
+      interpret this property. Ignored when `parameterMappings` is
+      non-empty.
+    * `parameterMappings` — optional `workflow:ParameterMapping` list.
+      Prepare applies each mapping in order onto `parameters`. Several
+      mappings build the value successively. Interpolated or expression
+      `source` values close against this ModelTransformation
+      (`#this.parameters` and other literal properties) before lookup.
+      CLI `--parameter-mappings` is a JSON array; a non-empty CLI array
+      replaces pending mappings and is written onto the running copy.
+      Any effective mapping list ignores `--parameters`. A mapping fault
+      is `workflow:ParametersException`.
     * `result` — value of generic `R` (`core:ValueType`, default
       `type:Text`). Bind `R` as the second type argument, e.g.
       `workflow:ModelTransformation(Parameters, type:Integer)`. Persist
@@ -54,8 +55,8 @@
       Several mappings, across operations, build the value successively.
       A mapping fault fails that operation (`workflow:ResultException`
       on the operation) and leaves later operations unrun.
-    * `exception` — `core:Exception` when Prepare cannot resolve
-      `parametersSource` (`workflow:ParametersException`). Empty when a
+    * `exception` — `core:Exception` when Prepare cannot apply
+      `parameterMappings` (`workflow:ParametersException`). Empty when a
       ModelOperation fails; operation faults, including ResultException
       from `resultMappings`, stay on that ModelOperation.
     * `status` — lifecycle state (`workflow:ExecutionStatus`). Matches the
@@ -79,9 +80,10 @@
     <see type="workflow:ToolOperation" relation="SeeAlso" />
     <see type="transformercap:OperationExecutor" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
+    <see type="workflow:ParameterMapping" relation="SeeAlso" />
     <see type="workflow:ResultMapping" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
-    <see type="type:PropertyReference" relation="SeeAlso" />
+    <see type="type:PropertyIdentifier" relation="SeeAlso" />
     <see type="type:UUID" relation="SeeAlso" />
     <see type="workflow:ParametersException" relation="SeeAlso" />
     <see type="workflow:ResultException" relation="SeeAlso" />
@@ -109,17 +111,10 @@
       <documentation>
         Run value of bound T. Default type:Text. Written only when a
         value exists. StructType: merge CLI over pending. Other types:
-        CLI replaces pending. Tasks do not read this.
+        CLI replaces pending. Ignored when parameterMappings is
+        non-empty. Tasks do not read this.
       </documentation>
     </parameters>
-    <parametersSource type="type:PropertyReference">
-      <documentation>
-        Optional path to the Property Prepare copies onto parameters.
-        Canonical form BlockFqn.properties.name. Expressions close
-        against this Block before lookup. Any effective source ignores
-        --parameters.
-      </documentation>
-    </parametersSource>
     <executionId type="type:UUID">
       <documentation>Globally unique identifier. Absent while pending; assigned at Running.</documentation>
     </executionId>
@@ -151,6 +146,13 @@
   </properties>
 
   <aggregations>
+    <parameterMappings type="workflow:ParameterMapping[]">
+      <documentation>
+        Mappings Prepare applies onto parameters. Empty: use CLI
+        --parameters or pending parameters. Non-empty: ignore
+        --parameters.
+      </documentation>
+    </parameterMappings>
     <operations type="workflow:ModelOperation[]">
       <documentation>Concrete ModelOperation subtypes of this execution, in order.</documentation>
     </operations>

@@ -49,7 +49,7 @@
     <inspectFqn type="type:Text"><documentation>Block FQN for inspect. (optional)</documentation></inspectFqn>
     <executionFqn type="type:Text"><documentation>FQN of a pending ModelTransformation for transform apply. (optional)</documentation></executionFqn>
     <parametersJson type="type:Text"><documentation>Raw --parameters JSON value for transform apply. (optional)</documentation></parametersJson>
-    <parametersSource type="type:Text"><documentation>Raw --parameters-source PropertyReference path for transform apply. (optional)</documentation></parametersSource>
+    <parameterMappingsJson type="type:Text"><documentation>Raw --parameter-mappings JSON array for transform apply. (optional)</documentation></parameterMappingsJson>
     <newFqn type="type:Text"><documentation>FQN for blockml new. (optional)</documentation></newFqn>
     <newBaseType type="type:Text"><documentation>--baseType for blockml new. (optional)</documentation></newBaseType>
     <newIs type="type:Text"><documentation>--is for blockml new. (optional)</documentation></newIs>

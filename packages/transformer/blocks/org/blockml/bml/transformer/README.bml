@@ -26,7 +26,7 @@
     org.blockml.bml.transformer.capability.*.
 
     The TypeScript engine executes ModelTransformation instances via
-    `blockml transform apply EXECUTION-FQN [--parameters JSON] [--parameters-source PATH]`. Transformer.run prepares the
+    `blockml transform apply EXECUTION-FQN [--parameters JSON] [--parameter-mappings JSON]`. Transformer.run prepares the
     execution, then runs each concrete `workflow:ModelOperation` in
     order: persist operation Running, dispatch the registered
     OperationExecutor, Reflect, Persist results onto that operation,
@@ -42,8 +42,8 @@
     mapping fault writes ResultException onto the operation, fails it,
     and aborts remaining operations. After a started execution, Finalize
     relocates the Block to `_meta.transform.succeeded` only when every
-    ModelOperation succeeded, otherwise `_meta.transform.failed`. Prepare
-    `parametersSource` faults fill `exception` with ParametersException
+    ModelOperation succeeded, otherwise `_meta.transform.failed`.     Prepare
+    `parameterMappings` faults fill `exception` with ParametersException
     and skip operations. A ModelOperation failure leaves
     `ModelTransformation.exception` empty and aborts remaining
     operations. Prepare requires a clean Git
@@ -65,6 +65,7 @@
     <see type="workflow:ToolOperation" relation="SeeAlso" />
     <see type="transformercap:ToolExecutor" relation="SeeAlso" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
+    <see type="workflow:ParameterMapping" relation="SeeAlso" />
     <see type="workflow:ResultMapping" relation="SeeAlso" />
     <see type="workflow:CompositeTask" relation="SeeAlso" />
     <see type="workflow:Prerequisite" relation="SeeAlso" />

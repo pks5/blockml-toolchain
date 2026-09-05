@@ -52,12 +52,13 @@
         (including SubBlocks / bound T), set template=false on the copy,
         rewrite local type FQNs onto the copy, and relocate that copy
         instead.
-        Resolve parameters: parametersSource (CLI --parameters-source
-        over pending) closes a pending expression against this Block,
-        copies that Property onto parameters, and ignores --parameters.
-        Otherwise StructType merges CLI JSON over pending; other types
-        replace. Write a value only when one exists.
-        Bound T defaults to type:Text. parametersSource faults write
+        Resolve parameters: parameterMappings (CLI --parameter-mappings
+        over pending) closes each mapping source against this Block,
+        applies the mappings onto parameters, and ignores --parameters.
+        A non-empty CLI array replaces pending mappings on the running
+        copy. Otherwise StructType merges CLI JSON over pending; other
+        types replace. Write a value only when one exists.
+        Bound T defaults to type:Text. parameterMappings faults write
         ParametersException onto exception; operations are skipped.
         If the contract is violated or the worktree is dirty, do not start.
 
@@ -127,6 +128,7 @@
     <see type="transformercap:RunTransformation" relation="Defines" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:ModelOperation" relation="SeeAlso" />
+    <see type="workflow:ParameterMapping" relation="SeeAlso" />
     <see type="workflow:ResultMapping" relation="SeeAlso" />
     <see type="workflow:AgenticOperation" relation="SeeAlso" />
     <see type="transformercap:OperationExecutor" relation="SeeAlso" />

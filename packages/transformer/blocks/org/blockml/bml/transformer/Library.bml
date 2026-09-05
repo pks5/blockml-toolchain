@@ -67,6 +67,7 @@
         <blockml:transformer.workflow.ModelOperation />
         <blockml:transformer.workflow.ModelTransformation />
         <blockml:transformer.workflow.Prerequisite />
+        <blockml:transformer.workflow.ParameterMapping />
         <blockml:transformer.workflow.ParametersException />
         <blockml:transformer.workflow.PrerequisiteNotMetException />
         <blockml:transformer.workflow.ResultException />
