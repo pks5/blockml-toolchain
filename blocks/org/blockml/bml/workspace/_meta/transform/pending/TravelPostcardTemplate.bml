@@ -1,0 +1,123 @@
+<!--
+  Workspace pending transform — TravelPostcardTemplate
+  FQN: org.blockml.bml.workspace._meta.transform.pending.TravelPostcardTemplate
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:pending="org.blockml.bml.workspace._meta.transform.pending">
+
+  <name>TravelPostcardTemplate</name>
+  <type>pending:TravelPostcardTemplate</type>
+  <baseType>workflow:ModelTransformation(Parameters, Result)</baseType>
+  <is>A pending ModelTransformation that writes a playground travel postcard</is>
+
+  <subBlocks>
+    <block>
+      <name>Parameters</name>
+      <baseType>type:StructType</baseType>
+      <is>Run parameters for this postcard transformation</is>
+      <properties>
+        <destination type="type:Text" />
+        <language type="type:Text" />
+        <targetBlock type="type:Text" />
+      </properties>
+    </block>
+    <block>
+      <name>Result</name>
+      <baseType>type:StructType</baseType>
+      <is>Successive postcard excerpt copied from the playground block</is>
+      <properties>
+        <title type="type:Text" />
+        <destination type="type:Text" />
+        <opening type="type:Text" />
+      </properties>
+    </block>
+  </subBlocks>
+
+  <properties>
+    <description override="true">
+      <value>A transformation that creates a playground travel postcard and builds result from ResultMappings</value>
+    </description>
+    <status override="true" type="workflow:ExecutionStatus">
+      <value>Pending</value>
+    </status>
+    <createdAt override="true" type="type:DateTime">
+      <value>2026-09-05T20:52:00</value>
+    </createdAt>
+    <template override="true" type="type:Boolean">
+      <value>true</value>
+    </template>
+    <parameters override="true" type="pending:TravelPostcardTemplate.Parameters">
+      <value>{destination:"Lisbon",language:"English",targetBlock:"org.blockml.bml.workspace.playground.TravelPostcard"}</value>
+    </parameters>
+  </properties>
+
+  <aggregations>
+    <operations override="true">
+      <composition>
+        <workflow:AgenticOperation name="Create Postcard" status="Pending" captureOutput="true">
+          <resultMappings>
+            <workflow:ResultMapping>
+              <source>${ #strings.concat( #this.parameters.targetBlock, '.properties.title') }</source>
+              <resultPath>/title</resultPath>
+            </workflow:ResultMapping>
+          </resultMappings>
+          <task>
+            <workflow:InstructionTask>
+              <instructions>
+                Create or update the block ${ #this.parameters.targetBlock }
+                as a short travel postcard in ${ #this.parameters.language }
+                about ${ #this.parameters.destination }.
+                For each execution invent a new postcard.
+                The block must have these properties:
+                - title (type:Text) — a short postcard title
+                - destination (type:Text) — ${ #this.parameters.destination }
+                - opening (type:Text) — one vivid opening sentence
+                - body (type:Text) — three short postcard paragraphs
+                - language (type:Text) — ${ #this.parameters.language }
+                - date (type:DateTime) — now
+                Write only under the playground package. Do not edit
+                ModelTransformation metadata or files under _meta/transform/.
+              </instructions>
+            </workflow:InstructionTask>
+          </task>
+        </workflow:AgenticOperation>
+        <workflow:ToolOperation name="Validate" status="Pending" captureOutput="true" command="blockml">
+          <args>["validate"]</args>
+        </workflow:ToolOperation>
+        <workflow:AgenticOperation name="Polish Opening" status="Pending">
+          <resultMappings>
+            <workflow:ResultMapping>
+              <source>${ #strings.concat( #this.parameters.targetBlock, '.properties.destination') }</source>
+              <resultPath>/destination</resultPath>
+            </workflow:ResultMapping>
+            <workflow:ResultMapping>
+              <source>${ #strings.concat( #this.parameters.targetBlock, '.properties.opening') }</source>
+              <resultPath>/opening</resultPath>
+            </workflow:ResultMapping>
+          </resultMappings>
+          <task>
+            <workflow:InstructionTask>
+              <instructions>
+                Polish the opening sentence of
+                ${ #this.parameters.targetBlock }
+                so it sounds like a handwritten postcard in
+                ${ #this.parameters.language }.
+                Keep title, destination, body, language, and date.
+                Only rewrite opening. Do not edit files under
+                _meta/transform/.
+              </instructions>
+            </workflow:InstructionTask>
+          </task>
+        </workflow:AgenticOperation>
+      </composition>
+    </operations>
+  </aggregations>
+
+</block>
