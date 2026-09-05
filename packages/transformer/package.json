@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@blockml/bom": "^0.9.1",
-    "@blockml/core": "^1.1.0",
+    "@blockml/core": "^1.1.1",
     "@blockml/framework": "^0.9.1",
     "@blockml/serializer": "^0.9.1",
     "proper-lockfile": "^4.1.2"

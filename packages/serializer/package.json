@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@blockml/bom": "^0.9.1",
-    "@blockml/core": "^1.1.0"
+    "@blockml/core": "^1.1.1"
   },
   "engines": {
     "node": ">=20"
