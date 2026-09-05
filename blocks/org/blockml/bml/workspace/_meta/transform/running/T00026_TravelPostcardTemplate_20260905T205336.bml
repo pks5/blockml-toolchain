@@ -55,8 +55,7 @@
         <workflow:AgenticOperation name="Create Postcard" status="Succeeded" captureOutput="true">
           <startedAt>2026-09-05T20:53:36</startedAt>
           <baseCommit>0765f368fa94e74fd5d1ad3cbdeb35bba3deb904</baseCommit>
-          <output>Validation succeeded with no errors related to the new block (only pre-existing style recommendations elsewhere). Created `org.blockml.bml.workspace.playground.TravelPostcard` in `blocks/org/blockml/bml/workspace/playground/TravelPostcard.bml` with all six required properties (title, destination, opening, body, language, date), leaving the ModelTransformation and `_meta/transform/` files untouched.
-</output>
+          <output>Validation succeeded with no errors related to the new block (only pre-existing style recommendations elsewhere). Created `org.blockml.bml.workspace.playground.TravelPostcard` in `blocks/org/blockml/bml/workspace/playground/TravelPostcard.bml` with all six required properties (title, destination, opening, body, language, date), leaving the ModelTransformation and `_meta/transform/` files untouched.</output>
           <completedAt>2026-09-05T20:54:20</completedAt>
           <resultMappings>
             <workflow:ResultMapping>
@@ -85,8 +84,10 @@ ModelTransformation metadata or files under _meta/transform/.</instructions>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/TravelPostcard.bml" />
           </changedFiles>
         </workflow:AgenticOperation>
-        <workflow:ToolOperation name="Validate" status="Pending" captureOutput="true" command="blockml">
+        <workflow:ToolOperation name="Validate" status="Running" captureOutput="true" command="blockml">
           <args>[&quot;validate&quot;]</args>
+          <startedAt>2026-09-05T20:54:21</startedAt>
+          <baseCommit>ee87f6e16140887094fdf271e0866fbcf3401b2b</baseCommit>
         </workflow:ToolOperation>
         <workflow:AgenticOperation name="Polish Opening" status="Pending">
           <resultMappings>
