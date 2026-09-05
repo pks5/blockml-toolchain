@@ -52,7 +52,9 @@
   <aggregations>
     <operations override="true">
       <composition>
-        <workflow:AgenticOperation name="Create Postcard" status="Pending" captureOutput="true">
+        <workflow:AgenticOperation name="Create Postcard" status="Running" captureOutput="true">
+          <startedAt>2026-09-05T21:02:30</startedAt>
+          <baseCommit>eb1786ced9f83bb51b5de561df761f998575c3e4</baseCommit>
           <resultMappings>
             <workflow:ResultMapping>
               <source>${ #strings.concat( #this.parameters.targetBlock, '.properties.title') }</source>
