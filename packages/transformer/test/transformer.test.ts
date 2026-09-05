@@ -993,6 +993,10 @@ describe("Transformer lifecycle", () => {
     );
     expect(succeeded).toMatch(/<result[\s>][\s\S]*El roble/);
     expect(succeeded).toMatch(/<result[\s>][\s\S]*Anon/);
+    expect(succeeded).toMatch(
+      /<result[^>]*type="succeeded:T00001_JokeTest_20260830T011702.Result"/,
+    );
+    expect(succeeded).not.toContain("_meta.transform.running.");
   });
 
   it("appends to a Text[] result when resultPath index equals length", async () => {

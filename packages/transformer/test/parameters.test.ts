@@ -113,4 +113,39 @@ describe("rewriteParameterTypeFqns", () => {
         ?.composition.children[0]?.instance.typeFqn,
     ).toBe(`${toFqn}.CustomTask`);
   });
+
+  it("rewrites result and parameters property types onto the relocated FQN", () => {
+    const fromFqn = "pkg._meta.transform.running.T00001_Card";
+    const toFqn = "pkg._meta.transform.succeeded.T00001_Card";
+    const block = {
+      name: "T00001_Card",
+      type: toFqn,
+      members: [
+        {
+          kind: "property",
+          name: "parameters",
+          typeFqn: `${fromFqn}.Parameters`,
+        },
+        {
+          kind: "property",
+          name: "result",
+          typeFqn: `${fromFqn}.Result`,
+          type: { kind: "named", fqn: `${fromFqn}.Result` },
+        },
+      ],
+      subBlocks: [],
+      compositions: [],
+    } as unknown as import("@blockml/bom").BlockDefinition;
+
+    rewriteParameterTypeFqns(block, fromFqn, toFqn);
+
+    const parameters = block.members[0] as { typeFqn: string };
+    const result = block.members[1] as {
+      typeFqn: string;
+      type: { kind: "named"; fqn: string };
+    };
+    expect(parameters.typeFqn).toBe(`${toFqn}.Parameters`);
+    expect(result.typeFqn).toBe(`${toFqn}.Result`);
+    expect(result.type.fqn).toBe(`${toFqn}.Result`);
+  });
 });

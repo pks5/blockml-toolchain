@@ -48,7 +48,7 @@
     <baseCommit override="true" type="type:Text">
       <value>be851077adceccb8601106140e04e51ae1b53b57</value>
     </baseCommit>
-    <result override="true" type="org.blockml.bml.workspace._meta.transform.running.T00027_TravelPostcardTemplate_20260905T205817.Result">
+    <result override="true" type="succeeded:T00027_TravelPostcardTemplate_20260905T205817.Result">
       <value>{title:"A Day Among the Seven Hills",destination:"Lisbon",opening:"Wish you were here! I'm scribbling this from a little tiled bench above the Tagus, watching the ferries draw silver lines across the water while the whole waterfront smells of salt, coffee, and roasting chestnuts."}</value>
     </result>
     <completedAt override="true" type="type:DateTime">

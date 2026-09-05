@@ -216,8 +216,8 @@ export function applyExecutionParameters(block, registry, options = {}) {
 }
 /**
  * Rewrite FQNs rooted at this execution Block after a lifecycle relocate.
- * Covers SubBlocks, the parameters property, and composition instances
- * nested under a ModelOperation.
+ * Covers SubBlocks, parameters and result property types, and composition
+ * instances nested under a ModelOperation.
  */
 export function rewriteParameterTypeFqns(block, fromFqn, toFqn) {
     const rewrite = (value) => value === fromFqn || value.startsWith(`${fromFqn}.`)
@@ -242,7 +242,7 @@ export function rewriteParameterTypeFqns(block, fromFqn, toFqn) {
         if (member.kind === "aggregation") {
             rewriteCompositionTemplate(member.composition, rewrite);
         }
-        if (member.kind !== "property" || member.name !== "parameters") {
+        if (member.kind !== "property") {
             continue;
         }
         if (member.typeFqn) {
