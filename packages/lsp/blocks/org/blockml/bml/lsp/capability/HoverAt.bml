@@ -18,6 +18,7 @@
   xmlns:fwcap="org.blockml.bml.framework.capability"
   xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
   xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
   xmlns:serializer="org.blockml.bml.compiler.serializer"
   xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
   xmlns:validator="org.blockml.bml.compiler.validator"
@@ -42,7 +43,7 @@
 
   <references>
     <see type="lspdocumentation:PublicApi" relation="SeeAlso" />
-    <see type="parser:Parse" relation="SeeAlso" />
+    <see type="parcap:Parse" relation="SeeAlso" />
   </references>
 
   <properties>

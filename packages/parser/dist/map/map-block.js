@@ -610,7 +610,7 @@ function getTextOrAttr(element, tag) {
 function mapLanguage(element, block, ctx) {
     for (const child of elementChildren(element)) {
         if (isTypeReferenceEntitySugar(child, ctx)) {
-            const { inst } = mapTypeReferenceEntityInstance(child, ctx);
+            const { inst } = mapTypeReferenceEntityInstance(child, ctx, undefined, "language");
             block.language = inst;
             block.languageFqn = inst.value;
         }
@@ -619,7 +619,7 @@ function mapLanguage(element, block, ctx) {
             if (value) {
                 block.language = {
                     typeFqn: TYPE_REFERENCE_ENTITY,
-                    value: resolveBlockReference(value, ctx.bindings, ctx.subBlockIndex, block.type),
+                    value: resolveTypeName(value, ctx.bindings, "language"),
                 };
                 block.languageFqn = block.language.value;
             }
@@ -856,6 +856,13 @@ function parseBaseType(raw, ctx, fallbackParent) {
 function namedTypeFqn(raw, ctx, fallbackParent) {
     return parseBaseType(raw, ctx, fallbackParent).fqn;
 }
+function resolveGenericDefaultType(raw, ctx) {
+    const expr = parseTypeExpression(raw, ctx.bindings, "type", typeResolveOptions(ctx));
+    if (expr.kind === "genericParam") {
+        return expr.name;
+    }
+    return namedTypeFqn(raw, ctx, ctx.parentBlockType);
+}
 function mapGenericTypes(element, ctx) {
     return elementChildren(element).map((c) => {
         const defaultType = getAttribute(c, "defaultType");
@@ -863,7 +870,9 @@ function mapGenericTypes(element, ctx) {
         return {
             name: elementLocalName(c),
             baseType: withElementLocation(ctx.filePath, ctx.source, c, () => namedTypeFqn(raw, ctx, ctx.parentBlockType)),
-            ...(defaultType !== undefined ? { defaultType } : {}),
+            ...(defaultType !== undefined
+                ? { defaultType: resolveGenericDefaultType(defaultType, ctx) }
+                : {}),
         };
     });
 }

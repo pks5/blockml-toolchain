@@ -1,10 +1,11 @@
 import type { BlockInstanceNode, CompositionTemplate } from "@blockml/bom";
 import type { Element } from "@xmldom/xmldom";
+import { type ImplicitNamespaceContext } from "../util/qname.js";
 import type { MapContext } from "./context.js";
 export declare function mapCompositionTemplate(element: Element, aggregationName: string, ctx: MapContext): CompositionTemplate;
 export declare function mapBlockInstanceNode(element: Element, ctx: MapContext): BlockInstanceNode;
 export declare function isTypeReferenceEntitySugar(element: Element, ctx: MapContext): boolean;
-export declare function mapTypeReferenceEntityInstance(element: Element, ctx: MapContext, boundB?: string): {
+export declare function mapTypeReferenceEntityInstance(element: Element, ctx: MapContext, boundB?: string, implicit?: ImplicitNamespaceContext): {
     inst: {
         boundB?: string;
         typeFqn: "org.blockml.bml.type.TypeReferenceEntity";

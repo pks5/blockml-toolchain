@@ -28,6 +28,7 @@ import {
   resolveTypeName,
   TYPE_REFERENCE_ENTITY,
   elementSourceLoc,
+  type ImplicitNamespaceContext,
 } from "../util/qname.js";
 import { parseVisibilityFromName } from "../util/visibility.js";
 import type { MapContext } from "./context.js";
@@ -311,25 +312,27 @@ export function mapTypeReferenceEntityInstance(
   element: Element,
   ctx: MapContext,
   boundB?: string,
+  implicit?: ImplicitNamespaceContext,
 ) {
   const prefix = elementPrefix(element);
   const local = elementLocalName(element);
   const qname = prefix ? `${prefix}:${local}` : local;
   const valueAttr = getAttribute(element, "value");
+  const raw = valueAttr ?? qname;
   let value: string;
-  try {
-    value =
-      valueAttr ??
-      resolveBlockReference(
-        prefix ? `${prefix}:${local}` : local,
+  if (implicit === "language") {
+    value = resolveTypeName(raw, ctx.bindings, "language");
+  } else {
+    try {
+      value = resolveBlockReference(
+        raw,
         ctx.bindings,
         ctx.subBlockIndex,
         ctx.parentBlockType,
       );
-  } catch {
-    value =
-      valueAttr ??
-      resolveTypeName(local, ctx.bindings, "language");
+    } catch {
+      value = resolveTypeName(local, ctx.bindings, "language");
+    }
   }
   const meta = parseBmlMeta(
     element,

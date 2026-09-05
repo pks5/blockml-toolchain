@@ -863,7 +863,7 @@ function getTextOrAttr(element: Element, tag?: string): string | undefined {
 function mapLanguage(element: Element, block: BlockDefinition, ctx: MapContext) {
   for (const child of elementChildren(element)) {
     if (isTypeReferenceEntitySugar(child, ctx)) {
-      const { inst } = mapTypeReferenceEntityInstance(child, ctx);
+      const { inst } = mapTypeReferenceEntityInstance(child, ctx, undefined, "language");
       block.language = inst;
       block.languageFqn = inst.value;
     } else if (elementLocalName(child) === "TypeReferenceEntity") {
@@ -871,7 +871,7 @@ function mapLanguage(element: Element, block: BlockDefinition, ctx: MapContext) 
       if (value) {
         block.language = {
           typeFqn: TYPE_REFERENCE_ENTITY,
-          value: resolveBlockReference(value, ctx.bindings, ctx.subBlockIndex, block.type),
+          value: resolveTypeName(value, ctx.bindings, "language"),
         };
         block.languageFqn = block.language.value;
       }
@@ -1134,6 +1134,14 @@ function namedTypeFqn(raw: string, ctx: MapContext, fallbackParent?: string): st
   return parseBaseType(raw, ctx, fallbackParent).fqn;
 }
 
+function resolveGenericDefaultType(raw: string, ctx: MapContext): string {
+  const expr = parseTypeExpression(raw, ctx.bindings, "type", typeResolveOptions(ctx));
+  if (expr.kind === "genericParam") {
+    return expr.name;
+  }
+  return namedTypeFqn(raw, ctx, ctx.parentBlockType);
+}
+
 function mapGenericTypes(element: Element, ctx: MapContext): GenericType[] {
   return elementChildren(element).map((c) => {
     const defaultType = getAttribute(c, "defaultType");
@@ -1144,7 +1152,9 @@ function mapGenericTypes(element: Element, ctx: MapContext): GenericType[] {
       baseType: withElementLocation(ctx.filePath, ctx.source, c, () =>
         namedTypeFqn(raw, ctx, ctx.parentBlockType),
       ),
-      ...(defaultType !== undefined ? { defaultType } : {}),
+      ...(defaultType !== undefined
+        ? { defaultType: resolveGenericDefaultType(defaultType, ctx) }
+        : {}),
     };
   });
 }

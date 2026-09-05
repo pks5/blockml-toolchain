@@ -47,7 +47,7 @@
     Inherited native properties not in members[] — validator uses resolveEffectiveMembers().</documentation>
 
   <references>
-    <see type="bomdoc:BomDocument" relation="ExampleOf" />
+    <see type="bomdoc:BomDocument" relation="SeeAlso" />
   </references>
 
 </block>

@@ -354,7 +354,7 @@ const capabilities = [
     tsExport: "forkBom",
     inputs: [{ name: "document", type: "bomdoc:BomDocument", required: true }],
     output: { name: "copy", type: "bomdoc:BomDocument", required: true },
-    refs: ["bomdocumentation:PragmaticModel"],
+    refs: ["bomdocumentation:PublicApi"],
   },
   {
     pkg: "capability",

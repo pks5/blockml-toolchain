@@ -37,7 +37,7 @@
     </see>
   </references>
   <language>
-    <blockml:transformer.Library.English />
+    <English />
   </language>
   <properties>
     <description override="true">

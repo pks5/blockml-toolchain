@@ -39,7 +39,7 @@
   <documentation>Deep-clone Urmodell for pragmatic / validation working copy</documentation>
 
   <references>
-    <see type="bomdocumentation:PragmaticModel" relation="SeeAlso" />
+    <see type="bomdocumentation:PublicApi" relation="SeeAlso" />
   </references>
 
   <properties>

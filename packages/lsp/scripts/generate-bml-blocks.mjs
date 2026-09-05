@@ -195,7 +195,7 @@ const capabilities = [
       { name: "workspace", type: "lsp:WorkspaceState", required: true },
     ],
     output: { name: "result", type: "lsp:AnalysisResult", required: true },
-    refs: ["lspdocumentation:PublicApi", "valcap:Validate", "parser:Parse"],
+    refs: ["lspdocumentation:PublicApi", "valcap:Validate", "parcap:Parse"],
   },
   {
     pkg: "capability",
@@ -210,7 +210,7 @@ const capabilities = [
       { name: "xmlDeclaration", type: "type:Boolean" },
     ],
     output: { name: "result", type: "type:Text", required: true },
-    refs: ["lspdocumentation:PublicApi", "sercap:Serialize", "parser:Parse"],
+    refs: ["lspdocumentation:PublicApi", "sercap:Serialize", "parcap:Parse"],
   },
   {
     pkg: "capability",
@@ -226,7 +226,7 @@ const capabilities = [
       { name: "workspace", type: "lsp:WorkspaceState", required: true },
     ],
     output: { name: "result", type: "lsp:HoverInfo", required: true, doc: "HoverInfo | null." },
-    refs: ["lspdocumentation:PublicApi", "parser:Parse"],
+    refs: ["lspdocumentation:PublicApi", "parcap:Parse"],
   },
   {
     pkg: "capability",
@@ -240,7 +240,7 @@ const capabilities = [
       { name: "filePath", type: "type:Text", required: true },
     ],
     output: { name: "result", type: "lsp:OutlineSymbol[]", required: true, doc: "OutlineSymbol[] | null." },
-    refs: ["lspdocumentation:PublicApi", "parser:Parse"],
+    refs: ["lspdocumentation:PublicApi", "parcap:Parse"],
   },
   {
     pkg: "capability",
@@ -256,7 +256,7 @@ const capabilities = [
       { name: "workspace", type: "lsp:WorkspaceState", required: true },
     ],
     output: { name: "result", type: "lsp:LspLocationLink[]", required: true, doc: "LspLocationLink[] | null." },
-    refs: ["lspdocumentation:PublicApi", "parser:Parse"],
+    refs: ["lspdocumentation:PublicApi", "parcap:Parse"],
   },
   {
     pkg: "capability",
@@ -273,7 +273,7 @@ const capabilities = [
       { name: "includeDeclaration", type: "type:Boolean" },
     ],
     output: { name: "result", type: "lsp:LspLocation[]", required: true, doc: "LspLocation[] | null." },
-    refs: ["lspdocumentation:PublicApi", "parser:Parse"],
+    refs: ["lspdocumentation:PublicApi", "parcap:Parse"],
   },
   {
     pkg: "capability",

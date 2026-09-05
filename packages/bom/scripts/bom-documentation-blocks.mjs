@@ -356,7 +356,7 @@ export const documentationBlocks = [
     Observations: Sub-Block refs by short name resolved via subBlocks[] tree.
     @utils.formatValue and #math.* stored as ExpressionValue { raw }.
     Inherited native properties not in members[] — validator uses resolveEffectiveMembers().`,
-    refs: [{ type: "bomdoc:BomDocument", relation: "ExampleOf" }],
+    refs: [{ type: "bomdoc:BomDocument", relation: "SeeAlso" }],
   },
   {
     name: "ScopeExclusions",

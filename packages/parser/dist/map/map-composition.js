@@ -220,21 +220,23 @@ export function isTypeReferenceEntitySugar(element, ctx) {
     const local = elementLocalName(element);
     return local !== "TypeReferenceEntity" && local !== "composition";
 }
-export function mapTypeReferenceEntityInstance(element, ctx, boundB) {
+export function mapTypeReferenceEntityInstance(element, ctx, boundB, implicit) {
     const prefix = elementPrefix(element);
     const local = elementLocalName(element);
     const qname = prefix ? `${prefix}:${local}` : local;
     const valueAttr = getAttribute(element, "value");
+    const raw = valueAttr ?? qname;
     let value;
-    try {
-        value =
-            valueAttr ??
-                resolveBlockReference(prefix ? `${prefix}:${local}` : local, ctx.bindings, ctx.subBlockIndex, ctx.parentBlockType);
+    if (implicit === "language") {
+        value = resolveTypeName(raw, ctx.bindings, "language");
     }
-    catch {
-        value =
-            valueAttr ??
-                resolveTypeName(local, ctx.bindings, "language");
+    else {
+        try {
+            value = resolveBlockReference(raw, ctx.bindings, ctx.subBlockIndex, ctx.parentBlockType);
+        }
+        catch {
+            value = resolveTypeName(local, ctx.bindings, "language");
+        }
     }
     const meta = parseBmlMeta(element, TYPE_REFERENCE_ENTITY, ctx.filePath, elementSourceLoc(ctx.filePath, ctx.source, element));
     const inst = {
