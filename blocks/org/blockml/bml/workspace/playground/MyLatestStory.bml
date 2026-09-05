@@ -14,66 +14,66 @@
   <name>MyLatestStory</name>
   <type>playground:MyLatestStory</type>
   <baseType>core:Documentation</baseType>
-  <is>A random structured song produced by a workspace transform execution, in Spanish, about a futuristic city and a dog</is>
+  <is>A random structured song produced by a workspace transform execution, in German, about a futuristic city and a dog</is>
 
   <documentation>
-    A structured Spanish song about a futuristic city and a dog. The song text and its
+    A structured German song about a futuristic city and a dog. The song text and its
     metadata are carried as typed properties. Each transform execution replaces
     this block with a freshly composed song.
   </documentation>
 
   <properties>
     <title type="type:Text">
-      <value>El Perro de la Torre 9</value>
+      <value>Der Hund von Turm 9</value>
     </title>
     <artist type="type:Text">
-      <value>Neón y Ceniza</value>
+      <value>Neon und Asche</value>
     </artist>
     <song type="type:Text">
-      <value>(Verso 1)
-La ciudad se levanta sobre rieles de cristal,
-mil ventanas encendidas como ojos sin dormir,
-y en la plaza de metal donde nadie va a pasear,
-un perro gris olfatea lo que el viento hizo venir.
+      <value>(Strophe 1)
+Die Stadt erhebt sich über Schienen aus Kristall,
+tausend Fenster leuchten wie Augen ohne Schlaf,
+und auf dem Platz aus Metall, wo niemand spazieren geht,
+beschnuppert ein grauer Hund, was der Wind herbeigetragen hat.
 
-(Verso 2)
-No lleva collar ni número, ni un amo que llamar,
-sólo el mapa de las calles guardado en su nariz,
-los coches vuelan mudos, las farolas van a hablar,
-pero él persigue el eco de una vieja cicatriz.
+(Strophe 2)
+Er trägt kein Halsband, keine Nummer, keinen Herrn zum Rufen,
+nur die Karte der Straßen, verwahrt in seiner Nase,
+die Wagen fliegen stumm, die Laternen wollen sprechen,
+doch er verfolgt das Echo einer alten Narbe.
 
-(Coro)
-Corre, perro, corre, bajo el cielo de neón,
-que la torre número nueve todavía tiene voz,
-si el futuro es una máquina sin sitio al corazón,
-tú serás el guardián de lo que fuimos los dos.
+(Refrain)
+Lauf, Hund, lauf, unter dem Himmel aus Neon,
+denn Turm Nummer neun hat noch immer eine Stimme,
+wenn die Zukunft eine Maschine ohne Platz fürs Herz ist,
+dann wirst du der Hüter dessen sein, was wir beide waren.
 
-(Verso 3)
-Un niño lo saluda desde un puente de titanio,
-le lanza un pan de luz que sabe a lluvia de verdad,
-y el perro mueve el rabo como un péndulo de vidrio,
-midiendo con su alegría la distancia a la ciudad.
+(Strophe 3)
+Ein Kind grüßt ihn von einer Brücke aus Titan,
+wirft ihm ein Brot aus Licht zu, das nach echtem Regen schmeckt,
+und der Hund wedelt mit dem Schwanz wie ein Pendel aus Glas,
+und misst mit seiner Freude die Entfernung zur Stadt.
 
-(Coro)
-Corre, perro, corre, bajo el cielo de neón,
-que la torre número nueve todavía tiene voz,
-si el futuro es una máquina sin sitio al corazón,
-tú serás el guardián de lo que fuimos los dos.
+(Refrain)
+Lauf, Hund, lauf, unter dem Himmel aus Neon,
+denn Turm Nummer neun hat noch immer eine Stimme,
+wenn die Zukunft eine Maschine ohne Platz fürs Herz ist,
+dann wirst du der Hüter dessen sein, was wir beide waren.
 
-(Puente)
-Cuando apaguen las pantallas y se duerma el ascensor,
-cuando el último dron regrese a su rincón,
-quedará su silueta recortada en el vapor,
-un latido analógico en mitad del procesador.
+(Bridge)
+Wenn die Bildschirme erlöschen und der Aufzug einschläft,
+wenn die letzte Drohne in ihre Ecke zurückkehrt,
+bleibt seine Silhouette, geschnitten in den Dampf,
+ein analoger Herzschlag mitten im Prozessor.
 
-(Final)
-La ciudad se levanta sobre rieles de cristal,
-y en su base late tibio un pequeño corazón,
-mañana habrá más torres, más silencio, más metal,
-pero siempre habrá un perro custodiando la canción.</value>
+(Finale)
+Die Stadt erhebt sich über Schienen aus Kristall,
+und an ihrem Fuß schlägt lau ein kleines Herz,
+morgen gibt es mehr Türme, mehr Stille, mehr Metall,
+doch immer wird ein Hund das Lied bewachen.</value>
     </song>
     <language type="type:Text">
-      <value>Spanish</value>
+      <value>German</value>
     </language>
     <date type="type:DateTime">
       <value>2026-09-05T23:57:08</value>
