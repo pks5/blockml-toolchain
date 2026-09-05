@@ -49,7 +49,7 @@
       <value>be851077adceccb8601106140e04e51ae1b53b57</value>
     </baseCommit>
     <result override="true" type="running:T00027_TravelPostcardTemplate_20260905T205817.Result">
-      <value>{title:"A Day Among the Seven Hills"}</value>
+      <value>{title:"A Day Among the Seven Hills",destination:"Lisbon",opening:"Wish you were here! I'm scribbling this from a little tiled bench above the Tagus, watching the ferries draw silver lines across the water while the whole waterfront smells of salt, coffee, and roasting chestnuts."}</value>
     </result>
   </properties>
   <aggregations>
@@ -107,9 +107,10 @@ recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/
 Validation succeeded. Tested 730 blocks, 0 with errors, 0 warnings, 3 recommendations.</output>
           <completedAt>2026-09-05T20:59:21</completedAt>
         </workflow:ToolOperation>
-        <workflow:AgenticOperation name="Polish Opening" status="Running">
+        <workflow:AgenticOperation name="Polish Opening" status="Succeeded">
           <startedAt>2026-09-05T20:59:21</startedAt>
           <baseCommit>eb0a25a09ea0dbeb184e025dc9df25e68e1c4f03</baseCommit>
+          <completedAt>2026-09-05T20:59:59</completedAt>
           <resultMappings>
             <workflow:ResultMapping>
               <source>${ #strings.concat( #this.parameters.targetBlock, '.properties.destination') }</source>
@@ -131,6 +132,9 @@ Only rewrite opening. Do not edit files under
 _meta/transform/.</instructions>
             </workflow:InstructionTask>
           </task>
+          <changedFiles>
+            <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/TravelPostcard.bml" />
+          </changedFiles>
         </workflow:AgenticOperation>
       </composition>
     </operations>
