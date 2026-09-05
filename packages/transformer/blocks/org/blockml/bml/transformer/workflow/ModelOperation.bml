@@ -8,6 +8,7 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type">
 
@@ -25,7 +26,7 @@
     must be a concrete subtype; this type itself is not instantiated.
 
     The transformer writes envelope fields the same way for every
-    subtype. A registered `workflow:OperationExecutor` does only the
+    subtype. A registered `transformercap:OperationExecutor` does only the
     type-specific work and may return output text.
 
     * `status` — lifecycle state (`workflow:ExecutionStatus`).
@@ -45,7 +46,7 @@
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:AgenticOperation" relation="SeeAlso" />
     <see type="workflow:ToolOperation" relation="SeeAlso" />
-    <see type="workflow:OperationExecutor" relation="SeeAlso" />
+    <see type="transformercap:OperationExecutor" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
     <see type="core:Exception" relation="SeeAlso" />
     <see type="type:FilePathEntity" relation="SeeAlso" />

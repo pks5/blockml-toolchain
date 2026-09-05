@@ -21,7 +21,7 @@
   <documentation>
     # Execute Task
 
-    Inner work of `workflow:AgenticExecutor`. Receive the closed Task
+    Inner work of `transformercap:AgenticExecutor`. Receive the closed Task
     BML fragment and the repository. Execute `run` on that Task
     instance in a new isolated agent process. Look up `Task.run`, the
     concrete `_execute`, and nested Prerequisite / Rule / Criterion
@@ -43,7 +43,7 @@
 
   <references>
     <see type="transformerdocumentation:ArchitectureOverview" relation="SeeAlso" />
-    <see type="workflow:AgenticExecutor" relation="SeeAlso" />
+    <see type="transformercap:AgenticExecutor" relation="SeeAlso" />
     <see type="workflow:AgenticOperation" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
   </references>

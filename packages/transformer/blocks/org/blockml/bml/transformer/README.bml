@@ -59,10 +59,10 @@
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="workflow:ModelOperation" relation="SeeAlso" />
     <see type="workflow:AgenticOperation" relation="SeeAlso" />
-    <see type="workflow:OperationExecutor" relation="SeeAlso" />
-    <see type="workflow:AgenticExecutor" relation="SeeAlso" />
+    <see type="transformercap:OperationExecutor" relation="SeeAlso" />
+    <see type="transformercap:AgenticExecutor" relation="SeeAlso" />
     <see type="workflow:ToolOperation" relation="SeeAlso" />
-    <see type="workflow:ToolExecutor" relation="SeeAlso" />
+    <see type="transformercap:ToolExecutor" relation="SeeAlso" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:CompositeTask" relation="SeeAlso" />
     <see type="workflow:Prerequisite" relation="SeeAlso" />

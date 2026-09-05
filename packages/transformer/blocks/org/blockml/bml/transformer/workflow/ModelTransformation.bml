@@ -8,6 +8,7 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type">
 
@@ -81,7 +82,7 @@
     <see type="workflow:ModelOperation" relation="SeeAlso" />
     <see type="workflow:AgenticOperation" relation="SeeAlso" />
     <see type="workflow:ToolOperation" relation="SeeAlso" />
-    <see type="workflow:OperationExecutor" relation="SeeAlso" />
+    <see type="transformercap:OperationExecutor" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
     <see type="type:PropertyReference" relation="SeeAlso" />

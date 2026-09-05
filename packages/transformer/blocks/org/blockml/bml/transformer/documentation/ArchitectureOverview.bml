@@ -34,7 +34,7 @@
     Future extensions use other packages under `_meta`.
 
     The orchestrator writes envelope fields the same way for every
-    subtype. A registered workflow:OperationExecutor does only
+    subtype. A registered transformercap:OperationExecutor does only
     type-specific work. Default: AgenticExecutor for AgenticOperation
     (isolated agent process; output candidate is agent stdout).
     ToolExecutor for ToolOperation (npm CLI via npx).
@@ -68,7 +68,7 @@
         boundary: after a crash it is clear which operation started and
         on which commit.
 
-        [2] Operation executor — workflow:OperationExecutor
+        [2] Operation executor — transformercap:OperationExecutor
             Lookup by the instance type FQN (most specific match).
             Default AgenticExecutor (transformercap:ExecuteTask): close
             the Task instance (all expressions become literals; element
@@ -112,8 +112,8 @@
     TypeScript:
     • runtime/transformer.ts → transformercap:RunTransformation
     • pipeline/prepare.ts → transformercap:PrepareExecution
-    • executor/agentic-executor.ts → workflow:AgenticExecutor
-    • executor/tool-executor.ts → workflow:ToolExecutor
+    • executor/agentic-executor.ts → transformercap:AgenticExecutor
+    • executor/tool-executor.ts → transformercap:ToolExecutor
     • pipeline/execute.ts → executor dispatch
     • pipeline/reflect.ts → transformercap:ReflectOnExecution
     • pipeline/persist.ts → transformercap:PersistExecution
@@ -125,10 +125,10 @@
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:ModelOperation" relation="SeeAlso" />
     <see type="workflow:AgenticOperation" relation="SeeAlso" />
-    <see type="workflow:OperationExecutor" relation="SeeAlso" />
-    <see type="workflow:AgenticExecutor" relation="SeeAlso" />
+    <see type="transformercap:OperationExecutor" relation="SeeAlso" />
+    <see type="transformercap:AgenticExecutor" relation="SeeAlso" />
     <see type="workflow:ToolOperation" relation="SeeAlso" />
-    <see type="workflow:ToolExecutor" relation="SeeAlso" />
+    <see type="transformercap:ToolExecutor" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="type:UUID" relation="SeeAlso" />
     <see type="workflow:ParametersException" relation="SeeAlso" />

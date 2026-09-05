@@ -1,6 +1,6 @@
 <!--
-  Transformer Workflow — OperationExecutor
-  FQN: org.blockml.bml.transformer.workflow.OperationExecutor
+  Transformer Capability — OperationExecutor
+  FQN: org.blockml.bml.transformer.capability.OperationExecutor
 -->
 <block
   xmlns="http://blockml.org/bml"
@@ -9,11 +9,11 @@
                       "
   xmlns:cap="org.blockml.bml.capability"
   xmlns:core="org.blockml.bml.core"
-  xmlns:workflow="org.blockml.bml.transformer.workflow"
-  xmlns:type="org.blockml.bml.type">
+  xmlns:transformercap="org.blockml.bml.transformer.capability"
+  xmlns:workflow="org.blockml.bml.transformer.workflow">
 
   <name>OperationExecutor</name>
-  <type>workflow:OperationExecutor</type>
+  <type>transformercap:OperationExecutor</type>
   <baseType>core:Block</baseType>
   <is>A registered executor for a concrete ModelOperation subtype</is>
   <abstract>true</abstract>
@@ -33,8 +33,8 @@
 
   <references>
     <see type="workflow:ModelOperation" relation="SeeAlso" />
-    <see type="workflow:AgenticExecutor" relation="SeeAlso" />
-    <see type="workflow:ToolExecutor" relation="SeeAlso" />
+    <see type="transformercap:AgenticExecutor" relation="SeeAlso" />
+    <see type="transformercap:ToolExecutor" relation="SeeAlso" />
   </references>
 
   <capabilities>

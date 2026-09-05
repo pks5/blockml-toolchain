@@ -8,6 +8,7 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type">
 
@@ -18,7 +19,7 @@
 
   <documentation>
     Concrete `workflow:ModelOperation` whose type-specific work is an
-    npm CLI invocation executed by `workflow:ToolExecutor`.
+    npm CLI invocation executed by `transformercap:ToolExecutor`.
 
     The envelope `name` is the operation label (for example
     "Validate model"). Do not add a second name for the tool.
@@ -35,7 +36,7 @@
 
   <references>
     <see type="workflow:ModelOperation" relation="Extends" />
-    <see type="workflow:ToolExecutor" relation="SeeAlso" />
+    <see type="transformercap:ToolExecutor" relation="SeeAlso" />
   </references>
 
   <properties>
