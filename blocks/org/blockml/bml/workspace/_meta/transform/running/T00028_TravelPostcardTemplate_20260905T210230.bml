@@ -49,7 +49,7 @@
       <value>78276ee0b554a68be27422c5d496e810d82d9f33</value>
     </baseCommit>
     <result override="true" type="running:T00028_TravelPostcardTemplate_20260905T210230.Result">
-      <value>{title:"Greetings from the Alfama"}</value>
+      <value>{title:"Greetings from the Alfama",destination:"Lisbon",opening:"Dear you — I'm scribbling this from a wonky little step in the Alfama with a paper cup of ginjinha in one hand, church bells clanging right over my head and someone's washing flapping like bunting between the balconies, and I just had to tell you about it!"}</value>
     </result>
   </properties>
   <aggregations>
@@ -106,9 +106,10 @@ recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/
 Validation succeeded. Tested 731 blocks, 0 with errors, 0 warnings, 3 recommendations.</output>
           <completedAt>2026-09-05T21:03:28</completedAt>
         </workflow:ToolOperation>
-        <workflow:AgenticOperation name="Polish Opening" status="Running">
+        <workflow:AgenticOperation name="Polish Opening" status="Succeeded">
           <startedAt>2026-09-05T21:03:29</startedAt>
           <baseCommit>6e643ac99cd90ead9b42f7631ee8af4c06518561</baseCommit>
+          <completedAt>2026-09-05T21:04:12</completedAt>
           <resultMappings>
             <workflow:ResultMapping>
               <source>${ #strings.concat( #this.parameters.targetBlock, '.properties.destination') }</source>
@@ -130,6 +131,9 @@ Only rewrite opening. Do not edit files under
 _meta/transform/.</instructions>
             </workflow:InstructionTask>
           </task>
+          <changedFiles>
+            <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/TravelPostcard.bml" />
+          </changedFiles>
         </workflow:AgenticOperation>
       </composition>
     </operations>
