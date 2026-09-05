@@ -14,69 +14,69 @@
   <name>MyLatestStory</name>
   <type>playground:MyLatestStory</type>
   <baseType>core:Documentation</baseType>
-  <is>A random structured song produced by a workspace transform execution, in German, about a futuristic city and a dog</is>
+  <is>A random structured song produced by a workspace transform execution, in Spanish, about a futuristic city and a dog</is>
 
   <documentation>
-    A structured German song about a futuristic city and a dog. The song text and its
+    A structured Spanish song about a futuristic city and a dog. The song text and its
     metadata are carried as typed properties. Each transform execution replaces
     this block with a freshly composed song.
   </documentation>
 
   <properties>
     <title type="type:Text">
-      <value>Neonhund</value>
+      <value>El Perro de la Torre 9</value>
     </title>
     <artist type="type:Text">
-      <value>Satélite Callejero</value>
+      <value>Neón y Ceniza</value>
     </artist>
     <song type="type:Text">
-      <value>(Strophe 1)
-Zwischen Türmen, die blaues Licht atmen,
-und Zügen, die den Asphalt nicht mehr berühren,
-geht ein Hund ohne Herrn und ohne Uhr,
-auf der Suche nach Schatten unter der Plasmasonne.
+      <value>(Verso 1)
+La ciudad se levanta sobre rieles de cristal,
+mil ventanas encendidas como ojos sin dormir,
+y en la plaza de metal donde nadie va a pasear,
+un perro gris olfatea lo que el viento hizo venir.
 
-(Strophe 2)
-Sein Bellen hallt von den Bildschirmen wider,
-weckt eine Drohne, die auf dem Dach schläft,
-die ganze Stadt bewahrt ihr Schweigen,
-um die Stimme der alten Straße zu hören.
+(Verso 2)
+No lleva collar ni número, ni un amo que llamar,
+sólo el mapa de las calles guardado en su nariz,
+los coches vuelan mudos, las farolas van a hablar,
+pero él persigue el eco de una vieja cicatriz.
 
-(Refrain)
-Stadt aus Glas, Stadt von morgen,
-ein treuer Hund wandert durch deine Adern,
-er braucht keine Karten noch Antennen,
-nur den Geruchssinn und einen fernen Mond.
+(Coro)
+Corre, perro, corre, bajo el cielo de neón,
+que la torre número nueve todavía tiene voz,
+si el futuro es una máquina sin sitio al corazón,
+tú serás el guardián de lo que fuimos los dos.
 
-(Strophe 3)
-Die Hologramme erzählen eine andere Geschichte,
-von grünen Parks, die niemand mehr betritt,
-der Hund läuft zum letzten Baum,
-und bellt laut, wie einer, der nicht vergisst.
+(Verso 3)
+Un niño lo saluda desde un puente de titanio,
+le lanza un pan de luz que sabe a lluvia de verdad,
+y el perro mueve el rabo como un péndulo de vidrio,
+midiendo con su alegría la distancia a la ciudad.
 
-(Refrain)
-Stadt aus Glas, Stadt von morgen,
-ein treuer Hund wandert durch deine Adern,
-er braucht keine Karten noch Antennen,
-nur den Geruchssinn und einen fernen Mond.
+(Coro)
+Corre, perro, corre, bajo el cielo de neón,
+que la torre número nueve todavía tiene voz,
+si el futuro es una máquina sin sitio al corazón,
+tú serás el guardián de lo que fuimos los dos.
 
-(Brücke)
-Sollte eines Tages die ganze Stadt erlöschen,
-wird er weiter durch die Ruinen traben,
-und jeden führen, der seinem Schatten folgt,
-der letzte Herzschlag der alten Straßenecke.
+(Puente)
+Cuando apaguen las pantallas y se duerma el ascensor,
+cuando el último dron regrese a su rincón,
+quedará su silueta recortada en el vapor,
+un latido analógico en mitad del procesador.
 
-(Finale)
-Zwischen Türmen, die blaues Licht atmen,
-durchquert ein Hund die Zeit ohne Eile,
-und in jedem Funken, der die Nacht entzündet,
-hört man sein Bellen, klar und rein.</value>
+(Final)
+La ciudad se levanta sobre rieles de cristal,
+y en su base late tibio un pequeño corazón,
+mañana habrá más torres, más silencio, más metal,
+pero siempre habrá un perro custodiando la canción.</value>
     </song>
     <language type="type:Text">
-      <value>German</value>
+      <value>Spanish</value>
     </language>
     <date type="type:DateTime">
-      <value>2026-09-04T23:58:00</value>
+      <value>2026-09-05T23:57:08</value>
     </date>
   </properties>
 
