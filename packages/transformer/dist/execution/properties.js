@@ -1,5 +1,5 @@
 import { collectBaseTypeChain } from "@blockml/framework";
-import { BOOLEAN_TYPE_FQN, DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, AGENTIC_OPERATION_FQN, MODEL_OPERATION_FQN, TOOL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN, TEXT_TYPE_FQN, UUID_TYPE_FQN, } from "./constants.js";
+import { BOOLEAN_TYPE_FQN, DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, AGENTIC_OPERATION_FQN, MODEL_OPERATION_FQN, TOOL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN, RESULT_MAPPING_FQN, TEXT_TYPE_FQN, UUID_TYPE_FQN, } from "./constants.js";
 export function isModelTransformation(block, registry) {
     if (block.type === MODEL_TRANSFORMATION_FQN || block.baseType === MODEL_TRANSFORMATION_FQN) {
         return true;
@@ -157,12 +157,23 @@ export function setOperationChangedFiles(instance, paths) {
         },
     })));
 }
-export function setOperationException(instance, message) {
+export function getOperationResultMappings(instance) {
+    const aggregation = instance.aggregationCompositions?.find((entry) => entry.aggregationName === "resultMappings");
+    if (!aggregation) {
+        return [];
+    }
+    return aggregation.composition.children
+        .filter((child) => child.kind === "blockInstance")
+        .map((child) => child.instance)
+        .filter((mapping) => mapping.typeFqn === RESULT_MAPPING_FQN ||
+        mapping.typeFqn.endsWith(".ResultMapping"));
+}
+export function setOperationException(instance, message, typeFqn = EXECUTION_EXCEPTION_FQN) {
     upsertInstanceAggregation(instance, "exception", [
         {
             kind: "blockInstance",
             instance: {
-                typeFqn: EXECUTION_EXCEPTION_FQN,
+                typeFqn,
                 memberValues: {
                     message: {
                         kind: "literal",

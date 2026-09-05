@@ -1,13 +1,28 @@
-import type { BlockDefinition } from "@blockml/bom";
+import type { BlockDefinition, BlockInstance } from "@blockml/bom";
 import { type TypeRegistry } from "@blockml/framework";
-export { parsePropertyReference } from "./property-reference.js";
 export declare class ResultResolutionError extends Error {
     constructor(message: string);
 }
+export type PathSegment = {
+    kind: "index";
+    value: number;
+} | {
+    kind: "name";
+    value: string;
+};
+export interface ResolvedType {
+    fqn: string;
+    array: boolean;
+}
 export declare function resolveResultTypeFqn(block: BlockDefinition): string;
+export declare function resolveResultType(block: BlockDefinition): ResolvedType;
 /**
- * Copy resultSource onto result. No-op when resultSource is unset.
- * Throws ResultResolutionError when the path, Block, Property, type, or value is invalid.
+ * Apply each ResultMapping on the operation onto transformation.result.
+ * No-op when the operation has no mappings.
  */
-export declare function applyTransformationResult(transformation: BlockDefinition, registry: TypeRegistry): void;
+export declare function applyOperationResultMappings(transformation: BlockDefinition, operation: BlockInstance, registry: TypeRegistry): void;
+export declare function parseModelPath(raw: string | undefined, label: string): PathSegment[];
+export declare function walkType(start: ResolvedType, path: PathSegment[], registry: TypeRegistry, label: string): ResolvedType;
+export declare function readPath(value: unknown, path: PathSegment[], label: string): unknown;
+export declare function writePath(root: unknown, path: PathSegment[], value: unknown, startType: ResolvedType, registry: TypeRegistry): unknown;
 //# sourceMappingURL=result.d.ts.map

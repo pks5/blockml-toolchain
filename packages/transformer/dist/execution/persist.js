@@ -1,9 +1,10 @@
 import { forkBom } from "@blockml/framework";
-import { TYPE_PACKAGE_FQN } from "./constants.js";
+import { EXECUTION_EXCEPTION_FQN, RESULT_EXCEPTION_FQN, TYPE_PACKAGE_FQN, } from "./constants.js";
 import { TransformError } from "./errors.js";
 import { persistDocument } from "./relocate.js";
 import { loadRunningExecution } from "./load-running.js";
 import { getOperationInstance, setOperationChangedFiles, setOperationCompletedAt, setOperationException, setOperationOutput, setOperationStatus, } from "./properties.js";
+import { applyOperationResultMappings, ResultResolutionError } from "./result.js";
 import { commitWorktree } from "../pipeline/git.js";
 export function persistReflection(workspaceRoot, input) {
     const { document, registry } = loadRunningExecution(workspaceRoot, input.started);
@@ -19,13 +20,33 @@ export function persistReflection(workspaceRoot, input) {
         ensureTypeNamespace(forked);
         setOperationChangedFiles(operation, input.changedFiles);
     }
-    if (input.exceptionMessage !== undefined) {
-        setOperationException(operation, input.exceptionMessage);
+    let outcome = input.outcome;
+    let exceptionMessage = input.exceptionMessage;
+    let exceptionType = EXECUTION_EXCEPTION_FQN;
+    if (outcome === "succeeded") {
+        try {
+            applyOperationResultMappings(forked.block, operation, registry);
+        }
+        catch (error) {
+            if (!(error instanceof ResultResolutionError)) {
+                throw error;
+            }
+            outcome = "failed";
+            exceptionMessage = error.message;
+            exceptionType = RESULT_EXCEPTION_FQN;
+        }
     }
-    setOperationStatus(operation, input.outcome === "failed" ? "Failed" : "Succeeded");
+    if (exceptionMessage !== undefined) {
+        setOperationException(operation, exceptionMessage, exceptionType);
+    }
+    setOperationStatus(operation, outcome === "failed" ? "Failed" : "Succeeded");
     setOperationCompletedAt(operation, input.completedAtIso);
     persistDocument(forked);
     commitWorktree(workspaceRoot, `transform(operation): ${input.started.generatedName} #${input.operationIndex + 1}`, { required: true });
+    return {
+        outcome,
+        ...(exceptionMessage !== undefined ? { exceptionMessage } : {}),
+    };
 }
 function ensureTypeNamespace(document) {
     const bindings = { ...(document.source.namespaceBindings ?? {}) };

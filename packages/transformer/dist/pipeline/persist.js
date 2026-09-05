@@ -10,7 +10,7 @@ export function createNoopPersistStage() {
 export function createPersistStage() {
     return {
         async run(reflected, context) {
-            persistReflection(context.workspaceRoot, {
+            const persisted = persistReflection(context.workspaceRoot, {
                 started: reflected.started,
                 operationIndex: reflected.operationIndex,
                 changedFiles: reflected.changedFiles,
@@ -21,7 +21,13 @@ export function createPersistStage() {
                     ? { exceptionMessage: reflected.exceptionMessage }
                     : {}),
             });
-            return { ...reflected };
+            return {
+                ...reflected,
+                outcome: persisted.outcome,
+                ...(persisted.exceptionMessage !== undefined
+                    ? { exceptionMessage: persisted.exceptionMessage }
+                    : {}),
+            };
         },
     };
 }

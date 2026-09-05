@@ -8,5 +8,9 @@ export interface PersistReflectionInput {
     outcome: "succeeded" | "failed";
     completedAtIso: string;
 }
-export declare function persistReflection(workspaceRoot: string, input: PersistReflectionInput): void;
+export interface PersistReflectionResult {
+    outcome: "succeeded" | "failed";
+    exceptionMessage?: string;
+}
+export declare function persistReflection(workspaceRoot: string, input: PersistReflectionInput): PersistReflectionResult;
 //# sourceMappingURL=persist.d.ts.map
