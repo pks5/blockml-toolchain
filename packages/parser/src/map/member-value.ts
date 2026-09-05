@@ -103,6 +103,7 @@ export function parseMemberValue(
     if ("value" in result) {
       return literal(result.value, typeFqn, placement);
     }
+    return literal(trimmed, typeFqn, placement);
   }
 
   if (isBooleanLiteral(trimmed)) {

@@ -34,7 +34,20 @@
   <baseType>core:Capability</baseType>
   <is>Parse attribute/element value to MemberValue</is>
 
-  <documentation>Parse attribute/element value to MemberValue</documentation>
+  <documentation>
+    Parse attribute/element value to MemberValue.
+
+    Always classifies a whole `${ … }` as ExpressionValue and unescaped `${` in
+    running text as InterpolatedTextValue. JSON arrays/objects stay structural
+    list/struct tokenization.
+
+    Without `ctx.parseValue` (library bootstrap): Boolean and number heuristics
+    (Text / Integer / Boolean / TypeIdentifier) remain.
+
+    With the host hook: scalars go through parseValue only. Success stores the
+    host value. Failure keeps the authored string and reports BML_INVALID_VALUE.
+    Skip keeps the authored string — no Boolean/number coercion.
+  </documentation>
 
   <references>
     <see type="pardocumentation:ExpressionCapture" relation="SeeAlso" />

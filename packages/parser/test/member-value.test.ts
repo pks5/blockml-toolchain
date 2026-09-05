@@ -82,4 +82,14 @@ describe("parseMemberValue host hook", () => {
     expect(val).toMatchObject({ kind: "literal", value: 42 });
     expect(ctx.diagnostics).toEqual([]);
   });
+
+  it("keeps authored text when the hook skips — no boolean or number heuristic", () => {
+    const ctx = createMapContext("t.bml", "", {}, { diagnostics: [] });
+    ctx.parseValue = () => ({ ok: true, skipped: true });
+    const numberVal = parseMemberValue("42", "org.blockml.bml.type.Integer", "t.bml", 1, 1, undefined, ctx);
+    const boolVal = parseMemberValue("true", "org.blockml.bml.type.Boolean", "t.bml", 1, 1, undefined, ctx);
+    expect(numberVal).toMatchObject({ kind: "literal", value: "42" });
+    expect(boolVal).toMatchObject({ kind: "literal", value: "true" });
+    expect(ctx.diagnostics).toEqual([]);
+  });
 });

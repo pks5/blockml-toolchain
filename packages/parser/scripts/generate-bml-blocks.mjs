@@ -403,6 +403,7 @@ const capabilities = [
     prefix: "parcap",
     name: "ParseMemberValue",
     is: "Parse attribute/element value to MemberValue",
+    doc: "Always classifies ExpressionValue and InterpolatedTextValue. Boolean/number heuristics run only without the parseValue hook (bootstrap). With the hook, skip keeps the authored string.",
     inputs: [
       { name: "raw", type: "type:Text", required: true },
       { name: "ctx", type: "parmap:MapContext", required: true },
