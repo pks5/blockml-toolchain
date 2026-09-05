@@ -65,12 +65,17 @@ function registerCore(registry: TypeRegistry): void {
   );
 }
 
-function parseSample(body: string, filePath: string): { source: string; document: BomDocument } {
+function parseSample(
+  body: string,
+  filePath: string,
+  extraXmlns = "",
+): { source: string; document: BomDocument } {
   const source = [
     '<block xmlns="http://blockml.org/bml"',
     ' xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"',
     ' xmlns:core="org.blockml.bml.core"',
     ' xmlns:type="org.blockml.bml.type"',
+    extraXmlns,
     ' xmlns:test="com.blockml.test.refs">',
     "  <type>test:Sample</type>",
     "  <baseType>core:Block</baseType>",
@@ -148,13 +153,72 @@ describe("validateTypes type-driven reference walk", () => {
     const registry = new TypeRegistry();
     registerCore(registry);
     const diagnostics = validateTypes(document, registry);
-    expect(
-      diagnostics.some(
-        (d) =>
-          d.code === "BML_UNKNOWN_TYPE" &&
-          d.message.includes("com.blockml.test.refs.MissingTarget"),
-      ),
-    ).toBe(true);
+    const unknown = diagnostics.filter(
+      (d) =>
+        d.code === "BML_UNKNOWN_TYPE" &&
+        d.message.includes("com.blockml.test.refs.MissingTarget"),
+    );
+    expect(unknown).toHaveLength(1);
+  });
+
+  it("resolves xmlns QName TypeReference defaults via document bindings", () => {
+    const { document } = parseSample(
+      [
+        "  <properties>",
+        '    <definition type="type:TypeReference">',
+        "      <value>def:SubBlockDefinition</value>",
+        "    </definition>",
+        "  </properties>",
+      ].join("\n"),
+      "type-ref-qname-ok.bml",
+      ' xmlns:def="org.blockml.bml.definition"',
+    );
+    const registry = new TypeRegistry();
+    registerCore(registry);
+    registry.register(
+      typeDoc(stub("SubBlockDefinition", "org.blockml.bml.definition.SubBlockDefinition")),
+    );
+    const diagnostics = validateTypes(document, registry);
+    expect(diagnostics.filter((d) => d.code === "BML_UNKNOWN_TYPE")).toEqual([]);
+  });
+
+  it("resolves xmlns QNames before reporting an unknown TypeReference default", () => {
+    const { document } = parseSample(
+      [
+        "  <properties>",
+        '    <definition type="type:TypeReference">',
+        "      <value>def:MissingDefinition</value>",
+        "    </definition>",
+        "  </properties>",
+      ].join("\n"),
+      "type-ref-qname-missing.bml",
+      ' xmlns:def="org.blockml.bml.definition"',
+    );
+    const registry = new TypeRegistry();
+    registerCore(registry);
+    const diagnostics = validateTypes(document, registry);
+    const unknown = diagnostics.filter((d) => d.code === "BML_UNKNOWN_TYPE");
+    expect(unknown).toHaveLength(1);
+    expect(unknown[0]!.message).toContain("org.blockml.bml.definition.MissingDefinition");
+    expect(unknown[0]!.message).not.toContain("def:MissingDefinition");
+  });
+
+  it("resolves a generic TypeExpression QName on a TypeReference default", () => {
+    const { document } = parseSample(
+      [
+        "  <properties>",
+        '    <language type="type:TypeReference">',
+        "      <value>lang:Markdown(lang:English)</value>",
+        "    </language>",
+        "  </properties>",
+      ].join("\n"),
+      "type-ref-qname-generic.bml",
+      ' xmlns:lang="org.blockml.bml.language"',
+    );
+    const registry = new TypeRegistry();
+    registerCore(registry);
+    const diagnostics = validateTypes(document, registry);
+    expect(diagnostics.filter((d) => d.code === "BML_UNKNOWN_TYPE")).toEqual([]);
   });
 
   it("does not existence-check a TypeIdentifier property value", () => {

@@ -46,6 +46,13 @@
     - Identifier types (`TypeIdentifier`, `MemberIdentifier`, …) are syntax-only and are not
       existence-checked
 
+    TypeReference / TypeReferenceEntity literals stay authored text (QName or
+    TypeExpression). The reference walk re-parses them with
+    document.source.namespaceBindings — the same xmlns map as type attributes —
+    then existence-checks the resolved FQNs. Canonical default is checked once
+    (property.value; values[namespace=""] is the same entry). Prefixed
+    PropertyValueEntry facets are not existence-checked.
+
     After the reference walk, canonical BML literals with a declared PrimitiveType are
     checked via fwcap:EvaluateParseValue (property.value / values[namespace=""]).
     Prefixed / annotation-namespaced PropertyValueEntry values (scad:value and other

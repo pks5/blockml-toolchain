@@ -56,7 +56,7 @@ export function walkNamedTypes(expr, visit) {
             break;
     }
 }
-function typeExpressionFromRaw(raw) {
+function typeExpressionFromRaw(raw, bindings) {
     const trimmed = raw.trim();
     if (!trimmed) {
         return undefined;
@@ -65,7 +65,7 @@ function typeExpressionFromRaw(raw) {
         return { kind: "named", fqn: trimmed };
     }
     try {
-        return parseTypeExpression(trimmed, {});
+        return parseTypeExpression(trimmed, bindings);
     }
     catch {
         return { kind: "named", fqn: trimmed };
@@ -106,7 +106,7 @@ function checkTypeExpression(expr, ctx, loc, code = "BML_UNKNOWN_TYPE", messageP
     });
 }
 function checkTypeFqn(raw, ctx, loc, code = "BML_UNKNOWN_TYPE", messagePrefix = "Unknown type", boundFqn) {
-    const expr = typeExpressionFromRaw(raw);
+    const expr = typeExpressionFromRaw(raw, ctx.bindings);
     if (!expr) {
         return;
     }
@@ -245,6 +245,14 @@ function checkMemberTypes(member, ctx) {
         const classified = classifyDeclaredType(member.type, ctx.registry, member.typeFqn);
         checkMemberValue(member.value, classified, ctx, memberValueSource(member.value) ?? loc);
         for (const entry of member.values ?? []) {
+            // Prefixed values are annotation facets, not TypeReference literals.
+            // property.value is the canonical default-namespace entry from values[].
+            if (entry.namespace) {
+                continue;
+            }
+            if (member.value) {
+                continue;
+            }
             checkMemberValue(entry.value, classified, ctx, memberValueSource(entry.value) ?? loc);
         }
         for (const suggestion of member.suggestions ?? []) {
@@ -386,7 +394,13 @@ export function validateReferences(document, registry) {
     const diagnostics = [];
     const file = document.source.filePath ?? "<memory>";
     const ids = collectDocumentInstanceIds(document.block, file);
-    walkBlockDefinition(document.block, { registry, file, diagnostics, ids });
+    walkBlockDefinition(document.block, {
+        registry,
+        file,
+        diagnostics,
+        ids,
+        bindings: document.source.namespaceBindings ?? {},
+    });
     return diagnostics;
 }
 //# sourceMappingURL=validate-references.js.map

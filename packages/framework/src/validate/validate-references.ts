@@ -47,6 +47,7 @@ type CheckCtx = {
   file: string;
   diagnostics: Diagnostic[];
   ids: Map<string, InstanceIdLoc>;
+  bindings: Record<string, string>;
 };
 
 function diag(
@@ -102,7 +103,10 @@ export function walkNamedTypes(expr: TypeExpression | undefined, visit: (fqn: st
   }
 }
 
-function typeExpressionFromRaw(raw: string): TypeExpression | undefined {
+function typeExpressionFromRaw(
+  raw: string,
+  bindings: Record<string, string>,
+): TypeExpression | undefined {
   const trimmed = raw.trim();
   if (!trimmed) {
     return undefined;
@@ -111,7 +115,7 @@ function typeExpressionFromRaw(raw: string): TypeExpression | undefined {
     return { kind: "named", fqn: trimmed };
   }
   try {
-    return parseTypeExpression(trimmed, {});
+    return parseTypeExpression(trimmed, bindings);
   } catch {
     return { kind: "named", fqn: trimmed };
   }
@@ -176,7 +180,7 @@ function checkTypeFqn(
   messagePrefix = "Unknown type",
   boundFqn?: string,
 ): void {
-  const expr = typeExpressionFromRaw(raw);
+  const expr = typeExpressionFromRaw(raw, ctx.bindings);
   if (!expr) {
     return;
   }
@@ -376,6 +380,14 @@ function checkMemberTypes(member: MemberDefinition, ctx: CheckCtx): void {
     const classified = classifyDeclaredType(member.type, ctx.registry, member.typeFqn);
     checkMemberValue(member.value, classified, ctx, memberValueSource(member.value) ?? loc);
     for (const entry of member.values ?? []) {
+      // Prefixed values are annotation facets, not TypeReference literals.
+      // property.value is the canonical default-namespace entry from values[].
+      if (entry.namespace) {
+        continue;
+      }
+      if (member.value) {
+        continue;
+      }
       checkMemberValue(entry.value, classified, ctx, memberValueSource(entry.value) ?? loc);
     }
     for (const suggestion of member.suggestions ?? []) {
@@ -550,6 +562,12 @@ export function validateReferences(document: BomDocument, registry: TypeRegistry
   const diagnostics: Diagnostic[] = [];
   const file = document.source.filePath ?? "<memory>";
   const ids = collectDocumentInstanceIds(document.block, file);
-  walkBlockDefinition(document.block, { registry, file, diagnostics, ids });
+  walkBlockDefinition(document.block, {
+    registry,
+    file,
+    diagnostics,
+    ids,
+    bindings: document.source.namespaceBindings ?? {},
+  });
   return diagnostics;
 }
