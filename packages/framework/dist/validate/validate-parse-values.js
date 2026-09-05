@@ -88,6 +88,12 @@ function checkMember(member, ctx) {
     if (member.kind === "property") {
         checkLiteral(member.value, member.type, member.typeFqn, ctx, loc);
         for (const entry of member.values ?? []) {
+            if (entry.namespace) {
+                continue;
+            }
+            if (member.value) {
+                continue;
+            }
             checkLiteral(entry.value, member.type, member.typeFqn, ctx, loc);
         }
         for (const suggestion of member.suggestions ?? []) {

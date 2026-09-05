@@ -12,11 +12,12 @@ import {
 
 const ROOT = join(import.meta.dirname, "..", "..", "..");
 
-function parseSample(body: string, filePath: string): BomDocument {
+function parseSample(body: string, filePath: string, extraXmlns = ""): BomDocument {
   const source = [
     '<block xmlns="http://blockml.org/bml"',
     ' xmlns:core="org.blockml.bml.core"',
     ' xmlns:type="org.blockml.bml.type"',
+    extraXmlns,
     ' xmlns:test="com.blockml.test.parsevalue">',
     "  <type>test:Sample</type>",
     "  <baseType>core:Block</baseType>",
@@ -148,5 +149,35 @@ describe("validateTypes parseValue literals", () => {
     );
     const diagnostics = validateTypes(document, new TypeRegistry());
     expect(diagnostics.some((d) => d.code === "BML_INVALID_VALUE")).toBe(false);
+  });
+
+  it("skips annotation-namespaced values such as scad:value", () => {
+    const document = parseSample(
+      [
+        '    <baseColor type="type:Color">',
+        "      <value>#EAC645</value>",
+        '      <scad:value>"#EAC645"</scad:value>',
+        "    </baseColor>",
+      ].join("\n"),
+      "scad-color-facet.bml",
+      ' xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"',
+    );
+    const diagnostics = validateTypes(document, bootstrappedRegistry());
+    expect(diagnostics.filter((d) => d.code === "BML_INVALID_VALUE")).toEqual([]);
+  });
+
+  it("still reports BML_INVALID_VALUE for the canonical value when a facet is also present", () => {
+    const document = parseSample(
+      [
+        '    <count type="type:Integer">',
+        "      <value>1.5</value>",
+        "      <scad:value>1.5</scad:value>",
+        "    </count>",
+      ].join("\n"),
+      "scad-invalid-canonical.bml",
+      ' xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"',
+    );
+    const diagnostics = validateTypes(document, bootstrappedRegistry());
+    expect(diagnostics.filter((d) => d.code === "BML_INVALID_VALUE")).toHaveLength(1);
   });
 });

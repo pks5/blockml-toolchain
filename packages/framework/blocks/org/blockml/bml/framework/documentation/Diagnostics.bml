@@ -54,7 +54,12 @@
     • BML_EXPR_SYNTAX_ERROR — unclosed ${} in interpolated text
     • BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION — hole uses @model, @bean, or a forbidden call
     • BML_EXPR_TYPE_MISMATCH — interpolated text on a non-Text member
-    • BML_INVALID_VALUE — PrimitiveType.parseValue threw on a literal (property value/values, instance memberValues, TypeReferenceEntity.value). Message is the thrown Error text. Expressions, interpolation, unions, StructType, and EnumType are skipped.
+    • BML_INVALID_VALUE — PrimitiveType.parseValue threw on a canonical BML literal
+      (property.value, values[namespace=""], instance memberValues, TypeReferenceEntity.value).
+      Prefixed values (scad:value and other Annotation FQNs) are not validated today.
+      TODO: a matching prefixed type (scad:type for scad:value) so each facet can be
+      checked in its target language. Message is the thrown Error text. Expressions,
+      interpolation, unions, StructType, and EnumType are skipped.
 
     validateInstances:
     • BML_UNKNOWN_TYPE — composition instance typeFqn not in TypeRegistry

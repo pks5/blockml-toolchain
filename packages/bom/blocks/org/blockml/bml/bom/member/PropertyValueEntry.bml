@@ -28,7 +28,18 @@
   <baseType>bom:UrmodellType</baseType>
   <is>Namespaced property value entry</is>
 
-  <documentation>Namespaced property value entry</documentation>
+  <documentation>
+    Namespaced property value entry.
+
+    - `namespace` `""` — canonical BML value (same lexical type as the property)
+    - non-empty `namespace` — resolved Annotation FQN (for example `scad:value`);
+      a target-language facet, not a second BML value
+    - `PrimitiveType.parseValue` applies only to the canonical entry
+
+    TODO: a prefixed value should carry its own type (for example `scad:type` for
+    `scad:value`) so each facet can be validated in its target language. Today
+    prefixed values are not validated.
+  </documentation>
 
   <properties>
     <namespace type="type:Text">
