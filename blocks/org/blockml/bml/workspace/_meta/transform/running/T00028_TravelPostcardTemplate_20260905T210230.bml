@@ -103,11 +103,12 @@ ModelTransformation metadata or files under _meta/transform/.</instructions>
           <output>recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/packages/graph/blocks/org/blockml/bml/graph/capability/Members.bml:28 — Structure long documentation with markdown (headings, lists, or paragraphs).
 recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/packages/inspect/blocks/org/blockml/bml/inspect/InspectedMember.bml:29 — Structure long documentation with markdown (headings, lists, or paragraphs).
 recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/packages/transformer/blocks/org/blockml/bml/transformer/capability/ToolExecutor.bml:21 — Structure long documentation with markdown (headings, lists, or paragraphs).
-Validation succeeded. Tested 731 blocks, 0 with errors, 0 warnings, 3 recommendations.
-</output>
+Validation succeeded. Tested 731 blocks, 0 with errors, 0 warnings, 3 recommendations.</output>
           <completedAt>2026-09-05T21:03:28</completedAt>
         </workflow:ToolOperation>
-        <workflow:AgenticOperation name="Polish Opening" status="Pending">
+        <workflow:AgenticOperation name="Polish Opening" status="Running">
+          <startedAt>2026-09-05T21:03:29</startedAt>
+          <baseCommit>6e643ac99cd90ead9b42f7631ee8af4c06518561</baseCommit>
           <resultMappings>
             <workflow:ResultMapping>
               <source>${ #strings.concat( #this.parameters.targetBlock, '.properties.destination') }</source>
