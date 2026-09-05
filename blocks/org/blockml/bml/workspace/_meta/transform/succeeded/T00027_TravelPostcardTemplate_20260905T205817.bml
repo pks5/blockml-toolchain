@@ -1,21 +1,21 @@
 <!--Workspace pending transform — TravelPostcardTemplate
-  FQN: org.blockml.bml.workspace._meta.transform.running.T00027_TravelPostcardTemplate_20260905T205817-->
+  FQN: org.blockml.bml.workspace._meta.transform.succeeded.T00027_TravelPostcardTemplate_20260905T205817-->
 <block xmlns="http://blockml.org/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
+  xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
   <name>
     T00027_TravelPostcardTemplate_20260905T205817
   </name>
   <type>
-    running:T00027_TravelPostcardTemplate_20260905T205817
+    succeeded:T00027_TravelPostcardTemplate_20260905T205817
   </type>
   <baseType>
-    workflow:ModelTransformation(running:T00027_TravelPostcardTemplate_20260905T205817.Parameters, running:T00027_TravelPostcardTemplate_20260905T205817.Result)
+    workflow:ModelTransformation(succeeded:T00027_TravelPostcardTemplate_20260905T205817.Parameters, succeeded:T00027_TravelPostcardTemplate_20260905T205817.Result)
   </baseType>
   <is>
     A pending ModelTransformation that writes a playground travel postcard
@@ -25,7 +25,7 @@
       <value>A transformation that creates a playground travel postcard and builds result from ResultMappings</value>
     </description>
     <status override="true" type="workflow:ExecutionStatus">
-      <value>Running</value>
+      <value>Succeeded</value>
     </status>
     <createdAt override="true" type="type:DateTime">
       <value>2026-09-05T20:52:00</value>
@@ -33,7 +33,7 @@
     <template override="true" type="type:Boolean">
       <value>false</value>
     </template>
-    <parameters override="true" type="running:T00027_TravelPostcardTemplate_20260905T205817.Parameters">
+    <parameters override="true" type="succeeded:T00027_TravelPostcardTemplate_20260905T205817.Parameters">
       <value>{destination:"Lisbon",language:"English",targetBlock:"org.blockml.bml.workspace.playground.TravelPostcard"}</value>
     </parameters>
     <executionId override="true" type="type:UUID">
@@ -48,9 +48,12 @@
     <baseCommit override="true" type="type:Text">
       <value>be851077adceccb8601106140e04e51ae1b53b57</value>
     </baseCommit>
-    <result override="true" type="running:T00027_TravelPostcardTemplate_20260905T205817.Result">
+    <result override="true" type="org.blockml.bml.workspace._meta.transform.running.T00027_TravelPostcardTemplate_20260905T205817.Result">
       <value>{title:"A Day Among the Seven Hills",destination:"Lisbon",opening:"Wish you were here! I'm scribbling this from a little tiled bench above the Tagus, watching the ferries draw silver lines across the water while the whole waterfront smells of salt, coffee, and roasting chestnuts."}</value>
     </result>
+    <completedAt override="true" type="type:DateTime">
+      <value>2026-09-05T21:00:00</value>
+    </completedAt>
   </properties>
   <aggregations>
     <operations override="true">
@@ -145,7 +148,7 @@ _meta/transform/.</instructions>
         Parameters
       </name>
       <type>
-        running:T00027_TravelPostcardTemplate_20260905T205817.Parameters
+        succeeded:T00027_TravelPostcardTemplate_20260905T205817.Parameters
       </type>
       <baseType>
         type:StructType
@@ -164,7 +167,7 @@ _meta/transform/.</instructions>
         Result
       </name>
       <type>
-        running:T00027_TravelPostcardTemplate_20260905T205817.Result
+        succeeded:T00027_TravelPostcardTemplate_20260905T205817.Result
       </type>
       <baseType>
         type:StructType
