@@ -5,17 +5,17 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
+  xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
   <name>
     T00029_PoemTestTemplate_20260905T235708
   </name>
   <type>
-    running:T00029_PoemTestTemplate_20260905T235708
+    succeeded:T00029_PoemTestTemplate_20260905T235708
   </type>
   <baseType>
-    workflow:ModelTransformation(running:T00029_PoemTestTemplate_20260905T235708.Parameters, type:Text)
+    workflow:ModelTransformation(succeeded:T00029_PoemTestTemplate_20260905T235708.Parameters, type:Text)
   </baseType>
   <is>
     A pending ModelTransformation that creates a playground Poem block
@@ -25,7 +25,7 @@
       <value>A transformation that creates a playground Poem block</value>
     </description>
     <status override="true" type="workflow:ExecutionStatus">
-      <value>Running</value>
+      <value>Succeeded</value>
     </status>
     <createdAt override="true" type="type:DateTime">
       <value>2026-08-30T01:40:20</value>
@@ -33,7 +33,7 @@
     <template override="true" type="type:Boolean">
       <value>false</value>
     </template>
-    <parameters override="true" type="running:T00029_PoemTestTemplate_20260905T235708.Parameters">
+    <parameters override="true" type="succeeded:T00029_PoemTestTemplate_20260905T235708.Parameters">
       <value>{translationLanguage:"German",storyLanguage:"Spanish",topic:"A Futuristic city and a dog",targetBlock:"org.blockml.bml.workspace.playground.MyLatestStory"}</value>
     </parameters>
     <executionId override="true" type="type:UUID">
@@ -91,6 +91,9 @@ und an ihrem Fuß schlägt lau ein kleines Herz,
 morgen gibt es mehr Türme, mehr Stille, mehr Metall,
 doch immer wird ein Hund das Lied bewachen.</value>
     </result>
+    <completedAt override="true" type="type:DateTime">
+      <value>2026-09-06T00:00:17</value>
+    </completedAt>
   </properties>
   <aggregations>
     <operations override="true">
@@ -690,7 +693,7 @@ to ${ #this.parameters.translationLanguage }.</instructions>
         Parameters
       </name>
       <type>
-        running:T00029_PoemTestTemplate_20260905T235708.Parameters
+        succeeded:T00029_PoemTestTemplate_20260905T235708.Parameters
       </type>
       <baseType>
         type:StructType
