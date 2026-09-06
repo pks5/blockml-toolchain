@@ -1,6 +1,6 @@
 {
   "name": "@blockml/parser",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "BlockML parser — BML XML to BOM (Urmodell)",
   "license": "Apache-2.0",
   "repository": {
@@ -32,7 +32,7 @@
     "test": "vitest run packages/parser/test"
   },
   "dependencies": {
-    "@blockml/bom": "^0.9.3",
+    "@blockml/bom": "^0.9.4",
     "@blockml/core": "^1.1.2",
     "@xmldom/xmldom": "^0.9.8"
   },

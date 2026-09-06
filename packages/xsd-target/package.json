@@ -1,6 +1,6 @@
 {
   "name": "@blockml/xsd-target",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "BlockML XSD render target — XML Schema generation",
   "license": "Apache-2.0",
   "repository": {
@@ -32,10 +32,10 @@
     "test": "vitest run packages/xsd-target/test"
   },
   "dependencies": {
-    "@blockml/bom": "^0.9.3",
-    "@blockml/compiler": "^0.9.3",
+    "@blockml/bom": "^0.9.4",
+    "@blockml/compiler": "^0.9.4",
     "@blockml/core": "^1.1.2",
-    "@blockml/framework": "^0.9.3"
+    "@blockml/framework": "^0.9.4"
   },
   "engines": {
     "node": ">=20"
