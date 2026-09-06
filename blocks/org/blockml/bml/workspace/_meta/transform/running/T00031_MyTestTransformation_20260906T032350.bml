@@ -71,8 +71,7 @@ Following `InstructionTask.instructions` and the closed instance's resolved `tar
 
 **Validation:** `blockml validate --all` — 1140 blocks, 0 errors, 0 warnings. The single `BML_STYLE_PREFER_MARKDOWN` recommendation on the block is the same non-blocking style hint that already applies to the sibling playground blocks and 187 others across the repo.
 
-**Untouched:** no changes to `MyTestTransformation` / its `ModelOperations`, nothing under `_meta/transform/`, and no execution-metadata fields. Only the new playground file is added (`git status`: one untracked file).
-</output>
+**Untouched:** no changes to `MyTestTransformation` / its `ModelOperations`, nothing under `_meta/transform/`, and no execution-metadata fields. Only the new playground file is added (`git status`: one untracked file).</output>
           <completedAt>2026-09-06T03:25:06</completedAt>
           <task>
             <workflow:InstructionTask>
@@ -98,8 +97,10 @@ ModelTransformation metadata or files under _meta/transform/.</instructions>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/RandomBlock.bml" />
           </changedFiles>
         </workflow:AgenticOperation>
-        <workflow:ToolOperation name="Validate" status="Pending" captureOutput="true" command="blockml">
+        <workflow:ToolOperation name="Validate" status="Running" captureOutput="true" command="blockml">
           <args>[&quot;validate&quot;]</args>
+          <startedAt>2026-09-06T03:25:06</startedAt>
+          <baseCommit>d9b79db0634d779f594bfd0565408a36b04f54e9</baseCommit>
         </workflow:ToolOperation>
       </composition>
     </operations>
