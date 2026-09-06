@@ -35,7 +35,7 @@
 
     Options: depth?, rootDir?, srcDir?, libraries? (inspectProject), maxBlocks?.
     Constants: DEFAULT_INSPECT_DEPTH, MAX_INSPECT_DEPTH, DEFAULT_MAX_BLOCKS, DOC_TRUNCATE, REF_TRUNCATE.
-    InspectedBlock.baseType is an InspectTypeRef. InspectedBlock.genericTypes are declared parameters (bound + default). Effective members are InspectedProperty, InspectedAggregation, InspectedAssociation, and InspectedCapability lists (empty omitted; no kind field). InspectedBlock.references are authored documentation see entries (FQN + relation, first 8, not expanded). InspectedBlock.referencesTruncated is the remaining count when more than 8. InspectedProperty.value is a literal. InspectedAggregation.instances are authored composition children. InspectedCapability may include InspectedImplementation (language + truncated source).</documentation>
+    InspectedBlock.baseType is an InspectTypeRef. InspectedBlock.genericTypes are declared parameters (bound + default). Effective members are InspectedProperty, InspectedAggregation, InspectedAssociation, and InspectedCapability lists (empty omitted; no kind field). InspectedMember.documentation is the first entry, truncated like Block documentation. InspectedBlock.references are authored documentation see entries (FQN + relation, first 8, not expanded). InspectedBlock.referencesTruncated is the remaining count when more than 8. InspectedProperty.value is a literal. InspectedAggregation.instances are authored composition children. InspectedCapability may include InspectedImplementation (language + truncated source).</documentation>
 
   <references>
     <see type="inspectcap:InspectBlock" relation="Defines" />

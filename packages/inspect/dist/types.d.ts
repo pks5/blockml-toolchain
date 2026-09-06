@@ -28,6 +28,8 @@ export interface InspectedImplementation {
 }
 export interface InspectedMember {
     name: string;
+    documentation?: string;
+    documentationTruncated?: boolean;
     inheritedFrom?: string;
     visibility?: string;
     readOnly?: boolean;

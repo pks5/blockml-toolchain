@@ -31,7 +31,7 @@
 
     Search answers where something is. Graph answers how it connects. Inspect answers: give me this part of the model already resolved so I can understand it.
 
-    Aggregation entries include authored composition instances. Authored documentation see references are compact FQN + relation and are not expanded; at most 8, with referencesTruncated as the remaining count. Long documentation is truncated with an ellipsis and documentationTruncated.
+    Member documentation is the first entry when present, truncated like Block documentation. Aggregation entries include authored composition instances. Authored documentation see references are compact FQN + relation and are not expanded; at most 8, with referencesTruncated as the remaining count. Long documentation is truncated with an ellipsis and documentationTruncated.
 
     The inspect view is ephemeral. It is not a canonical model format and is not written back to BML. This library (org.blockml.bml.inspect.*) is the SSOT. TypeScript in packages/inspect/src/ implements it.</documentation>
 

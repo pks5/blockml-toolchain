@@ -46,8 +46,8 @@ function truncateDocumentation(text) {
     }
     return { text: `${text.slice(0, DOC_TRUNCATE)}…`, truncated: true };
 }
-function firstDocumentation(block) {
-    return truncateDocumentation(block.documentations?.[0]?.text);
+function firstDocumentation(entries) {
+    return truncateDocumentation(entries?.[0]?.text);
 }
 function projectReferences(refs) {
     if (!refs?.length) {
@@ -258,6 +258,13 @@ function inheritedFromOwner(block, member, registry) {
 }
 function projectCommon(member, inheritedFrom) {
     const projected = { name: member.name };
+    const documentation = firstDocumentation(member.documentations);
+    if (documentation) {
+        projected.documentation = documentation.text;
+        if (documentation.truncated) {
+            projected.documentationTruncated = true;
+        }
+    }
     if (inheritedFrom) {
         projected.inheritedFrom = inheritedFrom;
     }
@@ -399,7 +406,7 @@ function projectBlock(doc, registry, options) {
     if (block.is) {
         projected.is = block.is;
     }
-    const documentation = firstDocumentation(block);
+    const documentation = firstDocumentation(block.documentations);
     if (documentation) {
         projected.documentation = documentation.text;
         if (documentation.truncated) {

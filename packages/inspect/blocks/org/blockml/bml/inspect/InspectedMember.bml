@@ -32,12 +32,19 @@
 
     No kind discriminator — the owning InspectedBlock aggregation names the kind.
     inheritedFrom is omitted when the member is declared on the inspected Block.
+    First documentation entry is projected when present; truncated to 400 characters with documentationTruncated.
   </documentation>
 
   <properties>
     <name type="type:Text">
       <documentation>Logical member name. (required)</documentation>
     </name>
+    <documentation type="type:Text">
+      <documentation>First documentation entry. Truncated to 400 characters with an ellipsis when longer. (optional)</documentation>
+    </documentation>
+    <documentationTruncated type="type:Boolean">
+      <documentation>true when documentation was truncated. (optional)</documentation>
+    </documentationTruncated>
     <inheritedFrom type="type:Text">
       <documentation>Declaring ancestor or contract FQN. (optional)</documentation>
     </inheritedFrom>

@@ -100,8 +100,10 @@ function truncateDocumentation(text: string | undefined): { text: string; trunca
   return { text: `${text.slice(0, DOC_TRUNCATE)}…`, truncated: true };
 }
 
-function firstDocumentation(block: BlockDefinition): { text: string; truncated: boolean } | undefined {
-  return truncateDocumentation(block.documentations?.[0]?.text);
+function firstDocumentation(
+  entries: { text: string }[] | undefined,
+): { text: string; truncated: boolean } | undefined {
+  return truncateDocumentation(entries?.[0]?.text);
 }
 
 function projectReferences(
@@ -345,6 +347,13 @@ function inheritedFromOwner(
 
 function projectCommon(member: MemberDefinition, inheritedFrom?: string): InspectedMember {
   const projected: InspectedMember = { name: member.name };
+  const documentation = firstDocumentation(member.documentations);
+  if (documentation) {
+    projected.documentation = documentation.text;
+    if (documentation.truncated) {
+      projected.documentationTruncated = true;
+    }
+  }
   if (inheritedFrom) {
     projected.inheritedFrom = inheritedFrom;
   }
@@ -494,7 +503,7 @@ function projectBlock(
   if (block.is) {
     projected.is = block.is;
   }
-  const documentation = firstDocumentation(block);
+  const documentation = firstDocumentation(block.documentations);
   if (documentation) {
     projected.documentation = documentation.text;
     if (documentation.truncated) {

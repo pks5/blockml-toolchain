@@ -66,7 +66,9 @@ describe("inspectProject", () => {
         extra: [
           "  <documentation>a customer</documentation>",
           "  <properties>",
-          '    <address type="test:Address"/>',
+          '    <address type="test:Address">',
+          "      <documentation>shipping address</documentation>",
+          "    </address>",
           "  </properties>",
         ].join("\n"),
       }),
@@ -78,6 +80,8 @@ describe("inspectProject", () => {
     const customer = d0.blocks[`${NS}.Customer`];
     const addressMember = customer?.properties?.find((m) => m.name === "address");
     expect(addressMember?.type?.ref).toBe(`${NS}.Address`);
+    expect(addressMember?.documentation).toBe("shipping address");
+    expect(addressMember?.documentationTruncated).toBeUndefined();
     expect(addressMember && "kind" in addressMember).toBe(false);
     expect(customer && "members" in customer).toBe(false);
     expect(customer?.capabilities).toBeUndefined();
@@ -393,6 +397,31 @@ describe("inspectProject", () => {
     expect(block?.documentation?.endsWith("…")).toBe(true);
     expect(block?.documentation?.startsWith("inspect fixture ")).toBe(true);
     expect(block?.documentation?.length).toBe(401);
+  });
+
+  it("truncates member documentation and omits it when empty", () => {
+    const dir = join(TMP, "member-docs");
+    const longDoc = `member fixture ${"y".repeat(420)}`;
+    writeProject(dir, {
+      "blocks/Noted.bml": blockXml({
+        name: "Noted",
+        extra: [
+          "  <documentation>noted</documentation>",
+          "  <properties>",
+          '    <quiet type="type:Text"/>',
+          `    <loud type="type:Text"><documentation>${longDoc}</documentation></loud>`,
+          "  </properties>",
+        ].join("\n"),
+      }),
+    });
+    const result = inspectProject(`${NS}.Noted`, { rootDir: dir, depth: 0 });
+    const quiet = result.blocks[`${NS}.Noted`]?.properties?.find((m) => m.name === "quiet");
+    const loud = result.blocks[`${NS}.Noted`]?.properties?.find((m) => m.name === "loud");
+    expect(quiet?.documentation).toBeUndefined();
+    expect(loud?.documentationTruncated).toBe(true);
+    expect(loud?.documentation?.startsWith("member fixture ")).toBe(true);
+    expect(loud?.documentation?.endsWith("…")).toBe(true);
+    expect(loud?.documentation?.length).toBe(401);
   });
 
   it("projects capability implementation language and truncated source", () => {

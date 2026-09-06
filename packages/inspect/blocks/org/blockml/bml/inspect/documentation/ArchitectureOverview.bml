@@ -35,7 +35,7 @@
 
     Leaf FQNs under org.blockml.bml.type. and org.blockml.bml.core.ValueType stay as refs.
 
-    Effective members are four optional lists on InspectedBlock (properties, aggregations, associations, capabilities) with no kind field. Aggregation entries include authored composition instances on the member (not as extra blocks). Authored documentation see references are compact FQN + relation on InspectedBlock and are not expanded; first 8, referencesTruncated is the remaining count. Documentation longer than 400 characters is truncated with an ellipsis and documentationTruncated=true.</documentation>
+    Effective members are four optional lists on InspectedBlock (properties, aggregations, associations, capabilities) with no kind field. Each member includes its first documentation entry when present, truncated like Block documentation. Aggregation entries include authored composition instances on the member (not as extra blocks). Authored documentation see references are compact FQN + relation on InspectedBlock and are not expanded; first 8, referencesTruncated is the remaining count. Documentation longer than 400 characters is truncated with an ellipsis and documentationTruncated=true.</documentation>
 
   <references>
     <see type="inspectdocumentation:V1Scope" relation="ReadNext" />
