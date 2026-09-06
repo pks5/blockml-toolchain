@@ -64,8 +64,7 @@ The block is complete and valid:
 - **documentation** — paragraph noting it was produced by this transform execution
 - typed properties: 4× `type:Text` (title, keeper, region, summary), 4× `type:Integer` (glove counts / shelf height), 2× `type:DateTime` including `compiledAt` set to now (`2026-09-06T14:38:52`)
 
-`npx blockml validate`: 746 blocks, 0 errors, 0 warnings (3 pre-existing recommendations in unrelated package files). `npx blockml inspect` resolves the block cleanly. No other files touched.
-</output>
+`npx blockml validate`: 746 blocks, 0 errors, 0 warnings (3 pre-existing recommendations in unrelated package files). `npx blockml inspect` resolves the block cleanly. No other files touched.</output>
           <completedAt>2026-09-06T20:13:10</completedAt>
           <task>
             <workflow:InstructionTask>
@@ -91,8 +90,10 @@ ModelTransformation metadata or files under _meta/transform/.</instructions>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/RandomBlock.bml" />
           </changedFiles>
         </workflow:AgenticOperation>
-        <workflow:ToolOperation name="Validate" status="Pending" captureOutput="true" command="blockml">
+        <workflow:ToolOperation name="Validate" status="Running" captureOutput="true" command="blockml">
           <args>[&quot;validate&quot;]</args>
+          <startedAt>2026-09-06T20:13:11</startedAt>
+          <baseCommit>f8f71c6c909a4c431123910d638e29f4e9be5d37</baseCommit>
         </workflow:ToolOperation>
       </composition>
     </operations>
