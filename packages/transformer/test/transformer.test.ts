@@ -139,6 +139,8 @@ describe("Transformer lifecycle", () => {
       `com.example.model._meta.transform.succeeded.${generated}`,
     );
     expect(result.status).toBe("Succeeded");
+    expect(result.duration).toMatch(/^PT(?:\d+H)?(?:\d+M)?(?:\d+(?:\.\d+)?S)$/);
+    expect(result.durationMs).toBeGreaterThanOrEqual(0);
     expect(calls).toHaveLength(1);
     expect(calls[0]).toContain("org.blockml.bml.transformer.workflow.InstructionTask");
     expect(calls[0]).toContain("Do the task.");
@@ -164,6 +166,8 @@ describe("Transformer lifecycle", () => {
     expect(succeeded).toContain(formatDateTimeProperty(FIXED_NOW));
     expect(succeeded).toContain("workflow:InstructionTask");
     expect(succeeded).toContain(">Succeeded</value>");
+    expect(succeeded).toMatch(/<duration[^>]*type="type:Duration"/);
+    expect(succeeded).toContain(`<value>${result.duration}</value>`);
     expect(succeeded).not.toContain("<exception");
     expect(succeeded).not.toContain("<result");
     expect(succeeded).not.toContain("<resultException");

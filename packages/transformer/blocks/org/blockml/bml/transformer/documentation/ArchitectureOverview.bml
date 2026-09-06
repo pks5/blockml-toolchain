@@ -113,9 +113,11 @@
     [5] Finalize Execution — transformercap:FinalizeExecution
         Default: deterministic. Always runs after a started execution.
         Succeeded only when every ModelOperation succeeded:
-        status=Succeeded, completedAt, relocate running to succeeded.
-        Otherwise status=Failed, completedAt, relocate running to
-        failed. Does not resolve result. Operation exception, including
+        status=Succeeded, completedAt, duration, relocate running to
+        succeeded. Otherwise status=Failed, completedAt, duration,
+        relocate running to failed. duration is wall-clock elapsed
+        time from Prepare through Finalize and is printed as
+        Elapsed … on the complete lifecycle line. Does not resolve result. Operation exception, including
         ResultException from resultMappings, lives on the failed
         ModelOperation. ParametersException lives on
         ModelTransformation.exception. A ModelOperation failure leaves

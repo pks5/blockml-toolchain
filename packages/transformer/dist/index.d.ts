@@ -27,6 +27,7 @@ export { persistReflection } from "./execution/persist.js";
 export { finalizeExecution } from "./execution/complete.js";
 export { startWorkflowOperation } from "./execution/start-operation.js";
 export { formatTransformLifecycle, emitLifecycle, } from "./execution/lifecycle-events.js";
+export { formatElapsed, formatIsoDuration } from "./execution/duration.js";
 export type { TransformLifecycleEvent, TransformLifecycleListener, } from "./execution/lifecycle-events.js";
 export { SequenceAllocator } from "./execution/sequence.js";
 export { resolveTargetLibrary, packageFqnFromLibraryType } from "./execution/target-library.js";

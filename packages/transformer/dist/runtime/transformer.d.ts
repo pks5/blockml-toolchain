@@ -54,6 +54,8 @@ export type RunTransformationResult = (TransformRunResult & {
     error: string;
     terminalFqn?: string;
     status?: TransformRunResult["status"];
+    duration?: string;
+    durationMs?: number;
 };
 export declare function runTransformation(options: RunTransformationOptions): Promise<RunTransformationResult>;
 export type { StartedExecution } from "../execution/start.js";

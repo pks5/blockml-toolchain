@@ -1,5 +1,5 @@
 import { collectBaseTypeChain } from "@blockml/framework";
-import { BOOLEAN_TYPE_FQN, DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, AGENTIC_OPERATION_FQN, MODEL_OPERATION_FQN, TOOL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN, PARAMETER_MAPPING_FQN, PROPERTY_IDENTIFIER_FQN, RESULT_MAPPING_FQN, TEXT_TYPE_FQN, UUID_TYPE_FQN, } from "./constants.js";
+import { BOOLEAN_TYPE_FQN, DATETIME_TYPE_FQN, DURATION_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, AGENTIC_OPERATION_FQN, MODEL_OPERATION_FQN, TOOL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN, PARAMETER_MAPPING_FQN, PROPERTY_IDENTIFIER_FQN, RESULT_MAPPING_FQN, TEXT_TYPE_FQN, UUID_TYPE_FQN, } from "./constants.js";
 export function isModelTransformation(block, registry) {
     if (block.type === MODEL_TRANSFORMATION_FQN || block.baseType === MODEL_TRANSFORMATION_FQN) {
         return true;
@@ -372,6 +372,9 @@ export function setBaseCommit(block, commit) {
 }
 export function setCompletedAt(block, iso) {
     setOverrideProperty(block, "completedAt", DATETIME_TYPE_FQN, iso);
+}
+export function setDuration(block, iso) {
+    setOverrideProperty(block, "duration", DURATION_TYPE_FQN, iso);
 }
 export function setFeedback(block, feedback) {
     setOverrideProperty(block, "feedback", TEXT_TYPE_FQN, feedback);

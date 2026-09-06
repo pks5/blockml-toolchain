@@ -11,6 +11,7 @@ import { collectBaseTypeChain, type TypeRegistry } from "@blockml/framework";
 import {
   BOOLEAN_TYPE_FQN,
   DATETIME_TYPE_FQN,
+  DURATION_TYPE_FQN,
   EXECUTION_EXCEPTION_FQN,
   EXECUTION_STATUS_FQN,
   FILE_PATH_ENTITY_FQN,
@@ -567,6 +568,10 @@ export function setBaseCommit(block: BlockDefinition, commit: string): void {
 
 export function setCompletedAt(block: BlockDefinition, iso: string): void {
   setOverrideProperty(block, "completedAt", DATETIME_TYPE_FQN, iso);
+}
+
+export function setDuration(block: BlockDefinition, iso: string): void {
+  setOverrideProperty(block, "duration", DURATION_TYPE_FQN, iso);
 }
 
 export function setFeedback(block: BlockDefinition, feedback: string): void {

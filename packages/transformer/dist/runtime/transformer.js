@@ -29,6 +29,7 @@ export class Transformer {
             workspaceRoot: this.workspaceRoot,
             targetLibrary,
             now: this.now,
+            runStartedAtMs: performance.now(),
             ...(this.parameters !== undefined ? { parameters: this.parameters } : {}),
             ...(this.parameterMappings !== undefined
                 ? { parameterMappings: this.parameterMappings }
@@ -64,11 +65,7 @@ export class Transformer {
                 status: result.status,
                 fqn: result.terminalFqn,
             });
-            emitLifecycle(this.onLifecycle, {
-                kind: "transformationComplete",
-                status: result.status,
-                terminalFqn: result.terminalFqn,
-            });
+            emitComplete(this.onLifecycle, result);
             return result;
         }
         let last;
@@ -88,11 +85,7 @@ export class Transformer {
             status: result.status,
             fqn: result.terminalFqn,
         });
-        emitLifecycle(this.onLifecycle, {
-            kind: "transformationComplete",
-            status: result.status,
-            terminalFqn: result.terminalFqn,
-        });
+        emitComplete(this.onLifecycle, result);
         return result;
     }
     async runOperation(prepared, context) {
@@ -180,6 +173,15 @@ export class Transformer {
         }
     }
 }
+function emitComplete(listener, result) {
+    emitLifecycle(listener, {
+        kind: "transformationComplete",
+        status: result.status,
+        terminalFqn: result.terminalFqn,
+        durationMs: result.durationMs,
+        duration: result.duration,
+    });
+}
 function failedReflection(prepared, executed, context, error) {
     const exceptionMessage = errorMessage(error);
     const changedFiles = executed?.trace.changedFiles ??
@@ -247,6 +249,8 @@ export async function runTransformation(options) {
             error: result.error ?? "Execution failed",
             terminalFqn: result.terminalFqn,
             status: result.status,
+            duration: result.duration,
+            durationMs: result.durationMs,
         };
     }
     catch (error) {

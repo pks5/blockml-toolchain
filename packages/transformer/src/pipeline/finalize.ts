@@ -1,4 +1,5 @@
 import { finalizeExecution } from "../execution/complete.js";
+import { formatIsoDuration } from "../execution/duration.js";
 import type {
   PersistedExecution,
   StageContext,
@@ -15,10 +16,16 @@ export function createFinalizeStage(): TransformStage<
       persisted: PersistedExecution,
       context: StageContext,
     ): Promise<TransformRunResult> {
+      const durationMs = Math.max(
+        0,
+        performance.now() - (context.runStartedAtMs ?? performance.now()),
+      );
+      const duration = formatIsoDuration(durationMs);
       const finalized = finalizeExecution(
         context.workspaceRoot,
         persisted.started,
         context.now(),
+        duration,
       );
       return {
         success: finalized.stage !== "failed",
@@ -28,6 +35,8 @@ export function createFinalizeStage(): TransformStage<
         status: finalized.stage === "succeeded" ? "Succeeded" : "Failed",
         sequence: persisted.started.sequence,
         executionId: persisted.started.executionId,
+        duration,
+        durationMs,
         ...(finalized.error !== undefined
           ? { error: finalized.error }
           : persisted.exceptionMessage !== undefined

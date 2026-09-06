@@ -9,6 +9,7 @@ const FORBIDDEN_PROPERTIES = [
     "startedAt",
     "baseCommit",
     "completedAt",
+    "duration",
     "sequence",
     "output",
     "result",

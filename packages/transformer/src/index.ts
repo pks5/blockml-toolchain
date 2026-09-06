@@ -89,6 +89,7 @@ export {
   formatTransformLifecycle,
   emitLifecycle,
 } from "./execution/lifecycle-events.js";
+export { formatElapsed, formatIsoDuration } from "./execution/duration.js";
 export type {
   TransformLifecycleEvent,
   TransformLifecycleListener,

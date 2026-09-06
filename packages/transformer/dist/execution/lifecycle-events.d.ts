@@ -33,6 +33,8 @@ export type TransformLifecycleEvent = {
     kind: "transformationComplete";
     status: TerminalExecutionStatus;
     terminalFqn: string;
+    durationMs: number;
+    duration: string;
 };
 export type TransformLifecycleListener = (event: TransformLifecycleEvent) => void;
 export declare function emitLifecycle(listener: TransformLifecycleListener | undefined, event: TransformLifecycleEvent): void;

@@ -44,6 +44,7 @@
     Pending-contract violations do not start (exit 2). Missing FQN → exit 2.
 
     Lifecycle status and execute/reflect boundary lines always print.
+    The complete line is followed by Elapsed … (total wall-clock time).
     --verbose streams each Claude Code session live to the terminal
     (thinking, tool calls, assistant text). Claude-specific; the Transformer
     API stays generic.

@@ -30,7 +30,10 @@
     ModelTransformation outside `_meta.transform` (`template=true`).
     Does not implement any process step. Emits
     lifecycle events at status and execute/reflect boundaries regardless
-    of --verbose. TS: Transformer.run / runTransformation.
+    of --verbose. Measures wall-clock duration from Prepare through
+    Finalize, writes `duration` on the terminal ModelTransformation,
+    and prints `Elapsed …` on the complete lifecycle line.
+    TS: Transformer.run / runTransformation.
   </documentation>
 
   <references>
@@ -52,6 +55,9 @@
     <terminalFqn type="type:Text">
       <documentation>Succeeded or failed ModelTransformation FQN after Finalize. (required)</documentation>
     </terminalFqn>
+    <duration type="type:Duration">
+      <documentation>Wall-clock elapsed time from Prepare through Finalize. (required)</documentation>
+    </duration>
   </properties>
 
 </block>

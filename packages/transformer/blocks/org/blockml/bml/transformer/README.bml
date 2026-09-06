@@ -45,9 +45,12 @@
     fields onto the ModelOperation that just ran. When that operation
     succeeds, Persist applies its `resultMappings` onto `result`. A
     mapping fault writes ResultException onto the operation, fails it,
-    and aborts remaining operations. After a started execution, Finalize
+    and aborts remaining operations.     After a started execution, Finalize
     relocates the Block to `_meta.transform.succeeded` only when every
-    ModelOperation succeeded, otherwise `_meta.transform.failed`.     Prepare
+    ModelOperation succeeded, otherwise `_meta.transform.failed`.
+    Finalize writes `duration` (wall-clock elapsed from Prepare
+    through Finalize) and the complete lifecycle line prints
+    `Elapsed …`.     Prepare
     `parameterMappings` faults fill `exception` with ParametersException
     and skip operations. A ModelOperation failure leaves
     `ModelTransformation.exception` empty and aborts remaining

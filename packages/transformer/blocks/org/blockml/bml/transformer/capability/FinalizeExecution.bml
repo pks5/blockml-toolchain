@@ -21,8 +21,10 @@
   <documentation>
     # Finalize Execution
 
-    Set completedAt and status, then relocate the running ModelTransformation to
-    `_meta.transform.succeeded` or `_meta.transform.failed`. `Succeeded` only when every
+    Set completedAt, duration, and status, then relocate the running
+    ModelTransformation to `_meta.transform.succeeded` or
+    `_meta.transform.failed`. `duration` is the wall-clock elapsed time
+    from Prepare through this step. `Succeeded` only when every
     ModelOperation succeeded. After that relocation, commit.
 
     Does not resolve `result`. Persist already applied each succeeding
@@ -55,6 +57,9 @@
     <completedAt type="type:DateTime">
       <documentation>When this execution finished. (required)</documentation>
     </completedAt>
+    <duration type="type:Duration">
+      <documentation>Wall-clock elapsed time from Prepare through Finalize. (required)</documentation>
+    </duration>
   </properties>
 
 </block>

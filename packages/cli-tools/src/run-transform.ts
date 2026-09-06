@@ -91,16 +91,13 @@ export async function runTransform(
 function lifecycleOutput(
   event: TransformLifecycleEvent,
 ): CliOutputLine | undefined {
-  if (event.kind === "transformationComplete" && event.status !== "Succeeded") {
-    return undefined;
-  }
   const text = formatTransformLifecycle(event);
   return { kind: lifecycleKind(event), text };
 }
 
 function lifecycleKind(event: TransformLifecycleEvent): CliStreamKind {
   if (event.kind === "transformationComplete") {
-    return "success";
+    return event.status === "Succeeded" ? "success" : "error";
   }
   if (event.kind === "transformationStatus" || event.kind === "operationStatus") {
     if (event.status === "Succeeded") {

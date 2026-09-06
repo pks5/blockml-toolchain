@@ -12,6 +12,7 @@ export const PROPERTY_REFERENCE_FQN = "org.blockml.bml.type.PropertyReference";
 export const PROPERTY_IDENTIFIER_FQN = "org.blockml.bml.type.PropertyIdentifier";
 export const INTEGER_TYPE_FQN = "org.blockml.bml.type.Integer";
 export const DATETIME_TYPE_FQN = "org.blockml.bml.type.DateTime";
+export const DURATION_TYPE_FQN = "org.blockml.bml.type.Duration";
 export const TEXT_TYPE_FQN = "org.blockml.bml.type.Text";
 export const UUID_TYPE_FQN = "org.blockml.bml.type.UUID";
 export const BOOLEAN_TYPE_FQN = "org.blockml.bml.type.Boolean";

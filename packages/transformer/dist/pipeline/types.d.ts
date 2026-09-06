@@ -10,6 +10,8 @@ export interface StageContext {
     onLifecycle?: TransformLifecycleListener;
     parameters?: unknown;
     parameterMappings?: readonly ParameterMappingSpec[];
+    /** performance.now() when Transformer.run acquired the worktree lock. */
+    runStartedAtMs?: number;
 }
 export interface TransformStage<Input, Output> {
     run(input: Input, context: StageContext): Promise<Output>;
@@ -48,6 +50,8 @@ export interface TransformRunResult {
     status: TerminalExecutionStatus;
     sequence: number;
     executionId: string;
+    duration: string;
+    durationMs: number;
     error?: string;
 }
 export interface TransformPipeline {

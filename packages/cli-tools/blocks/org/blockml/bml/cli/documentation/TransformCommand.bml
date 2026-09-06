@@ -72,7 +72,8 @@
 
     Lifecycle lines (ModelTransformation and operation status,
     execute/reflect start and done) always print so progress is visible
-    without --verbose.
+    without --verbose. The last lifecycle lines are the complete
+    status and Elapsed … (total wall-clock time).
 
     Only one transform may run at a time in the same Git worktree. A second
     call fails immediately (exit 2) with no wait. Different worktrees may

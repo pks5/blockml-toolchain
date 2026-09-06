@@ -1,3 +1,4 @@
+import { formatElapsed } from "./duration.js";
 export function emitLifecycle(listener, event) {
     listener?.(event);
 }
@@ -18,10 +19,12 @@ export function formatTransformLifecycle(event) {
             return `${operationLabel(event)} reflect start`;
         case "operationReflectEnd":
             return `${operationLabel(event)} reflect done`;
-        case "transformationComplete":
+        case "transformationComplete": {
+            const elapsed = `Elapsed ${formatElapsed(event.durationMs)}`;
             return event.status === "Succeeded"
-                ? `Transformed ${event.terminalFqn}`
-                : `ModelTransformation Failed  ${event.terminalFqn}`;
+                ? `Transformed ${event.terminalFqn}\n${elapsed}`
+                : `ModelTransformation Failed  ${event.terminalFqn}\n${elapsed}`;
+        }
     }
 }
 //# sourceMappingURL=lifecycle-events.js.map

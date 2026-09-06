@@ -4,6 +4,7 @@ import { formatDateTimeProperty } from "./lifecycle.js";
 import { loadRunningExecution } from "./load-running.js";
 import {
   setCompletedAt,
+  setDuration,
   setStatus,
   modelTransformationHasCompletedAt,
   allOperationsSucceeded,
@@ -22,6 +23,7 @@ export interface FinalizedExecution {
   terminalFqn: string;
   terminalFilePath: string;
   completedAtIso: string;
+  durationIso: string;
   stage: TerminalLifecycleStage;
   error?: string;
 }
@@ -30,6 +32,7 @@ export function finalizeExecution(
   workspaceRoot: string,
   started: StartedExecution,
   now: Date,
+  durationIso: string,
 ): FinalizedExecution {
   const { document, registry } = loadRunningExecution(workspaceRoot, started);
   const forked = forkBom(document);
@@ -37,6 +40,7 @@ export function finalizeExecution(
   if (modelTransformationHasCompletedAt(registry)) {
     setCompletedAt(forked.block, completedAtIso);
   }
+  setDuration(forked.block, durationIso);
   const succeeded = allOperationsSucceeded(forked.block, registry);
   const stage: TerminalLifecycleStage = succeeded ? "succeeded" : "failed";
   setStatus(forked.block, succeeded ? "Succeeded" : "Failed");
@@ -63,6 +67,7 @@ export function finalizeExecution(
     terminalFqn,
     terminalFilePath: forked.source.filePath,
     completedAtIso,
+    durationIso,
     stage,
   };
 }

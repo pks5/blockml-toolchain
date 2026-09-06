@@ -72,6 +72,9 @@
       while pending. Assigned when Prepare sets `status=Running`
       (random UUID, unique among other ModelTransformations).
     * `startedAt` / `completedAt` — the execution interval.
+    * `duration` — wall-clock elapsed time (`type:Duration`, ISO 8601).
+      Absent while pending. Finalize writes it from Prepare through
+      Finalize. The complete lifecycle line prints the same total.
     * `baseCommit` — Git HEAD commit when this execution started. Set only
       after Prepare confirms a clean worktree and sets `status=Running`.
     * `operations` — concrete ModelOperation subtypes of this execution,
@@ -91,6 +94,7 @@
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
     <see type="type:PropertyIdentifier" relation="SeeAlso" />
     <see type="type:UUID" relation="SeeAlso" />
+    <see type="type:Duration" relation="SeeAlso" />
     <see type="workflow:ParametersException" relation="SeeAlso" />
     <see type="workflow:ResultException" relation="SeeAlso" />
   </references>
@@ -142,6 +146,12 @@
     <completedAt type="type:DateTime">
       <documentation>When this execution finished.</documentation>
     </completedAt>
+    <duration type="type:Duration">
+      <documentation>
+        Wall-clock elapsed time from Prepare through Finalize.
+        Absent while pending; written at Finalize.
+      </documentation>
+    </duration>
     <result type="R">
       <documentation>
         Value written from each succeeding ModelOperation's

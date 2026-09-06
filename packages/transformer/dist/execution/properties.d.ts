@@ -46,6 +46,7 @@ export declare function setStatus(block: BlockDefinition, status: ExecutionStatu
 export declare function setStartedAt(block: BlockDefinition, iso: string): void;
 export declare function setBaseCommit(block: BlockDefinition, commit: string): void;
 export declare function setCompletedAt(block: BlockDefinition, iso: string): void;
+export declare function setDuration(block: BlockDefinition, iso: string): void;
 export declare function setFeedback(block: BlockDefinition, feedback: string): void;
 export declare function setChangedFiles(block: BlockDefinition, paths: readonly string[]): void;
 export declare function setException(block: BlockDefinition, typeFqn: string, message: string): void;

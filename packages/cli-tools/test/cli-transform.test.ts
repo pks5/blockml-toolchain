@@ -181,6 +181,7 @@ describe("blockml transform CLI", () => {
     expect(stderr).toMatch(/Operation 1\/1 Running/);
     expect(stderr).toMatch(/Operation 1\/1 execute start/);
     expect(stderr).toMatch(/ModelTransformation Failed/);
+    expect(stderr).toMatch(/Elapsed /);
     expect(
       existsSync(join(TMP, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml")),
     ).toBe(false);
@@ -243,6 +244,7 @@ describe("blockml transform CLI", () => {
     expect(stderr).toMatch(/Operation 1\/1 Succeeded/);
     expect(stderr).toMatch(/ModelTransformation Succeeded/);
     expect(stderr).toMatch(/Transformed /);
+    expect(stderr).toMatch(/Elapsed /);
     expect(stderr).not.toMatch(/--verbose/);
   });
 

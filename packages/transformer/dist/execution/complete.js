@@ -2,17 +2,18 @@ import { forkBom } from "@blockml/framework";
 import {} from "./constants.js";
 import { formatDateTimeProperty } from "./lifecycle.js";
 import { loadRunningExecution } from "./load-running.js";
-import { setCompletedAt, setStatus, modelTransformationHasCompletedAt, allOperationsSucceeded, } from "./properties.js";
+import { setCompletedAt, setDuration, setStatus, modelTransformationHasCompletedAt, allOperationsSucceeded, } from "./properties.js";
 import { rewriteParameterTypeFqns } from "./parameters.js";
 import { applyExecutionIdentity, persistDocument, removeFile, rewriteInboundReferences, } from "./relocate.js";
 import { commitWorktree } from "../pipeline/git.js";
-export function finalizeExecution(workspaceRoot, started, now) {
+export function finalizeExecution(workspaceRoot, started, now, durationIso) {
     const { document, registry } = loadRunningExecution(workspaceRoot, started);
     const forked = forkBom(document);
     const completedAtIso = formatDateTimeProperty(now);
     if (modelTransformationHasCompletedAt(registry)) {
         setCompletedAt(forked.block, completedAtIso);
     }
+    setDuration(forked.block, durationIso);
     const succeeded = allOperationsSucceeded(forked.block, registry);
     const stage = succeeded ? "succeeded" : "failed";
     setStatus(forked.block, succeeded ? "Succeeded" : "Failed");
@@ -36,6 +37,7 @@ export function finalizeExecution(workspaceRoot, started, now) {
         terminalFqn,
         terminalFilePath: forked.source.filePath,
         completedAtIso,
+        durationIso,
         stage,
     };
 }

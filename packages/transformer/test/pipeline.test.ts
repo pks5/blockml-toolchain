@@ -100,6 +100,8 @@ describe("Transformer pipeline", () => {
               status: "Succeeded" as const,
               sequence: 1,
               executionId: "fixture",
+              duration: "PT0S",
+              durationMs: 0,
             };
           },
         },

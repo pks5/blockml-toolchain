@@ -1,4 +1,5 @@
 import type { ExecutionStatusId, TerminalExecutionStatus } from "./constants.js";
+import { formatElapsed } from "./duration.js";
 
 export type TransformLifecycleEvent =
   | {
@@ -41,6 +42,8 @@ export type TransformLifecycleEvent =
       kind: "transformationComplete";
       status: TerminalExecutionStatus;
       terminalFqn: string;
+      durationMs: number;
+      duration: string;
     };
 
 export type TransformLifecycleListener = (event: TransformLifecycleEvent) => void;
@@ -73,9 +76,11 @@ export function formatTransformLifecycle(event: TransformLifecycleEvent): string
       return `${operationLabel(event)} reflect start`;
     case "operationReflectEnd":
       return `${operationLabel(event)} reflect done`;
-    case "transformationComplete":
+    case "transformationComplete": {
+      const elapsed = `Elapsed ${formatElapsed(event.durationMs)}`;
       return event.status === "Succeeded"
-        ? `Transformed ${event.terminalFqn}`
-        : `ModelTransformation Failed  ${event.terminalFqn}`;
+        ? `Transformed ${event.terminalFqn}\n${elapsed}`
+        : `ModelTransformation Failed  ${event.terminalFqn}\n${elapsed}`;
+    }
   }
 }

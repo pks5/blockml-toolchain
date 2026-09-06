@@ -57,15 +57,12 @@ export async function runTransform(executionFqn, rootDir, lines, usage, agent, r
     return 0;
 }
 function lifecycleOutput(event) {
-    if (event.kind === "transformationComplete" && event.status !== "Succeeded") {
-        return undefined;
-    }
     const text = formatTransformLifecycle(event);
     return { kind: lifecycleKind(event), text };
 }
 function lifecycleKind(event) {
     if (event.kind === "transformationComplete") {
-        return "success";
+        return event.status === "Succeeded" ? "success" : "error";
     }
     if (event.kind === "transformationStatus" || event.kind === "operationStatus") {
         if (event.status === "Succeeded") {
