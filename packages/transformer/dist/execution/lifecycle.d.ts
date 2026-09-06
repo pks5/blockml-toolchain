@@ -7,7 +7,16 @@ export interface ParsedExecutionFqn {
 }
 export declare function isLifecycleStage(value: string): value is LifecycleStage;
 export declare function parseExecutionFqn(fqn: string): ParsedExecutionFqn | undefined;
+export interface ParsedTransformLocation {
+    libraryFqn: string;
+    segment: string;
+    name: string;
+    fqn: string;
+}
+/** Any `{library}._meta.transform.{segment}.{name}` FQN, including `available`. */
+export declare function parseTransformLocation(fqn: string): ParsedTransformLocation | undefined;
 export declare function executionFqn(libraryFqn: string, stage: LifecycleStage, name: string): string;
+export declare function transformPackageFqn(libraryFqn: string, segment: string): string;
 export declare function lifecyclePackageFqn(libraryFqn: string, stage: LifecycleStage): string;
 export declare function padSequence(sequence: number): string;
 export declare function formatNameTimestamp(date: Date): string;

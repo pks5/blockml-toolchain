@@ -26,14 +26,14 @@
   <baseType>cli:CliType</baseType>
   <is>blockml transform apply subcommand</is>
 
-  <documentation>blockml transform apply EXECUTION-FQN [--library path] [--verbose] [--parameters JSON] [--parameter-mappings JSON]. The CLI token is apply. The argument is the FQN of a pending ModelTransformation. The source FQN need not live under the target library. --library is a path to the target Library.bml; omitted uses cwd package.json blockml.library. Missing both is exit 2. Distinct from --libraries. Delegates to @blockml/transformer.</documentation>
+  <documentation>blockml transform apply EXECUTION-FQN [--library path] [--verbose] [--parameters JSON] [--parameter-mappings JSON]. The CLI token is apply. The argument is a pending one-shot, an available template, or a template outside _meta.transform. The source FQN need not live under the target library. --library is a path to the target Library.bml; omitted uses cwd package.json blockml.library. Missing both is exit 2. Distinct from --libraries. Delegates to @blockml/transformer.</documentation>
   <references>
     <see type="clicommand:TransformCommand" relation="SeeAlso" />
     <see type="clidocumentation:TransformCommand" relation="SeeAlso" />
     <see type="clicap:RunTransform" relation="SeeAlso" />
   </references>
   <properties>
-    <executionFqn type="type:Text"><documentation>FQN of a pending ModelTransformation. Need not live under the target library or _meta.transform.pending. (required)</documentation></executionFqn>
+    <executionFqn type="type:Text"><documentation>FQN of an Apply-source ModelTransformation (pending one-shot, available template, or template outside _meta.transform). (required)</documentation></executionFqn>
     <library type="type:Text"><documentation>Path to the target Library.bml for _meta. Distinct from --libraries. (optional)</documentation></library>
     <parameters type="type:Text"><documentation>JSON value of run parameters. StructType: merged over pending. Other types: replaces pending. Ignored when parameterMappings is non-empty. (optional)</documentation></parameters>
     <parameterMappings type="type:Text"><documentation>JSON array of ParameterMapping objects applied onto parameters. Ignores --parameters. (optional)</documentation></parameterMappings>

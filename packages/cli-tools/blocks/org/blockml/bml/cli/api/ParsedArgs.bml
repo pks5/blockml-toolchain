@@ -48,7 +48,7 @@
     <graphTo type="type:Text"><documentation>Path end FQN for graph path. (optional)</documentation></graphTo>
     <depth type="type:Integer"><documentation>--depth: uses/used-by/neighbors hops (default 1); ancestors/descendants/path max hops (default 16); inspect expansion (0 allowed). members ignores --depth. (optional)</documentation></depth>
     <inspectFqn type="type:Text"><documentation>Block FQN for inspect. (optional)</documentation></inspectFqn>
-    <executionFqn type="type:Text"><documentation>FQN of a pending ModelTransformation for transform apply. Need not live under the target library. (optional)</documentation></executionFqn>
+    <executionFqn type="type:Text"><documentation>FQN of an Apply-source ModelTransformation for transform apply (pending, available, or template outside _meta.transform). (optional)</documentation></executionFqn>
     <parametersJson type="type:Text"><documentation>Raw --parameters JSON value for transform apply. (optional)</documentation></parametersJson>
     <parameterMappingsJson type="type:Text"><documentation>Raw --parameter-mappings JSON array for transform apply. (optional)</documentation></parameterMappingsJson>
     <newFqn type="type:Text"><documentation>FQN for blockml new. (optional)</documentation></newFqn>

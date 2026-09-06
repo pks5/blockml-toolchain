@@ -11,6 +11,10 @@ export function pendingFqn(name: string): string {
   return `${LIBRARY}._meta.transform.pending.${name}`;
 }
 
+export function availableFqn(name: string): string {
+  return `${LIBRARY}._meta.transform.available.${name}`;
+}
+
 export const LIBRARY_FILE = "blocks/com/example/model/Library.bml";
 
 export function fixtureLibraryXml(packageFqn = LIBRARY): string {
@@ -112,6 +116,7 @@ export type ParameterMappingSpec = {
 
 export function pendingExecutionXml(opts: {
   name: string;
+  segment?: "pending" | "available";
   executionId?: string;
   extraRefs?: string;
   operationInstructions?: readonly string[];
@@ -125,6 +130,7 @@ export function pendingExecutionXml(opts: {
   parameterMappings?: readonly ParameterMappingSpec[];
   tool?: { command: string; args?: readonly string[] };
 }): string {
+  const segment = opts.segment ?? "pending";
   const refs = opts.extraRefs
     ? `  <references>\n${opts.extraRefs}\n  </references>\n`
     : "";
@@ -228,10 +234,10 @@ export function pendingExecutionXml(opts: {
     `<block xmlns="http://blockml.org/bml"`,
     ` xmlns:core="org.blockml.bml.core"`,
     ` xmlns:workflow="org.blockml.bml.transformer.workflow"`,
-    ` xmlns:pending="${LIBRARY}._meta.transform.pending"`,
+    ` xmlns:${segment}="${LIBRARY}._meta.transform.${segment}"`,
     ` xmlns:type="org.blockml.bml.type">`,
     `  <name>${opts.name}</name>`,
-    `  <type>pending:${opts.name}</type>`,
+    `  <type>${segment}:${opts.name}</type>`,
     `  <baseType>${baseType}</baseType>`,
     `  <is>pending execution fixture</is>`,
     refs,
@@ -407,10 +413,11 @@ export function plainBlockXml(name: string): string {
 }
 
 export function referrerXml(name: string, seeType: string): string {
+  const prefix = seeType.includes(":") ? seeType.split(":")[0]! : "pending";
   return [
     `<block xmlns="http://blockml.org/bml"`,
     ` xmlns:core="org.blockml.bml.core"`,
-    ` xmlns:pending="${LIBRARY}._meta.transform.pending"`,
+    ` xmlns:${prefix}="${LIBRARY}._meta.transform.${prefix}"`,
     ` xmlns:test="${LIBRARY}">`,
     `  <name>${name}</name>`,
     `  <type>test:${name}</type>`,

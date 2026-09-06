@@ -3,9 +3,13 @@ import {
   bootstrapFullProjectRegistry,
   type TypeRegistry,
 } from "@blockml/framework";
-import { MODEL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN } from "./constants.js";
+import {
+  AVAILABLE_SEGMENT,
+  MODEL_OPERATION_FQN,
+  MODEL_TRANSFORMATION_FQN,
+} from "./constants.js";
 import { TransformError } from "./errors.js";
-import { parseExecutionFqn } from "./lifecycle.js";
+import { parseTransformLocation } from "./lifecycle.js";
 import type { TargetLibrary } from "./target-library.js";
 import {
   getOperationInstances,
@@ -17,6 +21,7 @@ import {
   hasPropertyValue,
   isAgenticOperationType,
   isModelTransformation,
+  isTemplate,
   isToolOperationType,
   operationHasAggregation,
   operationHasTask,
@@ -64,11 +69,11 @@ export function resolvePendingExecutionInRegistry(
   registry: TypeRegistry,
   targetLibrary: TargetLibrary,
 ): ResolvedExecution {
-  const parsed = parseExecutionFqn(executionFqn);
-  if (parsed && parsed.stage !== "pending") {
+  const location = parseTransformLocation(executionFqn);
+  if (location && location.segment !== "pending" && location.segment !== AVAILABLE_SEGMENT) {
     throw new TransformError(
       "resolve",
-      `Execution FQN must be a pending ModelTransformation, got ${executionFqn}`,
+      `Execution FQN under _meta.transform must be pending or available, got ${executionFqn}`,
     );
   }
 
@@ -87,13 +92,14 @@ export function resolvePendingExecutionInRegistry(
     );
   }
 
+  assertApplyLocationContract(executionFqn, document.block, location);
   assertPendingContract(executionFqn, document.block, registry);
 
   return {
     fqn: executionFqn,
     libraryFqn: targetLibrary.packageFqn,
     libraryRoot: targetLibrary.libraryRoot,
-    originalName: parsed?.name ?? lastFqnSegment(executionFqn),
+    originalName: location?.name ?? lastFqnSegment(executionFqn),
     document,
     registry,
   };
@@ -102,6 +108,35 @@ export function resolvePendingExecutionInRegistry(
 function lastFqnSegment(fqn: string): string {
   const name = fqn.split(".").pop();
   return name && name.length > 0 ? name : fqn;
+}
+
+function assertApplyLocationContract(
+  fqn: string,
+  block: BlockDefinition,
+  location: ReturnType<typeof parseTransformLocation>,
+): void {
+  const template = isTemplate(block);
+  if (!location) {
+    if (!template) {
+      throw new TransformError(
+        "resolve",
+        `${fqn} is outside _meta.transform and must have template=true`,
+      );
+    }
+    return;
+  }
+  if (location.segment === "pending" && template) {
+    throw new TransformError(
+      "resolve",
+      `${fqn} is in _meta.transform.pending and must have template=false`,
+    );
+  }
+  if (location.segment === AVAILABLE_SEGMENT && !template) {
+    throw new TransformError(
+      "resolve",
+      `${fqn} is in _meta.transform.available and must have template=true`,
+    );
+  }
 }
 
 function assertPendingContract(

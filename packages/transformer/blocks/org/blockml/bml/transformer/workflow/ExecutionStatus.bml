@@ -21,8 +21,10 @@
     `workflow:ModelOperation` can be in.
 
     On a started ModelTransformation the target library's `_meta.transform`
-    package matches this value. A Pending source Block need not live
-    under that library.
+    package matches this value. Apply sources: `_meta.transform.pending`
+    (one-shot, `template=false`), `_meta.transform.available` (template
+    catalog, `template=true`), or any FQN outside `_meta.transform`
+    (`template=true`).
 
     * `Pending` — created, not yet started.
     * `Running` — currently executing (`_meta.transform.running`).

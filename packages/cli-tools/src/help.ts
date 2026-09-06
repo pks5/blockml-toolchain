@@ -74,7 +74,7 @@ Commands:
               blockml validate [--all] [<file>]
   compile     Render derived output for a registered target.
               blockml compile blockdoc|xsd|fatblock
-  transform   Run a pending ModelTransformation.
+  transform   Run a ModelTransformation.
               blockml transform apply <execution-fqn> [--library path]
 
 Shared flags: --src dir, --libraries a,b, --json, --help / -h
@@ -220,10 +220,10 @@ Related: inspect, validate.`;
 export const TRANSFORM_HELP = `Usage: blockml transform apply <execution-fqn> [--library path] [--verbose] [--parameters json] [--parameter-mappings json]
        blockml transform --help
 
-When: run a pending ModelTransformation.
+When: run a ModelTransformation.
 
 transform is a parent command. V1 defines apply only.
-EXECUTION-FQN is a pending ModelTransformation. It need not live under the target library.
+EXECUTION-FQN is a pending one-shot, an available template, or a template outside _meta.transform.
 --library is a path to the target Library.bml. Omitted: cwd package.json blockml.library. Missing both is exit 2.
 
 Pipeline stage constraints belong to the Execute / Reflect prompts, not here.

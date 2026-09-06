@@ -1,6 +1,6 @@
 <!--
-  Workspace pending transform — TravelPostcardTemplate
-  FQN: org.blockml.bml.workspace._meta.transform.pending.TravelPostcardTemplate
+  Workspace available transform — TravelPostcardTemplate
+  FQN: org.blockml.bml.workspace._meta.transform.available.TravelPostcardTemplate
 -->
 <block
   xmlns="http://blockml.org/bml"
@@ -10,10 +10,10 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:pending="org.blockml.bml.workspace._meta.transform.pending">
+  xmlns:available="org.blockml.bml.workspace._meta.transform.available">
 
   <name>TravelPostcardTemplate</name>
-  <type>pending:TravelPostcardTemplate</type>
+  <type>available:TravelPostcardTemplate</type>
   <baseType>workflow:ModelTransformation(Parameters, Result)</baseType>
   <is>A pending ModelTransformation that writes a playground travel postcard</is>
 
@@ -53,7 +53,7 @@
     <template override="true" type="type:Boolean">
       <value>true</value>
     </template>
-    <parameters override="true" type="pending:TravelPostcardTemplate.Parameters">
+    <parameters override="true" type="available:TravelPostcardTemplate.Parameters">
       <value>{destination:"Lisbon",language:"English",targetBlock:"org.blockml.bml.workspace.playground.TravelPostcard"}</value>
     </parameters>
   </properties>

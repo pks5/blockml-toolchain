@@ -21,8 +21,8 @@ export { formatTransformLifecycle, emitLifecycle, } from "./execution/lifecycle-
 export { SequenceAllocator } from "./execution/sequence.js";
 export { resolveTargetLibrary, packageFqnFromLibraryType } from "./execution/target-library.js";
 export { allocateUniqueExecutionId, usedExecutionIds } from "./execution/execution-id.js";
-export { parseExecutionFqn, generateExecutionName, executionFilePath, padSequence, formatNameTimestamp, formatDateTimeProperty, } from "./execution/lifecycle.js";
-export { MODEL_TRANSFORMATION_FQN } from "./execution/constants.js";
+export { parseExecutionFqn, parseTransformLocation, generateExecutionName, executionFilePath, padSequence, formatNameTimestamp, formatDateTimeProperty, } from "./execution/lifecycle.js";
+export { AVAILABLE_SEGMENT, MODEL_TRANSFORMATION_FQN, } from "./execution/constants.js";
 export { parseParameterMappingsJson, parseParametersJson, } from "./execution/parameters.js";
 export { closeOperationTask, closeTaskInstance, emitClosedTaskSnippet, getOperationTaskInstances, } from "./execution/close-task.js";
 export { AgenticExecutor } from "./executor/agentic-executor.js";

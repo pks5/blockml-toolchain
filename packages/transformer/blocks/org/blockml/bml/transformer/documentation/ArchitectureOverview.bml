@@ -27,14 +27,17 @@
     work inside a ModelTransformation. Concrete subtypes (today
     workflow:AgenticOperation) are instantiated. Process steps
     (Prepare, executor, Reflect, Persist, Finalize) are not the same as
-    ModelOperations.     Lifecycle packages of the ModelTransformation live
-    under the target library's `_meta.transform` package (pending /
-    running / succeeded / failed) and match its status. The target
+    ModelOperations.     Lifecycle packages of a started ModelTransformation live
+    under the target library's `_meta.transform` package (running /
+    succeeded / failed) and match its status. Apply sources are
+    `_meta.transform.pending` (`template=false`, source relocated),
+    `_meta.transform.available` (`template=true`, source stays), or
+    any FQN outside `_meta.transform` (`template=true`, source stays).
+    Other `_meta.transform` packages are not Apply sources. The target
     library is `--library` (path to Library.bml) or, when omitted,
-    cwd `package.json` `blockml.library`. The source FQN need not live
-    under that library. `_meta` is the shared metadata package next to
-    that Library.bml (`dirname(Library.bml)/_meta`); it is created when
-    missing. Future extensions use other packages under `_meta`.
+    cwd `package.json` `blockml.library`. `_meta` is the shared
+    metadata package next to that Library.bml
+    (`dirname(Library.bml)/_meta`); it is created when missing.
 
     The orchestrator writes envelope fields the same way for every
     subtype. A registered transformercap:OperationExecutor does only
@@ -52,10 +55,11 @@
         sequence, startedAt, and baseCommit (HEAD),
         set status=Running, relocate to the target library's
         _meta.transform.running, then commit.
-        When template is true, leave the pending Block in place, copy it
+        When template is true (available catalog or outside
+        _meta.transform), leave the source Block in place, copy it
         (including SubBlocks / bound T), set template=false on the copy,
         rewrite local type FQNs onto the copy, and relocate that copy
-        instead.
+        instead. pending sources must have template=false and are moved.
         Resolve parameters: parameterMappings (CLI --parameter-mappings
         over pending) closes each mapping source against this Block,
         applies the mappings onto parameters, and ignores --parameters.

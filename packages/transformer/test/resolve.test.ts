@@ -9,6 +9,7 @@ import { MODEL_TRANSFORMATION_FQN } from "../src/execution/constants.js";
 import {
   LIBRARY,
   EXECUTION_ID,
+  availableFqn,
   pendingExecutionXml,
   pendingFqn,
   plainBlockXml,
@@ -48,7 +49,7 @@ describe("resolvePendingExecution", () => {
   });
 
   it("resolves a pending ModelTransformation outside _meta.transform.pending", () => {
-    const xml = pendingExecutionXml({ name: "CreateJoke" })
+    const xml = pendingExecutionXml({ name: "CreateJoke", template: true })
       .replaceAll(`${LIBRARY}._meta.transform.pending`, `${LIBRARY}.program`)
       .replaceAll("xmlns:pending=", "xmlns:program=")
       .replaceAll("<type>pending:", "<type>program:");
@@ -88,7 +89,60 @@ describe("resolvePendingExecution", () => {
     expect(registry.get(`${LIBRARY}._meta.transform.succeeded.OldOne`)).toBeTruthy();
     expect(() =>
       resolveAt(`${LIBRARY}._meta.transform.succeeded.OldOne`),
-    ).toThrow(/pending/);
+    ).toThrow(/pending or available/);
+  });
+
+  it("resolves an available template ModelTransformation", () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/available/JokeTest.bml":
+        pendingExecutionXml({
+          name: "JokeTest",
+          segment: "available",
+          template: true,
+        }),
+    });
+    const resolved = resolveAt(availableFqn("JokeTest"));
+    expect(resolved.fqn).toBe(availableFqn("JokeTest"));
+    expect(resolved.originalName).toBe("JokeTest");
+  });
+
+  it("rejects a pending ModelTransformation with template=true", () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml":
+        pendingExecutionXml({
+          name: "JokeTest",
+          template: true,
+        }),
+    });
+    expect(() => resolveAt(pendingFqn("JokeTest"))).toThrow(
+      /pending and must have template=false/,
+    );
+  });
+
+  it("rejects an available ModelTransformation with template=false", () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/available/JokeTest.bml":
+        pendingExecutionXml({
+          name: "JokeTest",
+          segment: "available",
+        }),
+    });
+    expect(() => resolveAt(availableFqn("JokeTest"))).toThrow(
+      /available and must have template=true/,
+    );
+  });
+
+  it("rejects a ModelTransformation outside _meta.transform without template=true", () => {
+    const xml = pendingExecutionXml({ name: "CreateJoke" })
+      .replaceAll(`${LIBRARY}._meta.transform.pending`, `${LIBRARY}.program`)
+      .replaceAll("xmlns:pending=", "xmlns:program=")
+      .replaceAll("<type>pending:", "<type>program:");
+    writeProject(TMP, {
+      "blocks/com/example/model/program/CreateJoke.bml": xml,
+    });
+    expect(() => resolveAt(`${LIBRARY}.program.CreateJoke`)).toThrow(
+      /outside _meta.transform and must have template=true/,
+    );
   });
 
   it("rejects a pending execution that is missing status=Pending", () => {

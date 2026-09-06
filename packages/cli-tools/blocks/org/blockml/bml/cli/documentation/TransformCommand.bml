@@ -34,9 +34,12 @@
     Further transform subcommands are declared on clicommand:TransformCommand
     subcommands.
 
-    EXECUTION-FQN is the FQN of a pending ModelTransformation. It need
-    not live under the target library or {library}._meta.transform.pending.
-    Tasks are not accepted directly.
+    EXECUTION-FQN is a ModelTransformation Apply source:
+    {library}._meta.transform.pending (template=false, source moved),
+    {library}._meta.transform.available (template=true, source stays),
+    or any FQN outside _meta.transform (template=true, source stays).
+    Other _meta.transform packages are rejected. Tasks are not accepted
+    directly.
 
     Target library for `_meta` is --library (a path to that library's
     Library.bml). Omitted: package.json blockml.library of the current
@@ -90,10 +93,10 @@ Printed help:
 Usage: blockml transform apply <execution-fqn> [--library path] [--verbose] [--parameters json] [--parameter-mappings json]
        blockml transform --help
 
-When: run a pending ModelTransformation.
+When: run a ModelTransformation.
 
 transform is a parent command. V1 defines apply only.
-EXECUTION-FQN is a pending ModelTransformation. It need not live under the target library.
+EXECUTION-FQN is a pending one-shot, an available template, or a template outside _meta.transform.
 --library is a path to the target Library.bml. Omitted: cwd package.json blockml.library. Missing both is exit 2.
 
 Pipeline stage constraints belong to the Execute / Reflect prompts, not here.

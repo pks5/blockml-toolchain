@@ -24,8 +24,11 @@
     each ModelOperation (Running commit, registered executor, Reflect,
     Persist), and Finalize. A failed ModelOperation aborts the rest.
     Target library for `_meta` is `library` (path to Library.bml) or
-    cwd `package.json` `blockml.library`. The source FQN need not live
-    under that library. Does not implement any process step. Emits
+    cwd `package.json` `blockml.library`. Apply sources are
+    `_meta.transform.pending` (`template=false`),
+    `_meta.transform.available` (`template=true`), or a
+    ModelTransformation outside `_meta.transform` (`template=true`).
+    Does not implement any process step. Emits
     lifecycle events at status and execute/reflect boundaries regardless
     of --verbose. TS: Transformer.run / runTransformation.
   </documentation>
@@ -41,7 +44,7 @@
 
   <properties>
     <executionFqn type="type:Text">
-      <documentation>Pending ModelTransformation FQN. Need not live under the target library. (required)</documentation>
+      <documentation>Apply-source ModelTransformation FQN (pending one-shot, available template, or template outside _meta.transform). (required)</documentation>
     </executionFqn>
     <library type="type:Text">
       <documentation>Path to the target Library.bml. Omitted: cwd package.json blockml.library. (optional)</documentation>

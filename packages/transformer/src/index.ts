@@ -99,13 +99,17 @@ export type { TargetLibrary } from "./execution/target-library.js";
 export { allocateUniqueExecutionId, usedExecutionIds } from "./execution/execution-id.js";
 export {
   parseExecutionFqn,
+  parseTransformLocation,
   generateExecutionName,
   executionFilePath,
   padSequence,
   formatNameTimestamp,
   formatDateTimeProperty,
 } from "./execution/lifecycle.js";
-export { MODEL_TRANSFORMATION_FQN } from "./execution/constants.js";
+export {
+  AVAILABLE_SEGMENT,
+  MODEL_TRANSFORMATION_FQN,
+} from "./execution/constants.js";
 export {
   parseParameterMappingsJson,
   parseParametersJson,

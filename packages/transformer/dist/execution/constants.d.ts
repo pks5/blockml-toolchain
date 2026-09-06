@@ -32,6 +32,10 @@ export declare const TRANSFORM_PACKAGE = "_meta.transform";
 export declare const TRANSFORM_PATH = "_meta/transform";
 export declare const LIFECYCLE_STAGES: readonly ["pending", "running", "succeeded", "failed"];
 export type LifecycleStage = (typeof LIFECYCLE_STAGES)[number];
+/** Template catalog under `_meta.transform`. Not a lifecycle status. */
+export declare const AVAILABLE_SEGMENT = "available";
+/** Prefixes/URIs Apply copies may carry and must strip on relocate. */
+export declare const TRANSFORM_NS_SEGMENTS: readonly ["pending", "running", "succeeded", "failed", "available"];
 export declare const SEQUENCE_STAGES: readonly ["running", "succeeded", "failed"];
 export type ExecutionStatusId = "Pending" | "Running" | "Failed" | "Succeeded";
 export type TerminalExecutionStatus = "Succeeded" | "Failed";

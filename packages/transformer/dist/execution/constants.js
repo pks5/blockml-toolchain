@@ -38,5 +38,12 @@ export const LIFECYCLE_STAGES = [
     "succeeded",
     "failed",
 ];
+/** Template catalog under `_meta.transform`. Not a lifecycle status. */
+export const AVAILABLE_SEGMENT = "available";
+/** Prefixes/URIs Apply copies may carry and must strip on relocate. */
+export const TRANSFORM_NS_SEGMENTS = [
+    ...LIFECYCLE_STAGES,
+    AVAILABLE_SEGMENT,
+];
 export const SEQUENCE_STAGES = ["running", "succeeded", "failed"];
 //# sourceMappingURL=constants.js.map

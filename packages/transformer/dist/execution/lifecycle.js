@@ -16,11 +16,28 @@ export function parseExecutionFqn(fqn) {
         fqn,
     };
 }
+const TRANSFORM_LOCATION = new RegExp(`^(.+)\\.${TRANSFORM_PACKAGE.replaceAll(".", "\\.")}\\.([^.]+)\\.([^.]+)$`);
+/** Any `{library}._meta.transform.{segment}.{name}` FQN, including `available`. */
+export function parseTransformLocation(fqn) {
+    const match = TRANSFORM_LOCATION.exec(fqn);
+    if (!match) {
+        return undefined;
+    }
+    return {
+        libraryFqn: match[1],
+        segment: match[2],
+        name: match[3],
+        fqn,
+    };
+}
 export function executionFqn(libraryFqn, stage, name) {
     return `${libraryFqn}.${TRANSFORM_PACKAGE}.${stage}.${name}`;
 }
+export function transformPackageFqn(libraryFqn, segment) {
+    return `${libraryFqn}.${TRANSFORM_PACKAGE}.${segment}`;
+}
 export function lifecyclePackageFqn(libraryFqn, stage) {
-    return `${libraryFqn}.${TRANSFORM_PACKAGE}.${stage}`;
+    return transformPackageFqn(libraryFqn, stage);
 }
 export function padSequence(sequence) {
     return String(sequence).padStart(5, "0");

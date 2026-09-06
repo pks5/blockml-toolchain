@@ -29,13 +29,17 @@
        if the worktree is dirty or not a Git toplevel.
     3. Assign a unique `executionId` (`type:UUID`), `sequence`, `startedAt`,
        and `baseCommit` (current HEAD), set `status=Running`.
-    4. Relocate the Block to the target library's
+    4. Relocate or copy into the target library's
        `_meta.transform.running`. The target library is `--library` or
        cwd `package.json` `blockml.library` (`dirname(Library.bml)`).
-       The source FQN need not live under that library. When `template`
-       is true, leave the pending Block in place, copy it (including
-       SubBlocks / bound `T`), set `template=false` on the copy, rewrite
-       local type FQNs onto the copy, and relocate that copy instead.
+       Placement: `_meta.transform.pending` requires `template=false`
+       and the source is relocated. `_meta.transform.available` is the
+       template catalog under `_meta.transform` and requires
+       `template=true`. A source outside `_meta.transform` requires
+       `template=true`. Other `_meta.transform` packages are rejected.
+       Templates are never moved: copy them (including SubBlocks /
+       bound `T`), set `template=false` on the copy, rewrite local type
+       FQNs onto the copy, and relocate that copy instead.
     5. Resolve `parameters`. CLI `--parameter-mappings` or pending
        `parameterMappings` wins and ignores `--parameters`: close each
        mapping `source` against this Block, then apply the mappings in

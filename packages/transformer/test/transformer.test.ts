@@ -22,6 +22,7 @@ import {
   gitLogSubjects,
   gitParent,
   historyExecutionXml,
+  availableFqn,
   pendingExecutionXml,
   pendingFqn,
   recordingAgent,
@@ -178,11 +179,12 @@ describe("Transformer lifecycle", () => {
 
   it("copies a template pending ModelTransformation and leaves the original in place", async () => {
     writeProject(TMP, {
-      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+      "blocks/com/example/model/_meta/transform/available/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
+        segment: "available",
         template: true,
       }),
-      "blocks/com/example/model/Referrer.bml": referrerXml("Referrer", "pending:JokeTest"),
+      "blocks/com/example/model/Referrer.bml": referrerXml("Referrer", "available:JokeTest"),
     });
     const generated = "T00001_JokeTest_20260830T011702";
     const transformer = new Transformer({
@@ -190,23 +192,23 @@ describe("Transformer lifecycle", () => {
       agent: successfulAgent(),
       now: () => FIXED_NOW,
     });
-    const result = await transformer.run(pendingFqn("JokeTest"));
+    const result = await transformer.run(availableFqn("JokeTest"));
 
     expect(result.status).toBe("Succeeded");
     expect(result.terminalFqn).toBe(
       `com.example.model._meta.transform.succeeded.${generated}`,
     );
 
-    const pendingPath = join(
+    const availablePath = join(
       TMP,
-      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml",
+      "blocks/com/example/model/_meta/transform/available/JokeTest.bml",
     );
-    expect(existsSync(pendingPath)).toBe(true);
-    const pending = readFileSync(pendingPath, "utf8");
-    expect(pending).toContain("<name>JokeTest</name>");
-    expect(pending).toContain("<value>true</value>");
-    expect(pending).not.toContain(result.executionId);
-    expect(pending).not.toContain(generated);
+    expect(existsSync(availablePath)).toBe(true);
+    const available = readFileSync(availablePath, "utf8");
+    expect(available).toContain("<name>JokeTest</name>");
+    expect(available).toContain("<value>true</value>");
+    expect(available).not.toContain(result.executionId);
+    expect(available).not.toContain(generated);
 
     const succeededPath = join(
       TMP,
@@ -223,17 +225,18 @@ describe("Transformer lifecycle", () => {
 
     const referrerPath = join(TMP, "blocks/com/example/model/Referrer.bml");
     const referrer = readFileSync(referrerPath, "utf8");
-    expect(referrer).toContain("pending:JokeTest");
+    expect(referrer).toContain("available:JokeTest");
     const parsedReferrer = parse(referrer, { filePath: referrerPath });
     expect(parsedReferrer.document?.block.references?.[0]?.type).toBe(
-      pendingFqn("JokeTest"),
+      availableFqn("JokeTest"),
     );
   });
 
   it("can apply a template pending ModelTransformation more than once", async () => {
     writeProject(TMP, {
-      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+      "blocks/com/example/model/_meta/transform/available/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
+        segment: "available",
         template: true,
       }),
     });
@@ -242,7 +245,7 @@ describe("Transformer lifecycle", () => {
       agent: successfulAgent(),
       now: () => FIXED_NOW,
     });
-    const firstResult = await first.run(pendingFqn("JokeTest"));
+    const firstResult = await first.run(availableFqn("JokeTest"));
     expect(firstResult.status).toBe("Succeeded");
 
     const secondNow = new Date(2026, 7, 30, 1, 18, 2);
@@ -251,7 +254,7 @@ describe("Transformer lifecycle", () => {
       agent: successfulAgent(),
       now: () => secondNow,
     });
-    const secondResult = await second.run(pendingFqn("JokeTest"));
+    const secondResult = await second.run(availableFqn("JokeTest"));
     expect(secondResult.status).toBe("Succeeded");
     expect(secondResult.sequence).toBe(2);
     expect(secondResult.terminalFqn).toBe(
@@ -259,7 +262,7 @@ describe("Transformer lifecycle", () => {
     );
     expect(
       existsSync(
-        join(TMP, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml"),
+        join(TMP, "blocks/com/example/model/_meta/transform/available/JokeTest.bml"),
       ),
     ).toBe(true);
     expect(
@@ -405,8 +408,9 @@ describe("Transformer lifecycle", () => {
 
   it("copies the parameter schema onto a template execution", async () => {
     writeProject(TMP, {
-      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+      "blocks/com/example/model/_meta/transform/available/JokeTest.bml": pendingExecutionXml({
         name: "JokeTest",
+        segment: "available",
         template: true,
         parameterFields: ["language"],
         pendingParameters: '{"language":"en"}',
@@ -419,17 +423,17 @@ describe("Transformer lifecycle", () => {
       now: () => FIXED_NOW,
       parameters: { language: "de" },
     });
-    const result = await transformer.run(pendingFqn("JokeTest"));
+    const result = await transformer.run(availableFqn("JokeTest"));
     expect(result.status).toBe("Succeeded");
     expect(
-      existsSync(join(TMP, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml")),
+      existsSync(join(TMP, "blocks/com/example/model/_meta/transform/available/JokeTest.bml")),
     ).toBe(true);
-    const pending = readFileSync(
-      join(TMP, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml"),
+    const available = readFileSync(
+      join(TMP, "blocks/com/example/model/_meta/transform/available/JokeTest.bml"),
       "utf8",
     );
-    expect(pending).toContain("<name>JokeTest</name>");
-    expect(pending).toContain('{"language":"en"}');
+    expect(available).toContain("<name>JokeTest</name>");
+    expect(available).toContain('{"language":"en"}');
     const succeeded = readFileSync(
       join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
       "utf8",
@@ -438,7 +442,8 @@ describe("Transformer lifecycle", () => {
     expect(succeeded).toMatch(/<name>\s*Parameters\s*<\/name>/);
     expect(succeeded).toContain(`${generated}.Parameters`);
     expect(succeeded).toContain("<value>false</value>");
-    expect(succeeded).not.toContain("pending:JokeTest");
+    expect(succeeded).not.toContain("available:JokeTest");
+    expect(succeeded).not.toContain("_meta.transform.available.");
     expect(succeeded).not.toContain("_meta.transform.pending.");
   });
 
@@ -717,7 +722,7 @@ describe("Transformer lifecycle", () => {
   });
 
   it("relocates a source FQN outside the target library into that library _meta", async () => {
-    const xml = pendingExecutionXml({ name: "CreateJoke" })
+    const xml = pendingExecutionXml({ name: "CreateJoke", template: true })
       .replaceAll(`${LIBRARY}._meta.transform.pending`, `${LIBRARY}.program`)
       .replaceAll("xmlns:pending=", "xmlns:program=")
       .replaceAll("<type>pending:", "<type>program:");
@@ -737,7 +742,7 @@ describe("Transformer lifecycle", () => {
     );
     expect(
       existsSync(join(TMP, "blocks/com/example/model/program/CreateJoke.bml")),
-    ).toBe(false);
+    ).toBe(true);
     expect(
       existsSync(
         join(

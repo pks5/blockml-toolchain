@@ -32,7 +32,7 @@
     • search — local full-text search over the validate --all corpus; search index rebuilds the cache
     • graph — local authored structural graph over the validate --all corpus; graph index rebuilds the cache
     • inspect — compact JSON inspect view of a Block FQN from the TypeRegistry (effective members, optional depth)
-    • transform — parent command; apply executes a pending ModelTransformation via @blockml/transformer
+    • transform — parent command; apply executes a ModelTransformation via @blockml/transformer
     • new — create a Block .bml file via @blockml/builder and export it from the owning Library
 
     Planned commands (not V1): init, watch, activate-config.

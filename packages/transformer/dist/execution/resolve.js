@@ -1,8 +1,8 @@
 import { bootstrapFullProjectRegistry, } from "@blockml/framework";
-import { MODEL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN } from "./constants.js";
+import { AVAILABLE_SEGMENT, MODEL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN, } from "./constants.js";
 import { TransformError } from "./errors.js";
-import { parseExecutionFqn } from "./lifecycle.js";
-import { getOperationInstances, getOperationStatus, getPropertyLiteral, getStatus, hasAggregationComposition, hasOperationProperty, hasPropertyValue, isAgenticOperationType, isModelTransformation, isToolOperationType, operationHasAggregation, operationHasTask, } from "./properties.js";
+import { parseTransformLocation } from "./lifecycle.js";
+import { getOperationInstances, getOperationStatus, getPropertyLiteral, getStatus, hasAggregationComposition, hasOperationProperty, hasPropertyValue, isAgenticOperationType, isModelTransformation, isTemplate, isToolOperationType, operationHasAggregation, operationHasTask, } from "./properties.js";
 const REQUIRED_PRESENT = ["createdAt"];
 const FORBIDDEN_PROPERTIES = [
     "executionId",
@@ -26,9 +26,9 @@ export function resolvePendingExecution(executionFqn, workspaceRoot, targetLibra
     return resolvePendingExecutionInRegistry(executionFqn, registry, targetLibrary);
 }
 export function resolvePendingExecutionInRegistry(executionFqn, registry, targetLibrary) {
-    const parsed = parseExecutionFqn(executionFqn);
-    if (parsed && parsed.stage !== "pending") {
-        throw new TransformError("resolve", `Execution FQN must be a pending ModelTransformation, got ${executionFqn}`);
+    const location = parseTransformLocation(executionFqn);
+    if (location && location.segment !== "pending" && location.segment !== AVAILABLE_SEGMENT) {
+        throw new TransformError("resolve", `Execution FQN under _meta.transform must be pending or available, got ${executionFqn}`);
     }
     const document = registry.get(executionFqn);
     if (!document) {
@@ -37,12 +37,13 @@ export function resolvePendingExecutionInRegistry(executionFqn, registry, target
     if (!isModelTransformation(document.block, registry)) {
         throw new TransformError("resolve", `${executionFqn} is not a ${MODEL_TRANSFORMATION_FQN}`);
     }
+    assertApplyLocationContract(executionFqn, document.block, location);
     assertPendingContract(executionFqn, document.block, registry);
     return {
         fqn: executionFqn,
         libraryFqn: targetLibrary.packageFqn,
         libraryRoot: targetLibrary.libraryRoot,
-        originalName: parsed?.name ?? lastFqnSegment(executionFqn),
+        originalName: location?.name ?? lastFqnSegment(executionFqn),
         document,
         registry,
     };
@@ -50,6 +51,21 @@ export function resolvePendingExecutionInRegistry(executionFqn, registry, target
 function lastFqnSegment(fqn) {
     const name = fqn.split(".").pop();
     return name && name.length > 0 ? name : fqn;
+}
+function assertApplyLocationContract(fqn, block, location) {
+    const template = isTemplate(block);
+    if (!location) {
+        if (!template) {
+            throw new TransformError("resolve", `${fqn} is outside _meta.transform and must have template=true`);
+        }
+        return;
+    }
+    if (location.segment === "pending" && template) {
+        throw new TransformError("resolve", `${fqn} is in _meta.transform.pending and must have template=false`);
+    }
+    if (location.segment === AVAILABLE_SEGMENT && !template) {
+        throw new TransformError("resolve", `${fqn} is in _meta.transform.available and must have template=true`);
+    }
 }
 function assertPendingContract(fqn, block, registry) {
     const operations = getOperationInstances(block, registry);

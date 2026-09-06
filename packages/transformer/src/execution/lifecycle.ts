@@ -35,6 +35,33 @@ export function parseExecutionFqn(fqn: string): ParsedExecutionFqn | undefined {
   };
 }
 
+export interface ParsedTransformLocation {
+  libraryFqn: string;
+  segment: string;
+  name: string;
+  fqn: string;
+}
+
+const TRANSFORM_LOCATION = new RegExp(
+  `^(.+)\\.${TRANSFORM_PACKAGE.replaceAll(".", "\\.")}\\.([^.]+)\\.([^.]+)$`,
+);
+
+/** Any `{library}._meta.transform.{segment}.{name}` FQN, including `available`. */
+export function parseTransformLocation(
+  fqn: string,
+): ParsedTransformLocation | undefined {
+  const match = TRANSFORM_LOCATION.exec(fqn);
+  if (!match) {
+    return undefined;
+  }
+  return {
+    libraryFqn: match[1]!,
+    segment: match[2]!,
+    name: match[3]!,
+    fqn,
+  };
+}
+
 export function executionFqn(
   libraryFqn: string,
   stage: LifecycleStage,
@@ -43,11 +70,18 @@ export function executionFqn(
   return `${libraryFqn}.${TRANSFORM_PACKAGE}.${stage}.${name}`;
 }
 
+export function transformPackageFqn(
+  libraryFqn: string,
+  segment: string,
+): string {
+  return `${libraryFqn}.${TRANSFORM_PACKAGE}.${segment}`;
+}
+
 export function lifecyclePackageFqn(
   libraryFqn: string,
   stage: LifecycleStage,
 ): string {
-  return `${libraryFqn}.${TRANSFORM_PACKAGE}.${stage}`;
+  return transformPackageFqn(libraryFqn, stage);
 }
 
 export function padSequence(sequence: number): string {

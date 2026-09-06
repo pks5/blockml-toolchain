@@ -24,14 +24,19 @@
     agent process. `workflow:ToolOperation` runs an npm CLI tool
     via npx. Other subtypes use their registered executor.
 
-    * `template` — when true, this Block is a reusable template. Prepare
-      leaves it in place (it need not live under the target library),
-      copies it, sets `template=false` on the copy, and relocates that
-      copy to the target library's `_meta.transform.running`.
-      The copy is a snapshot: SubBlocks (including bound `T`) are copied
-      and rewritten onto the copy, so later template edits cannot change
-      recorded executions. Default false: the pending Block is relocated
-      and removed.
+    * `template` — reusable vs one-shot. Placement is part of the Apply
+      contract. `{library}._meta.transform.pending` must have
+      `template=false`; Prepare relocates that Block to running and
+      removes the source. `{library}._meta.transform.available` is the
+      required catalog for templates under `_meta.transform` and must
+      have `template=true`. A ModelTransformation outside
+      `_meta.transform` may live anywhere and must have `template=true`.
+      Other `_meta.transform` packages (running / succeeded / failed /
+      unknown) are not Apply sources. Templates are never moved:
+      Prepare copies them, sets `template=false` on the copy, and
+      relocates that copy to the target library's
+      `_meta.transform.running`. The copy is a snapshot: SubBlocks
+      (including bound `T`) are copied and rewritten onto the copy.
     * `parameters` — run value of generic `T` (`core:ValueType`, default
       `type:Text`). Bind a Struct with
       `baseType=workflow:ModelTransformation(Parameters)` and a same-Block
@@ -101,10 +106,10 @@
     </description>
     <template type="type:Boolean">
       <documentation>
-        When true, this ModelTransformation is a reusable template. Prepare
-        leaves the pending Block in place, copies it including SubBlocks,
-        sets template=false on the copy, rewrites local type FQNs onto the
-        copy, and relocates that copy to running. Default false.
+        Reusable template. Required true outside _meta.transform.pending
+        (available catalog or any non-_meta.transform package). Required
+        false in _meta.transform.pending. Templates are copied, never
+        moved. Default false.
       </documentation>
       <value>false</value>
     </template>

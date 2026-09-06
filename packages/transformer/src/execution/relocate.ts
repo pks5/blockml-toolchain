@@ -3,12 +3,13 @@ import { forkBom, rootFqnByFilePath, type TypeRegistry } from "@blockml/framewor
 import { serialize } from "@blockml/serializer";
 import { mkdirSync, unlinkSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
-import { LIFECYCLE_STAGES, type LifecycleStage } from "./constants.js";
+import { TRANSFORM_NS_SEGMENTS, type LifecycleStage } from "./constants.js";
 import {
   executionFilePath,
   executionFqn,
   lifecyclePackageFqn,
   parseExecutionFqn,
+  transformPackageFqn,
 } from "./lifecycle.js";
 import { TransformError } from "./errors.js";
 
@@ -37,12 +38,12 @@ export function applyExecutionIdentity(
   document.source.filePath = nextPath;
 
   const bindings = { ...(document.source.namespaceBindings ?? {}) };
-  for (const stage of LIFECYCLE_STAGES) {
-    delete bindings[stage];
+  for (const segment of TRANSFORM_NS_SEGMENTS) {
+    delete bindings[segment];
   }
   for (const [prefix, uri] of Object.entries(bindings)) {
-    for (const stage of LIFECYCLE_STAGES) {
-      if (uri === lifecyclePackageFqn(identity.libraryFqn, stage)) {
+    for (const segment of TRANSFORM_NS_SEGMENTS) {
+      if (uri === transformPackageFqn(identity.libraryFqn, segment)) {
         delete bindings[prefix];
       }
     }
