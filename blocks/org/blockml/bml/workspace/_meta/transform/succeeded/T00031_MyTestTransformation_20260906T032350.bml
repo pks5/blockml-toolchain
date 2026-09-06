@@ -1,22 +1,22 @@
 <!--Workspace Playground — MyTestTransformation
-  FQN: org.blockml.bml.workspace._meta.transform.running.T00031_MyTestTransformation_20260906T032350-->
+  FQN: org.blockml.bml.workspace._meta.transform.succeeded.T00031_MyTestTransformation_20260906T032350-->
 <block xmlns="http://blockml.org/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
   xmlns:playground="org.blockml.bml.workspace.playground"
-  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
+  xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
   <name>
     T00031_MyTestTransformation_20260906T032350
   </name>
   <type>
-    running:T00031_MyTestTransformation_20260906T032350
+    succeeded:T00031_MyTestTransformation_20260906T032350
   </type>
   <baseType>
-    workflow:ModelTransformation(running:T00031_MyTestTransformation_20260906T032350.Parameters, type:Text)
+    workflow:ModelTransformation(succeeded:T00031_MyTestTransformation_20260906T032350.Parameters, type:Text)
   </baseType>
   <is>
     A pending ModelTransformation that creates a random playground Block
@@ -26,7 +26,7 @@
       <value>A transformation that creates a random playground Block</value>
     </description>
     <status override="true" type="workflow:ExecutionStatus">
-      <value>Running</value>
+      <value>Succeeded</value>
     </status>
     <createdAt override="true" type="type:DateTime">
       <value>2026-09-06T00:00:00</value>
@@ -34,7 +34,7 @@
     <template override="true" type="type:Boolean">
       <value>false</value>
     </template>
-    <parameters override="true" type="running:T00031_MyTestTransformation_20260906T032350.Parameters">
+    <parameters override="true" type="succeeded:T00031_MyTestTransformation_20260906T032350.Parameters">
       <value>{targetBlock:"org.blockml.bml.workspace.playground.RandomBlock"}</value>
     </parameters>
     <executionId override="true" type="type:UUID">
@@ -49,6 +49,9 @@
     <baseCommit override="true" type="type:Text">
       <value>b16397e08e5c6c619e90f373305193b68d7d51f6</value>
     </baseCommit>
+    <completedAt override="true" type="type:DateTime">
+      <value>2026-09-06T03:25:13</value>
+    </completedAt>
   </properties>
   <aggregations>
     <operations override="true">
@@ -106,8 +109,7 @@ recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/
 recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/packages/graph/blocks/org/blockml/bml/graph/capability/Members.bml:28 — Structure long documentation with markdown (headings, lists, or paragraphs).
 recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/packages/inspect/blocks/org/blockml/bml/inspect/InspectedMember.bml:29 — Structure long documentation with markdown (headings, lists, or paragraphs).
 recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/packages/transformer/blocks/org/blockml/bml/transformer/capability/ToolExecutor.bml:21 — Structure long documentation with markdown (headings, lists, or paragraphs).
-Validation succeeded. Tested 738 blocks, 0 with errors, 0 warnings, 5 recommendations.
-</output>
+Validation succeeded. Tested 738 blocks, 0 with errors, 0 warnings, 5 recommendations.</output>
           <completedAt>2026-09-06T03:25:12</completedAt>
         </workflow:ToolOperation>
       </composition>
@@ -119,7 +121,7 @@ Validation succeeded. Tested 738 blocks, 0 with errors, 0 warnings, 5 recommenda
         Parameters
       </name>
       <type>
-        running:T00031_MyTestTransformation_20260906T032350.Parameters
+        succeeded:T00031_MyTestTransformation_20260906T032350.Parameters
       </type>
       <baseType>
         type:StructType
