@@ -38,9 +38,13 @@
   <is>parseExpression AST — no Urmodell writeback (B4)</is>
 
   <documentation>parseExpression(source) parses expression text into an ExpressionNode AST.
-    parseInterpolatedText(source) scans Text for ${} holes (restricted profile).
-    Lookup is the same as full expressions: size ≡ #this.size, this ≡ #this.this.
+    parseInterpolatedText(source) scans Text for unescaped ${} holes (restricted
+    profile). `\${` is a literal `${`; `\\${` is one `\` plus a hole (odd/even
+    backslashes immediately before `$`). Lookup is the same as full expressions:
+    size ≡ #this.size, this ≡ #this.this.
     Returns ParseExpressionOutcome: { ok: true, result } | { ok: false, error }.
+    Empty expression text → BML_EXPRESSION_PARSE_ERROR (write `\${ }` for literal
+    delimiter characters).
 
     Parser stores ExpressionValue.raw / InterpolatedTextValue.raw only (B4).
     validateTypes re-parses at validation time and emits BML_EXPRESSION_PARSE_ERROR

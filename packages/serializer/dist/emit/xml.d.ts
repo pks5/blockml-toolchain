@@ -16,5 +16,8 @@ export declare function escapeText(value: string): string;
 export declare function needsCData(text: string): boolean;
 export declare function emitCharacterData(writer: XmlWriter, text: string, form?: "text" | "cdata"): void;
 export declare function formatBoolean(value: boolean): string;
+/** Inverse of ParseMemberValue unescape — emit string literals so `${` is not a hole. */
+declare function escapeInterpolationDelimiters(raw: string): string;
 export declare function formatMemberValue(value: unknown): string;
+export { escapeInterpolationDelimiters };
 //# sourceMappingURL=xml.d.ts.map

@@ -247,6 +247,8 @@ Classification:
 "${ expr }"                 → ExpressionValue          (full expression language)
 "Hello ${ expr } world"     → InterpolatedTextValue    (restricted profile)
 "Hello world"               → LiteralValue
+"Introduce \${ } …"         → LiteralValue "${ }"      (unescaped storage)
+"Show \${ and ${ x }"       → InterpolatedTextValue    (authored raw kept)
 ```
 
 `InterpolatedTextValue.raw` is the **full authored text** including holes. The serializer emits that raw text unchanged — it does not wrap the value in `${ }`. AST construction is a Stage-2 utility (`parseInterpolatedText()`) — never stored on Canonical BOM.
@@ -285,7 +287,18 @@ Forbidden — `BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION`:
 
 Top-level interpolation is legal only on `type:Text`. On `type:Text[]`, the member stays a `LiteralValue` array; string elements that contain `${` are validated and evaluated as interpolated text.
 
-Escape: `\${` is a literal `${`. An unclosed `${` is `BML_EXPR_SYNTAX_ERROR`. Nested `${` inside a hole is out of scope.
+Escape is JS-template-like: a `${` opener is escaped when an **odd** number of backslashes immediately precedes `$`.
+
+```text
+\${          → literal ${
+\\${ expr }  → one literal \ plus a hole
+\\\${        → literal \${
+${} / ${ }   → BML_EXPRESSION_PARSE_ERROR (write \${ } for delimiter characters)
+```
+
+Literal string storage is **unescaped** (`\${` → `${` in `LiteralValue.value`). `InterpolatedTextValue.raw` keeps the authored escapes; `parseInterpolatedText()` / `evaluateInterpolatedText()` apply the same odd/even rule. The serializer re-escapes string literals (`${` → `\${`, and doubles backslashes that precede `${`) so round-trip stays a literal. JSON arrays/objects are not interpolation-escaped.
+
+An unclosed `${` is `BML_EXPR_SYNTAX_ERROR`. Nested `${` inside a hole is out of scope.
 
 Evaluation (`evaluateInterpolatedText()`) happens at read time — Canonical BOM is not rewritten.
 

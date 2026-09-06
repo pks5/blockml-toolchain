@@ -43,6 +43,34 @@ describe("parseInterpolatedText", () => {
     expect(result.result.ast.parts[1]).toEqual({ kind: "property", path: ["label"] });
   });
 
+  it("treats \\${ as a literal ${", () => {
+    const result = parseInterpolatedText("Cost is \\${ amount }");
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.result.ast).toEqual({
+      kind: "interpolated",
+      parts: [{ kind: "literal", value: "Cost is ${ amount }" }],
+    });
+  });
+
+  it("treats \\\\${ as a backslash plus a hole", () => {
+    const result = parseInterpolatedText("Show \\\\${ #this.label }");
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.result.ast.kind).toBe("interpolated");
+    if (result.result.ast.kind !== "interpolated") {
+      return;
+    }
+    expect(result.result.ast.parts).toEqual([
+      { kind: "literal", value: "Show \\" },
+      { kind: "property", path: ["#this.label"] },
+    ]);
+  });
+
   it("rejects unclosed interpolation", () => {
     const result = parseInterpolatedText("Hello ${ #this.label");
     expect(result.ok).toBe(false);
@@ -80,5 +108,13 @@ describe("evaluateInterpolatedText", () => {
     expect(evaluateInterpolatedText("${ #this.this.x }", scope)).toBe("1");
     expect(evaluateInterpolatedText("${ params.z }", scope)).toBe("3");
     expect(() => evaluateInterpolatedText("${ this.size }", scope)).toThrow(/Unknown property/);
+  });
+
+  it("unescapes \\${ at evaluation time", () => {
+    expect(evaluateInterpolatedText("delimiters \\${ }", {})).toBe("delimiters ${ }");
+  });
+
+  it("evaluates a hole after an even backslash pair", () => {
+    expect(evaluateInterpolatedText("Show \\\\${ label }", { label: "X" })).toBe("Show \\X");
   });
 });

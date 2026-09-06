@@ -2,19 +2,10 @@ import { parseExpression } from "../expression/parse-expression.js";
 import { parseInterpolatedText } from "../expression/parse-interpolated-text.js";
 import { INTERPOLATION_NOT_ALLOWED } from "../expression/restricted.js";
 import { memberIdentityKey, resolveEffectiveMembers, } from "../resolve/resolve-effective-members.js";
+import { containsUnescapedInterpolation } from "@blockml/parser";
 import { validateParseValues } from "./validate-parse-values.js";
 import { validateReferences } from "./validate-references.js";
 const TEXT_TYPE_FQN = "org.blockml.bml.type.Text";
-function containsUnescapedInterpolation(raw) {
-    for (let i = 0; i < raw.length - 1; i++) {
-        if (raw[i] === "$" && raw[i + 1] === "{") {
-            if (i === 0 || raw[i - 1] !== "\\") {
-                return true;
-            }
-        }
-    }
-    return false;
-}
 function namedTypeFqn(expr, fallback) {
     if (expr?.kind === "named") {
         return expr.fqn;

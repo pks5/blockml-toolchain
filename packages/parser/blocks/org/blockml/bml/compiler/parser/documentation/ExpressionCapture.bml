@@ -36,8 +36,10 @@
   <is>Raw expression storage — no AST in Urmodell (B4)</is>
 
   <documentation>${ … } attribute/element values → ExpressionValue { raw, source }.
-    Mixed text with ${ … } holes → InterpolatedTextValue { raw, source }.
-    Implementation CDATA → embeddedExpressions[] with source offsets.
+    Mixed text with unescaped ${ … } holes → InterpolatedTextValue { raw, source }.
+    `\${` is a literal `${` (odd backslashes immediately before `$`). A value whose
+    only openers are escaped is LiteralValue after unescape — BOM stores `${`, not
+    `\${`. Implementation CDATA → embeddedExpressions[] with source offsets.
 
     Parser step [5] captures raw text only. AST construction via parseExpression()
     / parseInterpolatedText() in @blockml/framework (Stage 2 utility) — never stored

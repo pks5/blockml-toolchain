@@ -1,14 +1,6 @@
 import { isBooleanLiteral, normalizeBooleanValue } from "../util/boolean.js";
-export function containsUnescapedInterpolation(raw) {
-    for (let i = 0; i < raw.length - 1; i++) {
-        if (raw[i] === "$" && raw[i + 1] === "{") {
-            if (i === 0 || raw[i - 1] !== "\\") {
-                return true;
-            }
-        }
-    }
-    return false;
-}
+import { containsUnescapedInterpolation, unescapeInterpolationDelimiters, } from "./interpolation-escape.js";
+export { containsUnescapedInterpolation, escapeInterpolationDelimiters, unescapeInterpolationDelimiters, } from "./interpolation-escape.js";
 function parseJsonLike(raw) {
     const trimmed = raw.trim();
     if (trimmed.startsWith("[") || trimmed.startsWith("{")) {
@@ -25,7 +17,8 @@ function parseJsonLike(raw) {
     return trimmed;
 }
 function literal(value, typeFqn, placement) {
-    const lit = { kind: "literal", value, typeFqn };
+    const stored = typeof value === "string" ? unescapeInterpolationDelimiters(value) : value;
+    const lit = { kind: "literal", value: stored, typeFqn };
     if (placement) {
         lit.authoredPlacement = placement;
     }

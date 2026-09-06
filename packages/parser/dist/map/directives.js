@@ -1,4 +1,4 @@
-import { containsUnescapedInterpolation, expressionFromRaw } from "./member-value.js";
+import { containsUnescapedInterpolation, expressionFromRaw, unescapeInterpolationDelimiters, } from "./member-value.js";
 import { elementChildren, elementLocalName, elementPrefix, getAttribute, getCharacterData, } from "../util/xml.js";
 import { collectUnknownBmlAttributes, reportDiagnostic } from "./structural.js";
 import { parseGenericArgumentList, } from "./type-expression.js";
@@ -137,7 +137,7 @@ function parseMetaValue(raw, typeFqn, file, loc) {
     }
     return {
         kind: "literal",
-        value: raw,
+        value: unescapeInterpolationDelimiters(raw),
         typeFqn,
     };
 }

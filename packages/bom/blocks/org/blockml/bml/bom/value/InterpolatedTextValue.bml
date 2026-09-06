@@ -28,7 +28,10 @@
   <baseType>bomvalue:MemberValue</baseType>
   <is>Authored interpolated text member value</is>
 
-  <documentation>raw is the full authored text including ${} holes. AST via parseInterpolatedText() — not stored.</documentation>
+  <documentation>
+    raw is the full authored text including `${` holes and `\${` escapes. AST via
+    parseInterpolatedText() — not stored. Serializer emits raw 1:1.
+  </documentation>
 
   <properties>
     <kind type="type:Text">

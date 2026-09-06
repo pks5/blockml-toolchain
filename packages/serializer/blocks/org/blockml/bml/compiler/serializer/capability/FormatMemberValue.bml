@@ -32,7 +32,15 @@
   <baseType>core:Capability</baseType>
   <is>Format MemberValue for XML attribute emission</is>
 
-  <documentation>Format MemberValue for XML attribute emission</documentation>
+  <documentation>
+    Format MemberValue for XML attribute emission.
+
+    ExpressionValue emits `${ raw }`. InterpolatedTextValue emits authored raw
+    unchanged (escapes and holes). String LiteralValue re-escapes every `${` as
+    `\${` (and doubles backslashes that precede `${`) so ParseMemberValue
+    round-trips to the same literal. JSON arrays/objects are not interpolation-
+    escaped — they stay structural tokens.
+  </documentation>
 
   <references>
     <see type="sercap:FormatBoolean" relation="SeeAlso" />

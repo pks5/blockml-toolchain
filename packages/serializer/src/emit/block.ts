@@ -17,6 +17,7 @@ import { fqnToQName, visibilityPrefix } from "./qname.js";
 import {
   emitCharacterData,
   escapeAttr,
+  escapeInterpolationDelimiters,
   escapeText,
   formatBoolean,
   XmlWriter,
@@ -818,7 +819,7 @@ function emitMemberCommonChildren(
 
 function formatLiteralValue(value: unknown): string {
   if (typeof value === "string") {
-    return value;
+    return escapeInterpolationDelimiters(value);
   }
   if (typeof value === "boolean") {
     return formatBoolean(value);

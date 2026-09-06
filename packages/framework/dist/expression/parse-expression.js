@@ -171,7 +171,10 @@ function parseExpressionInternal(input, i) {
 export function parseExpression(raw) {
     const trimmed = raw.trim();
     if (!trimmed) {
-        return { ok: false, error: { message: "Empty expression", offset: 0 } };
+        return {
+            ok: false,
+            error: { message: "Empty expression; write \\${ } for literal delimiters", offset: 0 },
+        };
     }
     try {
         const { node, next } = parseExpressionInternal(trimmed, 0);

@@ -13,6 +13,7 @@ import { fqnToQName, visibilityPrefix } from "./qname.js";
 import {
   emitCharacterData,
   escapeAttr,
+  escapeInterpolationDelimiters,
   escapeText,
   formatBoolean,
   formatMemberValue,
@@ -221,7 +222,7 @@ function emitMetaAttr(name: string, val: MemberValue): string[] {
   if (val.kind === "address") {
     return [`${name}="${escapeAttr(val.address.raw)}"`];
   }
-  return [`${name}="${escapeAttr(String(val.value))}"`];
+  return [`${name}="${escapeAttr(escapeInterpolationDelimiters(String(val.value)))}"`];
 }
 
 function emitMemberValueAttr(val: MemberValue): string {
@@ -240,7 +241,7 @@ function emitMemberValueAttr(val: MemberValue): string {
   if (typeof val.value === "object") {
     return formatMemberValue(val.value);
   }
-  return escapeAttr(String(val.value));
+  return escapeAttr(escapeInterpolationDelimiters(String(val.value)));
 }
 
 function emitMemberValueElement(name: string, val: MemberValue): string {

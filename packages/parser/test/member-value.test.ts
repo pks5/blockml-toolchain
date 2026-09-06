@@ -18,10 +18,20 @@ describe("parseMemberValue interpolation", () => {
     });
   });
 
-  it("keeps escaped \\${ as a literal", () => {
-    const raw = "Cost is \\${ amount }";
+  it("unescapes \\${ into a literal ${", () => {
+    const val = parseMemberValue("Cost is \\${ amount }", "type:Text", "t.bml");
+    expect(val).toMatchObject({ kind: "literal", value: "Cost is ${ amount }" });
+  });
+
+  it("treats a whole \\${ } value as a literal delimiter pair", () => {
+    const val = parseMemberValue("\\${ }", "type:Text", "t.bml");
+    expect(val).toMatchObject({ kind: "literal", value: "${ }" });
+  });
+
+  it("classifies \\\\${ as interpolation after a literal backslash", () => {
+    const raw = "Show \\\\${ #this.label }";
     const val = parseMemberValue(raw, "type:Text", "t.bml");
-    expect(val).toMatchObject({ kind: "literal", value: raw });
+    expect(val).toMatchObject({ kind: "interpolated", raw });
   });
 
   it("keeps a JSON array with ${ inside string elements as a literal", () => {

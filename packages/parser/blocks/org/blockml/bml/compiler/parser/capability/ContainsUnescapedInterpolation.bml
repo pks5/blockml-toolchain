@@ -34,7 +34,16 @@
   <baseType>core:Capability</baseType>
   <is>Detect unescaped ${…} interpolation in raw text</is>
 
-  <documentation>True when raw contains ${ not preceded by a backslash. Used by ParseMemberValue and ParseDirectives to choose InterpolatedTextValue over a JSON-like literal.</documentation>
+  <documentation>
+    True when raw contains an interpolation opener `${` with an even number of
+    immediately preceding backslashes (zero is even).
+
+    - Odd backslashes: last `\` escapes — `\${` is a literal `${`
+    - Even backslashes: `\\${` is one literal `\` plus a hole
+
+    Used by ParseMemberValue and ParseDirectives to choose InterpolatedTextValue
+    over a JSON-like literal.
+  </documentation>
 
   <references>
     <see type="pardocumentation:ExpressionCapture" relation="SeeAlso" />

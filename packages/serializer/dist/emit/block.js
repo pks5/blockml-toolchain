@@ -1,6 +1,6 @@
 import { emitTypeExpression } from "./type-expression.js";
 import { fqnToQName, visibilityPrefix } from "./qname.js";
-import { emitCharacterData, escapeAttr, escapeText, formatBoolean, XmlWriter, } from "./xml.js";
+import { emitCharacterData, escapeAttr, escapeInterpolationDelimiters, escapeText, formatBoolean, XmlWriter, } from "./xml.js";
 import { emitBlockInstance, emitCompositionTemplate, emitConstraintInstances, emitTypeReferenceEntity, } from "./composition.js";
 const BLOCK_EMIT_ORDER = [
     "name",
@@ -657,7 +657,7 @@ function emitMemberCommonChildren(writer, member, ctx) {
 }
 function formatLiteralValue(value) {
     if (typeof value === "string") {
-        return value;
+        return escapeInterpolationDelimiters(value);
     }
     if (typeof value === "boolean") {
         return formatBoolean(value);

@@ -74,12 +74,42 @@ export function emitCharacterData(writer, text, form) {
 export function formatBoolean(value) {
     return value ? "true" : "false";
 }
+/** Inverse of ParseMemberValue unescape — emit string literals so `${` is not a hole. */
+function escapeInterpolationDelimiters(raw) {
+    let out = "";
+    let i = 0;
+    while (i < raw.length) {
+        if (raw[i] === "\\") {
+            let n = 0;
+            while (i + n < raw.length && raw[i + n] === "\\") {
+                n++;
+            }
+            if (raw[i + n] === "$" && raw[i + n + 1] === "{") {
+                out += "\\".repeat(2 * n + 1);
+                out += "${";
+                i += n + 2;
+                continue;
+            }
+            out += raw.slice(i, i + n);
+            i += n;
+            continue;
+        }
+        if (raw[i] === "$" && raw[i + 1] === "{") {
+            out += "\\${";
+            i += 2;
+            continue;
+        }
+        out += raw[i];
+        i++;
+    }
+    return out;
+}
 export function formatMemberValue(value) {
     if (typeof value === "boolean") {
         return formatBoolean(value);
     }
     if (typeof value === "string") {
-        return escapeAttr(value);
+        return escapeAttr(escapeInterpolationDelimiters(value));
     }
     if (typeof value === "number") {
         return String(value);
@@ -89,4 +119,5 @@ export function formatMemberValue(value) {
     }
     return escapeAttr(String(value));
 }
+export { escapeInterpolationDelimiters };
 //# sourceMappingURL=xml.js.map

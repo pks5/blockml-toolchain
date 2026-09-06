@@ -12,6 +12,7 @@ import type {
   SourceLocation,
   TypeExpression,
 } from "@blockml/bom";
+import { containsUnescapedInterpolation } from "@blockml/parser";
 import type { TypeRegistry } from "../registry/type-registry.js";
 import { parseExpression } from "../expression/parse-expression.js";
 import { parseInterpolatedText } from "../expression/parse-interpolated-text.js";
@@ -24,17 +25,6 @@ import { validateParseValues } from "./validate-parse-values.js";
 import { validateReferences } from "./validate-references.js";
 
 const TEXT_TYPE_FQN = "org.blockml.bml.type.Text";
-
-function containsUnescapedInterpolation(raw: string): boolean {
-  for (let i = 0; i < raw.length - 1; i++) {
-    if (raw[i] === "$" && raw[i + 1] === "{") {
-      if (i === 0 || raw[i - 1] !== "\\") {
-        return true;
-      }
-    }
-  }
-  return false;
-}
 
 function namedTypeFqn(expr: TypeExpression | undefined, fallback?: string): string | undefined {
   if (expr?.kind === "named") {

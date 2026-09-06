@@ -1,5 +1,5 @@
 import { fqnToQName, visibilityPrefix } from "./qname.js";
-import { emitCharacterData, escapeAttr, escapeText, formatBoolean, formatMemberValue, XmlWriter, } from "./xml.js";
+import { emitCharacterData, escapeAttr, escapeInterpolationDelimiters, escapeText, formatBoolean, formatMemberValue, XmlWriter, } from "./xml.js";
 export function emitCompositionTemplate(writer, template, ctx, wrapInAggregation) {
     if (wrapInAggregation) {
         const prefix = visibilityPrefix(undefined);
@@ -160,7 +160,7 @@ function emitMetaAttr(name, val) {
     if (val.kind === "address") {
         return [`${name}="${escapeAttr(val.address.raw)}"`];
     }
-    return [`${name}="${escapeAttr(String(val.value))}"`];
+    return [`${name}="${escapeAttr(escapeInterpolationDelimiters(String(val.value)))}"`];
 }
 function emitMemberValueAttr(val) {
     if (val.kind === "expression") {
@@ -178,7 +178,7 @@ function emitMemberValueAttr(val) {
     if (typeof val.value === "object") {
         return formatMemberValue(val.value);
     }
-    return escapeAttr(String(val.value));
+    return escapeAttr(escapeInterpolationDelimiters(String(val.value)));
 }
 function emitMemberValueElement(name, val) {
     if (val.kind === "expression") {

@@ -37,9 +37,19 @@
   <documentation>
     Parse attribute/element value to MemberValue.
 
-    Always classifies a whole `${ … }` as ExpressionValue and unescaped `${` in
-    running text as InterpolatedTextValue. JSON arrays/objects stay structural
-    list/struct tokenization.
+    Classification of the entire value:
+    • unescaped whole `${ … }` → ExpressionValue (full expression language)
+    • running text with an unescaped `${` → InterpolatedTextValue (authored raw kept)
+    • only escaped openers (`\${`, `\\\${`, …) → LiteralValue after unescape
+    • JSON arrays/objects stay structural list/struct tokenization
+
+    Escape is JS-template-like: a `${` opener is escaped when an odd number of
+    backslashes immediately precedes `$`. `\${` stores literal `${`. `\\${` is
+    one literal `\` plus a hole. Empty `${}` / `${ }` stays a parse error — write
+    `\${ }` when the delimiter characters are intended.
+
+    Literal string storage is unescaped (`\${` → `${`). InterpolatedTextValue.raw
+    keeps the authored escapes; parseInterpolatedText / evaluate unescapes holes.
 
     Without `ctx.parseValue` (library bootstrap): Boolean and number heuristics
     (Text / Integer / Boolean / TypeIdentifier) remain.

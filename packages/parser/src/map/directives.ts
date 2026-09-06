@@ -9,7 +9,11 @@ import type {
   WithDirective,
 } from "@blockml/bom";
 import type { Element } from "@xmldom/xmldom";
-import { containsUnescapedInterpolation, expressionFromRaw } from "./member-value.js";
+import {
+  containsUnescapedInterpolation,
+  expressionFromRaw,
+  unescapeInterpolationDelimiters,
+} from "./member-value.js";
 import {
   elementChildren,
   elementLocalName,
@@ -196,7 +200,7 @@ function parseMetaValue(
   }
   return {
     kind: "literal" as const,
-    value: raw,
+    value: unescapeInterpolationDelimiters(raw),
     typeFqn,
   };
 }

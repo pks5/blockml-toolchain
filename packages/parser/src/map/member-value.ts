@@ -7,17 +7,16 @@ import type {
 } from "@blockml/bom";
 import { isBooleanLiteral, normalizeBooleanValue } from "../util/boolean.js";
 import type { MapContext } from "./context.js";
+import {
+  containsUnescapedInterpolation,
+  unescapeInterpolationDelimiters,
+} from "./interpolation-escape.js";
 
-export function containsUnescapedInterpolation(raw: string): boolean {
-  for (let i = 0; i < raw.length - 1; i++) {
-    if (raw[i] === "$" && raw[i + 1] === "{") {
-      if (i === 0 || raw[i - 1] !== "\\") {
-        return true;
-      }
-    }
-  }
-  return false;
-}
+export {
+  containsUnescapedInterpolation,
+  escapeInterpolationDelimiters,
+  unescapeInterpolationDelimiters,
+} from "./interpolation-escape.js";
 
 function parseJsonLike(raw: string): unknown {
   const trimmed = raw.trim();
@@ -39,7 +38,8 @@ function literal(
   typeFqn: string,
   placement?: "attribute" | "element",
 ): LiteralValue {
-  const lit: LiteralValue = { kind: "literal", value, typeFqn };
+  const stored = typeof value === "string" ? unescapeInterpolationDelimiters(value) : value;
+  const lit: LiteralValue = { kind: "literal", value: stored, typeFqn };
   if (placement) {
     lit.authoredPlacement = placement;
   }

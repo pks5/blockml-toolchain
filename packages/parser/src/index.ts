@@ -1,5 +1,10 @@
 export { parse } from "./parse.js";
 export {
+  containsUnescapedInterpolation,
+  escapeInterpolationDelimiters,
+  unescapeInterpolationDelimiters,
+} from "./map/interpolation-escape.js";
+export {
   isWellKnownTypeFqn,
   resolveTypeName,
   type ImplicitNamespaceContext,
