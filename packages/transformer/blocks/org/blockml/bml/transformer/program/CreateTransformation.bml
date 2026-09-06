@@ -29,9 +29,9 @@
         <fqn type="type:TypeIdentifier">
           <documentation>The FQN of the new transformation</documentation>
         </fqn>
-        <description type="type:Text">
-          <documentation>The description of the new transformation</documentation>
-        </description>
+        <objective type="type:Text">
+          <documentation>The objective of the new transformation</documentation>
+        </objective>
       </properties>
     </block>
   </subBlocks>
@@ -56,7 +56,30 @@
           <task>
             <workflow:InstructionTask>
               <instructions>
-                
+Create a new ModelTransformation block with the FQN:
+
+${ #this.parameters.fqn }
+
+Use `org.blockml.bml.transformer.program.CreateTransformation` as the template for the new block.
+
+The objective of the new ModelTransformation is described below:
+
+===== Start of Objective =====
+${ #this.parameters.objective }
+===== End of Objective =====
+
+Design the ModelTransformation so that executing it achieves this objective.
+
+Determine the required structure of the ModelTransformation from the objective.
+
+Define only the properties that are needed by the transformation and bind their values to the appropriate sources.
+
+Determine how many operations are required to achieve the objective. Use the smallest number of operations that results in a clear and reliable transformation.
+
+For each operation, define its responsibility clearly and ensure that the operations together form a coherent execution flow.
+
+The resulting block must be a complete and valid ModelTransformation definition.
+
               </instructions>
             </workflow:InstructionTask>
           </task>
