@@ -45,17 +45,17 @@
     </description>
   </properties>
   <aggregations>
-    <readMe>
+    <readMe override="true">
       <composition>
         <blockml:transformer.README />
       </composition>
     </readMe>
-    <dependencies>
+    <dependencies override="true">
       <composition>
         <blockml:Library />
       </composition>
     </dependencies>
-    <blocks>
+    <blocks override="true">
       <composition>
         <blockml:transformer.workflow.CompositeTask />
         <blockml:transformer.workflow.Criterion />

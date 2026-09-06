@@ -916,19 +916,19 @@ ${XMLNS}>
   </properties>
 
   <aggregations>
-    <readMe>
+    <readMe override="true">
       <composition>
         <framework:README />
       </composition>
     </readMe>
-    <dependencies>
+    <dependencies override="true">
       <composition>
         <blockml:Library />
         <bom:Library />
         <parser:Library />
       </composition>
     </dependencies>
-    <blocks>
+    <blocks override="true">
 ${libraryBlocks}
     </blocks>
   </aggregations>

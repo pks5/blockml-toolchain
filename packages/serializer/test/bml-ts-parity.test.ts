@@ -76,7 +76,7 @@ function parseBmlProperties(content: string): { name: string; required: boolean 
 function parseLibraryCatalog(): Set<string> {
   const library = readFileSync(join(blocksRoot, "Library.bml"), "utf8");
   const catalog = new Set<string>();
-  const blocksSection = library.match(/<blocks>([\s\S]*?)<\/blocks>/)?.[1] ?? library;
+  const blocksSection = library.match(/<blocks(?:\s[^>]*)?>([\s\S]*?)<\/blocks>/)?.[1] ?? library;
   const compRegex = /<(?:[\w]+:)?(\w+)\s*\/>/g;
   let m;
   while ((m = compRegex.exec(blocksSection)) !== null) {

@@ -59,12 +59,12 @@
   </properties>
 
   <aggregations>
-    <readMe>
+    <readMe override="true">
       <composition>
         <cli:README />
       </composition>
     </readMe>
-    <dependencies>
+    <dependencies override="true">
       <composition>
         <blockml:Library />
         <runtime:Library />
@@ -76,7 +76,7 @@
         <transformer:Library />
       </composition>
     </dependencies>
-    <blocks>
+    <blocks override="true">
       <composition><cli:CliType />
         <cliapi:BomConfig />
         <cliapi:ParsedArgs />

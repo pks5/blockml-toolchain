@@ -1135,17 +1135,17 @@ ${XMLNS}
   </properties>
 
   <aggregations>
-    <readMe>
+    <readMe override="true">
       <composition>
         <bom:README />
       </composition>
     </readMe>
-    <dependencies>
+    <dependencies override="true">
       <composition>
         <blockml:Library />
       </composition>
     </dependencies>
-    <blocks>
+    <blocks override="true">
 ${libraryBlocks}
     </blocks>
   </aggregations>

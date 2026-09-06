@@ -40,7 +40,7 @@
   </properties>
 
   <aggregations>
-    <check>
+    <check override="true">
       <composition>
         <valstyle:PreferMarkdownStructure />
       </composition>

@@ -49,19 +49,19 @@
   </properties>
 
   <aggregations>
-    <readMe>
+    <readMe override="true">
       <composition>
         <fatblock:README />
       </composition>
     </readMe>
-    <dependencies>
+    <dependencies override="true">
       <composition>
         <blockml:Library />
         <bom:Library />
         <serializer:Library />
       </composition>
     </dependencies>
-    <blocks>
+    <blocks override="true">
       <composition><fatblock:FatblockType />
         <fbapi:FatBlockOptions />
         <fbapi:FatBlockRenderOutput />

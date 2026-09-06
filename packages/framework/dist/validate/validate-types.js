@@ -1,8 +1,8 @@
+import { containsUnescapedInterpolation } from "@blockml/parser";
 import { parseExpression } from "../expression/parse-expression.js";
 import { parseInterpolatedText } from "../expression/parse-interpolated-text.js";
 import { INTERPOLATION_NOT_ALLOWED } from "../expression/restricted.js";
-import { memberIdentityKey, resolveEffectiveMembers, } from "../resolve/resolve-effective-members.js";
-import { containsUnescapedInterpolation } from "@blockml/parser";
+import { memberIdentityKey, resolveContracts, resolveEffectiveMembers, } from "../resolve/resolve-effective-members.js";
 import { validateParseValues } from "./validate-parse-values.js";
 import { validateReferences } from "./validate-references.js";
 const TEXT_TYPE_FQN = "org.blockml.bml.type.Text";
@@ -53,6 +53,15 @@ function literalNumber(val) {
     }
     return typeof val.value === "number" ? val.value : undefined;
 }
+function inheritedOrContractMembers(block, registry) {
+    const parentBlock = block.baseType ? registry.get(block.baseType)?.block : undefined;
+    const inherited = parentBlock ? resolveEffectiveMembers(parentBlock, registry) : [];
+    return [...inherited, ...resolveContracts(block, registry)];
+}
+function hasMatchingParentMember(member, parentMembers) {
+    return parentMembers.some((candidate) => memberIdentityKey(candidate) === memberIdentityKey(member) &&
+        candidate.kind === member.kind);
+}
 function validateBlockDefinition(block, registry, file, diagnostics) {
     const effective = resolveEffectiveMembers(block, registry);
     const seen = new Set();
@@ -63,26 +72,17 @@ function validateBlockDefinition(block, registry, file, diagnostics) {
         }
         seen.add(key);
     }
+    const parentMembers = inheritedOrContractMembers(block, registry);
+    const parentResolved = !block.baseType || registry.has(block.baseType);
     for (const member of block.members) {
-        const skipOverrideCheck = member.kind === "aggregation" &&
-            (member.composition !== undefined || member.default === true);
+        const hasParent = hasMatchingParentMember(member, parentMembers);
         if (member.override) {
-            const parentBlock = block.baseType ? registry.get(block.baseType)?.block : undefined;
-            const parentMembers = parentBlock
-                ? resolveEffectiveMembers(parentBlock, registry)
-                : [];
-            const hasParent = parentMembers.some((m) => memberIdentityKey(m) === memberIdentityKey(member) && m.kind === member.kind);
-            if (block.baseType && registry.has(block.baseType) && !hasParent) {
+            if (parentResolved && !hasParent) {
                 diagnostics.push(diag("BML_OVERRIDE_WITHOUT_PARENT", `override without parent member: ${member.name}`, file, member.source));
             }
         }
-        else if (block.baseType && registry.has(block.baseType) && !skipOverrideCheck) {
-            const parentBlock = registry.get(block.baseType)?.block;
-            const parentDirect = parentBlock?.members ?? [];
-            const hasParent = parentDirect.some((m) => memberIdentityKey(m) === memberIdentityKey(member) && m.kind === member.kind);
-            if (hasParent && !member.override) {
-                diagnostics.push(diag("BML_OVERRIDE_REQUIRED", `override required for redeclared member: ${member.name}`, file, member.source));
-            }
+        else if (hasParent) {
+            diagnostics.push(diag("BML_OVERRIDE_REQUIRED", `override required for redeclared member: ${member.name}`, file, member.source));
         }
         if (member.kind === "property") {
             validatePropertyExpressions(member, file, diagnostics);

@@ -44,7 +44,7 @@
   </references>
 
   <aggregations>
-    <values>
+    <values override="true">
       <composition>
         <workflow:ExecutionStatus bml:id="Pending" />
         <workflow:ExecutionStatus bml:id="Running" />

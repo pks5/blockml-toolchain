@@ -49,12 +49,12 @@
   </properties>
 
   <aggregations>
-    <readMe>
+    <readMe override="true">
       <composition>
         <runtime:README />
       </composition>
     </readMe>
-    <dependencies>
+    <dependencies override="true">
       <composition>
         <blockml:Library />
         <bom:Library />
@@ -63,7 +63,7 @@
         <validator:Library />
       </composition>
     </dependencies>
-    <blocks>
+    <blocks override="true">
       <composition><runtime:RuntimeType />
         <runapi:CompileScopeKind />
         <runapi:CompileInput />

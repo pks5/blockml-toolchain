@@ -512,12 +512,12 @@ ${XMLNS}>
   </properties>
 
   <aggregations>
-    <readMe>
+    <readMe override="true">
       <composition>
         <lsp:README />
       </composition>
     </readMe>
-    <dependencies>
+    <dependencies override="true">
       <composition>
         <blockml:Library />
         <bom:Library />
@@ -527,7 +527,7 @@ ${XMLNS}>
         <framework:Library />
       </composition>
     </dependencies>
-    <blocks>
+    <blocks override="true">
 ${libraryBlocks}
     </blocks>
   </aggregations>

@@ -48,8 +48,8 @@
     • BML_TYPE_BOUND_NOT_SATISFIED — TypeReference(B) / TypeReferenceEntity(B) value fails bound B (capability throws[] defaults to core:Exception)
     TypeIdentifier / PackageIdentifier / InstanceIdentifier / MemberIdentifier (and *IdentifierEntity) values are not existence-checked. block.type is TypeIdentifier.
     • BML_MEMBER_COLLISION — duplicate member identity in effective set
-    • BML_OVERRIDE_WITHOUT_PARENT — override without resolvable base member
-    • BML_OVERRIDE_REQUIRED — override on non-overridable member
+    • BML_OVERRIDE_WITHOUT_PARENT — override="true" without a matching inherited or contract member
+    • BML_OVERRIDE_REQUIRED — local redeclaration of an inherited or contract member without override="true" (all member kinds, including aggregation composition fills)
     • BML_EXPRESSION_PARSE_ERROR — parseExpression failed on ExpressionValue.raw
     • BML_EXPR_SYNTAX_ERROR — unclosed ${} in interpolated text
     • BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION — hole uses @model, @bean, or a forbidden call

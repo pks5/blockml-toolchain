@@ -404,19 +404,19 @@ ${XMLNS}>
   </properties>
 
   <aggregations>
-    <readMe>
+    <readMe override="true">
       <composition>
         <search:README />
       </composition>
     </readMe>
-    <dependencies>
+    <dependencies override="true">
       <composition>
         <blockml:Library />
         <bom:Library />
         <framework:Library />
       </composition>
     </dependencies>
-    <blocks>
+    <blocks override="true">
 ${libraryBlocks}
     </blocks>
   </aggregations>
