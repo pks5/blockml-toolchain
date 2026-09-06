@@ -53,7 +53,9 @@
   <aggregations>
     <operations override="true">
       <composition>
-        <workflow:AgenticOperation name="Create Random Block" status="Pending" captureOutput="true">
+        <workflow:AgenticOperation name="Create Random Block" status="Running" captureOutput="true">
+          <startedAt>2026-09-06T04:34:58</startedAt>
+          <baseCommit>90bfe132a7a12a5ed53909d41d7a4d617210f81e</baseCommit>
           <task>
             <workflow:InstructionTask>
               <instructions>Create or update the block ${ #this.parameters.targetBlock }
