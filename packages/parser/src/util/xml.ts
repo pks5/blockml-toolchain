@@ -145,13 +145,18 @@ export function xmlTriviaFromElement(element: Element): XmlTrivia | undefined {
 }
 
 /**
- * Strip the longest leading whitespace prefix shared by every non-empty line,
+ * Strip the longest leading whitespace prefix shared by non-empty lines,
  * then trim the result. Pretty-printed XML indent is formatting (B13) and must
  * not be stored on character-data fields; relative extra indent is kept.
+ *
+ * A first line with content and no leading space/tab is glued to the opening
+ * tag and is excluded from the prefix calculation. Leading whitespace on that
+ * same line means the first line counts. A whitespace-only first line is
+ * ignored like any blank line.
  */
 export function trimText(value: string): string {
   const lines = value.split(/\r\n|\n|\r/);
-  const prefix = commonLeadingWhitespace(lines);
+  const prefix = commonLeadingWhitespace(linesForPrefix(lines));
   const stripped =
     prefix.length === 0
       ? lines
@@ -159,6 +164,14 @@ export function trimText(value: string): string {
           line.startsWith(prefix) ? line.slice(prefix.length) : line.trim() === "" ? "" : line,
         );
   return stripped.join("\n").trim();
+}
+
+function linesForPrefix(lines: string[]): string[] {
+  const first = lines[0];
+  if (first !== undefined && first.trim() !== "" && !/^[ \t]/.test(first)) {
+    return lines.slice(1);
+  }
+  return lines;
 }
 
 function commonLeadingWhitespace(lines: string[]): string {

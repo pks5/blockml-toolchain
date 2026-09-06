@@ -34,7 +34,7 @@
   <baseType>core:Capability</baseType>
   <is>Extract text/CDATA content and authoredCharacterDataForm (D8)</is>
 
-  <documentation>Extract text/CDATA content and authoredCharacterDataForm (D8). Character data is passed through TrimText: common leading indent on every non-empty line is removed before the value is stored on the BOM.</documentation>
+  <documentation>Extract text/CDATA content and authoredCharacterDataForm (D8). Character data is passed through TrimText before the value is stored on the BOM (B13).</documentation>
 
   <properties>
     <element type="parmap:XmlDomNode">

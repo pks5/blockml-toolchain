@@ -7,6 +7,7 @@ function sample(documentation: string): string {
   return [
     '<block xmlns="http://blockml.org/bml"',
     ' xmlns:core="org.blockml.bml.core"',
+    ' xmlns:type="org.blockml.bml.type"',
     ' xmlns:test="com.blockml.test.struct">',
     "  <name>Sample</name>",
     "  <type>test:Sample</type>",
@@ -24,8 +25,17 @@ describe("trimText", () => {
     ).toBe("Hello,\nthis is a test.\n    - but this is intended");
   });
 
-  it("does not strip when any non-empty line has no indent", () => {
-    expect(trimText("Hello,\n    indented")).toBe("Hello,\n    indented");
+  it("excludes a first line glued to the opening tag from the prefix", () => {
+    expect(trimText("Hello,\n    indented")).toBe("Hello,\nindented");
+  });
+
+  it("counts the first line when it has leading whitespace on the same line", () => {
+    expect(trimText("    Hello,\n    indented")).toBe("Hello,\nindented");
+    expect(trimText("    Hello,\n        list")).toBe("Hello,\n    list");
+  });
+
+  it("ignores a whitespace-only first line like any blank line", () => {
+    expect(trimText("   \n    Hello,\n    world")).toBe("Hello,\nworld");
   });
 
   it("ignores blank lines when computing the common prefix", () => {
@@ -78,6 +88,24 @@ describe("documentation prose indent", () => {
     });
     expect(second.document!.block.documentations?.[0]?.text).toBe(
       first.document!.block.documentations?.[0]?.text,
+    );
+  });
+
+  it("dedents member documentation glued to the opening tag", () => {
+    const source = sample(
+      [
+        "  <properties>",
+        '    <label type="type:Text">',
+        "      <documentation>Human-readable summary. Public readOnly —",
+        "        inspectable from foreign Blocks.</documentation>",
+        "    </label>",
+        "  </properties>",
+      ].join("\n"),
+    );
+    const result = parse(source, { filePath: "member-doc-indent.bml", continueOnError: true });
+    const label = result.document!.block.members.find((m) => m.name === "label");
+    expect(label?.documentations?.[0]?.text).toBe(
+      "Human-readable summary. Public readOnly —\ninspectable from foreign Blocks.",
     );
   });
 });
