@@ -72,6 +72,13 @@ export interface InspectedGenericType {
   defaultType?: InspectTypeRef;
 }
 
+export interface InspectedReference {
+  ref?: string;
+  relation: string;
+  file?: string;
+  url?: string;
+}
+
 export interface InspectedBlock {
   fqn: string;
   name: string;
@@ -88,6 +95,7 @@ export interface InspectedBlock {
   subBlocks?: string[];
   abstract?: boolean;
   final?: boolean;
+  references?: InspectedReference[];
 }
 
 export interface InspectResult {

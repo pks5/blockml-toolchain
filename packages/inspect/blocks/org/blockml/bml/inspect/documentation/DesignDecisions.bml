@@ -25,10 +25,10 @@
   <name>DesignDecisions</name>
   <type>inspectdocumentation:DesignDecisions</type>
   <baseType>core:Documentation</baseType>
-  <is>Normative Inspect decisions INSPECT1–INSPECT10</is>
+  <is>Normative Inspect decisions INSPECT1–INSPECT11</is>
 
   <documentation>
-    # Normative Inspect decisions INSPECT1–INSPECT10
+    # Normative Inspect decisions INSPECT1–INSPECT11
 
     INSPECT1 CLI verb is inspect; the projection is an Inspect view, not a Resolved BOM.
 
@@ -49,6 +49,8 @@
     INSPECT9 No persistent index; live TypeRegistry via bootstrapFullProjectRegistry.
 
     INSPECT10 Inspect does not flatten into BOM and does not round-trip to BML.
+
+    INSPECT11 Authored documentation see references are compact FQN + relation on InspectedBlock. They do not expand depth and are not structural graph edges.
   </documentation>
 
   <references>

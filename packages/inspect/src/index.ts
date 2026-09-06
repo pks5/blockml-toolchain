@@ -18,6 +18,7 @@ export type {
   InspectedImplementation,
   InspectedInstance,
   InspectedMember,
+  InspectedReference,
   InspectOrigin,
   InspectProjectOptions,
   InspectResult,

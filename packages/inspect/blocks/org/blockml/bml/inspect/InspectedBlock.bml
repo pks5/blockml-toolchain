@@ -26,7 +26,14 @@
   <baseType>inspect:InspectType</baseType>
   <is>Compact projection of one Block</is>
 
-  <documentation>Members are the effective set. baseType is an InspectTypeRef (generic arguments kept). ancestors are parent FQNs only — the inheritance chain is not copied into InspectResult.blocks. genericTypes are declared parameters, not subBlocks.</documentation>
+  <documentation>
+    Members are the effective set.
+
+    • baseType is an InspectTypeRef (generic arguments kept)
+    • ancestors are parent FQNs only — the inheritance chain is not copied into InspectResult.blocks
+    • genericTypes are declared parameters, not subBlocks
+    • references are authored documentation see entries (FQN + relation); they are not expanded into blocks
+  </documentation>
 
   <properties>
     <fqn type="type:Text">
@@ -73,6 +80,9 @@
     <genericTypes type="inspect:InspectedGenericType[]">
       <documentation>Declared generic type parameters. (optional)</documentation>
     </genericTypes>
+    <references type="inspect:InspectedReference[]">
+      <documentation>Authored documentation see references. Compact FQN + relation; not expanded. (optional)</documentation>
+    </references>
     <members type="inspect:InspectedMember[]">
       <documentation>Effective members. (required)</documentation>
     </members>

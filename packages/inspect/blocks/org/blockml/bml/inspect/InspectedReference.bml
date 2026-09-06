@@ -1,0 +1,46 @@
+<!--
+  Inspect — InspectedReference
+  FQN: org.blockml.bml.inspect.InspectedReference
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:inspect="org.blockml.bml.inspect"
+  xmlns:inspectcap="org.blockml.bml.inspect.capability"
+  xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>InspectedReference</name>
+  <type>inspect:InspectedReference</type>
+  <baseType>inspect:InspectType</baseType>
+  <is>One authored documentation see reference</is>
+
+  <documentation>Compact projection of a Block-level see reference. ref is the target type FQN. relation is the short Relation name (SeeAlso when omitted on the source). file and url are present when authored instead of or besides a type. Not expanded into InspectResult.blocks.</documentation>
+
+  <properties>
+    <ref type="type:Text">
+      <documentation>Target Block FQN from see@type. (optional)</documentation>
+    </ref>
+    <relation type="type:Text">
+      <documentation>Short Relation name. SeeAlso when relation is omitted on the see entry. (required)</documentation>
+    </relation>
+    <file type="type:Text">
+      <documentation>Authored file target. (optional)</documentation>
+    </file>
+    <url type="type:Text">
+      <documentation>Authored URL target. (optional)</documentation>
+    </url>
+  </properties>
+
+</block>

@@ -5,6 +5,7 @@ import type {
   BomDocument,
   CompositionNode,
   CompositionTemplate,
+  DocumentationReference,
   GenericType,
   MemberDefinition,
   MemberValue,
@@ -33,6 +34,7 @@ import {
   type InspectedImplementation,
   type InspectedInstance,
   type InspectedMember,
+  type InspectedReference,
   type InspectOrigin,
   type InspectProjectOptions,
   type InspectResult,
@@ -91,6 +93,33 @@ function truncateDocumentation(text: string | undefined): { text: string; trunca
 
 function firstDocumentation(block: BlockDefinition): { text: string; truncated: boolean } | undefined {
   return truncateDocumentation(block.documentations?.[0]?.text);
+}
+
+function projectReferences(
+  refs: DocumentationReference[] | undefined,
+): InspectedReference[] | undefined {
+  if (!refs?.length) {
+    return undefined;
+  }
+  const projected: InspectedReference[] = [];
+  for (const ref of refs) {
+    const entry: InspectedReference = {
+      relation: lastSegment(ref.relationFqn ?? "") || "SeeAlso",
+    };
+    if (ref.type) {
+      entry.ref = ref.type;
+    }
+    if (ref.file) {
+      entry.file = ref.file;
+    }
+    if (ref.url) {
+      entry.url = ref.url;
+    }
+    if (entry.ref || entry.file || entry.url) {
+      projected.push(entry);
+    }
+  }
+  return projected.length > 0 ? projected : undefined;
 }
 
 function lastSegment(fqn: string): string {
@@ -465,6 +494,10 @@ function projectBlock(
   }
   if (block.final) {
     projected.final = true;
+  }
+  const references = projectReferences(block.references);
+  if (references) {
+    projected.references = references;
   }
 
   const effective = resolveEffectiveMembers(block, registry);

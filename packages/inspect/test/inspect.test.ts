@@ -324,6 +324,31 @@ describe("inspectProject", () => {
     ]);
   });
 
+  it("projects authored documentation see references without expanding them", () => {
+    const dir = join(TMP, "refs");
+    writeProject(dir, {
+      "blocks/Peer.bml": blockXml({ name: "Peer" }),
+      "blocks/Topic.bml": blockXml({
+        name: "Topic",
+        extra: [
+          "  <documentation>topic</documentation>",
+          "  <references>",
+          '    <see type="test:Peer" relation="ReadNext" />',
+          '    <see type="test:Peer" />',
+          '    <see url="https://blockml.org/docs" relation="SeeAlso" />',
+          "  </references>",
+        ].join("\n"),
+      }),
+    });
+    const result = inspectProject(`${NS}.Topic`, { rootDir: dir, depth: 1 });
+    expect(result.blocks[`${NS}.Topic`]?.references).toEqual([
+      { ref: `${NS}.Peer`, relation: "ReadNext" },
+      { ref: `${NS}.Peer`, relation: "SeeAlso" },
+      { url: "https://blockml.org/docs", relation: "SeeAlso" },
+    ]);
+    expect(result.blocks[`${NS}.Peer`]).toBeUndefined();
+  });
+
   it("marks truncated documentation", () => {
     const dir = join(TMP, "docs");
     const longDoc = `inspect fixture ${"x".repeat(420)}`;

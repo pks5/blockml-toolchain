@@ -49,6 +49,30 @@ function truncateDocumentation(text) {
 function firstDocumentation(block) {
     return truncateDocumentation(block.documentations?.[0]?.text);
 }
+function projectReferences(refs) {
+    if (!refs?.length) {
+        return undefined;
+    }
+    const projected = [];
+    for (const ref of refs) {
+        const entry = {
+            relation: lastSegment(ref.relationFqn ?? "") || "SeeAlso",
+        };
+        if (ref.type) {
+            entry.ref = ref.type;
+        }
+        if (ref.file) {
+            entry.file = ref.file;
+        }
+        if (ref.url) {
+            entry.url = ref.url;
+        }
+        if (entry.ref || entry.file || entry.url) {
+            projected.push(entry);
+        }
+    }
+    return projected.length > 0 ? projected : undefined;
+}
 function lastSegment(fqn) {
     const parts = fqn.split(".");
     return parts[parts.length - 1] || fqn;
@@ -388,6 +412,10 @@ function projectBlock(doc, registry, options) {
     }
     if (block.final) {
         projected.final = true;
+    }
+    const references = projectReferences(block.references);
+    if (references) {
+        projected.references = references;
     }
     const effective = resolveEffectiveMembers(block, registry);
     projected.members = effective.map((member) => projectMember(member, inheritedFromOwner(block, member, registry)));

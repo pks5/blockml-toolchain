@@ -36,7 +36,8 @@
     • FatBlock assembly
     • Persistent index under .blockml/
     • Writing InspectResult back to BML
-    • MCP wrapper, documentation see-also edges</documentation>
+    • MCP wrapper
+    • Documentation see-also as graph / structural edges</documentation>
 
   <references>
     <see type="inspectdocumentation:Introduction" relation="SeeAlso" />
