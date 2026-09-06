@@ -14,41 +14,46 @@
   <name>RandomBlock</name>
   <type>playground:RandomBlock</type>
   <baseType>core:Documentation</baseType>
-  <is>A whimsical catalogue of unclaimed echoes recorded on the disused Nerobergbahn upper platform, invented at random by a workspace transform execution</is>
+  <is>A field census of imaginary bells cast for bell towers that were never built, compiled at random by a workspace transform execution</is>
 
   <documentation>
-    This block was produced by a BlockML workspace transform execution — the
-    "Create Random Block" agentic operation of playground:MyTestTransformation.
-    Its contents are arbitrary and freshly invented for this run; every
-    execution replaces the block with different random material, so nothing
-    recorded here should be treated as authoritative.
+    Produced by a BlockML workspace transform execution — the "Create Random
+    Block" step of playground:MyTestTransformation. Every run replaces this
+    block with freshly invented, arbitrary material, so nothing catalogued
+    here is stable or authoritative.
   </documentation>
 
   <properties>
     <title type="type:Text">
-      <value>The Ledger of Unclaimed Echoes</value>
+      <value>The Census of Bells That Were Never Hung</value>
     </title>
-    <location type="type:Text">
-      <value>Upper platform of the shuttered Nerobergbahn funicular, Wiesbaden</value>
-    </location>
-    <entry type="type:Text">
-      <value>Cabinet three holds the echoes nobody came back for: a conductor's two-note whistle that still rounds the tiled corner after closing, the flat clap of a season ticket against a glove, and a child counting backwards from eleven in the stairwell. The keeper logs each one on waxed card, notes where in the vault it settles, and leaves the drawer a finger's width open so the sounds can leave if an owner is ever named.</value>
-    </entry>
-    <catalogueNumber type="type:Integer">
-      <value>4417</value>
-    </catalogueNumber>
-    <echoCount type="type:Integer">
-      <value>23</value>
-    </echoCount>
-    <longestEchoSeconds type="type:Integer">
-      <value>9</value>
-    </longestEchoSeconds>
-    <recordedAt type="type:DateTime">
-      <value>2026-09-06T03:23:50</value>
-    </recordedAt>
-    <sealedOn type="type:DateTime">
-      <value>2026-09-07T18:30:00</value>
-    </sealedOn>
+    <compiler type="type:Text">
+      <value>The itinerant founder Wenna Trevithick, working from a handcart forge</value>
+    </compiler>
+    <region type="type:Text">
+      <value>The chalk downland between Ogbourne St George and the deserted hamlet of Snap, Wiltshire</value>
+    </region>
+    <summary type="type:Text">
+      <value>Seven bells were poured for towers that stayed on paper. The largest, "Broad Aldous", carries a rim inscription meant for a church whose foundation trench still shows as a green scar in the pasture. The smallest is no wider than a teacup and rings only in frost. Each bell was weighed, struck once, its note written on a slate tag, and then buried a spade's depth down at the point where the tower's door would have stood, so a future builder might dig it up already tuned.</value>
+    </summary>
+    <bellsCast type="type:Integer">
+      <value>7</value>
+    </bellsCast>
+    <heaviestBellKilograms type="type:Integer">
+      <value>612</value>
+    </heaviestBellKilograms>
+    <deepestBurialCentimetres type="type:Integer">
+      <value>28</value>
+    </deepestBurialCentimetres>
+    <strikeNoteHertz type="type:Integer">
+      <value>247</value>
+    </strikeNoteHertz>
+    <compiledAt type="type:DateTime">
+      <value>2026-09-06T03:37:20</value>
+    </compiledAt>
+    <lastBellBuriedOn type="type:DateTime">
+      <value>2026-08-19T06:45:00</value>
+    </lastBellBuriedOn>
   </properties>
 
 </block>

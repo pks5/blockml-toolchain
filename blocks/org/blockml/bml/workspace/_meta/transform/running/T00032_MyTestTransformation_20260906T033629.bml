@@ -53,9 +53,19 @@
   <aggregations>
     <operations override="true">
       <composition>
-        <workflow:AgenticOperation name="Create Random Block" status="Running" captureOutput="true">
+        <workflow:AgenticOperation name="Create Random Block" status="Succeeded" captureOutput="true">
           <startedAt>2026-09-06T03:36:29</startedAt>
           <baseCommit>1fe721caeda3ff912a9300f8cddb15eb71c16e8b</baseCommit>
+          <output>Done. Updated `blocks/org/blockml/bml/workspace/playground/RandomBlock.bml` with fresh random content:
+
+- **name** `RandomBlock`, **type** `playground:RandomBlock`, **baseType** `core:Documentation`
+- **is** — one-line description (&quot;A field census of imaginary bells cast for bell towers that were never built…&quot;)
+- **documentation** — short paragraph noting it was produced by this transform execution
+- **properties** — `type:Text` (title, compiler, region, summary), `type:Integer` (bellsCast, heaviestBellKilograms, deepestBurialCentimetres, strikeNoteHertz), `type:DateTime` (`compiledAt` = now, `2026-09-06T03:37:20`; `lastBellBuriedOn`)
+
+`npx blockml validate --all` → 1141 blocks, 0 errors, 0 warnings. Only that one file changed; no `_meta/transform/` or ModelTransformation files touched.
+</output>
+          <completedAt>2026-09-06T03:37:50</completedAt>
           <task>
             <workflow:InstructionTask>
               <instructions>Create or update the block ${ #this.parameters.targetBlock }
@@ -76,6 +86,9 @@ Write only under the playground package. Do not edit
 ModelTransformation metadata or files under _meta/transform/.</instructions>
             </workflow:InstructionTask>
           </task>
+          <changedFiles>
+            <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/RandomBlock.bml" />
+          </changedFiles>
         </workflow:AgenticOperation>
         <workflow:ToolOperation name="Validate" status="Pending" captureOutput="true" command="blockml">
           <args>[&quot;validate&quot;]</args>
