@@ -33,6 +33,7 @@
     • ancestors are parent FQNs only — the inheritance chain is not copied into InspectResult.blocks
     • genericTypes are declared parameters, not subBlocks
     • references are authored documentation see entries (FQN + relation); they are not expanded into blocks
+    • at most 8 references; referencesTruncated is the count of additional authored entries not shown
   </documentation>
 
   <properties>
@@ -75,13 +76,16 @@
     <final type="type:Boolean">
       <documentation>true when the Block is final. (optional)</documentation>
     </final>
+    <referencesTruncated type="type:Integer">
+      <documentation>Count of authored see references not shown after the first 8. Present only when greater than 0. (optional)</documentation>
+    </referencesTruncated>
   </properties>
   <aggregations>
     <genericTypes type="inspect:InspectedGenericType[]">
       <documentation>Declared generic type parameters. (optional)</documentation>
     </genericTypes>
     <references type="inspect:InspectedReference[]">
-      <documentation>Authored documentation see references. Compact FQN + relation; not expanded. (optional)</documentation>
+      <documentation>Authored documentation see references, first 8. Compact FQN + relation; not expanded. (optional)</documentation>
     </references>
     <members type="inspect:InspectedMember[]">
       <documentation>Effective members. (required)</documentation>

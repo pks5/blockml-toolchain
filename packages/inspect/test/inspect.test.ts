@@ -341,12 +341,37 @@ describe("inspectProject", () => {
       }),
     });
     const result = inspectProject(`${NS}.Topic`, { rootDir: dir, depth: 1 });
-    expect(result.blocks[`${NS}.Topic`]?.references).toEqual([
+    const topic = result.blocks[`${NS}.Topic`];
+    expect(topic?.references).toEqual([
       { ref: `${NS}.Peer`, relation: "ReadNext" },
       { ref: `${NS}.Peer`, relation: "SeeAlso" },
       { url: "https://blockml.org/docs", relation: "SeeAlso" },
     ]);
+    expect(topic?.referencesTruncated).toBeUndefined();
     expect(result.blocks[`${NS}.Peer`]).toBeUndefined();
+  });
+
+  it("caps references at 8 and sets referencesTruncated to the remaining count", () => {
+    const dir = join(TMP, "refs-cap");
+    const sees = Array.from({ length: 11 }, (_, i) => `    <see type="test:Peer${i}" />`).join("\n");
+    const peers = Object.fromEntries(
+      Array.from({ length: 11 }, (_, i) => [`blocks/Peer${i}.bml`, blockXml({ name: `Peer${i}` })]),
+    );
+    writeProject(dir, {
+      ...peers,
+      "blocks/Hub.bml": blockXml({
+        name: "Hub",
+        extra: ["  <documentation>hub</documentation>", "  <references>", sees, "  </references>"].join(
+          "\n",
+        ),
+      }),
+    });
+    const result = inspectProject(`${NS}.Hub`, { rootDir: dir, depth: 0 });
+    const hub = result.blocks[`${NS}.Hub`];
+    expect(hub?.references).toHaveLength(8);
+    expect(hub?.references?.[0]?.ref).toBe(`${NS}.Peer0`);
+    expect(hub?.references?.[7]?.ref).toBe(`${NS}.Peer7`);
+    expect(hub?.referencesTruncated).toBe(3);
   });
 
   it("marks truncated documentation", () => {

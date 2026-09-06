@@ -35,7 +35,7 @@
 
     Leaf FQNs under org.blockml.bml.type. and org.blockml.bml.core.ValueType stay as refs.
 
-    Aggregation members include authored composition instances on the member (not as extra blocks). Authored documentation see references are compact FQN + relation on InspectedBlock and are not expanded. Documentation longer than 400 characters is truncated with an ellipsis and documentationTruncated=true.</documentation>
+    Aggregation members include authored composition instances on the member (not as extra blocks). Authored documentation see references are compact FQN + relation on InspectedBlock and are not expanded; first 8, referencesTruncated is the remaining count. Documentation longer than 400 characters is truncated with an ellipsis and documentationTruncated=true.</documentation>
 
   <references>
     <see type="inspectdocumentation:V1Scope" relation="ReadNext" />

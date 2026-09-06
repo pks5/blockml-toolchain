@@ -1,7 +1,7 @@
 import { isAbsolute, relative, resolve } from "node:path";
 import { bootstrapFullProjectRegistry, collectBaseTypeChain, findLocalMember, isLiteralValue, projectSourceRoots, resolveEffectiveMembers, } from "@blockml/framework";
 import { collectNamedFqns, projectTypeExpression } from "./type-refs.js";
-import { DEFAULT_INSPECT_DEPTH, DEFAULT_MAX_BLOCKS, DOC_TRUNCATE, MAX_INSPECT_DEPTH, TYPE_PACKAGE_PREFIX, VALUE_TYPE_FQN, } from "./types.js";
+import { DEFAULT_INSPECT_DEPTH, DEFAULT_MAX_BLOCKS, DOC_TRUNCATE, MAX_INSPECT_DEPTH, REF_TRUNCATE, TYPE_PACKAGE_PREFIX, VALUE_TYPE_FQN, } from "./types.js";
 function clampDepth(depth) {
     const n = depth === undefined ? DEFAULT_INSPECT_DEPTH : depth;
     if (!Number.isFinite(n) || n < 0) {
@@ -71,7 +71,16 @@ function projectReferences(refs) {
             projected.push(entry);
         }
     }
-    return projected.length > 0 ? projected : undefined;
+    if (projected.length === 0) {
+        return undefined;
+    }
+    if (projected.length <= REF_TRUNCATE) {
+        return { references: projected, omitted: 0 };
+    }
+    return {
+        references: projected.slice(0, REF_TRUNCATE),
+        omitted: projected.length - REF_TRUNCATE,
+    };
 }
 function lastSegment(fqn) {
     const parts = fqn.split(".");
@@ -415,7 +424,10 @@ function projectBlock(doc, registry, options) {
     }
     const references = projectReferences(block.references);
     if (references) {
-        projected.references = references;
+        projected.references = references.references;
+        if (references.omitted > 0) {
+            projected.referencesTruncated = references.omitted;
+        }
     }
     const effective = resolveEffectiveMembers(block, registry);
     projected.members = effective.map((member) => projectMember(member, inheritedFromOwner(block, member, registry)));

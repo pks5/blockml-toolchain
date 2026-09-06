@@ -2,6 +2,7 @@ export declare const DEFAULT_INSPECT_DEPTH = 1;
 export declare const MAX_INSPECT_DEPTH = 3;
 export declare const DEFAULT_MAX_BLOCKS = 48;
 export declare const DOC_TRUNCATE = 400;
+export declare const REF_TRUNCATE = 8;
 export declare const TYPE_PACKAGE_PREFIX = "org.blockml.bml.type.";
 export declare const VALUE_TYPE_FQN = "org.blockml.bml.core.ValueType";
 export type InspectOrigin = "workspace" | "dependency" | "unresolved";
@@ -78,6 +79,7 @@ export interface InspectedBlock {
     abstract?: boolean;
     final?: boolean;
     references?: InspectedReference[];
+    referencesTruncated?: number;
 }
 export interface InspectResult {
     root: string;

@@ -115,7 +115,7 @@ Not a write format; do not round-trip Inspect JSON to BML.
 A .bml path is not an FQN; inspect may print Did you mean <root FQN>?
 Unknown FQN exits 2. Documentation longer than 400 characters is truncated with an ellipsis and documentationTruncated=true.
 Aggregation members include authored composition instances (enum literals, Library catalog FQNs, nested ModelOperation/Task fills).
-Authored documentation see references are compact FQN + relation and are not expanded.
+Authored documentation see references are compact FQN + relation and are not expanded; first 8, referencesTruncated is the remaining count.
 Capability members include implementation (language + truncated source).
 
 Related: search (find the FQN), graph (how it connects).`;

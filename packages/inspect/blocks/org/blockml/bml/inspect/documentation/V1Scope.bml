@@ -33,7 +33,7 @@
     • Compact TypeExpression projection; baseType keeps generic arguments; genericTypes on InspectedBlock
     • depth 0..3 (default 1), cycle detection, 48-block budget
     • Aggregation composition instances (enum literals, Library catalog FQNs, nested fills)
-    • Authored documentation see references as compact FQN + relation (not expanded)
+    • Authored documentation see references as compact FQN + relation (not expanded); first 8, referencesTruncated = remaining count
     • Capability implementation language and truncated source
     • documentationTruncated when documentation exceeds 400 characters
     • JSON-only CLI: blockml inspect FQN [--depth n]

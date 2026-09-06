@@ -50,7 +50,7 @@
 
     INSPECT10 Inspect does not flatten into BOM and does not round-trip to BML.
 
-    INSPECT11 Authored documentation see references are compact FQN + relation on InspectedBlock. They do not expand depth and are not structural graph edges.
+    INSPECT11 Authored documentation see references are compact FQN + relation on InspectedBlock. First 8 are shown; referencesTruncated is the count of additional authored entries not shown. They do not expand depth and are not structural graph edges.
   </documentation>
 
   <references>

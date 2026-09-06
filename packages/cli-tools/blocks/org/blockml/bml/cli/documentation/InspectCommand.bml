@@ -32,7 +32,7 @@
 
     Inspect uses the same corpus as validate --all (@blockml/inspect / bootstrapFullProjectRegistry).
     Output is InspectResult JSON (root, depth, blocks, unresolved, cycles, truncated).
-    Aggregation members include authored composition instances. Authored documentation see references are compact FQN + relation and are not expanded. Capability members include implementation language and truncated source. Documentation longer than 400 characters sets documentationTruncated. InspectedBlock.baseType keeps generic arguments. genericTypes lists declared parameters (not subBlocks).
+    Aggregation members include authored composition instances. Authored documentation see references are compact FQN + relation and are not expanded; first 8, referencesTruncated is the remaining count. Capability members include implementation language and truncated source. Documentation longer than 400 characters sets documentationTruncated. InspectedBlock.baseType keeps generic arguments. genericTypes lists declared parameters (not subBlocks).
     Default depth 1, allowed 0, cap 3. --json is accepted and implied.
     Missing or unknown FQN → exit 2. Unknown FQN may print Did you mean …? when search finds a Block whose last segment matches, or when the token is a .bml path whose document-root FQN is in the corpus.
     --help and -h print the Printed help page and exit 0.
@@ -58,7 +58,7 @@ Not a write format; do not round-trip Inspect JSON to BML.
 A .bml path is not an FQN; inspect may print Did you mean <root FQN>?
 Unknown FQN exits 2. Documentation longer than 400 characters is truncated with an ellipsis and documentationTruncated=true.
 Aggregation members include authored composition instances (enum literals, Library catalog FQNs, nested ModelOperation/Task fills).
-Authored documentation see references are compact FQN + relation and are not expanded.
+Authored documentation see references are compact FQN + relation and are not expanded; first 8, referencesTruncated is the remaining count.
 Capability members include implementation (language + truncated source).
 
 Related: search (find the FQN), graph (how it connects).]]></documentation>

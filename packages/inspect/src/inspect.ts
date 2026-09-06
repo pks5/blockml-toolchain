@@ -26,6 +26,7 @@ import {
   DEFAULT_MAX_BLOCKS,
   DOC_TRUNCATE,
   MAX_INSPECT_DEPTH,
+  REF_TRUNCATE,
   TYPE_PACKAGE_PREFIX,
   VALUE_TYPE_FQN,
   type InspectBlockOptions,
@@ -97,7 +98,7 @@ function firstDocumentation(block: BlockDefinition): { text: string; truncated: 
 
 function projectReferences(
   refs: DocumentationReference[] | undefined,
-): InspectedReference[] | undefined {
+): { references: InspectedReference[]; omitted: number } | undefined {
   if (!refs?.length) {
     return undefined;
   }
@@ -119,7 +120,16 @@ function projectReferences(
       projected.push(entry);
     }
   }
-  return projected.length > 0 ? projected : undefined;
+  if (projected.length === 0) {
+    return undefined;
+  }
+  if (projected.length <= REF_TRUNCATE) {
+    return { references: projected, omitted: 0 };
+  }
+  return {
+    references: projected.slice(0, REF_TRUNCATE),
+    omitted: projected.length - REF_TRUNCATE,
+  };
 }
 
 function lastSegment(fqn: string): string {
@@ -497,7 +507,10 @@ function projectBlock(
   }
   const references = projectReferences(block.references);
   if (references) {
-    projected.references = references;
+    projected.references = references.references;
+    if (references.omitted > 0) {
+      projected.referencesTruncated = references.omitted;
+    }
   }
 
   const effective = resolveEffectiveMembers(block, registry);

@@ -34,8 +34,8 @@
     collectNamedFqns(expr, typeFqn?) → string[]
 
     Options: depth?, rootDir?, srcDir?, libraries? (inspectProject), maxBlocks?.
-    Constants: DEFAULT_INSPECT_DEPTH, MAX_INSPECT_DEPTH, DEFAULT_MAX_BLOCKS, DOC_TRUNCATE.
-    InspectedBlock.baseType is an InspectTypeRef. InspectedBlock.genericTypes are declared parameters (bound + default). InspectedBlock.references are authored documentation see entries (FQN + relation, not expanded). InspectedMember.value is a literal property value. InspectedMember.instances are authored composition children. Capability members may include InspectedImplementation (language + truncated source).</documentation>
+    Constants: DEFAULT_INSPECT_DEPTH, MAX_INSPECT_DEPTH, DEFAULT_MAX_BLOCKS, DOC_TRUNCATE, REF_TRUNCATE.
+    InspectedBlock.baseType is an InspectTypeRef. InspectedBlock.genericTypes are declared parameters (bound + default). InspectedBlock.references are authored documentation see entries (FQN + relation, first 8, not expanded). InspectedBlock.referencesTruncated is the remaining count when more than 8. InspectedMember.value is a literal property value. InspectedMember.instances are authored composition children. Capability members may include InspectedImplementation (language + truncated source).</documentation>
 
   <references>
     <see type="inspectcap:InspectBlock" relation="Defines" />
