@@ -1,0 +1,103 @@
+<!--Workspace Playground — MyTestTransformation
+  FQN: org.blockml.bml.workspace._meta.transform.running.T00034_MyTestTransformation_20260906T201209-->
+<block xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:playground="org.blockml.bml.workspace.playground"
+  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
+
+  <name>
+    T00034_MyTestTransformation_20260906T201209
+  </name>
+  <type>
+    running:T00034_MyTestTransformation_20260906T201209
+  </type>
+  <baseType>
+    workflow:ModelTransformation(running:T00034_MyTestTransformation_20260906T201209.Parameters, type:Text)
+  </baseType>
+  <is>
+    A pending ModelTransformation that creates a random playground Block
+  </is>
+  <properties>
+    <description override="true">
+      <value>A transformation that creates a random playground Block</value>
+    </description>
+    <status override="true" type="workflow:ExecutionStatus">
+      <value>Running</value>
+    </status>
+    <createdAt override="true" type="type:DateTime">
+      <value>2026-09-06T00:00:00</value>
+    </createdAt>
+    <template override="true" type="type:Boolean">
+      <value>false</value>
+    </template>
+    <parameters override="true" type="running:T00034_MyTestTransformation_20260906T201209.Parameters">
+      <value>{targetBlock:"org.blockml.bml.workspace.playground.RandomBlock"}</value>
+    </parameters>
+    <executionId override="true" type="type:UUID">
+      <value>02ab6fc8-f949-4223-b5b9-8a02b6e63219</value>
+    </executionId>
+    <sequence override="true" type="type:Integer">
+      <value>34</value>
+    </sequence>
+    <startedAt override="true" type="type:DateTime">
+      <value>2026-09-06T20:12:09</value>
+    </startedAt>
+    <baseCommit override="true" type="type:Text">
+      <value>a1905c9419a00fedad0de6c46bd8f30348691de5</value>
+    </baseCommit>
+  </properties>
+  <aggregations>
+    <operations override="true">
+      <composition>
+        <workflow:AgenticOperation name="Create Random Block" status="Pending" captureOutput="true">
+          <task>
+            <workflow:InstructionTask>
+              <instructions>Create or update the block ${ #this.parameters.targetBlock }
+as a random Block under the playground package.
+For each execution invent fresh, arbitrary content so the
+block differs from any previous run.
+The block must be a complete and valid BML Block:
+- name — the short name of ${ #this.parameters.targetBlock }
+- type — ${ #this.parameters.targetBlock }
+- baseType — core:Documentation
+- is — a one-line description of the random content
+- documentation — a short paragraph noting it was produced by
+  this transform execution
+- a handful of typed properties (type:Text, type:Integer,
+  type:DateTime) carrying the random content, including a
+  date (type:DateTime) set to now
+Write only under the playground package. Do not edit
+ModelTransformation metadata or files under _meta/transform/.</instructions>
+            </workflow:InstructionTask>
+          </task>
+        </workflow:AgenticOperation>
+        <workflow:ToolOperation name="Validate" status="Pending" captureOutput="true" command="blockml">
+          <args>[&quot;validate&quot;]</args>
+        </workflow:ToolOperation>
+      </composition>
+    </operations>
+  </aggregations>
+  <subBlocks>
+    <block>
+      <name>
+        Parameters
+      </name>
+      <type>
+        running:T00034_MyTestTransformation_20260906T201209.Parameters
+      </type>
+      <baseType>
+        type:StructType
+      </baseType>
+      <is>
+        Run parameters for this random block transformation
+      </is>
+      <properties>
+        <targetBlock type="type:Text" />
+      </properties>
+    </block>
+  </subBlocks>
+</block>
