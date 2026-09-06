@@ -14,46 +14,46 @@
   <name>RandomBlock</name>
   <type>playground:RandomBlock</type>
   <baseType>core:Documentation</baseType>
-  <is>A field census of imaginary bells cast for bell towers that were never built, compiled at random by a workspace transform execution</is>
+  <is>A fog timetable for a narrow-gauge tram line whose stops are named only on the mornings the mist is thick enough to hide the next pole</is>
 
   <documentation>
     Produced by a BlockML workspace transform execution — the "Create Random
     Block" step of playground:MyTestTransformation. Every run replaces this
-    block with freshly invented, arbitrary material, so nothing catalogued
+    block with freshly invented, arbitrary material, so nothing recorded
     here is stable or authoritative.
   </documentation>
 
   <properties>
     <title type="type:Text">
-      <value>The Census of Bells That Were Never Hung</value>
+      <value>The Fog Timetable of the Marrom Halt Tramway</value>
     </title>
-    <compiler type="type:Text">
-      <value>The itinerant founder Wenna Trevithick, working from a handcart forge</value>
-    </compiler>
+    <keeper type="type:Text">
+      <value>Present-day duty is held by the signalwoman Oona Bricriu, who walks the line counting poles by touch</value>
+    </keeper>
     <region type="type:Text">
-      <value>The chalk downland between Ogbourne St George and the deserted hamlet of Snap, Wiltshire</value>
+      <value>The reed flats where the River Ceirw loses itself before the sea, below the abandoned lime kilns at Trawsallt</value>
     </region>
     <summary type="type:Text">
-      <value>Seven bells were poured for towers that stayed on paper. The largest, "Broad Aldous", carries a rim inscription meant for a church whose foundation trench still shows as a green scar in the pasture. The smallest is no wider than a teacup and rings only in frost. Each bell was weighed, struck once, its note written on a slate tag, and then buried a spade's depth down at the point where the tower's door would have stood, so a future builder might dig it up already tuned.</value>
+      <value>The tramway runs a single motor car along four kilometres of thirty-inch track, but only when a bank of sea fog rolls in thick enough that the driver cannot see the next pole. On those mornings each halt is given a name chalked onto a slate at the platform edge — "Heron's Excuse", "Second Kettle", "Where The Dog Turned Back" — and the name is wiped off again the moment the fog lifts, so the line has no fixed stops at all. A brass bell on the front buffer is rung once per pole passed, and passengers count the rings to know where to step down into the white.</value>
     </summary>
-    <bellsCast type="type:Integer">
-      <value>7</value>
-    </bellsCast>
-    <heaviestBellKilograms type="type:Integer">
-      <value>612</value>
-    </heaviestBellKilograms>
-    <deepestBurialCentimetres type="type:Integer">
-      <value>28</value>
-    </deepestBurialCentimetres>
-    <strikeNoteHertz type="type:Integer">
-      <value>247</value>
-    </strikeNoteHertz>
+    <namedHalts type="type:Integer">
+      <value>11</value>
+    </namedHalts>
+    <trackLengthMetres type="type:Integer">
+      <value>4120</value>
+    </trackLengthMetres>
+    <foggyRunningDaysLastYear type="type:Integer">
+      <value>63</value>
+    </foggyRunningDaysLastYear>
+    <bellRingsPerFullTrip type="type:Integer">
+      <value>187</value>
+    </bellRingsPerFullTrip>
     <compiledAt type="type:DateTime">
-      <value>2026-09-06T03:37:20</value>
+      <value>2026-09-06T05:24:10</value>
     </compiledAt>
-    <lastBellBuriedOn type="type:DateTime">
-      <value>2026-08-19T06:45:00</value>
-    </lastBellBuriedOn>
+    <firstFogRunRecordedOn type="type:DateTime">
+      <value>2026-07-02T06:15:00</value>
+    </firstFogRunRecordedOn>
   </properties>
 
 </block>
