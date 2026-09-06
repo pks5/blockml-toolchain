@@ -1,22 +1,22 @@
 <!--Workspace Playground — MyTestTransformation
-  FQN: org.blockml.bml.workspace._meta.transform.running.T00033_MyTestTransformation_20260906T043458-->
+  FQN: org.blockml.bml.workspace._meta.transform.succeeded.T00033_MyTestTransformation_20260906T043458-->
 <block xmlns="http://blockml.org/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
   xmlns:playground="org.blockml.bml.workspace.playground"
-  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
+  xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
   <name>
     T00033_MyTestTransformation_20260906T043458
   </name>
   <type>
-    running:T00033_MyTestTransformation_20260906T043458
+    succeeded:T00033_MyTestTransformation_20260906T043458
   </type>
   <baseType>
-    workflow:ModelTransformation(running:T00033_MyTestTransformation_20260906T043458.Parameters, type:Text)
+    workflow:ModelTransformation(succeeded:T00033_MyTestTransformation_20260906T043458.Parameters, type:Text)
   </baseType>
   <is>
     A pending ModelTransformation that creates a random playground Block
@@ -26,7 +26,7 @@
       <value>A transformation that creates a random playground Block</value>
     </description>
     <status override="true" type="workflow:ExecutionStatus">
-      <value>Running</value>
+      <value>Succeeded</value>
     </status>
     <createdAt override="true" type="type:DateTime">
       <value>2026-09-06T00:00:00</value>
@@ -34,7 +34,7 @@
     <template override="true" type="type:Boolean">
       <value>false</value>
     </template>
-    <parameters override="true" type="running:T00033_MyTestTransformation_20260906T043458.Parameters">
+    <parameters override="true" type="succeeded:T00033_MyTestTransformation_20260906T043458.Parameters">
       <value>{targetBlock:"org.blockml.bml.workspace.playground.RandomBlock"}</value>
     </parameters>
     <executionId override="true" type="type:UUID">
@@ -49,6 +49,12 @@
     <baseCommit override="true" type="type:Text">
       <value>95e636cf569414c4811ad300a94d72fc206bc998</value>
     </baseCommit>
+    <completedAt override="true" type="type:DateTime">
+      <value>2026-09-06T04:36:15</value>
+    </completedAt>
+    <duration override="true" type="type:Duration">
+      <value>PT1M17.695S</value>
+    </duration>
   </properties>
   <aggregations>
     <operations override="true">
@@ -98,8 +104,7 @@ ModelTransformation metadata or files under _meta/transform/.</instructions>
 recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/packages/graph/blocks/org/blockml/bml/graph/capability/Members.bml:28 — Structure long documentation with markdown (headings, lists, or paragraphs).
 recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/packages/inspect/blocks/org/blockml/bml/inspect/InspectedMember.bml:29 — Structure long documentation with markdown (headings, lists, or paragraphs).
 recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/packages/transformer/blocks/org/blockml/bml/transformer/capability/ToolExecutor.bml:21 — Structure long documentation with markdown (headings, lists, or paragraphs).
-Validation succeeded. Tested 741 blocks, 0 with errors, 0 warnings, 4 recommendations.
-</output>
+Validation succeeded. Tested 741 blocks, 0 with errors, 0 warnings, 4 recommendations.</output>
           <completedAt>2026-09-06T04:36:14</completedAt>
         </workflow:ToolOperation>
       </composition>
@@ -111,7 +116,7 @@ Validation succeeded. Tested 741 blocks, 0 with errors, 0 warnings, 4 recommenda
         Parameters
       </name>
       <type>
-        running:T00033_MyTestTransformation_20260906T043458.Parameters
+        succeeded:T00033_MyTestTransformation_20260906T043458.Parameters
       </type>
       <baseType>
         type:StructType
