@@ -1,0 +1,54 @@
+<!--
+  Workspace Playground — RandomBlock
+  FQN: org.blockml.bml.workspace.playground.RandomBlock
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:playground="org.blockml.bml.workspace.playground">
+
+  <name>RandomBlock</name>
+  <type>playground:RandomBlock</type>
+  <baseType>core:Documentation</baseType>
+  <is>A whimsical catalogue of unclaimed echoes recorded on the disused Nerobergbahn upper platform, invented at random by a workspace transform execution</is>
+
+  <documentation>
+    This block was produced by a BlockML workspace transform execution — the
+    "Create Random Block" agentic operation of playground:MyTestTransformation.
+    Its contents are arbitrary and freshly invented for this run; every
+    execution replaces the block with different random material, so nothing
+    recorded here should be treated as authoritative.
+  </documentation>
+
+  <properties>
+    <title type="type:Text">
+      <value>The Ledger of Unclaimed Echoes</value>
+    </title>
+    <location type="type:Text">
+      <value>Upper platform of the shuttered Nerobergbahn funicular, Wiesbaden</value>
+    </location>
+    <entry type="type:Text">
+      <value>Cabinet three holds the echoes nobody came back for: a conductor's two-note whistle that still rounds the tiled corner after closing, the flat clap of a season ticket against a glove, and a child counting backwards from eleven in the stairwell. The keeper logs each one on waxed card, notes where in the vault it settles, and leaves the drawer a finger's width open so the sounds can leave if an owner is ever named.</value>
+    </entry>
+    <catalogueNumber type="type:Integer">
+      <value>4417</value>
+    </catalogueNumber>
+    <echoCount type="type:Integer">
+      <value>23</value>
+    </echoCount>
+    <longestEchoSeconds type="type:Integer">
+      <value>9</value>
+    </longestEchoSeconds>
+    <recordedAt type="type:DateTime">
+      <value>2026-09-06T03:23:50</value>
+    </recordedAt>
+    <sealedOn type="type:DateTime">
+      <value>2026-09-07T18:30:00</value>
+    </sealedOn>
+  </properties>
+
+</block>
