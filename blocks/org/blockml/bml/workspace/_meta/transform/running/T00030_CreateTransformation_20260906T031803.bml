@@ -53,7 +53,9 @@
   <aggregations>
     <operations override="true">
       <composition>
-        <workflow:AgenticOperation name="Create Transformation Block" status="Pending" captureOutput="true">
+        <workflow:AgenticOperation name="Create Transformation Block" status="Running" captureOutput="true">
+          <startedAt>2026-09-06T03:18:04</startedAt>
+          <baseCommit>6078a37b4ac2336c7aebe9641fdd836cabfb91d2</baseCommit>
           <task>
             <workflow:InstructionTask>
               <instructions>Create a new ModelTransformation block with the FQN:
