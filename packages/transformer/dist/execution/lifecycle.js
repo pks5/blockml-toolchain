@@ -1,6 +1,5 @@
 import { join } from "node:path";
 import { LIFECYCLE_STAGES, META_SEGMENT, TRANSFORM_PACKAGE, TRANSFORM_PACKAGE_SEGMENT, } from "./constants.js";
-import { TransformError } from "./errors.js";
 const EXECUTION_FQN = new RegExp(`^(.+)\\.${TRANSFORM_PACKAGE.replaceAll(".", "\\.")}\\.(${LIFECYCLE_STAGES.join("|")})\\.([^.]+)$`);
 export function isLifecycleStage(value) {
     return LIFECYCLE_STAGES.includes(value);
@@ -46,31 +45,8 @@ export function generateExecutionName(sequence, originalName, startedAt) {
     const safe = sanitizeBlockName(originalName) || "Execution";
     return `T${padSequence(sequence)}_${safe}_${formatNameTimestamp(startedAt)}`;
 }
-export function executionFilePath(currentPath, libraryFqn, stage, name) {
-    const libraryRoot = libraryRootFromPath(currentPath, libraryFqn);
-    if (!libraryRoot) {
-        throw new TransformError("execution", `Cannot relocate ${name}: ${currentPath} is not under library ${libraryFqn}`);
-    }
+export function executionFilePath(libraryRoot, stage, name) {
     return join(libraryRoot, META_SEGMENT, TRANSFORM_PACKAGE_SEGMENT, stage, `${name}.bml`);
-}
-function libraryRootFromPath(currentPath, libraryFqn) {
-    const posix = currentPath.replaceAll("\\", "/");
-    const librarySeg = libraryFqn.replaceAll(".", "/");
-    const needle = `/${librarySeg}/`;
-    const idx = posix.lastIndexOf(needle);
-    if (idx >= 0) {
-        return fromPosix(posix.slice(0, idx + needle.length - 1), currentPath);
-    }
-    if (posix === librarySeg || posix.endsWith(`/${librarySeg}`)) {
-        return fromPosix(posix, currentPath);
-    }
-    return undefined;
-}
-function fromPosix(posix, original) {
-    if (original.includes("\\") && !original.includes("/")) {
-        return posix.replaceAll("/", "\\");
-    }
-    return posix;
 }
 function compactTimestamp(date) {
     const y = String(date.getFullYear()).padStart(4, "0");

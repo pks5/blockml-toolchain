@@ -3,6 +3,7 @@ import { type TypeRegistry } from "@blockml/framework";
 import { type LifecycleStage } from "./constants.js";
 export interface RelocateIdentity {
     libraryFqn: string;
+    libraryRoot: string;
     stage: LifecycleStage;
     name: string;
 }

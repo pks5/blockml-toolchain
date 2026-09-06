@@ -94,6 +94,8 @@ export type {
   TransformLifecycleListener,
 } from "./execution/lifecycle-events.js";
 export { SequenceAllocator } from "./execution/sequence.js";
+export { resolveTargetLibrary, packageFqnFromLibraryType } from "./execution/target-library.js";
+export type { TargetLibrary } from "./execution/target-library.js";
 export { allocateUniqueExecutionId, usedExecutionIds } from "./execution/execution-id.js";
 export {
   parseExecutionFqn,

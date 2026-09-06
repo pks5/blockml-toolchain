@@ -7,7 +7,11 @@ import type { PreparedExecution, StageContext, TransformStage } from "./types.js
 export function createPrepareStage(): TransformStage<string, PreparedExecution> {
   return {
     async run(pendingFqn: string, context: StageContext): Promise<PreparedExecution> {
-      const resolved = resolvePendingExecution(pendingFqn, context.workspaceRoot);
+      const resolved = resolvePendingExecution(
+        pendingFqn,
+        context.workspaceRoot,
+        context.targetLibrary,
+      );
       const started = startExecution(
         resolved,
         context.now(),

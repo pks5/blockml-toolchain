@@ -57,6 +57,12 @@ export function parseArgs(argv) {
                 result.libraries = value.split(",").map((s) => s.trim()).filter(Boolean);
             }
         }
+        else if (flag === "--library") {
+            const value = args.shift();
+            if (value) {
+                result.library = value;
+            }
+        }
         else if (flag === "--include") {
             const value = args.shift();
             if (value) {
@@ -718,7 +724,7 @@ async function executeCli(argv, cwd, options = {}) {
             }
             const verbose = parsed.verbose === true;
             const agent = options.transformAgent ?? defaultTransformAgent(verbose);
-            const code = await runTransform(parsed.executionFqn, cwd, lines, USAGE, agent, options.reflectAgent, options.onOutputLine, parsed.parametersJson, parsed.parameterMappingsJson);
+            const code = await runTransform(parsed.executionFqn, cwd, lines, USAGE, agent, options.reflectAgent, options.onOutputLine, parsed.parametersJson, parsed.parameterMappingsJson, parsed.library);
             return { code, lines };
         }
         if (parsed.command === "new") {

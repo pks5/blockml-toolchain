@@ -13,7 +13,7 @@ export const USAGE =
   "       blockml graph query <cypher> [--json]\n" +
   "       blockml graph schema [--json]\n" +
   "       blockml inspect <fqn> [--depth n] [--json] [--src dir] [--libraries a,b]\n" +
-  "       blockml transform apply <execution-fqn> [--verbose] [--parameters json] [--parameter-mappings json]\n" +
+  "       blockml transform apply <execution-fqn> [--library path] [--verbose] [--parameters json] [--parameter-mappings json]\n" +
   "       blockml new <fqn> [--baseType fqn] [--is text] [--src dir] [--libraries a,b]\n" +
   "       blockml --help";
 
@@ -75,7 +75,7 @@ Commands:
   compile     Render derived output for a registered target.
               blockml compile blockdoc|xsd|fatblock
   transform   Run a pending ModelTransformation.
-              blockml transform apply <execution-fqn>
+              blockml transform apply <execution-fqn> [--library path]
 
 Shared flags: --src dir, --libraries a,b, --json, --help / -h
 Corpus for search, inspect, and graph is the same as validate --all.
@@ -217,17 +217,19 @@ Prefer existing Blocks over new duplicates.
 Related: inspect, validate.`;
 
 /** Printed help. SSOT: org.blockml.bml.cli.documentation.TransformCommand */
-export const TRANSFORM_HELP = `Usage: blockml transform apply <execution-fqn> [--verbose] [--parameters json] [--parameter-mappings json]
+export const TRANSFORM_HELP = `Usage: blockml transform apply <execution-fqn> [--library path] [--verbose] [--parameters json] [--parameter-mappings json]
        blockml transform --help
 
 When: run a pending ModelTransformation.
 
 transform is a parent command. V1 defines apply only.
-EXECUTION-FQN is the FQN of a ModelTransformation under {library}._meta.transform.pending. Tasks are not accepted directly.
+EXECUTION-FQN is a pending ModelTransformation. It need not live under the target library.
+--library is a path to the target Library.bml. Omitted: cwd package.json blockml.library. Missing both is exit 2.
 
 Pipeline stage constraints belong to the Execute / Reflect prompts, not here.
 
 Flags:
+  --library path    target Library.bml for _meta (default: cwd package.json blockml.library)
   --verbose         stream additional agent-session detail
   --parameters json           JSON value for parameters (object merge when T is StructType)
   --parameter-mappings json   JSON array of ParameterMapping objects; ignores --parameters

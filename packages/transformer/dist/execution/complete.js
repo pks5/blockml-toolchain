@@ -19,6 +19,7 @@ export function finalizeExecution(workspaceRoot, started, now) {
     const runningFilePath = forked.source.filePath;
     const terminalFqn = applyExecutionIdentity(forked, {
         libraryFqn: started.libraryFqn,
+        libraryRoot: started.libraryRoot,
         stage,
         name: started.generatedName,
     });

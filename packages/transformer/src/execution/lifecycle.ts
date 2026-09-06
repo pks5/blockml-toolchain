@@ -6,7 +6,6 @@ import {
   TRANSFORM_PACKAGE,
   TRANSFORM_PACKAGE_SEGMENT,
 } from "./constants.js";
-import { TransformError } from "./errors.js";
 
 export interface ParsedExecutionFqn {
   libraryFqn: string;
@@ -84,18 +83,10 @@ export function generateExecutionName(
 }
 
 export function executionFilePath(
-  currentPath: string,
-  libraryFqn: string,
+  libraryRoot: string,
   stage: LifecycleStage,
   name: string,
 ): string {
-  const libraryRoot = libraryRootFromPath(currentPath, libraryFqn);
-  if (!libraryRoot) {
-    throw new TransformError(
-      "execution",
-      `Cannot relocate ${name}: ${currentPath} is not under library ${libraryFqn}`,
-    );
-  }
   return join(
     libraryRoot,
     META_SEGMENT,
@@ -103,27 +94,6 @@ export function executionFilePath(
     stage,
     `${name}.bml`,
   );
-}
-
-function libraryRootFromPath(currentPath: string, libraryFqn: string): string | undefined {
-  const posix = currentPath.replaceAll("\\", "/");
-  const librarySeg = libraryFqn.replaceAll(".", "/");
-  const needle = `/${librarySeg}/`;
-  const idx = posix.lastIndexOf(needle);
-  if (idx >= 0) {
-    return fromPosix(posix.slice(0, idx + needle.length - 1), currentPath);
-  }
-  if (posix === librarySeg || posix.endsWith(`/${librarySeg}`)) {
-    return fromPosix(posix, currentPath);
-  }
-  return undefined;
-}
-
-function fromPosix(posix: string, original: string): string {
-  if (original.includes("\\") && !original.includes("/")) {
-    return posix.replaceAll("/", "\\");
-  }
-  return posix;
 }
 
 function compactTimestamp(date: Date): string {

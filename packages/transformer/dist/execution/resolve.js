@@ -21,14 +21,14 @@ const OPERATION_FORBIDDEN_PROPERTIES = [
     "output",
 ];
 const OPERATION_FORBIDDEN_AGGREGATIONS = ["changedFiles", "exception"];
-export function resolvePendingExecution(executionFqn, workspaceRoot) {
+export function resolvePendingExecution(executionFqn, workspaceRoot, targetLibrary) {
     const { registry } = bootstrapFullProjectRegistry({ rootDir: workspaceRoot });
-    return resolvePendingExecutionInRegistry(executionFqn, registry);
+    return resolvePendingExecutionInRegistry(executionFqn, registry, targetLibrary);
 }
-export function resolvePendingExecutionInRegistry(executionFqn, registry) {
+export function resolvePendingExecutionInRegistry(executionFqn, registry, targetLibrary) {
     const parsed = parseExecutionFqn(executionFqn);
-    if (!parsed || parsed.stage !== "pending") {
-        throw new TransformError("resolve", `Execution FQN must be a ModelTransformation under <library>._meta.transform.pending, got ${executionFqn}`);
+    if (parsed && parsed.stage !== "pending") {
+        throw new TransformError("resolve", `Execution FQN must be a pending ModelTransformation, got ${executionFqn}`);
     }
     const document = registry.get(executionFqn);
     if (!document) {
@@ -40,11 +40,16 @@ export function resolvePendingExecutionInRegistry(executionFqn, registry) {
     assertPendingContract(executionFqn, document.block, registry);
     return {
         fqn: executionFqn,
-        libraryFqn: parsed.libraryFqn,
-        originalName: parsed.name,
+        libraryFqn: targetLibrary.packageFqn,
+        libraryRoot: targetLibrary.libraryRoot,
+        originalName: parsed?.name ?? lastFqnSegment(executionFqn),
         document,
         registry,
     };
+}
+function lastFqnSegment(fqn) {
+    const name = fqn.split(".").pop();
+    return name && name.length > 0 ? name : fqn;
 }
 function assertPendingContract(fqn, block, registry) {
     const operations = getOperationInstances(block, registry);

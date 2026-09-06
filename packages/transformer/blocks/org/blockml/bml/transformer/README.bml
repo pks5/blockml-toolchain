@@ -26,7 +26,9 @@
     org.blockml.bml.transformer.capability.*.
 
     The TypeScript engine executes ModelTransformation instances via
-    `blockml transform apply EXECUTION-FQN [--parameters JSON] [--parameter-mappings JSON]`. Transformer.run prepares the
+    `blockml transform apply EXECUTION-FQN [--library path] [--parameters JSON] [--parameter-mappings JSON]`.
+    `--library` selects the target Library.bml for `_meta`; omitted uses
+    cwd `package.json` `blockml.library`. Transformer.run prepares the
     execution, then runs each concrete `workflow:ModelOperation` in
     order: persist operation Running, dispatch the registered
     OperationExecutor, Reflect, Persist results onto that operation,

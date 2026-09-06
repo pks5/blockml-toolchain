@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { bootstrapFullProjectRegistry } from "@blockml/framework";
 import { TransformError } from "../src/execution/errors.js";
 import { resolvePendingExecution } from "../src/execution/resolve.js";
+import { resolveTargetLibrary } from "../src/execution/target-library.js";
 import { MODEL_TRANSFORMATION_FQN } from "../src/execution/constants.js";
 import {
   LIBRARY,
@@ -13,6 +14,10 @@ import {
   plainBlockXml,
   writeProject,
 } from "./fixture.js";
+
+function resolveAt(fqn: string): ReturnType<typeof resolvePendingExecution> {
+  return resolvePendingExecution(fqn, TMP, resolveTargetLibrary(TMP));
+}
 
 const TMP = join(import.meta.dirname, ".tmp-transformer-resolve");
 
@@ -32,22 +37,37 @@ describe("resolvePendingExecution", () => {
         name: "JokeTest",
       }),
     });
-    const resolved = resolvePendingExecution(pendingFqn("JokeTest"), TMP);
+    const resolved = resolveAt(pendingFqn("JokeTest"));
     expect(resolved.fqn).toBe(pendingFqn("JokeTest"));
     expect(resolved.libraryFqn).toBe(LIBRARY);
+    expect(resolved.libraryRoot.replaceAll("\\", "/")).toMatch(
+      /blocks\/com\/example\/model$/,
+    );
     expect(resolved.originalName).toBe("JokeTest");
     expect(resolved.document.block.baseType).toBe(MODEL_TRANSFORMATION_FQN);
+  });
+
+  it("resolves a pending ModelTransformation outside _meta.transform.pending", () => {
+    const xml = pendingExecutionXml({ name: "CreateJoke" })
+      .replaceAll(`${LIBRARY}._meta.transform.pending`, `${LIBRARY}.program`)
+      .replaceAll("xmlns:pending=", "xmlns:program=")
+      .replaceAll("<type>pending:", "<type>program:");
+    writeProject(TMP, {
+      "blocks/com/example/model/program/CreateJoke.bml": xml,
+    });
+    const resolved = resolveAt(`${LIBRARY}.program.CreateJoke`);
+    expect(resolved.fqn).toBe(`${LIBRARY}.program.CreateJoke`);
+    expect(resolved.libraryFqn).toBe(LIBRARY);
+    expect(resolved.originalName).toBe("CreateJoke");
   });
 
   it("rejects a non-ModelTransformation FQN", () => {
     writeProject(TMP, {
       "blocks/com/example/model/Other.bml": plainBlockXml("Other"),
     });
-    expect(() =>
-      resolvePendingExecution(`${LIBRARY}.Other`, TMP),
-    ).toThrow(TransformError);
+    expect(() => resolveAt(`${LIBRARY}.Other`)).toThrow(TransformError);
     try {
-      resolvePendingExecution(`${LIBRARY}.Other`, TMP);
+      resolveAt(`${LIBRARY}.Other`);
     } catch (error) {
       expect(error).toBeInstanceOf(TransformError);
       expect((error as TransformError).kind).toBe("resolve");
@@ -67,7 +87,7 @@ describe("resolvePendingExecution", () => {
     const { registry } = bootstrapFullProjectRegistry({ rootDir: TMP });
     expect(registry.get(`${LIBRARY}._meta.transform.succeeded.OldOne`)).toBeTruthy();
     expect(() =>
-      resolvePendingExecution(`${LIBRARY}._meta.transform.succeeded.OldOne`, TMP),
+      resolveAt(`${LIBRARY}._meta.transform.succeeded.OldOne`),
     ).toThrow(/pending/);
   });
 
@@ -79,9 +99,7 @@ describe("resolvePendingExecution", () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": xml,
     });
-    expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
-      /status=Pending/,
-    );
+    expect(() => resolveAt(pendingFqn("JokeTest"))).toThrow(/status=Pending/);
   });
 
   it("rejects a pending execution that already has executionId", () => {
@@ -91,7 +109,7 @@ describe("resolvePendingExecution", () => {
         executionId: EXECUTION_ID,
       }),
     });
-    expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
+    expect(() => resolveAt(pendingFqn("JokeTest"))).toThrow(
       /must not have executionId/,
     );
   });
@@ -107,7 +125,7 @@ describe("resolvePendingExecution", () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": xml,
     });
-    expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
+    expect(() => resolveAt(pendingFqn("JokeTest"))).toThrow(
       /must not have sequence/,
     );
   });
@@ -122,7 +140,7 @@ describe("resolvePendingExecution", () => {
         ],
       }),
     });
-    const resolved = resolvePendingExecution(pendingFqn("JokeTest"), TMP);
+    const resolved = resolveAt(pendingFqn("JokeTest"));
     expect(resolved.fqn).toBe(pendingFqn("JokeTest"));
   });
 
@@ -137,7 +155,7 @@ describe("resolvePendingExecution", () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": xml,
     });
-    expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
+    expect(() => resolveAt(pendingFqn("JokeTest"))).toThrow(
       /must not have result/,
     );
   });
@@ -148,7 +166,7 @@ describe("resolvePendingExecution", () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": xml,
     });
-    expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
+    expect(() => resolveAt(pendingFqn("JokeTest"))).toThrow(
       /concrete subtype/,
     );
   });
@@ -161,7 +179,7 @@ describe("resolvePendingExecution", () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": xml,
     });
-    expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
+    expect(() => resolveAt(pendingFqn("JokeTest"))).toThrow(
       /AgenticOperation 1 has no configured task/,
     );
   });
@@ -173,7 +191,7 @@ describe("resolvePendingExecution", () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": xml,
     });
-    expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
+    expect(() => resolveAt(pendingFqn("JokeTest"))).toThrow(
       /ToolOperation 1 must have command set/,
     );
   });
@@ -188,7 +206,7 @@ describe("resolvePendingExecution", () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": xml,
     });
-    const resolved = resolvePendingExecution(pendingFqn("JokeTest"), TMP);
+    const resolved = resolveAt(pendingFqn("JokeTest"));
     expect(resolved.fqn).toBe(pendingFqn("JokeTest"));
   });
 
@@ -207,7 +225,7 @@ describe("resolvePendingExecution", () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": xml,
     });
-    expect(() => resolvePendingExecution(pendingFqn("JokeTest"), TMP)).toThrow(
+    expect(() => resolveAt(pendingFqn("JokeTest"))).toThrow(
       /must not have exception/,
     );
   });

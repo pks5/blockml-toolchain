@@ -15,7 +15,9 @@ import { SequenceAllocator } from "../src/execution/sequence.js";
 import { bootstrapFullProjectRegistry } from "@blockml/framework";
 import {
   FIXED_NOW,
+  LIBRARY,
   failingAgent,
+  fixtureLibraryXml,
   gitHead,
   gitLogSubjects,
   gitParent,
@@ -710,6 +712,63 @@ describe("Transformer lifecycle", () => {
           TMP,
           `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`,
         ),
+      ),
+    ).toBe(true);
+  });
+
+  it("relocates a source FQN outside the target library into that library _meta", async () => {
+    const xml = pendingExecutionXml({ name: "CreateJoke" })
+      .replaceAll(`${LIBRARY}._meta.transform.pending`, `${LIBRARY}.program`)
+      .replaceAll("xmlns:pending=", "xmlns:program=")
+      .replaceAll("<type>pending:", "<type>program:");
+    writeProject(TMP, {
+      "blocks/com/example/model/program/CreateJoke.bml": xml,
+    });
+    const generated = "T00001_CreateJoke_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(`${LIBRARY}.program.CreateJoke`);
+    expect(result.status).toBe("Succeeded");
+    expect(result.terminalFqn).toBe(
+      `${LIBRARY}._meta.transform.succeeded.${generated}`,
+    );
+    expect(
+      existsSync(join(TMP, "blocks/com/example/model/program/CreateJoke.bml")),
+    ).toBe(false);
+    expect(
+      existsSync(
+        join(
+          TMP,
+          `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`,
+        ),
+      ),
+    ).toBe(true);
+  });
+
+  it("writes _meta under --library even when the source lives elsewhere", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml":
+        pendingExecutionXml({ name: "JokeTest" }),
+      "blocks/com/other/target/Library.bml": fixtureLibraryXml("com.other.target"),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      library: "blocks/com/other/target/Library.bml",
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.status).toBe("Succeeded");
+    expect(result.terminalFqn).toBe(
+      `com.other.target._meta.transform.succeeded.${generated}`,
+    );
+    expect(
+      existsSync(
+        join(TMP, `blocks/com/other/target/_meta/transform/succeeded/${generated}.bml`),
       ),
     ).toBe(true);
   });

@@ -4,6 +4,7 @@ import { SequenceAllocator } from "./sequence.js";
 export interface StartedExecution {
     executionId: string;
     libraryFqn: string;
+    libraryRoot: string;
     originalName: string;
     sequence: number;
     startedAt: Date;

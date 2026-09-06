@@ -38,7 +38,11 @@
     - CLI7 writeOutputFiles cleanOutDir rmSync.
     - CLI8 rootFiles beside rootDir (XSD catalog).
     - CLI9 parseArgs flag and positional rules. Transform apply accepts
+      --library (target Library.bml path; distinct from --libraries),
       --parameters JSON and --parameter-mappings JSON.
+      Transform target library: --library or cwd package.json
+      blockml.library; missing both → exit 2. Source FQN need not live
+      under that library.
     - CLI10 validate file XOR --all. Default validate = project sources; --all = entire registry.
     - CLI11 validate never writes render output.
     - CLI12 default compile target blockdoc.

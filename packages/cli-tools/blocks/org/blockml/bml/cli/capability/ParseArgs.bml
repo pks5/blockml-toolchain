@@ -33,8 +33,10 @@
     Flags: --out, --src, --libraries (comma-split), --include (comma-split),
     --all, --per-package, --verbose, --json, --force, --limit, --depth,
     --origin and --relation (graph uses/used-by/neighbors, comma-split),
-    --parameters (transform apply JSON value), --parameter-mappings
-    (transform apply JSON array of ParameterMapping objects), --baseType and --is (new),
+    --library (transform apply path to the target Library.bml; distinct
+    from --libraries), --parameters (transform apply JSON value),
+    --parameter-mappings (transform apply JSON array of ParameterMapping
+    objects), --baseType and --is (new),
     --help / -h (print help page, exit 0). The token help as command or graph subcommand is the same.
     Root help is clidocumentation:Help. Command help is the Printed help section of that command documentation.
     Error paths print short USAGE, not the help page.

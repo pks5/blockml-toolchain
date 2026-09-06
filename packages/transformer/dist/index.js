@@ -19,6 +19,7 @@ export { finalizeExecution } from "./execution/complete.js";
 export { startWorkflowOperation } from "./execution/start-operation.js";
 export { formatTransformLifecycle, emitLifecycle, } from "./execution/lifecycle-events.js";
 export { SequenceAllocator } from "./execution/sequence.js";
+export { resolveTargetLibrary, packageFqnFromLibraryType } from "./execution/target-library.js";
 export { allocateUniqueExecutionId, usedExecutionIds } from "./execution/execution-id.js";
 export { parseExecutionFqn, generateExecutionName, executionFilePath, padSequence, formatNameTimestamp, formatDateTimeProperty, } from "./execution/lifecycle.js";
 export { MODEL_TRANSFORMATION_FQN } from "./execution/constants.js";

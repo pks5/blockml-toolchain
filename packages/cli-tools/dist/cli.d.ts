@@ -10,6 +10,7 @@ export interface ParsedArgs {
     outDir?: string;
     srcDir?: string;
     libraries?: string[];
+    library?: string;
     include?: string[];
     verbose?: boolean;
     perPackage?: boolean;

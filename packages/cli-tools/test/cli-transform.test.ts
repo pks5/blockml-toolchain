@@ -48,7 +48,25 @@ function writeProject(): void {
   mkdirSync(join(TMP, "blocks/com/example/model/_meta/transform/pending"), { recursive: true });
   writeFileSync(
     join(TMP, "package.json"),
-    JSON.stringify({ name: "cli-transform-fixture", private: true }),
+    JSON.stringify({
+      name: "cli-transform-fixture",
+      private: true,
+      blockml: { library: "./blocks/com/example/model/Library.bml" },
+    }),
+  );
+  writeFileSync(
+    join(TMP, "blocks/com/example/model/Library.bml"),
+    [
+      `<block xmlns="http://blockml.org/bml"`,
+      ` xmlns:core="org.blockml.bml.core"`,
+      ` xmlns:model="${LIBRARY}">`,
+      `  <name>Library</name>`,
+      `  <type>model:Library</type>`,
+      `  <baseType>core:BlockLibrary</baseType>`,
+      `  <is>fixture library</is>`,
+      `</block>`,
+      ``,
+    ].join("\n"),
   );
   writeFileSync(
     join(TMP, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml"),
@@ -121,6 +139,18 @@ describe("parseArgs transform", () => {
     expect(parsed.parameterMappingsJson).toBe(
       '[{"source":"com.example.model.Poem.properties.title"}]',
     );
+  });
+
+  it("parses transform apply --library", () => {
+    const parsed = parseArgs([
+      "transform",
+      "apply",
+      "org.blockml.bml.transformer.program.CreateTransformation",
+      "--library",
+      "./blocks/org/blockml/bml/workspace/Library.bml",
+    ]);
+    expect(parsed.library).toBe("./blocks/org/blockml/bml/workspace/Library.bml");
+    expect(parsed.libraries).toBeUndefined();
   });
 });
 
@@ -214,5 +244,67 @@ describe("blockml transform CLI", () => {
     expect(stderr).toMatch(/ModelTransformation Succeeded/);
     expect(stderr).toMatch(/Transformed /);
     expect(stderr).not.toMatch(/--verbose/);
+  });
+
+  it("returns 2 when cwd has no blockml.library and --library is omitted", async () => {
+    writeFileSync(
+      join(TMP, "package.json"),
+      JSON.stringify({ name: "cli-transform-fixture", private: true }),
+    );
+    gitOrThrow(["add", "-A"]);
+    gitOrThrow(["-c", "commit.gpgsign=false", "commit", "-m", "drop library"]);
+    const { code, stderr } = await runCli(
+      ["transform", "apply", `${LIBRARY}._meta.transform.pending.JokeTest`],
+      TMP,
+      {
+        transformAgent: {
+          async execute() {
+            return { success: true };
+          },
+        },
+      },
+    );
+    expect(code).toBe(2);
+    expect(stderr).toMatch(/blockml\.library/);
+  });
+
+  it("writes _meta under --library", async () => {
+    mkdirSync(join(TMP, "blocks/com/other/target"), { recursive: true });
+    writeFileSync(
+      join(TMP, "blocks/com/other/target/Library.bml"),
+      [
+        `<block xmlns="http://blockml.org/bml"`,
+        ` xmlns:core="org.blockml.bml.core"`,
+        ` xmlns:other="com.other.target">`,
+        `  <name>Library</name>`,
+        `  <type>other:Library</type>`,
+        `  <baseType>core:BlockLibrary</baseType>`,
+        `  <is>other fixture library</is>`,
+        `</block>`,
+        ``,
+      ].join("\n"),
+    );
+    gitOrThrow(["add", "-A"]);
+    gitOrThrow(["-c", "commit.gpgsign=false", "commit", "-m", "other library"]);
+    const { code } = await runCli(
+      [
+        "transform",
+        "apply",
+        `${LIBRARY}._meta.transform.pending.JokeTest`,
+        "--library",
+        "blocks/com/other/target/Library.bml",
+      ],
+      TMP,
+      {
+        transformAgent: {
+          async execute() {
+            return { success: true };
+          },
+        },
+      },
+    );
+    expect(code).toBe(0);
+    const succeededDir = join(TMP, "blocks/com/other/target/_meta/transform/succeeded");
+    expect(readdirSync(succeededDir).some((name) => name.endsWith(".bml"))).toBe(true);
   });
 });

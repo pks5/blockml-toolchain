@@ -14,6 +14,7 @@ import { TransformError } from "./errors.js";
 
 export interface RelocateIdentity {
   libraryFqn: string;
+  libraryRoot: string;
   stage: LifecycleStage;
   name: string;
 }
@@ -24,10 +25,8 @@ export function applyExecutionIdentity(
 ): string {
   const nextFqn = executionFqn(identity.libraryFqn, identity.stage, identity.name);
   const previousFqn = document.block.type;
-  const previousPath = document.source.filePath;
   const nextPath = executionFilePath(
-    previousPath,
-    identity.libraryFqn,
+    identity.libraryRoot,
     identity.stage,
     identity.name,
   );

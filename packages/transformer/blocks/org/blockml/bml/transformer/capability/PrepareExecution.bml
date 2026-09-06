@@ -29,8 +29,11 @@
        if the worktree is dirty or not a Git toplevel.
     3. Assign a unique `executionId` (`type:UUID`), `sequence`, `startedAt`,
        and `baseCommit` (current HEAD), set `status=Running`.
-    4. Relocate the Block to `_meta.transform.running`. When `template` is
-       true, leave the pending Block in place, copy it (including
+    4. Relocate the Block to the target library's
+       `_meta.transform.running`. The target library is `--library` or
+       cwd `package.json` `blockml.library` (`dirname(Library.bml)`).
+       The source FQN need not live under that library. When `template`
+       is true, leave the pending Block in place, copy it (including
        SubBlocks / bound `T`), set `template=false` on the copy, rewrite
        local type FQNs onto the copy, and relocate that copy instead.
     5. Resolve `parameters`. CLI `--parameter-mappings` or pending
@@ -55,7 +58,7 @@
 
   <properties>
     <pendingFqn type="type:Text">
-      <documentation>Pending ModelTransformation FQN. (required)</documentation>
+      <documentation>Pending ModelTransformation FQN. Need not live under the target library. (required)</documentation>
     </pendingFqn>
     <runningFqn type="type:Text">
       <documentation>Running ModelTransformation FQN after relocation. (required)</documentation>

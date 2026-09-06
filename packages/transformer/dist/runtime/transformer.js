@@ -4,8 +4,10 @@ import { startWorkflowOperation } from "../execution/start-operation.js";
 import { createDefaultPipeline } from "../pipeline/default-pipeline.js";
 import { collectWorktreeTrace, modelChangedFiles } from "../pipeline/worktree-trace.js";
 import { acquireWorktreeLock } from "./worktree-lock.js";
+import { resolveTargetLibrary } from "../execution/target-library.js";
 export class Transformer {
     workspaceRoot;
+    library;
     pipeline;
     now;
     onLifecycle;
@@ -13,6 +15,7 @@ export class Transformer {
     parameterMappings;
     constructor(options) {
         this.workspaceRoot = options.workspaceRoot;
+        this.library = options.library;
         this.pipeline = resolvePipeline(options);
         this.now = options.now ?? (() => new Date());
         this.onLifecycle = options.onLifecycle;
@@ -20,9 +23,11 @@ export class Transformer {
         this.parameterMappings = options.parameterMappings;
     }
     async run(executionFqn) {
+        const targetLibrary = resolveTargetLibrary(this.workspaceRoot, this.library);
         const lock = await acquireWorktreeLock(this.workspaceRoot, executionFqn);
         const context = {
             workspaceRoot: this.workspaceRoot,
+            targetLibrary,
             now: this.now,
             ...(this.parameters !== undefined ? { parameters: this.parameters } : {}),
             ...(this.parameterMappings !== undefined
@@ -203,6 +208,9 @@ export async function runTransformation(options) {
     const transformerOptions = {
         workspaceRoot: options.workspaceRoot,
     };
+    if (options.library !== undefined) {
+        transformerOptions.library = options.library;
+    }
     if (options.agent) {
         transformerOptions.agent = options.agent;
     }

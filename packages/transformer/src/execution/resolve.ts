@@ -6,6 +6,7 @@ import {
 import { MODEL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN } from "./constants.js";
 import { TransformError } from "./errors.js";
 import { parseExecutionFqn } from "./lifecycle.js";
+import type { TargetLibrary } from "./target-library.js";
 import {
   getOperationInstances,
   getOperationStatus,
@@ -24,6 +25,7 @@ import {
 export interface ResolvedExecution {
   fqn: string;
   libraryFqn: string;
+  libraryRoot: string;
   originalName: string;
   document: BomDocument;
   registry: TypeRegistry;
@@ -51,20 +53,22 @@ const OPERATION_FORBIDDEN_AGGREGATIONS = ["changedFiles", "exception"] as const;
 export function resolvePendingExecution(
   executionFqn: string,
   workspaceRoot: string,
+  targetLibrary: TargetLibrary,
 ): ResolvedExecution {
   const { registry } = bootstrapFullProjectRegistry({ rootDir: workspaceRoot });
-  return resolvePendingExecutionInRegistry(executionFqn, registry);
+  return resolvePendingExecutionInRegistry(executionFqn, registry, targetLibrary);
 }
 
 export function resolvePendingExecutionInRegistry(
   executionFqn: string,
   registry: TypeRegistry,
+  targetLibrary: TargetLibrary,
 ): ResolvedExecution {
   const parsed = parseExecutionFqn(executionFqn);
-  if (!parsed || parsed.stage !== "pending") {
+  if (parsed && parsed.stage !== "pending") {
     throw new TransformError(
       "resolve",
-      `Execution FQN must be a ModelTransformation under <library>._meta.transform.pending, got ${executionFqn}`,
+      `Execution FQN must be a pending ModelTransformation, got ${executionFqn}`,
     );
   }
 
@@ -87,11 +91,17 @@ export function resolvePendingExecutionInRegistry(
 
   return {
     fqn: executionFqn,
-    libraryFqn: parsed.libraryFqn,
-    originalName: parsed.name,
+    libraryFqn: targetLibrary.packageFqn,
+    libraryRoot: targetLibrary.libraryRoot,
+    originalName: parsed?.name ?? lastFqnSegment(executionFqn),
     document,
     registry,
   };
+}
+
+function lastFqnSegment(fqn: string): string {
+  const name = fqn.split(".").pop();
+  return name && name.length > 0 ? name : fqn;
 }
 
 function assertPendingContract(

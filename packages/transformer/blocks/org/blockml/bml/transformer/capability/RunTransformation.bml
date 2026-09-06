@@ -23,9 +23,11 @@
     Public engine entry. Acquires the worktree lock, then runs Prepare,
     each ModelOperation (Running commit, registered executor, Reflect,
     Persist), and Finalize. A failed ModelOperation aborts the rest.
-    Does not implement any process step. Emits lifecycle events at
-    status and execute/reflect boundaries regardless of --verbose.
-    TS: Transformer.run / runTransformation.
+    Target library for `_meta` is `library` (path to Library.bml) or
+    cwd `package.json` `blockml.library`. The source FQN need not live
+    under that library. Does not implement any process step. Emits
+    lifecycle events at status and execute/reflect boundaries regardless
+    of --verbose. TS: Transformer.run / runTransformation.
   </documentation>
 
   <references>
@@ -39,8 +41,11 @@
 
   <properties>
     <executionFqn type="type:Text">
-      <documentation>Pending ModelTransformation FQN under _meta.transform.pending. (required)</documentation>
+      <documentation>Pending ModelTransformation FQN. Need not live under the target library. (required)</documentation>
     </executionFqn>
+    <library type="type:Text">
+      <documentation>Path to the target Library.bml. Omitted: cwd package.json blockml.library. (optional)</documentation>
+    </library>
     <terminalFqn type="type:Text">
       <documentation>Succeeded or failed ModelTransformation FQN after Finalize. (required)</documentation>
     </terminalFqn>

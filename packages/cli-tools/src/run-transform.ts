@@ -25,6 +25,7 @@ export async function runTransform(
   onOutputLine?: (line: CliOutputLine) => void,
   parametersJson?: string,
   parameterMappingsJson?: string,
+  library?: string,
 ): Promise<number> {
   const fqn = executionFqn?.trim() ?? "";
   if (!fqn) {
@@ -63,6 +64,7 @@ export async function runTransform(
   const result = await runTransformation({
     workspaceRoot: rootDir,
     executionFqn: fqn,
+    ...(library !== undefined ? { library } : {}),
     agent,
     ...(reflectAgent ? { reflectAgent } : {}),
     ...(parameters !== undefined ? { parameters } : {}),

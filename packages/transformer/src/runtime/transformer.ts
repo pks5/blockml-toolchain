@@ -21,11 +21,14 @@ import type {
 } from "../pipeline/types.js";
 import { collectWorktreeTrace, modelChangedFiles } from "../pipeline/worktree-trace.js";
 import { acquireWorktreeLock } from "./worktree-lock.js";
+import { resolveTargetLibrary } from "../execution/target-library.js";
 
 export type { TransformRunResult };
 
 export interface TransformerOptions {
   workspaceRoot: string;
+  /** Path to the target Library.bml. Omitted: cwd package.json blockml.library. */
+  library?: string;
   agent?: TransformationAgent;
   reflectAgent?: ReflectionAgent;
   executors?: ExecutorRegistry;
@@ -38,6 +41,7 @@ export interface TransformerOptions {
 
 export class Transformer {
   private readonly workspaceRoot: string;
+  private readonly library: string | undefined;
   private readonly pipeline: TransformPipeline;
   private readonly now: () => Date;
   private readonly onLifecycle: TransformLifecycleListener | undefined;
@@ -46,6 +50,7 @@ export class Transformer {
 
   constructor(options: TransformerOptions) {
     this.workspaceRoot = options.workspaceRoot;
+    this.library = options.library;
     this.pipeline = resolvePipeline(options);
     this.now = options.now ?? (() => new Date());
     this.onLifecycle = options.onLifecycle;
@@ -54,9 +59,11 @@ export class Transformer {
   }
 
   async run(executionFqn: string): Promise<TransformRunResult> {
+    const targetLibrary = resolveTargetLibrary(this.workspaceRoot, this.library);
     const lock = await acquireWorktreeLock(this.workspaceRoot, executionFqn);
     const context: StageContext = {
       workspaceRoot: this.workspaceRoot,
+      targetLibrary,
       now: this.now,
       ...(this.parameters !== undefined ? { parameters: this.parameters } : {}),
       ...(this.parameterMappings !== undefined
@@ -267,6 +274,8 @@ function errorMessage(error: unknown): string {
 export interface RunTransformationOptions {
   workspaceRoot: string;
   executionFqn: string;
+  /** Path to the target Library.bml. Omitted: cwd package.json blockml.library. */
+  library?: string;
   agent?: TransformationAgent;
   reflectAgent?: ReflectionAgent;
   executors?: ExecutorRegistry;
@@ -293,6 +302,9 @@ export async function runTransformation(
   const transformerOptions: TransformerOptions = {
     workspaceRoot: options.workspaceRoot,
   };
+  if (options.library !== undefined) {
+    transformerOptions.library = options.library;
+  }
   if (options.agent) {
     transformerOptions.agent = options.agent;
   }

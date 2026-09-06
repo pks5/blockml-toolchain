@@ -11,13 +11,42 @@ export function pendingFqn(name: string): string {
   return `${LIBRARY}._meta.transform.pending.${name}`;
 }
 
+export const LIBRARY_FILE = "blocks/com/example/model/Library.bml";
+
+export function fixtureLibraryXml(packageFqn = LIBRARY): string {
+  const prefix = "model";
+  return [
+    `<block xmlns="http://blockml.org/bml"`,
+    ` xmlns:core="org.blockml.bml.core"`,
+    ` xmlns:${prefix}="${packageFqn}">`,
+    `  <name>Library</name>`,
+    `  <type>${prefix}:Library</type>`,
+    `  <baseType>core:BlockLibrary</baseType>`,
+    `  <is>fixture library</is>`,
+    `</block>`,
+    ``,
+  ].join("\n");
+}
+
 export function writeProject(dir: string, files: Record<string, string>): void {
   mkdirSync(join(dir, "blocks"), { recursive: true });
   writeFileSync(
     join(dir, "package.json"),
-    JSON.stringify({ name: "transformer-fixture", private: true }, null, 2),
+    JSON.stringify(
+      {
+        name: "transformer-fixture",
+        private: true,
+        blockml: { library: `./${LIBRARY_FILE}` },
+      },
+      null,
+      2,
+    ),
   );
-  for (const [rel, contents] of Object.entries(files)) {
+  const withLibrary = {
+    [LIBRARY_FILE]: fixtureLibraryXml(),
+    ...files,
+  };
+  for (const [rel, contents] of Object.entries(withLibrary)) {
     const path = join(dir, rel);
     mkdirSync(dirname(path), { recursive: true });
     writeFileSync(path, contents);

@@ -7,6 +7,8 @@ import type { TransformPipeline, TransformRunResult } from "../pipeline/types.js
 export type { TransformRunResult };
 export interface TransformerOptions {
     workspaceRoot: string;
+    /** Path to the target Library.bml. Omitted: cwd package.json blockml.library. */
+    library?: string;
     agent?: TransformationAgent;
     reflectAgent?: ReflectionAgent;
     executors?: ExecutorRegistry;
@@ -18,6 +20,7 @@ export interface TransformerOptions {
 }
 export declare class Transformer {
     private readonly workspaceRoot;
+    private readonly library;
     private readonly pipeline;
     private readonly now;
     private readonly onLifecycle;
@@ -31,6 +34,8 @@ export declare class Transformer {
 export interface RunTransformationOptions {
     workspaceRoot: string;
     executionFqn: string;
+    /** Path to the target Library.bml. Omitted: cwd package.json blockml.library. */
+    library?: string;
     agent?: TransformationAgent;
     reflectAgent?: ReflectionAgent;
     executors?: ExecutorRegistry;

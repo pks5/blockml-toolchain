@@ -20,10 +20,11 @@
     Closed set of states a `workflow:ModelTransformation` or
     `workflow:ModelOperation` can be in.
 
-    On a ModelTransformation the `_meta.transform` package of the Block
-    matches this value:
+    On a started ModelTransformation the target library's `_meta.transform`
+    package matches this value. A Pending source Block need not live
+    under that library.
 
-    * `Pending` — created, not yet started (`_meta.transform.pending`).
+    * `Pending` — created, not yet started.
     * `Running` — currently executing (`_meta.transform.running`).
     * `Failed` — finished unsuccessfully (`_meta.transform.failed`).
     * `Succeeded` — finished successfully (`_meta.transform.succeeded`).

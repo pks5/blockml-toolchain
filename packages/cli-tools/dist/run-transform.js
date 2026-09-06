@@ -1,6 +1,6 @@
 import { ClaudeCodeAgent, formatTransformLifecycle, parseParameterMappingsJson, parseParametersJson, runTransformation, TransformError, } from "@blockml/transformer";
 import { pushLines, } from "./cli-style.js";
-export async function runTransform(executionFqn, rootDir, lines, usage, agent, reflectAgent, onOutputLine, parametersJson, parameterMappingsJson) {
+export async function runTransform(executionFqn, rootDir, lines, usage, agent, reflectAgent, onOutputLine, parametersJson, parameterMappingsJson, library) {
     const fqn = executionFqn?.trim() ?? "";
     if (!fqn) {
         emit(lines, onOutputLine, "Specify a ModelTransformation FQN.", "error");
@@ -35,6 +35,7 @@ export async function runTransform(executionFqn, rootDir, lines, usage, agent, r
     const result = await runTransformation({
         workspaceRoot: rootDir,
         executionFqn: fqn,
+        ...(library !== undefined ? { library } : {}),
         agent,
         ...(reflectAgent ? { reflectAgent } : {}),
         ...(parameters !== undefined ? { parameters } : {}),

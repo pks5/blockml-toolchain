@@ -38,11 +38,11 @@
     • blockml graph query CYPHER [--json]
     • blockml graph schema [--json]
     • blockml inspect FQN [--depth n] [--json] [--src] [--libraries]
-    • blockml transform apply EXECUTION-FQN [--verbose]
+    • blockml transform apply EXECUTION-FQN [--library] [--verbose]
     • blockml new FQN [--baseType FQN] [--is text]
     • Targets: blockdoc (default), xsd, fatblock; custom via registerTargetFactory or targetPackages
     • Config: targets[], targetPackages, targetOptions, defaultTarget
-    • Flags: --out, --src, --libraries, --include (fatblock), --per-package (fatblock), --all, --verbose (validate, transform), --json (search, graph, inspect), --limit (search), --force (search/graph index), --depth (graph, inspect), --baseType (new), --is (new)
+    • Flags: --out, --src, --libraries, --library (transform apply target Library.bml), --include (fatblock), --per-package (fatblock), --all, --verbose (validate, transform), --json (search, graph, inspect), --limit (search), --force (search/graph index), --depth (graph, inspect), --baseType (new), --is (new)
     • Validate uses parse + @blockml/validator only; XSD is compile xsd, not a validate step
     • Search uses @blockml/search over the validate --all corpus
     • Graph uses @blockml/graph over the validate --all corpus

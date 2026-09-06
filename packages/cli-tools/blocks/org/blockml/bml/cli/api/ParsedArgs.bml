@@ -35,6 +35,7 @@
     <outDir type="type:Text"><documentation>--out override. (optional)</documentation></outDir>
     <srcDir type="type:Text"><documentation>--src override. (optional)</documentation></srcDir>
     <libraries type="type:Text"><documentation>--libraries comma-separated override of config.libraries extras (identity seed remains). (optional)</documentation></libraries>
+    <library type="type:Text"><documentation>--library path to the target Library.bml for transform apply. Distinct from --libraries. (optional)</documentation></library>
     <include type="type:Text"><documentation>--include comma-separated for fatblock. (optional)</documentation></include>
     <perPackage type="type:Boolean"><documentation>--per-package: one fatblock per local package.json blockml.library. (optional)</documentation></perPackage>
     <verbose type="type:Boolean"><documentation>--verbose: validate bootstrap lists; transform streams additional agent-session detail. Lifecycle lines always print. (optional)</documentation></verbose>
@@ -47,7 +48,7 @@
     <graphTo type="type:Text"><documentation>Path end FQN for graph path. (optional)</documentation></graphTo>
     <depth type="type:Integer"><documentation>--depth: uses/used-by/neighbors hops (default 1); ancestors/descendants/path max hops (default 16); inspect expansion (0 allowed). members ignores --depth. (optional)</documentation></depth>
     <inspectFqn type="type:Text"><documentation>Block FQN for inspect. (optional)</documentation></inspectFqn>
-    <executionFqn type="type:Text"><documentation>FQN of a pending ModelTransformation for transform apply. (optional)</documentation></executionFqn>
+    <executionFqn type="type:Text"><documentation>FQN of a pending ModelTransformation for transform apply. Need not live under the target library. (optional)</documentation></executionFqn>
     <parametersJson type="type:Text"><documentation>Raw --parameters JSON value for transform apply. (optional)</documentation></parametersJson>
     <parameterMappingsJson type="type:Text"><documentation>Raw --parameter-mappings JSON array for transform apply. (optional)</documentation></parameterMappingsJson>
     <newFqn type="type:Text"><documentation>FQN for blockml new. (optional)</documentation></newFqn>

@@ -28,14 +28,21 @@
   <is>blockml transform specification</is>
 
   <documentation><![CDATA[Syntax:
-    blockml transform apply EXECUTION-FQN [--verbose] [--parameters JSON] [--parameter-mappings JSON]
+    blockml transform apply EXECUTION-FQN [--library path] [--verbose] [--parameters JSON] [--parameter-mappings JSON]
 
     transform is a parent command. V1 defines the apply subcommand only.
     Further transform subcommands are declared on clicommand:TransformCommand
     subcommands.
 
-    EXECUTION-FQN is the FQN of a ModelTransformation under
-    {library}._meta.transform.pending. Tasks are not accepted directly.
+    EXECUTION-FQN is the FQN of a pending ModelTransformation. It need
+    not live under the target library or {library}._meta.transform.pending.
+    Tasks are not accepted directly.
+
+    Target library for `_meta` is --library (a path to that library's
+    Library.bml). Omitted: package.json blockml.library of the current
+    working directory. Missing both is exit 2. Distinct from --libraries
+    (registry seeds). In a multi-package repo, cwd selects the default
+    target library.
 
     --parameters is JSON of any value. StructType: merged over pending
     (CLI wins; nested objects merge; arrays replace). Other types: CLI
@@ -80,17 +87,19 @@
     Pending-contract violations never start the execution (exit 2).
 
 Printed help:
-Usage: blockml transform apply <execution-fqn> [--verbose] [--parameters json] [--parameter-mappings json]
+Usage: blockml transform apply <execution-fqn> [--library path] [--verbose] [--parameters json] [--parameter-mappings json]
        blockml transform --help
 
 When: run a pending ModelTransformation.
 
 transform is a parent command. V1 defines apply only.
-EXECUTION-FQN is the FQN of a ModelTransformation under {library}._meta.transform.pending. Tasks are not accepted directly.
+EXECUTION-FQN is a pending ModelTransformation. It need not live under the target library.
+--library is a path to the target Library.bml. Omitted: cwd package.json blockml.library. Missing both is exit 2.
 
 Pipeline stage constraints belong to the Execute / Reflect prompts, not here.
 
 Flags:
+  --library path    target Library.bml for _meta (default: cwd package.json blockml.library)
   --verbose         stream additional agent-session detail
   --parameters json           JSON value for parameters (object merge when T is StructType)
   --parameter-mappings json   JSON array of ParameterMapping objects; ignores --parameters

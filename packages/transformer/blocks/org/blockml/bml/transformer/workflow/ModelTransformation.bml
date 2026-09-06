@@ -25,8 +25,9 @@
     via npx. Other subtypes use their registered executor.
 
     * `template` — when true, this Block is a reusable template. Prepare
-      leaves it in `_meta.transform.pending`, copies it, sets
-      `template=false` on the copy, and relocates that copy to running.
+      leaves it in place (it need not live under the target library),
+      copies it, sets `template=false` on the copy, and relocates that
+      copy to the target library's `_meta.transform.running`.
       The copy is a snapshot: SubBlocks (including bound `T`) are copied
       and rewritten onto the copy, so later template edits cannot change
       recorded executions. Default false: the pending Block is relocated

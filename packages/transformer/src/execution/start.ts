@@ -31,6 +31,7 @@ import { assertWorktreeClean, commitWorktree } from "../pipeline/git.js";
 export interface StartedExecution {
   executionId: string;
   libraryFqn: string;
+  libraryRoot: string;
   originalName: string;
   sequence: number;
   startedAt: Date;
@@ -80,6 +81,7 @@ export function startExecution(
 
   const runningFqn = applyExecutionIdentity(forked, {
     libraryFqn: resolved.libraryFqn,
+    libraryRoot: resolved.libraryRoot,
     stage: "running",
     name: generatedName,
   });
@@ -104,6 +106,7 @@ export function startExecution(
   return {
     executionId,
     libraryFqn: resolved.libraryFqn,
+    libraryRoot: resolved.libraryRoot,
     originalName: resolved.originalName,
     sequence,
     startedAt: now,

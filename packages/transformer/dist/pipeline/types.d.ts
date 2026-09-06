@@ -2,8 +2,10 @@ import type { StartedExecution } from "../execution/start.js";
 import type { TerminalExecutionStatus } from "../execution/constants.js";
 import type { TransformLifecycleListener } from "../execution/lifecycle-events.js";
 import type { ParameterMappingSpec } from "../execution/parameters.js";
+import type { TargetLibrary } from "../execution/target-library.js";
 export interface StageContext {
     workspaceRoot: string;
+    targetLibrary: TargetLibrary;
     now: () => Date;
     onLifecycle?: TransformLifecycleListener;
     parameters?: unknown;

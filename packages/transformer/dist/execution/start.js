@@ -37,6 +37,7 @@ export function startExecution(resolved, now, workspaceRoot, allocator = new Seq
     setBaseCommit(forked.block, baseCommit);
     const runningFqn = applyExecutionIdentity(forked, {
         libraryFqn: resolved.libraryFqn,
+        libraryRoot: resolved.libraryRoot,
         stage: "running",
         name: generatedName,
     });
@@ -54,6 +55,7 @@ export function startExecution(resolved, now, workspaceRoot, allocator = new Seq
     return {
         executionId,
         libraryFqn: resolved.libraryFqn,
+        libraryRoot: resolved.libraryRoot,
         originalName: resolved.originalName,
         sequence,
         startedAt: now,

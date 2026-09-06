@@ -65,7 +65,7 @@ Commands:
   compile     Render derived output for a registered target.
               blockml compile blockdoc|xsd|fatblock
   transform   Run a pending ModelTransformation.
-              blockml transform apply <execution-fqn>
+              blockml transform apply <execution-fqn> [--library path]
 
 Shared flags: --src dir, --libraries a,b, --json, --help / -h
 Corpus for search, inspect, and graph is the same as validate --all.

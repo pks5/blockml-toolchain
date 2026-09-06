@@ -5,7 +5,7 @@ import { getOperationInstances } from "../execution/properties.js";
 export function createPrepareStage() {
     return {
         async run(pendingFqn, context) {
-            const resolved = resolvePendingExecution(pendingFqn, context.workspaceRoot);
+            const resolved = resolvePendingExecution(pendingFqn, context.workspaceRoot, context.targetLibrary);
             const started = startExecution(resolved, context.now(), context.workspaceRoot, new SequenceAllocator(), {
                 ...(context.parameters !== undefined
                     ? { parameters: context.parameters }

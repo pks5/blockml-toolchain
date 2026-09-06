@@ -73,6 +73,7 @@ export interface ParsedArgs {
   outDir?: string;
   srcDir?: string;
   libraries?: string[];
+  library?: string;
   include?: string[];
   verbose?: boolean;
   perPackage?: boolean;
@@ -135,6 +136,11 @@ export function parseArgs(argv: string[]): ParsedArgs {
       const value = args.shift();
       if (value) {
         result.libraries = value.split(",").map((s) => s.trim()).filter(Boolean);
+      }
+    } else if (flag === "--library") {
+      const value = args.shift();
+      if (value) {
+        result.library = value;
       }
     } else if (flag === "--include") {
       const value = args.shift();
@@ -987,6 +993,7 @@ async function executeCli(
         options.onOutputLine,
         parsed.parametersJson,
         parsed.parameterMappingsJson,
+        parsed.library,
       );
       return { code, lines };
     }
