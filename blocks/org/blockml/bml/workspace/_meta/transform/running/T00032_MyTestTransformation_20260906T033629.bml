@@ -63,8 +63,7 @@
 - **documentation** — short paragraph noting it was produced by this transform execution
 - **properties** — `type:Text` (title, compiler, region, summary), `type:Integer` (bellsCast, heaviestBellKilograms, deepestBurialCentimetres, strikeNoteHertz), `type:DateTime` (`compiledAt` = now, `2026-09-06T03:37:20`; `lastBellBuriedOn`)
 
-`npx blockml validate --all` → 1141 blocks, 0 errors, 0 warnings. Only that one file changed; no `_meta/transform/` or ModelTransformation files touched.
-</output>
+`npx blockml validate --all` → 1141 blocks, 0 errors, 0 warnings. Only that one file changed; no `_meta/transform/` or ModelTransformation files touched.</output>
           <completedAt>2026-09-06T03:37:50</completedAt>
           <task>
             <workflow:InstructionTask>
@@ -90,8 +89,10 @@ ModelTransformation metadata or files under _meta/transform/.</instructions>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/RandomBlock.bml" />
           </changedFiles>
         </workflow:AgenticOperation>
-        <workflow:ToolOperation name="Validate" status="Pending" captureOutput="true" command="blockml">
+        <workflow:ToolOperation name="Validate" status="Running" captureOutput="true" command="blockml">
           <args>[&quot;validate&quot;]</args>
+          <startedAt>2026-09-06T03:37:51</startedAt>
+          <baseCommit>98a6c2bf92e44c0a28eeb464c4219ea9efc9c3c1</baseCommit>
         </workflow:ToolOperation>
       </composition>
     </operations>
