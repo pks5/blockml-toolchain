@@ -62,6 +62,10 @@
         <inspect:InspectType />
         <inspect:InspectTypeRef />
         <inspect:InspectedMember />
+        <inspect:InspectedProperty />
+        <inspect:InspectedAggregation />
+        <inspect:InspectedAssociation />
+        <inspect:InspectedCapability />
         <inspect:InspectedInstance />
         <inspect:InspectedImplementation />
         <inspect:InspectedGenericType />

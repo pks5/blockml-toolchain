@@ -29,7 +29,7 @@
 
   <documentation>In scope V1:
     • inspectBlock / inspectProject over the validate --all TypeRegistry
-    • Effective members with inheritedFrom
+    • Effective members grouped into properties, aggregations, associations, capabilities (no kind field) with inheritedFrom
     • Compact TypeExpression projection; baseType keeps generic arguments; genericTypes on InspectedBlock
     • depth 0..3 (default 1), cycle detection, 48-block budget
     • Aggregation composition instances (enum literals, Library catalog FQNs, nested fills)

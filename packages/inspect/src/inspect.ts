@@ -6,9 +6,13 @@ import type {
   CompositionNode,
   CompositionTemplate,
   DocumentationReference,
+  AggregationDefinition,
+  AssociationDefinition,
+  CapabilityDefinition,
   GenericType,
   MemberDefinition,
   MemberValue,
+  PropertyDefinition,
   TypeExpression,
 } from "@blockml/bom";
 import {
@@ -30,11 +34,15 @@ import {
   TYPE_PACKAGE_PREFIX,
   VALUE_TYPE_FQN,
   type InspectBlockOptions,
+  type InspectedAggregation,
+  type InspectedAssociation,
   type InspectedBlock,
+  type InspectedCapability,
   type InspectedGenericType,
   type InspectedImplementation,
   type InspectedInstance,
   type InspectedMember,
+  type InspectedProperty,
   type InspectedReference,
   type InspectOrigin,
   type InspectProjectOptions,
@@ -335,11 +343,8 @@ function inheritedFromOwner(
   return undefined;
 }
 
-function projectMember(member: MemberDefinition, inheritedFrom?: string): InspectedMember {
-  const projected: InspectedMember = {
-    kind: member.kind,
-    name: member.name,
-  };
+function projectCommon(member: MemberDefinition, inheritedFrom?: string): InspectedMember {
+  const projected: InspectedMember = { name: member.name };
   if (inheritedFrom) {
     projected.inheritedFrom = inheritedFrom;
   }
@@ -358,48 +363,67 @@ function projectMember(member: MemberDefinition, inheritedFrom?: string): Inspec
   if (member.override) {
     projected.override = true;
   }
+  return projected;
+}
 
-  if (member.kind === "property") {
-    const type = projectTypeExpression(member.type, member.typeFqn);
-    if (type) {
-      projected.type = type;
-    }
-    if (isLiteralValue(member.value)) {
-      projected.value = member.value.value;
-    }
-  } else if (member.kind === "aggregation" || member.kind === "association") {
-    const type = projectTypeExpression(member.type);
-    if (type) {
-      projected.type = type;
-    }
-    if (member.cardinality) {
-      projected.cardinality = member.cardinality;
-    }
-    if (member.kind === "aggregation") {
-      const instances = projectInstances(member.composition);
-      if (instances) {
-        projected.instances = instances;
-      }
-    }
-  } else if (member.kind === "capability") {
-    const input = projectTypeExpression(member.inputType as TypeExpression | undefined);
-    if (input) {
-      projected.inputType = input;
-    }
-    const output = projectTypeExpression(member.outputType as TypeExpression | undefined);
-    if (output) {
-      projected.outputType = output;
-    }
-    const throws = (member.throws ?? []).map((item) => item.value).filter(Boolean);
-    if (throws.length > 0) {
-      projected.throws = throws;
-    }
-    const implementation = projectImplementation(member.implementation);
-    if (implementation) {
-      projected.implementation = implementation;
-    }
+function projectProperty(member: PropertyDefinition, inheritedFrom?: string): InspectedProperty {
+  const projected: InspectedProperty = projectCommon(member, inheritedFrom);
+  const type = projectTypeExpression(member.type, member.typeFqn);
+  if (type) {
+    projected.type = type;
   }
+  if (isLiteralValue(member.value)) {
+    projected.value = member.value.value;
+  }
+  return projected;
+}
 
+function projectAggregation(member: AggregationDefinition, inheritedFrom?: string): InspectedAggregation {
+  const projected: InspectedAggregation = projectCommon(member, inheritedFrom);
+  const type = projectTypeExpression(member.type);
+  if (type) {
+    projected.type = type;
+  }
+  if (member.cardinality) {
+    projected.cardinality = member.cardinality;
+  }
+  const instances = projectInstances(member.composition);
+  if (instances) {
+    projected.instances = instances;
+  }
+  return projected;
+}
+
+function projectAssociation(member: AssociationDefinition, inheritedFrom?: string): InspectedAssociation {
+  const projected: InspectedAssociation = projectCommon(member, inheritedFrom);
+  const type = projectTypeExpression(member.type);
+  if (type) {
+    projected.type = type;
+  }
+  if (member.cardinality) {
+    projected.cardinality = member.cardinality;
+  }
+  return projected;
+}
+
+function projectCapability(member: CapabilityDefinition, inheritedFrom?: string): InspectedCapability {
+  const projected: InspectedCapability = projectCommon(member, inheritedFrom);
+  const input = projectTypeExpression(member.inputType as TypeExpression | undefined);
+  if (input) {
+    projected.inputType = input;
+  }
+  const output = projectTypeExpression(member.outputType as TypeExpression | undefined);
+  if (output) {
+    projected.outputType = output;
+  }
+  const throws = (member.throws ?? []).map((item) => item.value).filter(Boolean);
+  if (throws.length > 0) {
+    projected.throws = throws;
+  }
+  const implementation = projectImplementation(member.implementation);
+  if (implementation) {
+    projected.implementation = implementation;
+  }
   return projected;
 }
 
@@ -462,7 +486,6 @@ function projectBlock(
   const projected: InspectedBlock = {
     fqn: block.type,
     name: block.name,
-    members: [],
   };
   if (filePath) {
     projected.file = displayPath(filePath, options.rootDir);
@@ -514,9 +537,34 @@ function projectBlock(
   }
 
   const effective = resolveEffectiveMembers(block, registry);
-  projected.members = effective.map((member) =>
-    projectMember(member, inheritedFromOwner(block, member, registry)),
-  );
+  const properties: InspectedProperty[] = [];
+  const aggregations: InspectedAggregation[] = [];
+  const associations: InspectedAssociation[] = [];
+  const capabilities: InspectedCapability[] = [];
+  for (const member of effective) {
+    const inheritedFrom = inheritedFromOwner(block, member, registry);
+    if (member.kind === "property") {
+      properties.push(projectProperty(member, inheritedFrom));
+    } else if (member.kind === "aggregation") {
+      aggregations.push(projectAggregation(member, inheritedFrom));
+    } else if (member.kind === "association") {
+      associations.push(projectAssociation(member, inheritedFrom));
+    } else {
+      capabilities.push(projectCapability(member, inheritedFrom));
+    }
+  }
+  if (properties.length > 0) {
+    projected.properties = properties;
+  }
+  if (aggregations.length > 0) {
+    projected.aggregations = aggregations;
+  }
+  if (associations.length > 0) {
+    projected.associations = associations;
+  }
+  if (capabilities.length > 0) {
+    projected.capabilities = capabilities;
+  }
   return projected;
 }
 

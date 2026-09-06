@@ -102,7 +102,7 @@ When: you already know the FQN and need the Block already resolved.
 
 Inspect returns compact JSON of a Block from the live TypeRegistry (same corpus as validate --all). No cache file.
 
-Members in the JSON are the effective set (inherited included). Expansion follows declared member types, contracts, subBlocks, and generic type arguments — not a copy of the ancestor chain; ancestors are FQN refs. genericTypes are declared parameters; bound types on an instance are SubBlocks of that instance, not of the generic parent.
+Effective members are four optional lists (properties, aggregations, associations, capabilities) with no kind field; inherited included. Empty lists omitted. Expansion follows declared member types, contracts, subBlocks, and generic type arguments — not a copy of the ancestor chain; ancestors are FQN refs. genericTypes are declared parameters; bound types on an instance are SubBlocks of that instance, not of the generic parent.
 
 Flags:
   --depth n     0 = that Block only; default 1; cap 3. Budget 48 blocks.

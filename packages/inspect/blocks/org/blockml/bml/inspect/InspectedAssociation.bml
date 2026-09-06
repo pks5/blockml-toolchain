@@ -1,0 +1,40 @@
+<!--
+  Inspect — InspectedAssociation
+  FQN: org.blockml.bml.inspect.InspectedAssociation
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:inspect="org.blockml.bml.inspect"
+  xmlns:inspectcap="org.blockml.bml.inspect.capability"
+  xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>InspectedAssociation</name>
+  <type>inspect:InspectedAssociation</type>
+  <baseType>inspect:InspectedMember</baseType>
+  <is>One effective association in an Inspect projection</is>
+
+  <documentation>Projected association. type and cardinality only — no composition instances.</documentation>
+
+  <properties>
+    <type type="inspect:InspectTypeRef">
+      <documentation>Projected association type. (optional)</documentation>
+    </type>
+    <cardinality type="type:Text">
+      <documentation>Association cardinality. (optional)</documentation>
+    </cardinality>
+  </properties>
+
+</block>

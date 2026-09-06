@@ -36,7 +36,7 @@
 
     INSPECT3 Default depth 1, allowed 0, cap 3.
 
-    INSPECT4 Members are effective; inheritedFrom from findLocalMember plus baseType/contract owners.
+    INSPECT4 Members are effective and grouped into properties, aggregations, associations, and capabilities. No kind field. Empty groups omitted. inheritedFrom from findLocalMember plus baseType/contract owners.
 
     INSPECT5 Expansion follows declared member types, contracts, subBlocks, baseType generic arguments, and genericTypes defaultType FQNs — not the baseType parent, not generic bounds, and not inherited member types.
 

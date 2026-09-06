@@ -27,11 +27,12 @@
   <is>Compact projection of one Block</is>
 
   <documentation>
-    Members are the effective set.
+    Compact projection of one Block.
 
     • baseType is an InspectTypeRef (generic arguments kept)
     • ancestors are parent FQNs only — the inheritance chain is not copied into InspectResult.blocks
     • genericTypes are declared parameters, not subBlocks
+    • effective members are four optional lists: properties, aggregations, associations, capabilities — no kind field
     • references are authored documentation see entries (FQN + relation); they are not expanded into blocks
     • at most 8 references; referencesTruncated is the count of additional authored entries not shown
   </documentation>
@@ -84,12 +85,21 @@
     <genericTypes type="inspect:InspectedGenericType[]">
       <documentation>Declared generic type parameters. (optional)</documentation>
     </genericTypes>
+    <properties type="inspect:InspectedProperty[]">
+      <documentation>Effective properties. Omitted when empty. (optional)</documentation>
+    </properties>
+    <aggregations type="inspect:InspectedAggregation[]">
+      <documentation>Effective aggregations. Omitted when empty. (optional)</documentation>
+    </aggregations>
+    <associations type="inspect:InspectedAssociation[]">
+      <documentation>Effective associations. Omitted when empty. (optional)</documentation>
+    </associations>
+    <capabilities type="inspect:InspectedCapability[]">
+      <documentation>Effective capabilities. Omitted when empty. (optional)</documentation>
+    </capabilities>
     <references type="inspect:InspectedReference[]">
       <documentation>Authored documentation see references, first 8. Compact FQN + relation; not expanded. (optional)</documentation>
     </references>
-    <members type="inspect:InspectedMember[]">
-      <documentation>Effective members. (required)</documentation>
-    </members>
   </aggregations>
 
 </block>

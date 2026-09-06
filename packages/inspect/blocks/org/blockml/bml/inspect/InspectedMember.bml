@@ -24,32 +24,20 @@
   <name>InspectedMember</name>
   <type>inspect:InspectedMember</type>
   <baseType>inspect:InspectType</baseType>
-  <is>One effective member in an Inspect projection</is>
+  <is>Shared fields for a projected member</is>
+  <abstract>true</abstract>
 
-  <documentation>kind is property, aggregation, association, or capability. inheritedFrom is omitted when the member is declared on the inspected Block. instances holds authored composition children when present. capability members include implementation (language + truncated source) when authored.</documentation>
+  <documentation>
+    Abstract base for the four kind-specific inspect member types.
+
+    No kind discriminator — the owning InspectedBlock aggregation names the kind.
+    inheritedFrom is omitted when the member is declared on the inspected Block.
+  </documentation>
 
   <properties>
-    <kind type="type:Text">
-      <documentation>Member kind. (required)</documentation>
-    </kind>
     <name type="type:Text">
       <documentation>Logical member name. (required)</documentation>
     </name>
-    <type type="inspect:InspectTypeRef">
-      <documentation>Projected member type. (optional)</documentation>
-    </type>
-    <inputType type="inspect:InspectTypeRef">
-      <documentation>Capability input type. (optional)</documentation>
-    </inputType>
-    <outputType type="inspect:InspectTypeRef">
-      <documentation>Capability output type. (optional)</documentation>
-    </outputType>
-    <throws type="type:Text">
-      <documentation>Thrown type FQNs. TS: Text[]. (optional)</documentation>
-    </throws>
-    <cardinality type="type:Text">
-      <documentation>Aggregation or association cardinality. (optional)</documentation>
-    </cardinality>
     <inheritedFrom type="type:Text">
       <documentation>Declaring ancestor or contract FQN. (optional)</documentation>
     </inheritedFrom>
@@ -68,17 +56,6 @@
     <override type="type:Boolean">
       <documentation>true when the member overrides an ancestor. (optional)</documentation>
     </override>
-    <value type="type:Text">
-      <documentation>Literal property value. TS: unknown. (optional)</documentation>
-    </value>
-    <implementation type="inspect:InspectedImplementation">
-      <documentation>Authored capability implementation. (optional)</documentation>
-    </implementation>
   </properties>
-  <aggregations>
-    <instances type="inspect:InspectedInstance[]">
-      <documentation>Authored composition children. Enum literals, Library catalog refs, nested ModelOperation/Task fills. (optional)</documentation>
-    </instances>
-  </aggregations>
 
 </block>

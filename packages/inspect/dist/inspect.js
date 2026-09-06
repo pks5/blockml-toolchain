@@ -256,11 +256,8 @@ function inheritedFromOwner(block, member, registry) {
     }
     return undefined;
 }
-function projectMember(member, inheritedFrom) {
-    const projected = {
-        kind: member.kind,
-        name: member.name,
-    };
+function projectCommon(member, inheritedFrom) {
+    const projected = { name: member.name };
     if (inheritedFrom) {
         projected.inheritedFrom = inheritedFrom;
     }
@@ -279,47 +276,62 @@ function projectMember(member, inheritedFrom) {
     if (member.override) {
         projected.override = true;
     }
-    if (member.kind === "property") {
-        const type = projectTypeExpression(member.type, member.typeFqn);
-        if (type) {
-            projected.type = type;
-        }
-        if (isLiteralValue(member.value)) {
-            projected.value = member.value.value;
-        }
+    return projected;
+}
+function projectProperty(member, inheritedFrom) {
+    const projected = projectCommon(member, inheritedFrom);
+    const type = projectTypeExpression(member.type, member.typeFqn);
+    if (type) {
+        projected.type = type;
     }
-    else if (member.kind === "aggregation" || member.kind === "association") {
-        const type = projectTypeExpression(member.type);
-        if (type) {
-            projected.type = type;
-        }
-        if (member.cardinality) {
-            projected.cardinality = member.cardinality;
-        }
-        if (member.kind === "aggregation") {
-            const instances = projectInstances(member.composition);
-            if (instances) {
-                projected.instances = instances;
-            }
-        }
+    if (isLiteralValue(member.value)) {
+        projected.value = member.value.value;
     }
-    else if (member.kind === "capability") {
-        const input = projectTypeExpression(member.inputType);
-        if (input) {
-            projected.inputType = input;
-        }
-        const output = projectTypeExpression(member.outputType);
-        if (output) {
-            projected.outputType = output;
-        }
-        const throws = (member.throws ?? []).map((item) => item.value).filter(Boolean);
-        if (throws.length > 0) {
-            projected.throws = throws;
-        }
-        const implementation = projectImplementation(member.implementation);
-        if (implementation) {
-            projected.implementation = implementation;
-        }
+    return projected;
+}
+function projectAggregation(member, inheritedFrom) {
+    const projected = projectCommon(member, inheritedFrom);
+    const type = projectTypeExpression(member.type);
+    if (type) {
+        projected.type = type;
+    }
+    if (member.cardinality) {
+        projected.cardinality = member.cardinality;
+    }
+    const instances = projectInstances(member.composition);
+    if (instances) {
+        projected.instances = instances;
+    }
+    return projected;
+}
+function projectAssociation(member, inheritedFrom) {
+    const projected = projectCommon(member, inheritedFrom);
+    const type = projectTypeExpression(member.type);
+    if (type) {
+        projected.type = type;
+    }
+    if (member.cardinality) {
+        projected.cardinality = member.cardinality;
+    }
+    return projected;
+}
+function projectCapability(member, inheritedFrom) {
+    const projected = projectCommon(member, inheritedFrom);
+    const input = projectTypeExpression(member.inputType);
+    if (input) {
+        projected.inputType = input;
+    }
+    const output = projectTypeExpression(member.outputType);
+    if (output) {
+        projected.outputType = output;
+    }
+    const throws = (member.throws ?? []).map((item) => item.value).filter(Boolean);
+    if (throws.length > 0) {
+        projected.throws = throws;
+    }
+    const implementation = projectImplementation(member.implementation);
+    if (implementation) {
+        projected.implementation = implementation;
     }
     return projected;
 }
@@ -379,7 +391,6 @@ function projectBlock(doc, registry, options) {
     const projected = {
         fqn: block.type,
         name: block.name,
-        members: [],
     };
     if (filePath) {
         projected.file = displayPath(filePath, options.rootDir);
@@ -430,7 +441,37 @@ function projectBlock(doc, registry, options) {
         }
     }
     const effective = resolveEffectiveMembers(block, registry);
-    projected.members = effective.map((member) => projectMember(member, inheritedFromOwner(block, member, registry)));
+    const properties = [];
+    const aggregations = [];
+    const associations = [];
+    const capabilities = [];
+    for (const member of effective) {
+        const inheritedFrom = inheritedFromOwner(block, member, registry);
+        if (member.kind === "property") {
+            properties.push(projectProperty(member, inheritedFrom));
+        }
+        else if (member.kind === "aggregation") {
+            aggregations.push(projectAggregation(member, inheritedFrom));
+        }
+        else if (member.kind === "association") {
+            associations.push(projectAssociation(member, inheritedFrom));
+        }
+        else {
+            capabilities.push(projectCapability(member, inheritedFrom));
+        }
+    }
+    if (properties.length > 0) {
+        projected.properties = properties;
+    }
+    if (aggregations.length > 0) {
+        projected.aggregations = aggregations;
+    }
+    if (associations.length > 0) {
+        projected.associations = associations;
+    }
+    if (capabilities.length > 0) {
+        projected.capabilities = capabilities;
+    }
     return projected;
 }
 export function inspectBlock(fqn, registry, options = {}) {

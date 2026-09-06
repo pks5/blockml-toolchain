@@ -75,8 +75,12 @@ describe("inspectProject", () => {
     expect(d0.depth).toBe(0);
     expect(d0.root).toBe(`${NS}.Customer`);
     expect(Object.keys(d0.blocks)).toEqual([`${NS}.Customer`]);
-    const addressMember = d0.blocks[`${NS}.Customer`]?.members.find((m) => m.name === "address");
+    const customer = d0.blocks[`${NS}.Customer`];
+    const addressMember = customer?.properties?.find((m) => m.name === "address");
     expect(addressMember?.type?.ref).toBe(`${NS}.Address`);
+    expect(addressMember && "kind" in addressMember).toBe(false);
+    expect(customer && "members" in customer).toBe(false);
+    expect(customer?.capabilities).toBeUndefined();
 
     const d1 = inspectProject(`${NS}.Customer`, { rootDir: dir, depth: 1 });
     expect(d1.blocks[`${NS}.Address`]).toBeDefined();
@@ -103,7 +107,7 @@ describe("inspectProject", () => {
       }),
     });
     const result = inspectProject(`${NS}.Child`, { rootDir: dir, depth: 0 });
-    const label = result.blocks[`${NS}.Child`]?.members.find((m) => m.name === "label");
+    const label = result.blocks[`${NS}.Child`]?.properties?.find((m) => m.name === "label");
     expect(label?.inheritedFrom).toBe(`${NS}.Parent`);
     expect(result.blocks[`${NS}.Parent`]).toBeUndefined();
     expect(result.blocks[`${NS}.Child`]?.ancestors).toContain(`${NS}.Parent`);
@@ -125,7 +129,7 @@ describe("inspectProject", () => {
     const result = inspectProject(`${NS}.Counted`, { rootDir: dir, depth: 1 });
     expect(result.blocks[`${NS}.Counted`]).toBeDefined();
     expect(result.blocks["org.blockml.bml.type.Integer"]).toBeUndefined();
-    const n = result.blocks[`${NS}.Counted`]?.members.find((m) => m.name === "n");
+    const n = result.blocks[`${NS}.Counted`]?.properties?.find((m) => m.name === "n");
     expect(n?.type?.ref).toBe("org.blockml.bml.type.Integer");
   });
 
@@ -233,7 +237,7 @@ describe("inspectProject", () => {
       }),
     });
     const result = inspectProject(`${NS}.Color`, { rootDir: dir, depth: 0 });
-    const values = result.blocks[`${NS}.Color`]?.members.find((m) => m.name === "values");
+    const values = result.blocks[`${NS}.Color`]?.aggregations?.find((m) => m.name === "values");
     expect(values?.instances?.map((item) => item.id)).toEqual(["Red", "Blue"]);
     expect(values?.instances?.every((item) => item.type === `${NS}.Color`)).toBe(true);
   });
@@ -258,7 +262,7 @@ describe("inspectProject", () => {
       }),
     });
     const result = inspectProject(`${NS}.Catalog`, { rootDir: dir, depth: 0 });
-    const blocks = result.blocks[`${NS}.Catalog`]?.members.find((m) => m.name === "blocks");
+    const blocks = result.blocks[`${NS}.Catalog`]?.aggregations?.find((m) => m.name === "blocks");
     expect(blocks?.instances?.map((item) => item.type)).toEqual([`${NS}.Address`, `${NS}.Catalog`]);
   });
 
@@ -307,7 +311,7 @@ describe("inspectProject", () => {
       }),
     });
     const result = inspectProject(`${NS}.Pipeline`, { rootDir: dir, depth: 0 });
-    const stages = result.blocks[`${NS}.Pipeline`]?.members.find((m) => m.name === "stages");
+    const stages = result.blocks[`${NS}.Pipeline`]?.aggregations?.find((m) => m.name === "stages");
     expect(stages?.instances).toEqual([
       {
         type: `${NS}.Stage`,
@@ -410,8 +414,8 @@ describe("inspectProject", () => {
       }),
     });
     const result = inspectProject(`${NS}.Runner`, { rootDir: dir, depth: 0 });
-    const go = result.blocks[`${NS}.Runner`]?.members.find((m) => m.name === "go");
-    expect(go?.kind).toBe("capability");
+    const go = result.blocks[`${NS}.Runner`]?.capabilities?.find((m) => m.name === "go");
+    expect(go && "kind" in go).toBe(false);
     expect(go?.implementation?.language).toBe("English");
     expect(go?.implementation?.sourceTruncated).toBe(true);
     expect(go?.implementation?.source.startsWith("Do the thing.")).toBe(true);
@@ -445,7 +449,7 @@ describe("inspectProject", () => {
         defaultType: { kind: "named", ref: `${NS}.Widget` },
       },
     ]);
-    const item = box?.members.find((m) => m.name === "item");
+    const item = box?.properties?.find((m) => m.name === "item");
     expect(item?.type).toEqual({ kind: "genericParam", name: "T" });
     expect(d0.blocks[`${NS}.Widget`]).toBeUndefined();
     expect(d0.blocks["org.blockml.bml.core.Block"]).toBeUndefined();

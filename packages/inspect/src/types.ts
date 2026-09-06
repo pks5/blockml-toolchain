@@ -41,21 +41,35 @@ export interface InspectedImplementation {
 }
 
 export interface InspectedMember {
-  kind: "property" | "aggregation" | "association" | "capability";
   name: string;
-  type?: InspectTypeRef;
-  inputType?: InspectTypeRef;
-  outputType?: InspectTypeRef;
-  throws?: string[];
-  cardinality?: string;
   inheritedFrom?: string;
   visibility?: string;
   readOnly?: boolean;
   abstract?: boolean;
   final?: boolean;
   override?: boolean;
+}
+
+export interface InspectedProperty extends InspectedMember {
+  type?: InspectTypeRef;
   value?: unknown;
+}
+
+export interface InspectedAggregation extends InspectedMember {
+  type?: InspectTypeRef;
+  cardinality?: string;
   instances?: InspectedInstance[];
+}
+
+export interface InspectedAssociation extends InspectedMember {
+  type?: InspectTypeRef;
+  cardinality?: string;
+}
+
+export interface InspectedCapability extends InspectedMember {
+  inputType?: InspectTypeRef;
+  outputType?: InspectTypeRef;
+  throws?: string[];
   implementation?: InspectedImplementation;
 }
 
@@ -92,7 +106,10 @@ export interface InspectedBlock {
   genericTypes?: InspectedGenericType[];
   ancestors?: string[];
   contracts?: string[];
-  members: InspectedMember[];
+  properties?: InspectedProperty[];
+  aggregations?: InspectedAggregation[];
+  associations?: InspectedAssociation[];
+  capabilities?: InspectedCapability[];
   subBlocks?: string[];
   abstract?: boolean;
   final?: boolean;
