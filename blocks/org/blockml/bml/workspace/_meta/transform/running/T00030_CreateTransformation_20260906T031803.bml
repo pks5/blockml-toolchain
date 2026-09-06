@@ -1,0 +1,116 @@
+<!--Program — CreateTransformation
+  FQN: org.blockml.bml.workspace._meta.transform.running.T00030_CreateTransformation_20260906T031803-->
+<block xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:program="org.blockml.bml.transformer.program"
+  xmlns:running="org.blockml.bml.workspace._meta.transform.running"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
+
+  <name>
+    T00030_CreateTransformation_20260906T031803
+  </name>
+  <type>
+    running:T00030_CreateTransformation_20260906T031803
+  </type>
+  <baseType>
+    workflow:ModelTransformation(running:T00030_CreateTransformation_20260906T031803.Parameters, type:Text)
+  </baseType>
+  <is>
+    A program that creates a new ModelTransformation
+  </is>
+  <properties>
+    <description override="true">
+      <value>A program that creates a new ModelTransformation</value>
+    </description>
+    <status override="true" type="workflow:ExecutionStatus">
+      <value>Running</value>
+    </status>
+    <createdAt override="true" type="type:DateTime">
+      <value>2026-08-30T01:40:20</value>
+    </createdAt>
+    <template override="true" type="type:Boolean">
+      <value>false</value>
+    </template>
+    <parameters override="true" type="running:T00030_CreateTransformation_20260906T031803.Parameters">
+      <value>{objective:"Create a random Block org.blockml.bml.workspace.playground.RandomBlock.bml",fqn:"org.blockml.bml.workspace.playground.MyTestTransformation"}</value>
+    </parameters>
+    <executionId override="true" type="type:UUID">
+      <value>0e90bc66-1498-4fea-8c9b-6385e890fc7c</value>
+    </executionId>
+    <sequence override="true" type="type:Integer">
+      <value>30</value>
+    </sequence>
+    <startedAt override="true" type="type:DateTime">
+      <value>2026-09-06T03:18:03</value>
+    </startedAt>
+    <baseCommit override="true" type="type:Text">
+      <value>cd0d107d54594f009b7616cac297dd09e82b72bb</value>
+    </baseCommit>
+  </properties>
+  <aggregations>
+    <operations override="true">
+      <composition>
+        <workflow:AgenticOperation name="Create Transformation Block" status="Pending" captureOutput="true">
+          <task>
+            <workflow:InstructionTask>
+              <instructions>Create a new ModelTransformation block with the FQN:
+
+${ #this.parameters.fqn }
+
+Use `org.blockml.bml.transformer.program.CreateTransformation` as the template for the new block.
+
+The objective of the new ModelTransformation is described below:
+
+===== Start of Objective =====
+${ #this.parameters.objective }
+===== End of Objective =====
+
+Design the ModelTransformation so that executing it achieves this objective.
+
+Determine the required structure of the ModelTransformation from the objective.
+
+Define only the properties that are needed by the transformation and bind their values to the appropriate sources.
+
+Determine how many operations are required to achieve the objective. Use the smallest number of operations that results in a clear and reliable transformation.
+
+For each operation, define its responsibility clearly and ensure that the operations together form a coherent execution flow.
+
+The resulting block must be a complete and valid ModelTransformation definition.</instructions>
+            </workflow:InstructionTask>
+          </task>
+        </workflow:AgenticOperation>
+      </composition>
+    </operations>
+  </aggregations>
+  <subBlocks>
+    <block>
+      <name>
+        Parameters
+      </name>
+      <type>
+        running:T00030_CreateTransformation_20260906T031803.Parameters
+      </type>
+      <baseType>
+        type:StructType
+      </baseType>
+      <is>
+        Run parameters for this transformation
+      </is>
+      <properties>
+        <fqn type="type:TypeIdentifier">
+          <documentation>
+            The FQN of the new transformation
+          </documentation>
+        </fqn>
+        <objective type="type:Text">
+          <documentation>
+            The objective of the new transformation
+          </documentation>
+        </objective>
+      </properties>
+    </block>
+  </subBlocks>
+</block>
