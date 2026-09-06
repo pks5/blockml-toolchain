@@ -53,9 +53,27 @@
   <aggregations>
     <operations override="true">
       <composition>
-        <workflow:AgenticOperation name="Create Transformation Block" status="Running" captureOutput="true">
+        <workflow:AgenticOperation name="Create Transformation Block" status="Succeeded" captureOutput="true">
           <startedAt>2026-09-06T03:18:04</startedAt>
           <baseCommit>6078a37b4ac2336c7aebe9641fdd836cabfb91d2</baseCommit>
+          <output>The Task is done.
+
+**Created:** `blocks/org/blockml/bml/workspace/playground/MyTestTransformation.bml`
+
+Defining `org.blockml.bml.workspace.playground.MyTestTransformation`, a `workflow:ModelTransformation` modeled on `program:CreateTransformation` / the workspace transform templates.
+
+**Structure derived from the objective** (&quot;Create a random Block `org.blockml.bml.workspace.playground.RandomBlock.bml`&quot;):
+
+- **baseType** `workflow:ModelTransformation(Parameters, type:Text)`, `template=true` (FQN is outside `_meta.transform`, so it is a reusable template).
+- **Parameters** struct — only one property is needed: `targetBlock` (`type:Text`), the FQN of the block to create.
+- **Bound values** — `parameters` is bound to `{targetBlock:&quot;org.blockml.bml.workspace.playground.RandomBlock&quot;}`; other lifecycle fields (`status=Pending`, `createdAt`, `description`) follow the template pattern. Nothing else is set.
+- **Operations — two**, the smallest coherent flow:
+  1. `AgenticOperation &quot;Create Random Block&quot;` — an `InstructionTask` that creates/updates `${ #this.parameters.targetBlock }` as a complete, valid random Block with fresh content each run, scoped to the playground package.
+  2. `ToolOperation &quot;Validate&quot;` — runs `blockml validate` to confirm the generated block is well-formed.
+
+**Validation:** `blockml validate` passes — 736 blocks, 0 errors, 0 warnings (the 4 recommendations are pre-existing and in unrelated files). `blockml inspect` resolves it as a proper `ModelTransformation` with both operations and the `Parameters` sub-block.
+</output>
+          <completedAt>2026-09-06T03:20:22</completedAt>
           <task>
             <workflow:InstructionTask>
               <instructions>Create a new ModelTransformation block with the FQN:
@@ -83,6 +101,9 @@ For each operation, define its responsibility clearly and ensure that the operat
 The resulting block must be a complete and valid ModelTransformation definition.</instructions>
             </workflow:InstructionTask>
           </task>
+          <changedFiles>
+            <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/MyTestTransformation.bml" />
+          </changedFiles>
         </workflow:AgenticOperation>
       </composition>
     </operations>
