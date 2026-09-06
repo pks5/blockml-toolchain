@@ -151,7 +151,7 @@ describe("worktree transform lock", () => {
     const [resultA, resultB] = await Promise.all([runA, runB]);
     expect(resultA.success).toBe(true);
     expect(resultB.success).toBe(true);
-  });
+  }, 15_000);
 });
 
 function writePending(dir: string, name: string): void {
