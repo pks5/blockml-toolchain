@@ -166,6 +166,17 @@ describe("validateTypes parseValue literals", () => {
     expect(diagnostics.filter((d) => d.code === "BML_INVALID_VALUE")).toEqual([]);
   });
 
+  it("reports BML_INVALID_VALUE for a JSON array on a non-list StructType", () => {
+    const document = parseSample(
+      '    <size type="core:Block" value="[4,4,3]" />',
+      "struct-array.bml",
+    );
+    const diagnostics = validateTypes(document, bootstrappedRegistry());
+    expect(
+      diagnostics.some((d) => d.message === "collection value on a non-list type"),
+    ).toBe(true);
+  });
+
   it("reports BML_INVALID_VALUE for a JSON list on a scalar Text property", () => {
     const document = parseSample(
       `    <label type="type:Text" value="['Hello', 'Good Bye']" />`,

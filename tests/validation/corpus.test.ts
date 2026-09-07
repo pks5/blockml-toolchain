@@ -23,12 +23,17 @@ const STRICT_CORPUS_FILES = [
     "node_modules/@blockml/core/blocks/org/blockml/bml/definition/MemberDefinition.bml",
   ]),
   corpusPath([
-    "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/core/NativeBlock.bml",
-  ]),
-  corpusPath([
     "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/core/CompositeBlock.bml",
   ]),
   corpusPath(["node_modules/@machineblocks/core/blocks/com/machineblocks/bml/core/Set.bml"]),
+];
+
+/** Stale SCAD positional arrays authored as BML StructType values (`[4,4,3]`).
+ *  Structs are named field mappings; these files live in node_modules. */
+const STALE_STRUCT_ARRAY_CORPUS = [
+  corpusPath([
+    "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/core/NativeBlock.bml",
+  ]),
   corpusPath([
     "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/examples/Cross.bml",
   ]),
@@ -56,4 +61,26 @@ describe("validation corpus", () => {
     expect(result.success).toBe(true);
     expect(result.pragmaticModel).toBeDefined();
   });
+
+  it.each(STALE_STRUCT_ARRAY_CORPUS)(
+    "flags positional arrays on StructType: %s",
+    (filePath) => {
+      const source = readFileSync(filePath, "utf8");
+      const parsed = parse(source, { filePath });
+      expect(parsed.success, JSON.stringify(parsed.diagnostics)).toBe(true);
+      expect(parsed.document).not.toBeNull();
+
+      const result = validate(parsed.document!);
+      const errors = result.diagnostics.filter((d) => d.severity === "error");
+      expect(errors.length).toBeGreaterThan(0);
+      expect(
+        errors.every(
+          (d) =>
+            d.code === "BML_INVALID_VALUE" &&
+            d.message === "collection value on a non-list type",
+        ),
+        `unexpected validation errors in ${filePath}: ${JSON.stringify(errors)}`,
+      ).toBe(true);
+    },
+  );
 });

@@ -52,6 +52,9 @@
     • BML_EXPR_TYPE_MISMATCH — interpolated text on a non-Text member
     • BML_INVALID_VALUE — PrimitiveType.parseValue threw on a canonical BML literal
       (property.value, values[namespace=""], instance memberValues, TypeReferenceEntity.value).
+      A JSON-like `[…]` payload without `[]` multiplicity is also this code
+      (collection on a non-list type), including on StructType. Struct values are
+      named field mappings, not positional arrays.
       Prefixed values (scad:value and other Annotation FQNs) are not validated today.
       TODO: a matching prefixed type (scad:type for scad:value) so each facet can be
       checked in its target language. Message is the thrown Error text. Expressions,

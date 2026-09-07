@@ -134,7 +134,7 @@ describe("definitionAt / referencesAt", () => {
         continue;
       }
       const text = readFileSync(block.baseTypeSource.file, "utf8");
-      if (!text.includes("<baseType>core:Block")) {
+      if (!text.includes("core:Block")) {
         continue;
       }
       usageFile = block.baseTypeSource.file;
@@ -148,10 +148,13 @@ describe("definitionAt / referencesAt", () => {
     expect(usageRange).toBeTruthy();
 
     const usageText = readFileSync(usageFile!, "utf8");
+    const compact = usageText.includes("<baseType>core:Block");
     const refs = referencesAt(
       usageText,
       usageFile!,
-      positionAt(usageText, "<baseType>core:Block", 11),
+      compact
+        ? positionAt(usageText, "<baseType>core:Block", 11)
+        : positionAt(usageText, "core:Block"),
       workspace,
     );
     expect(refs).not.toBeNull();
