@@ -141,6 +141,30 @@ describe("semanticHighlightSpans", () => {
     expect(typeAt(xml, "<properties>")).toBe("memberContainer");
   });
 
+  it("treats a type-as-root tag as root and keeps member nesting", () => {
+    const src = [
+      '<test:HoverMe xmlns="http://blockml.org/bml"',
+      ' xmlns:core="org.blockml.bml.core"',
+      ' xmlns:type="org.blockml.bml.type"',
+      ' xmlns:test="com.blockml.test.hover">',
+      "  <name>HoverMe</name>",
+      "  <documentation>docs</documentation>",
+      "  <properties>",
+      '    <count type="type:Integer">',
+      "      <documentation>item count</documentation>",
+      "    </count>",
+      "  </properties>",
+      "</test:HoverMe>",
+    ].join("\n");
+    expect(typeAt(src, "<test:HoverMe")).toBe("root");
+    expect(typeAt(src, "</test:HoverMe>")).toBe("root");
+    expect(typeAt(src, "<name>HoverMe")).toBe("blockDeclaration");
+    expect(typeAt(src, "<documentation>docs")).toBe("blockFacet");
+    expect(typeAt(src, "<properties>")).toBe("memberContainer");
+    expect(typeAt(src, "<count type")).toBe("memberName");
+    expect(typeAt(src, "<documentation>item count")).toBe("memberFacet");
+  });
+
   it("colors attributes, strings, comments, and interpolation", () => {
     const src = '<!-- note -->\n<block xmlns="http://blockml.org/bml" name="${x}" />';
     const spans = semanticHighlightSpans(src);

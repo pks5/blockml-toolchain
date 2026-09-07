@@ -85,6 +85,7 @@
         <parcap:GetParseErrors />
         <parcap:DocumentElement />
         <parcap:AssertBlockRoot />
+        <parcap:IsDocumentRootLocalName />
         <parcap:ExtractNamespaceBindings />
         <parcap:MergeSourceInfo />
         <parcap:CreateMapContext />

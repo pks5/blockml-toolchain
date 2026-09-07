@@ -79,8 +79,8 @@
     and usages come from the TypeRegistry with the open document overlaid.
     includeDeclaration defaults true.
 
-    Semantic tokens are an XML-stack walk (no parser). Element names are classified
-    by nesting relative to the nearest block, matching
+    Semantic tokens are an XML-stack walk (no parse()). Element names are classified
+    by nesting relative to the nearest document root or nested block, matching
     org.blockml.bml.vscode.theme.FrameworkRoles — same local name, different color
     by position. Nested block re-enters block-body rules. Clients map the
     legend types to *.bml TextMate scopes; theming stays in the IDE package.</documentation>

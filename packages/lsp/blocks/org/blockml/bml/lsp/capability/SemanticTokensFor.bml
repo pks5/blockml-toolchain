@@ -34,11 +34,12 @@
   <baseType>core:Capability</baseType>
   <is>Position-based semantic tokens for a BML document</is>
 
-  <documentation>
+  <documentation><![CDATA[
     # Position-based semantic tokens for a BML document
 
-    XML-stack walk (no parser, no TypeRegistry). Classifies each element name by nesting
-    relative to the nearest block, matching org.blockml.bml.vscode.theme.FrameworkRoles:
+    XML-stack walk (no parse() / TypeRegistry). Classifies each element name by nesting
+    relative to the nearest document root or nested <block>, matching
+    org.blockml.bml.vscode.theme.FrameworkRoles:
 
     • root, block declaration/facet/container
     • member container/name/field/facet/sub-container
@@ -47,7 +48,7 @@
     Nested block re-enters L1. Lexical tokens cover attributes, strings, comments,
     interpolation, embed, and punctuation. Returns LSP SemanticTokens.data (5-int groups).
     Used by textDocument/semanticTokens/full.
-  </documentation>
+  ]]></documentation>
 
   <references>
     <see type="lspdocumentation:PublicApi" relation="SeeAlso" />

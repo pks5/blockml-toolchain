@@ -354,6 +354,23 @@
       "output": null
     },
     {
+      "name": "IsDocumentRootLocalName",
+      "tsExport": "isDocumentRootLocalName",
+      "fqn": "org.blockml.bml.compiler.parser.capability.IsDocumentRootLocalName",
+      "inputs": [
+        {
+          "name": "local",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "allowed",
+        "type": "type:Boolean",
+        "required": true
+      }
+    },
+    {
       "name": "ExtractNamespaceBindings",
       "tsExport": "extractNamespaceBindings",
       "fqn": "org.blockml.bml.compiler.parser.capability.ExtractNamespaceBindings",

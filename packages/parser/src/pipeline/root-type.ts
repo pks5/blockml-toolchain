@@ -13,9 +13,13 @@ function authoredRootTag(element: Element): string {
   return prefix ? `${prefix}:${local}` : local;
 }
 
+export function isDocumentRootLocalName(local: string): boolean {
+  return local === V1_ROOT_ELEMENT || TYPE_AS_ROOT_LOCAL.test(local);
+}
+
 export function assertBlockRoot(element: Element): void {
   const local = elementLocalName(element);
-  if (local === V1_ROOT_ELEMENT || TYPE_AS_ROOT_LOCAL.test(local)) {
+  if (isDocumentRootLocalName(local)) {
     return;
   }
   throw new Error(

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { isDocumentRootLocalName } from "../src/pipeline/root-type.js";
 import { parse } from "../src/parse.js";
 
 const NS = [
@@ -19,6 +20,16 @@ function legacy(body = ""): string {
     "</block>",
   ].join("\n");
 }
+
+describe("isDocumentRootLocalName", () => {
+  it("accepts legacy block and PascalCase type tags", () => {
+    expect(isDocumentRootLocalName("block")).toBe(true);
+    expect(isDocumentRootLocalName("MyLatestStory")).toBe(true);
+    expect(isDocumentRootLocalName("_Helper")).toBe(true);
+    expect(isDocumentRootLocalName("notBlock")).toBe(false);
+    expect(isDocumentRootLocalName("properties")).toBe(false);
+  });
+});
 
 describe("document root dual format", () => {
   it("keeps legacy <block> plus <type> identity", () => {

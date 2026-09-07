@@ -329,6 +329,31 @@ describe("runCli validate (parse + semantic, no XSD)", () => {
     expect(stderr).toMatch(/Validation failed\. Tested 1 block,/);
   });
 
+  it("accepts a type-as-root tag without XSD", async () => {
+    const srcDir = join(tmpProject, "src");
+    mkdirSync(srcDir, { recursive: true });
+    writeFileSync(
+      join(srcDir, "Ok.bml"),
+      `<cli:Ok xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:cli="com.test.cli">
+
+  <name>Ok</name>
+  <baseType>core:Block</baseType>
+  <is>ok</is>
+  <documentation>ok</documentation>
+  <version>0.0.1</version>
+</cli:Ok>
+`,
+      "utf8",
+    );
+
+    const { code, stderr } = await runCli(["validate", "src/Ok.bml"], tmpProject);
+    expect(stderr).not.toMatch(/BML_INVALID_ROOT/);
+    expect(code).toBe(0);
+    expect(stderr).toMatch(/Validation succeeded\. Tested 1 block,/);
+  });
+
   it("counts parse errors in the with-errors tally for project validate", async () => {
     const srcDir = join(tmpProject, "blocks");
     mkdirSync(srcDir, { recursive: true });

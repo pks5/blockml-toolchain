@@ -282,8 +282,9 @@ const capabilities = [
     is: "Position-based semantic tokens for a BML document",
     doc: `# Position-based semantic tokens for a BML document
 
-    XML-stack walk (no parser, no TypeRegistry). Classifies each element name by nesting
-    relative to the nearest block, matching org.blockml.bml.vscode.theme.FrameworkRoles:
+    XML-stack walk (no parse() / TypeRegistry). Classifies each element name by nesting
+    relative to the nearest document root or nested <block>, matching
+    org.blockml.bml.vscode.theme.FrameworkRoles:
 
     • root, block declaration/facet/container
     • member container/name/field/facet/sub-container

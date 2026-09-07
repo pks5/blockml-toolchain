@@ -67,7 +67,8 @@ export const documentationBlocks = [
     baseType + member types, optional declaration).
 
     Semantic tokens: textDocument/semanticTokens/full → semanticTokensFor → XML-stack
-    walk classified by FrameworkRoles position (no parser). Nested block re-enters L1.
+    walk classified by FrameworkRoles position (no parse()). Document root or nested
+    block re-enters L1 (doc:DocumentFormat).
 
     Workspace bootstrap reads blockml.config.json (srcDir, libraries) inline — no @blockml/cli dependency.
     Corpus-first: always scan srcDir. Seed = package.json blockml.library then config.libraries
@@ -76,6 +77,7 @@ export const documentationBlocks = [
     Library blocks trees inside srcDir are not scanned twice.`,
     refs: [
       { type: "lspdocumentation:ServerLifecycle", relation: "ReadNext" },
+      { type: "doc:DocumentFormat", relation: "SeeAlso" },
     ],
   },
   {
@@ -243,8 +245,8 @@ export const documentationBlocks = [
     and usages come from the TypeRegistry with the open document overlaid.
     includeDeclaration defaults true.
 
-    Semantic tokens are an XML-stack walk (no parser). Element names are classified
-    by nesting relative to the nearest block, matching
+    Semantic tokens are an XML-stack walk (no parse()). Element names are classified
+    by nesting relative to the nearest document root or nested block, matching
     org.blockml.bml.vscode.theme.FrameworkRoles — same local name, different color
     by position. Nested block re-enters block-body rules. Clients map the
     legend types to *.bml TextMate scopes; theming stays in the IDE package.`,

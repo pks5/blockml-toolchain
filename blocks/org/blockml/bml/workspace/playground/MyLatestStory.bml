@@ -2,17 +2,13 @@
   Workspace Playground — MyLatestStory
   FQN: org.blockml.bml.workspace.playground.MyLatestStory
 -->
-<block
+<playground:MyLatestStory
   xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:playground="org.blockml.bml.workspace.playground">
 
   <name>MyLatestStory</name>
-  <type>playground:MyLatestStory</type>
   <baseType>core:Documentation</baseType>
   <is>A random structured song produced by a workspace transform execution, in German, about a futuristic city and a dog</is>
 
@@ -80,4 +76,4 @@ doch immer wird ein Hund das Lied bewachen.</value>
     </date>
   </properties>
 
-</block>
+</playground:MyLatestStory>

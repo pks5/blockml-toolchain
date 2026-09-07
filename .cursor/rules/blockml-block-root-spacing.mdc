@@ -6,23 +6,21 @@ alwaysApply: false
 
 # Block root body spacing
 
-After the `<block …>` opening tag, leave **one blank line** before the first child (`<name>`, `<type>`, …).
+After the document-root opening tag (`<block …>` or a type tag), leave **one blank line** before the first child (`<name>`, `<type>`, `<baseType>`, …).
 
 ```xml
 <!-- ❌ BAD -->
-<block
+<playground:MyLatestStory
   xmlns="http://blockml.org/bml"
   …>
-  <name>Face</name>
-  <type>mbtype:Face</type>
+  <name>MyLatestStory</name>
 
 <!-- ✅ GOOD -->
-<block
+<playground:MyLatestStory
   xmlns="http://blockml.org/bml"
   …>
 
-  <name>Face</name>
-  <type>mbtype:Face</type>
+  <name>MyLatestStory</name>
 ```
 
-Separates the xmlns header from the identity block. Do not insert extra blank lines.
+Legacy `<block>` uses the same blank line after the xmlns header. Do not insert extra blank lines.

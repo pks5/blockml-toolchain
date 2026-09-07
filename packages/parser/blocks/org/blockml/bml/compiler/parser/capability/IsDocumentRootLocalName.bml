@@ -1,0 +1,56 @@
+<!--
+  Parser Capability — IsDocumentRootLocalName
+  FQN: org.blockml.bml.compiler.parser.capability.IsDocumentRootLocalName
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
+  xmlns:parconfig="org.blockml.bml.compiler.parser.config"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:parmap="org.blockml.bml.compiler.parser.map"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>IsDocumentRootLocalName</name>
+  <type>parcap:IsDocumentRootLocalName</type>
+  <baseType>core:Capability</baseType>
+  <is>True when a local name may be a document root tag</is>
+
+  <documentation><![CDATA[True for legacy block or a PascalCase type-as-root local name
+    (optional visibility underscores). Shared by assertBlockRoot and tools that
+    must not assume the root local name is block (doc:DocumentFormat).]]></documentation>
+
+  <references>
+    <see type="parcap:AssertBlockRoot" relation="SeeAlso" />
+    <see type="doc:DocumentFormat" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <local type="type:Text">
+      <documentation>Element local name. TS type: type:Text. (required)</documentation>
+    </local>
+    <allowed type="type:Boolean">
+      <documentation>allowed. TS type: type:Boolean. (required)</documentation>
+    </allowed>
+  </properties>
+
+</block>

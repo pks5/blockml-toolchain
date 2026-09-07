@@ -1,5 +1,6 @@
 import type { BlockDefinition, MemberDefinition } from "@blockml/bom";
 import {
+  isDocumentRootLocalName,
   parse,
   resolveTypeName,
   type ImplicitNamespaceContext,
@@ -174,6 +175,20 @@ function parentLocal(token: XmlToken): string | undefined {
   return token.ancestors.length >= 2 ? token.ancestors[token.ancestors.length - 2] : undefined;
 }
 
+function isDocumentRootElement(token: XmlToken): boolean {
+  return token.ancestors.length === 1 && isDocumentRootLocalName(token.elementLocalName);
+}
+
+function isDefinitionParent(parent: string | undefined, token: XmlToken): boolean {
+  if (!parent) {
+    return false;
+  }
+  if (parent === "block") {
+    return true;
+  }
+  return isDocumentRootLocalName(parent) && token.ancestors[0] === parent;
+}
+
 function innermostBlock(
   block: BlockDefinition,
   text: string,
@@ -241,7 +256,7 @@ function enclosingMember(
     return block.members.find((member) => member.name === memberName);
   }
   const parent = parentLocal(token);
-  if (parent === "block" && !LANGUAGE_ELEMENT_NAMES.has(token.elementLocalName)) {
+  if (isDefinitionParent(parent, token) && !LANGUAGE_ELEMENT_NAMES.has(token.elementLocalName)) {
     return block.members.find((member) => member.name === token.elementLocalName);
   }
   return undefined;
@@ -255,7 +270,7 @@ function isDomainMemberTag(token: XmlToken): boolean {
   if (parent && MEMBER_SECTIONS.has(parent)) {
     return token.ancestors[token.ancestors.length - 1] === token.elementLocalName;
   }
-  return parent === "block" && !LANGUAGE_ELEMENT_NAMES.has(token.elementLocalName);
+  return isDefinitionParent(parent, token) && !LANGUAGE_ELEMENT_NAMES.has(token.elementLocalName);
 }
 
 function lookupLanguageMember(
@@ -302,7 +317,10 @@ function languageHit(
   if (member) {
     return { kind: "language", metaFqn, member, range: token.range };
   }
-  if (token.kind === "elementName" && (localName === "block" || localName === "see")) {
+  if (
+    token.kind === "elementName" &&
+    (localName === "see" || localName === "block" || isDocumentRootElement(token))
+  ) {
     return { kind: "language", metaFqn, range: token.range };
   }
   return null;

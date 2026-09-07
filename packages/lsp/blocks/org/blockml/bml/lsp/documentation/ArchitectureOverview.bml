@@ -53,7 +53,8 @@
     baseType + member types, optional declaration).
 
     Semantic tokens: textDocument/semanticTokens/full → semanticTokensFor → XML-stack
-    walk classified by FrameworkRoles position (no parser). Nested block re-enters L1.
+    walk classified by FrameworkRoles position (no parse()). Document root or nested
+    block re-enters L1 (doc:DocumentFormat).
 
     Workspace bootstrap reads blockml.config.json (srcDir, libraries) inline — no @blockml/cli dependency.
     Corpus-first: always scan srcDir. Seed = package.json blockml.library then config.libraries
@@ -63,6 +64,7 @@
 
   <references>
     <see type="lspdocumentation:ServerLifecycle" relation="ReadNext" />
+    <see type="doc:DocumentFormat" relation="SeeAlso" />
   </references>
 
 </block>

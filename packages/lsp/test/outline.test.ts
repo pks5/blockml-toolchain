@@ -55,4 +55,32 @@ describe("documentSymbols", () => {
   it("returns null for invalid XML", () => {
     expect(documentSymbols("<not-a-block>", "outline.bml")).toBeNull();
   });
+
+  it("outlines a type-as-root document the same as legacy <block>", () => {
+    const typed = [
+      '<test:OutlineMe xmlns="http://blockml.org/bml"',
+      ' xmlns:core="org.blockml.bml.core"',
+      ' xmlns:type="org.blockml.bml.type"',
+      ' xmlns:test="com.blockml.test.outline">',
+      "  <name>OutlineMe</name>",
+      "  <baseType>core:Block</baseType>",
+      "  <is>outline fixture</is>",
+      "  <subBlocks>",
+      "    <block>",
+      "      <name>Inner</name>",
+      "      <type>test:Inner</type>",
+      "      <baseType>core:Block</baseType>",
+      "    </block>",
+      "  </subBlocks>",
+      "  <properties>",
+      '    <count type="type:Integer" />',
+      "  </properties>",
+      "</test:OutlineMe>",
+    ].join("\n");
+    const symbols = documentSymbols(typed, "outline-typed.bml");
+    expect(symbols).not.toBeNull();
+    expect(symbols![0]!.name).toBe("OutlineMe");
+    expect(symbols![0]!.detail).toBe("com.blockml.test.outline.OutlineMe");
+    expect(symbols![0]!.children?.find((c) => c.name === "count")).toBeDefined();
+  });
 });

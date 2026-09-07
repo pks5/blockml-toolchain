@@ -1,3 +1,4 @@
+import { isDocumentRootLocalName } from "@blockml/parser";
 import { offsetToPosition, xmlLocalName } from "./xml-token.js";
 
 /**
@@ -5,10 +6,15 @@ import { offsetToPosition, xmlLocalName } from "./xml-token.js";
  * org.blockml.bml.vscode.theme.FrameworkRoles.
  *
  * Same tag local name (e.g. abstract, documentation, composition) colors
- * differently by XML nesting relative to the nearest <block>, not by keyword
- * lists alone. Lexical types cover comments, strings, and punctuation so
- * highlighting survives when the TextMate grammar loses its rule stack.
+ * differently by XML nesting relative to the nearest document root or nested
+ * <block>, not by keyword lists alone. Lexical types cover comments, strings,
+ * and punctuation so highlighting survives when the TextMate grammar loses
+ * its rule stack.
  */
+
+function isBlockWrapper(local: string, isDocumentRoot: boolean): boolean {
+  return local === "block" || (isDocumentRoot && isDocumentRootLocalName(local));
+}
 export const SEMANTIC_TOKEN_TYPES = [
   "root",
   "blockDeclaration",
@@ -215,13 +221,16 @@ function matchesTag(tokenText: string, local: string, tags: Set<string>): boolea
 function bodyOf(parentAncestors: string[]): BodyContext {
   let body: BodyContext = "blockBody";
   let seenBlock = false;
+  let first = true;
   for (const raw of parentAncestors) {
     const name = xmlLocalName(raw);
-    if (name === "block") {
+    if (isBlockWrapper(name, first)) {
       seenBlock = true;
       body = "blockBody";
+      first = false;
       continue;
     }
+    first = false;
     if (!seenBlock) {
       continue;
     }
@@ -266,8 +275,13 @@ function bodyOf(parentAncestors: string[]): BodyContext {
   return body;
 }
 
-function classifyElement(tokenText: string, local: string, body: BodyContext): SemanticTokenType {
-  if (local === "block") {
+function classifyElement(
+  tokenText: string,
+  local: string,
+  body: BodyContext,
+  isDocumentRoot: boolean,
+): SemanticTokenType {
+  if (isBlockWrapper(local, isDocumentRoot)) {
     return "root";
   }
   switch (body) {
@@ -434,9 +448,10 @@ export function semanticHighlightSpans(text: string): HighlightSpan[] {
       }
       const local = xmlLocalName(name.name);
       const ancestors = stack.length > 0 ? stack : [local];
-      const body = bodyOf(ancestors.slice(0, -1));
+      const parents = ancestors.slice(0, -1);
+      const body = bodyOf(parents);
       pushSpan(spans, "tagPunctuation", i, i + 2);
-      pushSpan(spans, classifyElement(name.name, local, body), name.start, name.end);
+      pushSpan(spans, classifyElement(name.name, local, body, parents.length === 0), name.start, name.end);
       if (stack.length > 0) {
         stack.pop();
       }
@@ -457,9 +472,10 @@ export function semanticHighlightSpans(text: string): HighlightSpan[] {
       }
       const local = xmlLocalName(name.name);
       stack.push(local);
-      const body = bodyOf(stack.slice(0, -1));
+      const parents = stack.slice(0, -1);
+      const body = bodyOf(parents);
       pushSpan(spans, "tagPunctuation", i, i + 1);
-      pushSpan(spans, classifyElement(name.name, local, body), name.start, name.end);
+      pushSpan(spans, classifyElement(name.name, local, body, parents.length === 0), name.start, name.end);
       let j = skipWs(text, name.end);
       let selfClosing = false;
       while (j < text.length) {

@@ -1,27 +1,24 @@
 ---
-description: Ordering of xmlns / schemaLocation attributes on Block root elements
+description: Ordering of xmlns attributes on Block document roots
 globs: "**/*.bml"
 alwaysApply: false
 ---
 
 # Block `xmlns` attribute order
 
-On every `<block>` root, declare attributes in this order — nothing interleaved.
+On every document root (`<block>` or a type tag), declare attributes in this order — nothing interleaved.
 
-## 1. URIs and schemaLocation
+## 1. Default XML namespace
 
 ```xml
 xmlns="http://blockml.org/bml"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                    "
 ```
 
-Only HTTP(S) XML namespace URIs and `xsi:schemaLocation` belong here.
+`xmlns:xsi` and `xsi:schemaLocation` are omitted by default (doc:DocumentFormat). XSD is not the authoring validator.
 
 ## 2. Package xmlns bindings
 
-After the URI block, declare every `xmlns:<prefix>="<package.fqn>"` binding:
+After the default xmlns, declare every `xmlns:<prefix>="<package.fqn>"` binding:
 
 1. **BlockML packages** (`org.blockml.*`) first
 2. **Domain packages** next — one group per domain root (e.g. all `com.machineblocks.*`, then any other domain)
@@ -29,28 +26,21 @@ After the URI block, declare every `xmlns:<prefix>="<package.fqn>"` binding:
 Within each group, sort by package FQN (hierarchical / alphabetical).
 
 ```xml
-<!-- ❌ BAD — package before schemaLocation; BlockML and domain interleaved -->
-<block
+<!-- ❌ BAD — package groups interleaved -->
+<playground:MyLatestStory
   xmlns="http://blockml.org/bml"
-  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
   xmlns:mbtype="com.machineblocks.bml.type"
-  xmlns:unit="org.blockml.bml.unit"
-  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation">
+  xmlns:core="org.blockml.bml.core"
+  xmlns:playground="org.blockml.bml.workspace.playground">
 
 <!-- ✅ GOOD -->
-<block
+<playground:MyLatestStory
   xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
-  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
-  xmlns:type="org.blockml.bml.type"
-  xmlns:unit="org.blockml.bml.unit"
-  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:playground="org.blockml.bml.workspace.playground"
   xmlns:mbtype="com.machineblocks.bml.type">
 
-  <name>…</name>
+  <name>MyLatestStory</name>
 ```
+
+Legacy `<block>` plus `<type>` uses the same attribute order. Keep `xsi:schemaLocation` only on files that already have it; do not add it to new documents.

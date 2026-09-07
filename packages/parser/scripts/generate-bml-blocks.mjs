@@ -252,6 +252,16 @@ const capabilities = [
   {
     pkg: "capability",
     prefix: "parcap",
+    name: "IsDocumentRootLocalName",
+    is: "True when a local name may be a document root tag",
+    doc: "True for legacy block or a PascalCase type-as-root local name (optional visibility underscores). Shared by assertBlockRoot and tools that must not assume the root local name is block (doc:DocumentFormat).",
+    inputs: [{ name: "local", type: "type:Text", required: true }],
+    output: { name: "allowed", type: "type:Boolean", required: true },
+    refs: ["parcap:AssertBlockRoot", "doc:DocumentFormat"],
+  },
+  {
+    pkg: "capability",
+    prefix: "parcap",
     name: "ExtractNamespaceBindings",
     is: "Extract xmlns* from root element — step [4]",
     inputs: [{ name: "element", type: "parmap:XmlDomNode", required: true }],
