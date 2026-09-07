@@ -77,7 +77,7 @@ import {
   reportUnknownElement,
   toUnknownXmlNode,
 } from "./structural.js";
-import { V1_ROOT_ELEMENT } from "../pipeline/root-type.js";
+import { isDocumentRootLocalName, V1_ROOT_ELEMENT } from "../pipeline/root-type.js";
 
 const MEMBER_SECTIONS = new Set([
   "properties",
@@ -131,13 +131,14 @@ function applyRootTypeIdentity(
   block: BlockDefinition,
   ctx: MapContext,
   tagType: string | undefined,
+  missingCode: "BML_MISSING_BLOCK_TYPE" | "BML_MISSING_EMBEDDED_BLOCK_TYPE",
 ): void {
   if (tagType) {
     if (block.type && !rootTypesAgree(tagType, block.type)) {
       reportDiagnostic(
         ctx,
         "BML_MAP_ERROR",
-        `BML_MAP_ERROR: root tag type ${tagType} disagrees with <type> ${block.type}`,
+        `BML_MAP_ERROR: tag type ${tagType} disagrees with <type> ${block.type}`,
         elementSourceLoc(ctx.filePath, ctx.source, element),
       );
       block.type = tagType;
@@ -152,13 +153,50 @@ function applyRootTypeIdentity(
     return;
   }
   if (!block.type) {
+    const site = missingCode === "BML_MISSING_EMBEDDED_BLOCK_TYPE" ? "embed tag" : "root tag";
     reportDiagnostic(
       ctx,
-      "BML_MISSING_BLOCK_TYPE",
-      "BML_MISSING_BLOCK_TYPE: neither root tag nor <type> supplies a type",
+      missingCode,
+      `${missingCode}: neither ${site} nor <type> supplies a type`,
       elementSourceLoc(ctx.filePath, ctx.source, element),
     );
   }
+}
+
+function applySubBlockIdentity(
+  element: Element,
+  block: BlockDefinition,
+  ctx: MapContext,
+  parentType: string | undefined,
+): void {
+  const local = elementLocalName(element);
+  const tagName = local === V1_ROOT_ELEMENT ? undefined : local;
+  if (tagName) {
+    if (block.name && block.name !== tagName) {
+      reportDiagnostic(
+        ctx,
+        "BML_MAP_ERROR",
+        `BML_MAP_ERROR: Sub-Block tag ${tagName} disagrees with <name> ${block.name}`,
+        elementSourceLoc(ctx.filePath, ctx.source, element),
+      );
+    }
+    block.name = tagName;
+  }
+  if (!block.name) {
+    reportDiagnostic(
+      ctx,
+      "BML_MISSING_SUBBLOCK_NAME",
+      "BML_MISSING_SUBBLOCK_NAME: neither element tag nor <name> supplies the local name",
+      elementSourceLoc(ctx.filePath, ctx.source, element),
+    );
+  }
+  if (!block.type && parentType && block.name) {
+    block.type = `${parentType}.${block.name}`;
+  }
+}
+
+function isDefinitionWrapper(element: Element): boolean {
+  return isDocumentRootLocalName(elementLocalName(element));
 }
 
 function mapBlockDefinition(
@@ -192,7 +230,11 @@ function mapBlockDefinition(
     block.generics = blockGenerics;
   }
 
-  const tagType = ctx.isRoot ? typeFromRootTag(element, ctx) : undefined;
+  const local = elementLocalName(element);
+  block.wrapperForm = local === V1_ROOT_ELEMENT ? "block" : "type";
+
+  const tagType =
+    ctx.isRoot || ctx.isEmbedded ? typeFromRootTag(element, ctx) : undefined;
   if (tagType) {
     block.type = tagType;
     block.typeSource = elementSourceLoc(ctx.filePath, ctx.source, element);
@@ -223,11 +265,11 @@ function mapBlockDefinition(
       continue;
     }
     if (local === "subBlocks") {
-      subBlocksRaw.push(...elementChildren(child).filter((c) => elementLocalName(c) === "block"));
+      subBlocksRaw.push(...elementChildren(child).filter(isDefinitionWrapper));
       continue;
     }
     if (local === "embeddedBlocks") {
-      embeddedRaw.push(...elementChildren(child).filter((c) => elementLocalName(c) === "block"));
+      embeddedRaw.push(...elementChildren(child).filter(isDefinitionWrapper));
       continue;
     }
     if (MEMBER_SECTIONS.has(local)) {
@@ -257,10 +299,14 @@ function mapBlockDefinition(
   mapMetadataFields(element, block, ctx);
 
   if (ctx.isRoot) {
-    applyRootTypeIdentity(element, block, ctx, tagType);
+    applyRootTypeIdentity(element, block, ctx, tagType, "BML_MISSING_BLOCK_TYPE");
+  } else if (ctx.isEmbedded) {
+    applyRootTypeIdentity(element, block, ctx, tagType, "BML_MISSING_EMBEDDED_BLOCK_TYPE");
+  } else if (parentType !== undefined) {
+    applySubBlockIdentity(element, block, ctx, parentType);
   }
 
-  if (!block.name) {
+  if (!block.name && (ctx.isRoot || ctx.isEmbedded)) {
     block.name = block.type.split(".").pop() ?? "Block";
   }
 
@@ -275,13 +321,13 @@ function mapBlockDefinition(
         { name: "type", value: typeText },
       );
     }
-  } else if (!block.type && parentType) {
+  } else if (!block.type && parentType && block.name) {
     block.type = `${parentType}.${block.name}`;
   }
 
   const subBlockElements: Element[] = [...subBlocksRaw];
   for (const child of childElements) {
-    if (elementLocalName(child) === "block") {
+    if (elementLocalName(child) === V1_ROOT_ELEMENT) {
       subBlockElements.push(child);
     }
   }
@@ -925,6 +971,12 @@ function peekSubBlock(
       name = getTextOrAttr(child);
     } else if (local === "type") {
       typeText = getTextOrAttr(child);
+    }
+  }
+  if (!name) {
+    const local = elementLocalName(element);
+    if (local !== V1_ROOT_ELEMENT && isDocumentRootLocalName(local)) {
+      name = local;
     }
   }
   if (!name) {

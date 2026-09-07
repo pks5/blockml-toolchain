@@ -1,13 +1,28 @@
+import { isDocumentRootLocalName } from "@blockml/parser";
 import { offsetToPosition, xmlLocalName } from "./xml-token.js";
 /**
  * Position-based highlight roles, aligned with
  * org.blockml.bml.vscode.theme.FrameworkRoles.
  *
  * Same tag local name (e.g. abstract, documentation, composition) colors
- * differently by XML nesting relative to the nearest <block>, not by keyword
- * lists alone. Lexical types cover comments, strings, and punctuation so
- * highlighting survives when the TextMate grammar loses its rule stack.
+ * differently by XML nesting relative to the nearest document root or nested
+ * <block>, not by keyword lists alone. Lexical types cover comments, strings,
+ * and punctuation so highlighting survives when the TextMate grammar loses
+ * its rule stack.
  */
+function isBlockWrapper(local, ancestors) {
+    if (local === "block") {
+        return true;
+    }
+    if (!isDocumentRootLocalName(local)) {
+        return false;
+    }
+    if (ancestors.length === 0) {
+        return true;
+    }
+    const parent = ancestors[ancestors.length - 1];
+    return parent === "subBlocks" || parent === "embeddedBlocks";
+}
 export const SEMANTIC_TOKEN_TYPES = [
     "root",
     "blockDeclaration",
@@ -176,13 +191,16 @@ function matchesTag(tokenText, local, tags) {
 function bodyOf(parentAncestors) {
     let body = "blockBody";
     let seenBlock = false;
+    const walked = [];
     for (const raw of parentAncestors) {
         const name = xmlLocalName(raw);
-        if (name === "block") {
+        if (isBlockWrapper(name, walked)) {
             seenBlock = true;
             body = "blockBody";
+            walked.push(name);
             continue;
         }
+        walked.push(name);
         if (!seenBlock) {
             continue;
         }
@@ -233,8 +251,8 @@ function bodyOf(parentAncestors) {
     }
     return body;
 }
-function classifyElement(tokenText, local, body) {
-    if (local === "block") {
+function classifyElement(tokenText, local, body, ancestors) {
+    if (isBlockWrapper(local, ancestors)) {
         return "root";
     }
     switch (body) {
@@ -390,9 +408,10 @@ export function semanticHighlightSpans(text) {
             }
             const local = xmlLocalName(name.name);
             const ancestors = stack.length > 0 ? stack : [local];
-            const body = bodyOf(ancestors.slice(0, -1));
+            const parents = ancestors.slice(0, -1);
+            const body = bodyOf(parents);
             pushSpan(spans, "tagPunctuation", i, i + 2);
-            pushSpan(spans, classifyElement(name.name, local, body), name.start, name.end);
+            pushSpan(spans, classifyElement(name.name, local, body, parents), name.start, name.end);
             if (stack.length > 0) {
                 stack.pop();
             }
@@ -414,9 +433,10 @@ export function semanticHighlightSpans(text) {
             }
             const local = xmlLocalName(name.name);
             stack.push(local);
-            const body = bodyOf(stack.slice(0, -1));
+            const parents = stack.slice(0, -1);
+            const body = bodyOf(parents);
             pushSpan(spans, "tagPunctuation", i, i + 1);
-            pushSpan(spans, classifyElement(name.name, local, body), name.start, name.end);
+            pushSpan(spans, classifyElement(name.name, local, body, parents), name.start, name.end);
             let j = skipWs(text, name.end);
             let selfClosing = false;
             while (j < text.length) {

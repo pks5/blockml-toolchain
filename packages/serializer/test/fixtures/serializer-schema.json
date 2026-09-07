@@ -161,6 +161,11 @@
           "name": "omitTypeChild",
           "type": "type:Boolean",
           "required": false
+        },
+        {
+          "name": "omitNameChild",
+          "type": "type:Boolean",
+          "required": false
         }
       ],
       "output": null

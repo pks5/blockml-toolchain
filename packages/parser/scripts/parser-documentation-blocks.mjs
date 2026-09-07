@@ -61,7 +61,7 @@ export const documentationBlocks = [
     Stage 1 pipeline:
     [1] Format detect (B24) — detectFormat(); strip UTF-8 BOM; first '<' → xml
     [2] XML DOM (B18) — parseXmlDom() via @xmldom/xmldom
-    [3] Root type resolver — assertBlockRoot(); <block> or type-as-root tag (doc:DocumentFormat)
+    [3] Root type resolver — assertBlockRoot(); <block> or type-or-name tag (doc:DocumentFormat)
     [4] Namespace resolver — extractNamespaceBindings(), mergeSourceInfo(); FQN resolution; rootForm
     [5] BML → BOM mapper — mapDocumentBlock() → BomDocument
 
@@ -392,7 +392,9 @@ export const documentationBlocks = [
     • BML_MISSING_ROOT — no document element
     • BML_INVALID_ROOT — not <block> and not a type-as-root tag (doc:DocumentFormat)
     • BML_MISSING_BLOCK_TYPE — legacy <block> supplies neither root tag type nor <type>
-    • BML_MAP_ERROR — mapping exception, including root-tag type vs child <type> mismatch
+    • BML_MISSING_EMBEDDED_BLOCK_TYPE — legacy embed <block> supplies neither tag type nor <type>
+    • BML_MISSING_SUBBLOCK_NAME — legacy Sub-Block <block> supplies neither tag name nor <name>
+    • BML_MAP_ERROR — mapping exception, including tag vs child <type>/<name> mismatch
 
     Map-time codes (mapper modules):
     • BML_UNKNOWN_NAMESPACE_PREFIX, BML_UNQUALIFIED_BLOCK_REFERENCE

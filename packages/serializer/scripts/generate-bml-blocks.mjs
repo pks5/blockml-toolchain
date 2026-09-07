@@ -170,6 +170,7 @@ const capabilities = [
       { name: "block", type: "bomblock:BlockDefinition", required: true },
       { name: "context", type: "seremit:EmitContext", required: true },
       { name: "omitTypeChild", type: "type:Boolean" },
+      { name: "omitNameChild", type: "type:Boolean" },
     ],
     refs: ["serconfig:BlockEmitOrder", "serdocumentation:EmitOrder"],
   },

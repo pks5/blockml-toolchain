@@ -1166,6 +1166,11 @@
           "name": "unknownAttributes",
           "type": "type:Text",
           "required": false
+        },
+        {
+          "name": "wrapperForm",
+          "type": "type:Text",
+          "required": false
         }
       ]
     },

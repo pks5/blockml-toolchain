@@ -179,6 +179,16 @@ function isDocumentRootElement(token: XmlToken): boolean {
   return token.ancestors.length === 1 && isDocumentRootLocalName(token.elementLocalName);
 }
 
+function isNestedDefinitionWrapper(token: XmlToken): boolean {
+  const local = token.elementLocalName;
+  if (!isDocumentRootLocalName(local)) {
+    return false;
+  }
+  const idx = token.ancestors.lastIndexOf(local);
+  const before = idx > 0 ? token.ancestors[idx - 1] : undefined;
+  return before === "subBlocks" || before === "embeddedBlocks";
+}
+
 function isDefinitionParent(parent: string | undefined, token: XmlToken): boolean {
   if (!parent) {
     return false;
@@ -186,7 +196,15 @@ function isDefinitionParent(parent: string | undefined, token: XmlToken): boolea
   if (parent === "block") {
     return true;
   }
-  return isDocumentRootLocalName(parent) && token.ancestors[0] === parent;
+  if (!isDocumentRootLocalName(parent)) {
+    return false;
+  }
+  if (token.ancestors[0] === parent) {
+    return true;
+  }
+  const idx = token.ancestors.lastIndexOf(parent);
+  const before = idx > 0 ? token.ancestors[idx - 1] : undefined;
+  return before === "subBlocks" || before === "embeddedBlocks";
 }
 
 function innermostBlock(
@@ -319,7 +337,10 @@ function languageHit(
   }
   if (
     token.kind === "elementName" &&
-    (localName === "see" || localName === "block" || isDocumentRootElement(token))
+    (localName === "see" ||
+      localName === "block" ||
+      isDocumentRootElement(token) ||
+      isNestedDefinitionWrapper(token))
   ) {
     return { kind: "language", metaFqn, range: token.range };
   }

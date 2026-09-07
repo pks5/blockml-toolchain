@@ -33,8 +33,8 @@
   <is>Emit full BlockDefinition tree in BLOCK_EMIT_ORDER (B12)</is>
 
   <documentation><![CDATA[Walks serconfig:BlockEmitOrder; delegates to member/composition/type emit helpers.
-    omitTypeChild is true only for the document-root definition when SourceInfo.rootForm is
-    type — nested <block> still emits child <type>.]]></documentation>
+    omitTypeChild is true when the wrapper tag already supplies the type (root, embed, or
+    preferred Sub-Block). omitNameChild is true when a Sub-Block tag already supplies the name.]]></documentation>
 
   <references>
     <see type="serconfig:BlockEmitOrder" relation="SeeAlso" />
@@ -52,8 +52,11 @@
       <documentation>context. TS type: seremit:EmitContext. (required)</documentation>
     </context>
     <omitTypeChild type="type:Boolean">
-      <documentation>Skip child type when the document root tag already supplies it. Nested blocks ignore this. TS type: type:Boolean. (optional)</documentation>
+      <documentation>Skip child type when the wrapper tag already supplies it. TS type: type:Boolean. (optional)</documentation>
     </omitTypeChild>
+    <omitNameChild type="type:Boolean">
+      <documentation>Skip child name when a Sub-Block tag already supplies it. TS type: type:Boolean. (optional)</documentation>
+    </omitNameChild>
   </properties>
 
 </block>

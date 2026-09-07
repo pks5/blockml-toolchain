@@ -32,7 +32,7 @@
     "test": "vitest run packages/bom/test"
   },
   "dependencies": {
-    "@blockml/core": "^1.2.0"
+    "@blockml/core": "^1.2.1"
   },
   "engines": {
     "node": ">=20"

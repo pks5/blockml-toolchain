@@ -85,4 +85,45 @@ describe("document root form-fidelity", () => {
     expect(xml.text).toMatch(/<block>/);
     expect(xml.text).toMatch(/<type>\s*test:Inner\s*<\/type>/);
   });
+
+  it("re-emits an unqualified Sub-Block tag and omits child <name>", () => {
+    const source = [
+      `<test:Sample ${NS}>`,
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "  <subBlocks>",
+      "    <Inner>",
+      "      <baseType>core:Block</baseType>",
+      "      <is>inner</is>",
+      "    </Inner>",
+      "  </subBlocks>",
+      "</test:Sample>",
+    ].join("\n");
+    const parsed = parse(source, { filePath: "sub-tag.bml" });
+    const xml = serialize(parsed.document!);
+    expect(xml.text).toMatch(/<subBlocks>/);
+    expect(xml.text).toMatch(/<Inner>/);
+    expect(xml.text).toMatch(/<\/Inner>/);
+    expect(xml.text).not.toMatch(/<name>\s*Inner\s*<\/name>/);
+  });
+
+  it("re-emits a qualified embed tag and omits child <type>", () => {
+    const source = [
+      `<test:Sample ${NS}>`,
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "  <embeddedBlocks>",
+      "    <test:Helper>",
+      "      <baseType>core:Block</baseType>",
+      "      <is>embed</is>",
+      "    </test:Helper>",
+      "  </embeddedBlocks>",
+      "</test:Sample>",
+    ].join("\n");
+    const parsed = parse(source, { filePath: "embed-tag.bml" });
+    const xml = serialize(parsed.document!);
+    expect(xml.text).toMatch(/<test:Helper>/);
+    expect(xml.text).toMatch(/<\/test:Helper>/);
+    expect(xml.text).not.toMatch(/<type>/);
+  });
 });

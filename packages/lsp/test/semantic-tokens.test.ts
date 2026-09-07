@@ -84,6 +84,20 @@ describe("semanticHighlightSpans", () => {
     expect(typeAt(SAMPLE, "<abstract>true</abstract>\n    </block>")).toBe("blockDeclaration");
   });
 
+  it("treats an unqualified Sub-Block tag as a nested wrapper", () => {
+    const src = [
+      "<block>",
+      "  <subBlocks>",
+      "    <Inner>",
+      "      <baseType>core:Block</baseType>",
+      "    </Inner>",
+      "  </subBlocks>",
+      "</block>",
+    ].join("\n");
+    expect(typeAt(src, "<Inner>")).toBe("root");
+    expect(typeAt(src, "<baseType>core:Block")).toBe("blockDeclaration");
+  });
+
   it("colors the same tag differently at member level", () => {
     expect(typeAt(SAMPLE, "<count type")).toBe("memberName");
     expect(typeAt(SAMPLE, "<abstract>true</abstract>\n      <documentation>item")).toBe("memberField");

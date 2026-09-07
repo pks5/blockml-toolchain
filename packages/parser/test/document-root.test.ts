@@ -187,3 +187,108 @@ describe("document root dual format", () => {
     expect(typedResult.document!.block.name).toBe(legacyResult.document!.block.name);
   });
 });
+
+describe("nested definition wrappers", () => {
+  it("maps an unqualified Sub-Block tag as the name and derives type", () => {
+    const source = [
+      `<test:Sample ${NS}>`,
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "  <subBlocks>",
+      "    <Inner>",
+      "      <baseType>core:Block</baseType>",
+      "      <is>inner</is>",
+      "    </Inner>",
+      "  </subBlocks>",
+      "</test:Sample>",
+    ].join("\n");
+    const result = parse(source, { filePath: "sub-tag.bml" });
+    expect(result.success).toBe(true);
+    const inner = result.document!.block.subBlocks[0];
+    expect(inner?.name).toBe("Inner");
+    expect(inner?.type).toBe("com.blockml.test.root.Sample.Inner");
+    expect(inner?.wrapperForm).toBe("type");
+  });
+
+  it("maps a visibility-prefixed Sub-Block tag", () => {
+    const source = [
+      `<test:Sample ${NS}>`,
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "  <subBlocks>",
+      "    <_Utils>",
+      "      <baseType>core:Entity</baseType>",
+      "      <is>helpers</is>",
+      "    </_Utils>",
+      "  </subBlocks>",
+      "</test:Sample>",
+    ].join("\n");
+    const result = parse(source, { filePath: "sub-vis.bml" });
+    expect(result.success).toBe(true);
+    expect(result.document!.block.subBlocks[0]?.name).toBe("_Utils");
+    expect(result.document!.block.subBlocks[0]?.type).toBe(
+      "com.blockml.test.root.Sample._Utils",
+    );
+  });
+
+  it("maps a qualified embed tag as the type", () => {
+    const source = [
+      `<test:Sample ${NS}>`,
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "  <embeddedBlocks>",
+      "    <test:Helper>",
+      "      <baseType>core:Block</baseType>",
+      "      <is>embed</is>",
+      "    </test:Helper>",
+      "  </embeddedBlocks>",
+      "</test:Sample>",
+    ].join("\n");
+    const result = parse(source, { filePath: "embed-tag.bml" });
+    expect(result.success).toBe(true);
+    const embed = result.document!.block.embeddedBlocks[0];
+    expect(embed?.name).toBe("Helper");
+    expect(embed?.type).toBe("com.blockml.test.root.Helper");
+    expect(embed?.wrapperForm).toBe("type");
+  });
+
+  it("keeps legacy nested <block> wrappers", () => {
+    const source = [
+      `<test:Sample ${NS}>`,
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "  <subBlocks>",
+      "    <block>",
+      "      <name>Inner</name>",
+      "      <baseType>core:Block</baseType>",
+      "      <is>inner</is>",
+      "    </block>",
+      "  </subBlocks>",
+      "</test:Sample>",
+    ].join("\n");
+    const result = parse(source, { filePath: "sub-legacy.bml" });
+    expect(result.success).toBe(true);
+    expect(result.document!.block.subBlocks[0]?.wrapperForm).toBe("block");
+    expect(result.document!.block.subBlocks[0]?.name).toBe("Inner");
+    expect(result.document!.block.subBlocks[0]?.type).toBe(
+      "com.blockml.test.root.Sample.Inner",
+    );
+  });
+
+  it("reports BML_MISSING_SUBBLOCK_NAME for legacy <block> without <name>", () => {
+    const source = [
+      `<test:Sample ${NS}>`,
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "  <subBlocks>",
+      "    <block>",
+      "      <baseType>core:Block</baseType>",
+      "    </block>",
+      "  </subBlocks>",
+      "</test:Sample>",
+    ].join("\n");
+    const result = parse(source, { filePath: "sub-missing-name.bml", continueOnError: true });
+    expect(result.success).toBe(false);
+    expect(result.diagnostics.some((d) => d.code === "BML_MISSING_SUBBLOCK_NAME")).toBe(true);
+  });
+});

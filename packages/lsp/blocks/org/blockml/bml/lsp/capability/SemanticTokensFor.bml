@@ -38,7 +38,7 @@
     # Position-based semantic tokens for a BML document
 
     XML-stack walk (no parse() / TypeRegistry). Classifies each element name by nesting
-    relative to the nearest document root or nested <block>, matching
+    relative to the nearest document root or nested definition wrapper, matching
     org.blockml.bml.vscode.theme.FrameworkRoles:
 
     • root, block declaration/facet/container

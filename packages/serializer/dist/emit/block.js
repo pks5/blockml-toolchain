@@ -33,15 +33,18 @@ const BLOCK_EMIT_ORDER = [
     "embeddedBlocks",
     "bml:xml",
 ];
-export function emitBlockDefinition(writer, block, ctx, omitTypeChild = false) {
+export function emitBlockDefinition(writer, block, ctx, omitTypeChild = false, omitNameChild = false) {
     for (const key of BLOCK_EMIT_ORDER) {
-        emitBlockField(writer, block, key, ctx, omitTypeChild);
+        emitBlockField(writer, block, key, ctx, omitTypeChild, omitNameChild);
     }
     emitUnknownXmlNodes(writer, block.unknownElements);
 }
-function emitBlockField(writer, block, key, ctx, omitTypeChild = false) {
+function emitBlockField(writer, block, key, ctx, omitTypeChild = false, omitNameChild = false) {
     switch (key) {
         case "name":
+            if (omitNameChild) {
+                break;
+            }
             if (block.name) {
                 emitSimpleElement(writer, "name", block.name);
             }
@@ -248,7 +251,7 @@ function emitBlockField(writer, block, key, ctx, omitTypeChild = false) {
                 writer.line("<subBlocks>");
                 writer.pushDepth();
                 for (const sb of block.subBlocks) {
-                    emitNestedBlock(writer, sb, ctx);
+                    emitNestedBlock(writer, sb, ctx, "subBlock");
                 }
                 writer.popDepth();
                 writer.line("</subBlocks>");
@@ -259,7 +262,7 @@ function emitBlockField(writer, block, key, ctx, omitTypeChild = false) {
                 writer.line("<embeddedBlocks>");
                 writer.pushDepth();
                 for (const eb of block.embeddedBlocks) {
-                    emitNestedBlock(writer, eb, ctx);
+                    emitNestedBlock(writer, eb, ctx, "embed");
                 }
                 writer.popDepth();
                 writer.line("</embeddedBlocks>");
@@ -277,13 +280,29 @@ function emitBlockField(writer, block, key, ctx, omitTypeChild = false) {
             break;
     }
 }
-function emitNestedBlock(writer, block, ctx) {
+function nestedDefinitionTag(block, ctx, kind) {
+    if (kind === "subBlock") {
+        return block.name || "block";
+    }
+    if (!block.type) {
+        return "block";
+    }
+    const qname = fqnToQName(block.type, ctx.bindings);
+    if (qname.includes(":")) {
+        return qname;
+    }
+    const lastDot = block.type.lastIndexOf(".");
+    return lastDot === -1 ? block.type : block.type.slice(lastDot + 1);
+}
+function emitNestedBlock(writer, block, ctx, kind) {
+    const preferred = block.wrapperForm === "type";
+    const tag = preferred ? nestedDefinitionTag(block, ctx, kind) : "block";
     writer.comments(block.xmlTrivia);
-    writer.line("<block>");
+    writer.line(`<${tag}>`);
     writer.pushDepth();
-    emitBlockDefinition(writer, block, ctx);
+    emitBlockDefinition(writer, block, ctx, preferred, preferred && kind === "subBlock");
     writer.popDepth();
-    writer.line("</block>");
+    writer.line(`</${tag}>`);
     writer.comments(block.xmlTrivia, true);
 }
 function emitSimpleElement(writer, tag, text) {

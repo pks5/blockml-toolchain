@@ -43,6 +43,12 @@ export interface BlockDefinition {
    * Derived on Sub-Blocks: parentFqn + "." + name
    */
   type: string;
+  /**
+   * Authored definition wrapper (doc:DocumentFormat).
+   * `"block"` = legacy `<block>`; `"type"` = type-or-name tag.
+   * Omitted on hand-built BOM defaults to `"block"` on serialize.
+   */
+  wrapperForm?: "block" | "type";
   /** Parent type FQN. Omitted in some corpus files. */
   baseType?: string;
   /**

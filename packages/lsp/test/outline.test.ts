@@ -83,4 +83,25 @@ describe("documentSymbols", () => {
     expect(symbols![0]!.detail).toBe("com.blockml.test.outline.OutlineMe");
     expect(symbols![0]!.children?.find((c) => c.name === "count")).toBeDefined();
   });
+
+  it("outlines an unqualified Sub-Block tag", () => {
+    const typed = [
+      '<test:OutlineMe xmlns="http://blockml.org/bml"',
+      ' xmlns:core="org.blockml.bml.core"',
+      ' xmlns:test="com.blockml.test.outline">',
+      "  <baseType>core:Block</baseType>",
+      "  <is>outline fixture</is>",
+      "  <subBlocks>",
+      "    <Inner>",
+      "      <baseType>core:Block</baseType>",
+      "    </Inner>",
+      "  </subBlocks>",
+      "</test:OutlineMe>",
+    ].join("\n");
+    const symbols = documentSymbols(typed, "outline-sub-tag.bml");
+    expect(symbols).not.toBeNull();
+    const inner = symbols![0]!.children?.find((c) => c.name === "Inner");
+    expect(inner).toBeDefined();
+    expect(inner!.detail).toBe("com.blockml.test.outline.OutlineMe.Inner");
+  });
 });

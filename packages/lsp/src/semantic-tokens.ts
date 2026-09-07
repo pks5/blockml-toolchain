@@ -12,8 +12,18 @@ import { offsetToPosition, xmlLocalName } from "./xml-token.js";
  * its rule stack.
  */
 
-function isBlockWrapper(local: string, isDocumentRoot: boolean): boolean {
-  return local === "block" || (isDocumentRoot && isDocumentRootLocalName(local));
+function isBlockWrapper(local: string, ancestors: string[]): boolean {
+  if (local === "block") {
+    return true;
+  }
+  if (!isDocumentRootLocalName(local)) {
+    return false;
+  }
+  if (ancestors.length === 0) {
+    return true;
+  }
+  const parent = ancestors[ancestors.length - 1];
+  return parent === "subBlocks" || parent === "embeddedBlocks";
 }
 export const SEMANTIC_TOKEN_TYPES = [
   "root",
@@ -221,16 +231,16 @@ function matchesTag(tokenText: string, local: string, tags: Set<string>): boolea
 function bodyOf(parentAncestors: string[]): BodyContext {
   let body: BodyContext = "blockBody";
   let seenBlock = false;
-  let first = true;
+  const walked: string[] = [];
   for (const raw of parentAncestors) {
     const name = xmlLocalName(raw);
-    if (isBlockWrapper(name, first)) {
+    if (isBlockWrapper(name, walked)) {
       seenBlock = true;
       body = "blockBody";
-      first = false;
+      walked.push(name);
       continue;
     }
-    first = false;
+    walked.push(name);
     if (!seenBlock) {
       continue;
     }
@@ -279,9 +289,9 @@ function classifyElement(
   tokenText: string,
   local: string,
   body: BodyContext,
-  isDocumentRoot: boolean,
+  ancestors: string[],
 ): SemanticTokenType {
-  if (isBlockWrapper(local, isDocumentRoot)) {
+  if (isBlockWrapper(local, ancestors)) {
     return "root";
   }
   switch (body) {
@@ -451,7 +461,7 @@ export function semanticHighlightSpans(text: string): HighlightSpan[] {
       const parents = ancestors.slice(0, -1);
       const body = bodyOf(parents);
       pushSpan(spans, "tagPunctuation", i, i + 2);
-      pushSpan(spans, classifyElement(name.name, local, body, parents.length === 0), name.start, name.end);
+      pushSpan(spans, classifyElement(name.name, local, body, parents), name.start, name.end);
       if (stack.length > 0) {
         stack.pop();
       }
@@ -475,7 +485,7 @@ export function semanticHighlightSpans(text: string): HighlightSpan[] {
       const parents = stack.slice(0, -1);
       const body = bodyOf(parents);
       pushSpan(spans, "tagPunctuation", i, i + 1);
-      pushSpan(spans, classifyElement(name.name, local, body, parents.length === 0), name.start, name.end);
+      pushSpan(spans, classifyElement(name.name, local, body, parents), name.start, name.end);
       let j = skipWs(text, name.end);
       let selfClosing = false;
       while (j < text.length) {

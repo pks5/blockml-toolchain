@@ -51,6 +51,7 @@ export class BomBuilder {
         const block = {
             name,
             type,
+            wrapperForm: "type",
             baseType,
             is: idea,
             members: [],

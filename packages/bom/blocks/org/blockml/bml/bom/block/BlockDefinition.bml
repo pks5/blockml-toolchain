@@ -149,6 +149,9 @@
     <unknownAttributes type="type:Text">
       <documentation>Record of unknown attributes on the grammar node. (optional)</documentation>
     </unknownAttributes>
+    <wrapperForm type="type:Text">
+      <documentation>Authored definition wrapper: "block" (legacy) or "type" (tag-as-identity). TS type: type:Text. (optional)</documentation>
+    </wrapperForm>
   </properties>
 
 </block>

@@ -545,6 +545,7 @@ const blocks = [
       { name: "baseTypeSource", type: "bomcommon:SourceLocation" },
       { name: "unknownElements", type: "bomcommon:UnknownXmlNode[]" },
       { name: "unknownAttributes", type: "type:Text", doc: "Record of unknown attributes on the grammar node." },
+      { name: "wrapperForm", type: "type:Text", doc: 'Authored definition wrapper: "block" (legacy) or "type" (tag-as-identity).' },
     ],
   },
 

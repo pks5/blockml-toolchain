@@ -1,4 +1,4 @@
-import { parse, resolveTypeName, } from "@blockml/parser";
+import { isDocumentRootLocalName, parse, resolveTypeName, } from "@blockml/parser";
 import { resolveEffectiveMembers } from "@blockml/framework";
 import { bomLocationToRange } from "./positions.js";
 import { isXmlnsAttribute, qnameAt, rangeContains, xmlLocalName, xmlTokenAt, } from "./xml-token.js";
@@ -121,6 +121,35 @@ function implicitContextFor(token, enclosing) {
 function parentLocal(token) {
     return token.ancestors.length >= 2 ? token.ancestors[token.ancestors.length - 2] : undefined;
 }
+function isDocumentRootElement(token) {
+    return token.ancestors.length === 1 && isDocumentRootLocalName(token.elementLocalName);
+}
+function isNestedDefinitionWrapper(token) {
+    const local = token.elementLocalName;
+    if (!isDocumentRootLocalName(local)) {
+        return false;
+    }
+    const idx = token.ancestors.lastIndexOf(local);
+    const before = idx > 0 ? token.ancestors[idx - 1] : undefined;
+    return before === "subBlocks" || before === "embeddedBlocks";
+}
+function isDefinitionParent(parent, token) {
+    if (!parent) {
+        return false;
+    }
+    if (parent === "block") {
+        return true;
+    }
+    if (!isDocumentRootLocalName(parent)) {
+        return false;
+    }
+    if (token.ancestors[0] === parent) {
+        return true;
+    }
+    const idx = token.ancestors.lastIndexOf(parent);
+    const before = idx > 0 ? token.ancestors[idx - 1] : undefined;
+    return before === "subBlocks" || before === "embeddedBlocks";
+}
 function innermostBlock(block, text, position) {
     const range = block.source ? bomLocationToRange(block.source, text) : undefined;
     if (range && !rangeContains(range, position)) {
@@ -177,7 +206,7 @@ function enclosingMember(token, block) {
         return block.members.find((member) => member.name === memberName);
     }
     const parent = parentLocal(token);
-    if (parent === "block" && !LANGUAGE_ELEMENT_NAMES.has(token.elementLocalName)) {
+    if (isDefinitionParent(parent, token) && !LANGUAGE_ELEMENT_NAMES.has(token.elementLocalName)) {
         return block.members.find((member) => member.name === token.elementLocalName);
     }
     return undefined;
@@ -190,7 +219,7 @@ function isDomainMemberTag(token) {
     if (parent && MEMBER_SECTIONS.has(parent)) {
         return token.ancestors[token.ancestors.length - 1] === token.elementLocalName;
     }
-    return parent === "block" && !LANGUAGE_ELEMENT_NAMES.has(token.elementLocalName);
+    return isDefinitionParent(parent, token) && !LANGUAGE_ELEMENT_NAMES.has(token.elementLocalName);
 }
 function lookupLanguageMember(workspace, metaFqn, localName) {
     const meta = workspace.registry.get(metaFqn)?.block;
@@ -228,7 +257,11 @@ function languageHit(token, enclosing, workspace) {
     if (member) {
         return { kind: "language", metaFqn, member, range: token.range };
     }
-    if (token.kind === "elementName" && (localName === "block" || localName === "see")) {
+    if (token.kind === "elementName" &&
+        (localName === "see" ||
+            localName === "block" ||
+            isDocumentRootElement(token) ||
+            isNestedDefinitionWrapper(token))) {
         return { kind: "language", metaFqn, range: token.range };
     }
     return null;
