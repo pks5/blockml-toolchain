@@ -19,56 +19,56 @@
   </documentation>
   <properties>
     <title type="type:Text">
-      <value>Perro de Cobre bajo la Cúpula</value>
+      <value>Kupferhund unter der Kuppel</value>
     </title>
     <artist type="type:Text">
-      <value>Marisol y los Circuitos</value>
+      <value>Marisol und die Schaltkreise</value>
     </artist>
     <song type="type:Text">
-      <value>(Estrofa 1)
-Amanece en la cúpula de luz de la ciudad,
-los trenes de aire trazan hilos sobre el bulevar,
-y entre torres que respiran con pulmones de cristal
-trota un perro de cobre que no sabe adónde va.
+      <value>(Strophe 1)
+Es dämmert über der Lichtkuppel der Stadt,
+die Luftzüge ziehen Fäden über den Boulevard,
+und zwischen Türmen, die mit Lungen aus Glas atmen,
+trabt ein Kupferhund, der nicht weiß, wohin er geht.
 
-(Estrofa 2)
-Nadie apuntó su nombre en el registro central,
-ningún dron lo vigila, ningún sensor lo quiere hallar,
-lleva el polvo de mil calles pegado al corazón
-y una chispa en la mirada que la máquina no da.
+(Strophe 2)
+Niemand trug seinen Namen ins zentrale Register ein,
+keine Drohne bewacht ihn, kein Sensor will ihn finden,
+er trägt den Staub von tausend Straßen dicht am Herzen
+und einen Funken im Blick, den keine Maschine gibt.
 
-(Estribillo)
-Ladra, perro, ladra, que la noche es de neón,
-que la ciudad del futuro olvidó tu canción;
-si los relojes mandan y se apaga el corazón,
-tú serás la brújula que guarde nuestro amor.
+(Refrain)
+Bell, Hund, bell, denn die Nacht gehört dem Neon,
+denn die Stadt der Zukunft vergaß dein Lied;
+wenn die Uhren befehlen und das Herz erlischt,
+wirst du der Kompass sein, der unsere Liebe bewahrt.
 
-(Estrofa 3)
-Una anciana en el andén le comparte medio pan,
-él le lame los dedos como quien firma un pacto de paz,
-las farolas parpadean un saludo en clave morse
-y la plaza de titanio se ablanda al respirar.
+(Strophe 3)
+Eine alte Frau am Bahnsteig teilt mit ihm ein halbes Brot,
+er leckt ihr die Finger wie einer, der einen Friedenspakt besiegelt,
+die Laternen blinken einen Gruß im Morsecode
+und der Platz aus Titan wird weich, wenn er atmet.
 
-(Estribillo)
-Ladra, perro, ladra, que la noche es de neón,
-que la ciudad del futuro olvidó tu canción;
-si los relojes mandan y se apaga el corazón,
-tú serás la brújula que guarde nuestro amor.
+(Refrain)
+Bell, Hund, bell, denn die Nacht gehört dem Neon,
+denn die Stadt der Zukunft vergaß dein Lied;
+wenn die Uhren befehlen und das Herz erlischt,
+wirst du der Kompass sein, der unsere Liebe bewahrt.
 
-(Puente)
-Cuando callen los anuncios y el metro se detenga,
-cuando el último satélite se hunda en su rincón,
-quedará su trote suave por la avenida vacía,
-un compás de carne y sueño dentro del procesador.
+(Bridge)
+Wenn die Anzeigen verstummen und die U-Bahn stehen bleibt,
+wenn der letzte Satellit in seinen Winkel sinkt,
+bleibt sein sanftes Traben auf der leeren Allee,
+ein Takt aus Fleisch und Traum im Prozessor.
 
-(Final)
-Amanece en la cúpula de luz de la ciudad,
-y a sus pies late tibio lo que no se programó;
-habrá más torres mañana, más silencio, más metal,
-pero siempre un perro de cobre cuidando la canción.</value>
+(Schluss)
+Es dämmert über der Lichtkuppel der Stadt,
+und zu seinen Füßen schlägt lau, was nicht programmiert wurde;
+morgen wird es mehr Türme geben, mehr Stille, mehr Metall,
+doch immer einen Kupferhund, der das Lied behütet.</value>
     </song>
     <language type="type:Text">
-      <value>Spanish</value>
+      <value>German</value>
     </language>
     <date type="type:DateTime">
       <value>2026-09-07T22:32:04</value>
