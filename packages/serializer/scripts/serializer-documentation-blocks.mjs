@@ -183,6 +183,10 @@ export const documentationBlocks = [
     Omit-by-default (B17):
     SHOULD omit: abstract/final/override/readOnly when false, empty containers, visibility
     when prefix encodes it, default-false flags, …
+    Collection instance values: attribute-placed arrays emit JSON-like [ … ];
+    element-placed arrays emit one tag per item (verbose form). Definition
+    <value> stays a single payload (JSON list inside one value).
+
     MUST NOT omit: required identity, true flags, non-default enums, authoredPlacement (D9),
     authored CDATA form (D8), comments, …
 

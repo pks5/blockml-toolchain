@@ -21,8 +21,29 @@ export function collectBaseTypeChain(block, registry) {
     }
     return chain;
 }
+function applyLocalDeclarationFlags(merged, incoming) {
+    if (incoming.abstract === true) {
+        merged.abstract = true;
+    }
+    else {
+        delete merged.abstract;
+    }
+    if (incoming.final === true) {
+        merged.final = true;
+    }
+    else {
+        delete merged.final;
+    }
+    if (incoming.override === true) {
+        merged.override = true;
+    }
+    else {
+        delete merged.override;
+    }
+}
 function mergeMemberPartial(existing, incoming) {
     const merged = { ...existing, ...incoming, name: incoming.name };
+    applyLocalDeclarationFlags(merged, incoming);
     if (existing.kind === "property" && incoming.kind === "property") {
         const existingConstraints = existing.constraints ?? [];
         const incomingConstraints = incoming.constraints ?? [];

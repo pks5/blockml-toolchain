@@ -15,9 +15,10 @@ import {
   pendingFqn,
   successfulAgent,
   writeProject,
+  fixtureTempDir,
 } from "./fixture.js";
 
-const TMP = join(import.meta.dirname, ".tmp-transformer-pipeline");
+const TMP = fixtureTempDir("transformer-pipeline");
 
 describe("Transformer pipeline", () => {
   beforeEach(() => {

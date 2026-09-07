@@ -1,9 +1,9 @@
 import { mkdirSync, rmSync } from "node:fs";
-import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { collectWorktreeTrace } from "../src/pipeline/worktree-trace.js";
+import { fixtureTempDir } from "./fixture.js";
 
-const TMP = join(import.meta.dirname, ".tmp-worktree-trace");
+const TMP = fixtureTempDir("worktree-trace");
 
 describe("collectWorktreeTrace", () => {
   beforeEach(() => {

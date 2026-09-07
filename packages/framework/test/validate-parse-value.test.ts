@@ -166,6 +166,15 @@ describe("validateTypes parseValue literals", () => {
     expect(diagnostics.filter((d) => d.code === "BML_INVALID_VALUE")).toEqual([]);
   });
 
+  it("reports BML_INVALID_VALUE for a JSON list on a scalar Text property", () => {
+    const document = parseSample(
+      `    <label type="type:Text" value="['Hello', 'Good Bye']" />`,
+      "list-on-scalar.bml",
+    );
+    const diagnostics = validateTypes(document, bootstrappedRegistry());
+    expect(diagnostics.some((d) => d.code === "BML_INVALID_VALUE")).toBe(true);
+  });
+
   it("still reports BML_INVALID_VALUE for the canonical value when a facet is also present", () => {
     const document = parseSample(
       [

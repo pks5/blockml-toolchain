@@ -105,20 +105,23 @@ function checkLiteral(
     return;
   }
   const list = hasMultiplicity(type, typeFqn);
-  if (list) {
-    if (Array.isArray(val.value)) {
-      for (const item of val.value) {
-        const raw = rawFromUnknown(item);
-        if (raw !== undefined) {
-          checkRaw(named, raw, ctx, loc);
-        }
-      }
-    }
+  if (!list && Array.isArray(val.value)) {
+    ctx.diagnostics.push(
+      diag(
+        "BML_INVALID_VALUE",
+        "collection value on a non-list type",
+        ctx.file,
+        loc,
+      ),
+    );
     return;
   }
-  const raw = rawFromUnknown(val.value);
-  if (raw !== undefined) {
-    checkRaw(named, raw, ctx, loc);
+  const items = Array.isArray(val.value) ? val.value : [val.value];
+  for (const item of items) {
+    const raw = rawFromUnknown(item);
+    if (raw !== undefined) {
+      checkRaw(named, raw, ctx, loc);
+    }
   }
 }
 

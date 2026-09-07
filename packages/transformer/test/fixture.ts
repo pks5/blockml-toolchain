@@ -1,7 +1,28 @@
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { existsSync, mkdirSync, realpathSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join, resolve } from "node:path";
 import type { TransformationAgent } from "../src/agent/transformation-agent.js";
+
+export function fixtureTempDir(name: string): string {
+  return join(tmpdir(), `blockml-${name}`);
+}
+
+function gitEnv(dir: string): NodeJS.ProcessEnv {
+  let root = dir;
+  try {
+    root = realpathSync(dir);
+  } catch {
+    root = resolve(dir);
+  }
+  const env = { ...process.env };
+  delete env.GIT_DIR;
+  delete env.GIT_WORK_TREE;
+  delete env.GIT_INDEX_FILE;
+  env.GIT_DIR = resolve(root, ".git");
+  env.GIT_WORK_TREE = root;
+  return env;
+}
 
 export const LIBRARY = "com.example.model";
 export const EXECUTION_ID = "d41bf2a3-f51f-4171-a2e4-e71893c16f24";
@@ -85,6 +106,7 @@ function commitFixture(dir: string, message = "fixture"): void {
   const cached = spawnSync("git", ["diff", "--cached", "--quiet"], {
     cwd: dir,
     encoding: "utf8",
+    env: gitEnv(dir),
   });
   if (cached.status === 0) {
     return;
@@ -93,7 +115,11 @@ function commitFixture(dir: string, message = "fixture"): void {
 }
 
 function gitOrThrow(dir: string, args: string[]): string {
-  const result = spawnSync("git", args, { cwd: dir, encoding: "utf8" });
+  const result = spawnSync("git", args, {
+    cwd: dir,
+    encoding: "utf8",
+    env: gitEnv(dir),
+  });
   if (result.error || (result.status ?? 1) !== 0) {
     throw new Error(
       `git ${args.join(" ")} failed: ${result.stderr || result.error?.message || ""}`,

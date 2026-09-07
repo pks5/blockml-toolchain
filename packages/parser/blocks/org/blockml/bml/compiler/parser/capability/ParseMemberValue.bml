@@ -36,7 +36,9 @@
     • unescaped whole `${ … }` → ExpressionValue (full expression language)
     • running text with an unescaped `${` → InterpolatedTextValue (authored raw kept)
     • only escaped openers (`\${`, `\\\${`, …) → LiteralValue after unescape
-    • JSON arrays/objects stay structural list/struct tokenization
+    • JSON arrays/objects stay structural list/struct tokenization — the
+      compact collection form for any member (property or association).
+      Repeated instance elements are merged by MapBlockInstanceNode, not here.
     
     Escape is JS-template-like: a `${` opener is escaped when an odd number of
     backslashes immediately precedes `$`. `\${` stores literal `${`. `\\${` is

@@ -16,6 +16,7 @@ export declare const reportStandaloneComposition: (element: Element, ctx: MapCon
 export declare const reportDuplicateComposition: (element: Element, ctx: MapContext) => void;
 export declare const reportNestedComposition: (element: Element, ctx: MapContext) => void;
 export declare const reportDuplicatePropertyValue: (element: Element, ctx: MapContext, source?: SourceLocation) => void;
+export declare const reportMixedMemberValue: (ctx: MapContext, source: SourceLocation) => void;
 export declare const isCharacterDataHost: (element: Element) => boolean;
 export declare const reportUnexpectedTextChildren: (element: Element, ctx: MapContext) => void;
 export declare const listUnknownBmlAttributes: (element: Element) => Record<string, string> | undefined;

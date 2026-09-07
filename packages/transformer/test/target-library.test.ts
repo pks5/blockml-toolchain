@@ -6,9 +6,9 @@ import {
   packageFqnFromLibraryType,
   resolveTargetLibrary,
 } from "../src/execution/target-library.js";
-import { fixtureLibraryXml, writeProject } from "./fixture.js";
+import { fixtureLibraryXml, fixtureTempDir, writeProject } from "./fixture.js";
 
-const TMP = join(import.meta.dirname, ".tmp-transformer-target-library");
+const TMP = fixtureTempDir("transformer-target-library");
 
 describe("resolveTargetLibrary", () => {
   beforeEach(() => {

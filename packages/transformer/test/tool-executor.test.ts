@@ -6,9 +6,14 @@ import {
   ToolExecutor,
   type ToolProcessRequest,
 } from "../src/executor/tool-executor.js";
-import { pendingExecutionXml, pendingFqn, writeProject } from "./fixture.js";
+import {
+  fixtureTempDir,
+  pendingExecutionXml,
+  pendingFqn,
+  writeProject,
+} from "./fixture.js";
 
-const TMP = join(import.meta.dirname, ".tmp-transformer-tool-executor");
+const TMP = fixtureTempDir("transformer-tool-executor");
 
 function writeToolPending(opts?: {
   command?: string;

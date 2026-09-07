@@ -3,6 +3,7 @@ export interface GitCommandResult {
     stdout: string;
     stderr: string;
 }
+export declare function resolveWorkspacePath(path: string): string;
 export declare function git(cwd: string, args: string[]): GitCommandResult;
 export declare function gitStdout(cwd: string, args: string[]): string | undefined;
 export declare function assertWorktreeClean(workspaceRoot: string): string;

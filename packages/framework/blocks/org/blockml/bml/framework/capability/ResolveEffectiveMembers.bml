@@ -32,7 +32,23 @@
     Merge members along baseType chain, contracts, and local declarations
   </is>
   <documentation>
-    Merge members along baseType chain, contracts, and local declarations
+    ## Merge order
+
+    baseType chain (ancestors first) → contracts[] in declaration order → local
+    members.
+
+    ## What inherits
+
+    Specified attributes replace; unspecified attributes inherit — except local
+    declaration flags `abstract`, `final`, and `override`. Those describe only
+    the current layer and are never copied from the parent. Omitted on a
+    redeclaration → false (locally concrete). Restate `abstract="true"` (with
+    `override="true"`) to keep a member abstract.
+
+    ## What still propagates
+
+    An unimplemented abstract ancestor stays an obligation; parent `final` still
+    blocks further override.
   </documentation>
   <references>
     <see type="fwcap:CollectBaseTypeChain" relation="SeeAlso" />

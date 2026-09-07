@@ -330,6 +330,92 @@ describe("validateTypes type-driven reference walk", () => {
     expect(diagnostics.some((d) => d.message.includes("Unknown package"))).toBe(false);
   });
 
+  it("treats space-separated association text as one instance token", () => {
+    const { document } = parseSample(
+      [
+        "  <associations>",
+        '    <linked type="type:InstanceReference(core:Block)[]" />',
+        "  </associations>",
+        "  <aggregations>",
+        "    <children>",
+        "      <composition>",
+        '        <test:Sample bml:id="mine" />',
+        '        <test:Sample bml:id="other" linked="mine other" />',
+        "      </composition>",
+        "    </children>",
+        "  </aggregations>",
+      ].join("\n"),
+      "instance-ref-space.bml",
+    );
+    const registry = new TypeRegistry();
+    registerCore(registry);
+    const diagnostics = validateTypes(document, registry);
+    expect(
+      diagnostics.some(
+        (d) => d.code === "BML_UNRESOLVABLE_INSTANCE_REF" && d.message.includes("mine other"),
+      ),
+    ).toBe(true);
+  });
+
+  it("resolves compact JSON InstanceReference list items", () => {
+    const { document } = parseSample(
+      [
+        "  <properties>",
+        '    <peers type="type:InstanceReference[]" />',
+        "  </properties>",
+        "  <aggregations>",
+        "    <children>",
+        "      <composition>",
+        '        <test:Sample bml:id="mine" />',
+        `        <test:Sample bml:id="other" peers="['mine', 'ghost']" />`,
+        "      </composition>",
+        "    </children>",
+        "  </aggregations>",
+      ].join("\n"),
+      "instance-ref-list-json.bml",
+    );
+    const registry = new TypeRegistry();
+    registerCore(registry);
+    const diagnostics = validateTypes(document, registry);
+    expect(
+      diagnostics.some((d) => d.code === "BML_UNRESOLVABLE_INSTANCE_REF" && d.message.includes("ghost")),
+    ).toBe(true);
+    expect(
+      diagnostics.some((d) => d.code === "BML_UNRESOLVABLE_INSTANCE_REF" && d.message.includes("mine")),
+    ).toBe(false);
+  });
+
+  it("resolves repeated InstanceReference tags item-wise", () => {
+    const { document } = parseSample(
+      [
+        "  <associations>",
+        '    <linked type="type:InstanceReference(core:Block)[]" />',
+        "  </associations>",
+        "  <aggregations>",
+        "    <children>",
+        "      <composition>",
+        '        <test:Sample bml:id="mine" />',
+        "        <test:Sample bml:id=\"other\">",
+        "          <linked>mine</linked>",
+        "          <linked>ghost</linked>",
+        "        </test:Sample>",
+        "      </composition>",
+        "    </children>",
+        "  </aggregations>",
+      ].join("\n"),
+      "instance-ref-list-tags.bml",
+    );
+    const registry = new TypeRegistry();
+    registerCore(registry);
+    const diagnostics = validateTypes(document, registry);
+    expect(
+      diagnostics.some((d) => d.code === "BML_UNRESOLVABLE_INSTANCE_REF" && d.message.includes("ghost")),
+    ).toBe(true);
+    expect(
+      diagnostics.some((d) => d.code === "BML_UNRESOLVABLE_INSTANCE_REF" && d.message.includes("mine")),
+    ).toBe(false);
+  });
+
   it("resolves a local InstanceReference id when the declared type is InstanceReference", () => {
     const { document } = parseSample(
       [

@@ -588,7 +588,7 @@ Examples:
   com.myproject.enclosures.DefaultEnclosure::floor
 ```
 
-Used in **association** member values that reference other instances — e.g. `basePresets`, `Step.part`. Association declaration `type` must be `InstanceReference(T)` or `InstanceReference(T)[]`. Values are InstanceReference tokens. **Not** valid on property values — properties always store inline deep copies. Also authorable on `<see instance="…">`. See `12_bom_object_model.md` — Property Value Semantics · AssociationDefinition.
+Used in **association** member values that reference other instances — e.g. `basePresets`, `Step.part`. Association declaration `type` must be `InstanceReference(T)` or `InstanceReference(T)[]`. Collection values use a JSON-like `['id', 'otherId']` array or repeated instance tags; a single pointer stays unbracketed. **Not** valid on property values — properties always store inline deep copies. Also authorable on `<see instance="…">`. See `12_bom_object_model.md` — Property Value Semantics · AssociationDefinition.
 
 A qualified reference is valid **only when both** conditions hold:
 
@@ -1880,7 +1880,7 @@ Each preset instance in `_presets`:
 ```text
 bml:id           — stable kebab-case identifier (composition meta; reference key)
 name             — human-readable display name (Customizer UI, editor)
-basePresets   — association bml:Self[]: space-separated preset ids (local or FQN::id)
+basePresets   — association bml:Self[]: JSON ['id', 'otherId'] or repeated tags (local or FQN::id)
                    own instance properties override merged preset chain
 ```
 

@@ -131,6 +131,19 @@ function literalText(val: MemberValue | undefined): string | undefined {
   return undefined;
 }
 
+function literalTexts(val: MemberValue | undefined): string[] {
+  if (!val || val.kind !== "literal") {
+    return [];
+  }
+  if (Array.isArray(val.value)) {
+    return val.value.filter((item): item is string => typeof item === "string");
+  }
+  if (typeof val.value === "string") {
+    return [val.value];
+  }
+  return [];
+}
+
 function memberValueSource(val: MemberValue | undefined): SourceLocation | undefined {
   if (!val) {
     return undefined;
@@ -359,11 +372,14 @@ function checkMemberValue(
   if (!classified || classified.role !== "reference") {
     return;
   }
-  const text = literalText(val);
-  if (text === undefined) {
+  const texts = literalTexts(val);
+  if (texts.length === 0) {
     return;
   }
-  checkReferenceValue(classified, text, ctx, loc ?? memberValueSource(val));
+  const source = loc ?? memberValueSource(val);
+  for (const text of texts) {
+    checkReferenceValue(classified, text, ctx, source);
+  }
 }
 
 function checkMemberTypes(member: MemberDefinition, ctx: CheckCtx): void {

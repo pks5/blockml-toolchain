@@ -382,6 +382,7 @@ const capabilities = [
     prefix: "fwcap",
     name: "ResolveEffectiveMembers",
     is: "Merge members along baseType chain, contracts, and local declarations",
+    doc: "## Merge order\n\nbaseType chain (ancestors first) → contracts[] in declaration order → local members.\n\n## What inherits\n\nSpecified attributes replace; unspecified attributes inherit — except local declaration flags `abstract`, `final`, and `override`. Those describe only the current layer and are never copied from the parent. Omitted on a redeclaration → false (locally concrete). Restate `abstract=\"true\"` (with `override=\"true\"`) to keep a member abstract.\n\n## What still propagates\n\nAn unimplemented abstract ancestor stays an obligation; parent `final` still blocks further override.",
     tsExport: "resolveEffectiveMembers",
     inputs: [
       { name: "block", type: "bomblock:BlockDefinition", required: true },

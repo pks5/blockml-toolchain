@@ -80,6 +80,18 @@ function literalText(val) {
     }
     return undefined;
 }
+function literalTexts(val) {
+    if (!val || val.kind !== "literal") {
+        return [];
+    }
+    if (Array.isArray(val.value)) {
+        return val.value.filter((item) => typeof item === "string");
+    }
+    if (typeof val.value === "string") {
+        return [val.value];
+    }
+    return [];
+}
 function memberValueSource(val) {
     if (!val) {
         return undefined;
@@ -224,11 +236,14 @@ function checkMemberValue(val, classified, ctx, loc) {
     if (!classified || classified.role !== "reference") {
         return;
     }
-    const text = literalText(val);
-    if (text === undefined) {
+    const texts = literalTexts(val);
+    if (texts.length === 0) {
         return;
     }
-    checkReferenceValue(classified, text, ctx, loc ?? memberValueSource(val));
+    const source = loc ?? memberValueSource(val);
+    for (const text of texts) {
+        checkReferenceValue(classified, text, ctx, source);
+    }
 }
 function checkMemberTypes(member, ctx) {
     const loc = member.typeSource ?? member.source;

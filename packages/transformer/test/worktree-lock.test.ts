@@ -13,12 +13,13 @@ import {
   pendingFqn,
   successfulAgent,
   writeProject,
+  fixtureTempDir,
 } from "./fixture.js";
 import type { TransformationAgent } from "../src/agent/transformation-agent.js";
 
-const TMP = join(import.meta.dirname, ".tmp-worktree-lock");
-const TMP_A = join(import.meta.dirname, ".tmp-worktree-lock-a");
-const TMP_B = join(import.meta.dirname, ".tmp-worktree-lock-b");
+const TMP = fixtureTempDir("worktree-lock");
+const TMP_A = fixtureTempDir("worktree-lock-a");
+const TMP_B = fixtureTempDir("worktree-lock-b");
 
 describe("worktree transform lock", () => {
   beforeEach(() => {

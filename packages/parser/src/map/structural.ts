@@ -300,6 +300,15 @@ export const reportDuplicatePropertyValue = (
   );
 };
 
+export const reportMixedMemberValue = (ctx: MapContext, source: SourceLocation): void => {
+  reportDiagnostic(
+    ctx,
+    "BML_MIXED_MEMBER_VALUE",
+    "do not mix attribute, JSON list, and repeated element forms on the same member",
+    source,
+  );
+};
+
 const CHARACTER_DATA_HOSTS = new Set([
   "name",
   "type",

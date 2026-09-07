@@ -30,7 +30,13 @@
     Map composition child node to BlockInstanceNode
   </is>
   <documentation>
-    Map composition child node to BlockInstanceNode
+    Map composition child node to BlockInstanceNode.
+    
+    Instance property and association values: attributes and child elements
+    become memberValues. Repeated same-name elements merge into a list
+    (verbose collection form). Compact JSON-like [ … ] in one attribute or
+    element stays one list value. Mixing those forms, or attribute plus
+    element for the same member, is BML_MIXED_MEMBER_VALUE.
   </documentation>
   <properties>
     <element type="parmap:XmlDomNode">

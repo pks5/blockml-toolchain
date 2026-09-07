@@ -40,7 +40,7 @@
     • BML_UNKNOWN_CONTRACT — contracts[] FQN not in TypeRegistry
     • BML_UNKNOWN_TYPE — TypeReference / TypeReferenceEntity value, PackageReference, see type=/relation=/language=, member types, groups, language — FQN or package not in TypeRegistry and not a well-known primitive. Authored QNames / TypeExpressions on TypeReference values resolve via document.source.namespaceBindings before the lookup; the canonical default is reported once (value, not also values[namespace=""])
     • BML_UNKNOWN_PROPERTY — PropertyReference / AggregationReference / AssociationReference / CapabilityReference path does not resolve (or BML_UNKNOWN_TYPE if the owning type cannot be resolved)
-    • BML_UNRESOLVABLE_INSTANCE_REF — InstanceReference / InstanceReferenceEntity value does not resolve to a document instance id
+    • BML_UNRESOLVABLE_INSTANCE_REF — InstanceReference / InstanceReferenceEntity value does not resolve to a document instance id. List values (JSON ['id'] or repeated instance tags) are checked item-wise.
     • BML_TYPE_BOUND_NOT_SATISFIED — TypeReference(B) / TypeReferenceEntity(B) value fails bound B (capability throws[] defaults to core:Exception)
     TypeIdentifier / PackageIdentifier / InstanceIdentifier / MemberIdentifier (and *IdentifierEntity) values are not existence-checked. block.type is TypeIdentifier.
     • BML_MEMBER_COLLISION — duplicate member identity in effective set

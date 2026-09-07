@@ -4,7 +4,7 @@ import { elementChildren, elementLocalName, elementPrefix, getAttribute, getChar
 import { resolveBlockReference, resolvePrefix, resolveTypeName, TYPE_REFERENCE_ENTITY, elementSourceLoc, } from "../util/qname.js";
 import { parseVisibilityFromName } from "../util/visibility.js";
 import { withElementLocation } from "../util/mapping-error.js";
-import { listUnknownBmlAttributes, reportNestedComposition, reportStandaloneComposition, reportUnexpectedTextChildren, } from "./structural.js";
+import { listUnknownBmlAttributes, reportMixedMemberValue, reportNestedComposition, reportStandaloneComposition, reportUnexpectedTextChildren, } from "./structural.js";
 const MEMBER_SECTIONS = new Set([
     "properties",
     "aggregations",
@@ -105,7 +105,7 @@ export function mapBlockInstanceNode(element, ctx) {
     const qname = prefix ? `${prefix}:${local}` : local;
     const typeFqn = withElementLocation(ctx.filePath, ctx.source, element, () => resolveBlockReference(qname, ctx.bindings, ctx.subBlockIndex, ctx.parentBlockType));
     const meta = parseBmlMeta(element, typeFqn, ctx.filePath, loc);
-    const memberValues = {};
+    const memberOccurrences = {};
     if (element.attributes) {
         for (let i = 0; i < element.attributes.length; i++) {
             const attr = element.attributes.item(i);
@@ -124,7 +124,7 @@ export function mapBlockInstanceNode(element, ctx) {
             }
             const val = parseMemberValue(attr.value, typeFqn, ctx.filePath, loc.line, loc.column, "attribute", ctx);
             if (val) {
-                memberValues[attrLocal] = val;
+                pushMemberOccurrence(memberOccurrences, attrLocal, val);
             }
         }
     }
@@ -165,14 +165,21 @@ export function mapBlockInstanceNode(element, ctx) {
         const { text } = getCharacterData(child);
         const val = parseMemberValue(text || getAttribute(child, "value"), typeFqn, ctx.filePath, loc.line, loc.column, "element", ctx);
         if (val) {
-            memberValues[childLocal] = val;
+            pushMemberOccurrence(memberOccurrences, childLocal, val);
+        }
+    }
+    const memberValues = {};
+    for (const [name, occurrences] of Object.entries(memberOccurrences)) {
+        const collapsed = collapseMemberOccurrences(occurrences, ctx, loc);
+        if (collapsed) {
+            memberValues[name] = collapsed;
         }
     }
     const directives = parseDirectives(element, loc, ctx);
     const generics = parseGenericsBinding(element, ctx);
     const instance = {
         typeFqn,
-        memberValues: Object.fromEntries(Object.entries(memberValues).filter(([, v]) => v !== undefined)),
+        memberValues,
         source: loc,
     };
     const unknownBml = listUnknownBmlAttributes(element);
@@ -200,6 +207,36 @@ export function mapBlockInstanceNode(element, ctx) {
         instance,
         ...(directives.length > 0 ? { directives } : {}),
         source: loc,
+    };
+}
+function pushMemberOccurrence(occurrences, name, value) {
+    const list = occurrences[name] ?? [];
+    list.push(value);
+    occurrences[name] = list;
+}
+function isLiteralArray(value) {
+    return value.kind === "literal" && Array.isArray(value.value);
+}
+function collapseMemberOccurrences(occurrences, ctx, loc) {
+    if (occurrences.length === 0) {
+        return undefined;
+    }
+    if (occurrences.length === 1) {
+        return occurrences[0];
+    }
+    const placements = new Set(occurrences
+        .map((value) => ("authoredPlacement" in value ? value.authoredPlacement : undefined))
+        .filter((placement) => placement !== undefined));
+    if (placements.size > 1 || occurrences.some(isLiteralArray) || occurrences.some((value) => value.kind !== "literal")) {
+        reportMixedMemberValue(ctx, loc);
+        return occurrences[0];
+    }
+    const first = occurrences[0];
+    return {
+        kind: "literal",
+        value: occurrences.map((value) => value.value),
+        typeFqn: first.typeFqn,
+        ...(first.authoredPlacement ? { authoredPlacement: first.authoredPlacement } : {}),
     };
 }
 function instanceMemberIsAggregationFill(element) {

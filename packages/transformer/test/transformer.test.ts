@@ -30,9 +30,10 @@ import {
   resultSourceBlockXml,
   successfulAgent,
   writeProject,
+  fixtureTempDir,
 } from "./fixture.js";
 
-const TMP = join(import.meta.dirname, ".tmp-transformer-run");
+const TMP = fixtureTempDir("transformer-run");
 
 describe("execution naming", () => {
   it("zero-pads sequence to five digits", () => {

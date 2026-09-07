@@ -5,3 +5,4 @@ node_modules
 /schemas
 *.fat.bml
 .blockml/
+**/.tmp-*

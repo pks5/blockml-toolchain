@@ -34,7 +34,9 @@
     unchanged (escapes and holes). String LiteralValue re-escapes every `${` as
     `\${` (and doubles backslashes that precede `${`) so ParseMemberValue
     round-trips to the same literal. JSON arrays/objects are not interpolation-
-    escaped — they stay structural tokens.
+    escaped — they stay structural tokens (compact collection form). Repeated
+    instance tags are emitted by the composition writer when
+    authoredPlacement is element and the literal is an array.
   </documentation>
   <references>
     <see type="sercap:FormatBoolean" relation="SeeAlso" />

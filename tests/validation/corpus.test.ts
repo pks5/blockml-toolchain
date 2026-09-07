@@ -40,22 +40,6 @@ const STRICT_CORPUS_FILES = [
   ]),
 ];
 
-/** Published snapshots that predate override="true" on inherited member fills. */
-const PUBLISHED_OVERRIDE_GAPS = new Set([
-  corpusPath([
-    "node_modules/@blockml/core/blocks/org/blockml/bml/definition/MemberDefinition.bml",
-  ]),
-  corpusPath([
-    "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/examples/Cross.bml",
-  ]),
-  corpusPath([
-    "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/bricks/Standard.bml",
-  ]),
-  corpusPath([
-    "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/calibration/Calibrator.bml",
-  ]),
-]);
-
 describe("validation corpus", () => {
   it.each(STRICT_CORPUS_FILES)("parse → validate: %s", (filePath) => {
     const source = readFileSync(filePath, "utf8");
@@ -65,16 +49,11 @@ describe("validation corpus", () => {
 
     const result = validate(parsed.document!);
     const errors = result.diagnostics.filter((d) => d.severity === "error");
-    const unexpected = PUBLISHED_OVERRIDE_GAPS.has(filePath)
-      ? errors.filter((d) => d.code !== "BML_OVERRIDE_REQUIRED")
-      : errors;
     expect(
-      unexpected,
-      `unexpected validation errors in ${filePath}: ${JSON.stringify(unexpected)}`,
+      errors,
+      `unexpected validation errors in ${filePath}: ${JSON.stringify(errors)}`,
     ).toEqual([]);
+    expect(result.success).toBe(true);
     expect(result.pragmaticModel).toBeDefined();
-    if (!PUBLISHED_OVERRIDE_GAPS.has(filePath)) {
-      expect(result.success).toBe(true);
-    }
   });
 });

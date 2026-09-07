@@ -8,8 +8,9 @@ import {
 } from "../src/agent/claude-reflect-agent.js";
 import { CLAUDE_REFLECT_PERMISSIONS } from "../src/agent/claude-permissions.js";
 import type { ExecutionTrace } from "../src/pipeline/types.js";
+import { fixtureTempDir } from "./fixture.js";
 
-const TMP = join(import.meta.dirname, ".tmp-claude-reflect");
+const TMP = fixtureTempDir("claude-reflect");
 
 const TRACE: ExecutionTrace = {
   stdout: "execute did the work",

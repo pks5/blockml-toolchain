@@ -30,6 +30,20 @@ describe("forkBom", () => {
 });
 
 describe("resolveEffectiveMembers", () => {
+  it("treats Integer.parseValue as concrete after override without abstract", () => {
+    const { registry } = bootstrapTypeRegistry(defaultBootstrapPaths());
+    const integer = registry.get("org.blockml.bml.type.Integer");
+    expect(integer).toBeDefined();
+    if (!integer) {
+      return;
+    }
+    const parseValue = resolveEffectiveMembers(integer.block, registry).find(
+      (m) => m.kind === "capability" && m.name === "parseValue",
+    );
+    expect(parseValue?.abstract).toBeUndefined();
+    expect(parseValue?.kind === "capability" && parseValue.implementation).toBeTruthy();
+  });
+
   it("merges members along baseType chain", () => {
     const { registry } = bootstrapTypeRegistry(defaultBootstrapPaths());
     const memberDef = registry.get("org.blockml.bml.definition.MemberDefinition");
@@ -41,6 +55,87 @@ describe("resolveEffectiveMembers", () => {
     const keys = effective.map(memberIdentityKey);
     expect(keys.length).toBeGreaterThan(0);
     expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it("does not inherit abstract/final/override from the parent layer", () => {
+    const parent = parse(
+      `<block xmlns="http://blockml.org/bml"
+        xmlns:core="org.blockml.bml.core"
+        xmlns:type="org.blockml.bml.type"
+        xmlns:test="com.test.abstract">
+        <type>test:Parent</type>
+        <baseType>core:Block</baseType>
+        <is>abstract parent</is>
+        <properties>
+          <label abstract="true" type="type:Text" />
+        </properties>
+      </block>`,
+      { filePath: "<parent>" },
+    );
+    const child = parse(
+      `<block xmlns="http://blockml.org/bml"
+        xmlns:core="org.blockml.bml.core"
+        xmlns:type="org.blockml.bml.type"
+        xmlns:test="com.test.abstract">
+        <type>test:Child</type>
+        <baseType>test:Parent</baseType>
+        <is>concrete child</is>
+        <properties>
+          <label override="true" type="type:Text">
+            <value>ok</value>
+          </label>
+        </properties>
+      </block>`,
+      { filePath: "<child>" },
+    );
+    expect(parent.document).not.toBeNull();
+    expect(child.document).not.toBeNull();
+    const registry = new TypeRegistry();
+    registry.register(parent.document!);
+    registry.register(child.document!);
+    const effective = resolveEffectiveMembers(child.document!.block, registry);
+    const label = effective.find((m) => m.name === "label");
+    expect(label?.abstract).toBeUndefined();
+    expect(label?.override).toBe(true);
+  });
+
+  it("keeps abstract when the child restates it", () => {
+    const parent = parse(
+      `<block xmlns="http://blockml.org/bml"
+        xmlns:core="org.blockml.bml.core"
+        xmlns:type="org.blockml.bml.type"
+        xmlns:test="com.test.abstractstay">
+        <type>test:Parent</type>
+        <baseType>core:Block</baseType>
+        <is>abstract parent</is>
+        <properties>
+          <label abstract="true" type="type:Text" />
+        </properties>
+      </block>`,
+      { filePath: "<parent>" },
+    );
+    const child = parse(
+      `<block xmlns="http://blockml.org/bml"
+        xmlns:core="org.blockml.bml.core"
+        xmlns:type="org.blockml.bml.type"
+        xmlns:test="com.test.abstractstay">
+        <type>test:Child</type>
+        <baseType>test:Parent</baseType>
+        <is>still abstract</is>
+        <properties>
+          <label override="true" abstract="true" type="type:Text" />
+        </properties>
+      </block>`,
+      { filePath: "<child>" },
+    );
+    expect(parent.document).not.toBeNull();
+    expect(child.document).not.toBeNull();
+    const registry = new TypeRegistry();
+    registry.register(parent.document!);
+    registry.register(child.document!);
+    const effective = resolveEffectiveMembers(child.document!.block, registry);
+    const label = effective.find((m) => m.name === "label");
+    expect(label?.abstract).toBe(true);
   });
 
   it("honors override on redeclared members", () => {

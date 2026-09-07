@@ -3,6 +3,9 @@ import type {
   BlockInstanceNode,
   CompositionNode,
   CompositionTemplate,
+  LiteralValue,
+  MemberValue,
+  SourceLocation,
   VirtualContainerNode,
 } from "@blockml/bom";
 import type { Element } from "@xmldom/xmldom";
@@ -35,6 +38,7 @@ import type { MapContext } from "./context.js";
 import { withElementLocation } from "../util/mapping-error.js";
 import {
   listUnknownBmlAttributes,
+  reportMixedMemberValue,
   reportNestedComposition,
   reportStandaloneComposition,
   reportUnexpectedTextChildren,
@@ -162,7 +166,7 @@ export function mapBlockInstanceNode(
   );
 
   const meta = parseBmlMeta(element, typeFqn, ctx.filePath, loc);
-  const memberValues: Record<string, ReturnType<typeof parseMemberValue>> = {};
+  const memberOccurrences: Record<string, MemberValue[]> = {};
 
   if (element.attributes) {
     for (let i = 0; i < element.attributes.length; i++) {
@@ -192,7 +196,7 @@ export function mapBlockInstanceNode(
         ctx,
       );
       if (val) {
-        memberValues[attrLocal] = val;
+        pushMemberOccurrence(memberOccurrences, attrLocal, val);
       }
     }
   }
@@ -245,7 +249,15 @@ export function mapBlockInstanceNode(
       ctx,
     );
     if (val) {
-      memberValues[childLocal] = val;
+      pushMemberOccurrence(memberOccurrences, childLocal, val);
+    }
+  }
+
+  const memberValues: Record<string, MemberValue> = {};
+  for (const [name, occurrences] of Object.entries(memberOccurrences)) {
+    const collapsed = collapseMemberOccurrences(occurrences, ctx, loc);
+    if (collapsed) {
+      memberValues[name] = collapsed;
     }
   }
 
@@ -253,9 +265,7 @@ export function mapBlockInstanceNode(
   const generics = parseGenericsBinding(element, ctx);
   const instance: BlockInstance = {
     typeFqn,
-    memberValues: Object.fromEntries(
-      Object.entries(memberValues).filter(([, v]) => v !== undefined),
-    ) as BlockInstance["memberValues"],
+    memberValues,
     source: loc,
   };
 
@@ -282,6 +292,51 @@ export function mapBlockInstanceNode(
     instance,
     ...(directives.length > 0 ? { directives } : {}),
     source: loc,
+  };
+}
+
+function pushMemberOccurrence(
+  occurrences: Record<string, MemberValue[]>,
+  name: string,
+  value: MemberValue,
+): void {
+  const list = occurrences[name] ?? [];
+  list.push(value);
+  occurrences[name] = list;
+}
+
+function isLiteralArray(value: MemberValue): boolean {
+  return value.kind === "literal" && Array.isArray(value.value);
+}
+
+function collapseMemberOccurrences(
+  occurrences: MemberValue[],
+  ctx: MapContext,
+  loc: SourceLocation,
+): MemberValue | undefined {
+  if (occurrences.length === 0) {
+    return undefined;
+  }
+  if (occurrences.length === 1) {
+    return occurrences[0];
+  }
+
+  const placements = new Set(
+    occurrences
+      .map((value) => ("authoredPlacement" in value ? value.authoredPlacement : undefined))
+      .filter((placement): placement is "attribute" | "element" => placement !== undefined),
+  );
+  if (placements.size > 1 || occurrences.some(isLiteralArray) || occurrences.some((value) => value.kind !== "literal")) {
+    reportMixedMemberValue(ctx, loc);
+    return occurrences[0];
+  }
+
+  const first = occurrences[0] as LiteralValue;
+  return {
+    kind: "literal",
+    value: occurrences.map((value) => (value as LiteralValue).value),
+    typeFqn: first.typeFqn,
+    ...(first.authoredPlacement ? { authoredPlacement: first.authoredPlacement } : {}),
   };
 }
 

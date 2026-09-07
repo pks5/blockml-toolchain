@@ -11,9 +11,10 @@ import {
   historyExecutionXml,
   pendingExecutionXml,
   writeProject,
+  fixtureTempDir,
 } from "./fixture.js";
 
-const TMP = join(import.meta.dirname, ".tmp-transformer-execution-id");
+const TMP = fixtureTempDir("transformer-execution-id");
 const USED_ID = "aaaaaaaa-0000-4000-8000-000000000007";
 const FRESH_ID = "bbbbbbbb-0000-4000-8000-000000000008";
 

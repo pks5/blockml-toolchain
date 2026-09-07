@@ -14,13 +14,14 @@ import {
   pendingFqn,
   plainBlockXml,
   writeProject,
+  fixtureTempDir,
 } from "./fixture.js";
 
 function resolveAt(fqn: string): ReturnType<typeof resolvePendingExecution> {
   return resolvePendingExecution(fqn, TMP, resolveTargetLibrary(TMP));
 }
 
-const TMP = join(import.meta.dirname, ".tmp-transformer-resolve");
+const TMP = fixtureTempDir("transformer-resolve");
 
 describe("resolvePendingExecution", () => {
   beforeEach(() => {

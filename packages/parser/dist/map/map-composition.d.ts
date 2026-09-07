@@ -1,4 +1,4 @@
-import type { BlockInstanceNode, CompositionTemplate } from "@blockml/bom";
+import type { BlockInstanceNode, CompositionTemplate, SourceLocation } from "@blockml/bom";
 import type { Element } from "@xmldom/xmldom";
 import { type ImplicitNamespaceContext } from "../util/qname.js";
 import type { MapContext } from "./context.js";
@@ -14,7 +14,7 @@ export declare function mapTypeReferenceEntityInstance(element: Element, ctx: Ma
     version: import("@blockml/bom").ExpressionValue | {
         kind: "interpolated";
         raw: string;
-        source: import("@blockml/bom").SourceLocation;
+        source: SourceLocation;
         value?: never;
         typeFqn?: never;
     } | {

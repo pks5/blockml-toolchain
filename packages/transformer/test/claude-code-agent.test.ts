@@ -8,8 +8,9 @@ import {
 } from "../src/agent/claude-code-agent.js";
 import { DEFAULT_AGENTS_MD } from "../src/agent/default-agents.js";
 import { CLAUDE_EXECUTE_PERMISSIONS } from "../src/agent/claude-permissions.js";
+import { fixtureTempDir } from "./fixture.js";
 
-const TMP = join(import.meta.dirname, ".tmp-claude-agent");
+const TMP = fixtureTempDir("claude-agent");
 
 const CLOSED_TASK = [
   "<org.blockml.bml.transformer.workflow.InstructionTask>",

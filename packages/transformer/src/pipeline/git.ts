@@ -1,4 +1,5 @@
 import { spawnSync } from "node:child_process";
+import { realpathSync } from "node:fs";
 import { resolve } from "node:path";
 import { TransformError } from "../execution/errors.js";
 
@@ -8,10 +9,30 @@ export interface GitCommandResult {
   stderr: string;
 }
 
+export function resolveWorkspacePath(path: string): string {
+  try {
+    return realpathSync(path);
+  } catch {
+    return resolve(path);
+  }
+}
+
+function gitEnv(cwd: string): NodeJS.ProcessEnv {
+  const root = resolveWorkspacePath(cwd);
+  const env = { ...process.env };
+  delete env.GIT_DIR;
+  delete env.GIT_WORK_TREE;
+  delete env.GIT_INDEX_FILE;
+  env.GIT_DIR = resolve(root, ".git");
+  env.GIT_WORK_TREE = root;
+  return env;
+}
+
 export function git(cwd: string, args: string[]): GitCommandResult {
   const result = spawnSync("git", args, {
     cwd,
     encoding: "utf8",
+    env: gitEnv(cwd),
   });
   if (result.error) {
     return { status: 1, stdout: "", stderr: result.error.message };
@@ -39,7 +60,7 @@ export function assertWorktreeClean(workspaceRoot: string): string {
       `Workspace is not a Git repository: ${workspaceRoot}`,
     );
   }
-  if (resolve(toplevel.stdout.trim()) !== resolve(workspaceRoot)) {
+  if (resolveWorkspacePath(toplevel.stdout.trim()) !== resolveWorkspacePath(workspaceRoot)) {
     throw new TransformError(
       "resolve",
       `Workspace must be the Git toplevel (${toplevel.stdout.trim()})`,

@@ -95,7 +95,7 @@ export function emitBlockInstance(writer, instance, directives, ctx) {
         if (!("authoredPlacement" in val) || val.authoredPlacement !== "element") {
             continue;
         }
-        elementChildren.push(emitMemberValueElement(name, val));
+        elementChildren.push(...emitMemberValueElements(name, val));
     }
     const genericsElement = instance.generics?.authoredPlacement === "element";
     const hasBody = elementChildren.length > 0 ||
@@ -179,6 +179,12 @@ function emitMemberValueAttr(val) {
         return formatMemberValue(val.value);
     }
     return escapeAttr(escapeInterpolationDelimiters(String(val.value)));
+}
+function emitMemberValueElements(name, val) {
+    if (val.kind === "literal" && Array.isArray(val.value)) {
+        return val.value.map((item) => `<${name}>${formatMemberValue(item)}</${name}>`);
+    }
+    return [emitMemberValueElement(name, val)];
 }
 function emitMemberValueElement(name, val) {
     if (val.kind === "expression") {

@@ -37,11 +37,33 @@ export function collectBaseTypeChain(
   return chain;
 }
 
+function applyLocalDeclarationFlags(
+  merged: MemberDefinition,
+  incoming: MemberDefinition,
+): void {
+  if (incoming.abstract === true) {
+    merged.abstract = true;
+  } else {
+    delete merged.abstract;
+  }
+  if (incoming.final === true) {
+    merged.final = true;
+  } else {
+    delete merged.final;
+  }
+  if (incoming.override === true) {
+    merged.override = true;
+  } else {
+    delete merged.override;
+  }
+}
+
 function mergeMemberPartial(
   existing: MemberDefinition,
   incoming: MemberDefinition,
 ): MemberDefinition {
   const merged = { ...existing, ...incoming, name: incoming.name } as MemberDefinition;
+  applyLocalDeclarationFlags(merged, incoming);
 
   if (existing.kind === "property" && incoming.kind === "property") {
     const existingConstraints = existing.constraints ?? [];

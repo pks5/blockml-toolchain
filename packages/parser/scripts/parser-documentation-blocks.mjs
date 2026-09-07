@@ -290,7 +290,19 @@ export const documentationBlocks = [
     • One <value> per namespace on a property member. Unprefixed <value> /
       value="…" is the canonical namespace (""). Prefixed <prefix:value>
       (Annotation xmlns) is a separate facet. Extra copies of the same
-      namespace → BML_DUPLICATE_PROPERTY_VALUE.
+      namespace → BML_DUPLICATE_PROPERTY_VALUE. A list default is one
+      <value>['a', 'b']</value> — not stacked <value> (choice-list reading;
+      use suggestions).
+    • Collection instance values (type multiplicity [] / 0..n) — properties
+      and associations share two forms. Compact: one attribute or element
+      whose text is a JSON-like array of quoted items
+      (myText="['Hello', 'Good Bye']", myAsso="['myId', 'otherId']").
+      Verbose: one instance element per item in document order
+      (<myText>Hello</myText><myText>Good Bye</myText>,
+      <myAsso>myId</myAsso><myAsso>otherId</myAsso>). A single item stays
+      without brackets (myAsso="myId"). Do not mix attribute + element,
+      compact JSON + repeated tags, or space-separated tokens
+      → BML_MIXED_MEMBER_VALUE. Duplicate XML attributes are not a list form.
     • One <composition> per aggregation member on a Block definition, as a direct
       child of that member (not of <block>, <aggregations>, nested inside metadata,
       or inside an aggregation that is already nested in a composition). Extra
@@ -408,6 +420,7 @@ export const documentationBlocks = [
     • BML_NESTED_COMPOSITION — <composition> inside an aggregation that is already nested in a composition
     • BML_DUPLICATE_COMPOSITION — more than one <composition> on the same aggregation member
     • BML_DUPLICATE_PROPERTY_VALUE — more than one <value> for the same namespace on a property
+    • BML_MIXED_MEMBER_VALUE — instance member mixes attribute + element, compact JSON list + repeated tags, or a non-literal with another payload
     • BML_UNEXPECTED_TEXT — non-whitespace text on an element-only grammar node
 
     Map-time diagnostics attach Diagnostic.source to the use-site token when known

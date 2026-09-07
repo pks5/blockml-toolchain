@@ -146,7 +146,7 @@ export function emitBlockInstance(
     if (!("authoredPlacement" in val) || val.authoredPlacement !== "element") {
       continue;
     }
-    elementChildren.push(emitMemberValueElement(name, val));
+    elementChildren.push(...emitMemberValueElements(name, val));
   }
 
   const genericsElement = instance.generics?.authoredPlacement === "element";
@@ -242,6 +242,13 @@ function emitMemberValueAttr(val: MemberValue): string {
     return formatMemberValue(val.value);
   }
   return escapeAttr(escapeInterpolationDelimiters(String(val.value)));
+}
+
+function emitMemberValueElements(name: string, val: MemberValue): string[] {
+  if (val.kind === "literal" && Array.isArray(val.value)) {
+    return val.value.map((item) => `<${name}>${formatMemberValue(item)}</${name}>`);
+  }
+  return [emitMemberValueElement(name, val)];
 }
 
 function emitMemberValueElement(name: string, val: MemberValue): string {

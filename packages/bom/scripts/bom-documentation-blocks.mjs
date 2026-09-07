@@ -240,6 +240,9 @@ export const documentationBlocks = [
     is: "Property value deep-copy rules",
     doc: `Property values are never linked — always deep copies on instances and definitions.
     Cross-instance FQN::id references exist only on associations (basePresets, Step.part, …).
+    Collection payloads (type multiplicity) use a JSON-like ['a', 'b'] array in one
+    attribute or element, or repeated instance elements of the same member name.
+    Space-separated association tokens are not a value form.
 
     EnumType tokens (Standard, FQN::id) are resolution keys — BOM stores id + typeFqn only.
     Struct/primitive literals stay inline in authored form — not normalized at parse time.

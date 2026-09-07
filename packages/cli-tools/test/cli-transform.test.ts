@@ -1,11 +1,28 @@
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, mkdirSync, realpathSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { parseArgs, runCli } from "../src/cli.js";
 import type { TransformationAgent } from "@blockml/transformer";
 
-const TMP = join(import.meta.dirname, ".tmp-cli-transform");
+const TMP = join(tmpdir(), "blockml-cli-transform");
+
+function gitEnv(dir: string): NodeJS.ProcessEnv {
+  let root = dir;
+  try {
+    root = realpathSync(dir);
+  } catch {
+    root = resolve(dir);
+  }
+  const env = { ...process.env };
+  delete env.GIT_DIR;
+  delete env.GIT_WORK_TREE;
+  delete env.GIT_INDEX_FILE;
+  env.GIT_DIR = resolve(root, ".git");
+  env.GIT_WORK_TREE = root;
+  return env;
+}
 const LIBRARY = "com.example.model";
 
 function pendingXml(name: string): string {
@@ -81,7 +98,11 @@ function writeProject(): void {
 }
 
 function gitOrThrow(args: string[]): void {
-  const result = spawnSync("git", args, { cwd: TMP, encoding: "utf8" });
+  const result = spawnSync("git", args, {
+    cwd: TMP,
+    encoding: "utf8",
+    env: gitEnv(TMP),
+  });
   if (result.error || (result.status ?? 1) !== 0) {
     throw new Error(
       `git ${args.join(" ")} failed: ${result.stderr || result.error?.message || ""}`,

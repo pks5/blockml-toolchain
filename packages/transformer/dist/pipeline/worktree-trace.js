@@ -1,6 +1,5 @@
-import { resolve } from "node:path";
 import { TRANSFORM_PATH } from "../execution/constants.js";
-import { gitStdout } from "./git.js";
+import { gitStdout, resolveWorkspacePath } from "./git.js";
 export function isTransformLifecyclePath(path) {
     return (path.includes(`/${TRANSFORM_PATH}/`) || path.startsWith(`${TRANSFORM_PATH}/`));
 }
@@ -13,7 +12,7 @@ export function collectWorktreeTrace(workspaceRoot) {
     if (toplevel === undefined) {
         return empty;
     }
-    if (resolve(toplevel.trim()) !== resolve(workspaceRoot)) {
+    if (resolveWorkspacePath(toplevel.trim()) !== resolveWorkspacePath(workspaceRoot)) {
         return empty;
     }
     const status = gitStdout(workspaceRoot, ["status", "--porcelain"]);
