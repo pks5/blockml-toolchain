@@ -84,10 +84,20 @@ ModelTransformation metadata or files under _meta/transform/.</instructions>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/RandomBlock.bml" />
           </changedFiles>
         </workflow:AgenticOperation>
-        <workflow:ToolOperation name="Validate" status="Running" captureOutput="true" command="blockml">
+        <workflow:ToolOperation name="Validate" status="Succeeded" captureOutput="true" command="blockml">
           <args>validate</args>
           <startedAt>2026-09-08T01:07:24</startedAt>
           <baseCommit>cb13cc98252dbaac5ec77c8ffbe0034dafb76a88</baseCommit>
+          <output>recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/blocks/org/blockml/bml/workspace/playground/RandomBlock.bml:14 — Structure long documentation with markdown (headings, lists, or paragraphs).
+recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/packages/cli-tools/blocks/org/blockml/bml/cli/command/TransformApplyCommand.bml:24 — Structure long documentation with markdown (headings, lists, or paragraphs).
+recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/packages/graph/blocks/org/blockml/bml/graph/capability/Members.bml:24 — Structure long documentation with markdown (headings, lists, or paragraphs).
+recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/packages/serializer/blocks/org/blockml/bml/compiler/serializer/capability/EmitCharacterData.bml:30 — Structure long documentation with markdown (headings, lists, or paragraphs).
+recommendation BML_STYLE_PREFER_CDATA /Users/pksoftware/workspace-fh/blockml/packages/serializer/blocks/org/blockml/bml/compiler/serializer/capability/EscapeAttr.bml:30 — Use CDATA instead of XML entity escaping in documentation.
+recommendation BML_STYLE_PREFER_CDATA /Users/pksoftware/workspace-fh/blockml/packages/serializer/blocks/org/blockml/bml/compiler/serializer/capability/EscapeText.bml:30 — Use CDATA instead of XML entity escaping in documentation.
+recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/packages/transformer/blocks/org/blockml/bml/transformer/capability/ToolExecutor.bml:16 — Structure long documentation with markdown (headings, lists, or paragraphs).
+Validation succeeded. Tested 754 blocks, 0 with errors, 0 warnings, 7 recommendations.
+</output>
+          <completedAt>2026-09-08T01:07:32</completedAt>
         </workflow:ToolOperation>
       </composition>
     </operations>
