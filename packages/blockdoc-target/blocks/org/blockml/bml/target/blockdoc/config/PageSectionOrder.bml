@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Config — PageSectionOrder
-  FQN: org.blockml.bml.target.blockdoc.config.PageSectionOrder
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Config — PageSectionOrder
+  FQN: org.blockml.bml.target.blockdoc.config.PageSectionOrder-->
+<bdconfig:PageSectionOrder xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,31 +21,36 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>PageSectionOrder</name>
-  <type>bdconfig:PageSectionOrder</type>
-  <baseType>blockdoc:BlockdocType</baseType>
-  <is>Normative section order for block / site / package pages</is>
-
+  <baseType>
+    blockdoc:BlockdocType
+  </baseType>
+  <is>
+    Normative section order for block / site / package pages
+  </is>
   <documentation>
     # Normative section order for block / site / package pages
-
+    
     BD6/BD25 block page order: sticky toolbar (BlockDoc, Index, All Blocks, search); dotted package path (fqn layout) or plain package; h1 name; optional extends / version / is; Documentation; Properties; Aggregations; Associations; Capabilities; Composition; Sub-Blocks; References.
-
+    
     All Blocks listing: toolbar; h1 title; count line; package sections, or library sections then packages when multiple libraries (BD21).
-
+    
     Package index: toolbar; breadcrumb; h1 last segment; Sub-packages; Blocks.
   </documentation>
-
   <properties>
     <blockPageSections type="type:Text">
-      <documentation>Ordered section ids for block HTML pages.</documentation>
+      <documentation>
+        Ordered section ids for block HTML pages.
+      </documentation>
     </blockPageSections>
     <siteIndexSections type="type:Text">
-      <documentation>Ordered section ids for site / perLibrary index.</documentation>
+      <documentation>
+        Ordered section ids for site / perLibrary index.
+      </documentation>
     </siteIndexSections>
     <packageIndexSections type="type:Text">
-      <documentation>Ordered section ids for package index.html.</documentation>
+      <documentation>
+        Ordered section ids for package index.html.
+      </documentation>
     </packageIndexSections>
   </properties>
-
-</block>
+</bdconfig:PageSectionOrder>

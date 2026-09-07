@@ -1,12 +1,6 @@
-<!--
-  Parser — MapTimeDiagnosticCodes
-  FQN: org.blockml.bml.compiler.parser.config.MapTimeDiagnosticCodes
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser — MapTimeDiagnosticCodes
+  FQN: org.blockml.bml.compiler.parser.config.MapTimeDiagnosticCodes-->
+<parconfig:MapTimeDiagnosticCodes xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,17 +23,20 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>MapTimeDiagnosticCodes</name>
-  <type>parconfig:MapTimeDiagnosticCodes</type>
-  <baseType>parser:ParserType</baseType>
-  <is>Diagnostic codes emitted during parse pipeline and mapping</is>
-
-  <documentation>Hard-fail codes return document: null. Map-time codes may attach to ParseResult with continueOnError.</documentation>
-
+  <baseType>
+    parser:ParserType
+  </baseType>
+  <is>
+    Diagnostic codes emitted during parse pipeline and mapping
+  </is>
+  <documentation>
+    Hard-fail codes return document: null. Map-time codes may attach to ParseResult with continueOnError.
+  </documentation>
   <properties>
     <codes type="type:Text[]">
-      <documentation>Ordered: BML_UNSUPPORTED_FORMAT, BML_MALFORMED_XML, BML_MISSING_ROOT, BML_INVALID_ROOT, BML_MISSING_BLOCK_TYPE, BML_MISSING_EMBEDDED_BLOCK_TYPE, BML_MISSING_SUBBLOCK_NAME, BML_MAP_ERROR, BML_UNKNOWN_NAMESPACE_PREFIX, BML_UNQUALIFIED_BLOCK_REFERENCE, BML_UNKNOWN_TYPE, BML_INVALID_TYPE_REFERENCE, BML_UNKNOWN_ELEMENT, BML_UNKNOWN_ATTRIBUTE, BML_UNKNOWN_DIRECTIVE, BML_STANDALONE_COMPOSITION, BML_NESTED_COMPOSITION, BML_DUPLICATE_COMPOSITION, BML_DUPLICATE_PROPERTY_VALUE, BML_UNEXPECTED_TEXT, BML_INVALID_VALUE (required)</documentation>
+      <documentation>
+        Ordered: BML_UNSUPPORTED_FORMAT, BML_MALFORMED_XML, BML_MISSING_ROOT, BML_INVALID_ROOT, BML_MISSING_BLOCK_TYPE, BML_MISSING_EMBEDDED_BLOCK_TYPE, BML_MISSING_SUBBLOCK_NAME, BML_MAP_ERROR, BML_UNKNOWN_NAMESPACE_PREFIX, BML_UNQUALIFIED_BLOCK_REFERENCE, BML_UNKNOWN_TYPE, BML_INVALID_TYPE_REFERENCE, BML_UNKNOWN_ELEMENT, BML_UNKNOWN_ATTRIBUTE, BML_UNKNOWN_DIRECTIVE, BML_STANDALONE_COMPOSITION, BML_NESTED_COMPOSITION, BML_DUPLICATE_COMPOSITION, BML_DUPLICATE_PROPERTY_VALUE, BML_UNEXPECTED_TEXT, BML_INVALID_VALUE (required)
+      </documentation>
     </codes>
   </properties>
-
-</block>
+</parconfig:MapTimeDiagnosticCodes>

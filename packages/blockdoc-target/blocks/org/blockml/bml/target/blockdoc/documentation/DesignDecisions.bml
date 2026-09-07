@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Documentation — DesignDecisions
-  FQN: org.blockml.bml.target.blockdoc.documentation.DesignDecisions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Documentation — DesignDecisions
+  FQN: org.blockml.bml.target.blockdoc.documentation.DesignDecisions-->
+<bddocumentation:DesignDecisions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -28,14 +22,15 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>DesignDecisions</name>
-  <type>bddocumentation:DesignDecisions</type>
-  <baseType>core:Documentation</baseType>
-  <is>Normative BlockDoc decisions BD1–BD28</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Normative BlockDoc decisions BD1–BD28
+  </is>
   <documentation>
     # Normative BlockDoc decisions BD1–BD28
-
+    
     - BD1 siteMode merged vs perLibrary.
     - BD2 outLayout fqn vs package (package may collide when multiple blocks share a package).
     - BD3 option defaults: merged / fqn / includeNonExported=true.
@@ -68,5 +63,4 @@
   <references>
     <see type="bddocumentation:PackageOwnership" relation="ReadNext" />
   </references>
-
-</block>
+</bddocumentation:DesignDecisions>

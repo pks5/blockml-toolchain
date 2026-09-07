@@ -1,12 +1,6 @@
-<!--
-  XSD API — XsdRenderOutput
-  FQN: org.blockml.bml.target.xsd.api.XsdRenderOutput
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--XSD API — XsdRenderOutput
+  FQN: org.blockml.bml.target.xsd.api.XsdRenderOutput-->
+<xsdapi:XsdRenderOutput xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -20,15 +14,25 @@
   xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>XsdRenderOutput</name>
-  <type>xsdapi:XsdRenderOutput</type>
-  <baseType>xsd:XsdType</baseType>
-  <is>Schema files under outDir plus optional root catalog.xml</is>
-
-  <documentation>files[] hold bml.xsd and optional types.xsd/service.xsd. rootFiles hold catalog.xml at project root.</documentation>
+  <baseType>
+    xsd:XsdType
+  </baseType>
+  <is>
+    Schema files under outDir plus optional root catalog.xml
+  </is>
+  <documentation>
+    files[] hold bml.xsd and optional types.xsd/service.xsd. rootFiles hold catalog.xml at project root.
+  </documentation>
   <properties>
-    <files type="type:Text"><documentation>Schema artifacts relative to outputBasePath. (required)</documentation></files>
-    <rootFiles type="type:Text"><documentation>Project-root files such as catalog.xml. (optional)</documentation></rootFiles>
+    <files type="type:Text">
+      <documentation>
+        Schema artifacts relative to outputBasePath. (required)
+      </documentation>
+    </files>
+    <rootFiles type="type:Text">
+      <documentation>
+        Project-root files such as catalog.xml. (optional)
+      </documentation>
+    </rootFiles>
   </properties>
-
-</block>
+</xsdapi:XsdRenderOutput>

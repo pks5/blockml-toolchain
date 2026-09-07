@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Documentation — RenderContextRules
-  FQN: org.blockml.bml.compiler.runtime.documentation.RenderContextRules
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Documentation — RenderContextRules
+  FQN: org.blockml.bml.compiler.runtime.documentation.RenderContextRules-->
+<rundocumentation:RenderContextRules xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -26,23 +20,24 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>RenderContextRules</name>
-  <type>rundocumentation:RenderContextRules</type>
-  <baseType>core:Documentation</baseType>
-  <is>RenderSession and RenderContext (C1)</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    RenderSession and RenderContext (C1)
+  </is>
   <documentation>
     # RenderSession and RenderContext (C1)
-
+    
     RenderSession is immutable per compile after BuildRenderSession.
-
+    
     Stable session fields for registry targets: typeRegistry, sourceFilePath, outputBasePath,
     targetName, scopeKind, libraryPaths?, corpusRoots?.
-
+    
     RenderContext holds session + blockFqn + outputRelativePath; child(overrides) forks a new
     context sharing the same session. Per-node fields are for composition/domain renderers;
     registry targets may ignore them and rely on request.scope plus session.
-
+    
     CreateRenderContext defaults empty FQN and relative path for the root call into target.render.
   </documentation>
   <references>
@@ -50,5 +45,4 @@
     <see type="runcap:BuildRenderSession" relation="SeeAlso" />
     <see type="runcap:CreateRenderContext" relation="SeeAlso" />
   </references>
-
-</block>
+</rundocumentation:RenderContextRules>

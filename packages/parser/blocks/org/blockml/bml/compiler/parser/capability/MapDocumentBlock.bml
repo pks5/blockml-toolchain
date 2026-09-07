@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — MapDocumentBlock
-  FQN: org.blockml.bml.compiler.parser.capability.MapDocumentBlock
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — MapDocumentBlock
+  FQN: org.blockml.bml.compiler.parser.capability.MapDocumentBlock-->
+<parcap:MapDocumentBlock xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,31 +23,39 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>MapDocumentBlock</name>
-  <type>parcap:MapDocumentBlock</type>
-  <baseType>core:Capability</baseType>
-  <is>Map document root to BomDocument — step [5] entry</is>
-
-  <documentation><![CDATA[Map document root (<block> or type tag) to BomDocument — step [5] entry]]></documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Map document root to BomDocument — step [5] entry
+  </is>
+  <documentation>
+    <![CDATA[Map document root (<block> or type tag) to BomDocument — step [5] entry]]>
+  </documentation>
   <references>
     <see type="parcap:MapBlock" relation="SeeAlso" />
     <see type="pardocumentation:BlockMetadataMapping" relation="SeeAlso" />
   </references>
-
   <properties>
     <element type="parmap:XmlDomNode">
-      <documentation>element. TS type: parmap:XmlDomNode. (required)</documentation>
+      <documentation>
+        element. TS type: parmap:XmlDomNode. (required)
+      </documentation>
     </element>
     <sourceInfo type="bomcommon:SourceInfo">
-      <documentation>sourceInfo. TS type: bomcommon:SourceInfo. (required)</documentation>
+      <documentation>
+        sourceInfo. TS type: bomcommon:SourceInfo. (required)
+      </documentation>
     </sourceInfo>
     <ctx type="parmap:MapContext">
-      <documentation>ctx. TS type: parmap:MapContext. (required)</documentation>
+      <documentation>
+        ctx. TS type: parmap:MapContext. (required)
+      </documentation>
     </ctx>
     <document type="bomdoc:BomDocument">
-      <documentation>document. TS type: bomdoc:BomDocument. (required)</documentation>
+      <documentation>
+        document. TS type: bomdoc:BomDocument. (required)
+      </documentation>
     </document>
   </properties>
-
-</block>
+</parcap:MapDocumentBlock>

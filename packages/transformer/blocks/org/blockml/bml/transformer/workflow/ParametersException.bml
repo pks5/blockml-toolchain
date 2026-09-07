@@ -1,46 +1,40 @@
-<!--
-  Transformer Workflow — ParametersException
-  FQN: org.blockml.bml.transformer.workflow.ParametersException
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Workflow — ParametersException
+  FQN: org.blockml.bml.transformer.workflow.ParametersException-->
+<workflow:ParametersException xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
-  <name>ParametersException</name>
-  <type>workflow:ParametersException</type>
-  <baseType>core:Exception</baseType>
-  <is>A thrown condition when ModelTransformation parameters cannot be resolved</is>
-
+  <baseType>
+    core:Exception
+  </baseType>
+  <is>
+    A thrown condition when ModelTransformation parameters cannot be resolved
+  </is>
+  <isnot>
+    Not ResultException (Finalize result fault), not ExecutionException
+    (ModelOperation execution fault), and not a validator diagnostic
+    (org.blockml.bml.core.Diagnostic).
+  </isnot>
   <documentation>
     # Parameters Exception
-
+    
     Prepare could not apply `parameterMappings` onto `parameters`:
-
+    
     * a mapping `source` expression could not be closed
     * the path points at an unknown Block or Property
     * a `sourcePath` / `parameterPath` is invalid
     * or a selected leaf type does not match bound `T` (or the
       `parameterPath` target)
-
+    
     Distinct from ResultException (Persist result-mapping fault) and
     ExecutionException (a ModelOperation fault). Inherits message from
     core:Exception. Written only onto `workflow:ModelTransformation.exception`.
     A ModelOperation failure leaves that aggregation empty.
   </documentation>
-
-  <isNot>Not ResultException (Finalize result fault), not ExecutionException
-    (ModelOperation execution fault), and not a validator diagnostic
-    (org.blockml.bml.core.Diagnostic).</isNot>
-
   <references>
     <see type="core:Exception" relation="Extends" />
     <see type="workflow:ResultException" relation="ContrastsWith" />
     <see type="workflow:ExecutionException" relation="ContrastsWith" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
   </references>
-
-</block>
+</workflow:ParametersException>

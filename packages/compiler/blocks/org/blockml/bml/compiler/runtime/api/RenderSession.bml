@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime API — RenderSession
-  FQN: org.blockml.bml.compiler.runtime.api.RenderSession
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime API — RenderSession
+  FQN: org.blockml.bml.compiler.runtime.api.RenderSession-->
+<runapi:RenderSession xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,25 +19,55 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>RenderSession</name>
-  <type>runapi:RenderSession</type>
-  <baseType>runtime:RuntimeType</baseType>
-  <is>Immutable per-compile session shared by RenderContext forks</is>
-
-  <documentation>C1: built by BuildRenderSession after scope bootstrap or BOM-first host registry.
-    Domain-agnostic — no MachineBlocks or product-profile fields.</documentation>
+  <baseType>
+    runtime:RuntimeType
+  </baseType>
+  <is>
+    Immutable per-compile session shared by RenderContext forks
+  </is>
+  <documentation>
+    C1: built by BuildRenderSession after scope bootstrap or BOM-first host registry.
+    Domain-agnostic — no MachineBlocks or product-profile fields.
+  </documentation>
   <references>
     <see type="rundocumentation:PublicApi" relation="SeeAlso" />
     <see type="rundocumentation:ExternalTargetContract" relation="SeeAlso" />
   </references>
   <properties>
-    <typeRegistry type="type:Text"><documentation>TypeRegistry for this compile. (required)</documentation></typeRegistry>
-    <sourceFilePath type="type:Text"><documentation>Document path or scope placeholder. (required)</documentation></sourceFilePath>
-    <outputBasePath type="type:Text"><documentation>Output base path. (required)</documentation></outputBasePath>
-    <targetName type="type:Text"><documentation>Registered target name. (required)</documentation></targetName>
-    <scopeKind type="type:Text"><documentation>Resolved kind without auto. (required)</documentation></scopeKind>
-    <libraryPaths type="type:Text"><documentation>When scope is library. (optional)</documentation></libraryPaths>
-    <corpusRoots type="type:Text"><documentation>When scope is corpus. (optional)</documentation></corpusRoots>
+    <typeRegistry type="type:Text">
+      <documentation>
+        TypeRegistry for this compile. (required)
+      </documentation>
+    </typeRegistry>
+    <sourceFilePath type="type:Text">
+      <documentation>
+        Document path or scope placeholder. (required)
+      </documentation>
+    </sourceFilePath>
+    <outputBasePath type="type:Text">
+      <documentation>
+        Output base path. (required)
+      </documentation>
+    </outputBasePath>
+    <targetName type="type:Text">
+      <documentation>
+        Registered target name. (required)
+      </documentation>
+    </targetName>
+    <scopeKind type="type:Text">
+      <documentation>
+        Resolved kind without auto. (required)
+      </documentation>
+    </scopeKind>
+    <libraryPaths type="type:Text">
+      <documentation>
+        When scope is library. (optional)
+      </documentation>
+    </libraryPaths>
+    <corpusRoots type="type:Text">
+      <documentation>
+        When scope is corpus. (optional)
+      </documentation>
+    </corpusRoots>
   </properties>
-
-</block>
+</runapi:RenderSession>

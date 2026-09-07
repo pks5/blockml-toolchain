@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — EmitTypeReferenceEntity
-  FQN: org.blockml.bml.compiler.serializer.capability.EmitTypeReferenceEntity
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — EmitTypeReferenceEntity
+  FQN: org.blockml.bml.compiler.serializer.capability.EmitTypeReferenceEntity-->
+<sercap:EmitTypeReferenceEntity xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,27 +21,33 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>EmitTypeReferenceEntity</name>
-  <type>sercap:EmitTypeReferenceEntity</type>
-  <baseType>core:Capability</baseType>
-  <is>Emit TypeReferenceEntityInstance element</is>
-
-  <documentation>Emit TypeReferenceEntityInstance element</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Emit TypeReferenceEntityInstance element
+  </is>
+  <documentation>
+    Emit TypeReferenceEntityInstance element
+  </documentation>
   <references>
     <see type="sercap:FqnToQName" relation="SeeAlso" />
   </references>
-
   <properties>
     <writer type="seremit:XmlWriter">
-      <documentation>writer. TS type: seremit:XmlWriter. (required)</documentation>
+      <documentation>
+        writer. TS type: seremit:XmlWriter. (required)
+      </documentation>
     </writer>
     <entity type="bomblock:TypeReferenceEntityInstance">
-      <documentation>entity. TS type: bomblock:TypeReferenceEntityInstance. (required)</documentation>
+      <documentation>
+        entity. TS type: bomblock:TypeReferenceEntityInstance. (required)
+      </documentation>
     </entity>
     <context type="seremit:EmitContext">
-      <documentation>context. TS type: seremit:EmitContext. (required)</documentation>
+      <documentation>
+        context. TS type: seremit:EmitContext. (required)
+      </documentation>
     </context>
   </properties>
-
-</block>
+</sercap:EmitTypeReferenceEntity>

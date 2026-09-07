@@ -1,12 +1,6 @@
-<!--
-  Builder Capability — AddCompositionChild
-  FQN: org.blockml.bml.builder.capability.AddCompositionChild
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Builder Capability — AddCompositionChild
+  FQN: org.blockml.bml.builder.capability.AddCompositionChild-->
+<buildercap:AddCompositionChild xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -20,25 +14,35 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>AddCompositionChild</name>
-  <type>buildercap:AddCompositionChild</type>
-  <baseType>core:Capability</baseType>
-  <is>Append a composition instance under a named aggregation</is>
-  <documentation>Used to add a Library.blocks catalog export. Creates the composition
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Append a composition instance under a named aggregation
+  </is>
+  <documentation>
+    Used to add a Library.blocks catalog export. Creates the composition
     wrapper when missing. Skips when typeFqn is already a child. Ensures xmlns
-    for the child package.</documentation>
+    for the child package.
+  </documentation>
   <references>
     <see type="builder:BomBuilder" relation="SeeAlso" />
   </references>
   <properties>
     <aggregationName type="type:Text">
-      <documentation>Target aggregation name, e.g. blocks. (required)</documentation>
+      <documentation>
+        Target aggregation name, e.g. blocks. (required)
+      </documentation>
     </aggregationName>
     <typeFqn type="type:Text">
-      <documentation>Child block FQN. (required)</documentation>
+      <documentation>
+        Child block FQN. (required)
+      </documentation>
     </typeFqn>
     <result type="builder:BomBuilder">
-      <documentation>This session. (required)</documentation>
+      <documentation>
+        This session. (required)
+      </documentation>
     </result>
   </properties>
-</block>
+</buildercap:AddCompositionChild>

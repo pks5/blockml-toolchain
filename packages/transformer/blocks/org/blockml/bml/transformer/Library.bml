@@ -1,23 +1,15 @@
 <!--BlockML Transformer Library Descriptor
   FQN: org.blockml.bml.transformer.Library-->
-<block xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<transformer:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:transformer="org.blockml.bml.transformer"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation"
-  xmlns:workflow="org.blockml.bml.transformer.workflow"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
+  xmlns:workflow="org.blockml.bml.transformer.workflow">
 
-  <name>
-    Library
-  </name>
-  <type>
-    blockml:transformer.Library
-  </type>
   <baseType>
-    blockml:core.BlockLibrary
+    core:BlockLibrary
   </baseType>
   <is>
     The BlockML Transformer package library catalog
@@ -32,7 +24,7 @@
     exclusively by this blocks list.
   </documentation>
   <references>
-    <see type="blockml:transformer.README" relation="ReadFirst">
+    <see type="transformer:README" relation="ReadFirst">
       Human/LLM reading entry for this library.
     </see>
   </references>
@@ -47,7 +39,7 @@
   <aggregations>
     <readMe override="true">
       <composition>
-        <blockml:transformer.README />
+        <transformer:README />
       </composition>
     </readMe>
     <dependencies override="true">
@@ -57,35 +49,35 @@
     </dependencies>
     <blocks override="true">
       <composition>
-        <blockml:transformer.workflow.CompositeTask />
-        <blockml:transformer.workflow.Criterion />
-        <blockml:transformer.workflow.ExecutionException />
-        <blockml:transformer.workflow.ExecutionStatus />
-        <blockml:transformer.workflow.AgenticOperation />
-        <blockml:transformer.workflow.InstructionRule />
-        <blockml:transformer.workflow.InstructionTask />
-        <blockml:transformer.workflow.ModelOperation />
-        <blockml:transformer.workflow.ModelTransformation />
-        <blockml:transformer.workflow.Prerequisite />
-        <blockml:transformer.workflow.ParameterMapping />
-        <blockml:transformer.workflow.ParametersException />
-        <blockml:transformer.workflow.PrerequisiteNotMetException />
-        <blockml:transformer.workflow.ResultException />
-        <blockml:transformer.workflow.ResultMapping />
-        <blockml:transformer.workflow.Rule />
-        <blockml:transformer.workflow.Task />
-        <blockml:transformer.workflow.ToolOperation />
-        <blockml:transformer.capability.AgenticExecutor />
-        <blockml:transformer.capability.ExecuteTask />
-        <blockml:transformer.capability.FinalizeExecution />
-        <blockml:transformer.capability.OperationExecutor />
-        <blockml:transformer.capability.PersistExecution />
-        <blockml:transformer.capability.PrepareExecution />
-        <blockml:transformer.capability.ReflectOnExecution />
-        <blockml:transformer.capability.RunTransformation />
-        <blockml:transformer.capability.ToolExecutor />
-        <blockml:transformer.documentation.ArchitectureOverview />
+        <workflow:CompositeTask />
+        <workflow:Criterion />
+        <workflow:ExecutionException />
+        <workflow:ExecutionStatus />
+        <workflow:AgenticOperation />
+        <workflow:InstructionRule />
+        <workflow:InstructionTask />
+        <workflow:ModelOperation />
+        <workflow:ModelTransformation />
+        <workflow:Prerequisite />
+        <workflow:ParameterMapping />
+        <workflow:ParametersException />
+        <workflow:PrerequisiteNotMetException />
+        <workflow:ResultException />
+        <workflow:ResultMapping />
+        <workflow:Rule />
+        <workflow:Task />
+        <workflow:ToolOperation />
+        <transformercap:AgenticExecutor />
+        <transformercap:ExecuteTask />
+        <transformercap:FinalizeExecution />
+        <transformercap:OperationExecutor />
+        <transformercap:PersistExecution />
+        <transformercap:PrepareExecution />
+        <transformercap:ReflectOnExecution />
+        <transformercap:RunTransformation />
+        <transformercap:ToolExecutor />
+        <transformerdocumentation:ArchitectureOverview />
       </composition>
     </blocks>
   </aggregations>
-</block>
+</transformer:Library>

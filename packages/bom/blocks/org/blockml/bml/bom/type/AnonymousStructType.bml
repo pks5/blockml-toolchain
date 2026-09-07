@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — AnonymousStructType
-  FQN: org.blockml.bml.bom.type.AnonymousStructType
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — AnonymousStructType
+  FQN: org.blockml.bml.bom.type.AnonymousStructType-->
+<bomtype:AnonymousStructType xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,21 +17,26 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>AnonymousStructType</name>
-  <type>bomtype:AnonymousStructType</type>
-  <baseType>bomtype:TypeExpression</baseType>
-  <is>Anonymous struct type expression</is>
-
-  <documentation>Anonymous struct type expression</documentation>
-
+  <baseType>
+    bomtype:TypeExpression
+  </baseType>
+  <is>
+    Anonymous struct type expression
+  </is>
+  <documentation>
+    Anonymous struct type expression
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind (required). TS type: type:Text.</documentation>
+      <documentation>
+        kind (required). TS type: type:Text.
+      </documentation>
       <value>anonymousStruct</value>
     </kind>
     <fields type="bomtype:StructField[]">
-      <documentation>fields (required). TS type: bomtype:StructField[].</documentation>
+      <documentation>
+        fields (required). TS type: bomtype:StructField[].
+      </documentation>
     </fields>
   </properties>
-
-</block>
+</bomtype:AnonymousStructType>

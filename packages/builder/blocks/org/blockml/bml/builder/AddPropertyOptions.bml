@@ -1,12 +1,6 @@
-<!--
-  Builder — AddPropertyOptions
-  FQN: org.blockml.bml.builder.AddPropertyOptions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Builder — AddPropertyOptions
+  FQN: org.blockml.bml.builder.AddPropertyOptions-->
+<builder:AddPropertyOptions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -20,19 +14,27 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>AddPropertyOptions</name>
-  <type>builder:AddPropertyOptions</type>
-  <baseType>builder:BuilderType</baseType>
-  <is>Declared property to append on the draft block</is>
+  <baseType>
+    builder:BuilderType
+  </baseType>
+  <is>
+    Declared property to append on the draft block
+  </is>
   <properties>
     <name type="type:Text">
-      <documentation>Logical property name. (required)</documentation>
+      <documentation>
+        Logical property name. (required)
+      </documentation>
     </name>
     <typeFqn type="type:Text">
-      <documentation>Property type FQN. (required)</documentation>
+      <documentation>
+        Property type FQN. (required)
+      </documentation>
     </typeFqn>
     <value type="type:Text">
-      <documentation>Optional literal value. (optional)</documentation>
+      <documentation>
+        Optional literal value. (optional)
+      </documentation>
     </value>
   </properties>
-</block>
+</builder:AddPropertyOptions>

@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — ParseMemberValue
-  FQN: org.blockml.bml.compiler.parser.capability.ParseMemberValue
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — ParseMemberValue
+  FQN: org.blockml.bml.compiler.parser.capability.ParseMemberValue-->
+<parcap:ParseMemberValue xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,50 +23,54 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ParseMemberValue</name>
-  <type>parcap:ParseMemberValue</type>
-  <baseType>core:Capability</baseType>
-  <is>Parse attribute/element value to MemberValue</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Parse attribute/element value to MemberValue
+  </is>
   <documentation>
     Parse attribute/element value to MemberValue.
-
+    
     Classification of the entire value:
     • unescaped whole `${ … }` → ExpressionValue (full expression language)
     • running text with an unescaped `${` → InterpolatedTextValue (authored raw kept)
     • only escaped openers (`\${`, `\\\${`, …) → LiteralValue after unescape
     • JSON arrays/objects stay structural list/struct tokenization
-
+    
     Escape is JS-template-like: a `${` opener is escaped when an odd number of
     backslashes immediately precedes `$`. `\${` stores literal `${`. `\\${` is
     one literal `\` plus a hole. Empty `${}` / `${ }` stays a parse error — write
     `\${ }` when the delimiter characters are intended.
-
+    
     Literal string storage is unescaped (`\${` → `${`). InterpolatedTextValue.raw
     keeps the authored escapes; parseInterpolatedText / evaluate unescapes holes.
-
+    
     Without `ctx.parseValue` (library bootstrap): Boolean and number heuristics
     (Text / Integer / Boolean / TypeIdentifier) remain.
-
+    
     With the host hook: scalars go through parseValue only. Success stores the
     host value. Failure keeps the authored string and reports BML_INVALID_VALUE.
     Skip keeps the authored string — no Boolean/number coercion.
   </documentation>
-
   <references>
     <see type="pardocumentation:ExpressionCapture" relation="SeeAlso" />
   </references>
-
   <properties>
     <raw type="type:Text">
-      <documentation>raw. TS type: type:Text. (required)</documentation>
+      <documentation>
+        raw. TS type: type:Text. (required)
+      </documentation>
     </raw>
     <ctx type="parmap:MapContext">
-      <documentation>ctx. TS type: parmap:MapContext. (required)</documentation>
+      <documentation>
+        ctx. TS type: parmap:MapContext. (required)
+      </documentation>
     </ctx>
     <value type="bomvalue:MemberValue">
-      <documentation>value. TS type: bomvalue:MemberValue. (required)</documentation>
+      <documentation>
+        value. TS type: bomvalue:MemberValue. (required)
+      </documentation>
     </value>
   </properties>
-
-</block>
+</parcap:ParseMemberValue>

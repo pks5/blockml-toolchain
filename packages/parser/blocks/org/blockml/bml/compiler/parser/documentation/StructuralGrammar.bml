@@ -1,12 +1,6 @@
-<!--
-  Parser Documentation — StructuralGrammar
-  FQN: org.blockml.bml.compiler.parser.documentation.StructuralGrammar
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Documentation — StructuralGrammar
+  FQN: org.blockml.bml.compiler.parser.documentation.StructuralGrammar-->
+<pardocumentation:StructuralGrammar xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,38 +24,39 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>StructuralGrammar</name>
-  <type>pardocumentation:StructuralGrammar</type>
-  <baseType>core:Documentation</baseType>
-  <is>Closed root vocabulary and preserve-on-error for structural BML errors</is>
-
-  <documentation>A document is valid BlockML if it is well-formed XML, structurally conforms
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Closed root vocabulary and preserve-on-error for structural BML errors
+  </is>
+  <documentation>
+    A document is valid BlockML if it is well-formed XML, structurally conforms
     to the BlockML definitions, and passes semantic validation against a complete registry.
     XSD is not part of this definition.
-
+    
     Error classes: XML Syntax Error (malformed XML; document may be null);
     Structural BML Error (unknown Gerüst tag/attribute/directive — this package);
     Semantic BML Error (unknown type/member/library — @blockml/validator).
-
+    
     Root children are closed: only identity and container names from the effective
     Block / document grammar (name, type, baseType, properties, aggregations, …).
     Direct aggregations at root are not allowed. User content lives only inside
     predefined containers and members.
-
+    
     Preserve-on-error: invalid authored constructs that can be represented are stored
     as unknownElements / unknownAttributes residuals. Diagnostics MUST NOT require
     destructive recovery. An error invalidates validity, not the whole BOM.
-
+    
     Definition/grammar nodes: unknown children/attributes → BML_UNKNOWN_ELEMENT /
     BML_UNKNOWN_ATTRIBUTE. Unknown bml:* → BML_UNKNOWN_DIRECTIVE.
     Non-whitespace text on element-only grammar nodes → BML_UNEXPECTED_TEXT.
     Formatting whitespace is ignored (B13). Character-data hosts keep text
     (name, is, documentation, value, property host text, …).
-    Block instances: extra attributes stay in memberValues for semantic checking.</documentation>
-
+    Block instances: extra attributes stay in memberValues for semantic checking.
+  </documentation>
   <references>
     <see type="pardocumentation:XmlCommentsParse" relation="ReadNext" />
     <see type="valdocumentation:ValidityContract" relation="SeeAlso" />
   </references>
-
-</block>
+</pardocumentation:StructuralGrammar>

@@ -1,12 +1,6 @@
-<!--
-  Serializer Documentation — ScopeExclusions
-  FQN: org.blockml.bml.compiler.serializer.documentation.ScopeExclusions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Documentation — ScopeExclusions
+  FQN: org.blockml.bml.compiler.serializer.documentation.ScopeExclusions-->
+<serdocumentation:ScopeExclusions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -28,13 +22,15 @@
   xmlns:bomcap="org.blockml.bml.bom.capability"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ScopeExclusions</name>
-  <type>serdocumentation:ScopeExclusions</type>
-  <baseType>core:Documentation</baseType>
-  <is>Explicit out-of-scope for the serializer package</is>
-
-  <documentation>Out of scope for @blockml/serializer:
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Explicit out-of-scope for the serializer package
+  </is>
+  <documentation>
+    Out of scope for @blockml/serializer:
+    
     • Meta-driven bml:xml serializer (V2) — specified in org.blockml.bml.core; not V1
     • Render target emit (SCAD, JSON, MBOM serialize) — @blockml/compiler / domain packages
     • Semantic validation — @blockml/validator
@@ -42,11 +38,10 @@
     • TypeRegistry bootstrap, effective member resolution — @blockml/core
     • BomBuilder (V3) — future; serializer accepts its output types only
     • File I/O (serializeFile), async, streaming — deferred API surfaces
-
-    In scope: canonical BML XML roundtrip emit from any valid BomDocument.</documentation>
-
+    
+    In scope: canonical BML XML roundtrip emit from any valid BomDocument.
+  </documentation>
   <references>
     <see type="serdocumentation:Introduction" relation="SeeAlso" />
   </references>
-
-</block>
+</serdocumentation:ScopeExclusions>

@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — MemberValue
-  FQN: org.blockml.bml.bom.value.MemberValue
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — MemberValue
+  FQN: org.blockml.bml.bom.value.MemberValue-->
+<bomvalue:MemberValue xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,13 +17,16 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>MemberValue</name>
-  <type>bomvalue:MemberValue</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Abstract union of authored member values</is>
-
-  <documentation>Discriminated union: LiteralValue | ExpressionValue | InterpolatedTextValue | AddressValue.</documentation>
-
-  <abstract>true</abstract>
-
-</block>
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Abstract union of authored member values
+  </is>
+  <documentation>
+    Discriminated union: LiteralValue | ExpressionValue | InterpolatedTextValue | AddressValue.
+  </documentation>
+  <abstract>
+    true
+  </abstract>
+</bomvalue:MemberValue>

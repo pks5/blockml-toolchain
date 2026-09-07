@@ -1,12 +1,6 @@
-<!--
-  Parser — ParserType
-  FQN: org.blockml.bml.compiler.parser.ParserType
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser — ParserType
+  FQN: org.blockml.bml.compiler.parser.ParserType-->
+<parser:ParserType xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,17 +23,19 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ParserType</name>
-  <type>parser:ParserType</type>
-  <baseType>core:Entity</baseType>
-  <is>Abstract marker for parser implementation data-structure blocks</is>
-
-  <documentation>All org.blockml.bml.compiler.parser.map.* and .config.* types extend this marker. Distinct from bom:UrmodellType (parse-result data) and core:Capability (operations).</documentation>
-
+  <baseType>
+    core:Entity
+  </baseType>
+  <is>
+    Abstract marker for parser implementation data-structure blocks
+  </is>
+  <documentation>
+    All org.blockml.bml.compiler.parser.map.* and .config.* types extend this marker. Distinct from bom:UrmodellType (parse-result data) and core:Capability (operations).
+  </documentation>
+  <abstract>
+    true
+  </abstract>
   <references>
     <see type="bom:UrmodellType" relation="SeeAlso" />
   </references>
-
-  <abstract>true</abstract>
-
-</block>
+</parser:ParserType>

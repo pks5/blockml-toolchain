@@ -1,12 +1,6 @@
-<!--
-  Inspect Documentation — PublicApi
-  FQN: org.blockml.bml.inspect.documentation.PublicApi
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Inspect Documentation — PublicApi
+  FQN: org.blockml.bml.inspect.documentation.PublicApi-->
+<inspectdocumentation:PublicApi xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -22,23 +16,24 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PublicApi</name>
-  <type>inspectdocumentation:PublicApi</type>
-  <baseType>core:Documentation</baseType>
-  <is>Exported API from packages/inspect/src/index.ts</is>
-
-  <documentation>inspectBlock(fqn, registry, options?) → InspectResult
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Exported API from packages/inspect/src/index.ts
+  </is>
+  <documentation>
+    inspectBlock(fqn, registry, options?) → InspectResult
     inspectProject(fqn, options?) → InspectResult
     isLeafTypeFqn(fqn) → boolean
     projectTypeExpression(expr, typeFqn?) → InspectTypeRef | undefined
     collectNamedFqns(expr, typeFqn?) → string[]
-
+    
     Options: depth?, rootDir?, srcDir?, libraries? (inspectProject), maxBlocks?.
     Constants: DEFAULT_INSPECT_DEPTH, MAX_INSPECT_DEPTH, DEFAULT_MAX_BLOCKS, DOC_TRUNCATE, REF_TRUNCATE.
-    InspectedBlock.baseType is an InspectTypeRef. InspectedBlock.genericTypes are declared parameters (bound + default). Effective members are InspectedProperty, InspectedAggregation, InspectedAssociation, and InspectedCapability lists (empty omitted; no kind field). InspectedMember.documentation is the first entry, truncated like Block documentation. InspectedBlock.references are authored documentation see entries (FQN + relation, first 8, not expanded). InspectedBlock.referencesTruncated is the remaining count when more than 8. InspectedProperty.value is a literal. InspectedAggregation.instances are authored composition children. InspectedCapability may include InspectedImplementation (language + truncated source).</documentation>
-
+    InspectedBlock.baseType is an InspectTypeRef. InspectedBlock.genericTypes are declared parameters (bound + default). Effective members are InspectedProperty, InspectedAggregation, InspectedAssociation, and InspectedCapability lists (empty omitted; no kind field). InspectedMember.documentation is the first entry, truncated like Block documentation. InspectedBlock.references are authored documentation see entries (FQN + relation, first 8, not expanded). InspectedBlock.referencesTruncated is the remaining count when more than 8. InspectedProperty.value is a literal. InspectedAggregation.instances are authored composition children. InspectedCapability may include InspectedImplementation (language + truncated source).
+  </documentation>
   <references>
     <see type="inspectcap:InspectBlock" relation="Defines" />
   </references>
-
-</block>
+</inspectdocumentation:PublicApi>

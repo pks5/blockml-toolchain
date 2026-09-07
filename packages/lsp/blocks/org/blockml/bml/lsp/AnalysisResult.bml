@@ -1,12 +1,6 @@
-<!--
-  LSP — AnalysisResult
-  FQN: org.blockml.bml.lsp.AnalysisResult
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP — AnalysisResult
+  FQN: org.blockml.bml.lsp.AnalysisResult-->
+<lsp:AnalysisResult xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>AnalysisResult</name>
-  <type>lsp:AnalysisResult</type>
-  <baseType>lsp:LspType</baseType>
-  <is>Parse plus validate outcome for one document</is>
-
-  <documentation>Returned by analyzeDocument(). document is null when parse cannot produce a BomDocument.</documentation>
-
+  <baseType>
+    lsp:LspType
+  </baseType>
+  <is>
+    Parse plus validate outcome for one document
+  </is>
+  <documentation>
+    Returned by analyzeDocument(). document is null when parse cannot produce a BomDocument.
+  </documentation>
   <properties>
     <diagnostics type="bomcommon:Diagnostic[]">
-      <documentation>Parse and validate diagnostics. (required)</documentation>
+      <documentation>
+        Parse and validate diagnostics. (required)
+      </documentation>
     </diagnostics>
     <document type="bomdoc:BomDocument">
-      <documentation>Parsed document, or omitted when parse failed. (optional)</documentation>
+      <documentation>
+        Parsed document, or omitted when parse failed. (optional)
+      </documentation>
     </document>
   </properties>
-
-</block>
+</lsp:AnalysisResult>

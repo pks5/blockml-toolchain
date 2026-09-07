@@ -1,12 +1,6 @@
-<!--
-  CLI Documentation — DualCliModel
-  FQN: org.blockml.bml.cli.documentation.DualCliModel
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Documentation — DualCliModel
+  FQN: org.blockml.bml.cli.documentation.DualCliModel-->
+<clidocumentation:DualCliModel xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -21,21 +15,23 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>DualCliModel</name>
-  <type>clidocumentation:DualCliModel</type>
-  <baseType>core:Documentation</baseType>
-  <is>Universal CLI vs domain host CLIs</is>
-
-  <documentation>@blockml/cli (blockml) — universal toolchain CLI in this repo.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Universal CLI vs domain host CLIs
+  </is>
+  <documentation>
+    @blockml/cli (blockml) — universal toolchain CLI in this repo.
     validate · compile blockdoc|xsd|fatblock
     Domain-agnostic; no MachineBlocks hardcoding.
-
+    
     @machineblocks/cli — thin MachineBlocks host (MachineBlocks mono-repo).
     Registers machineblocks-v3-scad target; MB defaults; recommended MB user entry.
-
-    Interop: domain targets may be loadable as plugins later; product UX stays with domain CLI.</documentation>
+    
+    Interop: domain targets may be loadable as plugins later; product UX stays with domain CLI.
+  </documentation>
   <references>
     <see type="clidocumentation:Installation" relation="ReadNext" />
   </references>
-
-</block>
+</clidocumentation:DualCliModel>

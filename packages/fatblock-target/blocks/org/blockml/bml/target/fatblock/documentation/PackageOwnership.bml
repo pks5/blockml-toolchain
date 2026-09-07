@@ -1,12 +1,6 @@
-<!--
-  FatBlock Documentation — PackageOwnership
-  FQN: org.blockml.bml.target.fatblock.documentation.PackageOwnership
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock Documentation — PackageOwnership
+  FQN: org.blockml.bml.target.fatblock.documentation.PackageOwnership-->
+<fbdocumentation:PackageOwnership xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -23,26 +17,28 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PackageOwnership</name>
-  <type>fbdocumentation:PackageOwnership</type>
-  <baseType>core:Documentation</baseType>
-  <is>Who owns FatBlock vs CLI vs BOM</is>
-
-  <documentation>@blockml/fatblock-target owns: this BML library; TypeScript assemble/filter/merge/emit;
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Who owns FatBlock vs CLI vs BOM
+  </is>
+  <documentation>
+    @blockml/fatblock-target owns: this BML library; TypeScript assemble/filter/merge/emit;
     FatBlockOptions; BML_FATBLOCK_* diagnostics; output basename algorithm.
-
+    
     @blockml/cli owns: --src / --include / --out; default host from package.json
     blockml.library; TypeRegistry from the package library graph plus core; writing
     {hostFqn}.fat.bml at the invocation directory; exit codes.
     See org.blockml.bml.cli.documentation.CompileCommand.
-
+    
     @blockml/bom owns: embeddedBlocks shape and language invariants.
-
+    
     @blockml/serializer owns: XML emit of the assembled BomDocument.
-
-    @blockml/compiler owns: RenderTarget contract and document compile scope.</documentation>
+    
+    @blockml/compiler owns: RenderTarget contract and document compile scope.
+  </documentation>
   <references>
     <see type="fbdocumentation:ScopeExclusions" relation="ReadNext" />
   </references>
-
-</block>
+</fbdocumentation:PackageOwnership>

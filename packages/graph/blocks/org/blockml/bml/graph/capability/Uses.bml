@@ -1,12 +1,6 @@
-<!--
-  Graph Capability — Uses
-  FQN: org.blockml.bml.graph.capability.Uses
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph Capability — Uses
+  FQN: org.blockml.bml.graph.capability.Uses-->
+<graphcap:Uses xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,29 +15,45 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Uses</name>
-  <type>graphcap:Uses</type>
-  <baseType>core:Capability</baseType>
-  <is>Outgoing authored block-level references</is>
-  <documentation>Default depth 1 is one hop: BASE_TYPE, CONTRACT, HAS_SUBBLOCK plus types of authored members. via names the member. depth n walks n outgoing hops; further hops set GraphNeighbor.source to the block that owns the edge. CLI --origin, --relation, and --limit filter the result list.</documentation>
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Outgoing authored block-level references
+  </is>
+  <documentation>
+    Default depth 1 is one hop: BASE_TYPE, CONTRACT, HAS_SUBBLOCK plus types of authored members. via names the member. depth n walks n outgoing hops; further hops set GraphNeighbor.source to the block that owns the edge. CLI --origin, --relation, and --limit filter the result list.
+  </documentation>
   <properties>
     <fqn type="type:Text">
-      <documentation>Block FQN. (required)</documentation>
+      <documentation>
+        Block FQN. (required)
+      </documentation>
     </fqn>
     <depth type="type:Integer">
-      <documentation>Outgoing hops. Default 1. (optional)</documentation>
+      <documentation>
+        Outgoing hops. Default 1. (optional)
+      </documentation>
     </depth>
     <origin type="type:Text">
-      <documentation>Keep neighbors whose node.origin is listed. Comma-separated. (optional)</documentation>
+      <documentation>
+        Keep neighbors whose node.origin is listed. Comma-separated. (optional)
+      </documentation>
     </origin>
     <relation type="type:Text">
-      <documentation>Keep neighbors whose relation is listed. Comma-separated. (optional)</documentation>
+      <documentation>
+        Keep neighbors whose relation is listed. Comma-separated. (optional)
+      </documentation>
     </relation>
     <limit type="type:Integer">
-      <documentation>Max neighbors after filters. (optional)</documentation>
+      <documentation>
+        Max neighbors after filters. (optional)
+      </documentation>
     </limit>
     <neighbors type="graph:GraphNeighbor[]">
-      <documentation>Outgoing neighbors. (required)</documentation>
+      <documentation>
+        Outgoing neighbors. (required)
+      </documentation>
     </neighbors>
   </properties>
-</block>
+</graphcap:Uses>

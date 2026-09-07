@@ -1,12 +1,6 @@
-<!--
-  CLI Command — NewCommand
-  FQN: org.blockml.bml.cli.command.NewCommand
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Command — NewCommand
+  FQN: org.blockml.bml.cli.command.NewCommand-->
+<clicommand:NewCommand xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:builder="org.blockml.bml.builder"
   xmlns:core="org.blockml.bml.core"
@@ -21,20 +15,34 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>NewCommand</name>
-  <type>clicommand:NewCommand</type>
-  <baseType>cli:CliType</baseType>
-  <is>blockml new command model</is>
-
-  <documentation>blockml new FQN [--baseType FQN] [--is text]. Creates a type-as-root .bml file via @blockml/builder (no xsi/schemaLocation) and adds the Block to the owning Library catalog.</documentation>
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    blockml new command model
+  </is>
+  <documentation>
+    blockml new FQN [--baseType FQN] [--is text]. Creates a type-as-root .bml file via @blockml/builder (no xsi/schemaLocation) and adds the Block to the owning Library catalog.
+  </documentation>
   <references>
     <see type="clidocumentation:NewCommand" relation="SeeAlso" />
     <see type="clicap:RunNew" relation="SeeAlso" />
   </references>
   <properties>
-    <newFqn type="type:Text"><documentation>FQN of the Block to create. (required)</documentation></newFqn>
-    <newBaseType type="type:Text"><documentation>--baseType override. (optional)</documentation></newBaseType>
-    <newIs type="type:Text"><documentation>--is override. (optional)</documentation></newIs>
+    <newFqn type="type:Text">
+      <documentation>
+        FQN of the Block to create. (required)
+      </documentation>
+    </newFqn>
+    <newBaseType type="type:Text">
+      <documentation>
+        --baseType override. (optional)
+      </documentation>
+    </newBaseType>
+    <newIs type="type:Text">
+      <documentation>
+        --is override. (optional)
+      </documentation>
+    </newIs>
   </properties>
-
-</block>
+</clicommand:NewCommand>

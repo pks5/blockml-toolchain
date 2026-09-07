@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Render Target Library
-  FQN: org.blockml.bml.target.blockdoc.Library
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Render Target Library
+  FQN: org.blockml.bml.target.blockdoc.Library-->
+<blockdoc:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,33 +21,32 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Library</name>
-  <type>blockdoc:Library</type>
-  <baseType>core:BlockLibrary</baseType>
-  <is>The BlockDoc HTML render target library catalog</is>
-
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    The BlockDoc HTML render target library catalog
+  </is>
+  <version>
+    0.9.4
+  </version>
   <documentation>
     # The BlockDoc HTML render target library catalog
-
+    
     Canonical BlockDoc specification for BlockML — registry name blockdoc, options,
     path/link/page/site rules (BD1–BD28). TypeScript in packages/blockdoc-target/src/
     implements this library. Urmodell input types live in org.blockml.bml.bom.* (@blockml/bom).
-
+    
     Membership is defined exclusively by this blocks list.
   </documentation>
-
-  <version>0.9.4</version>
-
   <language>
-    <English />
+    <blockml:language.English />
   </language>
-
   <properties>
     <description override="true">
       <value>BlockDoc render target library</value>
     </description>
   </properties>
-
   <aggregations>
     <readMe override="true">
       <composition>
@@ -67,7 +60,8 @@
       </composition>
     </dependencies>
     <blocks override="true">
-      <composition><blockdoc:BlockdocType />
+      <composition>
+        <blockdoc:BlockdocType />
         <bdapi:SiteMode />
         <bdapi:OutLayout />
         <bdapi:BlockDocOptions />
@@ -119,5 +113,4 @@
       </composition>
     </blocks>
   </aggregations>
-
-</block>
+</blockdoc:Library>

@@ -1,12 +1,6 @@
-<!--
-  BlockDoc API — SearchIndexEntry
-  FQN: org.blockml.bml.target.blockdoc.api.SearchIndexEntry
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc API — SearchIndexEntry
+  FQN: org.blockml.bml.target.blockdoc.api.SearchIndexEntry-->
+<bdapi:SearchIndexEntry xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,36 +21,42 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>SearchIndexEntry</name>
-  <type>bdapi:SearchIndexEntry</type>
-  <baseType>blockdoc:BlockdocType</baseType>
-  <is>One indexed block for BlockDoc quick search</is>
-
-  <documentation>BD24: one entry per emitted block HTML page. href is site-root relative (FqnToHtmlPath).
+  <baseType>
+    blockdoc:BlockdocType
+  </baseType>
+  <is>
+    One indexed block for BlockDoc quick search
+  </is>
+  <documentation>
+    BD24: one entry per emitted block HTML page. href is site-root relative (FqnToHtmlPath).
     keywords are deduplicated search terms: name, type FQN, FQN segments, is, alias names,
-    authored keyword terms and keyword type tails.</documentation>
-
+    authored keyword terms and keyword type tails.
+  </documentation>
   <references>
     <see type="bdapi:SearchIndex" relation="SeeAlso" />
     <see type="bdcap:BuildSearchIndex" relation="SeeAlso" />
   </references>
-
   <properties>
     <name type="type:Text">
-      <documentation>Block short name (required).</documentation>
+      <documentation>
+        Block short name (required).
+      </documentation>
     </name>
     <blockType type="type:Text">
-      <documentation>JSON field type — block FQN (required).</documentation>
+      <documentation>
+        JSON field type — block FQN (required).
+      </documentation>
     </blockType>
-    <is type="type:Text">
-      &lt;documentation>Idea designation when present (optional).&lt;/documentation>
-    </is>
+    <is type="type:Text" />
     <href type="type:Text">
-      <documentation>Site-root-relative HTML path (required).</documentation>
+      <documentation>
+        Site-root-relative HTML path (required).
+      </documentation>
     </href>
     <keywords type="type:Text">
-      <documentation>JSON array of search terms (required).</documentation>
+      <documentation>
+        JSON array of search terms (required).
+      </documentation>
     </keywords>
   </properties>
-
-</block>
+</bdapi:SearchIndexEntry>

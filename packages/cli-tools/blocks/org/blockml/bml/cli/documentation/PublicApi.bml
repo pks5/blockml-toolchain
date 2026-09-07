@@ -1,12 +1,6 @@
-<!--
-  CLI Documentation — PublicApi
-  FQN: org.blockml.bml.cli.documentation.PublicApi
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Documentation — PublicApi
+  FQN: org.blockml.bml.cli.documentation.PublicApi-->
+<clidocumentation:PublicApi xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -21,12 +15,15 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PublicApi</name>
-  <type>clidocumentation:PublicApi</type>
-  <baseType>core:Documentation</baseType>
-  <is>Exported TypeScript / capability surface</is>
-
-  <documentation><![CDATA[Package @blockml/cli exports:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Exported TypeScript / capability surface
+  </is>
+  <documentation>
+    <![CDATA[
+    Package @blockml/cli exports:
     • runCli(argv, cwd?) → Promise<{ code, stderr }>
     • parseArgs(argv) → ParsedArgs
     • formatDiagnostic(d) → string
@@ -46,18 +43,19 @@
     • runTransform via blockml transform apply (delegates to @blockml/transformer)
     • writeOutputFiles(output, outDir, rootDir?, options?) → WriteOutputResult
     • loadTargetFromPackage / resolveTargetPackage / isBuiltinTarget (plugin loader)
-
+    
     Bin: blockml → dist/cli.js (direct run invokes WriteCliOutput after executeCli;
     CLI21 realpath so node_modules/.bin/blockml symlink matches).
-
+    
     BML counterparts: clicap:RunCli, ParseArgs, LoadConfig, BootstrapTargets,
     RegisterTargetFactory, BootstrapProjectTypeRegistry, WriteOutputFiles,
-    WriteCliOutput, FormatDiagnostic.]]></documentation>
+    WriteCliOutput, FormatDiagnostic.
+    ]]>
+  </documentation>
   <references>
     <see type="clidocumentation:RuntimeBootstrap" relation="ReadNext" />
     <see type="clicap:RunCli" relation="Defines" />
     <see type="cliapi:BomConfig" relation="Defines" />
     <see type="cliapi:ParsedArgs" relation="Defines" />
   </references>
-
-</block>
+</clidocumentation:PublicApi>

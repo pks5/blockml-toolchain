@@ -1,12 +1,6 @@
-<!--
-  Graph Documentation — V1Scope
-  FQN: org.blockml.bml.graph.documentation.V1Scope
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph Documentation — V1Scope
+  FQN: org.blockml.bml.graph.documentation.V1Scope-->
+<graphdocumentation:V1Scope xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,11 +15,14 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>V1Scope</name>
-  <type>graphdocumentation:V1Scope</type>
-  <baseType>core:Documentation</baseType>
-  <is>Explicit V1 capabilities</is>
-  <documentation>In scope V1:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Explicit V1 capabilities
+  </is>
+  <documentation>
+    In scope V1:
     • Full effective classpath graph (workspace, dependencies, node_modules)
     • Authored Block and Member nodes
     • Semantic ops: uses, usedBy, neighbors, ancestors, descendants, path, members
@@ -33,9 +30,10 @@
     • Local persisted index under .blockml/graph/
     • Auto-build when the index is missing or stale
     • CLI: blockml graph SUBCOMMAND
-
-    Out of scope: see ScopeExclusions.</documentation>
+    
+    Out of scope: see ScopeExclusions.
+  </documentation>
   <references>
     <see type="graphdocumentation:ScopeExclusions" relation="SeeAlso" />
   </references>
-</block>
+</graphdocumentation:V1Scope>

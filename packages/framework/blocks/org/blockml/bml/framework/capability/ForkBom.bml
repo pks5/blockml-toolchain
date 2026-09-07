@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — ForkBom
-  FQN: org.blockml.bml.framework.capability.ForkBom
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — ForkBom
+  FQN: org.blockml.bml.framework.capability.ForkBom-->
+<fwcap:ForkBom xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,24 +25,28 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ForkBom</name>
-  <type>fwcap:ForkBom</type>
-  <baseType>core:Capability</baseType>
-  <is>Deep-clone Urmodell for pragmatic / validation working copy</is>
-
-  <documentation>Deep-clone Urmodell for pragmatic / validation working copy</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Deep-clone Urmodell for pragmatic / validation working copy
+  </is>
+  <documentation>
+    Deep-clone Urmodell for pragmatic / validation working copy
+  </documentation>
   <references>
     <see type="bomdocumentation:PublicApi" relation="SeeAlso" />
   </references>
-
   <properties>
     <document type="bomdoc:BomDocument">
-      <documentation>document. TS type: bomdoc:BomDocument. (required)</documentation>
+      <documentation>
+        document. TS type: bomdoc:BomDocument. (required)
+      </documentation>
     </document>
     <copy type="bomdoc:BomDocument">
-      <documentation>copy. TS type: bomdoc:BomDocument. (required)</documentation>
+      <documentation>
+        copy. TS type: bomdoc:BomDocument. (required)
+      </documentation>
     </copy>
   </properties>
-
-</block>
+</fwcap:ForkBom>

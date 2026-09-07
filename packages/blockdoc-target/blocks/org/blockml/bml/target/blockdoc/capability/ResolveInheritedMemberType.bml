@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Capability — ResolveInheritedMemberType
-  FQN: org.blockml.bml.target.blockdoc.capability.ResolveInheritedMemberType
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Capability — ResolveInheritedMemberType
+  FQN: org.blockml.bml.target.blockdoc.capability.ResolveInheritedMemberType-->
+<bdcap:ResolveInheritedMemberType xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,14 +21,15 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ResolveInheritedMemberType</name>
-  <type>bdcap:ResolveInheritedMemberType</type>
-  <baseType>core:Capability</baseType>
-  <is>Fill omitted member type from the nearest typed ancestor</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Fill omitted member type from the nearest typed ancestor
+  </is>
   <documentation>
     # Fill omitted member type from the nearest typed ancestor
-
+    
     BD28: when a local member has no authored type (empty typeFqn or omitted type
     expression), walk the baseType chain nearest-first and the block's contracts for a member
     of the same identity (namespace+name) that has a type. Use that ancestor member (and its
@@ -43,25 +38,30 @@
     always win. Does not list undeclared inherited members; only supplies missing types for
     members already on the page.
   </documentation>
-
   <references>
     <see type="bddocumentation:MemberAndCompositionRules" relation="SeeAlso" />
     <see type="bdcap:RenderMemberSections" relation="SeeAlso" />
   </references>
-
   <properties>
     <member type="type:Text">
-      <documentation>Local member (required).</documentation>
+      <documentation>
+        Local member (required).
+      </documentation>
     </member>
     <block type="bomblock:BlockDefinition">
-      <documentation>Owning block (required).</documentation>
+      <documentation>
+        Owning block (required).
+      </documentation>
     </block>
     <typeRegistry type="type:Text">
-      <documentation>TypeRegistry for baseType / contract walk (optional).</documentation>
+      <documentation>
+        TypeRegistry for baseType / contract walk (optional).
+      </documentation>
     </typeRegistry>
     <result type="type:Text">
-      <documentation>Member to use for type display plus owning block (required).</documentation>
+      <documentation>
+        Member to use for type display plus owning block (required).
+      </documentation>
     </result>
   </properties>
-
-</block>
+</bdcap:ResolveInheritedMemberType>

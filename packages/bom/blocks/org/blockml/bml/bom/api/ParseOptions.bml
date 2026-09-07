@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — ParseOptions
-  FQN: org.blockml.bml.bom.api.ParseOptions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — ParseOptions
+  FQN: org.blockml.bml.bom.api.ParseOptions-->
+<bomapi:ParseOptions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,19 +17,25 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ParseOptions</name>
-  <type>bomapi:ParseOptions</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Options for parse() (B26)</is>
-
-  <documentation>Options for parse() (B26)</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Options for parse() (B26)
+  </is>
+  <documentation>
+    Options for parse() (B26)
+  </documentation>
   <properties>
     <filePath type="type:Text">
-      <documentation>Default: "&lt;memory>". (optional)</documentation>
+      <documentation>
+        Default: "&lt;memory>". (optional)
+      </documentation>
     </filePath>
     <continueOnError type="type:Boolean">
-      <documentation>Default: true. (optional)</documentation>
+      <documentation>
+        Default: true. (optional)
+      </documentation>
     </continueOnError>
     <parseValue type="type:Text">
       <documentation>
@@ -45,5 +45,4 @@
       </documentation>
     </parseValue>
   </properties>
-
-</block>
+</bomapi:ParseOptions>

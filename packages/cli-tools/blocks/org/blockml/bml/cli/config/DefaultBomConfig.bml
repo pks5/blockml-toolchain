@@ -1,12 +1,6 @@
-<!--
-  CLI Config — DefaultBomConfig
-  FQN: org.blockml.bml.cli.config.DefaultBomConfig
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Config — DefaultBomConfig
+  FQN: org.blockml.bml.cli.config.DefaultBomConfig-->
+<cliconfig:DefaultBomConfig xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,16 +14,30 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>DefaultBomConfig</name>
-  <type>cliconfig:DefaultBomConfig</type>
-  <baseType>cli:CliType</baseType>
-  <is>Defaults when blockml.config.json is missing or fields omitted</is>
-
-  <documentation>CLI1/CLI2: missing file returns these defaults; empty targets[] becomes ["blockdoc"].</documentation>
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    Defaults when blockml.config.json is missing or fields omitted
+  </is>
+  <documentation>
+    CLI1/CLI2: missing file returns these defaults; empty targets[] becomes ["blockdoc"].
+  </documentation>
   <properties>
-    <outDir type="type:Text"><documentation>"blockdoc"</documentation></outDir>
-    <srcDir type="type:Text"><documentation>"blocks"</documentation></srcDir>
-    <targets type="type:Text"><documentation>["blockdoc"]</documentation></targets>
+    <outDir type="type:Text">
+      <documentation>
+        "blockdoc"
+      </documentation>
+    </outDir>
+    <srcDir type="type:Text">
+      <documentation>
+        "blocks"
+      </documentation>
+    </srcDir>
+    <targets type="type:Text">
+      <documentation>
+        ["blockdoc"]
+      </documentation>
+    </targets>
   </properties>
-
-</block>
+</cliconfig:DefaultBomConfig>

@@ -1,12 +1,6 @@
-<!--
-  Serializer Documentation — ArchitectureOverview
-  FQN: org.blockml.bml.compiler.serializer.documentation.ArchitectureOverview
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.compiler.serializer.documentation.ArchitectureOverview-->
+<serdocumentation:ArchitectureOverview xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -28,13 +22,16 @@
   xmlns:bomcap="org.blockml.bml.bom.capability"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ArchitectureOverview</name>
-  <type>serdocumentation:ArchitectureOverview</type>
-  <baseType>core:Documentation</baseType>
-  <is>Emit pipeline and module decomposition</is>
-
-  <documentation><![CDATA[Entry point: serialize(document, options?) → SerializeResult (B26).
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Emit pipeline and module decomposition
+  </is>
+  <documentation>
+    <![CDATA[
+    Entry point: serialize(document, options?) → SerializeResult (B26).
+    
     Pipeline:
     1. Read document.source.namespaceBindings (default { "": "http://blockml.org/bml" })
     2. createEmitContext(bindings, indent) → EmitContext { bindings, useQName, indent }
@@ -43,7 +40,7 @@
     5. emitRootStartTag — authored root tag (block or type) with xmlns* and optional xsi (B25)
     6. emitBlockDefinition — walk BlockDefinition in BLOCK_EMIT_ORDER (B12); omit child type when rootForm is type
     7. Return { text: writer.toString(), diagnostics, success }
-
+    
     Module decomposition (packages/serializer/src/):
     • serialize.ts → capability:Serialize orchestrates the pipeline
     • emit/context.ts → seremit:EmitContext, sercap:CreateEmitContext
@@ -53,12 +50,12 @@
     • emit/type-expression.ts → sercap:EmitTypeExpression (TypeExpression → attribute string)
     • emit/qname.ts → FQN↔QName, visibility prefixes (B14, B21)
     • emit/constants.ts → serconfig:SerializerConstants (XSI_NS, BML_XMLNS)
-
-    Internal types extend serializer:SerializerType. Public operations are sercap:* capabilities.]]></documentation>
-
+    
+    Internal types extend serializer:SerializerType. Public operations are sercap:* capabilities.
+    ]]>
+  </documentation>
   <references>
     <see type="serdocumentation:V1Scope" relation="ReadNext" />
     <see type="sercap:Serialize" relation="Defines" />
   </references>
-
-</block>
+</serdocumentation:ArchitectureOverview>

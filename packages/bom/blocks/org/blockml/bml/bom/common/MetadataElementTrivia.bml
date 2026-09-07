@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — MetadataElementTrivia
-  FQN: org.blockml.bml.bom.common.MetadataElementTrivia
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — MetadataElementTrivia
+  FQN: org.blockml.bml.bom.common.MetadataElementTrivia-->
+<bomcommon:MetadataElementTrivia xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,17 +17,20 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>MetadataElementTrivia</name>
-  <type>bomcommon:MetadataElementTrivia</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>XML trivia keyed by metadata child localName</is>
-
-  <documentation>Map: metadata element localName → XmlTrivia.</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    XML trivia keyed by metadata child localName
+  </is>
+  <documentation>
+    Map: metadata element localName → XmlTrivia.
+  </documentation>
   <properties>
     <entries type="bomcommon:XmlTrivia">
-      <documentation>Record&lt;string, XmlTrivia>. (optional)</documentation>
+      <documentation>
+        Record&lt;string, XmlTrivia>. (optional)
+      </documentation>
     </entries>
   </properties>
-
-</block>
+</bomcommon:MetadataElementTrivia>

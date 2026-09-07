@@ -1,12 +1,6 @@
-<!--
-  Serializer — SerializerType
-  FQN: org.blockml.bml.compiler.serializer.SerializerType
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer — SerializerType
+  FQN: org.blockml.bml.compiler.serializer.SerializerType-->
+<serializer:SerializerType xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,17 +21,19 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>SerializerType</name>
-  <type>serializer:SerializerType</type>
-  <baseType>core:Entity</baseType>
-  <is>Abstract marker for serializer implementation data-structure blocks</is>
-
-  <documentation>All org.blockml.bml.compiler.serializer.emit.* and .config.* types extend this marker. Distinct from bom:UrmodellType (parse-result data) and core:Capability (operations).</documentation>
-
+  <baseType>
+    core:Entity
+  </baseType>
+  <is>
+    Abstract marker for serializer implementation data-structure blocks
+  </is>
+  <documentation>
+    All org.blockml.bml.compiler.serializer.emit.* and .config.* types extend this marker. Distinct from bom:UrmodellType (parse-result data) and core:Capability (operations).
+  </documentation>
+  <abstract>
+    true
+  </abstract>
   <references>
     <see type="bom:UrmodellType" relation="SeeAlso" />
   </references>
-
-  <abstract>true</abstract>
-
-</block>
+</serializer:SerializerType>

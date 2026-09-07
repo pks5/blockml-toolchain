@@ -1,12 +1,6 @@
-<!--
-  Serializer Documentation — EmitRules
-  FQN: org.blockml.bml.compiler.serializer.documentation.EmitRules
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Documentation — EmitRules
+  FQN: org.blockml.bml.compiler.serializer.documentation.EmitRules-->
+<serdocumentation:EmitRules xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -28,49 +22,52 @@
   xmlns:bomcap="org.blockml.bml.bom.capability"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>EmitRules</name>
-  <type>serdocumentation:EmitRules</type>
-  <baseType>core:Documentation</baseType>
-  <is>Visibility, boolean, omit, QName/FQN, XSI (B14–B17, B21, B25)</is>
-
-  <documentation><![CDATA[Visibility prefix emit (B14):
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Visibility, boolean, omit, QName/FQN, XSI (B14–B17, B21, B25)
+  </is>
+  <documentation>
+    <![CDATA[
+    Visibility prefix emit (B14):
     private → localName "__" + name; protected → "_" + name; public → bare name.
     Visibility is SSOT; prefix is reconstructible. Same on composition instance attributes.
-
+    
     Type-reference emit (B21):
     No BML-semantic prefixed xmlns (excluding xsi) → FQN-emit mode.
     Otherwise → QName-emit mode using namespaceBindings; first authored prefix wins.
     Missing binding in QName mode → BML_NAMESPACE_UNBOUND (no silent FQN fallback).
     xmlns:xsi alone does NOT force QName mode (B25 interaction).
-
+    
     Boolean literals vs type refs (B15/B16):
     Boolean values → always lowercase true/false.
     Boolean.True/Boolean.False type refs → preserve as TypeExpression (QName or FQN per B21).
-
+    
     Omit-by-default (B17):
     SHOULD omit: abstract/final/override/readOnly when false, empty containers, visibility
     when prefix encodes it, default-false flags, …
     MUST NOT omit: required identity, true flags, non-default enums, authoredPlacement (D9),
     authored CDATA form (D8), comments, …
-
+    
     XSI infrastructure (B25):
     Re-emit every stored namespaceBindings entry (including xsi) and, when present,
     xsi:schemaLocation / xsi:noNamespaceSchemaLocation on root start-tag.
     Do not invent schemaLocation or xmlns:xsi when absent.
-
+    
     Document root form (doc:DocumentFormat):
     SourceInfo.rootForm "block" (or omitted) → emit <block> and child <type>.
     SourceInfo.rootForm "type" → emit the type QName / TypeIdentifier as the root tag
     and omit child <type> and <name>. Nested definition wrappers follow BlockDefinition.wrapperForm:
     Sub-Blocks emit the unqualified name tag; embeds emit the type tag like the root.
     Legacy wrapperForm "block" (or omitted) stays <block>. New documents from
-    BomBuilder.create use rootForm type and omit xsi / schemaLocation.]]></documentation>
-
+    BomBuilder.create use rootForm type and omit xsi / schemaLocation.
+    ]]>
+  </documentation>
   <references>
     <see type="serdocumentation:XmlCommentsEmit" relation="ReadNext" />
     <see type="sercap:FqnToQName" relation="SeeAlso" />
     <see type="sercap:VisibilityPrefix" relation="SeeAlso" />
     <see type="doc:DocumentFormat" relation="SeeAlso" />
   </references>
-
-</block>
+</serdocumentation:EmitRules>

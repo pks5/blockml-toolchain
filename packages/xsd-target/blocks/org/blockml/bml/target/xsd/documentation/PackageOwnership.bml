@@ -1,12 +1,6 @@
-<!--
-  XSD Documentation — PackageOwnership
-  FQN: org.blockml.bml.target.xsd.documentation.PackageOwnership
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--XSD Documentation — PackageOwnership
+  FQN: org.blockml.bml.target.xsd.documentation.PackageOwnership-->
+<xsddocumentation:PackageOwnership xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -22,22 +16,24 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PackageOwnership</name>
-  <type>xsddocumentation:PackageOwnership</type>
-  <baseType>core:Documentation</baseType>
-  <is>What belongs in @blockml/xsd-target vs neighbors</is>
-
-  <documentation>Owns: registry name xsd, accepts, Options, emit of bml.xsd/types.xsd/service.xsd/catalog.xml,
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    What belongs in @blockml/xsd-target vs neighbors
+  </is>
+  <documentation>
+    Owns: registry name xsd, accepts, Options, emit of bml.xsd/types.xsd/service.xsd/catalog.xml,
     D1 hardcoded lists + registry extras, MemberPrefersElement, NS/FQN constants.
-
+    
     Does not own: CLI default outDir=schemas, rootFiles write, exit codes (cli);
     D1/bml:xml grammar SSOT (Definition / docs 19);
     authoring validity (parser + validator; CLI validate);
     MachineBlocks domain XSDs.
-    Phase C IDE catalog narrative pointers in docs 15 stay host docs; generation here.</documentation>
+    Phase C IDE catalog narrative pointers in docs 15 stay host docs; generation here.
+  </documentation>
   <references>
     <see type="xsddocumentation:ScopeExclusions" relation="ReadNext" />
     <see type="cli:Library" relation="SeeAlso" />
   </references>
-
-</block>
+</xsddocumentation:PackageOwnership>

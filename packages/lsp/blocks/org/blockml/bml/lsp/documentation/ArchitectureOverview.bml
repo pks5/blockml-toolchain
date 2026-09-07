@@ -1,12 +1,6 @@
-<!--
-  LSP Documentation — ArchitectureOverview
-  FQN: org.blockml.bml.lsp.documentation.ArchitectureOverview
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.lsp.documentation.ArchitectureOverview-->
+<lspdocumentation:ArchitectureOverview xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,41 +24,42 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ArchitectureOverview</name>
-  <type>lspdocumentation:ArchitectureOverview</type>
-  <baseType>core:Documentation</baseType>
-  <is>Data flow from editor to diagnostics</is>
-
-  <documentation>Editor ↔ LSP (stdio) ↔ @blockml/lsp server.ts
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Data flow from editor to diagnostics
+  </is>
+  <documentation>
+    Editor ↔ LSP (stdio) ↔ @blockml/lsp server.ts
     → analyzeDocument (language-service.ts)
     → parse + validate with workspace TypeRegistry overlaid by the open document
     → Diagnostic[] mapped to LSP ranges (positions.ts)
-
+    
     Format: onDocumentFormatting → formatDocument → parse + serialize → TextEdit.
-
+    
     Hover: onHover → hoverAt → parse (no validator) → XML token at cursor
     → language member docs, type QName target, or concrete member Markdown.
-
+    
     Outline: onDocumentSymbol → documentSymbols → parse (no validator) → hierarchical
     DocumentSymbol tree (Block, members, subBlocks, embeddedBlocks).
-
+    
     Navigation: onDefinition / onReferences → XML-token hitAt → TypeRegistry
     (definition = LocationLink with whole-QName originSelectionRange; references =
     baseType + member types, optional declaration).
-
+    
     Semantic tokens: textDocument/semanticTokens/full → semanticTokensFor → XML-stack
     walk classified by FrameworkRoles position (no parse()). Document root or nested
     block re-enters L1 (doc:DocumentFormat).
-
+    
     Workspace bootstrap reads blockml.config.json (srcDir, libraries) inline — no @blockml/cli dependency.
     Corpus-first: always scan srcDir. Seed = package.json blockml.library then config.libraries
     (additive). FQN dependencies resolve via discovered BlockML workspace then npm packages
     (source root = srcDir, default blocks). Same type FQN: workspace wins over node_modules.
-    Library blocks trees inside srcDir are not scanned twice.</documentation>
-
+    Library blocks trees inside srcDir are not scanned twice.
+  </documentation>
   <references>
     <see type="lspdocumentation:ServerLifecycle" relation="ReadNext" />
     <see type="doc:DocumentFormat" relation="SeeAlso" />
   </references>
-
-</block>
+</lspdocumentation:ArchitectureOverview>

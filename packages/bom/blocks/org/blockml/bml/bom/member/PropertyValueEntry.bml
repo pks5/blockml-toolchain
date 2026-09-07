@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — PropertyValueEntry
-  FQN: org.blockml.bml.bom.member.PropertyValueEntry
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — PropertyValueEntry
+  FQN: org.blockml.bml.bom.member.PropertyValueEntry-->
+<bommember:PropertyValueEntry xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,31 +17,34 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>PropertyValueEntry</name>
-  <type>bommember:PropertyValueEntry</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Namespaced property value entry</is>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Namespaced property value entry
+  </is>
   <documentation>
     Namespaced property value entry.
-
+    
     - `namespace` `""` — canonical BML value (same lexical type as the property)
     - non-empty `namespace` — resolved Annotation FQN (for example `scad:value`);
       a target-language facet, not a second BML value
     - `PrimitiveType.parseValue` applies only to the canonical entry
-
+    
     TODO: a prefixed value should carry its own type (for example `scad:type` for
     `scad:value`) so each facet can be validated in its target language. Today
     prefixed values are not validated.
   </documentation>
-
   <properties>
     <namespace type="type:Text">
-      <documentation>"" = canonical value; else resolved Annotation FQN. Unique per PropertyDefinition. (required)</documentation>
+      <documentation>
+        "" = canonical value; else resolved Annotation FQN. Unique per PropertyDefinition. (required)
+      </documentation>
     </namespace>
     <value type="bomvalue:MemberValue">
-      <documentation>value (required). TS type: bomvalue:MemberValue.</documentation>
+      <documentation>
+        value (required). TS type: bomvalue:MemberValue.
+      </documentation>
     </value>
   </properties>
-
-</block>
+</bommember:PropertyValueEntry>

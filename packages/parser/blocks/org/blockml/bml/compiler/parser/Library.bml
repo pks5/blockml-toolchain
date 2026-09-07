@@ -1,12 +1,6 @@
-<!--
-  BlockML Parser Library Descriptor
-  FQN: org.blockml.bml.compiler.parser.Library
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Parser Library Descriptor
+  FQN: org.blockml.bml.compiler.parser.Library-->
+<parser:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,32 +23,31 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>Library</name>
-  <type>parser:Library</type>
-  <baseType>core:BlockLibrary</baseType>
-  <is>The BlockML Parser compiler package library catalog</is>
-
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    The BlockML Parser compiler package library catalog
+  </is>
+  <version>
+    0.9.4
+  </version>
   <documentation>
     # The BlockML Parser compiler package library catalog
-
+    
     Canonical parser specification for BlockML — BML → BOM mapping algorithm,
     Stage 1 pipeline [1]–[5], and parse() contract. TypeScript in packages/parser/src/
     implements this library. Input/output Urmodell types live in org.blockml.bml.bom.*
     (@blockml/bom). Membership is defined exclusively by this blocks list.
   </documentation>
-
-  <version>0.9.4</version>
-
   <language>
-    <English />
+    <blockml:language.English />
   </language>
-
   <properties>
     <description override="true">
       <value>BlockML Parser library</value>
     </description>
   </properties>
-
   <aggregations>
     <readMe override="true">
       <composition>
@@ -156,5 +149,4 @@
       </composition>
     </blocks>
   </aggregations>
-
-</block>
+</parser:Library>

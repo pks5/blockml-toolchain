@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — AggregationDefinition
-  FQN: org.blockml.bml.bom.member.AggregationDefinition
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — AggregationDefinition
+  FQN: org.blockml.bml.bom.member.AggregationDefinition-->
+<bommember:AggregationDefinition xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,36 +17,51 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>AggregationDefinition</name>
-  <type>bommember:AggregationDefinition</type>
-  <baseType>bommember:MemberDefinitionBase</baseType>
-  <is>Aggregation member definition (kind: aggregation)</is>
-
-  <documentation>Aggregation member definition (kind: aggregation)</documentation>
-
+  <baseType>
+    bommember:MemberDefinitionBase
+  </baseType>
+  <is>
+    Aggregation member definition (kind: aggregation)
+  </is>
+  <documentation>
+    Aggregation member definition (kind: aggregation)
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind (required). TS type: type:Text.</documentation>
+      <documentation>
+        kind (required). TS type: type:Text.
+      </documentation>
       <value>aggregation</value>
     </kind>
     <type type="bomtype:TypeExpression">
-      <documentation>type (optional). TS type: bomtype:TypeExpression.</documentation>
+      <documentation>
+        type (optional). TS type: bomtype:TypeExpression.
+      </documentation>
     </type>
     <cardinality type="type:Text">
-      <documentation>"0..1" | "0..n" | "1..1" | "1..n". (optional)</documentation>
+      <documentation>
+        "0..1" | "0..n" | "1..1" | "1..n". (optional)
+      </documentation>
     </cardinality>
     <default type="type:Boolean">
-      <documentation>default (optional). TS type: type:Boolean.</documentation>
+      <documentation>
+        default (optional). TS type: type:Boolean.
+      </documentation>
     </default>
     <composition type="bomcomp:CompositionTemplate">
-      <documentation>composition (optional). TS type: bomcomp:CompositionTemplate.</documentation>
+      <documentation>
+        composition (optional). TS type: bomcomp:CompositionTemplate.
+      </documentation>
     </composition>
     <groups type="bomblock:TypeReferenceEntityInstance[]">
-      <documentation>groups (optional). TS type: bomblock:TypeReferenceEntityInstance[].</documentation>
+      <documentation>
+        groups (optional). TS type: bomblock:TypeReferenceEntityInstance[].
+      </documentation>
     </groups>
     <authoredInAggregationsSection type="type:Boolean">
-      <documentation>authoredInAggregationsSection (optional). TS type: type:Boolean.</documentation>
+      <documentation>
+        authoredInAggregationsSection (optional). TS type: type:Boolean.
+      </documentation>
     </authoredInAggregationsSection>
   </properties>
-
-</block>
+</bommember:AggregationDefinition>

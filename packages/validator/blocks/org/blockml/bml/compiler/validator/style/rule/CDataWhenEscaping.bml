@@ -1,12 +1,6 @@
-<!--
-  Validator Style Rule — CDataWhenEscaping
-  FQN: org.blockml.bml.compiler.validator.style.CDataWhenEscaping
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Validator Style Rule — CDataWhenEscaping
+  FQN: org.blockml.bml.compiler.validator.style.CDataWhenEscaping-->
+<valstyle:CDataWhenEscaping xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomcommon="org.blockml.bml.bom.common"
@@ -16,14 +10,16 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:valstyle="org.blockml.bml.compiler.validator.style">
 
-  <name>CDataWhenEscaping</name>
-  <type>valstyle:CDataWhenEscaping</type>
-  <baseType>valstyle:StyleRule</baseType>
-  <is>Recommend CDATA for documentation that needs XML escaping</is>
-
-  <documentation>Block-level documentation whose text contains markup characters should use CDATA
-    instead of entity escaping so humans can read the source.</documentation>
-
+  <baseType>
+    valstyle:StyleRule
+  </baseType>
+  <is>
+    Recommend CDATA for documentation that needs XML escaping
+  </is>
+  <documentation>
+    Block-level documentation whose text contains markup characters should use CDATA
+    instead of entity escaping so humans can read the source.
+  </documentation>
   <properties>
     <code override="true">
       <value>BML_STYLE_PREFER_CDATA</value>
@@ -38,7 +34,6 @@
       <value>Use CDATA instead of XML entity escaping in documentation.</value>
     </message>
   </properties>
-
   <aggregations>
     <check override="true">
       <composition>
@@ -46,5 +41,4 @@
       </composition>
     </check>
   </aggregations>
-
-</block>
+</valstyle:CDataWhenEscaping>

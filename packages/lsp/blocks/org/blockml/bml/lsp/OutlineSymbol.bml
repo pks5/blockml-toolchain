@@ -1,12 +1,6 @@
-<!--
-  LSP — OutlineSymbol
-  FQN: org.blockml.bml.lsp.OutlineSymbol
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP — OutlineSymbol
+  FQN: org.blockml.bml.lsp.OutlineSymbol-->
+<lsp:OutlineSymbol xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,32 +23,45 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>OutlineSymbol</name>
-  <type>lsp:OutlineSymbol</type>
-  <baseType>lsp:LspType</baseType>
-  <is>Hierarchical document-symbol outline node</is>
-
-  <documentation>BML type gap: stands for TypeScript OutlineSymbol (packages/lsp/src/outline.ts). children is recursive.</documentation>
-
+  <baseType>
+    lsp:LspType
+  </baseType>
+  <is>
+    Hierarchical document-symbol outline node
+  </is>
+  <documentation>
+    BML type gap: stands for TypeScript OutlineSymbol (packages/lsp/src/outline.ts). children is recursive.
+  </documentation>
   <properties>
     <name type="type:Text">
-      <documentation>name (required). TS type: type:Text.</documentation>
+      <documentation>
+        name (required). TS type: type:Text.
+      </documentation>
     </name>
     <detail type="type:Text">
-      <documentation>detail (optional). TS type: type:Text.</documentation>
+      <documentation>
+        detail (optional). TS type: type:Text.
+      </documentation>
     </detail>
     <kind type="type:Integer">
-      <documentation>LSP SymbolKind. (required)</documentation>
+      <documentation>
+        LSP SymbolKind. (required)
+      </documentation>
     </kind>
     <range type="lsp:LspRange">
-      <documentation>range (required). TS type: lsp:LspRange.</documentation>
+      <documentation>
+        range (required). TS type: lsp:LspRange.
+      </documentation>
     </range>
     <selectionRange type="lsp:LspRange">
-      <documentation>selectionRange (required). TS type: lsp:LspRange.</documentation>
+      <documentation>
+        selectionRange (required). TS type: lsp:LspRange.
+      </documentation>
     </selectionRange>
     <children type="lsp:OutlineSymbol[]">
-      <documentation>children (optional). TS type: lsp:OutlineSymbol[].</documentation>
+      <documentation>
+        children (optional). TS type: lsp:OutlineSymbol[].
+      </documentation>
     </children>
   </properties>
-
-</block>
+</lsp:OutlineSymbol>

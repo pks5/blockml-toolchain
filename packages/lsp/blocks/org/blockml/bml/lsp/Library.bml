@@ -1,12 +1,6 @@
-<!--
-  BlockML LSP Library Descriptor
-  FQN: org.blockml.bml.lsp.Library
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML LSP Library Descriptor
+  FQN: org.blockml.bml.lsp.Library-->
+<lsp:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,29 +23,28 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>Library</name>
-  <type>lsp:Library</type>
-  <baseType>core:BlockLibrary</baseType>
-  <is>The BlockML Language Server package library catalog</is>
-
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    The BlockML Language Server package library catalog
+  </is>
+  <version>
+    0.9.4
+  </version>
   <documentation>
     Canonical LSP specification for BlockML IDE integration — editor-agnostic language
     service and stdio server. TypeScript in packages/lsp/src/ implements this library.
     Membership is defined exclusively by this blocks list.
   </documentation>
-
-  <version>0.9.4</version>
-
   <language>
-    <English />
+    <blockml:language.English />
   </language>
-
   <properties>
     <description override="true">
       <value>BlockML Language Server library</value>
     </description>
   </properties>
-
   <aggregations>
     <readMe override="true">
       <composition>
@@ -101,5 +94,4 @@
       </composition>
     </blocks>
   </aggregations>
-
-</block>
+</lsp:Library>

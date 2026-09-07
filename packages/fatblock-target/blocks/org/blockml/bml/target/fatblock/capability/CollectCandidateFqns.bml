@@ -1,12 +1,6 @@
-<!--
-  FatBlock Capability — CollectCandidateFqns
-  FQN: org.blockml.bml.target.fatblock.capability.CollectCandidateFqns
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock Capability — CollectCandidateFqns
+  FQN: org.blockml.bml.target.fatblock.capability.CollectCandidateFqns-->
+<fbcap:CollectCandidateFqns xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -22,36 +16,48 @@
   xmlns:serializer="org.blockml.bml.compiler.serializer"
   xmlns:type="org.blockml.bml.type">
 
-  <name>CollectCandidateFqns</name>
-  <type>fbcap:CollectCandidateFqns</type>
-  <baseType>core:Capability</baseType>
-  <is>Collect peer root FQNs under srcDir excluding host</is>
-
-  <documentation>FB6: absSrc = resolve(rootDir, srcDir); keep roots under absSrc; exclude host FQN; sort ascending; if include non-empty apply FilterByIncludes.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Collect peer root FQNs under srcDir excluding host
+  </is>
+  <documentation>
+    FB6: absSrc = resolve(rootDir, srcDir); keep roots under absSrc; exclude host FQN; sort ascending; if include non-empty apply FilterByIncludes.
+  </documentation>
   <references>
     <see type="fbdocumentation:CandidateCollection" relation="SeeAlso" />
   </references>
-
   <properties>
     <typeRegistry type="type:Text">
-      <documentation>TypeRegistry. (required)</documentation>
+      <documentation>
+        TypeRegistry. (required)
+      </documentation>
     </typeRegistry>
     <srcDir type="type:Text">
-      <documentation>Corpus pool. (required)</documentation>
+      <documentation>
+        Corpus pool. (required)
+      </documentation>
     </srcDir>
     <rootDir type="type:Text">
-      <documentation>Resolution root. (required)</documentation>
+      <documentation>
+        Resolution root. (required)
+      </documentation>
     </rootDir>
     <hostFqn type="type:Text">
-      <documentation>Host block FQN to exclude. (required)</documentation>
+      <documentation>
+        Host block FQN to exclude. (required)
+      </documentation>
     </hostFqn>
     <include type="type:Text">
-      <documentation>Optional include patterns. (optional)</documentation>
+      <documentation>
+        Optional include patterns. (optional)
+      </documentation>
     </include>
     <result type="type:Text">
-      <documentation>Sorted candidate FQN list. (required)</documentation>
+      <documentation>
+        Sorted candidate FQN list. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</fbcap:CollectCandidateFqns>

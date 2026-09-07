@@ -1,12 +1,6 @@
-<!--
-  Search — SearchOptions
-  FQN: org.blockml.bml.search.SearchOptions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Search — SearchOptions
+  FQN: org.blockml.bml.search.SearchOptions-->
+<search:SearchOptions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,17 +15,20 @@
   xmlns:searchdocumentation="org.blockml.bml.search.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>SearchOptions</name>
-  <type>search:SearchOptions</type>
-  <baseType>search:SearchIndexOptions</baseType>
-  <is>SearchIndexOptions plus result limit</is>
-
-  <documentation>limit defaults to 10.</documentation>
-
+  <baseType>
+    search:SearchIndexOptions
+  </baseType>
+  <is>
+    SearchIndexOptions plus result limit
+  </is>
+  <documentation>
+    limit defaults to 10.
+  </documentation>
   <properties>
     <limit type="type:Integer">
-      <documentation>limit (optional). TS type: type:Integer.</documentation>
+      <documentation>
+        limit (optional). TS type: type:Integer.
+      </documentation>
     </limit>
   </properties>
-
-</block>
+</search:SearchOptions>

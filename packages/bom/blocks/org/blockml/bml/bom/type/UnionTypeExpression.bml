@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — UnionTypeExpression
-  FQN: org.blockml.bml.bom.type.UnionTypeExpression
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — UnionTypeExpression
+  FQN: org.blockml.bml.bom.type.UnionTypeExpression-->
+<bomtype:UnionTypeExpression xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,21 +17,26 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>UnionTypeExpression</name>
-  <type>bomtype:UnionTypeExpression</type>
-  <baseType>bomtype:TypeExpression</baseType>
-  <is>Union type expression</is>
-
-  <documentation>Union type expression</documentation>
-
+  <baseType>
+    bomtype:TypeExpression
+  </baseType>
+  <is>
+    Union type expression
+  </is>
+  <documentation>
+    Union type expression
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind (required). TS type: type:Text.</documentation>
+      <documentation>
+        kind (required). TS type: type:Text.
+      </documentation>
       <value>union</value>
     </kind>
     <alternatives type="bomtype:TypeExpression[]">
-      <documentation>alternatives (required). TS type: bomtype:TypeExpression[].</documentation>
+      <documentation>
+        alternatives (required). TS type: bomtype:TypeExpression[].
+      </documentation>
     </alternatives>
   </properties>
-
-</block>
+</bomtype:UnionTypeExpression>

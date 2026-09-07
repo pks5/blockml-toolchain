@@ -1,12 +1,6 @@
-<!--
-  BOM Documentation — CompositionDirectives
-  FQN: org.blockml.bml.bom.documentation.CompositionDirectives
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Documentation — CompositionDirectives
+  FQN: org.blockml.bml.bom.documentation.CompositionDirectives-->
+<bomdocumentation:CompositionDirectives xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -24,13 +18,15 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>CompositionDirectives</name>
-  <type>bomdocumentation:CompositionDirectives</type>
-  <baseType>core:Documentation</baseType>
-  <is>Directive placement and Thymeleaf model</is>
-
-  <documentation>Directives follow Thymeleaf model — attributes on modified element, stored unexpanded.
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Directive placement and Thymeleaf model
+  </is>
+  <documentation>
+    Directives follow Thymeleaf model — attributes on modified element, stored unexpanded.
+    
     bml:id, bml:version, bml:bean, bml:scope, bml:generics → BlockInstance fields (NOT directives[]).
     bml:generics binds genericTypes (attribute or child element; parentheses required).
     Open parameters require a binding; parameters with defaultType may omit it.
@@ -38,12 +34,11 @@
     Misplaced bml:generics is still stored so validate() can emit BML_GENERICS_DIRECTIVE_NOT_ALLOWED.
     bml:with → composition, aggregation, bml:container, block instances.
     bml:each, bml:if, bml:unless → bml:container, block instances.
-
+    
     Dynamic ids: bml:id="${ 'val_' + i }" stored as ExpressionValue or literal on BlockInstance.id.
-    Omitted bml:id stored absent — parser does not assign auto-IDs.</documentation>
-
+    Omitted bml:id stored absent — parser does not assign auto-IDs.
+  </documentation>
   <references>
     <see type="bomcomp:DirectiveAttribute" relation="Defines" />
   </references>
-
-</block>
+</bomdocumentation:CompositionDirectives>

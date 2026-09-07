@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — GenericsBinding
-  FQN: org.blockml.bml.bom.composition.GenericsBinding
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — GenericsBinding
+  FQN: org.blockml.bml.bom.composition.GenericsBinding-->
+<bomcomp:GenericsBinding xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,29 +17,38 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>GenericsBinding</name>
-  <type>bomcomp:GenericsBinding</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Authored bml:generics binding on an instance or illegal host</is>
-
-  <documentation>Lossless bml:generics value. arguments is present only when the
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Authored bml:generics binding on an instance or illegal host
+  </is>
+  <documentation>
+    Lossless bml:generics value. arguments is present only when the
     parenthesized TypeExpression list parsed successfully. Legal host is
     BlockInstance; other hosts keep the binding so validate() can emit
-    BML_GENERICS_DIRECTIVE_NOT_ALLOWED.</documentation>
-
+    BML_GENERICS_DIRECTIVE_NOT_ALLOWED.
+  </documentation>
   <properties>
     <raw type="type:Text">
-      <documentation>raw (required). TS type: type:Text.</documentation>
+      <documentation>
+        raw (required). TS type: type:Text.
+      </documentation>
     </raw>
     <arguments type="bomtype:TypeExpression[]">
-      <documentation>arguments (optional). TS type: bomtype:TypeExpression[].</documentation>
+      <documentation>
+        arguments (optional). TS type: bomtype:TypeExpression[].
+      </documentation>
     </arguments>
     <authoredPlacement type="type:Text">
-      <documentation>"attribute" | "element". (required)</documentation>
+      <documentation>
+        "attribute" | "element". (required)
+      </documentation>
     </authoredPlacement>
     <source type="bomcommon:SourceLocation">
-      <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
+      <documentation>
+        source (optional). TS type: bomcommon:SourceLocation.
+      </documentation>
     </source>
   </properties>
-
-</block>
+</bomcomp:GenericsBinding>

@@ -1,12 +1,6 @@
-<!--
-  BlockDoc — BlockdocType
-  FQN: org.blockml.bml.target.blockdoc.BlockdocType
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc — BlockdocType
+  FQN: org.blockml.bml.target.blockdoc.BlockdocType-->
+<blockdoc:BlockdocType xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,17 +21,19 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>BlockdocType</name>
-  <type>blockdoc:BlockdocType</type>
-  <baseType>core:Entity</baseType>
-  <is>Abstract marker for BlockDoc implementation data-structure blocks</is>
-
-  <documentation>All org.blockml.bml.target.blockdoc.api|config|path|page|render.* types extend this marker. Distinct from bom:UrmodellType (parse-result data) and core:Capability (operations).</documentation>
-
+  <baseType>
+    core:Entity
+  </baseType>
+  <is>
+    Abstract marker for BlockDoc implementation data-structure blocks
+  </is>
+  <documentation>
+    All org.blockml.bml.target.blockdoc.api|config|path|page|render.* types extend this marker. Distinct from bom:UrmodellType (parse-result data) and core:Capability (operations).
+  </documentation>
+  <abstract>
+    true
+  </abstract>
   <references>
     <see type="bom:UrmodellType" relation="SeeAlso" />
   </references>
-
-  <abstract>true</abstract>
-
-</block>
+</blockdoc:BlockdocType>

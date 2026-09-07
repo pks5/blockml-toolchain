@@ -1,12 +1,6 @@
-<!--
-  Parser Documentation — MemberMapping
-  FQN: org.blockml.bml.compiler.parser.documentation.MemberMapping
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Documentation — MemberMapping
+  FQN: org.blockml.bml.compiler.parser.documentation.MemberMapping-->
+<pardocumentation:MemberMapping xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,12 +24,15 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>MemberMapping</name>
-  <type>pardocumentation:MemberMapping</type>
-  <baseType>core:Documentation</baseType>
-  <is>Member definition and composition mapping</is>
-
-  <documentation><![CDATA[Property/aggregation/association/capability members:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Member definition and composition mapping
+  </is>
+  <documentation>
+    <![CDATA[
+    Property/aggregation/association/capability members:
     • Element QName = member identity (deprecated namespace= attr → error)
     • type attribute → TypeExpression; value/memberValues for properties
     • One <value> per namespace on a property member. Unprefixed <value> /
@@ -56,12 +53,12 @@
       explicit type:TypeReferenceEntity); bound B = core:Exception
     • Sub-Blocks and embedded blocks → nested BlockDefinition trees
     • Redundant aggregation type on override → validator warning B19; parser must not apply
-
-    Directives on composition: bml:each, bml:if, bml:unless, bml:with — stored unexpanded.]]></documentation>
-
+    
+    Directives on composition: bml:each, bml:if, bml:unless, bml:with — stored unexpanded.
+    ]]>
+  </documentation>
   <references>
     <see type="pardocumentation:ExpressionCapture" relation="ReadNext" />
     <see type="parcap:MapBlockInstanceNode" relation="SeeAlso" />
   </references>
-
-</block>
+</pardocumentation:MemberMapping>

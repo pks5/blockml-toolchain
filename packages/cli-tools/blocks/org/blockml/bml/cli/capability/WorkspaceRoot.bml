@@ -1,12 +1,6 @@
-<!--
-  CLI Capability — WorkspaceRoot
-  FQN: org.blockml.bml.cli.capability.WorkspaceRoot
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Capability — WorkspaceRoot
+  FQN: org.blockml.bml.cli.capability.WorkspaceRoot-->
+<clicap:WorkspaceRoot xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,24 +14,28 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>WorkspaceRoot</name>
-  <type>clicap:WorkspaceRoot</type>
-  <baseType>core:Capability</baseType>
-  <is>Find workspace root containing @blockml/core</is>
-
-  <documentation>CLI15: walk up from rootDir until node_modules/@blockml/core exists; used for fatblock core Library seed path. Extra seed is omitted when package identity is already that library (same realpath or same Library type FQN).</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Find workspace root containing @blockml/core
+  </is>
+  <documentation>
+    CLI15: walk up from rootDir until node_modules/@blockml/core exists; used for fatblock core Library seed path. Extra seed is omitted when package identity is already that library (same realpath or same Library type FQN).
+  </documentation>
   <references>
     <see type="clicap:RunCompileFatBlock" relation="SeeAlso" />
   </references>
-
   <properties>
     <from type="type:Text">
-      <documentation>Starting directory. (required)</documentation>
+      <documentation>
+        Starting directory. (required)
+      </documentation>
     </from>
     <result type="type:Text">
-      <documentation>Workspace root path. (required)</documentation>
+      <documentation>
+        Workspace root path. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</clicap:WorkspaceRoot>

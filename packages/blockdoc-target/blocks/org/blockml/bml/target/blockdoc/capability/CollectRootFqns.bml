@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Capability — CollectRootFqns
-  FQN: org.blockml.bml.target.blockdoc.capability.CollectRootFqns
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Capability — CollectRootFqns
+  FQN: org.blockml.bml.target.blockdoc.capability.CollectRootFqns-->
+<bdcap:CollectRootFqns xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,24 +21,28 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>CollectRootFqns</name>
-  <type>bdcap:CollectRootFqns</type>
-  <baseType>core:Capability</baseType>
-  <is>Root FQN per source file (shortest FQN)</is>
-
-  <documentation>BD11: group TypeRegistry keys by doc.source.filePath; keep shortest FQN per file; sort. Nested Parent.Child are pages but not package-index Block entries.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Root FQN per source file (shortest FQN)
+  </is>
+  <documentation>
+    BD11: group TypeRegistry keys by doc.source.filePath; keep shortest FQN per file; sort. Nested Parent.Child are pages but not package-index Block entries.
+  </documentation>
   <references>
     <see type="bddocumentation:SiteAssembly" relation="SeeAlso" />
   </references>
-
   <properties>
     <typeRegistry type="type:Text">
-      <documentation>TypeRegistry (required).</documentation>
+      <documentation>
+        TypeRegistry (required).
+      </documentation>
     </typeRegistry>
     <result type="type:Text">
-      <documentation>Sorted root FQN list (required).</documentation>
+      <documentation>
+        Sorted root FQN list (required).
+      </documentation>
     </result>
   </properties>
-
-</block>
+</bdcap:CollectRootFqns>

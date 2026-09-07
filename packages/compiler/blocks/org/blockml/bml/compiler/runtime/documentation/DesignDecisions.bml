@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Documentation — DesignDecisions
-  FQN: org.blockml.bml.compiler.runtime.documentation.DesignDecisions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Documentation — DesignDecisions
+  FQN: org.blockml.bml.compiler.runtime.documentation.DesignDecisions-->
+<rundocumentation:DesignDecisions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -26,32 +20,32 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>DesignDecisions</name>
-  <type>rundocumentation:DesignDecisions</type>
-  <baseType>core:Documentation</baseType>
-  <is>Normative Phase C decisions C1–C7</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Normative Phase C decisions C1–C7
+  </is>
   <documentation>
     # Normative Phase C decisions C1–C7
-
+    
     C1 RenderContext = RenderSession plus forked per-node context; internal render API.
-
+    
     C2 Facade = compileToOutput(CompileRequest, …); compileBmlToOutput is document sugar;
     compileBomToOutput is BOM-first with required TypeRegistry (no re-parse/bootstrap).
-
+    
     C3 Registry has no defaults; hosts register; targets[] bootstrap is CLI config (cross-ref);
     registerTarget validates name, accepts, render.
-
+    
     C4 No mandatory input↔output mapping; RenderOutput opaque (files[] base).
-
+    
     C5 Incremental build is CLI-only (boundary); not a runtime capability.
-
+    
     C6 Thumbnails are CLI-only; not part of RenderOutput.
-
+    
     C7 Scope document | library | corpus | auto; accepts[]; opaque targetOptions.
   </documentation>
   <references>
     <see type="rundocumentation:PackageOwnership" relation="ReadNext" />
   </references>
-
-</block>
+</rundocumentation:DesignDecisions>

@@ -1,35 +1,29 @@
-<!--
-  Transformer Workflow — ExecutionException
-  FQN: org.blockml.bml.transformer.workflow.ExecutionException
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Workflow — ExecutionException
+  FQN: org.blockml.bml.transformer.workflow.ExecutionException-->
+<workflow:ExecutionException xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
-  <name>ExecutionException</name>
-  <type>workflow:ExecutionException</type>
-  <baseType>core:Exception</baseType>
-  <is>A thrown condition for an unforeseen execution failure</is>
-
+  <baseType>
+    core:Exception
+  </baseType>
+  <is>
+    A thrown condition for an unforeseen execution failure
+  </is>
+  <isnot>
+    Not PrerequisiteNotMetException (known unmet prerequisite) and not a
+    validator diagnostic (org.blockml.bml.core.Diagnostic).
+  </isnot>
   <documentation>
     Unforeseen Criterion.isSatisfied or Prerequisite.require failure —
     not declared in advance (missing context, I/O, …). Distinct from
     PrerequisiteNotMetException (known unmet precondition). Inherits
     message from core:Exception.
   </documentation>
-
-  <isNot>Not PrerequisiteNotMetException (known unmet prerequisite) and not a
-    validator diagnostic (org.blockml.bml.core.Diagnostic).</isNot>
-
   <references>
     <see type="core:Exception" relation="Extends" />
     <see type="workflow:PrerequisiteNotMetException" relation="ContrastsWith" />
     <see type="workflow:Criterion" relation="SeeAlso" />
     <see type="workflow:Prerequisite" relation="SeeAlso" />
   </references>
-
-</block>
+</workflow:ExecutionException>

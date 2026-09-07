@@ -1,12 +1,6 @@
-<!--
-  Parser Documentation — BlockMetadataMapping
-  FQN: org.blockml.bml.compiler.parser.documentation.BlockMetadataMapping
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Documentation — BlockMetadataMapping
+  FQN: org.blockml.bml.compiler.parser.documentation.BlockMetadataMapping-->
+<pardocumentation:BlockMetadataMapping xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,33 +24,36 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>BlockMetadataMapping</name>
-  <type>pardocumentation:BlockMetadataMapping</type>
-  <baseType>core:Documentation</baseType>
-  <is>Block definition metadata field mapping</is>
-
-  <documentation><![CDATA[Map definition-wrapper child elements to BlockDefinition fields.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Block definition metadata field mapping
+  </is>
+  <documentation>
+    <![CDATA[
+    Map definition-wrapper child elements to BlockDefinition fields.
     The wrapper may be legacy <block> or a type-or-name tag (doc:DocumentFormat) on the
     document root, each Sub-Block, and each embed. A type tag supplies type; a Sub-Block
     tag supplies name (type stays derived). Child <type>/<name> are omitted unless they
     repeat the same identity.
-
+    
     Identity: name, type, baseType, is, isNot, version, definition
     Structural: since, status, summary, documentation, abstract, final
     Aggregations: keywords, changelog, examples, references, constraints, aliases,
     language, genericTypes, contracts, properties, aggregations, associations,
     capabilities, subBlocks, embeddedBlocks
-
+    
     • xmlRendering (bml:xml metadata) stored on BlockDefinition — NOT in directives[] (B23/D3)
     • authoredPlacement stored for dual element|attribute forms (D9)
     • authoredCharacterDataForm for text vs CDATA (D8)
     • authoredNameChild / authoredTypeChild when child name / type elements are present
     • TrimText on character data: common leading indent stripped, then trim; a first line glued to the opening tag (no leading whitespace) is excluded from the prefix (B13)
-    • Visibility prefixes stripped → logical name + visibility (B14 parse half)]]></documentation>
-
+    • Visibility prefixes stripped → logical name + visibility (B14 parse half)
+    ]]>
+  </documentation>
   <references>
     <see type="pardocumentation:MemberMapping" relation="ReadNext" />
     <see type="def:BlockDefinition" relation="SeeAlso" />
   </references>
-
-</block>
+</pardocumentation:BlockMetadataMapping>

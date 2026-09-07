@@ -1,12 +1,6 @@
-<!--
-  Search Documentation — V1Scope
-  FQN: org.blockml.bml.search.documentation.V1Scope
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Search Documentation — V1Scope
+  FQN: org.blockml.bml.search.documentation.V1Scope-->
+<searchdocumentation:V1Scope xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -22,22 +16,23 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>V1Scope</name>
-  <type>searchdocumentation:V1Scope</type>
-  <baseType>core:Documentation</baseType>
-  <is>Explicit V1 capabilities</is>
-
-  <documentation>In scope V1:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Explicit V1 capabilities
+  </is>
+  <documentation>
+    In scope V1:
     • Full-text search over FQN, name, aliases, keywords, documentation
     • Local persisted index under .blockml/search/
     • Auto-build when the index is missing or stale
     • CLI: blockml search QUERY and blockml search index
     • --json output of SearchResult[]
-
-    Out of scope: see ScopeExclusions.</documentation>
-
+    
+    Out of scope: see ScopeExclusions.
+  </documentation>
   <references>
     <see type="searchdocumentation:ScopeExclusions" relation="SeeAlso" />
   </references>
-
-</block>
+</searchdocumentation:V1Scope>

@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime — RuntimeType
-  FQN: org.blockml.bml.compiler.runtime.RuntimeType
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime — RuntimeType
+  FQN: org.blockml.bml.compiler.runtime.RuntimeType-->
+<runtime:RuntimeType xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,12 +19,16 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>RuntimeType</name>
-  <type>runtime:RuntimeType</type>
-  <baseType>core:Entity</baseType>
-  <is>Abstract marker for compiler runtime API and config data-structure blocks</is>
-
-  <documentation>All org.blockml.bml.compiler.runtime.api|config.* types extend this marker. Distinct from core:Capability and bom Urmodell types.</documentation>
-  <abstract>true</abstract>
-
-</block>
+  <baseType>
+    core:Entity
+  </baseType>
+  <is>
+    Abstract marker for compiler runtime API and config data-structure blocks
+  </is>
+  <documentation>
+    All org.blockml.bml.compiler.runtime.api|config.* types extend this marker. Distinct from core:Capability and bom Urmodell types.
+  </documentation>
+  <abstract>
+    true
+  </abstract>
+</runtime:RuntimeType>

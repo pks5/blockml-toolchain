@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Capability — ResolveScope
-  FQN: org.blockml.bml.compiler.runtime.capability.ResolveScope
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Capability — ResolveScope
+  FQN: org.blockml.bml.compiler.runtime.capability.ResolveScope-->
+<runcap:ResolveScope xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,30 +19,38 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>ResolveScope</name>
-  <type>runcap:ResolveScope</type>
-  <baseType>core:Capability</baseType>
-  <is>Resolve CompileScope to ResolvedScope or empty diagnostic</is>
-
-  <documentation>C7: document requires document; library/corpus use scope fields then ScopeConfigHints; auto prefers libraries then roots; empty → BML_COMPILE_SCOPE_EMPTY.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Resolve CompileScope to ResolvedScope or empty diagnostic
+  </is>
+  <documentation>
+    C7: document requires document; library/corpus use scope fields then ScopeConfigHints; auto prefers libraries then roots; empty → BML_COMPILE_SCOPE_EMPTY.
+  </documentation>
   <references>
     <see type="rundocumentation:CompileScopeRules" relation="SeeAlso" />
   </references>
-
   <properties>
     <scope type="runapi:CompileScope">
-      <documentation>Input scope. (required)</documentation>
+      <documentation>
+        Input scope. (required)
+      </documentation>
     </scope>
     <hints type="runapi:ScopeConfigHints">
-      <documentation>Host hints. (optional)</documentation>
+      <documentation>
+        Host hints. (optional)
+      </documentation>
     </hints>
     <resolved type="runapi:ResolvedScope">
-      <documentation>Concrete scope or null. (optional)</documentation>
+      <documentation>
+        Concrete scope or null. (optional)
+      </documentation>
     </resolved>
     <diagnostics type="type:Text">
-      <documentation>Scope diagnostics. (required)</documentation>
+      <documentation>
+        Scope diagnostics. (required)
+      </documentation>
     </diagnostics>
   </properties>
-
-</block>
+</runcap:ResolveScope>

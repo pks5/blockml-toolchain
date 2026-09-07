@@ -1,12 +1,6 @@
-<!--
-  Framework — ExpressionNode
-  FQN: org.blockml.bml.framework.expression.ExpressionNode
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework — ExpressionNode
+  FQN: org.blockml.bml.framework.expression.ExpressionNode-->
+<fwexpression:ExpressionNode xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,17 +25,19 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ExpressionNode</name>
-  <type>fwexpression:ExpressionNode</type>
-  <baseType>framework:FrameworkType</baseType>
-  <is>Abstract union of expression AST node variants</is>
-
-  <documentation>Discriminated by kind: literal | array | object | property | call | binary | interpolated.</documentation>
-
+  <baseType>
+    framework:FrameworkType
+  </baseType>
+  <is>
+    Abstract union of expression AST node variants
+  </is>
+  <documentation>
+    Discriminated by kind: literal | array | object | property | call | binary | interpolated.
+  </documentation>
+  <abstract>
+    true
+  </abstract>
   <references>
     <see type="fwexpression:LiteralExpressionNode" relation="SeeAlso" />
   </references>
-
-  <abstract>true</abstract>
-
-</block>
+</fwexpression:ExpressionNode>

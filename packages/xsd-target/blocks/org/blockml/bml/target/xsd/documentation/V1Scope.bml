@@ -1,12 +1,6 @@
-<!--
-  XSD Documentation — V1Scope
-  FQN: org.blockml.bml.target.xsd.documentation.V1Scope
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--XSD Documentation — V1Scope
+  FQN: org.blockml.bml.target.xsd.documentation.V1Scope-->
+<xsddocumentation:V1Scope xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -22,12 +16,14 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>V1Scope</name>
-  <type>xsddocumentation:V1Scope</type>
-  <baseType>core:Documentation</baseType>
-  <is>What V1 delivers</is>
-
-  <documentation>V1 includes:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    What V1 delivers
+  </is>
+  <documentation>
+    V1 includes:
     • Registry name xsd; accepts library, corpus, auto
     • Always bml.xsd: D1 identity + container lists + registry extras; no element xs:any;
       anyAttribute processContents=lax; mixed=true root block
@@ -36,11 +32,11 @@
     • Always OASIS catalog.xml via rootFiles
     • No package-local emit diagnostics
     • includeNonExported reserved unused
-
+    
     V1 does NOT include authoring XSD validation, MachineBlocks domain schemas,
-    or full attribute/text/nested particle models from Definition.</documentation>
+    or full attribute/text/nested particle models from Definition.
+  </documentation>
   <references>
     <see type="xsddocumentation:PublicApi" relation="ReadNext" />
   </references>
-
-</block>
+</xsddocumentation:V1Scope>

@@ -1,12 +1,6 @@
-<!--
-  Serializer Documentation — RoundtripContract
-  FQN: org.blockml.bml.compiler.serializer.documentation.RoundtripContract
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Documentation — RoundtripContract
+  FQN: org.blockml.bml.compiler.serializer.documentation.RoundtripContract-->
+<serdocumentation:RoundtripContract xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -28,28 +22,29 @@
   xmlns:bomcap="org.blockml.bml.bom.capability"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>RoundtripContract</name>
-  <type>serdocumentation:RoundtripContract</type>
-  <baseType>core:Documentation</baseType>
-  <is>BOM equality gate and whitespace normalization (B10/B13/B20)</is>
-
-  <documentation>Authoritative Phase-A gate (B10 + B20): BOM deep equality after parse → serialize → parse.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    BOM equality gate and whitespace normalization (B10/B13/B20)
+  </is>
+  <documentation>
+    Authoritative Phase-A gate (B10 + B20): BOM deep equality after parse → serialize → parse.
     Use bomEquals(stripProvenance(a), stripProvenance(b)) from @blockml/bom.
-
+    
     NOT a gate: byte-identical or normalized XML equality. XML diffs may be logged as
     diagnostics/snapshots but must not fail Phase A.
-
+    
     Serializer may normalize:
     • formatting whitespace (indent, blank lines, attribute spacing) — B13
     • Boolean casing (True→true) where mapper canonicalized
     • self-closing style, attribute order, …
-
+    
     Success is defined on the object graph, not byte-identical XML.
-    Provenance (source, sourceLocation, end spans) is stripped for equality.</documentation>
-
+    Provenance (source, sourceLocation, end spans) is stripped for equality.
+  </documentation>
   <references>
     <see type="bomcap:BomEquals" relation="SeeAlso" />
     <see type="serdocumentation:DesignDecisions" relation="ReadNext" />
   </references>
-
-</block>
+</serdocumentation:RoundtripContract>

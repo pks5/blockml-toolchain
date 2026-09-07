@@ -1,12 +1,6 @@
-<!--
-  Builder — BuilderType
-  FQN: org.blockml.bml.builder.BuilderType
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Builder — BuilderType
+  FQN: org.blockml.bml.builder.BuilderType-->
+<builder:BuilderType xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -20,13 +14,19 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>BuilderType</name>
-  <type>builder:BuilderType</type>
-  <baseType>core:Entity</baseType>
-  <is>Abstract marker for Builder implementation data-structure blocks</is>
-  <documentation>BomBuilder, CreateBlockOptions, and related ValueTypes used as capability payloads.</documentation>
-  <abstract>true</abstract>
+  <baseType>
+    core:Entity
+  </baseType>
+  <is>
+    Abstract marker for Builder implementation data-structure blocks
+  </is>
+  <documentation>
+    BomBuilder, CreateBlockOptions, and related ValueTypes used as capability payloads.
+  </documentation>
+  <abstract>
+    true
+  </abstract>
   <references>
     <see type="bom:UrmodellType" relation="SeeAlso" />
   </references>
-</block>
+</builder:BuilderType>

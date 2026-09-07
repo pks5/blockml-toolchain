@@ -1,12 +1,6 @@
-<!--
-  Parser — ParserConstants
-  FQN: org.blockml.bml.compiler.parser.config.ParserConstants
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser — ParserConstants
+  FQN: org.blockml.bml.compiler.parser.config.ParserConstants-->
+<parconfig:ParserConstants xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,26 +23,35 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ParserConstants</name>
-  <type>parconfig:ParserConstants</type>
-  <baseType>parser:ParserType</baseType>
-  <is>Well-known URIs and V1 root element name</is>
-
-  <documentation>Shared across pipeline, qname resolution, and namespace extraction.</documentation>
-
+  <baseType>
+    parser:ParserType
+  </baseType>
+  <is>
+    Well-known URIs and V1 root element name
+  </is>
+  <documentation>
+    Shared across pipeline, qname resolution, and namespace extraction.
+  </documentation>
   <properties>
     <XSI_NS type="type:Text">
-      <documentation>XSI_NS. TS type: type:Text. (required)</documentation>
+      <documentation>
+        XSI_NS. TS type: type:Text. (required)
+      </documentation>
     </XSI_NS>
     <BML_XMLNS type="type:Text">
-      <documentation>BML_XMLNS. TS type: type:Text. (required)</documentation>
+      <documentation>
+        BML_XMLNS. TS type: type:Text. (required)
+      </documentation>
     </BML_XMLNS>
     <TYPE_REFERENCE_ENTITY type="type:Text">
-      <documentation>TYPE_REFERENCE_ENTITY. TS type: type:Text. (required)</documentation>
+      <documentation>
+        TYPE_REFERENCE_ENTITY. TS type: type:Text. (required)
+      </documentation>
     </TYPE_REFERENCE_ENTITY>
     <V1_ROOT_ELEMENT type="type:Text">
-      <documentation>V1_ROOT_ELEMENT. TS type: type:Text. (required)</documentation>
+      <documentation>
+        V1_ROOT_ELEMENT. TS type: type:Text. (required)
+      </documentation>
     </V1_ROOT_ELEMENT>
   </properties>
-
-</block>
+</parconfig:ParserConstants>

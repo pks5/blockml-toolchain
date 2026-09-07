@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Documentation — PageChrome
-  FQN: org.blockml.bml.target.blockdoc.documentation.PageChrome
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Documentation — PageChrome
+  FQN: org.blockml.bml.target.blockdoc.documentation.PageChrome-->
+<bddocumentation:PageChrome xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -28,40 +22,42 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PageChrome</name>
-  <type>bddocumentation:PageChrome</type>
-  <baseType>core:Documentation</baseType>
-  <is>Block / site / package page chrome (BD6, BD8, BD20–BD22, BD24–BD25, BD27)</is>
-
-  <documentation>Block page (BD6/BD8/BD25): sticky black toolbar (brand BlockDoc, Index link, All Blocks, search);
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Block / site / package page chrome (BD6, BD8, BD20–BD22, BD24–BD25, BD27)
+  </is>
+  <documentation>
+    Block page (BD6/BD8/BD25): sticky black toolbar (brand BlockDoc, Index link, All Blocks, search);
     dotted package path (fqn layout via RenderDottedPackagePath)
     or plain escaped package; h1 = block.name; optional extends (linked), version, is as designation.
     Then Documentation, member tables, Composition, Sub-Blocks, References.
     No definition-list for FQN/baseType/is; no breadcrumb nav on block pages.
     The former body Index paragraph is the toolbar Index link.
-
+    
     References: prefer ref.type as href; else url/file as text + context.
-
+    
     Site home (BD27): toolbar Index points at FirstInterestingPackagePrefix package index (fqn) or
     index.html (package layout / empty prefix). Merged index.html redirects to that home when the
     prefix is non-empty.
-
+    
     All Blocks (BD21): toolbar All Blocks → all-blocks.html (or perLibrary {prefix}/all-blocks.html);
     title "BlockDoc" or "{prefix} — BlockDoc"; count line; one library
     → packages as headings (linked to package index when outLayout=fqn); two or more libraries →
     library sections (h2 + full prefix) with package subheadings (h3); block labels = last FQN segment.
-
+    
     Package index (BD22, fqn only): toolbar; breadcrumb Index / ancestors / current; Sub-packages; Blocks
     (direct roots only — nested Alpha.Child is a block page but not listed under Blocks).
     Breadcrumb Index uses the interesting home, not all-blocks.html.
-
+    
     Shared CSS: system-ui, sticky toolbar, tables, blue links (BlockDocConstants.PAGE_CSS / TOOLBAR_CSS).
-    Search assets: search-index.json + search.js at site root (BD24).</documentation>
+    Search assets: search-index.json + search.js at site root (BD24).
+  </documentation>
   <references>
     <see type="bddocumentation:SiteAssembly" relation="ReadNext" />
     <see type="bdconfig:PageSectionOrder" relation="SeeAlso" />
     <see type="bdcap:RenderBlockPage" relation="SeeAlso" />
     <see type="bdcap:RenderToolbar" relation="SeeAlso" />
   </references>
-
-</block>
+</bddocumentation:PageChrome>

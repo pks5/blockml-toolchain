@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — ExpressionValue
-  FQN: org.blockml.bml.bom.value.ExpressionValue
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — ExpressionValue
+  FQN: org.blockml.bml.bom.value.ExpressionValue-->
+<bomvalue:ExpressionValue xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,27 +17,36 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ExpressionValue</name>
-  <type>bomvalue:ExpressionValue</type>
-  <baseType>bomvalue:MemberValue</baseType>
-  <is>Authored ${…} expression member value</is>
-
-  <documentation>raw is the only expression field in Canonical BOM. AST via parseExpression() utility — not stored.</documentation>
-
+  <baseType>
+    bomvalue:MemberValue
+  </baseType>
+  <is>
+    Authored ${…} expression member value
+  </is>
+  <documentation>
+    raw is the only expression field in Canonical BOM. AST via parseExpression() utility — not stored.
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind (required). TS type: type:Text.</documentation>
+      <documentation>
+        kind (required). TS type: type:Text.
+      </documentation>
       <value>expression</value>
     </kind>
     <raw type="type:Text">
-      <documentation>raw (required). TS type: type:Text.</documentation>
+      <documentation>
+        raw (required). TS type: type:Text.
+      </documentation>
     </raw>
     <authoredPlacement type="type:Text">
-      <documentation>authoredPlacement (optional). TS type: type:Text.</documentation>
+      <documentation>
+        authoredPlacement (optional). TS type: type:Text.
+      </documentation>
     </authoredPlacement>
     <source type="bomcommon:SourceLocation">
-      <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
+      <documentation>
+        source (optional). TS type: bomcommon:SourceLocation.
+      </documentation>
     </source>
   </properties>
-
-</block>
+</bomvalue:ExpressionValue>

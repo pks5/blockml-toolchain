@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — MemberDefinition
-  FQN: org.blockml.bml.bom.member.MemberDefinition
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — MemberDefinition
+  FQN: org.blockml.bml.bom.member.MemberDefinition-->
+<bommember:MemberDefinition xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,13 +17,16 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>MemberDefinition</name>
-  <type>bommember:MemberDefinition</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Abstract union of member definition kinds</is>
-
-  <documentation>PropertyDefinition | AggregationDefinition | AssociationDefinition | CapabilityDefinition.</documentation>
-
-  <abstract>true</abstract>
-
-</block>
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Abstract union of member definition kinds
+  </is>
+  <documentation>
+    PropertyDefinition | AggregationDefinition | AssociationDefinition | CapabilityDefinition.
+  </documentation>
+  <abstract>
+    true
+  </abstract>
+</bommember:MemberDefinition>

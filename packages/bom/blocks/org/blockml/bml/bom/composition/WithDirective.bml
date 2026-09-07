@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — WithDirective
-  FQN: org.blockml.bml.bom.composition.WithDirective
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — WithDirective
+  FQN: org.blockml.bml.bom.composition.WithDirective-->
+<bomcomp:WithDirective xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,21 +17,26 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>WithDirective</name>
-  <type>bomcomp:WithDirective</type>
-  <baseType>bomcomp:DirectiveAttribute</baseType>
-  <is>bml:with directive (type: with)</is>
-
-  <documentation>bml:with directive (type: with)</documentation>
-
+  <baseType>
+    bomcomp:DirectiveAttribute
+  </baseType>
+  <is>
+    bml:with directive (type: with)
+  </is>
+  <documentation>
+    bml:with directive (type: with)
+  </documentation>
   <properties>
     <type type="type:Text">
-      <documentation>type (required). TS type: type:Text.</documentation>
+      <documentation>
+        type (required). TS type: type:Text.
+      </documentation>
       <value>with</value>
     </type>
     <bindings type="bomcomp:WithBinding[]">
-      <documentation>bindings (required). TS type: bomcomp:WithBinding[].</documentation>
+      <documentation>
+        bindings (required). TS type: bomcomp:WithBinding[].
+      </documentation>
     </bindings>
   </properties>
-
-</block>
+</bomcomp:WithDirective>

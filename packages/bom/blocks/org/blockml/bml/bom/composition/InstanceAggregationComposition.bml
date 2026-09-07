@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — InstanceAggregationComposition
-  FQN: org.blockml.bml.bom.composition.InstanceAggregationComposition
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — InstanceAggregationComposition
+  FQN: org.blockml.bml.bom.composition.InstanceAggregationComposition-->
+<bomcomp:InstanceAggregationComposition xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,22 +17,29 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>InstanceAggregationComposition</name>
-  <type>bomcomp:InstanceAggregationComposition</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Inline aggregation fill on a Block instance</is>
-
-  <documentation><![CDATA[Inline aggregation fill on a Block instance. Children are
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Inline aggregation fill on a Block instance
+  </is>
+  <documentation>
+    <![CDATA[
+    Inline aggregation fill on a Block instance. Children are
     authored as direct descendants of the aggregation member — no
-    <composition> wrapper. A wrapper at this site is BML_NESTED_COMPOSITION.]]></documentation>
-
+    <composition> wrapper. A wrapper at this site is BML_NESTED_COMPOSITION.
+    ]]>
+  </documentation>
   <properties>
     <aggregationName type="type:Text">
-      <documentation>aggregationName (required). TS type: type:Text.</documentation>
+      <documentation>
+        aggregationName (required). TS type: type:Text.
+      </documentation>
     </aggregationName>
     <composition type="bomcomp:CompositionTemplate">
-      <documentation>composition (required). TS type: bomcomp:CompositionTemplate.</documentation>
+      <documentation>
+        composition (required). TS type: bomcomp:CompositionTemplate.
+      </documentation>
     </composition>
   </properties>
-
-</block>
+</bomcomp:InstanceAggregationComposition>

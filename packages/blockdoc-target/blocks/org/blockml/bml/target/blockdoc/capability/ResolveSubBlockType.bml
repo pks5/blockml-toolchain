@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Capability — ResolveSubBlockType
-  FQN: org.blockml.bml.target.blockdoc.capability.ResolveSubBlockType
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Capability — ResolveSubBlockType
+  FQN: org.blockml.bml.target.blockdoc.capability.ResolveSubBlockType-->
+<bdcap:ResolveSubBlockType xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,27 +21,33 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ResolveSubBlockType</name>
-  <type>bdcap:ResolveSubBlockType</type>
-  <baseType>core:Capability</baseType>
-  <is>Resolve unqualified/simple type name to nested sub-block FQN</is>
-
-  <documentation>BD16: strip type-args and multiplicity suffixes from type name; take last '.' segment; match block.subBlocks[].name → return sub.type FQN.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Resolve unqualified/simple type name to nested sub-block FQN
+  </is>
+  <documentation>
+    BD16: strip type-args and multiplicity suffixes from type name; take last '.' segment; match block.subBlocks[].name → return sub.type FQN.
+  </documentation>
   <references>
     <see type="bddocumentation:MemberAndCompositionRules" relation="SeeAlso" />
   </references>
-
   <properties>
     <block type="bomblock:BlockDefinition">
-      <documentation>Owning block (required).</documentation>
+      <documentation>
+        Owning block (required).
+      </documentation>
     </block>
     <typeName type="type:Text">
-      <documentation>Declared type name or FQN (optional).</documentation>
+      <documentation>
+        Declared type name or FQN (optional).
+      </documentation>
     </typeName>
     <result type="type:Text">
-      <documentation>Resolved sub-block FQN or empty (optional).</documentation>
+      <documentation>
+        Resolved sub-block FQN or empty (optional).
+      </documentation>
     </result>
   </properties>
-
-</block>
+</bdcap:ResolveSubBlockType>

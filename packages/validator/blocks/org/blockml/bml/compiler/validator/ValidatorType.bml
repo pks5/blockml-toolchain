@@ -1,12 +1,6 @@
-<!--
-  Validator — ValidatorType
-  FQN: org.blockml.bml.compiler.validator.ValidatorType
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Validator — ValidatorType
+  FQN: org.blockml.bml.compiler.validator.ValidatorType-->
+<validator:ValidatorType xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -22,17 +16,19 @@
   xmlns:valcap="org.blockml.bml.compiler.validator.capability"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ValidatorType</name>
-  <type>validator:ValidatorType</type>
-  <baseType>core:Entity</baseType>
-  <is>Abstract marker for validator implementation data-structure blocks</is>
-
-  <documentation>Reserved for future validator-internal types. Distinct from bom:UrmodellType and core:Capability.</documentation>
-
+  <baseType>
+    core:Entity
+  </baseType>
+  <is>
+    Abstract marker for validator implementation data-structure blocks
+  </is>
+  <documentation>
+    Reserved for future validator-internal types. Distinct from bom:UrmodellType and core:Capability.
+  </documentation>
+  <abstract>
+    true
+  </abstract>
   <references>
     <see type="bom:UrmodellType" relation="SeeAlso" />
   </references>
-
-  <abstract>true</abstract>
-
-</block>
+</validator:ValidatorType>

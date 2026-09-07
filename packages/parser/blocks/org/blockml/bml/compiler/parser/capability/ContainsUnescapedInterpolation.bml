@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — ContainsUnescapedInterpolation
-  FQN: org.blockml.bml.compiler.parser.capability.ContainsUnescapedInterpolation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — ContainsUnescapedInterpolation
+  FQN: org.blockml.bml.compiler.parser.capability.ContainsUnescapedInterpolation-->
+<parcap:ContainsUnescapedInterpolation xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,34 +23,36 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ContainsUnescapedInterpolation</name>
-  <type>parcap:ContainsUnescapedInterpolation</type>
-  <baseType>core:Capability</baseType>
-  <is>Detect unescaped ${…} interpolation in raw text</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Detect unescaped ${…} interpolation in raw text
+  </is>
   <documentation>
     True when raw contains an interpolation opener `${` with an even number of
     immediately preceding backslashes (zero is even).
-
+    
     - Odd backslashes: last `\` escapes — `\${` is a literal `${`
     - Even backslashes: `\\${` is one literal `\` plus a hole
-
+    
     Used by ParseMemberValue and ParseDirectives to choose InterpolatedTextValue
     over a JSON-like literal.
   </documentation>
-
   <references>
     <see type="pardocumentation:ExpressionCapture" relation="SeeAlso" />
     <see type="parcap:ParseMemberValue" relation="SeeAlso" />
   </references>
-
   <properties>
     <raw type="type:Text">
-      <documentation>raw. TS type: type:Text. (required)</documentation>
+      <documentation>
+        raw. TS type: type:Text. (required)
+      </documentation>
     </raw>
     <result type="type:Boolean">
-      <documentation>result. TS type: type:Boolean. (required)</documentation>
+      <documentation>
+        result. TS type: type:Boolean. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</parcap:ContainsUnescapedInterpolation>

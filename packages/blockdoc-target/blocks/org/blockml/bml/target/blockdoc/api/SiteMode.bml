@@ -1,12 +1,6 @@
-<!--
-  BlockDoc API — SiteMode
-  FQN: org.blockml.bml.target.blockdoc.api.SiteMode
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc API — SiteMode
+  FQN: org.blockml.bml.target.blockdoc.api.SiteMode-->
+<bdapi:SiteMode xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,17 +21,20 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>SiteMode</name>
-  <type>bdapi:SiteMode</type>
-  <baseType>blockdoc:BlockdocType</baseType>
-  <is>Site index mode: merged | perLibrary</is>
-
-  <documentation>String-literal union: "merged" | "perLibrary". BD1: merged = one site (index.html home + all-blocks.html listing); perLibrary = one home/listing pair per Library root.</documentation>
-
+  <baseType>
+    blockdoc:BlockdocType
+  </baseType>
+  <is>
+    Site index mode: merged | perLibrary
+  </is>
+  <documentation>
+    String-literal union: "merged" | "perLibrary". BD1: merged = one site (index.html home + all-blocks.html listing); perLibrary = one home/listing pair per Library root.
+  </documentation>
   <properties>
     <value type="type:Text">
-      <documentation>value (required). "merged" or "perLibrary".</documentation>
+      <documentation>
+        value (required). "merged" or "perLibrary".
+      </documentation>
     </value>
   </properties>
-
-</block>
+</bdapi:SiteMode>

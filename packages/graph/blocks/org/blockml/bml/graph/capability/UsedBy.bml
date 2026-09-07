@@ -1,12 +1,6 @@
-<!--
-  Graph Capability — UsedBy
-  FQN: org.blockml.bml.graph.capability.UsedBy
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph Capability — UsedBy
+  FQN: org.blockml.bml.graph.capability.UsedBy-->
+<graphcap:UsedBy xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,32 +15,48 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>UsedBy</name>
-  <type>graphcap:UsedBy</type>
-  <baseType>core:Capability</baseType>
-  <is>Incoming authored block-level references</is>
-  <documentation>Inverse of Uses. Default depth 1. depth n walks n incoming hops; further hops set GraphNeighbor.source. CLI --origin, --relation, and --limit filter the result list (comma-separated origin/relation; limit is a cap after filtering).</documentation>
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Incoming authored block-level references
+  </is>
+  <documentation>
+    Inverse of Uses. Default depth 1. depth n walks n incoming hops; further hops set GraphNeighbor.source. CLI --origin, --relation, and --limit filter the result list (comma-separated origin/relation; limit is a cap after filtering).
+  </documentation>
   <references>
     <see type="graphcap:Uses" relation="SeeAlso" />
   </references>
   <properties>
     <fqn type="type:Text">
-      <documentation>Block FQN. (required)</documentation>
+      <documentation>
+        Block FQN. (required)
+      </documentation>
     </fqn>
     <depth type="type:Integer">
-      <documentation>Incoming hops. Default 1. (optional)</documentation>
+      <documentation>
+        Incoming hops. Default 1. (optional)
+      </documentation>
     </depth>
     <origin type="type:Text">
-      <documentation>Keep neighbors whose node.origin is one of workspace, dependency, unresolved. Comma-separated. (optional)</documentation>
+      <documentation>
+        Keep neighbors whose node.origin is one of workspace, dependency, unresolved. Comma-separated. (optional)
+      </documentation>
     </origin>
     <relation type="type:Text">
-      <documentation>Keep neighbors whose relation is listed. Comma-separated GraphRelation names. (optional)</documentation>
+      <documentation>
+        Keep neighbors whose relation is listed. Comma-separated GraphRelation names. (optional)
+      </documentation>
     </relation>
     <limit type="type:Integer">
-      <documentation>Max neighbors after filters. (optional)</documentation>
+      <documentation>
+        Max neighbors after filters. (optional)
+      </documentation>
     </limit>
     <neighbors type="graph:GraphNeighbor[]">
-      <documentation>Incoming neighbors. (required)</documentation>
+      <documentation>
+        Incoming neighbors. (required)
+      </documentation>
     </neighbors>
   </properties>
-</block>
+</graphcap:UsedBy>

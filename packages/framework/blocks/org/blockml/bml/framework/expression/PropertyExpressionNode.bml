@@ -1,12 +1,6 @@
-<!--
-  Framework — PropertyExpressionNode
-  FQN: org.blockml.bml.framework.expression.PropertyExpressionNode
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework — PropertyExpressionNode
+  FQN: org.blockml.bml.framework.expression.PropertyExpressionNode-->
+<fwexpression:PropertyExpressionNode xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,21 +25,26 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>PropertyExpressionNode</name>
-  <type>fwexpression:PropertyExpressionNode</type>
-  <baseType>fwexpression:ExpressionNode</baseType>
-  <is>Property path expression AST node</is>
-
-  <documentation>kind: property. path: string[] (dot-separated property access).</documentation>
-
+  <baseType>
+    fwexpression:ExpressionNode
+  </baseType>
+  <is>
+    Property path expression AST node
+  </is>
+  <documentation>
+    kind: property. path: string[] (dot-separated property access).
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind. TS type: type:Text. (required)</documentation>
+      <documentation>
+        kind. TS type: type:Text. (required)
+      </documentation>
       <value>property</value>
     </kind>
     <path type="type:Text[]">
-      <documentation>path. TS type: type:Text[]. (required)</documentation>
+      <documentation>
+        path. TS type: type:Text[]. (required)
+      </documentation>
     </path>
   </properties>
-
-</block>
+</fwexpression:PropertyExpressionNode>

@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — DocumentationReference
-  FQN: org.blockml.bml.bom.block.DocumentationReference
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — DocumentationReference
+  FQN: org.blockml.bml.bom.block.DocumentationReference-->
+<bomblock:DocumentationReference xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,53 +17,80 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>DocumentationReference</name>
-  <type>bomblock:DocumentationReference</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Cross-reference entry in BOM</is>
-
-  <documentation>Cross-reference entry in BOM</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Cross-reference entry in BOM
+  </is>
+  <documentation>
+    Cross-reference entry in BOM
+  </documentation>
   <properties>
     <type type="type:Text">
-      <documentation>type (optional). TS type: type:Text.</documentation>
+      <documentation>
+        type (optional). TS type: type:Text.
+      </documentation>
     </type>
     <instance type="type:Text">
-      <documentation>instance (optional). TS type: type:Text.</documentation>
+      <documentation>
+        instance (optional). TS type: type:Text.
+      </documentation>
     </instance>
     <file type="type:Text">
-      <documentation>file (optional). TS type: type:Text.</documentation>
+      <documentation>
+        file (optional). TS type: type:Text.
+      </documentation>
     </file>
     <url type="type:Text">
-      <documentation>url (optional). TS type: type:Text.</documentation>
+      <documentation>
+        url (optional). TS type: type:Text.
+      </documentation>
     </url>
     <property type="type:Text">
-      <documentation>property (optional). TS type: type:Text.</documentation>
+      <documentation>
+        property (optional). TS type: type:Text.
+      </documentation>
     </property>
     <aggregation type="type:Text">
-      <documentation>aggregation (optional). TS type: type:Text.</documentation>
+      <documentation>
+        aggregation (optional). TS type: type:Text.
+      </documentation>
     </aggregation>
     <association type="type:Text">
-      <documentation>association (optional). TS type: type:Text.</documentation>
+      <documentation>
+        association (optional). TS type: type:Text.
+      </documentation>
     </association>
     <capability type="type:Text">
-      <documentation>capability (optional). TS type: type:Text.</documentation>
+      <documentation>
+        capability (optional). TS type: type:Text.
+      </documentation>
     </capability>
     <relationFqn type="type:Text">
-      <documentation>relationFqn (optional). TS type: type:Text.</documentation>
+      <documentation>
+        relationFqn (optional). TS type: type:Text.
+      </documentation>
     </relationFqn>
     <context type="type:Text">
-      <documentation>context (required). TS type: type:Text.</documentation>
+      <documentation>
+        context (required). TS type: type:Text.
+      </documentation>
     </context>
     <languageFqn type="type:Text">
-      <documentation>languageFqn (optional). TS type: type:Text.</documentation>
+      <documentation>
+        languageFqn (optional). TS type: type:Text.
+      </documentation>
     </languageFqn>
     <authoredEmptyElementForm type="bomcommon:EmptyElementForm">
-      <documentation>authoredEmptyElementForm (optional). TS type: bomcommon:EmptyElementForm.</documentation>
+      <documentation>
+        authoredEmptyElementForm (optional). TS type: bomcommon:EmptyElementForm.
+      </documentation>
     </authoredEmptyElementForm>
     <source type="bomcommon:SourceLocation">
-      <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
+      <documentation>
+        source (optional). TS type: bomcommon:SourceLocation.
+      </documentation>
     </source>
   </properties>
-
-</block>
+</bomblock:DocumentationReference>

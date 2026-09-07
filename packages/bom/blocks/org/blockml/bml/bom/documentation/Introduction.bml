@@ -1,12 +1,6 @@
-<!--
-  BOM Documentation — Introduction
-  FQN: org.blockml.bml.bom.documentation.Introduction
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Documentation — Introduction
+  FQN: org.blockml.bml.bom.documentation.Introduction-->
+<bomdocumentation:Introduction xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -24,27 +18,28 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>Introduction</name>
-  <type>bomdocumentation:Introduction</type>
-  <baseType>core:Documentation</baseType>
-  <is>Purpose and scope of the BOM Urmodell package</is>
-
-  <documentation>The @blockml/bom package defines the formal Block Object Model (Urmodell) — canonical,
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Purpose and scope of the BOM Urmodell package
+  </is>
+  <documentation>
+    The @blockml/bom package defines the formal Block Object Model (Urmodell) — canonical,
     immutable, lossless parse/build results produced by @blockml/parser (or V3 BomBuilder.seal())
     and consumed by serializer, validator, compiler, LSP, and render targets.
-
+    
     This library (org.blockml.bml.bom.*) is the SSOT. TypeScript in packages/bom/src/ implements
     it. Parity tests in packages/bom/test/ verify BML ↔ TS alignment.
-
+    
     Related reading outside this package:
     • Conceptual foundations — 01_bom_core.md
     • BML authoring syntax — org.blockml.bml.documentation.* (@blockml/core)
     • BML → BOM mapping — @blockml/parser (13_bml_to_bom_mapping.md)
-    • Expression AST — 10_expression_language.md</documentation>
-
+    • Expression AST — 10_expression_language.md
+  </documentation>
   <references>
     <see type="bomdocumentation:LayerSeparation" relation="ReadNext" />
     <see type="bomdocumentation:ArchitectureOverview" relation="SeeAlso" />
   </references>
-
-</block>
+</bomdocumentation:Introduction>

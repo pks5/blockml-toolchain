@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — HasBmlSemanticQNameBindings
-  FQN: org.blockml.bml.compiler.serializer.capability.HasBmlSemanticQNameBindings
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — HasBmlSemanticQNameBindings
+  FQN: org.blockml.bml.compiler.serializer.capability.HasBmlSemanticQNameBindings-->
+<sercap:HasBmlSemanticQNameBindings xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,25 +21,29 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>HasBmlSemanticQNameBindings</name>
-  <type>sercap:HasBmlSemanticQNameBindings</type>
-  <baseType>core:Capability</baseType>
-  <is>Detect QName-emit mode from namespace bindings (B21)</is>
-
-  <documentation>Returns true when any non-default, non-xsi, non-bml-default binding exists.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Detect QName-emit mode from namespace bindings (B21)
+  </is>
+  <documentation>
+    Returns true when any non-default, non-xsi, non-bml-default binding exists.
+  </documentation>
   <references>
     <see type="serconfig:SerializerConstants" relation="SeeAlso" />
     <see type="serdocumentation:EmitRules" relation="SeeAlso" />
   </references>
-
   <properties>
     <bindings type="type:Text">
-      <documentation>bindings. TS type: type:Text. (required)</documentation>
+      <documentation>
+        bindings. TS type: type:Text. (required)
+      </documentation>
     </bindings>
     <result type="type:Boolean">
-      <documentation>result. TS type: type:Boolean. (required)</documentation>
+      <documentation>
+        result. TS type: type:Boolean. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</sercap:HasBmlSemanticQNameBindings>

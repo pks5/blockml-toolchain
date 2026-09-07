@@ -1,12 +1,6 @@
-<!--
-  LSP Capability — FormatDocument
-  FQN: org.blockml.bml.lsp.capability.FormatDocument
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP Capability — FormatDocument
+  FQN: org.blockml.bml.lsp.capability.FormatDocument-->
+<lspcap:FormatDocument xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,32 +24,40 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>FormatDocument</name>
-  <type>lspcap:FormatDocument</type>
-  <baseType>core:Capability</baseType>
-  <is>Parse then serialize a BML document to canonical XML</is>
-
-  <documentation>Editor-neutral format: parse(text) then serialize(). Returns null if parse cannot produce a document.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Parse then serialize a BML document to canonical XML
+  </is>
+  <documentation>
+    Editor-neutral format: parse(text) then serialize(). Returns null if parse cannot produce a document.
+  </documentation>
   <references>
     <see type="lspdocumentation:PublicApi" relation="SeeAlso" />
     <see type="sercap:Serialize" relation="SeeAlso" />
     <see type="parcap:Parse" relation="SeeAlso" />
   </references>
-
   <properties>
     <text type="type:Text">
-      <documentation>text. TS type: type:Text. (required)</documentation>
+      <documentation>
+        text. TS type: type:Text. (required)
+      </documentation>
     </text>
     <indent type="type:Integer">
-      <documentation>indent. TS type: type:Integer. (optional)</documentation>
+      <documentation>
+        indent. TS type: type:Integer. (optional)
+      </documentation>
     </indent>
     <xmlDeclaration type="type:Boolean">
-      <documentation>xmlDeclaration. TS type: type:Boolean. (optional)</documentation>
+      <documentation>
+        xmlDeclaration. TS type: type:Boolean. (optional)
+      </documentation>
     </xmlDeclaration>
     <result type="type:Text">
-      <documentation>result. TS type: type:Text. (required)</documentation>
+      <documentation>
+        result. TS type: type:Text. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</lspcap:FormatDocument>

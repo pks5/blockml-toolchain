@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — EmitCompositionNode
-  FQN: org.blockml.bml.compiler.serializer.capability.EmitCompositionNode
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — EmitCompositionNode
+  FQN: org.blockml.bml.compiler.serializer.capability.EmitCompositionNode-->
+<sercap:EmitCompositionNode xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,27 +21,33 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>EmitCompositionNode</name>
-  <type>sercap:EmitCompositionNode</type>
-  <baseType>core:Capability</baseType>
-  <is>Dispatch emit for a CompositionNode variant</is>
-
-  <documentation>Dispatch emit for a CompositionNode variant</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Dispatch emit for a CompositionNode variant
+  </is>
+  <documentation>
+    Dispatch emit for a CompositionNode variant
+  </documentation>
   <references>
     <see type="sercap:EmitBlockInstance" relation="SeeAlso" />
   </references>
-
   <properties>
     <writer type="seremit:XmlWriter">
-      <documentation>writer. TS type: seremit:XmlWriter. (required)</documentation>
+      <documentation>
+        writer. TS type: seremit:XmlWriter. (required)
+      </documentation>
     </writer>
     <node type="bomcomp:CompositionNode">
-      <documentation>node. TS type: bomcomp:CompositionNode. (required)</documentation>
+      <documentation>
+        node. TS type: bomcomp:CompositionNode. (required)
+      </documentation>
     </node>
     <context type="seremit:EmitContext">
-      <documentation>context. TS type: seremit:EmitContext. (required)</documentation>
+      <documentation>
+        context. TS type: seremit:EmitContext. (required)
+      </documentation>
     </context>
   </properties>
-
-</block>
+</sercap:EmitCompositionNode>

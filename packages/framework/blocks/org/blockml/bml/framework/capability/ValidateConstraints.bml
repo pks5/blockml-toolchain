@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — ValidateConstraints
-  FQN: org.blockml.bml.framework.capability.ValidateConstraints
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — ValidateConstraints
+  FQN: org.blockml.bml.framework.capability.ValidateConstraints-->
+<fwcap:ValidateConstraints xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,27 +25,33 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ValidateConstraints</name>
-  <type>fwcap:ValidateConstraints</type>
-  <baseType>core:Capability</baseType>
-  <is>Evaluate constraint BlockInstances in composition tree</is>
-
-  <documentation>Evaluate constraint BlockInstances in composition tree</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Evaluate constraint BlockInstances in composition tree
+  </is>
+  <documentation>
+    Evaluate constraint BlockInstances in composition tree
+  </documentation>
   <references>
     <see type="fwdocumentation:ConstraintValidation" relation="SeeAlso" />
   </references>
-
   <properties>
     <document type="bomdoc:BomDocument">
-      <documentation>document. TS type: bomdoc:BomDocument. (required)</documentation>
+      <documentation>
+        document. TS type: bomdoc:BomDocument. (required)
+      </documentation>
     </document>
     <registry type="fwcap:TypeRegistry">
-      <documentation>registry. TS type: fwcap:TypeRegistry. (required)</documentation>
+      <documentation>
+        registry. TS type: fwcap:TypeRegistry. (required)
+      </documentation>
     </registry>
     <diagnostics type="bomcommon:Diagnostic[]">
-      <documentation>diagnostics. TS type: bomcommon:Diagnostic[]. (required)</documentation>
+      <documentation>
+        diagnostics. TS type: bomcommon:Diagnostic[]. (required)
+      </documentation>
     </diagnostics>
   </properties>
-
-</block>
+</fwcap:ValidateConstraints>

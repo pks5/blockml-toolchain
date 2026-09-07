@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — SerializeResult
-  FQN: org.blockml.bml.bom.api.SerializeResult
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — SerializeResult
+  FQN: org.blockml.bml.bom.api.SerializeResult-->
+<bomapi:SerializeResult xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,23 +17,30 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>SerializeResult</name>
-  <type>bomapi:SerializeResult</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Result of serialize() (B26)</is>
-
-  <documentation>Result of serialize() (B26)</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Result of serialize() (B26)
+  </is>
+  <documentation>
+    Result of serialize() (B26)
+  </documentation>
   <properties>
     <text type="type:Text">
-      <documentation>string | null — null if serialize cannot produce text. (required)</documentation>
+      <documentation>
+        string | null — null if serialize cannot produce text. (required)
+      </documentation>
     </text>
     <diagnostics type="bomcommon:Diagnostic[]">
-      <documentation>diagnostics (required). TS type: bomcommon:Diagnostic[].</documentation>
+      <documentation>
+        diagnostics (required). TS type: bomcommon:Diagnostic[].
+      </documentation>
     </diagnostics>
     <success type="type:Boolean">
-      <documentation>success (required). TS type: type:Boolean.</documentation>
+      <documentation>
+        success (required). TS type: type:Boolean.
+      </documentation>
     </success>
   </properties>
-
-</block>
+</bomapi:SerializeResult>

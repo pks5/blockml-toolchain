@@ -1,29 +1,24 @@
-<!--
-  Transformer Workflow — ModelTransformation
-  FQN: org.blockml.bml.transformer.workflow.ModelTransformation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Workflow — ModelTransformation
+  FQN: org.blockml.bml.transformer.workflow.ModelTransformation-->
+<workflow:ModelTransformation xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ModelTransformation</name>
-  <type>workflow:ModelTransformation</type>
-  <baseType>core:Block</baseType>
-  <is>A recorded transformation of the model by sequential ModelOperations</is>
-
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    A recorded transformation of the model by sequential ModelOperations
+  </is>
   <documentation>
     One transformation of the model driven by sequential
     `workflow:ModelOperation` instances. Operations may be mixed concrete
     subtypes. `workflow:AgenticOperation` runs a Task in an isolated
     agent process. `workflow:ToolOperation` runs an npm CLI tool
     via npx. Other subtypes use their registered executor.
-
+    
     * `template` — reusable vs one-shot. Placement is part of the Apply
       contract. `{library}._meta.transform.pending` must have
       `template=false`; Prepare relocates that Block to running and
@@ -82,7 +77,6 @@
       `exception` live on each operation. Agent Task work applies only
       to AgenticOperation.
   </documentation>
-
   <references>
     <see type="workflow:ModelOperation" relation="SeeAlso" />
     <see type="workflow:AgenticOperation" relation="SeeAlso" />
@@ -98,15 +92,15 @@
     <see type="workflow:ParametersException" relation="SeeAlso" />
     <see type="workflow:ResultException" relation="SeeAlso" />
   </references>
-
   <genericTypes>
-    <T baseType="core:ValueType" defaultType="type:Text" />
-    <R baseType="core:ValueType" defaultType="type:Text" />
+    <T baseType="core:ValueType" defaultType="org.blockml.bml.type.Text" />
+    <R baseType="core:ValueType" defaultType="org.blockml.bml.type.Text" />
   </genericTypes>
-
   <properties>
     <description type="type:Text">
-      <documentation>Description of this transformation.</documentation>
+      <documentation>
+        Description of this transformation.
+      </documentation>
     </description>
     <template type="type:Boolean">
       <documentation>
@@ -126,25 +120,39 @@
       </documentation>
     </parameters>
     <executionId type="type:UUID">
-      <documentation>Globally unique identifier. Absent while pending; assigned at Running.</documentation>
+      <documentation>
+        Globally unique identifier. Absent while pending; assigned at Running.
+      </documentation>
     </executionId>
     <sequence type="type:Integer">
-      <documentation>Which execution within the model this transformation was applied to.</documentation>
+      <documentation>
+        Which execution within the model this transformation was applied to.
+      </documentation>
     </sequence>
     <status type="workflow:ExecutionStatus">
-      <documentation>Lifecycle state of this execution.</documentation>
+      <documentation>
+        Lifecycle state of this execution.
+      </documentation>
     </status>
     <createdAt type="type:DateTime">
-      <documentation>When this execution was created.</documentation>
+      <documentation>
+        When this execution was created.
+      </documentation>
     </createdAt>
     <startedAt type="type:DateTime">
-      <documentation>When this execution started.</documentation>
+      <documentation>
+        When this execution started.
+      </documentation>
     </startedAt>
     <baseCommit type="type:Text">
-      <documentation>Git HEAD commit at start, recorded after a clean-worktree check.</documentation>
+      <documentation>
+        Git HEAD commit at start, recorded after a clean-worktree check.
+      </documentation>
     </baseCommit>
     <completedAt type="type:DateTime">
-      <documentation>When this execution finished.</documentation>
+      <documentation>
+        When this execution finished.
+      </documentation>
     </completedAt>
     <duration type="type:Duration">
       <documentation>
@@ -160,7 +168,6 @@
       </documentation>
     </result>
   </properties>
-
   <aggregations>
     <parameterMappings type="workflow:ParameterMapping[]">
       <documentation>
@@ -170,7 +177,9 @@
       </documentation>
     </parameterMappings>
     <operations type="workflow:ModelOperation[]">
-      <documentation>Concrete ModelOperation subtypes of this execution, in order.</documentation>
+      <documentation>
+        Concrete ModelOperation subtypes of this execution, in order.
+      </documentation>
     </operations>
     <exception type="core:Exception">
       <documentation>
@@ -180,5 +189,4 @@
       </documentation>
     </exception>
   </aggregations>
-
-</block>
+</workflow:ModelTransformation>

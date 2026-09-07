@@ -1,12 +1,6 @@
-<!--
-  Search — SearchType
-  FQN: org.blockml.bml.search.SearchType
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Search — SearchType
+  FQN: org.blockml.bml.search.SearchType-->
+<search:SearchType xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,17 +15,19 @@
   xmlns:searchdocumentation="org.blockml.bml.search.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>SearchType</name>
-  <type>search:SearchType</type>
-  <baseType>core:Entity</baseType>
-  <is>Abstract marker for Search implementation data-structure blocks</is>
-
-  <documentation>SearchDocument, SearchResult, and related ValueTypes used as capability payloads.</documentation>
-
+  <baseType>
+    core:Entity
+  </baseType>
+  <is>
+    Abstract marker for Search implementation data-structure blocks
+  </is>
+  <documentation>
+    SearchDocument, SearchResult, and related ValueTypes used as capability payloads.
+  </documentation>
+  <abstract>
+    true
+  </abstract>
   <references>
     <see type="bom:UrmodellType" relation="SeeAlso" />
   </references>
-
-  <abstract>true</abstract>
-
-</block>
+</search:SearchType>

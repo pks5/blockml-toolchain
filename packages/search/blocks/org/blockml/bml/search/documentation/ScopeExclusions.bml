@@ -1,12 +1,6 @@
-<!--
-  Search Documentation — ScopeExclusions
-  FQN: org.blockml.bml.search.documentation.ScopeExclusions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Search Documentation — ScopeExclusions
+  FQN: org.blockml.bml.search.documentation.ScopeExclusions-->
+<searchdocumentation:ScopeExclusions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -22,21 +16,22 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ScopeExclusions</name>
-  <type>searchdocumentation:ScopeExclusions</type>
-  <baseType>core:Documentation</baseType>
-  <is>Explicit out-of-scope for @blockml/search V1</is>
-
-  <documentation>Out of scope:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Explicit out-of-scope for @blockml/search V1
+  </is>
+  <documentation>
+    Out of scope:
     • Embeddings, vector database, LLM / RAG
     • Claude, Replicator, LSP, MCP, remote/cloud search
     • Incremental indexing
     • Second BML discovery or parser
     • Graph ranking beside Orama field boost
-    • postinstall hooks that mutate consumer projects</documentation>
-
+    • postinstall hooks that mutate consumer projects
+  </documentation>
   <references>
     <see type="searchdocumentation:Introduction" relation="SeeAlso" />
   </references>
-
-</block>
+</searchdocumentation:ScopeExclusions>

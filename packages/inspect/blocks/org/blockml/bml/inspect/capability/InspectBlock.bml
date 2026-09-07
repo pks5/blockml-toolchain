@@ -1,12 +1,6 @@
-<!--
-  Inspect Capability — InspectBlock
-  FQN: org.blockml.bml.inspect.capability.InspectBlock
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Inspect Capability — InspectBlock
+  FQN: org.blockml.bml.inspect.capability.InspectBlock-->
+<inspectcap:InspectBlock xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,28 +15,34 @@
   xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>InspectBlock</name>
-  <type>inspectcap:InspectBlock</type>
-  <baseType>core:Capability</baseType>
-  <is>Project a Block FQN to an InspectResult</is>
-
-  <documentation>inspectBlock(fqn, registry, options) uses an existing TypeRegistry. inspectProject(fqn, options) bootstraps via bootstrapFullProjectRegistry (validate --all corpus). No index is written.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Project a Block FQN to an InspectResult
+  </is>
+  <documentation>
+    inspectBlock(fqn, registry, options) uses an existing TypeRegistry. inspectProject(fqn, options) bootstraps via bootstrapFullProjectRegistry (validate --all corpus). No index is written.
+  </documentation>
   <references>
     <see type="inspect:InspectResult" relation="SeeAlso" />
     <see type="fwcap:BootstrapFullProjectRegistry" relation="SeeAlso" />
   </references>
-
   <properties>
     <fqn type="type:Text">
-      <documentation>Root Block FQN. (required)</documentation>
+      <documentation>
+        Root Block FQN. (required)
+      </documentation>
     </fqn>
     <options type="inspect:InspectOptions">
-      <documentation>Inspect options. (optional)</documentation>
+      <documentation>
+        Inspect options. (optional)
+      </documentation>
     </options>
     <result type="inspect:InspectResult">
-      <documentation>Projection. (required)</documentation>
+      <documentation>
+        Projection. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</inspectcap:InspectBlock>

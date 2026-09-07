@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Config — BlockDocConstants
-  FQN: org.blockml.bml.target.blockdoc.config.BlockDocConstants
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Config — BlockDocConstants
+  FQN: org.blockml.bml.target.blockdoc.config.BlockDocConstants-->
+<bdconfig:BlockDocConstants xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,44 +21,65 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>BlockDocConstants</name>
-  <type>bdconfig:BlockDocConstants</type>
-  <baseType>blockdoc:BlockdocType</baseType>
-  <is>Defaults, registry identity, shared CSS profile</is>
-
-  <documentation>Well-known constants for BlockDoc render (BD3–BD5).</documentation>
-
+  <baseType>
+    blockdoc:BlockdocType
+  </baseType>
+  <is>
+    Defaults, registry identity, shared CSS profile
+  </is>
+  <documentation>
+    Well-known constants for BlockDoc render (BD3–BD5).
+  </documentation>
   <properties>
     <REGISTRY_NAME type="type:Text">
-      <documentation>Always "blockdoc".</documentation>
+      <documentation>
+        Always "blockdoc".
+      </documentation>
     </REGISTRY_NAME>
     <DEFAULT_SITE_MODE type="type:Text">
-      <documentation>"merged".</documentation>
+      <documentation>
+        "merged".
+      </documentation>
     </DEFAULT_SITE_MODE>
     <DEFAULT_OUT_LAYOUT type="type:Text">
-      <documentation>"fqn".</documentation>
+      <documentation>
+        "fqn".
+      </documentation>
     </DEFAULT_OUT_LAYOUT>
     <DEFAULT_INCLUDE_NON_EXPORTED type="type:Boolean">
-      <documentation>true.</documentation>
+      <documentation>
+        true.
+      </documentation>
     </DEFAULT_INCLUDE_NON_EXPORTED>
     <ACCEPTS type="type:Text">
-      <documentation>JSON array string of scope kinds: library, corpus, auto.</documentation>
+      <documentation>
+        JSON array string of scope kinds: library, corpus, auto.
+      </documentation>
     </ACCEPTS>
     <PAGE_CSS type="type:Text">
-      <documentation>Shared CSS for block and site index pages (system-ui, page shell, tables, blue links).</documentation>
+      <documentation>
+        Shared CSS for block and site index pages (system-ui, page shell, tables, blue links).
+      </documentation>
     </PAGE_CSS>
     <PACKAGE_INDEX_CSS type="type:Text">
-      <documentation>CSS for package index pages (breadcrumb nav).</documentation>
+      <documentation>
+        CSS for package index pages (breadcrumb nav).
+      </documentation>
     </PACKAGE_INDEX_CSS>
     <TOOLBAR_CSS type="type:Text">
-      <documentation>Sticky black toolbar and search dropdown styles (BD25).</documentation>
+      <documentation>
+        Sticky black toolbar and search dropdown styles (BD25).
+      </documentation>
     </TOOLBAR_CSS>
     <ALL_BLOCKS_PATH type="type:Text">
-      <documentation>Merged All Blocks listing filename: "all-blocks.html" (BD27).</documentation>
+      <documentation>
+        Merged All Blocks listing filename: "all-blocks.html" (BD27).
+      </documentation>
     </ALL_BLOCKS_PATH>
     <MEMBER_VALUE_SUMMARY_LIMIT type="type:Integer">
-      <documentation>Max member-value keys shown before "+N more" (BD14). Default 5.</documentation>
+      <documentation>
+        Max member-value keys shown before "+N more" (BD14). Default 5.
+      </documentation>
     </MEMBER_VALUE_SUMMARY_LIMIT>
   </properties>
-
-</block>
+</bdconfig:BlockDocConstants>

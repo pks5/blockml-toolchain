@@ -1,12 +1,6 @@
-<!--
-  Builder Documentation — ArchitectureOverview
-  FQN: org.blockml.bml.builder.documentation.ArchitectureOverview
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Builder Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.builder.documentation.ArchitectureOverview-->
+<builderdocumentation:ArchitectureOverview xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -20,17 +14,21 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ArchitectureOverview</name>
-  <type>builderdocumentation:ArchitectureOverview</type>
-  <baseType>core:Documentation</baseType>
-  <is>Create or edit session to sealed Urmodell</is>
-  <documentation>BomBuilder.create(options) or BomBuilder.edit(document) → draft mutations
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Create or edit session to sealed Urmodell
+  </is>
+  <documentation>
+    BomBuilder.create(options) or BomBuilder.edit(document) → draft mutations
     → seal() → BomDocument. Serializer and validator consume the sealed document
     regardless of Parser or Builder provenance.
-
+    
     create starts a new root block. edit deep-clones an existing Urmodell.
-    Authoring never mutates a sealed document in place.</documentation>
+    Authoring never mutates a sealed document in place.
+  </documentation>
   <references>
     <see type="builderdocumentation:V1Scope" relation="ReadNext" />
   </references>
-</block>
+</builderdocumentation:ArchitectureOverview>

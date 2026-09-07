@@ -1,12 +1,6 @@
-<!--
-  CLI Documentation — NewCommand
-  FQN: org.blockml.bml.cli.documentation.NewCommand
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Documentation — NewCommand
+  FQN: org.blockml.bml.cli.documentation.NewCommand-->
+<clidocumentation:NewCommand xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:builder="org.blockml.bml.builder"
   xmlns:core="org.blockml.bml.core"
@@ -22,35 +16,39 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>NewCommand</name>
-  <type>clidocumentation:NewCommand</type>
-  <baseType>core:Documentation</baseType>
-  <is>blockml new specification</is>
-
-  <documentation><![CDATA[Syntax:
-    blockml new FQN [--baseType FQN] [--is text] [--src dir] [--libraries a,b]
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    blockml new specification
+  </is>
+  <documentation>
+    <![CDATA[
+    Syntax:
+        blockml new FQN [--baseType FQN] [--is text] [--src dir] [--libraries a,b]
+    
+        Defaults: --baseType org.blockml.bml.core.Block; --is is the short name.
+        Creates one .bml file via BomBuilder in the preferred type-as-root form
+        (doc:DocumentFormat) without xmlns:xsi / xsi:schemaLocation, and adds a catalog
+        child on the owning Library.bml when a pkg.Library prefix exists in the registry.
+        Does not overwrite an existing file.
+    
+    Printed help:
+    Usage: blockml new <fqn> [--baseType fqn] [--is text] [--src dir] [--libraries a,b]
+           blockml new --help
+    
+    When: create a new Block. Writes a .bml file and adds it to the owning Library catalog.
+    
     Defaults: --baseType org.blockml.bml.core.Block; --is is the short name.
-    Creates one .bml file via BomBuilder in the preferred type-as-root form
-    (doc:DocumentFormat) without xmlns:xsi / xsi:schemaLocation, and adds a catalog
-    child on the owning Library.bml when a pkg.Library prefix exists in the registry.
     Does not overwrite an existing file.
-
-Printed help:
-Usage: blockml new <fqn> [--baseType fqn] [--is text] [--src dir] [--libraries a,b]
-       blockml new --help
-
-When: create a new Block. Writes a .bml file and adds it to the owning Library catalog.
-
-Defaults: --baseType org.blockml.bml.core.Block; --is is the short name.
-Does not overwrite an existing file.
-Prefer existing Blocks over new duplicates.
-
-Related: inspect, validate.]]></documentation>
+    Prefer existing Blocks over new duplicates.
+    
+    Related: inspect, validate.
+    ]]>
+  </documentation>
   <references>
     <see type="clidocumentation:Commands" relation="SeeAlso" />
     <see type="clicap:RunNew" relation="SeeAlso" />
     <see type="doc:DocumentFormat" relation="SeeAlso" />
   </references>
-
-</block>
+</clidocumentation:NewCommand>

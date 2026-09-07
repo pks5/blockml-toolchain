@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Documentation — ScopeExclusions
-  FQN: org.blockml.bml.target.blockdoc.documentation.ScopeExclusions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Documentation — ScopeExclusions
+  FQN: org.blockml.bml.target.blockdoc.documentation.ScopeExclusions-->
+<bddocumentation:ScopeExclusions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -28,18 +22,20 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ScopeExclusions</name>
-  <type>bddocumentation:ScopeExclusions</type>
-  <baseType>core:Documentation</baseType>
-  <is>Explicitly out of BlockDoc V1 library scope</is>
-
-  <documentation>Out of scope for this library:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Explicitly out of BlockDoc V1 library scope
+  </is>
+  <documentation>
+    Out of scope for this library:
     • CLI bootstrap map, dual-CLI model, exit codes, blockml.config.json schema
     • compile scope auto resolution algorithm (compiler SSOT)
     • Dependency graphs / richer future navigation beyond toolbar + dotted path + package indexes
     • Authored XML example surfaces on API pages (future Definition / docs work)
     • Unused legacy block-page breadcrumb helper (not part of normative page chrome)
     • XSD, FatBlock, SCAD, and other render targets
-    • Codegen tooling that emits TypeScript from this library (structural SSOT only in V1)</documentation>
-
-</block>
+    • Codegen tooling that emits TypeScript from this library (structural SSOT only in V1)
+  </documentation>
+</bddocumentation:ScopeExclusions>

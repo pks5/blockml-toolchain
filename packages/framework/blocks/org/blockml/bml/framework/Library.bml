@@ -1,12 +1,6 @@
-<!--
-  BlockML Framework Library Descriptor
-  FQN: org.blockml.bml.framework.Library
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Framework Library Descriptor
+  FQN: org.blockml.bml.framework.Library-->
+<framework:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,36 +25,35 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>Library</name>
-  <type>framework:Library</type>
-  <baseType>core:BlockLibrary</baseType>
-  <is>The BlockML Framework utilities package library catalog</is>
-
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    The BlockML Framework utilities package library catalog
+  </is>
+  <version>
+    0.9.4
+  </version>
   <documentation>
     # The BlockML Framework utilities package library catalog
-
+    
     Canonical framework specification for BlockML Stage-2 utilities — TypeRegistry,
     bootstrap, fork/resolve, parseExpression, validateTypes/validateConstraints.
-
+    
     TypeScript in packages/framework/src/ implements this library.
-
+    
     Urmodell types live in org.blockml.bml.bom.* (@blockml/bom).
-
+    
     Membership is defined exclusively by this blocks list.
   </documentation>
-
-  <version>0.9.4</version>
-
   <language>
-    <English />
+    <blockml:language.English />
   </language>
-
   <properties>
     <description override="true">
       <value>BlockML Framework utilities library</value>
     </description>
   </properties>
-
   <aggregations>
     <readMe override="true">
       <composition>
@@ -142,5 +135,4 @@
       </composition>
     </blocks>
   </aggregations>
-
-</block>
+</framework:Library>

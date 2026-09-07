@@ -1,12 +1,6 @@
-<!--
-  BlockML CLI Library
-  FQN: org.blockml.bml.cli.Library
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML CLI Library
+  FQN: org.blockml.bml.cli.Library-->
+<cli:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -25,14 +19,18 @@
   xmlns:transformer="org.blockml.bml.transformer"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Library</name>
-  <type>cli:Library</type>
-  <baseType>core:BlockLibrary</baseType>
-  <is>The BlockML universal CLI package library catalog</is>
-
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    The BlockML universal CLI package library catalog
+  </is>
+  <version>
+    0.9.4
+  </version>
   <documentation>
     # The BlockML universal CLI package library catalog
-
+    
     Canonical CLI specification for BlockML — commands, config, bootstrap order,
     target matrix, exit codes, terminal colors (CLI1–CLI24). TypeScript in packages/cli-tools/src/
     implements this library. Compiler facade and scope live in org.blockml.bml.compiler.runtime.*
@@ -42,22 +40,17 @@
     Inspect lives in org.blockml.bml.inspect.* (@blockml/inspect).
     Builder lives in org.blockml.bml.builder.* (@blockml/builder).
     Transformation lives in org.blockml.bml.transformer.* (@blockml/transformer).
-
+    
     Membership is defined exclusively by this blocks list.
   </documentation>
-
-  <version>0.9.4</version>
-
   <language>
-    <English />
+    <blockml:language.English />
   </language>
-
   <properties>
     <description override="true">
       <value>BlockML CLI library</value>
     </description>
   </properties>
-
   <aggregations>
     <readMe override="true">
       <composition>
@@ -77,7 +70,8 @@
       </composition>
     </dependencies>
     <blocks override="true">
-      <composition><cli:CliType />
+      <composition>
+        <cli:CliType />
         <cliapi:BomConfig />
         <cliapi:ParsedArgs />
         <cliapi:CliResult />
@@ -144,5 +138,4 @@
       </composition>
     </blocks>
   </aggregations>
-
-</block>
+</cli:Library>

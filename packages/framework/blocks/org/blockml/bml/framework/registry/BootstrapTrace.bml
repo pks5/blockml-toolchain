@@ -1,12 +1,6 @@
-<!--
-  Framework — BootstrapTrace
-  FQN: org.blockml.bml.framework.registry.BootstrapTrace
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework — BootstrapTrace
+  FQN: org.blockml.bml.framework.registry.BootstrapTrace-->
+<fwregistry:BootstrapTrace xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,29 +25,40 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>BootstrapTrace</name>
-  <type>fwregistry:BootstrapTrace</type>
-  <baseType>framework:FrameworkType</baseType>
-  <is>Resolved bootstrap sources for tracing</is>
-
-  <documentation>corpusPaths — scanned corpus roots. seeds — libraryPaths used. searchRoots — discovery index (not a corpus dump). librariesVisited — graph order. skippedCoveredRoots — library trees skipped because they sit inside corpus srcDir.</documentation>
-
+  <baseType>
+    framework:FrameworkType
+  </baseType>
+  <is>
+    Resolved bootstrap sources for tracing
+  </is>
+  <documentation>
+    corpusPaths — scanned corpus roots. seeds — libraryPaths used. searchRoots — discovery index (not a corpus dump). librariesVisited — graph order. skippedCoveredRoots — library trees skipped because they sit inside corpus srcDir.
+  </documentation>
   <properties>
     <corpusPaths type="type:Text[]">
-      <documentation>corpusPaths. TS type: type:Text[]. (required)</documentation>
+      <documentation>
+        corpusPaths. TS type: type:Text[]. (required)
+      </documentation>
     </corpusPaths>
     <seeds type="type:Text[]">
-      <documentation>seeds. TS type: type:Text[]. (required)</documentation>
+      <documentation>
+        seeds. TS type: type:Text[]. (required)
+      </documentation>
     </seeds>
     <searchRoots type="type:Text[]">
-      <documentation>searchRoots. TS type: type:Text[]. (required)</documentation>
+      <documentation>
+        searchRoots. TS type: type:Text[]. (required)
+      </documentation>
     </searchRoots>
     <librariesVisited type="type:Text[]">
-      <documentation>librariesVisited. TS type: type:Text[]. (required)</documentation>
+      <documentation>
+        librariesVisited. TS type: type:Text[]. (required)
+      </documentation>
     </librariesVisited>
     <skippedCoveredRoots type="type:Text[]">
-      <documentation>skippedCoveredRoots. TS type: type:Text[]. (required)</documentation>
+      <documentation>
+        skippedCoveredRoots. TS type: type:Text[]. (required)
+      </documentation>
     </skippedCoveredRoots>
   </properties>
-
-</block>
+</fwregistry:BootstrapTrace>

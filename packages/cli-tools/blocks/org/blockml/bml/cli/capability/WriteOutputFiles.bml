@@ -1,12 +1,6 @@
-<!--
-  CLI Capability — WriteOutputFiles
-  FQN: org.blockml.bml.cli.capability.WriteOutputFiles
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Capability — WriteOutputFiles
+  FQN: org.blockml.bml.cli.capability.WriteOutputFiles-->
+<clicap:WriteOutputFiles xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,30 +14,38 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>WriteOutputFiles</name>
-  <type>clicap:WriteOutputFiles</type>
-  <baseType>core:Capability</baseType>
-  <is>Write RenderOutput files to disk</is>
-
-  <documentation>CLI7: when cleanOutDir true, rmSync outDir recursively before write. CLI8: rootFiles from RenderOutput.rootFiles (or options override) written relative to rootDir outside outDir (e.g. catalog.xml for xsd). Returns filesWritten and rootFilesWritten.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Write RenderOutput files to disk
+  </is>
+  <documentation>
+    CLI7: when cleanOutDir true, rmSync outDir recursively before write. CLI8: rootFiles from RenderOutput.rootFiles (or options override) written relative to rootDir outside outDir (e.g. catalog.xml for xsd). Returns filesWritten and rootFilesWritten.
+  </documentation>
   <references>
     <see type="clidocumentation:RuntimeBootstrap" relation="SeeAlso" />
   </references>
-
   <properties>
     <output type="type:Text">
-      <documentation>RenderOutput with files[]. (required)</documentation>
+      <documentation>
+        RenderOutput with files[]. (required)
+      </documentation>
     </output>
     <outDir type="type:Text">
-      <documentation>Output directory relative to rootDir. (required)</documentation>
+      <documentation>
+        Output directory relative to rootDir. (required)
+      </documentation>
     </outDir>
     <rootDir type="type:Text">
-      <documentation>Project root. (optional)</documentation>
+      <documentation>
+        Project root. (optional)
+      </documentation>
     </rootDir>
     <options type="cliapi:WriteOutputOptions">
-      <documentation>cleanOutDir and rootFiles. (optional)</documentation>
+      <documentation>
+        cleanOutDir and rootFiles. (optional)
+      </documentation>
     </options>
   </properties>
-
-</block>
+</clicap:WriteOutputFiles>

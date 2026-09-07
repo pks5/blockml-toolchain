@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — GetParseErrors
-  FQN: org.blockml.bml.compiler.parser.capability.GetParseErrors
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — GetParseErrors
+  FQN: org.blockml.bml.compiler.parser.capability.GetParseErrors-->
+<parcap:GetParseErrors xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>GetParseErrors</name>
-  <type>parcap:GetParseErrors</type>
-  <baseType>core:Capability</baseType>
-  <is>Collect xmldom parse error messages</is>
-
-  <documentation>Collect xmldom parse error messages</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Collect xmldom parse error messages
+  </is>
+  <documentation>
+    Collect xmldom parse error messages
+  </documentation>
   <properties>
     <document type="parmap:XmlDomNode">
-      <documentation>document. TS type: parmap:XmlDomNode. (required)</documentation>
+      <documentation>
+        document. TS type: parmap:XmlDomNode. (required)
+      </documentation>
     </document>
     <errors type="type:Text[]">
-      <documentation>errors. TS type: type:Text[]. (required)</documentation>
+      <documentation>
+        errors. TS type: type:Text[]. (required)
+      </documentation>
     </errors>
   </properties>
-
-</block>
+</parcap:GetParseErrors>

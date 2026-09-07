@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — KeywordEntry
-  FQN: org.blockml.bml.bom.block.KeywordEntry
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — KeywordEntry
+  FQN: org.blockml.bml.bom.block.KeywordEntry-->
+<bomblock:KeywordEntry xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,29 +17,40 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>KeywordEntry</name>
-  <type>bomblock:KeywordEntry</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Keyword Entity instance in BOM</is>
-
-  <documentation>Keyword Entity instance in BOM</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Keyword Entity instance in BOM
+  </is>
+  <documentation>
+    Keyword Entity instance in BOM
+  </documentation>
   <properties>
     <typeFqn type="type:Text">
-      <documentation>typeFqn (required). TS type: type:Text.</documentation>
+      <documentation>
+        typeFqn (required). TS type: type:Text.
+      </documentation>
     </typeFqn>
     <term type="type:Text">
-      <documentation>term (optional). TS type: type:Text.</documentation>
+      <documentation>
+        term (optional). TS type: type:Text.
+      </documentation>
     </term>
     <languageFqn type="type:Text">
-      <documentation>languageFqn (optional). TS type: type:Text.</documentation>
+      <documentation>
+        languageFqn (optional). TS type: type:Text.
+      </documentation>
     </languageFqn>
     <weight type="type:Decimal">
-      <documentation>weight (optional). TS type: type:Decimal.</documentation>
+      <documentation>
+        weight (optional). TS type: type:Decimal.
+      </documentation>
     </weight>
     <source type="bomcommon:SourceLocation">
-      <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
+      <documentation>
+        source (optional). TS type: bomcommon:SourceLocation.
+      </documentation>
     </source>
   </properties>
-
-</block>
+</bomblock:KeywordEntry>

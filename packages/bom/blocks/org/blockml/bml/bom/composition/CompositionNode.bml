@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — CompositionNode
-  FQN: org.blockml.bml.bom.composition.CompositionNode
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — CompositionNode
+  FQN: org.blockml.bml.bom.composition.CompositionNode-->
+<bomcomp:CompositionNode xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,13 +17,16 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>CompositionNode</name>
-  <type>bomcomp:CompositionNode</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Abstract union of composition tree nodes</is>
-
-  <documentation>BlockInstanceNode | VirtualContainerNode.</documentation>
-
-  <abstract>true</abstract>
-
-</block>
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Abstract union of composition tree nodes
+  </is>
+  <documentation>
+    BlockInstanceNode | VirtualContainerNode.
+  </documentation>
+  <abstract>
+    true
+  </abstract>
+</bomcomp:CompositionNode>

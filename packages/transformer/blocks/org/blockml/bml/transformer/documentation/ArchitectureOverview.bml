@@ -1,28 +1,24 @@
-<!--
-  Transformer Documentation — ArchitectureOverview
-  FQN: org.blockml.bml.transformer.documentation.ArchitectureOverview
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.transformer.documentation.ArchitectureOverview-->
+<transformerdocumentation:ArchitectureOverview xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
-  <name>ArchitectureOverview</name>
-  <type>transformerdocumentation:ArchitectureOverview</type>
-  <baseType>core:Documentation</baseType>
-  <is>Operation-based transformer process and module map</is>
-
-  <documentation><![CDATA[
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Operation-based transformer process and module map
+  </is>
+  <documentation>
+    <![CDATA[
     Entry: transformercap:RunTransformation (Transformer.run). Exclusive
     worktree lock. The orchestrator sequences process steps; it does not
     implement them.
-
+    
     workflow:ModelOperation is the abstract envelope for one unit of
     work inside a ModelTransformation. Concrete subtypes (today
     workflow:AgenticOperation) are instantiated. Process steps
@@ -38,13 +34,13 @@
     cwd `package.json` `blockml.library`. `_meta` is the shared
     metadata package next to that Library.bml
     (`dirname(Library.bml)/_meta`); it is created when missing.
-
+    
     The orchestrator writes envelope fields the same way for every
     subtype. A registered transformercap:OperationExecutor does only
     type-specific work. Default: AgenticExecutor for AgenticOperation
     (isolated agent process; output candidate is agent stdout).
     ToolExecutor for ToolOperation (npm CLI via npx).
-
+    
     [1] Prepare Execution — transformercap:PrepareExecution
         Default: deterministic. Validate the pending contract (status=
         Pending, concrete operations, AgenticOperation requires a Task,
@@ -69,14 +65,14 @@
         Bound T defaults to type:Text. parameterMappings faults write
         ParametersException onto exception; operations are skipped.
         If the contract is violated or the worktree is dirty, do not start.
-
+    
     Then for each ModelOperation, in order:
-
+    
         Persist operation Running — clean worktree, operation
         status=Running, operation baseCommit=HEAD, commit. Recovery
         boundary: after a crash it is clear which operation started and
         on which commit.
-
+    
         [2] Operation executor — transformercap:OperationExecutor
             Lookup by the instance type FQN (most specific match).
             Default AgenticExecutor (transformercap:ExecuteTask): close
@@ -91,14 +87,14 @@
             Claude default: Edit(**/*.bml), deny
             Edit(**/_meta/transform/**) and Edit(**/node_modules/**),
             Bash limited to npx blockml.
-
+    
         [3] Reflect on Execution — transformercap:ReflectOnExecution
             Envelope. Default: deterministic. No agent process. Must
             not change the model. Reads the git trace for changedFiles.
             When the operation's captureOutput is true, writes the
             executor output text onto output. Skipped when the
             executor throws; output never decides Succeeded vs Failed.
-
+    
         [4] Persist Execution — transformercap:PersistExecution
             Default: deterministic. Writes changedFiles, output, status,
             completedAt, and on failure a BML exception onto this
@@ -109,7 +105,7 @@
             Commits model changes together with the operation terminal
             state. Must not relocate the ModelTransformation. A Failed
             ModelOperation aborts remaining operations.
-
+    
     [5] Finalize Execution — transformercap:FinalizeExecution
         Default: deterministic. Always runs after a started execution.
         Succeeded only when every ModelOperation succeeded:
@@ -122,7 +118,7 @@
         ModelOperation. ParametersException lives on
         ModelTransformation.exception. A ModelOperation failure leaves
         that aggregation empty. Commits after the terminal relocation.
-
+    
     TypeScript:
     • runtime/transformer.ts → transformercap:RunTransformation
     • pipeline/prepare.ts → transformercap:PrepareExecution
@@ -132,8 +128,8 @@
     • pipeline/reflect.ts → transformercap:ReflectOnExecution
     • pipeline/persist.ts → transformercap:PersistExecution
     • pipeline/finalize.ts → transformercap:FinalizeExecution
-  ]]></documentation>
-
+    ]]>
+  </documentation>
   <references>
     <see type="transformercap:RunTransformation" relation="Defines" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
@@ -150,5 +146,4 @@
     <see type="workflow:ParametersException" relation="SeeAlso" />
     <see type="workflow:ResultException" relation="SeeAlso" />
   </references>
-
-</block>
+</transformerdocumentation:ArchitectureOverview>

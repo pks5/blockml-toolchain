@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Capability — GetTarget
-  FQN: org.blockml.bml.compiler.runtime.capability.GetTarget
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Capability — GetTarget
+  FQN: org.blockml.bml.compiler.runtime.capability.GetTarget-->
+<runcap:GetTarget xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,24 +19,28 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>GetTarget</name>
-  <type>runcap:GetTarget</type>
-  <baseType>core:Capability</baseType>
-  <is>Look up a registered RenderTarget by name</is>
-
-  <documentation>Returns undefined when missing; CompileToOutput turns that into BML_UNKNOWN_TARGET.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Look up a registered RenderTarget by name
+  </is>
+  <documentation>
+    Returns undefined when missing; CompileToOutput turns that into BML_UNKNOWN_TARGET.
+  </documentation>
   <references>
     <see type="rundocumentation:TargetRegistry" relation="SeeAlso" />
   </references>
-
   <properties>
     <name type="type:Text">
-      <documentation>Target name. (required)</documentation>
+      <documentation>
+        Target name. (required)
+      </documentation>
     </name>
     <result type="runapi:RenderTarget">
-      <documentation>Target or absent. (optional)</documentation>
+      <documentation>
+        Target or absent. (optional)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</runcap:GetTarget>

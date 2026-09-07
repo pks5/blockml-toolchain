@@ -1,12 +1,6 @@
-<!--
-  XSD Documentation — ParticleMappingRules
-  FQN: org.blockml.bml.target.xsd.documentation.ParticleMappingRules
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--XSD Documentation — ParticleMappingRules
+  FQN: org.blockml.bml.target.xsd.documentation.ParticleMappingRules-->
+<xsddocumentation:ParticleMappingRules xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -22,13 +16,15 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ParticleMappingRules</name>
-  <type>xsddocumentation:ParticleMappingRules</type>
-  <baseType>core:Documentation</baseType>
-  <is>bml.xsd particle construction (XSD4–XSD11)</is>
-
-  <documentation>Consumes D1 / bml:xml grammar from Definition (docs 19); does not redefine it.
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    bml.xsd particle construction (XSD4–XSD11)
+  </is>
+  <documentation>
+    Consumes D1 / bml:xml grammar from Definition (docs 19); does not redefine it.
+    
     XSD4: targetNamespace http://blockml.org/bml; single root element block; mixed=true.
     XSD5: choice of unbounded optional xs:element particles only.
     XSD6: no element-level xs:any.
@@ -38,12 +34,12 @@
     XSD10: MemberPrefersElement — element/raw element true; sole attribute false;
     aggregations/associations true; default true.
     XSD11: extras exclude names already in D1 identity or containers.
-
-    Later: full D1 fidelity (attributes, text, nested models); pure Definition-driven lists.</documentation>
+    
+    Later: full D1 fidelity (attributes, text, nested models); pure Definition-driven lists.
+  </documentation>
   <references>
     <see type="xsddocumentation:DomainVocabularyRules" relation="ReadNext" />
     <see type="xsdcap:EmitBlockXsd" relation="SeeAlso" />
     <see type="def:BlockDefinition" relation="SeeAlso" />
   </references>
-
-</block>
+</xsddocumentation:ParticleMappingRules>

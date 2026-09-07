@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — ImplementationBlock
-  FQN: org.blockml.bml.bom.member.ImplementationBlock
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — ImplementationBlock
+  FQN: org.blockml.bml.bom.member.ImplementationBlock-->
+<bommember:ImplementationBlock xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,29 +17,40 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ImplementationBlock</name>
-  <type>bommember:ImplementationBlock</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Capability implementation source block</is>
-
-  <documentation>Capability implementation source block</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Capability implementation source block
+  </is>
+  <documentation>
+    Capability implementation source block
+  </documentation>
   <properties>
     <languageFqn type="type:Text">
-      <documentation>languageFqn (required). TS type: type:Text.</documentation>
+      <documentation>
+        languageFqn (required). TS type: type:Text.
+      </documentation>
     </languageFqn>
     <source type="type:Text">
-      <documentation>Preserved by stripProvenance — not provenance. (required)</documentation>
+      <documentation>
+        Preserved by stripProvenance — not provenance. (required)
+      </documentation>
     </source>
     <authoredCharacterDataForm type="bomcommon:CharacterDataForm">
-      <documentation>authoredCharacterDataForm (optional). TS type: bomcommon:CharacterDataForm.</documentation>
+      <documentation>
+        authoredCharacterDataForm (optional). TS type: bomcommon:CharacterDataForm.
+      </documentation>
     </authoredCharacterDataForm>
     <embeddedExpressions type="bommember:EmbeddedExpression[]">
-      <documentation>embeddedExpressions (optional). TS type: bommember:EmbeddedExpression[].</documentation>
+      <documentation>
+        embeddedExpressions (optional). TS type: bommember:EmbeddedExpression[].
+      </documentation>
     </embeddedExpressions>
     <sourceLocation type="bomcommon:SourceLocation">
-      <documentation>sourceLocation (optional). TS type: bomcommon:SourceLocation.</documentation>
+      <documentation>
+        sourceLocation (optional). TS type: bomcommon:SourceLocation.
+      </documentation>
     </sourceLocation>
   </properties>
-
-</block>
+</bommember:ImplementationBlock>

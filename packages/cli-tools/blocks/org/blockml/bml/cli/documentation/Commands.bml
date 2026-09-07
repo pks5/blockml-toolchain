@@ -1,12 +1,6 @@
-<!--
-  CLI Documentation — Commands
-  FQN: org.blockml.bml.cli.documentation.Commands
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Documentation — Commands
+  FQN: org.blockml.bml.cli.documentation.Commands-->
+<clidocumentation:Commands xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -21,12 +15,14 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>Commands</name>
-  <type>clidocumentation:Commands</type>
-  <baseType>core:Documentation</baseType>
-  <is>Command inventory</is>
-
-  <documentation>V1 commands:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Command inventory
+  </is>
+  <documentation>
+    V1 commands:
     • validate — parser + semantic validation; no target; no output files (CLI11)
     • compile — render target output; requires bootstrapped target
     • search — local full-text search over the validate --all corpus; search index rebuilds the cache
@@ -34,13 +30,13 @@
     • inspect — compact JSON inspect view of a Block FQN from the TypeRegistry (effective members, optional depth)
     • transform — parent command; apply executes a ModelTransformation via @blockml/transformer
     • new — create a Block .bml file via @blockml/builder and export it from the owning Library
-
+    
     Planned commands (not V1): init, watch, activate-config.
     See cliconfig:CommandRegistry for implementation flags.
-    Printed operator help: clidocumentation:Help (root) and each command documentation Printed help section.</documentation>
+    Printed operator help: clidocumentation:Help (root) and each command documentation Printed help section.
+  </documentation>
   <references>
     <see type="clidocumentation:Help" relation="ReadNext" />
     <see type="clidocumentation:CompileCommand" relation="SeeAlso" />
   </references>
-
-</block>
+</clidocumentation:Commands>

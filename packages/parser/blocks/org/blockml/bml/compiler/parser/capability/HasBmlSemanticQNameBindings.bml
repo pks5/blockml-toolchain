@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — HasBmlSemanticQNameBindings
-  FQN: org.blockml.bml.compiler.parser.capability.HasBmlSemanticQNameBindings
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — HasBmlSemanticQNameBindings
+  FQN: org.blockml.bml.compiler.parser.capability.HasBmlSemanticQNameBindings-->
+<parcap:HasBmlSemanticQNameBindings xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>HasBmlSemanticQNameBindings</name>
-  <type>parcap:HasBmlSemanticQNameBindings</type>
-  <baseType>core:Capability</baseType>
-  <is>Detect whether document uses BML-semantic prefixed xmlns</is>
-
-  <documentation>Detect whether document uses BML-semantic prefixed xmlns</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Detect whether document uses BML-semantic prefixed xmlns
+  </is>
+  <documentation>
+    Detect whether document uses BML-semantic prefixed xmlns
+  </documentation>
   <properties>
     <bindings type="type:Text">
-      <documentation>bindings. TS type: type:Text. (required)</documentation>
+      <documentation>
+        bindings. TS type: type:Text. (required)
+      </documentation>
     </bindings>
     <result type="type:Boolean">
-      <documentation>result. TS type: type:Boolean. (required)</documentation>
+      <documentation>
+        result. TS type: type:Boolean. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</parcap:HasBmlSemanticQNameBindings>

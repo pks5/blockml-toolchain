@@ -1,12 +1,6 @@
-<!--
-  Builder Documentation — V1Scope
-  FQN: org.blockml.bml.builder.documentation.V1Scope
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Builder Documentation — V1Scope
+  FQN: org.blockml.bml.builder.documentation.V1Scope-->
+<builderdocumentation:V1Scope xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -20,20 +14,26 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>V1Scope</name>
-  <type>builderdocumentation:V1Scope</type>
-  <baseType>core:Documentation</baseType>
-  <is>Explicit V1 capabilities</is>
-  <documentation><![CDATA[In scope V1:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Explicit V1 capabilities
+  </is>
+  <documentation>
+    <![CDATA[
+    In scope V1:
     • BomBuilder.create / edit / seal
     • Identity setters (name, type, baseType, is, documentation, filePath)
     • ensureNamespaceBinding
     • addProperty, addAggregation, addCompositionChild, setMemberValue
     • querySelector for properties.<name> and aggregations.<name>
     • CLI: blockml new FQN (host in @blockml/cli)
-
-    Out of scope: see ScopeExclusions.]]></documentation>
+    
+    Out of scope: see ScopeExclusions.
+    ]]>
+  </documentation>
   <references>
     <see type="builderdocumentation:ScopeExclusions" relation="SeeAlso" />
   </references>
-</block>
+</builderdocumentation:V1Scope>

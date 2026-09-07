@@ -1,12 +1,6 @@
-<!--
-  Parser Documentation — Introduction
-  FQN: org.blockml.bml.compiler.parser.documentation.Introduction
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Documentation — Introduction
+  FQN: org.blockml.bml.compiler.parser.documentation.Introduction-->
+<pardocumentation:Introduction xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,28 +24,29 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>Introduction</name>
-  <type>pardocumentation:Introduction</type>
-  <baseType>core:Documentation</baseType>
-  <is>Purpose and scope of the Parser package</is>
-
-  <documentation>The @blockml/parser package converts BML XML source to BomDocument (Urmodell).
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Purpose and scope of the Parser package
+  </is>
+  <documentation>
+    The @blockml/parser package converts BML XML source to BomDocument (Urmodell).
     It is the forward mapping — enabling BML → BOM → BML roundtrip together with @blockml/serializer.
-
+    
     This library (org.blockml.bml.compiler.parser.*) is the SSOT. TypeScript in
     packages/parser/src/ implements it. Parity tests in packages/parser/test/
     verify BML ↔ TS alignment.
-
+    
     V1 build order: parser and serializer prove BML ↔ BOM roundtrip first; validator
     and compiler follow. Single-file scoped — one parse() invocation → one BomDocument.
-
+    
     Pipeline placement: BML XML → Parser → BomDocument; consumed by serializer, validator,
     compiler, LSP. Depends on @blockml/bom (types) and @xmldom/xmldom (B18). Does not
-    depend on @blockml/serializer, @blockml/validator, or TypeRegistry bootstrap.</documentation>
-
+    depend on @blockml/serializer, @blockml/validator, or TypeRegistry bootstrap.
+  </documentation>
   <references>
     <see type="pardocumentation:LayerSeparation" relation="ReadNext" />
     <see type="bomdocumentation:Introduction" relation="SeeAlso" />
   </references>
-
-</block>
+</pardocumentation:Introduction>

@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Documentation — ArchitectureOverview
-  FQN: org.blockml.bml.target.blockdoc.documentation.ArchitectureOverview
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.target.blockdoc.documentation.ArchitectureOverview-->
+<bddocumentation:ArchitectureOverview xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -28,13 +22,15 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ArchitectureOverview</name>
-  <type>bddocumentation:ArchitectureOverview</type>
-  <baseType>core:Documentation</baseType>
-  <is>Module map and render pipeline</is>
-
-  <documentation>Entry: bdcap:Render (BlockDocTarget.render) → ResolveOptions → AssembleSite.
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Module map and render pipeline
+  </is>
+  <documentation>
+    Entry: bdcap:Render (BlockDocTarget.render) → ResolveOptions → AssembleSite.
+    
     Assembly stages:
     1. Collect registry FQNs; optionally FilterExportedFqns (Library.blocks)
     2. CollectRootFqns (shortest FQN per source file) for indexes
@@ -45,7 +41,7 @@
        perLibrary library index.html is the package index when outLayout=fqn.
     6. If outLayout=fqn: CollectPackagePrefixes → RenderPackageIndex each
     7. BuildSearchIndex → search-index.json + search.js (inlined entries + RenderToolbar client)
-
+    
     TypeScript module ↔ BML map:
     • options.ts → bdapi:BlockDocOptions, bdcap:ResolveOptions, bdconfig:BlockDocConstants
     • fqn-path.ts → bdcap:FqnToHtmlPath, RelativeHref, EscapeHtml, bdpath:FqnHtmlPath
@@ -57,9 +53,9 @@
     • package-index.ts → RenderPackageIndex
     • search-index.ts → bdapi:SearchIndexEntry, bdapi:SearchIndex, bdcap:BuildSearchIndex
     • toolbar.ts → bdcap:RenderToolbar, BlockDocConstants.TOOLBAR_CSS
-    • blockdoc-target.ts → Render, AssembleSite, FilterExportedFqns</documentation>
+    • blockdoc-target.ts → Render, AssembleSite, FilterExportedFqns
+  </documentation>
   <references>
     <see type="bddocumentation:V1Scope" relation="ReadNext" />
   </references>
-
-</block>
+</bddocumentation:ArchitectureOverview>

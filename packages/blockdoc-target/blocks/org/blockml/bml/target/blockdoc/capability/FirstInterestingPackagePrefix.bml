@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Capability — FirstInterestingPackagePrefix
-  FQN: org.blockml.bml.target.blockdoc.capability.FirstInterestingPackagePrefix
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Capability — FirstInterestingPackagePrefix
+  FQN: org.blockml.bml.target.blockdoc.capability.FirstInterestingPackagePrefix-->
+<bdcap:FirstInterestingPackagePrefix xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,14 +21,15 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>FirstInterestingPackagePrefix</name>
-  <type>bdcap:FirstInterestingPackagePrefix</type>
-  <baseType>core:Capability</baseType>
-  <is>Deepest package prefix skipped to until a distinction exists</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Deepest package prefix skipped to until a distinction exists
+  </is>
   <documentation>
     # Deepest package prefix skipped to until a distinction exists
-
+    
     BD27: walk from the empty prefix; while the current prefix has exactly one
     direct sub-package and no direct root blocks, descend into that sub-package. Stop at the
     first prefix with two or more children (sub-packages and/or blocks). Empty result means
@@ -42,19 +37,20 @@
     site home when outLayout=fqn: index.html redirects there, or is a virtual root package
     index when the result is empty.
   </documentation>
-
   <references>
     <see type="bddocumentation:SiteAssembly" relation="SeeAlso" />
     <see type="bdcap:CollectPackagePrefixes" relation="SeeAlso" />
   </references>
-
   <properties>
     <rootFqns type="type:Text">
-      <documentation>Root FQN list (required).</documentation>
+      <documentation>
+        Root FQN list (required).
+      </documentation>
     </rootFqns>
     <result type="type:Text">
-      <documentation>Interesting package prefix, or empty string for site root (required).</documentation>
+      <documentation>
+        Interesting package prefix, or empty string for site root (required).
+      </documentation>
     </result>
   </properties>
-
-</block>
+</bdcap:FirstInterestingPackagePrefix>

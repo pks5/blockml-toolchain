@@ -1,26 +1,21 @@
-<!--
-  Transformer Capability — PrepareExecution
-  FQN: org.blockml.bml.transformer.capability.PrepareExecution
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Capability — PrepareExecution
+  FQN: org.blockml.bml.transformer.capability.PrepareExecution-->
+<transformercap:PrepareExecution xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
-  <name>PrepareExecution</name>
-  <type>transformercap:PrepareExecution</type>
-  <baseType>core:Capability</baseType>
-  <is>Process step [1] — create a running ModelTransformation</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Process step [1] — create a running ModelTransformation
+  </is>
   <documentation>
     # Prepare Execution
-
+    
     1. Validate the pending contract: `status=Pending`, `operations` of
        concrete ModelOperation subtypes (AgenticOperation requires a
        Task; ToolOperation requires `command`), and `createdAt` must be set; `executionId` and start/finish
@@ -50,26 +45,29 @@
        `type:Text`. Mapping fault: write `workflow:ParametersException`
        onto `exception`, persist Running, skip operations.
     6. Commit the running relocation.
-
+    
     Default implementation is deterministic. TS: pipeline/prepare.ts.
   </documentation>
-
   <references>
     <see type="transformerdocumentation:ArchitectureOverview" relation="SeeAlso" />
     <see type="transformercap:ExecuteTask" relation="SeeAlso" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
   </references>
-
   <properties>
     <pendingFqn type="type:Text">
-      <documentation>Pending ModelTransformation FQN. Need not live under the target library. (required)</documentation>
+      <documentation>
+        Pending ModelTransformation FQN. Need not live under the target library. (required)
+      </documentation>
     </pendingFqn>
     <runningFqn type="type:Text">
-      <documentation>Running ModelTransformation FQN after relocation. (required)</documentation>
+      <documentation>
+        Running ModelTransformation FQN after relocation. (required)
+      </documentation>
     </runningFqn>
     <sequence type="type:Integer">
-      <documentation>Allocated execution sequence. (required)</documentation>
+      <documentation>
+        Allocated execution sequence. (required)
+      </documentation>
     </sequence>
   </properties>
-
-</block>
+</transformercap:PrepareExecution>

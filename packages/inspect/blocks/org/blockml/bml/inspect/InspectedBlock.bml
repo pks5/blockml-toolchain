@@ -1,12 +1,6 @@
-<!--
-  Inspect — InspectedBlock
-  FQN: org.blockml.bml.inspect.InspectedBlock
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Inspect — InspectedBlock
+  FQN: org.blockml.bml.inspect.InspectedBlock-->
+<inspect:InspectedBlock xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,14 +15,15 @@
   xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>InspectedBlock</name>
-  <type>inspect:InspectedBlock</type>
-  <baseType>inspect:InspectType</baseType>
-  <is>Compact projection of one Block</is>
-
+  <baseType>
+    inspect:InspectType
+  </baseType>
+  <is>
+    Compact projection of one Block
+  </is>
   <documentation>
     Compact projection of one Block.
-
+    
     • baseType is an InspectTypeRef (generic arguments kept)
     • ancestors are parent FQNs only — the inheritance chain is not copied into InspectResult.blocks
     • genericTypes are declared parameters, not subBlocks
@@ -36,70 +31,108 @@
     • references are authored documentation see entries (FQN + relation); they are not expanded into blocks
     • at most 8 references; referencesTruncated is the count of additional authored entries not shown
   </documentation>
-
   <properties>
     <fqn type="type:Text">
-      <documentation>Block FQN. (required)</documentation>
+      <documentation>
+        Block FQN. (required)
+      </documentation>
     </fqn>
     <name type="type:Text">
-      <documentation>Short name. (required)</documentation>
+      <documentation>
+        Short name. (required)
+      </documentation>
     </name>
     <file type="type:Text">
-      <documentation>Source path relative to project root. (optional)</documentation>
+      <documentation>
+        Source path relative to project root. (optional)
+      </documentation>
     </file>
     <origin type="type:Text">
-      <documentation>workspace, dependency, or unresolved. (optional)</documentation>
+      <documentation>
+        workspace, dependency, or unresolved. (optional)
+      </documentation>
     </origin>
     <is type="type:Text">
-      <documentation>Idea descriptor. (optional)</documentation>
+      <documentation>
+        Idea descriptor. (optional)
+      </documentation>
     </is>
     <documentation type="type:Text">
-      <documentation>First documentation entry. Truncated to 400 characters with an ellipsis when longer. (optional)</documentation>
+      <documentation>
+        First documentation entry. Truncated to 400 characters with an ellipsis when longer. (optional)
+      </documentation>
     </documentation>
     <documentationTruncated type="type:Boolean">
-      <documentation>true when documentation was truncated. (optional)</documentation>
+      <documentation>
+        true when documentation was truncated. (optional)
+      </documentation>
     </documentationTruncated>
     <baseType type="inspect:InspectTypeRef">
-      <documentation>Parent type; generic arguments are kept on args. (optional)</documentation>
+      <documentation>
+        Parent type; generic arguments are kept on args. (optional)
+      </documentation>
     </baseType>
     <ancestors type="type:Text">
-      <documentation>baseType chain FQNs excluding self. TS: Text[]. (optional)</documentation>
+      <documentation>
+        baseType chain FQNs excluding self. TS: Text[]. (optional)
+      </documentation>
     </ancestors>
     <contracts type="type:Text">
-      <documentation>Contract FQNs. TS: Text[]. (optional)</documentation>
+      <documentation>
+        Contract FQNs. TS: Text[]. (optional)
+      </documentation>
     </contracts>
     <subBlocks type="type:Text">
-      <documentation>Nested sub-block FQNs. TS: Text[]. (optional)</documentation>
+      <documentation>
+        Nested sub-block FQNs. TS: Text[]. (optional)
+      </documentation>
     </subBlocks>
     <abstract type="type:Boolean">
-      <documentation>true when the Block is abstract. (optional)</documentation>
+      <documentation>
+        true when the Block is abstract. (optional)
+      </documentation>
     </abstract>
     <final type="type:Boolean">
-      <documentation>true when the Block is final. (optional)</documentation>
+      <documentation>
+        true when the Block is final. (optional)
+      </documentation>
     </final>
     <referencesTruncated type="type:Integer">
-      <documentation>Count of authored see references not shown after the first 8. Present only when greater than 0. (optional)</documentation>
+      <documentation>
+        Count of authored see references not shown after the first 8. Present only when greater than 0. (optional)
+      </documentation>
     </referencesTruncated>
   </properties>
   <aggregations>
     <genericTypes type="inspect:InspectedGenericType[]">
-      <documentation>Declared generic type parameters. (optional)</documentation>
+      <documentation>
+        Declared generic type parameters. (optional)
+      </documentation>
     </genericTypes>
     <properties type="inspect:InspectedProperty[]">
-      <documentation>Effective properties. Omitted when empty. (optional)</documentation>
+      <documentation>
+        Effective properties. Omitted when empty. (optional)
+      </documentation>
     </properties>
     <aggregations type="inspect:InspectedAggregation[]">
-      <documentation>Effective aggregations. Omitted when empty. (optional)</documentation>
+      <documentation>
+        Effective aggregations. Omitted when empty. (optional)
+      </documentation>
     </aggregations>
     <associations type="inspect:InspectedAssociation[]">
-      <documentation>Effective associations. Omitted when empty. (optional)</documentation>
+      <documentation>
+        Effective associations. Omitted when empty. (optional)
+      </documentation>
     </associations>
     <capabilities type="inspect:InspectedCapability[]">
-      <documentation>Effective capabilities. Omitted when empty. (optional)</documentation>
+      <documentation>
+        Effective capabilities. Omitted when empty. (optional)
+      </documentation>
     </capabilities>
     <references type="inspect:InspectedReference[]">
-      <documentation>Authored documentation see references, first 8. Compact FQN + relation; not expanded. (optional)</documentation>
+      <documentation>
+        Authored documentation see references, first 8. Compact FQN + relation; not expanded. (optional)
+      </documentation>
     </references>
   </aggregations>
-
-</block>
+</inspect:InspectedBlock>

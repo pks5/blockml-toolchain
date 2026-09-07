@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — GetPropertyNumericValue
-  FQN: org.blockml.bml.framework.capability.GetPropertyNumericValue
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — GetPropertyNumericValue
+  FQN: org.blockml.bml.framework.capability.GetPropertyNumericValue-->
+<fwcap:GetPropertyNumericValue xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,20 +25,25 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>GetPropertyNumericValue</name>
-  <type>fwcap:GetPropertyNumericValue</type>
-  <baseType>core:Capability</baseType>
-  <is>Extract numeric literal from PropertyDefinition value or values[]</is>
-
-  <documentation>Extract numeric literal from PropertyDefinition value or values[]</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Extract numeric literal from PropertyDefinition value or values[]
+  </is>
+  <documentation>
+    Extract numeric literal from PropertyDefinition value or values[]
+  </documentation>
   <properties>
     <property type="bommember:PropertyDefinition">
-      <documentation>property. TS type: bommember:PropertyDefinition. (required)</documentation>
+      <documentation>
+        property. TS type: bommember:PropertyDefinition. (required)
+      </documentation>
     </property>
     <value type="type:Number">
-      <documentation>undefined when no numeric literal. (optional)</documentation>
+      <documentation>
+        undefined when no numeric literal. (optional)
+      </documentation>
     </value>
   </properties>
-
-</block>
+</fwcap:GetPropertyNumericValue>

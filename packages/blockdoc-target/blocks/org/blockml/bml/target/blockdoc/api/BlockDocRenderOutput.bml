@@ -1,12 +1,6 @@
-<!--
-  BlockDoc API — BlockDocRenderOutput
-  FQN: org.blockml.bml.target.blockdoc.api.BlockDocRenderOutput
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc API — BlockDocRenderOutput
+  FQN: org.blockml.bml.target.blockdoc.api.BlockDocRenderOutput-->
+<bdapi:BlockDocRenderOutput xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,17 +21,20 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>BlockDocRenderOutput</name>
-  <type>bdapi:BlockDocRenderOutput</type>
-  <baseType>blockdoc:BlockdocType</baseType>
-  <is>Multi-file HTML site RenderOutput</is>
-
-  <documentation>Extends compiler RenderOutput. files[] are relative paths under outDir with HTML, search-index.json, and search.js content.</documentation>
-
+  <baseType>
+    blockdoc:BlockdocType
+  </baseType>
+  <is>
+    Multi-file HTML site RenderOutput
+  </is>
+  <documentation>
+    Extends compiler RenderOutput. files[] are relative paths under outDir with HTML, search-index.json, and search.js content.
+  </documentation>
   <properties>
     <files type="type:Text">
-      <documentation>Array of { path: Text; content: Text }. Relative to outputBasePath. (required)</documentation>
+      <documentation>
+        Array of { path: Text; content: Text }. Relative to outputBasePath. (required)
+      </documentation>
     </files>
   </properties>
-
-</block>
+</bdapi:BlockDocRenderOutput>

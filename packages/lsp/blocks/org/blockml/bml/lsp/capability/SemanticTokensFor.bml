@@ -1,12 +1,6 @@
-<!--
-  LSP Capability — SemanticTokensFor
-  FQN: org.blockml.bml.lsp.capability.SemanticTokensFor
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP Capability — SemanticTokensFor
+  FQN: org.blockml.bml.lsp.capability.SemanticTokensFor-->
+<lspcap:SemanticTokensFor xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,38 +23,42 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>SemanticTokensFor</name>
-  <type>lspcap:SemanticTokensFor</type>
-  <baseType>core:Capability</baseType>
-  <is>Position-based semantic tokens for a BML document</is>
-
-  <documentation><![CDATA[
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Position-based semantic tokens for a BML document
+  </is>
+  <documentation>
+    <![CDATA[
     # Position-based semantic tokens for a BML document
-
+    
     XML-stack walk (no parse() / TypeRegistry). Classifies each element name by nesting
     relative to the nearest document root or nested definition wrapper, matching
     org.blockml.bml.vscode.theme.FrameworkRoles:
-
+    
     • root, block declaration/facet/container
     • member container/name/field/facet/sub-container
     • domain type, composition instance
-
+    
     Nested block re-enters L1. Lexical tokens cover attributes, strings, comments,
     interpolation, embed, and punctuation. Returns LSP SemanticTokens.data (5-int groups).
     Used by textDocument/semanticTokens/full.
-  ]]></documentation>
-
+    ]]>
+  </documentation>
   <references>
     <see type="lspdocumentation:PublicApi" relation="SeeAlso" />
   </references>
-
   <properties>
     <text type="type:Text">
-      <documentation>text. TS type: type:Text. (required)</documentation>
+      <documentation>
+        text. TS type: type:Text. (required)
+      </documentation>
     </text>
     <result type="lsp:SemanticTokensResult">
-      <documentation>LSP encoded semantic tokens. (required)</documentation>
+      <documentation>
+        LSP encoded semantic tokens. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</lspcap:SemanticTokensFor>

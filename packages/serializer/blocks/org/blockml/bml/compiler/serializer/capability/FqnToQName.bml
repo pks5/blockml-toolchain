@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — FqnToQName
-  FQN: org.blockml.bml.compiler.serializer.capability.FqnToQName
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — FqnToQName
+  FQN: org.blockml.bml.compiler.serializer.capability.FqnToQName-->
+<sercap:FqnToQName xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,30 +21,36 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>FqnToQName</name>
-  <type>sercap:FqnToQName</type>
-  <baseType>core:Capability</baseType>
-  <is>Convert resolved FQN to prefixed QName using bindings (B21)</is>
-
-  <documentation>Picks the longest matching package URI so a type tag stays a TypeIdentifier
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Convert resolved FQN to prefixed QName using bindings (B21)
+  </is>
+  <documentation>
+    Picks the longest matching package URI so a type tag stays a TypeIdentifier
     (workspace:Library, not blockml:workspace.Library). On missing binding in
-    QName mode, emit BML_NAMESPACE_UNBOUND diagnostic.</documentation>
-
+    QName mode, emit BML_NAMESPACE_UNBOUND diagnostic.
+  </documentation>
   <references>
     <see type="serdocumentation:EmitRules" relation="SeeAlso" />
     <see type="serdocumentation:Diagnostics" relation="SeeAlso" />
   </references>
-
   <properties>
     <fqn type="type:Text">
-      <documentation>fqn. TS type: type:Text. (required)</documentation>
+      <documentation>
+        fqn. TS type: type:Text. (required)
+      </documentation>
     </fqn>
     <bindings type="type:Text">
-      <documentation>bindings. TS type: type:Text. (required)</documentation>
+      <documentation>
+        bindings. TS type: type:Text. (required)
+      </documentation>
     </bindings>
     <qname type="type:Text">
-      <documentation>qname. TS type: type:Text. (required)</documentation>
+      <documentation>
+        qname. TS type: type:Text. (required)
+      </documentation>
     </qname>
   </properties>
-
-</block>
+</sercap:FqnToQName>

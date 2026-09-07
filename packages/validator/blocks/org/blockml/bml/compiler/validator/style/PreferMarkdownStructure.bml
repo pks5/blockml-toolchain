@@ -1,12 +1,6 @@
-<!--
-  Validator Style Check — PreferMarkdownStructure
-  FQN: org.blockml.bml.compiler.validator.style.PreferMarkdownStructure
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Validator Style Check — PreferMarkdownStructure
+  FQN: org.blockml.bml.compiler.validator.style.PreferMarkdownStructure-->
+<valstyle:PreferMarkdownStructure xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -14,12 +8,14 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:valstyle="org.blockml.bml.compiler.validator.style">
 
-  <name>PreferMarkdownStructure</name>
-  <type>valstyle:PreferMarkdownStructure</type>
-  <baseType>valstyle:StyleCheck</baseType>
-  <is>Recommend markdown structure for long block documentation</is>
-
-  <documentation>Matches block-level documentation longer than 280 characters with no blank
-    line, heading, or list marker. Short member documentation is out of scope.</documentation>
-
-</block>
+  <baseType>
+    valstyle:StyleCheck
+  </baseType>
+  <is>
+    Recommend markdown structure for long block documentation
+  </is>
+  <documentation>
+    Matches block-level documentation longer than 280 characters with no blank
+    line, heading, or list marker. Short member documentation is out of scope.
+  </documentation>
+</valstyle:PreferMarkdownStructure>

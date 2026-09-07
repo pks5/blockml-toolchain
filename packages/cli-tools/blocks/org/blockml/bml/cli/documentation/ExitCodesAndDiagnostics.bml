@@ -1,12 +1,6 @@
-<!--
-  CLI Documentation — ExitCodesAndDiagnostics
-  FQN: org.blockml.bml.cli.documentation.ExitCodesAndDiagnostics
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Documentation — ExitCodesAndDiagnostics
+  FQN: org.blockml.bml.cli.documentation.ExitCodesAndDiagnostics-->
+<clidocumentation:ExitCodesAndDiagnostics xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -21,17 +15,19 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ExitCodesAndDiagnostics</name>
-  <type>clidocumentation:ExitCodesAndDiagnostics</type>
-  <baseType>core:Documentation</baseType>
-  <is>Exit codes and diagnostic formatting</is>
-
-  <documentation>CLI18 exit codes:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Exit codes and diagnostic formatting
+  </is>
+  <documentation>
+    CLI18 exit codes:
     • 0 — success
     • 1 — compiler/parser/validator errors (diagnostics with severity error)
     • 2 — configuration error (unknown command, missing file, unsupported target, bootstrap failure)
       or uncaught Internal CLI error (application failure, not a BML diagnostic)
-
+    
     CLI17 diagnostic format: severity code file:line — message (uncolored text).
     Printed first. Then a status line:
     validate — Validation succeeded|failed. Tested N block(s), M with errors, W warning(s), R recommendation(s).
@@ -41,11 +37,11 @@
     runCli joins uncolored lines with newlines in CliResult.stderr.
     Direct bin entry uses WriteCliOutput (CLI24): red error, yellow warning,
     blue recommendation, default/white info, green success. error and warning
-    write to stderr; info, success, and recommendation write to stdout.</documentation>
+    write to stderr; info, success, and recommendation write to stdout.
+  </documentation>
   <references>
     <see type="clidocumentation:DualCliModel" relation="ReadNext" />
     <see type="cliconfig:CliColorScheme" relation="SeeAlso" />
     <see type="clicap:WriteCliOutput" relation="SeeAlso" />
   </references>
-
-</block>
+</clidocumentation:ExitCodesAndDiagnostics>

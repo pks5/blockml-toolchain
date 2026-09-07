@@ -1,49 +1,43 @@
-<!--
-  Transformer Workflow — Prerequisite
-  FQN: org.blockml.bml.transformer.workflow.Prerequisite
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Workflow — Prerequisite
+  FQN: org.blockml.bml.transformer.workflow.Prerequisite-->
+<workflow:Prerequisite xmlns="http://blockml.org/bml"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
-  <name>Prerequisite</name>
-  <type>workflow:Prerequisite</type>
-  <baseType>core:Block</baseType>
-  <is>A precondition that must hold before a Task may run</is>
-
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    A precondition that must hold before a Task may run
+  </is>
+  <isnot>
+    Not an acceptance Criterion (org.blockml.bml.transformer.workflow.Criterion),
+    not a workflow Rule (obligation during Task.run), and not a BlockML validation
+    Constraint (org.blockml.bml.core.Constraint / org.blockml.bml.constraint.*).
+  </isnot>
   <documentation>
     Abstract precondition for Task.run. Concrete subtypes implement require; this type
     carries no implementation. Unlike Criterion, a Prerequisite is not an acceptance
     check after the task — it must already hold before the task starts.
   </documentation>
-
-  <isNot>Not an acceptance Criterion (org.blockml.bml.transformer.workflow.Criterion),
-    not a workflow Rule (obligation during Task.run), and not a BlockML validation
-    Constraint (org.blockml.bml.core.Constraint / org.blockml.bml.constraint.*).</isNot>
-
+  <abstract>
+    true
+  </abstract>
   <references>
     <see type="workflow:Criterion" relation="ContrastsWith" />
     <see type="workflow:Rule" relation="ContrastsWith" />
     <see type="workflow:Task" relation="SeeAlso" />
   </references>
-
-  <abstract>true</abstract>
-
   <capabilities>
-    <require type="cap:Action">
-      <abstract>true</abstract>
+    <require abstract="true" type="cap:Action">
       <throws>
         <workflow:PrerequisiteNotMetException />
         <workflow:ExecutionException />
       </throws>
-      
-      <documentation>Enforce this precondition. Concrete subtypes supply the Action implementation.</documentation>
+      <documentation>
+        Enforce this precondition. Concrete subtypes supply the Action implementation.
+      </documentation>
     </require>
   </capabilities>
-
-</block>
+</workflow:Prerequisite>

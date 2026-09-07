@@ -1,12 +1,6 @@
-<!--
-  CLI Capability — RegisterTargetFactory
-  FQN: org.blockml.bml.cli.capability.RegisterTargetFactory
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Capability — RegisterTargetFactory
+  FQN: org.blockml.bml.cli.capability.RegisterTargetFactory-->
+<clicap:RegisterTargetFactory xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,18 +14,19 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>RegisterTargetFactory</name>
-  <type>clicap:RegisterTargetFactory</type>
-  <baseType>core:Capability</baseType>
-  <is>Programmatic target registration for domain CLI hosts</is>
-
-  <documentation>Hosts call registerTargetFactory(name, factory, hints?) before bootstrapTargets/runCli.
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Programmatic target registration for domain CLI hosts
+  </is>
+  <documentation>
+    Hosts call registerTargetFactory(name, factory, hints?) before bootstrapTargets/runCli.
     Programmatic registration wins over config targetPackages plugin loading.
-    Domain CLIs (e.g. @machineblocks/cli) register domain targets here — not in @blockml/cli builtins.</documentation>
-
+    Domain CLIs (e.g. @machineblocks/cli) register domain targets here — not in @blockml/cli builtins.
+  </documentation>
   <references>
     <see type="clicap:BootstrapTargets" relation="SeeAlso" />
     <see type="clidocumentation:DualCliModel" relation="SeeAlso" />
   </references>
-
-</block>
+</clicap:RegisterTargetFactory>

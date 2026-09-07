@@ -1,12 +1,6 @@
-<!--
-  Graph Documentation — Introduction
-  FQN: org.blockml.bml.graph.documentation.Introduction
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph Documentation — Introduction
+  FQN: org.blockml.bml.graph.documentation.Introduction-->
+<graphdocumentation:Introduction xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,17 +15,21 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Introduction</name>
-  <type>graphdocumentation:Introduction</type>
-  <baseType>core:Documentation</baseType>
-  <is>Purpose and scope of the Graph package</is>
-  <documentation>The @blockml/graph package provides a local authored structural graph over the effective BML corpus of a BlockML project. The corpus is the same set of documents bootstrapped by blockml validate --all.
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Purpose and scope of the Graph package
+  </is>
+  <documentation>
+    The @blockml/graph package provides a local authored structural graph over the effective BML corpus of a BlockML project. The corpus is the same set of documents bootstrapped by blockml validate --all.
+    
     This library (org.blockml.bml.graph.*) is the SSOT. TypeScript in packages/graph/src/ implements it. LadybugDB is an internal engine and is not part of the public API.
-
-    Consumers (CLI, agents) call BlockML-owned interfaces only.</documentation>
+    
+    Consumers (CLI, agents) call BlockML-owned interfaces only.
+  </documentation>
   <references>
     <see type="graphdocumentation:LayerSeparation" relation="ReadNext" />
     <see type="fwcap:BootstrapFullProjectRegistry" relation="SeeAlso" />
   </references>
-</block>
+</graphdocumentation:Introduction>

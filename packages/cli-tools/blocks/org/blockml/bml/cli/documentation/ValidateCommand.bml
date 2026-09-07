@@ -1,12 +1,6 @@
-<!--
-  CLI Documentation — ValidateCommand
-  FQN: org.blockml.bml.cli.documentation.ValidateCommand
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Documentation — ValidateCommand
+  FQN: org.blockml.bml.cli.documentation.ValidateCommand-->
+<clidocumentation:ValidateCommand xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -22,57 +16,61 @@
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ValidateCommand</name>
-  <type>clidocumentation:ValidateCommand</type>
-  <baseType>core:Documentation</baseType>
-  <is>blockml validate specification</is>
-
-  <documentation><![CDATA[Syntax:
-    blockml validate [file] [--all] [--src dir] [--libraries a,b] [--verbose]
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    blockml validate specification
+  </is>
+  <documentation>
+    <![CDATA[
+    Syntax:
+        blockml validate [file] [--all] [--src dir] [--libraries a,b] [--verbose]
+    
+        Single file: parse + compileBmlToBom against the full project registry.
+        Default (no file, no --all): semantic-validate project sources only (this package srcDir
+        plus local packages/* BlockML modules). npm libraries stay on the registry for resolve.
+        --all: semantic-validate every document in the registry, including npm.
+        --verbose: print srcDir, seeds, search index, graph, validate set, registry files
+        (before diagnostics).
+    
+        Validity is parse + semantic validate only. XSD is a render target
+        (blockml compile xsd) and is not consulted.
+    
+        file and --all together → exit 2 (CLI10).
+        No target bootstrap. No output files written (CLI11).
+        Exit 0 on success; 1 on diagnostic errors; 2 on config errors.
+        After diagnostics, always: Validation succeeded|failed. Tested N block(s), M with errors, W warning(s), R recommendation(s).
+        M is unique filePaths among printed error diagnostics (parse + semantic), not only semantic validate() failures.
+    
+    Printed help:
+    Usage: blockml validate [--all] [<file>] [--src dir] [--libraries a,b] [--verbose]
+           blockml validate --help
+    
+    When: check the model after edits. Ordinary project work.
+    
+    Default (no file, no --all): semantic-validate project sources only (this package srcDir plus local packages/*). npm libraries stay on the registry for resolve.
+    --all: semantic-validate every document in the registry, including npm. Do not use --all as the default after every edit.
     Single file: parse + compileBmlToBom against the full project registry.
-    Default (no file, no --all): semantic-validate project sources only (this package srcDir
-    plus local packages/* BlockML modules). npm libraries stay on the registry for resolve.
-    --all: semantic-validate every document in the registry, including npm.
-    --verbose: print srcDir, seeds, search index, graph, validate set, registry files
-    (before diagnostics).
-
-    Validity is parse + semantic validate only. XSD is a render target
-    (blockml compile xsd) and is not consulted.
-
-    file and --all together → exit 2 (CLI10).
-    No target bootstrap. No output files written (CLI11).
+    file and --all together exit 2.
+    
+    Validity is parse + semantic validate only. XSD is a render target (compile xsd) and is not consulted.
+    No target bootstrap. No output files written.
+    
+    Flags:
+      --all         entire reachable corpus, including npm
+      --verbose     print srcDir, seeds, index, graph, validate set, registry files
+      --src / --libraries   corpus overrides
+    
     Exit 0 on success; 1 on diagnostic errors; 2 on config errors.
-    After diagnostics, always: Validation succeeded|failed. Tested N block(s), M with errors, W warning(s), R recommendation(s).
-    M is unique filePaths among printed error diagnostics (parse + semantic), not only semantic validate() failures.
-
-Printed help:
-Usage: blockml validate [--all] [<file>] [--src dir] [--libraries a,b] [--verbose]
-       blockml validate --help
-
-When: check the model after edits. Ordinary project work.
-
-Default (no file, no --all): semantic-validate project sources only (this package srcDir plus local packages/*). npm libraries stay on the registry for resolve.
---all: semantic-validate every document in the registry, including npm. Do not use --all as the default after every edit.
-Single file: parse + compileBmlToBom against the full project registry.
-file and --all together exit 2.
-
-Validity is parse + semantic validate only. XSD is a render target (compile xsd) and is not consulted.
-No target bootstrap. No output files written.
-
-Flags:
-  --all         entire reachable corpus, including npm
-  --verbose     print srcDir, seeds, index, graph, validate set, registry files
-  --src / --libraries   corpus overrides
-
-Exit 0 on success; 1 on diagnostic errors; 2 on config errors.
-After diagnostics: Validation succeeded|failed. Tested N block(s), M with errors, W warning(s), R recommendation(s).
-Do not ignore validation errors caused by your changes.
-
-Related: search, inspect.]]></documentation>
+    After diagnostics: Validation succeeded|failed. Tested N block(s), M with errors, W warning(s), R recommendation(s).
+    Do not ignore validation errors caused by your changes.
+    
+    Related: search, inspect.
+    ]]>
+  </documentation>
   <references>
     <see type="clidocumentation:Configuration" relation="ReadNext" />
     <see type="valdocumentation:ValidityContract" relation="SeeAlso" />
   </references>
-
-</block>
+</clidocumentation:ValidateCommand>

@@ -1,12 +1,6 @@
-<!--
-  Framework Documentation — EffectiveMembers
-  FQN: org.blockml.bml.framework.documentation.EffectiveMembers
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Documentation — EffectiveMembers
+  FQN: org.blockml.bml.framework.documentation.EffectiveMembers-->
+<fwdocumentation:EffectiveMembers xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -32,35 +26,36 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>EffectiveMembers</name>
-  <type>fwdocumentation:EffectiveMembers</type>
-  <baseType>core:Documentation</baseType>
-  <is>resolveEffectiveMembers and baseType chain merge</is>
-
-  <documentation>resolveEffectiveMembers(block, registry) merges members[] in order:
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    resolveEffectiveMembers and baseType chain merge
+  </is>
+  <documentation>
+    resolveEffectiveMembers(block, registry) merges members[] in order:
+    
     1. baseType chain (via collectBaseTypeChain) — earliest to latest
     2. contracts[] in declaration order (via resolveContracts) — contract Block members only;
        subBlocks/compositions/embeddedBlocks on contract types are ignored
     3. local block.members — override earlier layers when override=true
-
+    
     collectBaseTypeChain walks block.baseType → registry.get(baseType) until absent or cycle.
     resolveContracts resolves each contracts[] FQN via TypeRegistry; unknown contract →
     BML_UNKNOWN_CONTRACT (validateTypes).
     memberIdentityKey(member) = (namespace ?? "") + ":" + name — collision detection key.
     findLocalMember(block, member) looks up that key in block.members only (not inherited).
-
+    
     Partial merge: later layer replaces only explicitly authored attributes on the member.
     Used by validateTypes (member collision, override rules) and validateConstraints (effective
     PropertyDefinition constraints).
-
-    EffectiveMemberSet is a runtime view — not stored on Urmodell (BOM SSOT).</documentation>
-
+    
+    EffectiveMemberSet is a runtime view — not stored on Urmodell (BOM SSOT).
+  </documentation>
   <references>
     <see type="fwdocumentation:ExpressionParsing" relation="ReadNext" />
     <see type="fwcap:ResolveEffectiveMembers" relation="Defines" />
     <see type="fwcap:ResolveContracts" relation="SeeAlso" />
     <see type="fwcap:FindLocalMember" relation="SeeAlso" />
   </references>
-
-</block>
+</fwdocumentation:EffectiveMembers>

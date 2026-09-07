@@ -1,12 +1,6 @@
-<!--
-  CLI API — BomConfig
-  FQN: org.blockml.bml.cli.api.BomConfig
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI API — BomConfig
+  FQN: org.blockml.bml.cli.api.BomConfig-->
+<cliapi:BomConfig xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,23 +14,53 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>BomConfig</name>
-  <type>cliapi:BomConfig</type>
-  <baseType>cli:CliType</baseType>
-  <is>blockml.config.json project configuration shape (CLI-owned subset)</is>
-
-  <documentation>Fields the V1 CLI reads from blockml.config.json. Full schema in clidocumentation:Configuration.</documentation>
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    blockml.config.json project configuration shape (CLI-owned subset)
+  </is>
+  <documentation>
+    Fields the V1 CLI reads from blockml.config.json. Full schema in clidocumentation:Configuration.
+  </documentation>
   <references>
     <see type="clidocumentation:Configuration" relation="SeeAlso" />
   </references>
   <properties>
-    <outDir type="type:Text"><documentation>Output root. Default "blockdoc". (optional)</documentation></outDir>
-    <srcDir type="type:Text"><documentation>Source root. Default "blocks" (recommended BlockML source folder). (optional)</documentation></srcDir>
-    <libraries type="type:Text"><documentation>Extra Library.bml seeds; appended to package.json blockml.library. (optional)</documentation></libraries>
-    <targets type="type:Text"><documentation>Registry names to bootstrap. Default ["blockdoc"]. (optional)</documentation></targets>
-    <targetPackages type="type:Text"><documentation>Registry name → npm package for plugin load. (optional)</documentation></targetPackages>
-    <targetOptions type="type:Text"><documentation>Per-target opaque options keyed by registry name. (optional)</documentation></targetOptions>
-    <defaultTarget type="type:Text"><documentation>Default compile target when omitted. Default blockdoc. (optional)</documentation></defaultTarget>
+    <outDir type="type:Text">
+      <documentation>
+        Output root. Default "blockdoc". (optional)
+      </documentation>
+    </outDir>
+    <srcDir type="type:Text">
+      <documentation>
+        Source root. Default "blocks" (recommended BlockML source folder). (optional)
+      </documentation>
+    </srcDir>
+    <libraries type="type:Text">
+      <documentation>
+        Extra Library.bml seeds; appended to package.json blockml.library. (optional)
+      </documentation>
+    </libraries>
+    <targets type="type:Text">
+      <documentation>
+        Registry names to bootstrap. Default ["blockdoc"]. (optional)
+      </documentation>
+    </targets>
+    <targetPackages type="type:Text">
+      <documentation>
+        Registry name → npm package for plugin load. (optional)
+      </documentation>
+    </targetPackages>
+    <targetOptions type="type:Text">
+      <documentation>
+        Per-target opaque options keyed by registry name. (optional)
+      </documentation>
+    </targetOptions>
+    <defaultTarget type="type:Text">
+      <documentation>
+        Default compile target when omitted. Default blockdoc. (optional)
+      </documentation>
+    </defaultTarget>
   </properties>
-
-</block>
+</cliapi:BomConfig>

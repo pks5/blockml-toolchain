@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — FqnToQName
-  FQN: org.blockml.bml.compiler.parser.capability.FqnToQName
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — FqnToQName
+  FQN: org.blockml.bml.compiler.parser.capability.FqnToQName-->
+<parcap:FqnToQName xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,23 +23,30 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>FqnToQName</name>
-  <type>parcap:FqnToQName</type>
-  <baseType>core:Capability</baseType>
-  <is>Convert FQN to prefixed QName using bindings</is>
-
-  <documentation>Convert FQN to prefixed QName using bindings</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Convert FQN to prefixed QName using bindings
+  </is>
+  <documentation>
+    Convert FQN to prefixed QName using bindings
+  </documentation>
   <properties>
     <fqn type="type:Text">
-      <documentation>fqn. TS type: type:Text. (required)</documentation>
+      <documentation>
+        fqn. TS type: type:Text. (required)
+      </documentation>
     </fqn>
     <bindings type="type:Text">
-      <documentation>bindings. TS type: type:Text. (required)</documentation>
+      <documentation>
+        bindings. TS type: type:Text. (required)
+      </documentation>
     </bindings>
     <qname type="type:Text">
-      <documentation>qname. TS type: type:Text. (required)</documentation>
+      <documentation>
+        qname. TS type: type:Text. (required)
+      </documentation>
     </qname>
   </properties>
-
-</block>
+</parcap:FqnToQName>

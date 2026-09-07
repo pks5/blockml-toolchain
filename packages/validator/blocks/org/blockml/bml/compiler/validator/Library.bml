@@ -1,12 +1,6 @@
-<!--
-  BlockML Validator Library Descriptor
-  FQN: org.blockml.bml.compiler.validator.Library
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Validator Library Descriptor
+  FQN: org.blockml.bml.compiler.validator.Library-->
+<validator:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -24,33 +18,32 @@
   xmlns:valstyle="org.blockml.bml.compiler.validator.style"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>Library</name>
-  <type>validator:Library</type>
-  <baseType>core:BlockLibrary</baseType>
-  <is>The BlockML Validator compiler package library catalog</is>
-
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    The BlockML Validator compiler package library catalog
+  </is>
+  <version>
+    0.9.4
+  </version>
   <documentation>
     # The BlockML Validator compiler package library catalog
-
+    
     Canonical validator specification for BlockML Stage-2 — validate() orchestration
     on BomDocument using @blockml/framework utilities, plus the style catalog
     (org.blockml.bml.compiler.validator.style.*). TypeScript in packages/validator/src/
     implements this library. Urmodell and API types live in org.blockml.bml.bom.*
     (@blockml/bom). Membership is defined exclusively by this blocks list.
   </documentation>
-
-  <version>0.9.4</version>
-
   <language>
-    <English />
+    <blockml:language.English />
   </language>
-
   <properties>
     <description override="true">
       <value>BlockML Validator library</value>
     </description>
   </properties>
-
   <aggregations>
     <readMe override="true">
       <composition>
@@ -65,7 +58,8 @@
       </composition>
     </dependencies>
     <blocks override="true">
-      <composition><validator:ValidatorType />
+      <composition>
+        <validator:ValidatorType />
         <valcap:Validate />
         <valcap:ValidateStyle />
         <valstyle:StyleRule />
@@ -94,5 +88,4 @@
       </composition>
     </blocks>
   </aggregations>
-
-</block>
+</validator:Library>

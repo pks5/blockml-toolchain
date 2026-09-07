@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — EmitBlockInstance
-  FQN: org.blockml.bml.compiler.serializer.capability.EmitBlockInstance
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — EmitBlockInstance
+  FQN: org.blockml.bml.compiler.serializer.capability.EmitBlockInstance-->
+<sercap:EmitBlockInstance xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,30 +21,38 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>EmitBlockInstance</name>
-  <type>sercap:EmitBlockInstance</type>
-  <baseType>core:Capability</baseType>
-  <is>Emit BlockInstance with member values, nested aggregations, and directives</is>
-
-  <documentation><![CDATA[Emit BlockInstance composition element with member values and
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Emit BlockInstance with member values, nested aggregations, and directives
+  </is>
+  <documentation>
+    <![CDATA[
+    Emit BlockInstance composition element with member values and
     directives. Nested aggregations are filled by member name without a
-    <composition> wrapper.]]></documentation>
-
+    <composition> wrapper.
+    ]]>
+  </documentation>
   <references>
     <see type="sercap:VisibilityPrefix" relation="SeeAlso" />
     <see type="sercap:FormatMemberValue" relation="SeeAlso" />
   </references>
-
   <properties>
     <writer type="seremit:XmlWriter">
-      <documentation>writer. TS type: seremit:XmlWriter. (required)</documentation>
+      <documentation>
+        writer. TS type: seremit:XmlWriter. (required)
+      </documentation>
     </writer>
     <instance type="bomcomp:BlockInstance">
-      <documentation>instance. TS type: bomcomp:BlockInstance. (required)</documentation>
+      <documentation>
+        instance. TS type: bomcomp:BlockInstance. (required)
+      </documentation>
     </instance>
     <context type="seremit:EmitContext">
-      <documentation>context. TS type: seremit:EmitContext. (required)</documentation>
+      <documentation>
+        context. TS type: seremit:EmitContext. (required)
+      </documentation>
     </context>
   </properties>
-
-</block>
+</sercap:EmitBlockInstance>

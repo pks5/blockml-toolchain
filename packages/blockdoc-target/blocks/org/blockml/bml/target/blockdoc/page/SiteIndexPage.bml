@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Page — SiteIndexPage
-  FQN: org.blockml.bml.target.blockdoc.page.SiteIndexPage
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Page — SiteIndexPage
+  FQN: org.blockml.bml.target.blockdoc.page.SiteIndexPage-->
+<bdpage:SiteIndexPage xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,24 +21,27 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>SiteIndexPage</name>
-  <type>bdpage:SiteIndexPage</type>
-  <baseType>blockdoc:BlockdocType</baseType>
-  <is>HTML template model for the All Blocks listing</is>
-
+  <baseType>
+    blockdoc:BlockdocType
+  </baseType>
+  <is>
+    HTML template model for the All Blocks listing
+  </is>
   <documentation>
     # HTML template model for the All Blocks listing
-
+    
     Emitted as all-blocks.html (merged) or {libraryPrefix}/all-blocks.html (perLibrary). Title "BlockDoc" (merged) or "{libraryPrefix} — BlockDoc" (perLibrary). Lists only root FQNs. One library: grouped by package prefix. Multiple libraries: grouped by library then package (BD21). Includes sticky toolbar (BD25) with Index → interesting home and All Blocks → this page.
   </documentation>
-
   <properties>
     <title type="type:Text">
-      <documentation>Page h1 / title. (required)</documentation>
+      <documentation>
+        Page h1 / title. (required)
+      </documentation>
     </title>
     <html type="type:Text">
-      <documentation>Full HTML document string. (required)</documentation>
+      <documentation>
+        Full HTML document string. (required)
+      </documentation>
     </html>
   </properties>
-
-</block>
+</bdpage:SiteIndexPage>

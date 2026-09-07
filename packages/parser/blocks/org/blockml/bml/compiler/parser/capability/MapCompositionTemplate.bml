@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — MapCompositionTemplate
-  FQN: org.blockml.bml.compiler.parser.capability.MapCompositionTemplate
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — MapCompositionTemplate
+  FQN: org.blockml.bml.compiler.parser.capability.MapCompositionTemplate-->
+<parcap:MapCompositionTemplate xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,23 +23,30 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>MapCompositionTemplate</name>
-  <type>parcap:MapCompositionTemplate</type>
-  <baseType>core:Capability</baseType>
-  <is>Map &lt;composition> element to CompositionTemplate</is>
-
-  <documentation><![CDATA[Map <composition> element to CompositionTemplate]]></documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Map &lt;composition> element to CompositionTemplate
+  </is>
+  <documentation>
+    <![CDATA[Map <composition> element to CompositionTemplate]]>
+  </documentation>
   <properties>
     <element type="parmap:XmlDomNode">
-      <documentation>element. TS type: parmap:XmlDomNode. (required)</documentation>
+      <documentation>
+        element. TS type: parmap:XmlDomNode. (required)
+      </documentation>
     </element>
     <ctx type="parmap:MapContext">
-      <documentation>ctx. TS type: parmap:MapContext. (required)</documentation>
+      <documentation>
+        ctx. TS type: parmap:MapContext. (required)
+      </documentation>
     </ctx>
     <template type="bomcomp:CompositionTemplate">
-      <documentation>template. TS type: bomcomp:CompositionTemplate. (required)</documentation>
+      <documentation>
+        template. TS type: bomcomp:CompositionTemplate. (required)
+      </documentation>
     </template>
   </properties>
-
-</block>
+</parcap:MapCompositionTemplate>

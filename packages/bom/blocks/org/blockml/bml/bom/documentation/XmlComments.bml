@@ -1,12 +1,6 @@
-<!--
-  BOM Documentation — XmlComments
-  FQN: org.blockml.bml.bom.documentation.XmlComments
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Documentation — XmlComments
+  FQN: org.blockml.bml.bom.documentation.XmlComments-->
+<bomdocumentation:XmlComments xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -24,24 +18,26 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>XmlComments</name>
-  <type>bomdocumentation:XmlComments</type>
-  <baseType>core:Documentation</baseType>
-  <is>XML comment binding rules (B11, B22)</is>
-
-  <documentation>Comments are part of maximum authored surface — parser binds, never drops.
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    XML comment binding rules (B11, B22)
+  </is>
+  <documentation>
+    Comments are part of maximum authored surface — parser binds, never drops.
+    
     1. Comment(s) before element E → E.xmlTrivia.leadingComments[] (document order)
     2. Comment(s) after E end tag before next sibling → trailingComments[] (incl. same-line)
     3. File-header before root block → root BlockDefinition.xmlTrivia.leadingComments
     4. Before member-section container → memberSectionTrivia[section]
     5. Before metadata child (name, final, …) → metadataTrivia[localName]
     6. Dangling comment → trailingComments of previous sibling or root
-
+    
     NOT preserved (Phase A): processing instructions; formatting whitespace (B13); attribute order.
     DO preserve: comments (B11); dual placement (D9); CDATA form (D8).
-
+    
     Serializer: re-emit leading before element; trailing on next line after end tag + blank line (B22).
-    Sibling order follows B12. Layout whitespace not part of BOM equality (B10/B13).</documentation>
-
-</block>
+    Sibling order follows B12. Layout whitespace not part of BOM equality (B10/B13).
+  </documentation>
+</bomdocumentation:XmlComments>

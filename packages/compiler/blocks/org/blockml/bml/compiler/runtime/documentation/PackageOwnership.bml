@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Documentation — PackageOwnership
-  FQN: org.blockml.bml.compiler.runtime.documentation.PackageOwnership
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Documentation — PackageOwnership
+  FQN: org.blockml.bml.compiler.runtime.documentation.PackageOwnership-->
+<rundocumentation:PackageOwnership xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -26,21 +20,23 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PackageOwnership</name>
-  <type>rundocumentation:PackageOwnership</type>
-  <baseType>core:Documentation</baseType>
-  <is>What belongs in @blockml/compiler vs neighbors</is>
-
-  <documentation>Owns: compileToOutput and sugar, Target Registry API, ResolveScope/ScopeAccepts,
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    What belongs in @blockml/compiler vs neighbors
+  </is>
+  <documentation>
+    Owns: compileToOutput and sugar, Target Registry API, ResolveScope/ScopeAccepts,
     RenderContext/Session, CompileRequest/Options, CompilerResult, C1–C7 contracts,
     orchestration of parse/validate/bootstrap for Stage-3.
-
+    
     Does not own: CLI commands, file write, exit codes, C5/C6 (cli);
     parser/serializer/validator algorithms; framework TypeRegistry internals;
-    target Options and emit; MachineBlocks SCAD NativeBlock.</documentation>
+    target Options and emit; MachineBlocks SCAD NativeBlock.
+  </documentation>
   <references>
     <see type="rundocumentation:ScopeExclusions" relation="ReadNext" />
     <see type="cli:Library" relation="SeeAlso" />
   </references>
-
-</block>
+</rundocumentation:PackageOwnership>

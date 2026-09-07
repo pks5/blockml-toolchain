@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Documentation — Introduction
-  FQN: org.blockml.bml.target.blockdoc.documentation.Introduction
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Documentation — Introduction
+  FQN: org.blockml.bml.target.blockdoc.documentation.Introduction-->
+<bddocumentation:Introduction xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -28,27 +22,29 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>Introduction</name>
-  <type>bddocumentation:Introduction</type>
-  <baseType>core:Documentation</baseType>
-  <is>Purpose and scope of the BlockDoc render target</is>
-
-  <documentation>The @blockml/blockdoc-target package implements RenderTarget registry name blockdoc.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Purpose and scope of the BlockDoc render target
+  </is>
+  <documentation>
+    The @blockml/blockdoc-target package implements RenderTarget registry name blockdoc.
     It is the V1 Stage-3 control gate: browseable static HTML of the block corpus for human
     and LLM review after roundtrip — not a product SCAD/XSD emitter.
-
+    
     This library (org.blockml.bml.target.blockdoc.*) is the SSOT. TypeScript in
     packages/blockdoc-target/src/ implements it. Tests in packages/blockdoc-target/test/
     encode behavioral contracts.
-
+    
     Pipeline placement: TypeRegistry (+ optional libraryPaths) → BlockDocTarget.render →
     multi-file HTML under outDir (CLI default blockdoc/). Accepts compile scopes library, corpus, auto.
-
+    
     Related host wiring (CLI bootstrap, compileToOutput, scope auto resolution) lives in
-    @blockml/compiler / @blockml/cli — see PackageOwnership.</documentation>
+    @blockml/compiler / @blockml/cli — see PackageOwnership.
+  </documentation>
   <references>
     <see type="bddocumentation:LayerSeparation" relation="ReadNext" />
     <see type="bdcap:Render" relation="SeeAlso" />
   </references>
-
-</block>
+</bddocumentation:Introduction>

@@ -1,12 +1,6 @@
-<!--
-  CLI API — ParsedArgs
-  FQN: org.blockml.bml.cli.api.ParsedArgs
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI API — ParsedArgs
+  FQN: org.blockml.bml.cli.api.ParsedArgs-->
+<cliapi:ParsedArgs xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,43 +14,165 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ParsedArgs</name>
-  <type>cliapi:ParsedArgs</type>
-  <baseType>cli:CliType</baseType>
-  <is>Result of parseArgs(argv)</is>
-
-  <documentation>CLI9: parsed command-line arguments from process.argv slice.</documentation>
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    Result of parseArgs(argv)
+  </is>
+  <documentation>
+    CLI9: parsed command-line arguments from process.argv slice.
+  </documentation>
   <properties>
-    <command type="type:Text"><documentation>validate | compile | search | graph | inspect | transform | new. (optional)</documentation></command>
-    <subcommand type="type:Text"><documentation>Subcommand of command. For transform: apply. For graph: index, neighbors, uses, used-by, ancestors, descendants, members, path, query, schema. (optional)</documentation></subcommand>
-    <target type="type:Text"><documentation>Registry name e.g. blockdoc, xsd, fatblock. (optional)</documentation></target>
-    <file type="type:Text"><documentation>Path to .bml file for document targets or validate. (optional)</documentation></file>
-    <all type="type:Boolean"><documentation>--all: validate entire registry including npm (validate) or document compile. (optional)</documentation></all>
-    <outDir type="type:Text"><documentation>--out override. (optional)</documentation></outDir>
-    <srcDir type="type:Text"><documentation>--src override. (optional)</documentation></srcDir>
-    <libraries type="type:Text"><documentation>--libraries comma-separated override of config.libraries extras (identity seed remains). (optional)</documentation></libraries>
-    <library type="type:Text"><documentation>--library path to the target Library.bml for transform apply. Distinct from --libraries. (optional)</documentation></library>
-    <include type="type:Text"><documentation>--include comma-separated for fatblock. (optional)</documentation></include>
-    <perPackage type="type:Boolean"><documentation>--per-package: one fatblock per local package.json blockml.library. (optional)</documentation></perPackage>
-    <verbose type="type:Boolean"><documentation>--verbose: validate bootstrap lists; transform streams additional agent-session detail. Lifecycle lines always print. (optional)</documentation></verbose>
-    <json type="type:Boolean"><documentation>--json: machine-readable output (search, graph; inspect is always JSON). (optional)</documentation></json>
-    <force type="type:Boolean"><documentation>--force: alias of full rebuild for search or graph index. (optional)</documentation></force>
-    <limit type="type:Integer"><documentation>--limit: max search hits, or max graph uses/used-by/neighbors after --origin/--relation filters. (optional)</documentation></limit>
-    <query type="type:Text"><documentation>Joined positional query for search, or Cypher for graph query. (optional)</documentation></query>
-    <index type="type:Boolean"><documentation>search index subcommand: full rebuild. (optional)</documentation></index>
-    <graphFqn type="type:Text"><documentation>Block FQN for graph ops, or path start. (optional)</documentation></graphFqn>
-    <graphTo type="type:Text"><documentation>Path end FQN for graph path. (optional)</documentation></graphTo>
-    <depth type="type:Integer"><documentation>--depth: uses/used-by/neighbors hops (default 1); ancestors/descendants/path max hops (default 16); inspect expansion (0 allowed). members ignores --depth. (optional)</documentation></depth>
-    <inspectFqn type="type:Text"><documentation>Block FQN for inspect. (optional)</documentation></inspectFqn>
-    <executionFqn type="type:Text"><documentation>FQN of an Apply-source ModelTransformation for transform apply (pending, available, or template outside _meta.transform). (optional)</documentation></executionFqn>
-    <parametersJson type="type:Text"><documentation>Raw --parameters JSON value for transform apply. (optional)</documentation></parametersJson>
-    <parameterMappingsJson type="type:Text"><documentation>Raw --parameter-mappings JSON array for transform apply. (optional)</documentation></parameterMappingsJson>
-    <newFqn type="type:Text"><documentation>FQN for blockml new. (optional)</documentation></newFqn>
-    <newBaseType type="type:Text"><documentation>--baseType for blockml new. (optional)</documentation></newBaseType>
-    <newIs type="type:Text"><documentation>--is for blockml new. (optional)</documentation></newIs>
-    <help type="type:Boolean"><documentation>--help / -h: print help page and exit 0. (optional)</documentation></help>
-    <origin type="type:Text"><documentation>--origin: comma-separated workspace|dependency|unresolved filter for graph uses/used-by/neighbors. (optional)</documentation></origin>
-    <relation type="type:Text"><documentation>--relation: comma-separated GraphRelation filter for graph uses/used-by/neighbors. (optional)</documentation></relation>
+    <command type="type:Text">
+      <documentation>
+        validate | compile | search | graph | inspect | transform | new. (optional)
+      </documentation>
+    </command>
+    <subcommand type="type:Text">
+      <documentation>
+        Subcommand of command. For transform: apply. For graph: index, neighbors, uses, used-by, ancestors, descendants, members, path, query, schema. (optional)
+      </documentation>
+    </subcommand>
+    <target type="type:Text">
+      <documentation>
+        Registry name e.g. blockdoc, xsd, fatblock. (optional)
+      </documentation>
+    </target>
+    <file type="type:Text">
+      <documentation>
+        Path to .bml file for document targets or validate. (optional)
+      </documentation>
+    </file>
+    <all type="type:Boolean">
+      <documentation>
+        --all: validate entire registry including npm (validate) or document compile. (optional)
+      </documentation>
+    </all>
+    <outDir type="type:Text">
+      <documentation>
+        --out override. (optional)
+      </documentation>
+    </outDir>
+    <srcDir type="type:Text">
+      <documentation>
+        --src override. (optional)
+      </documentation>
+    </srcDir>
+    <libraries type="type:Text">
+      <documentation>
+        --libraries comma-separated override of config.libraries extras (identity seed remains). (optional)
+      </documentation>
+    </libraries>
+    <library type="type:Text">
+      <documentation>
+        --library path to the target Library.bml for transform apply. Distinct from --libraries. (optional)
+      </documentation>
+    </library>
+    <include type="type:Text">
+      <documentation>
+        --include comma-separated for fatblock. (optional)
+      </documentation>
+    </include>
+    <perPackage type="type:Boolean">
+      <documentation>
+        --per-package: one fatblock per local package.json blockml.library. (optional)
+      </documentation>
+    </perPackage>
+    <verbose type="type:Boolean">
+      <documentation>
+        --verbose: validate bootstrap lists; transform streams additional agent-session detail. Lifecycle lines always print. (optional)
+      </documentation>
+    </verbose>
+    <json type="type:Boolean">
+      <documentation>
+        --json: machine-readable output (search, graph; inspect is always JSON). (optional)
+      </documentation>
+    </json>
+    <force type="type:Boolean">
+      <documentation>
+        --force: alias of full rebuild for search or graph index. (optional)
+      </documentation>
+    </force>
+    <limit type="type:Integer">
+      <documentation>
+        --limit: max search hits, or max graph uses/used-by/neighbors after --origin/--relation filters. (optional)
+      </documentation>
+    </limit>
+    <query type="type:Text">
+      <documentation>
+        Joined positional query for search, or Cypher for graph query. (optional)
+      </documentation>
+    </query>
+    <index type="type:Boolean">
+      <documentation>
+        search index subcommand: full rebuild. (optional)
+      </documentation>
+    </index>
+    <graphFqn type="type:Text">
+      <documentation>
+        Block FQN for graph ops, or path start. (optional)
+      </documentation>
+    </graphFqn>
+    <graphTo type="type:Text">
+      <documentation>
+        Path end FQN for graph path. (optional)
+      </documentation>
+    </graphTo>
+    <depth type="type:Integer">
+      <documentation>
+        --depth: uses/used-by/neighbors hops (default 1); ancestors/descendants/path max hops (default 16); inspect expansion (0 allowed). members ignores --depth. (optional)
+      </documentation>
+    </depth>
+    <inspectFqn type="type:Text">
+      <documentation>
+        Block FQN for inspect. (optional)
+      </documentation>
+    </inspectFqn>
+    <executionFqn type="type:Text">
+      <documentation>
+        FQN of an Apply-source ModelTransformation for transform apply (pending, available, or template outside _meta.transform). (optional)
+      </documentation>
+    </executionFqn>
+    <parametersJson type="type:Text">
+      <documentation>
+        Raw --parameters JSON value for transform apply. (optional)
+      </documentation>
+    </parametersJson>
+    <parameterMappingsJson type="type:Text">
+      <documentation>
+        Raw --parameter-mappings JSON array for transform apply. (optional)
+      </documentation>
+    </parameterMappingsJson>
+    <newFqn type="type:Text">
+      <documentation>
+        FQN for blockml new. (optional)
+      </documentation>
+    </newFqn>
+    <newBaseType type="type:Text">
+      <documentation>
+        --baseType for blockml new. (optional)
+      </documentation>
+    </newBaseType>
+    <newIs type="type:Text">
+      <documentation>
+        --is for blockml new. (optional)
+      </documentation>
+    </newIs>
+    <help type="type:Boolean">
+      <documentation>
+        --help / -h: print help page and exit 0. (optional)
+      </documentation>
+    </help>
+    <origin type="type:Text">
+      <documentation>
+        --origin: comma-separated workspace|dependency|unresolved filter for graph uses/used-by/neighbors. (optional)
+      </documentation>
+    </origin>
+    <relation type="type:Text">
+      <documentation>
+        --relation: comma-separated GraphRelation filter for graph uses/used-by/neighbors. (optional)
+      </documentation>
+    </relation>
   </properties>
-
-</block>
+</cliapi:ParsedArgs>

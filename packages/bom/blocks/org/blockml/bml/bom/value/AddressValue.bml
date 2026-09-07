@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — AddressValue
-  FQN: org.blockml.bml.bom.value.AddressValue
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — AddressValue
+  FQN: org.blockml.bml.bom.value.AddressValue-->
+<bomvalue:AddressValue xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,21 +17,26 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>AddressValue</name>
-  <type>bomvalue:AddressValue</type>
-  <baseType>bomvalue:MemberValue</baseType>
-  <is>Parsed Address member value</is>
-
-  <documentation>Parsed Address member value</documentation>
-
+  <baseType>
+    bomvalue:MemberValue
+  </baseType>
+  <is>
+    Parsed Address member value
+  </is>
+  <documentation>
+    Parsed Address member value
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind (required). TS type: type:Text.</documentation>
+      <documentation>
+        kind (required). TS type: type:Text.
+      </documentation>
       <value>address</value>
     </kind>
     <address type="bomvalue:Address">
-      <documentation>address (required). TS type: bomvalue:Address.</documentation>
+      <documentation>
+        address (required). TS type: bomvalue:Address.
+      </documentation>
     </address>
   </properties>
-
-</block>
+</bomvalue:AddressValue>

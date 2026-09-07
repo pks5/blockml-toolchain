@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — AssertBlockRoot
-  FQN: org.blockml.bml.compiler.parser.capability.AssertBlockRoot
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — AssertBlockRoot
+  FQN: org.blockml.bml.compiler.parser.capability.AssertBlockRoot-->
+<parcap:AssertBlockRoot xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,25 +24,29 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>AssertBlockRoot</name>
-  <type>parcap:AssertBlockRoot</type>
-  <baseType>core:Capability</baseType>
-  <is>Root type resolver — step [3]; &lt;block> or a type tag</is>
-
-  <documentation><![CDATA[Accepts legacy <block> or a type-as-root tag (PascalCase local
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Root type resolver — step [3]; &lt;block> or a type tag
+  </is>
+  <documentation>
+    <![CDATA[
+    Accepts legacy <block> or a type-as-root tag (PascalCase local
     name, optional Package prefix). Throws BML_INVALID_ROOT otherwise
-    (doc:DocumentFormat).]]></documentation>
-
+    (doc:DocumentFormat).
+    ]]>
+  </documentation>
   <references>
     <see type="parconfig:ParserConstants" relation="SeeAlso" />
     <see type="pardocumentation:ArchitectureOverview" relation="SeeAlso" />
     <see type="doc:DocumentFormat" relation="SeeAlso" />
   </references>
-
   <properties>
     <element type="parmap:XmlDomNode">
-      <documentation>element. TS type: parmap:XmlDomNode. (required)</documentation>
+      <documentation>
+        element. TS type: parmap:XmlDomNode. (required)
+      </documentation>
     </element>
   </properties>
-
-</block>
+</parcap:AssertBlockRoot>

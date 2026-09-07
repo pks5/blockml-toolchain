@@ -1,12 +1,6 @@
-<!--
-  XSD Documentation — Diagnostics
-  FQN: org.blockml.bml.target.xsd.documentation.Diagnostics
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--XSD Documentation — Diagnostics
+  FQN: org.blockml.bml.target.xsd.documentation.Diagnostics-->
+<xsddocumentation:Diagnostics xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -22,23 +16,23 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>Diagnostics</name>
-  <type>xsddocumentation:Diagnostics</type>
-  <baseType>core:Documentation</baseType>
-  <is>Emit path has no package-local diagnostics</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Emit path has no package-local diagnostics
+  </is>
   <documentation>
     # Emit path has no package-local diagnostics
-
+    
     V1 XSD target emits without package diagnostics codes. Failures surface as host/CLI
     or empty/malformed output only if upstream session is broken.
-
+    
     Generated schema is non-authoritative; CLI validate does not invoke this target.
-
+    
     Scope mismatch for accepts is compiler/CLI (BML_TARGET_SCOPE_MISMATCH).
   </documentation>
   <references>
     <see type="xsddocumentation:DesignDecisions" relation="ReadNext" />
   </references>
-
-</block>
+</xsddocumentation:Diagnostics>

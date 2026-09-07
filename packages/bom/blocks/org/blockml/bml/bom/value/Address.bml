@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — Address
-  FQN: org.blockml.bml.bom.value.Address
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — Address
+  FQN: org.blockml.bml.bom.value.Address-->
+<bomvalue:Address xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,32 +17,45 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Address</name>
-  <type>bomvalue:Address</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Parsed org.blockml.bml.type.Address shape</is>
-
-  <documentation>BOM projection of Address ValueType — see @blockml/core type/Address.bml.</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Parsed org.blockml.bml.type.Address shape
+  </is>
+  <documentation>
+    BOM projection of Address ValueType — see @blockml/core type/Address.bml.
+  </documentation>
   <properties>
     <raw type="type:Text">
-      <documentation>raw (required). TS type: type:Text.</documentation>
+      <documentation>
+        raw (required). TS type: type:Text.
+      </documentation>
     </raw>
     <scheme type="type:Text">
-      <documentation>string | null in TS — required field, nullable value. (required)</documentation>
+      <documentation>
+        string | null in TS — required field, nullable value. (required)
+      </documentation>
     </scheme>
     <path type="type:Text">
-      <documentation>path (required). TS type: type:Text.</documentation>
+      <documentation>
+        path (required). TS type: type:Text.
+      </documentation>
     </path>
     <isAbsolute type="type:Boolean">
-      <documentation>isAbsolute (required). TS type: type:Boolean.</documentation>
+      <documentation>
+        isAbsolute (required). TS type: type:Boolean.
+      </documentation>
     </isAbsolute>
     <isRelative type="type:Boolean">
-      <documentation>isRelative (required). TS type: type:Boolean.</documentation>
+      <documentation>
+        isRelative (required). TS type: type:Boolean.
+      </documentation>
     </isRelative>
     <isExpression type="type:Boolean">
-      <documentation>isExpression (required). TS type: type:Boolean.</documentation>
+      <documentation>
+        isExpression (required). TS type: type:Boolean.
+      </documentation>
     </isExpression>
   </properties>
-
-</block>
+</bomvalue:Address>

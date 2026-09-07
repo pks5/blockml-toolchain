@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — SourceLoc
-  FQN: org.blockml.bml.compiler.parser.capability.SourceLoc
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — SourceLoc
+  FQN: org.blockml.bml.compiler.parser.capability.SourceLoc-->
+<parcap:SourceLoc xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,26 +23,35 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>SourceLoc</name>
-  <type>parcap:SourceLoc</type>
-  <baseType>core:Capability</baseType>
-  <is>Build SourceLocation from file path and line/column</is>
-
-  <documentation>Build SourceLocation from file path and line/column</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Build SourceLocation from file path and line/column
+  </is>
+  <documentation>
+    Build SourceLocation from file path and line/column
+  </documentation>
   <properties>
     <filePath type="type:Text">
-      <documentation>filePath. TS type: type:Text. (required)</documentation>
+      <documentation>
+        filePath. TS type: type:Text. (required)
+      </documentation>
     </filePath>
     <line type="type:Integer">
-      <documentation>line. TS type: type:Integer. (required)</documentation>
+      <documentation>
+        line. TS type: type:Integer. (required)
+      </documentation>
     </line>
     <column type="type:Integer">
-      <documentation>column. TS type: type:Integer. (required)</documentation>
+      <documentation>
+        column. TS type: type:Integer. (required)
+      </documentation>
     </column>
     <location type="bomcommon:SourceLocation">
-      <documentation>location. TS type: bomcommon:SourceLocation. (required)</documentation>
+      <documentation>
+        location. TS type: bomcommon:SourceLocation. (required)
+      </documentation>
     </location>
   </properties>
-
-</block>
+</parcap:SourceLoc>

@@ -1,12 +1,6 @@
-<!--
-  Parser Documentation — PublicApi
-  FQN: org.blockml.bml.compiler.parser.documentation.PublicApi
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Documentation — PublicApi
+  FQN: org.blockml.bml.compiler.parser.documentation.PublicApi-->
+<pardocumentation:PublicApi xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,13 +24,16 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PublicApi</name>
-  <type>pardocumentation:PublicApi</type>
-  <baseType>core:Documentation</baseType>
-  <is>parse() entry point (B26)</is>
-
-  <documentation><![CDATA[parse(source: string, options?: ParseOptions): ParseResult
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    parse() entry point (B26)
+  </is>
+  <documentation>
+    <![CDATA[
+    parse(source: string, options?: ParseOptions): ParseResult
+    
     ParseOptions (owned by @blockml/bom):
     • filePath — default "<memory>"; written to BomDocument.source.filePath
     • continueOnError — default true; keep mapping after errors when possible
@@ -44,12 +41,12 @@
       registry bootstrap). When set, scalar member values use the hook only;
       Boolean/number heuristics run only during bootstrap (no hook). Expression
       and interpolation classification always run.
-
+    
     ParseResult (owned by @blockml/bom):
     • document — BomDocument | null (null on hard fail)
     • diagnostics — Diagnostic[]
     • success — false if any diagnostic has severity === "error"
-
+    
     Behaviour:
     • B24 detect → [2] xmldom → [3]–[5] map
     • Hard fail → document: null (unsupported format, missing root, invalid root)
@@ -57,13 +54,13 @@
       carries a span; otherwise BML_MAP_ERROR at 1:1. continueOnError still returns
       document when possible
     • Sync only; no throw on recoverable errors
-    • Does NOT call validator; does NOT expand directives]]></documentation>
-
+    • Does NOT call validator; does NOT expand directives
+    ]]>
+  </documentation>
   <references>
     <see type="bomapi:ParseOptions" relation="Defines" />
     <see type="bomapi:ParseResult" relation="Defines" />
     <see type="parcap:Parse" relation="Defines" />
     <see type="pardocumentation:MappingPrinciples" relation="ReadNext" />
   </references>
-
-</block>
+</pardocumentation:PublicApi>

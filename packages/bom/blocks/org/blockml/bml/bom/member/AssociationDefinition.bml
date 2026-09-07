@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — AssociationDefinition
-  FQN: org.blockml.bml.bom.member.AssociationDefinition
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — AssociationDefinition
+  FQN: org.blockml.bml.bom.member.AssociationDefinition-->
+<bommember:AssociationDefinition xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,24 +17,31 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>AssociationDefinition</name>
-  <type>bommember:AssociationDefinition</type>
-  <baseType>bommember:MemberDefinitionBase</baseType>
-  <is>Association member definition (kind: association)</is>
-
-  <documentation>Association member definition (kind: association)</documentation>
-
+  <baseType>
+    bommember:MemberDefinitionBase
+  </baseType>
+  <is>
+    Association member definition (kind: association)
+  </is>
+  <documentation>
+    Association member definition (kind: association)
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind (required). TS type: type:Text.</documentation>
+      <documentation>
+        kind (required). TS type: type:Text.
+      </documentation>
       <value>association</value>
     </kind>
     <type type="bomtype:TypeExpression">
-      <documentation>type (required). TS type: bomtype:TypeExpression.</documentation>
+      <documentation>
+        type (required). TS type: bomtype:TypeExpression.
+      </documentation>
     </type>
     <cardinality type="type:Text">
-      <documentation>"0..1" | "0..n". (required)</documentation>
+      <documentation>
+        "0..1" | "0..n". (required)
+      </documentation>
     </cardinality>
   </properties>
-
-</block>
+</bommember:AssociationDefinition>

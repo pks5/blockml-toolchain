@@ -1,12 +1,6 @@
-<!--
-  Graph Documentation — PublicApi
-  FQN: org.blockml.bml.graph.documentation.PublicApi
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph Documentation — PublicApi
+  FQN: org.blockml.bml.graph.documentation.PublicApi-->
+<graphdocumentation:PublicApi xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,24 +15,28 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>PublicApi</name>
-  <type>graphdocumentation:PublicApi</type>
-  <baseType>core:Documentation</baseType>
-  <is>Exported API from packages/graph/src/index.ts</is>
-  <documentation>buildIndex(options?) → BuildIndexResult
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Exported API from packages/graph/src/index.ts
+  </is>
+  <documentation>
+    buildIndex(options?) → BuildIndexResult
     buildMemoryIndex(registry, options?) → GraphIndex
     rebuildIndex(options?) → BuildIndexResult
     loadIndex(options?) → GraphIndex | undefined
     getIndexStatus(options?) → IndexStatus
     openGraph(options?) → BuildIndexResult
-
+    
     GraphIndex: uses, usedBy, neighbors, ancestors, descendants, path, members, schema, query, block, close.
     uses/usedBy/neighbors take GraphDepthOptions (default 1 hop). Further hops set GraphNeighbor.source.
     schema() includes a Ladybug Cypher subset description and example. No type() or shortestPath().
     path follows outgoing authored edges only. block(fqn) returns the Block node or absent.
-    Ladybug types are not exported.</documentation>
+    Ladybug types are not exported.
+  </documentation>
   <references>
     <see type="graphcap:BuildIndex" relation="Defines" />
     <see type="graphcap:Query" relation="Defines" />
   </references>
-</block>
+</graphdocumentation:PublicApi>

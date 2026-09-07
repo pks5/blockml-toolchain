@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — MapBlock
-  FQN: org.blockml.bml.compiler.parser.capability.MapBlock
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — MapBlock
+  FQN: org.blockml.bml.compiler.parser.capability.MapBlock-->
+<parcap:MapBlock xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,27 +23,33 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>MapBlock</name>
-  <type>parcap:MapBlock</type>
-  <baseType>core:Capability</baseType>
-  <is>Map XML element to BlockDefinition</is>
-
-  <documentation>Map XML element to BlockDefinition</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Map XML element to BlockDefinition
+  </is>
+  <documentation>
+    Map XML element to BlockDefinition
+  </documentation>
   <references>
     <see type="pardocumentation:MemberMapping" relation="SeeAlso" />
   </references>
-
   <properties>
     <element type="parmap:XmlDomNode">
-      <documentation>element. TS type: parmap:XmlDomNode. (required)</documentation>
+      <documentation>
+        element. TS type: parmap:XmlDomNode. (required)
+      </documentation>
     </element>
     <ctx type="parmap:MapContext">
-      <documentation>ctx. TS type: parmap:MapContext. (required)</documentation>
+      <documentation>
+        ctx. TS type: parmap:MapContext. (required)
+      </documentation>
     </ctx>
     <block type="bomblock:BlockDefinition">
-      <documentation>block. TS type: bomblock:BlockDefinition. (required)</documentation>
+      <documentation>
+        block. TS type: bomblock:BlockDefinition. (required)
+      </documentation>
     </block>
   </properties>
-
-</block>
+</parcap:MapBlock>

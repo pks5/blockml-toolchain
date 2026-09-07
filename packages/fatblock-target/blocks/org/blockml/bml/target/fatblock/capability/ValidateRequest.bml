@@ -1,12 +1,6 @@
-<!--
-  FatBlock Capability — ValidateRequest
-  FQN: org.blockml.bml.target.fatblock.capability.ValidateRequest
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock Capability — ValidateRequest
+  FQN: org.blockml.bml.target.fatblock.capability.ValidateRequest-->
+<fbcap:ValidateRequest xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -22,24 +16,28 @@
   xmlns:serializer="org.blockml.bml.compiler.serializer"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ValidateRequest</name>
-  <type>fbcap:ValidateRequest</type>
-  <baseType>core:Capability</baseType>
-  <is>Validate CompileRequest before render</is>
-
-  <documentation>FB3: if srcDir missing, return BML_FATBLOCK_SRC_REQUIRED error diagnostic. Otherwise empty list.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Validate CompileRequest before render
+  </is>
+  <documentation>
+    FB3: if srcDir missing, return BML_FATBLOCK_SRC_REQUIRED error diagnostic. Otherwise empty list.
+  </documentation>
   <references>
     <see type="fbdocumentation:Diagnostics" relation="SeeAlso" />
   </references>
-
   <properties>
     <request type="type:Text">
-      <documentation>CompileRequest. (required)</documentation>
+      <documentation>
+        CompileRequest. (required)
+      </documentation>
     </request>
     <result type="type:Text">
-      <documentation>Diagnostic[]. (required)</documentation>
+      <documentation>
+        Diagnostic[]. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</fbcap:ValidateRequest>

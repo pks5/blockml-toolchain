@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — XmlNodeKind
-  FQN: org.blockml.bml.bom.common.XmlNodeKind
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — XmlNodeKind
+  FQN: org.blockml.bml.bom.common.XmlNodeKind-->
+<bomcommon:XmlNodeKind xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,17 +17,20 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>XmlNodeKind</name>
-  <type>bomcommon:XmlNodeKind</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>XML node placement kind</is>
-
-  <documentation>String-literal union: "attribute" | "element" | "text".</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    XML node placement kind
+  </is>
+  <documentation>
+    String-literal union: "attribute" | "element" | "text".
+  </documentation>
   <properties>
     <value type="type:Text">
-      <documentation>value (required). TS type: type:Text.</documentation>
+      <documentation>
+        value (required). TS type: type:Text.
+      </documentation>
     </value>
   </properties>
-
-</block>
+</bomcommon:XmlNodeKind>

@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime API — ScopeConfigHints
-  FQN: org.blockml.bml.compiler.runtime.api.ScopeConfigHints
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime API — ScopeConfigHints
+  FQN: org.blockml.bml.compiler.runtime.api.ScopeConfigHints-->
+<runapi:ScopeConfigHints xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,19 +19,33 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>ScopeConfigHints</name>
-  <type>runapi:ScopeConfigHints</type>
-  <baseType>runtime:RuntimeType</baseType>
-  <is>Host hints merged into ResolveScope</is>
-
-  <documentation>CLI passes libraries/roots/rootDir from blockml.config.json.</documentation>
+  <baseType>
+    runtime:RuntimeType
+  </baseType>
+  <is>
+    Host hints merged into ResolveScope
+  </is>
+  <documentation>
+    CLI passes libraries/roots/rootDir from blockml.config.json.
+  </documentation>
   <references>
     <see type="rundocumentation:PublicApi" relation="SeeAlso" />
   </references>
   <properties>
-    <libraries type="type:Text"><documentation>Fallback Library.bml paths. (optional)</documentation></libraries>
-    <roots type="type:Text"><documentation>Fallback corpus roots. (optional)</documentation></roots>
-    <rootDir type="type:Text"><documentation>Root for empty-scope diagnostics. (optional)</documentation></rootDir>
+    <libraries type="type:Text">
+      <documentation>
+        Fallback Library.bml paths. (optional)
+      </documentation>
+    </libraries>
+    <roots type="type:Text">
+      <documentation>
+        Fallback corpus roots. (optional)
+      </documentation>
+    </roots>
+    <rootDir type="type:Text">
+      <documentation>
+        Root for empty-scope diagnostics. (optional)
+      </documentation>
+    </rootDir>
   </properties>
-
-</block>
+</runapi:ScopeConfigHints>

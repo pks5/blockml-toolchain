@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime API — ResolvedScope
-  FQN: org.blockml.bml.compiler.runtime.api.ResolvedScope
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime API — ResolvedScope
+  FQN: org.blockml.bml.compiler.runtime.api.ResolvedScope-->
+<runapi:ResolvedScope xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,20 +19,38 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>ResolvedScope</name>
-  <type>runapi:ResolvedScope</type>
-  <baseType>runtime:RuntimeType</baseType>
-  <is>Concrete scope after ResolveScope (never auto)</is>
-
-  <documentation>kind is document | library | corpus with corresponding payload fields.</documentation>
+  <baseType>
+    runtime:RuntimeType
+  </baseType>
+  <is>
+    Concrete scope after ResolveScope (never auto)
+  </is>
+  <documentation>
+    kind is document | library | corpus with corresponding payload fields.
+  </documentation>
   <references>
     <see type="rundocumentation:PublicApi" relation="SeeAlso" />
   </references>
   <properties>
-    <kind type="type:Text"><documentation>Resolved kind without auto. (required)</documentation></kind>
-    <document type="runapi:CompileInput"><documentation>When kind is document. (optional)</documentation></document>
-    <libraries type="type:Text"><documentation>When kind is library. (optional)</documentation></libraries>
-    <roots type="type:Text"><documentation>When kind is corpus. (optional)</documentation></roots>
+    <kind type="type:Text">
+      <documentation>
+        Resolved kind without auto. (required)
+      </documentation>
+    </kind>
+    <document type="runapi:CompileInput">
+      <documentation>
+        When kind is document. (optional)
+      </documentation>
+    </document>
+    <libraries type="type:Text">
+      <documentation>
+        When kind is library. (optional)
+      </documentation>
+    </libraries>
+    <roots type="type:Text">
+      <documentation>
+        When kind is corpus. (optional)
+      </documentation>
+    </roots>
   </properties>
-
-</block>
+</runapi:ResolvedScope>

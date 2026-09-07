@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — ValidateResult
-  FQN: org.blockml.bml.bom.api.ValidateResult
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — ValidateResult
+  FQN: org.blockml.bml.bom.api.ValidateResult-->
+<bomapi:ValidateResult xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,23 +17,30 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ValidateResult</name>
-  <type>bomapi:ValidateResult</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Result of validate() (Stage 2)</is>
-
-  <documentation>Result of @blockml/validator validate(). success is false when any diagnostic has severity error. pragmaticModel is the forked working copy when validation ran.</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Result of validate() (Stage 2)
+  </is>
+  <documentation>
+    Result of @blockml/validator validate(). success is false when any diagnostic has severity error. pragmaticModel is the forked working copy when validation ran.
+  </documentation>
   <properties>
     <pragmaticModel type="bomdoc:BomDocument">
-      <documentation>Pragmatic model fork — optional. TS type: bomdoc:BomDocument | undefined. (optional)</documentation>
+      <documentation>
+        Pragmatic model fork — optional. TS type: bomdoc:BomDocument | undefined. (optional)
+      </documentation>
     </pragmaticModel>
     <diagnostics type="bomcommon:Diagnostic[]">
-      <documentation>diagnostics (required). TS type: bomcommon:Diagnostic[].</documentation>
+      <documentation>
+        diagnostics (required). TS type: bomcommon:Diagnostic[].
+      </documentation>
     </diagnostics>
     <success type="type:Boolean">
-      <documentation>success (required). TS type: type:Boolean.</documentation>
+      <documentation>
+        success (required). TS type: type:Boolean.
+      </documentation>
     </success>
   </properties>
-
-</block>
+</bomapi:ValidateResult>

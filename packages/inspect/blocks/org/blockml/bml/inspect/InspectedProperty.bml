@@ -1,12 +1,6 @@
-<!--
-  Inspect — InspectedProperty
-  FQN: org.blockml.bml.inspect.InspectedProperty
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Inspect — InspectedProperty
+  FQN: org.blockml.bml.inspect.InspectedProperty-->
+<inspect:InspectedProperty xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,20 +15,25 @@
   xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>InspectedProperty</name>
-  <type>inspect:InspectedProperty</type>
-  <baseType>inspect:InspectedMember</baseType>
-  <is>One effective property in an Inspect projection</is>
-
-  <documentation>Projected property. type is the member type. value is a literal when authored.</documentation>
-
+  <baseType>
+    inspect:InspectedMember
+  </baseType>
+  <is>
+    One effective property in an Inspect projection
+  </is>
+  <documentation>
+    Projected property. type is the member type. value is a literal when authored.
+  </documentation>
   <properties>
     <type type="inspect:InspectTypeRef">
-      <documentation>Projected property type. (optional)</documentation>
+      <documentation>
+        Projected property type. (optional)
+      </documentation>
     </type>
     <value type="type:Text">
-      <documentation>Literal property value. TS: unknown. (optional)</documentation>
+      <documentation>
+        Literal property value. TS: unknown. (optional)
+      </documentation>
     </value>
   </properties>
-
-</block>
+</inspect:InspectedProperty>

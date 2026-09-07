@@ -1,12 +1,6 @@
-<!--
-  Parser — CharacterData
-  FQN: org.blockml.bml.compiler.parser.map.CharacterData
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser — CharacterData
+  FQN: org.blockml.bml.compiler.parser.map.CharacterData-->
+<parmap:CharacterData xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>CharacterData</name>
-  <type>parmap:CharacterData</type>
-  <baseType>parser:ParserType</baseType>
-  <is>Trimmed element character data and authored form</is>
-
-  <documentation>BML type gap: stands for TypeScript { text: string; form: "text" | "cdata" } from getCharacterData() (packages/parser/src/util/xml.ts).</documentation>
-
+  <baseType>
+    parser:ParserType
+  </baseType>
+  <is>
+    Trimmed element character data and authored form
+  </is>
+  <documentation>
+    BML type gap: stands for TypeScript { text: string; form: "text" | "cdata" } from getCharacterData() (packages/parser/src/util/xml.ts).
+  </documentation>
   <properties>
     <text type="type:Text">
-      <documentation>text. TS type: type:Text. (required)</documentation>
+      <documentation>
+        text. TS type: type:Text. (required)
+      </documentation>
     </text>
     <form type="bomcommon:CharacterDataForm">
-      <documentation>form. TS type: bomcommon:CharacterDataForm. (required)</documentation>
+      <documentation>
+        form. TS type: bomcommon:CharacterDataForm. (required)
+      </documentation>
     </form>
   </properties>
-
-</block>
+</parmap:CharacterData>

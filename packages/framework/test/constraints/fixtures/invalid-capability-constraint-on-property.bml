@@ -1,27 +1,25 @@
-<!--
-  Test fixture — invalid CapabilityConstraint on Property (BML_CONSTRAINT_TARGET_MISMATCH)
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Test fixture — invalid CapabilityConstraint on Property (BML_CONSTRAINT_TARGET_MISMATCH)-->
+<test:InvalidCapabilityOnProperty xmlns="http://blockml.org/bml"
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:validation="org.blockml.bml.validation"
   xmlns:test="com.blockml.test.constraints">
 
-  <type>test:InvalidCapabilityOnProperty</type>
-  <baseType>core:Block</baseType>
-  <is>A constraint test fixture</is>
-  <version>1.0.0</version>
-
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    A constraint test fixture
+  </is>
+  <version>
+    1.0.0
+  </version>
   <properties>
     <name type="type:Text">
       <constraints>
-        <constraint:RequiresImplementation validation="validation:Error"/>
+        <constraint:RequiresImplementation validation="validation:Error" />
       </constraints>
     </name>
   </properties>
-</block>
+</test:InvalidCapabilityOnProperty>

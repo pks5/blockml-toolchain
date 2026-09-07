@@ -1,12 +1,6 @@
-<!--
-  Framework Documentation — ArchitectureOverview
-  FQN: org.blockml.bml.framework.documentation.ArchitectureOverview
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.framework.documentation.ArchitectureOverview-->
+<fwdocumentation:ArchitectureOverview xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -32,13 +26,15 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ArchitectureOverview</name>
-  <type>fwdocumentation:ArchitectureOverview</type>
-  <baseType>core:Documentation</baseType>
-  <is>Module decomposition for framework utilities</is>
-
-  <documentation>Module decomposition (packages/framework/src/):
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Module decomposition for framework utilities
+  </is>
+  <documentation>
+    Module decomposition (packages/framework/src/):
+    
     registry/type-registry.ts — fwcap:TypeRegistry (register, get, has, keys, size)
     registry/bootstrap.ts — fwcap:BootstrapTypeRegistry, fwcap:DefaultBootstrapPaths
     registry/library-bootstrap.ts — library graph resolution (Library.bml dependencies),
@@ -52,13 +48,12 @@
       fwcap:IsLiteralValue
     validate/validate-versions.ts — fwcap:ValidateVersions
     validate/validate-constraints.ts — fwcap:ValidateConstraints
-
+    
     Internal data-structure types extend framework:FrameworkType.
-    Public operations are fwcap:* capabilities.</documentation>
-
+    Public operations are fwcap:* capabilities.
+  </documentation>
   <references>
     <see type="fwdocumentation:PublicApi" relation="ReadNext" />
     <see type="fwcap:TypeRegistry" relation="Defines" />
   </references>
-
-</block>
+</fwdocumentation:ArchitectureOverview>

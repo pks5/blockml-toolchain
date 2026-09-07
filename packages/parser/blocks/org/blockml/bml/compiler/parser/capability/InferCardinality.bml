@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — InferCardinality
-  FQN: org.blockml.bml.compiler.parser.capability.InferCardinality
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — InferCardinality
+  FQN: org.blockml.bml.compiler.parser.capability.InferCardinality-->
+<parcap:InferCardinality xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>InferCardinality</name>
-  <type>parcap:InferCardinality</type>
-  <baseType>core:Capability</baseType>
-  <is>Infer cardinality from TypeExpression shape</is>
-
-  <documentation>Infer cardinality from TypeExpression shape</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Infer cardinality from TypeExpression shape
+  </is>
+  <documentation>
+    Infer cardinality from TypeExpression shape
+  </documentation>
   <properties>
     <type type="bomtype:TypeExpression">
-      <documentation>type. TS type: bomtype:TypeExpression. (optional)</documentation>
+      <documentation>
+        type. TS type: bomtype:TypeExpression. (optional)
+      </documentation>
     </type>
     <cardinality type="type:Text">
-      <documentation>cardinality. TS type: type:Text. (optional)</documentation>
+      <documentation>
+        cardinality. TS type: type:Text. (optional)
+      </documentation>
     </cardinality>
   </properties>
-
-</block>
+</parcap:InferCardinality>

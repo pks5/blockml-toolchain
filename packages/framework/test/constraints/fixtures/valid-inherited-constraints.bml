@@ -1,26 +1,24 @@
-<!--
-  Test fixture — inherited ValuePresent from contract (effective member constraints)
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Test fixture — inherited ValuePresent from contract (effective member constraints)-->
+<test:InheritedConstraints xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:test="com.blockml.test.constraints"
   xmlns:type="org.blockml.bml.type">
 
-  <type>test:InheritedConstraints</type>
-  <baseType>core:Block</baseType>
-  <is>A constraint test fixture</is>
-  <version>1.0.0</version>
-
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    A constraint test fixture
+  </is>
+  <version>
+    1.0.0
+  </version>
   <contracts>
     <test:IIdentifiable />
   </contracts>
   <properties>
-    <id type="type:Text" override="true">
+    <id override="true" type="type:Text">
       <value>entity-1</value>
     </id>
   </properties>
-</block>
+</test:InheritedConstraints>

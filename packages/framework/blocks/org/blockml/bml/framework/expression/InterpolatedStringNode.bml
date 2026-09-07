@@ -1,12 +1,6 @@
-<!--
-  Framework — InterpolatedStringNode
-  FQN: org.blockml.bml.framework.expression.InterpolatedStringNode
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework — InterpolatedStringNode
+  FQN: org.blockml.bml.framework.expression.InterpolatedStringNode-->
+<fwexpression:InterpolatedStringNode xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,21 +25,26 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>InterpolatedStringNode</name>
-  <type>fwexpression:InterpolatedStringNode</type>
-  <baseType>fwexpression:ExpressionNode</baseType>
-  <is>Interpolated text AST node</is>
-
-  <documentation>kind: interpolated. parts: literal and hole ExpressionNode[].</documentation>
-
+  <baseType>
+    fwexpression:ExpressionNode
+  </baseType>
+  <is>
+    Interpolated text AST node
+  </is>
+  <documentation>
+    kind: interpolated. parts: literal and hole ExpressionNode[].
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind. TS type: type:Text. (required)</documentation>
+      <documentation>
+        kind. TS type: type:Text. (required)
+      </documentation>
       <value>interpolated</value>
     </kind>
     <parts type="fwexpression:ExpressionNode[]">
-      <documentation>parts. TS type: fwexpression:ExpressionNode[]. (required)</documentation>
+      <documentation>
+        parts. TS type: fwexpression:ExpressionNode[]. (required)
+      </documentation>
     </parts>
   </properties>
-
-</block>
+</fwexpression:InterpolatedStringNode>

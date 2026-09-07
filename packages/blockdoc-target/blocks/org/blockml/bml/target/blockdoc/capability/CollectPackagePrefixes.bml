@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Capability — CollectPackagePrefixes
-  FQN: org.blockml.bml.target.blockdoc.capability.CollectPackagePrefixes
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Capability — CollectPackagePrefixes
+  FQN: org.blockml.bml.target.blockdoc.capability.CollectPackagePrefixes-->
+<bdcap:CollectPackagePrefixes xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,24 +21,28 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>CollectPackagePrefixes</name>
-  <type>bdcap:CollectPackagePrefixes</type>
-  <baseType>core:Capability</baseType>
-  <is>All ancestor package prefixes of root FQN packages</is>
-
-  <documentation>BD12: for each root FQN package prefix, add every ancestor prefix (1..n segments). Used to emit package indexes when outLayout=fqn.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    All ancestor package prefixes of root FQN packages
+  </is>
+  <documentation>
+    BD12: for each root FQN package prefix, add every ancestor prefix (1..n segments). Used to emit package indexes when outLayout=fqn.
+  </documentation>
   <references>
     <see type="bddocumentation:PathAndLayout" relation="SeeAlso" />
   </references>
-
   <properties>
     <rootFqns type="type:Text">
-      <documentation>Root FQN list (required).</documentation>
+      <documentation>
+        Root FQN list (required).
+      </documentation>
     </rootFqns>
     <result type="type:Text">
-      <documentation>Sorted package prefix list (required).</documentation>
+      <documentation>
+        Sorted package prefix list (required).
+      </documentation>
     </result>
   </properties>
-
-</block>
+</bdcap:CollectPackagePrefixes>

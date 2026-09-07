@@ -1,12 +1,6 @@
-<!--
-  Parser Documentation — AttributeClassification
-  FQN: org.blockml.bml.compiler.parser.documentation.AttributeClassification
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Documentation — AttributeClassification
+  FQN: org.blockml.bml.compiler.parser.documentation.AttributeClassification-->
+<pardocumentation:AttributeClassification xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,32 +24,33 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>AttributeClassification</name>
-  <type>pardocumentation:AttributeClassification</type>
-  <baseType>core:Documentation</baseType>
-  <is>Fixed priority chain for XML attributes (Rules 1–3)</is>
-
-  <documentation>When mapping an XML element, every attribute is classified — first matching rule wins:
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Fixed priority chain for XML attributes (Rules 1–3)
+  </is>
+  <documentation>
+    When mapping an XML element, every attribute is classified — first matching rule wins:
+    
     Rule 1 — XML infrastructure:
     • xmlns* → SourceInfo.namespaceBindings (incl. xmlns:xsi — B25)
     • xsi:schemaLocation / xsi:noNamespaceSchemaLocation → SourceInfo (B25)
     • other xsi:* → ignore (not memberValues)
-
+    
     Rule 2 — bml:* attributes:
     • Composition meta (bml:id, bml:version, bml:generics, …) → BlockInstance fields
     • Directives (bml:each, bml:if, …) → directives[]
     • Unknown bml:* → BML_UNKNOWN_DIRECTIVE (error at map time — B2)
-
+    
     Rule 3 — Grammar vs instance:
     • On definition/grammar nodes, remaining attributes are closed. Unknown → BML_UNKNOWN_ATTRIBUTE (structural error); preserved as unknownAttributes.
     • On block instances, remaining attributes → memberValues[name] (camelCase); ${ expr } → ExpressionValue { raw } (B4). Unknown members are a validator error.
-
-    Serialize side of Rule 1 (B25 re-emit) → @blockml/serializer.</documentation>
-
+    
+    Serialize side of Rule 1 (B25 re-emit) → @blockml/serializer.
+  </documentation>
   <references>
     <see type="pardocumentation:StructuralGrammar" relation="ReadNext" />
     <see type="parcap:ParseDirectives" relation="SeeAlso" />
   </references>
-
-</block>
+</pardocumentation:AttributeClassification>

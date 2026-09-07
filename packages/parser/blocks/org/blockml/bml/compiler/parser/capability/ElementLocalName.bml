@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — ElementLocalName
-  FQN: org.blockml.bml.compiler.parser.capability.ElementLocalName
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — ElementLocalName
+  FQN: org.blockml.bml.compiler.parser.capability.ElementLocalName-->
+<parcap:ElementLocalName xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ElementLocalName</name>
-  <type>parcap:ElementLocalName</type>
-  <baseType>core:Capability</baseType>
-  <is>Get element local name (without prefix)</is>
-
-  <documentation>Get element local name (without prefix)</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Get element local name (without prefix)
+  </is>
+  <documentation>
+    Get element local name (without prefix)
+  </documentation>
   <properties>
     <element type="parmap:XmlDomNode">
-      <documentation>element. TS type: parmap:XmlDomNode. (required)</documentation>
+      <documentation>
+        element. TS type: parmap:XmlDomNode. (required)
+      </documentation>
     </element>
     <localName type="type:Text">
-      <documentation>localName. TS type: type:Text. (required)</documentation>
+      <documentation>
+        localName. TS type: type:Text. (required)
+      </documentation>
     </localName>
   </properties>
-
-</block>
+</parcap:ElementLocalName>

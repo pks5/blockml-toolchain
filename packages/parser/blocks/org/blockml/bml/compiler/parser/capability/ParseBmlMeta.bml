@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — ParseBmlMeta
-  FQN: org.blockml.bml.compiler.parser.capability.ParseBmlMeta
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — ParseBmlMeta
+  FQN: org.blockml.bml.compiler.parser.capability.ParseBmlMeta-->
+<parcap:ParseBmlMeta xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ParseBmlMeta</name>
-  <type>parcap:ParseBmlMeta</type>
-  <baseType>core:Capability</baseType>
-  <is>Parse bml:id/version/bean/scope/status on BlockInstance</is>
-
-  <documentation>Parse bml:id/version/bean/scope/status on BlockInstance</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Parse bml:id/version/bean/scope/status on BlockInstance
+  </is>
+  <documentation>
+    Parse bml:id/version/bean/scope/status on BlockInstance
+  </documentation>
   <properties>
     <element type="parmap:XmlDomNode">
-      <documentation>element. TS type: parmap:XmlDomNode. (required)</documentation>
+      <documentation>
+        element. TS type: parmap:XmlDomNode. (required)
+      </documentation>
     </element>
     <meta type="parmap:BmlMeta">
-      <documentation>meta. TS type: parmap:BmlMeta. (required)</documentation>
+      <documentation>
+        meta. TS type: parmap:BmlMeta. (required)
+      </documentation>
     </meta>
   </properties>
-
-</block>
+</parcap:ParseBmlMeta>

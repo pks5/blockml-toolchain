@@ -1,12 +1,6 @@
-<!--
-  Serializer Documentation — PublicApi
-  FQN: org.blockml.bml.compiler.serializer.documentation.PublicApi
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Documentation — PublicApi
+  FQN: org.blockml.bml.compiler.serializer.documentation.PublicApi-->
+<serdocumentation:PublicApi xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -28,36 +22,39 @@
   xmlns:bomcap="org.blockml.bml.bom.capability"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PublicApi</name>
-  <type>serdocumentation:PublicApi</type>
-  <baseType>core:Documentation</baseType>
-  <is>serialize() entry point (B26)</is>
-
-  <documentation><![CDATA[serialize(document: BomDocument, options?: SerializeOptions): SerializeResult
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    serialize() entry point (B26)
+  </is>
+  <documentation>
+    <![CDATA[
+    serialize(document: BomDocument, options?: SerializeOptions): SerializeResult
+    
     SerializeOptions (owned by @blockml/bom):
     • indent — default 2; pretty-print spaces (B13); 0 = compact
     • xmlDeclaration — default false; omit <?xml …?> (B17/B24)
-
+    
     SerializeResult (owned by @blockml/bom):
     • text — string | null (null only if serialize cannot produce text)
     • diagnostics — Diagnostic[]
     • success — false if any diagnostic has severity === "error"
-
+    
     Behaviour:
     • Emit per B12–B25 / D8–D9 (authoredPlacement, authoredCharacterDataForm)
     • BML_NAMESPACE_UNBOUND → error diagnostic; prefer still emitting text when possible
     • Does NOT call the validator — host decides abort-on-diagnostics
     • Sync only; no throw on recoverable errors
     • Never write UTF-8 BOM on output
-
-    Not in V1 API: serializeFile, async variants, streaming.]]></documentation>
-
+    
+    Not in V1 API: serializeFile, async variants, streaming.
+    ]]>
+  </documentation>
   <references>
     <see type="bomapi:SerializeOptions" relation="Defines" />
     <see type="bomapi:SerializeResult" relation="Defines" />
     <see type="sercap:Serialize" relation="Defines" />
     <see type="serdocumentation:EmitOrder" relation="ReadNext" />
   </references>
-
-</block>
+</serdocumentation:PublicApi>

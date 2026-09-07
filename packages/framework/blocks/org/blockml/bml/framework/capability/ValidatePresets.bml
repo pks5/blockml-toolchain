@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — ValidatePresets
-  FQN: org.blockml.bml.framework.capability.ValidatePresets
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — ValidatePresets
+  FQN: org.blockml.bml.framework.capability.ValidatePresets-->
+<fwcap:ValidatePresets xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,23 +25,30 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ValidatePresets</name>
-  <type>fwcap:ValidatePresets</type>
-  <baseType>core:Capability</baseType>
-  <is>Preset member rules against TypeRegistry</is>
-
-  <documentation>Preset member rules against TypeRegistry</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Preset member rules against TypeRegistry
+  </is>
+  <documentation>
+    Preset member rules against TypeRegistry
+  </documentation>
   <properties>
     <document type="bomdoc:BomDocument">
-      <documentation>document. TS type: bomdoc:BomDocument. (required)</documentation>
+      <documentation>
+        document. TS type: bomdoc:BomDocument. (required)
+      </documentation>
     </document>
     <registry type="fwcap:TypeRegistry">
-      <documentation>registry. TS type: fwcap:TypeRegistry. (required)</documentation>
+      <documentation>
+        registry. TS type: fwcap:TypeRegistry. (required)
+      </documentation>
     </registry>
     <diagnostics type="bomcommon:Diagnostic[]">
-      <documentation>diagnostics. TS type: bomcommon:Diagnostic[]. (required)</documentation>
+      <documentation>
+        diagnostics. TS type: bomcommon:Diagnostic[]. (required)
+      </documentation>
     </diagnostics>
   </properties>
-
-</block>
+</fwcap:ValidatePresets>

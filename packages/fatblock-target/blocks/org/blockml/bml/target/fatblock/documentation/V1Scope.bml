@@ -1,12 +1,6 @@
-<!--
-  FatBlock Documentation — V1Scope
-  FQN: org.blockml.bml.target.fatblock.documentation.V1Scope
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock Documentation — V1Scope
+  FQN: org.blockml.bml.target.fatblock.documentation.V1Scope-->
+<fbdocumentation:V1Scope xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -23,12 +17,14 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>V1Scope</name>
-  <type>fbdocumentation:V1Scope</type>
-  <baseType>core:Documentation</baseType>
-  <is>V1 folder pool vs planned closure</is>
-
-  <documentation>V1 implemented:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    V1 folder pool vs planned closure
+  </is>
+  <documentation>
+    V1 implemented:
     • Registry name fatblock; accepts document only
     • Required srcDir peer pool of root blocks under that directory
       (CLI may default host and srcDir from package.json blockml.library)
@@ -37,14 +33,14 @@
     • Flat root embeddedBlocks; preserve embed subBlocks[]
     • Namespace binding union with collision errors
     • Serialize via @blockml/serializer indent 2 → {hostFqn}.fat.bml
-
+    
     Not V1 (see ScopeExclusions):
     • Transitive registry-closure candidate set (v2)
     • Alternative embeddedBlocksStrategy values beyond hardcoded empty-embeds error
     • Inventing or rewriting xmlns prefixes
-    • Nested / pre-fatted host merge</documentation>
+    • Nested / pre-fatted host merge
+  </documentation>
   <references>
     <see type="fbdocumentation:PublicApi" relation="ReadNext" />
   </references>
-
-</block>
+</fbdocumentation:V1Scope>

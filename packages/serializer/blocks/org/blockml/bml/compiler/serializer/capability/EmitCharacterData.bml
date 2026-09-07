@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — EmitCharacterData
-  FQN: org.blockml.bml.compiler.serializer.capability.EmitCharacterData
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — EmitCharacterData
+  FQN: org.blockml.bml.compiler.serializer.capability.EmitCharacterData-->
+<sercap:EmitCharacterData xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,27 +21,33 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>EmitCharacterData</name>
-  <type>sercap:EmitCharacterData</type>
-  <baseType>core:Capability</baseType>
-  <is>Emit text or CDATA character data (D8)</is>
-
-  <documentation>Emit text or CDATA character data (D8). Multiline values are written one XmlWriter line each so pretty-print indent applies per line; parse TrimText then recovers the BOM string (B13). Both forms run the same XML-safe sanitization as EscapeText before emit so U+FFFD and illegal XML 1.0 characters never reach the file.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Emit text or CDATA character data (D8)
+  </is>
+  <documentation>
+    Emit text or CDATA character data (D8). Multiline values are written one XmlWriter line each so pretty-print indent applies per line; parse TrimText then recovers the BOM string (B13). Both forms run the same XML-safe sanitization as EscapeText before emit so U+FFFD and illegal XML 1.0 characters never reach the file.
+  </documentation>
   <references>
     <see type="sercap:EscapeText" relation="SeeAlso" />
   </references>
-
   <properties>
     <writer type="seremit:XmlWriter">
-      <documentation>writer. TS type: seremit:XmlWriter. (required)</documentation>
+      <documentation>
+        writer. TS type: seremit:XmlWriter. (required)
+      </documentation>
     </writer>
     <text type="type:Text">
-      <documentation>text. TS type: type:Text. (required)</documentation>
+      <documentation>
+        text. TS type: type:Text. (required)
+      </documentation>
     </text>
     <form type="type:Text">
-      <documentation>text | cdata — from authoredCharacterDataForm. (optional)</documentation>
+      <documentation>
+        text | cdata — from authoredCharacterDataForm. (optional)
+      </documentation>
     </form>
   </properties>
-
-</block>
+</sercap:EmitCharacterData>

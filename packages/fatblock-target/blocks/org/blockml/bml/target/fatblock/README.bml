@@ -1,12 +1,6 @@
-<!--
-  FatBlock Render Target — README
-  FQN: org.blockml.bml.target.fatblock.README
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock Render Target — README
+  FQN: org.blockml.bml.target.fatblock.README-->
+<fatblock:README xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -22,36 +16,35 @@
   xmlns:serializer="org.blockml.bml.compiler.serializer"
   xmlns:type="org.blockml.bml.type">
 
-  <name>README</name>
-  <type>fatblock:README</type>
-  <baseType>core:ReadMe</baseType>
-  <is>Reading entry for the FatBlock render target library</is>
-
+  <baseType>
+    core:ReadMe
+  </baseType>
+  <is>
+    Reading entry for the FatBlock render target library
+  </is>
   <documentation>
     The @blockml/fatblock-target package implements RenderTarget name fatblock.
     This library (org.blockml.bml.target.fatblock.*) is the SSOT; TypeScript in
     packages/fatblock-target/src/ implements it. Tests in packages/fatblock-target/test/
     verify behavioral contracts.
-
+    
     Start reading at org.blockml.bml.target.fatblock.documentation.Introduction (ReadNext chain).
-
+    
     V1: folder-bundle document target — host .bml plus peer roots under --src into one
     {hostFqn}.fat.bml with flat embeddedBlocks. Transitive closure is planned for v2.
-
+    
     Layer separation:
     • org.blockml.bml.bom.* — embeddedBlocks meta-model
     • org.blockml.bml.target.fatblock.* (this library) — assemble / merge / emit
     • org.blockml.bml.compiler.serializer.* — XML serialization
     • org.blockml.bml.cli.* — host flags and file writing
-
+    
     Modules: documentation, api/config, capability.
   </documentation>
-
   <references>
     <see type="fbdocumentation:Introduction" relation="ReadFirst" />
     <see type="fbdocumentation:DesignDecisions" relation="SeeAlso" />
     <see type="fbdocumentation:PublicApi" relation="SeeAlso" />
     <see type="fbcap:Render" relation="SeeAlso" />
   </references>
-
-</block>
+</fatblock:README>

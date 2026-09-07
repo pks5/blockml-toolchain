@@ -1,12 +1,6 @@
-<!--
-  Search Documentation — PublicApi
-  FQN: org.blockml.bml.search.documentation.PublicApi
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Search Documentation — PublicApi
+  FQN: org.blockml.bml.search.documentation.PublicApi-->
+<searchdocumentation:PublicApi xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -22,12 +16,14 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PublicApi</name>
-  <type>searchdocumentation:PublicApi</type>
-  <baseType>core:Documentation</baseType>
-  <is>Exported API from packages/search/src/index.ts</is>
-
-  <documentation>buildIndex(options?) → BuildIndexResult
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Exported API from packages/search/src/index.ts
+  </is>
+  <documentation>
+    buildIndex(options?) → BuildIndexResult
     search(query, options?) → SearchResult[]
     rebuildIndex(options?) → BuildIndexResult
     loadIndex(options?) → SearchIndex | undefined
@@ -35,13 +31,12 @@
     getIndexStatus(options?) → IndexStatus
     openIndex(options?) → BuildIndexResult
     buildMemoryIndex(documents, diagnostics?) → SearchIndex
-
+    
     Options: rootDir?, srcDir?, libraries?, indexDir?, limit? (search only).
-    Orama types are not exported.</documentation>
-
+    Orama types are not exported.
+  </documentation>
   <references>
     <see type="searchcap:BuildIndex" relation="Defines" />
     <see type="searchcap:Search" relation="Defines" />
   </references>
-
-</block>
+</searchdocumentation:PublicApi>

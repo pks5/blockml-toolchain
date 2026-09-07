@@ -1,12 +1,6 @@
-<!--
-  CLI Documentation — V1Scope
-  FQN: org.blockml.bml.cli.documentation.V1Scope
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Documentation — V1Scope
+  FQN: org.blockml.bml.cli.documentation.V1Scope-->
+<clidocumentation:V1Scope xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -21,12 +15,14 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>V1Scope</name>
-  <type>clidocumentation:V1Scope</type>
-  <baseType>core:Documentation</baseType>
-  <is>V1 implemented vs planned commands</is>
-
-  <documentation>V1 implemented:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    V1 implemented vs planned commands
+  </is>
+  <documentation>
+    V1 implemented:
     • blockml validate [file] [--all] [--src] [--libraries] [--verbose]
       (default: project sources; --all: entire registry including npm)
     • blockml compile [file] target | blockml compile target
@@ -48,12 +44,12 @@
     • Graph uses @blockml/graph over the validate --all corpus
     • Inspect uses @blockml/inspect over the validate --all corpus
     • New uses @blockml/builder; writes .bml and updates Library.blocks
-
+    
     V1 not implemented (documented in ScopeExclusions):
     init, watch, activate-config,
-    incremental .bom-cache, thumbnails, OpenSCAD resolver, bom-cli.config.json renaming.</documentation>
+    incremental .bom-cache, thumbnails, OpenSCAD resolver, bom-cli.config.json renaming.
+  </documentation>
   <references>
     <see type="clidocumentation:PublicApi" relation="ReadNext" />
   </references>
-
-</block>
+</clidocumentation:V1Scope>

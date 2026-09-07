@@ -1,12 +1,6 @@
-<!--
-  Serializer Documentation — XmlCommentsEmit
-  FQN: org.blockml.bml.compiler.serializer.documentation.XmlCommentsEmit
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Documentation — XmlCommentsEmit
+  FQN: org.blockml.bml.compiler.serializer.documentation.XmlCommentsEmit-->
+<serdocumentation:XmlCommentsEmit xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -28,24 +22,27 @@
   xmlns:bomcap="org.blockml.bml.bom.capability"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>XmlCommentsEmit</name>
-  <type>serdocumentation:XmlCommentsEmit</type>
-  <baseType>core:Documentation</baseType>
-  <is>Comment re-emit layout (B11/B22)</is>
-
-  <documentation><![CDATA[Cross-ref: org.blockml.bml.bom.documentation.XmlComments for parse-side binding (B11).
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Comment re-emit layout (B11/B22)
+  </is>
+  <documentation>
+    <![CDATA[
+    Cross-ref: org.blockml.bml.bom.documentation.XmlComments for parse-side binding (B11).
+    
     Serializer re-emit:
     • leadingComments → <!-- body --> lines immediately before the element
     • trailingComments → next line after element end tag (B22 — not same-line)
     • blank line after trailing-comment block so comment reads as trailing to previous element
-
+    
     Whitespace/layout is not part of BOM equality (B10/B13). Parse accepts same-line trailing;
-    serializer normalizes to next-line layout.]]></documentation>
-
+    serializer normalizes to next-line layout.
+    ]]>
+  </documentation>
   <references>
     <see type="bomdocumentation:XmlComments" relation="SeeAlso" />
     <see type="serdocumentation:RoundtripContract" relation="ReadNext" />
   </references>
-
-</block>
+</serdocumentation:XmlCommentsEmit>

@@ -1,12 +1,6 @@
-<!--
-  BlockML BOM — README
-  FQN: org.blockml.bml.bom.README
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML BOM — README
+  FQN: org.blockml.bml.bom.README-->
+<bom:README xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,33 +17,32 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>README</name>
-  <type>bom:README</type>
-  <baseType>core:ReadMe</baseType>
-  <is>Reading entry for the BOM Urmodell library</is>
-
+  <baseType>
+    core:ReadMe
+  </baseType>
+  <is>
+    Reading entry for the BOM Urmodell library
+  </is>
   <documentation>
     The @blockml/bom package owns the Canonical BOM (Urmodell) — lossless, immutable parse results.
     This library (org.blockml.bml.bom.*) is the SSOT; TypeScript in packages/bom/src/ implements it.
     Parity tests in packages/bom/test/ verify BML ↔ TS alignment.
-
+    
     Start reading at org.blockml.bml.bom.documentation.Introduction (ReadNext chain).
-
+    
     Layer separation:
     • org.blockml.bml.definition.* (@blockml/core) — BML meta-model (what block documents mean)
     • org.blockml.bml.bom.* (this library) — parse-result data structures (BomDocument graph)
-
+    
     Modules: documentation (narrative specs), common, block, member, composition, type, value,
     document (BomDocument root), api (B26), capability (bomEquals).
-
+    
     Not in this library: EffectiveMemberSet, TypeRegistry (@blockml/framework); BML→BOM mapping (@blockml/parser).
   </documentation>
-
   <references>
     <see type="bomdocumentation:Introduction" relation="ReadFirst" />
     <see type="bomdocumentation:DesignDecisions" relation="SeeAlso" />
     <see type="bomdocumentation:ValidationResponsibilities" relation="SeeAlso" />
     <see type="def:BlockDefinition" relation="SeeAlso" />
   </references>
-
-</block>
+</bom:README>

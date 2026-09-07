@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — TypeRegistryReader
-  FQN: org.blockml.bml.bom.api.TypeRegistryReader
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — TypeRegistryReader
+  FQN: org.blockml.bml.bom.api.TypeRegistryReader-->
+<bomapi:TypeRegistryReader xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,11 +17,13 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>TypeRegistryReader</name>
-  <type>bomapi:TypeRegistryReader</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Minimal TypeRegistry surface for ValidateOptions</is>
-
-  <documentation>TypeScript interface — get(fqn) and has(fqn). Full TypeRegistry in @blockml/framework implements this reader for ValidateOptions.typeRegistry injection.</documentation>
-
-</block>
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Minimal TypeRegistry surface for ValidateOptions
+  </is>
+  <documentation>
+    TypeScript interface — get(fqn) and has(fqn). Full TypeRegistry in @blockml/framework implements this reader for ValidateOptions.typeRegistry injection.
+  </documentation>
+</bomapi:TypeRegistryReader>

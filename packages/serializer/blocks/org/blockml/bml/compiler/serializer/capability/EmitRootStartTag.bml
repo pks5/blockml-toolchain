@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — EmitRootStartTag
-  FQN: org.blockml.bml.compiler.serializer.capability.EmitRootStartTag
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — EmitRootStartTag
+  FQN: org.blockml.bml.compiler.serializer.capability.EmitRootStartTag-->
+<sercap:EmitRootStartTag xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,38 +21,50 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>EmitRootStartTag</name>
-  <type>sercap:EmitRootStartTag</type>
-  <baseType>core:Capability</baseType>
-  <is>Emit document root opening tag with xmlns and optional xsi attrs (B25)</is>
-
-  <documentation>Re-emits namespaceBindings, schemaLocation, noNamespaceSchemaLocation from SourceInfo.
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Emit document root opening tag with xmlns and optional xsi attrs (B25)
+  </is>
+  <documentation>
+    Re-emits namespaceBindings, schemaLocation, noNamespaceSchemaLocation from SourceInfo.
     rootTag is block for the legacy form, or the type QName / TypeIdentifier when
-    SourceInfo.rootForm is type (doc:DocumentFormat). Do not invent schemaLocation or xsi.</documentation>
-
+    SourceInfo.rootForm is type (doc:DocumentFormat). Do not invent schemaLocation or xsi.
+  </documentation>
   <references>
     <see type="serdocumentation:EmitRules" relation="SeeAlso" />
   </references>
-
   <properties>
     <writer type="seremit:XmlWriter">
-      <documentation>writer. TS type: seremit:XmlWriter. (required)</documentation>
+      <documentation>
+        writer. TS type: seremit:XmlWriter. (required)
+      </documentation>
     </writer>
     <bindings type="type:Text">
-      <documentation>bindings. TS type: type:Text. (required)</documentation>
+      <documentation>
+        bindings. TS type: type:Text. (required)
+      </documentation>
     </bindings>
     <schemaLocation type="type:Text">
-      <documentation>schemaLocation. TS type: type:Text. (optional)</documentation>
+      <documentation>
+        schemaLocation. TS type: type:Text. (optional)
+      </documentation>
     </schemaLocation>
     <noNamespaceSchemaLocation type="type:Text">
-      <documentation>noNamespaceSchemaLocation. TS type: type:Text. (optional)</documentation>
+      <documentation>
+        noNamespaceSchemaLocation. TS type: type:Text. (optional)
+      </documentation>
     </noNamespaceSchemaLocation>
     <unknownAttributes type="type:Text">
-      <documentation>unknownAttributes. TS type: type:Text. (optional)</documentation>
+      <documentation>
+        unknownAttributes. TS type: type:Text. (optional)
+      </documentation>
     </unknownAttributes>
     <rootTag type="type:Text">
-      <documentation>Document root tag. Defaults to block. TS type: type:Text. (optional)</documentation>
+      <documentation>
+        Document root tag. Defaults to block. TS type: type:Text. (optional)
+      </documentation>
     </rootTag>
   </properties>
-
-</block>
+</sercap:EmitRootStartTag>

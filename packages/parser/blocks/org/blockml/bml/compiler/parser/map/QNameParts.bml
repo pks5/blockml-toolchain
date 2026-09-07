@@ -1,12 +1,6 @@
-<!--
-  Parser — QNameParts
-  FQN: org.blockml.bml.compiler.parser.map.QNameParts
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser — QNameParts
+  FQN: org.blockml.bml.compiler.parser.map.QNameParts-->
+<parmap:QNameParts xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>QNameParts</name>
-  <type>parmap:QNameParts</type>
-  <baseType>parser:ParserType</baseType>
-  <is>Prefix and local name from a QName split</is>
-
-  <documentation>BML type gap: stands for TypeScript { prefix: string; local: string } from splitQName() (packages/parser/src/util/qname.ts).</documentation>
-
+  <baseType>
+    parser:ParserType
+  </baseType>
+  <is>
+    Prefix and local name from a QName split
+  </is>
+  <documentation>
+    BML type gap: stands for TypeScript { prefix: string; local: string } from splitQName() (packages/parser/src/util/qname.ts).
+  </documentation>
   <properties>
     <prefix type="type:Text">
-      <documentation>prefix. TS type: type:Text. (required)</documentation>
+      <documentation>
+        prefix. TS type: type:Text. (required)
+      </documentation>
     </prefix>
     <local type="type:Text">
-      <documentation>local. TS type: type:Text. (required)</documentation>
+      <documentation>
+        local. TS type: type:Text. (required)
+      </documentation>
     </local>
   </properties>
-
-</block>
+</parmap:QNameParts>

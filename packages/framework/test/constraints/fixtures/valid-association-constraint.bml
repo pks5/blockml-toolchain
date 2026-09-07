@@ -1,26 +1,20 @@
-<!--
-  Test fixture — valid AssociationConstraint
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Test fixture — valid AssociationConstraint-->
+<test:AssociationConstraint xmlns="http://blockml.org/bml"
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:validation="org.blockml.bml.validation"
   xmlns:test="com.blockml.test.constraints">
 
-  <type>test:AssociationConstraint</type>
-  <baseType>core:Block</baseType>
-  <is>A constraint test fixture</is>
-  <version>1.0.0</version>
-
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    A constraint test fixture
+  </is>
+  <version>
+    1.0.0
+  </version>
   <associations>
-    <parent type="InstanceReference(core:Block)">
-      <constraints>
-        <constraint:NoSelfReference validation="validation:Error"/>
-      </constraints>
-    </parent>
+    <parent type="org.blockml.bml.type.InstanceReference(core:Block)" />
   </associations>
-</block>
+</test:AssociationConstraint>

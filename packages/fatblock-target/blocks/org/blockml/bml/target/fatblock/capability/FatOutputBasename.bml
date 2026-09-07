@@ -1,12 +1,6 @@
-<!--
-  FatBlock Capability — FatOutputBasename
-  FQN: org.blockml.bml.target.fatblock.capability.FatOutputBasename
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock Capability — FatOutputBasename
+  FQN: org.blockml.bml.target.fatblock.capability.FatOutputBasename-->
+<fbcap:FatOutputBasename xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -22,24 +16,28 @@
   xmlns:serializer="org.blockml.bml.compiler.serializer"
   xmlns:type="org.blockml.bml.type">
 
-  <name>FatOutputBasename</name>
-  <type>fbcap:FatOutputBasename</type>
-  <baseType>core:Capability</baseType>
-  <is>Derive output filename from host FQN</is>
-
-  <documentation>FB18: output basename is host FQN plus .fat.bml. Example org.blockml.bml.workspace.Library to org.blockml.bml.workspace.Library.fat.bml. Empty FQN yields unnamed.fat.bml.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Derive output filename from host FQN
+  </is>
+  <documentation>
+    FB18: output basename is host FQN plus .fat.bml. Example org.blockml.bml.workspace.Library to org.blockml.bml.workspace.Library.fat.bml. Empty FQN yields unnamed.fat.bml.
+  </documentation>
   <references>
     <see type="fbdocumentation:OutputLayout" relation="SeeAlso" />
   </references>
-
   <properties>
     <hostFqn type="type:Text">
-      <documentation>Host block type FQN. (required)</documentation>
+      <documentation>
+        Host block type FQN. (required)
+      </documentation>
     </hostFqn>
     <result type="type:Text">
-      <documentation>Output basename. (required)</documentation>
+      <documentation>
+        Output basename. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</fbcap:FatOutputBasename>

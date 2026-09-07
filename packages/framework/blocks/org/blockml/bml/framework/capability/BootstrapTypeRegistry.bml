@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — BootstrapTypeRegistry
-  FQN: org.blockml.bml.framework.capability.BootstrapTypeRegistry
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — BootstrapTypeRegistry
+  FQN: org.blockml.bml.framework.capability.BootstrapTypeRegistry-->
+<fwcap:BootstrapTypeRegistry xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,27 +25,31 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>BootstrapTypeRegistry</name>
-  <type>fwcap:BootstrapTypeRegistry</type>
-  <baseType>core:Capability</baseType>
-  <is>Populate TypeRegistry from corpus paths or Library.bml graph</is>
-
-  <documentation>Accepts fwregistry:BootstrapOptions or legacy paths[] + rootDir. Library mode resolves dependencies/subLibraries in order, then registers blocks from each library blocks root. Flat mode walks paths for all .bml files.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Populate TypeRegistry from corpus paths or Library.bml graph
+  </is>
+  <documentation>
+    Accepts fwregistry:BootstrapOptions or legacy paths[] + rootDir. Library mode resolves dependencies/subLibraries in order, then registers blocks from each library blocks root. Flat mode walks paths for all .bml files.
+  </documentation>
   <references>
     <see type="fwcap:DefaultBootstrapPaths" relation="SeeAlso" />
     <see type="fwcap:ResolveLibrarySeeds" relation="SeeAlso" />
     <see type="fwregistry:BootstrapOptions" relation="SeeAlso" />
     <see type="parser:Library" relation="SeeAlso" />
   </references>
-
   <properties>
     <options type="fwregistry:BootstrapOptions">
-      <documentation>Bootstrap options object. (optional)</documentation>
+      <documentation>
+        Bootstrap options object. (optional)
+      </documentation>
     </options>
     <result type="fwregistry:BootstrapResult">
-      <documentation>result. TS type: fwregistry:BootstrapResult. (required)</documentation>
+      <documentation>
+        result. TS type: fwregistry:BootstrapResult. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</fwcap:BootstrapTypeRegistry>

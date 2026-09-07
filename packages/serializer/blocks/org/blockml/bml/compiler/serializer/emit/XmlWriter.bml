@@ -1,12 +1,6 @@
-<!--
-  Serializer — XmlWriter
-  FQN: org.blockml.bml.compiler.serializer.emit.XmlWriter
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer — XmlWriter
+  FQN: org.blockml.bml.compiler.serializer.emit.XmlWriter-->
+<seremit:XmlWriter xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,23 +21,30 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>XmlWriter</name>
-  <type>seremit:XmlWriter</type>
-  <baseType>serializer:SerializerType</baseType>
-  <is>Indent-aware line-oriented XML text builder</is>
-
-  <documentation>Accumulates output lines with depth-based indentation. Used by all emit capabilities.</documentation>
-
+  <baseType>
+    serializer:SerializerType
+  </baseType>
+  <is>
+    Indent-aware line-oriented XML text builder
+  </is>
+  <documentation>
+    Accumulates output lines with depth-based indentation. Used by all emit capabilities.
+  </documentation>
   <properties>
     <indent type="type:Integer">
-      <documentation>Spaces per depth level. (required)</documentation>
+      <documentation>
+        Spaces per depth level. (required)
+      </documentation>
     </indent>
     <depth type="type:Integer">
-      <documentation>Current nesting depth for indentation. (required)</documentation>
+      <documentation>
+        Current nesting depth for indentation. (required)
+      </documentation>
     </depth>
     <lines type="type:Text[]">
-      <documentation>Accumulated output lines (TS: private parts[]). (required)</documentation>
+      <documentation>
+        Accumulated output lines (TS: private parts[]). (required)
+      </documentation>
     </lines>
   </properties>
-
-</block>
+</seremit:XmlWriter>

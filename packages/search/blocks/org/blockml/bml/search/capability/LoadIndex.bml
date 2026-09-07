@@ -1,12 +1,6 @@
-<!--
-  Search Capability — LoadIndex
-  FQN: org.blockml.bml.search.capability.LoadIndex
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Search Capability — LoadIndex
+  FQN: org.blockml.bml.search.capability.LoadIndex-->
+<searchcap:LoadIndex xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,24 +15,28 @@
   xmlns:searchdocumentation="org.blockml.bml.search.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>LoadIndex</name>
-  <type>searchcap:LoadIndex</type>
-  <baseType>core:Capability</baseType>
-  <is>Load a ready persisted index or return undefined</is>
-
-  <documentation>Load a ready persisted index or return undefined</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Load a ready persisted index or return undefined
+  </is>
+  <documentation>
+    Load a ready persisted index or return undefined
+  </documentation>
   <references>
     <see type="searchcap:GetIndexStatus" relation="SeeAlso" />
   </references>
-
   <properties>
     <options type="search:SearchIndexOptions">
-      <documentation>options. TS type: search:SearchIndexOptions. (optional)</documentation>
+      <documentation>
+        options. TS type: search:SearchIndexOptions. (optional)
+      </documentation>
     </options>
     <index type="search:SearchType">
-      <documentation>SearchIndex or undefined. (optional)</documentation>
+      <documentation>
+        SearchIndex or undefined. (optional)
+      </documentation>
     </index>
   </properties>
-
-</block>
+</searchcap:LoadIndex>

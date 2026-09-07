@@ -1,12 +1,6 @@
-<!--
-  Inspect Documentation — PackageOwnership
-  FQN: org.blockml.bml.inspect.documentation.PackageOwnership
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Inspect Documentation — PackageOwnership
+  FQN: org.blockml.bml.inspect.documentation.PackageOwnership-->
+<inspectdocumentation:PackageOwnership xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -22,19 +16,20 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PackageOwnership</name>
-  <type>inspectdocumentation:PackageOwnership</type>
-  <baseType>core:Documentation</baseType>
-  <is>Toolchain responsibilities for Inspect</is>
-
-  <documentation>@blockml/inspect — InspectResult projection and this BML library.
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Toolchain responsibilities for Inspect
+  </is>
+  <documentation>
+    @blockml/inspect — InspectResult projection and this BML library.
+    
     @blockml/framework — discovery, TypeRegistry, resolveEffectiveMembers, findLocalMember.
     @blockml/cli — blockml inspect command host.
-    @blockml/bom — BlockDefinition and TypeExpression shapes.</documentation>
-
+    @blockml/bom — BlockDefinition and TypeExpression shapes.
+  </documentation>
   <references>
     <see type="inspectdocumentation:ScopeExclusions" relation="ReadNext" />
   </references>
-
-</block>
+</inspectdocumentation:PackageOwnership>

@@ -1,12 +1,6 @@
-<!--
-  CLI Documentation — Installation
-  FQN: org.blockml.bml.cli.documentation.Installation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Documentation — Installation
+  FQN: org.blockml.bml.cli.documentation.Installation-->
+<clidocumentation:Installation xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -21,22 +15,24 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>Installation</name>
-  <type>clidocumentation:Installation</type>
-  <baseType>core:Documentation</baseType>
-  <is>Building and linking the blockml command</is>
-
-  <documentation>From this monorepo:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Building and linking the blockml command
+  </is>
+  <documentation>
+    From this monorepo:
     npm install
     npm run build
     npm link
-
+    
     blockml bin points to packages/cli-tools/dist/cli.js.
     Requires Node.js 20+.
-
-    Domain users: install @machineblocks/cli from MachineBlocks mono-repo instead.</documentation>
+    
+    Domain users: install @machineblocks/cli from MachineBlocks mono-repo instead.
+  </documentation>
   <references>
     <see type="clidocumentation:DesignDecisions" relation="ReadNext" />
   </references>
-
-</block>
+</clidocumentation:Installation>

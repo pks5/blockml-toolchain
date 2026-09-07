@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — BomEquals
-  FQN: org.blockml.bml.bom.capability.BomEquals
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — BomEquals
+  FQN: org.blockml.bml.bom.capability.BomEquals-->
+<bomcap:BomEquals xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,23 +17,30 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>BomEquals</name>
-  <type>bomcap:BomEquals</type>
-  <baseType>core:Capability</baseType>
-  <is>Structural equality modulo provenance (B20)</is>
-
-  <documentation>deepEqual(stripProvenance(a), stripProvenance(b)). Roundtrip gate for BML → BOM → BML tests.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Structural equality modulo provenance (B20)
+  </is>
+  <documentation>
+    deepEqual(stripProvenance(a), stripProvenance(b)). Roundtrip gate for BML → BOM → BML tests.
+  </documentation>
   <properties>
     <inputA type="bomdoc:BomDocument">
-      <documentation>inputA (required). TS type: bomdoc:BomDocument.</documentation>
+      <documentation>
+        inputA (required). TS type: bomdoc:BomDocument.
+      </documentation>
     </inputA>
     <inputB type="bomdoc:BomDocument">
-      <documentation>inputB (required). TS type: bomdoc:BomDocument.</documentation>
+      <documentation>
+        inputB (required). TS type: bomdoc:BomDocument.
+      </documentation>
     </inputB>
     <output type="type:Boolean">
-      <documentation>output (required). TS type: type:Boolean.</documentation>
+      <documentation>
+        output (required). TS type: type:Boolean.
+      </documentation>
     </output>
   </properties>
-
-</block>
+</bomcap:BomEquals>

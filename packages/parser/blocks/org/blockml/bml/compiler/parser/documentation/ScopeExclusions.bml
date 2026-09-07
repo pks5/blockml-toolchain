@@ -1,12 +1,6 @@
-<!--
-  Parser Documentation — ScopeExclusions
-  FQN: org.blockml.bml.compiler.parser.documentation.ScopeExclusions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Documentation — ScopeExclusions
+  FQN: org.blockml.bml.compiler.parser.documentation.ScopeExclusions-->
+<pardocumentation:ScopeExclusions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,13 +24,15 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ScopeExclusions</name>
-  <type>pardocumentation:ScopeExclusions</type>
-  <baseType>core:Documentation</baseType>
-  <is>Explicit out-of-scope for the parser package</is>
-
-  <documentation>Out of scope for @blockml/parser:
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Explicit out-of-scope for the parser package
+  </is>
+  <documentation>
+    Out of scope for @blockml/parser:
+    
     • BOM → BML emit — @blockml/serializer
     • Semantic validation — @blockml/validator
     • TypeRegistry bootstrap / cross-file resolve — @blockml/cli + @blockml/framework
@@ -44,11 +40,10 @@
     • Render target output — @blockml/compiler
     • parseFile, async, streaming — deferred API
     • Meta-driven mapping from Definition blocks — V2
-
-    In scope: single-file BML XML → lossless BomDocument.</documentation>
-
+    
+    In scope: single-file BML XML → lossless BomDocument.
+  </documentation>
   <references>
     <see type="pardocumentation:Introduction" relation="SeeAlso" />
   </references>
-
-</block>
+</pardocumentation:ScopeExclusions>

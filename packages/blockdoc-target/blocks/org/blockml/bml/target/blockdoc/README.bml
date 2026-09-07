@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Render Target — README
-  FQN: org.blockml.bml.target.blockdoc.README
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Render Target — README
+  FQN: org.blockml.bml.target.blockdoc.README-->
+<blockdoc:README xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,36 +21,35 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>README</name>
-  <type>blockdoc:README</type>
-  <baseType>core:ReadMe</baseType>
-  <is>Reading entry for the BlockDoc render target library</is>
-
+  <baseType>
+    core:ReadMe
+  </baseType>
+  <is>
+    Reading entry for the BlockDoc render target library
+  </is>
   <documentation>
     The @blockml/blockdoc-target package implements RenderTarget name blockdoc.
     This library (org.blockml.bml.target.blockdoc.*) is the SSOT; TypeScript in
     packages/blockdoc-target/src/ implements it. Tests in packages/blockdoc-target/test/
     verify behavioral contracts.
-
+    
     Start reading at org.blockml.bml.target.blockdoc.documentation.Introduction (ReadNext chain).
-
+    
     Layer separation:
     • org.blockml.bml.bom.* (@blockml/bom) — Urmodell types BlockDoc reads
     • org.blockml.bml.target.blockdoc.* (this library) — HTML site rules and architecture
     • @blockml/compiler — RenderTarget contract and compile facade
     • @blockml/cli — target bootstrap and file writing
-
+    
     Modules: documentation (narrative specs), api/config/path/page/render (data types),
     capability (render + path/nav/page operations).
-
+    
     Not in this library: CLI targets[] bootstrap; compile scope auto resolution; other render targets.
   </documentation>
-
   <references>
     <see type="bddocumentation:Introduction" relation="ReadFirst" />
     <see type="bddocumentation:DesignDecisions" relation="SeeAlso" />
     <see type="bddocumentation:PublicApi" relation="SeeAlso" />
     <see type="bdcap:Render" relation="SeeAlso" />
   </references>
-
-</block>
+</blockdoc:README>

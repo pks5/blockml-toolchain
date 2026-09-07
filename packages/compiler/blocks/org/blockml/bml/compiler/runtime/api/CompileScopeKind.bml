@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime API — CompileScopeKind
-  FQN: org.blockml.bml.compiler.runtime.api.CompileScopeKind
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime API — CompileScopeKind
+  FQN: org.blockml.bml.compiler.runtime.api.CompileScopeKind-->
+<runapi:CompileScopeKind xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,20 +19,38 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>CompileScopeKind</name>
-  <type>runapi:CompileScopeKind</type>
-  <baseType>runtime:RuntimeType</baseType>
-  <is>Enumerated compile scope kinds</is>
-
-  <documentation>C7: document | library | corpus | auto. auto is input-only; ResolveScope yields a concrete kind.</documentation>
+  <baseType>
+    runtime:RuntimeType
+  </baseType>
+  <is>
+    Enumerated compile scope kinds
+  </is>
+  <documentation>
+    C7: document | library | corpus | auto. auto is input-only; ResolveScope yields a concrete kind.
+  </documentation>
   <references>
     <see type="rundocumentation:PublicApi" relation="SeeAlso" />
   </references>
   <properties>
-    <document type="type:Text"><documentation>Single .bml document scope.</documentation></document>
-    <library type="type:Text"><documentation>Library.bml roots plus dependency closure.</documentation></library>
-    <corpus type="type:Text"><documentation>Directory roots / blocks trees.</documentation></corpus>
-    <auto type="type:Text"><documentation>Resolve from libraries then roots; never left as auto after ResolveScope.</documentation></auto>
+    <document type="type:Text">
+      <documentation>
+        Single .bml document scope.
+      </documentation>
+    </document>
+    <library type="type:Text">
+      <documentation>
+        Library.bml roots plus dependency closure.
+      </documentation>
+    </library>
+    <corpus type="type:Text">
+      <documentation>
+        Directory roots / blocks trees.
+      </documentation>
+    </corpus>
+    <auto type="type:Text">
+      <documentation>
+        Resolve from libraries then roots; never left as auto after ResolveScope.
+      </documentation>
+    </auto>
   </properties>
-
-</block>
+</runapi:CompileScopeKind>

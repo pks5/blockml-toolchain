@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — IsBooleanLiteral
-  FQN: org.blockml.bml.compiler.parser.capability.IsBooleanLiteral
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — IsBooleanLiteral
+  FQN: org.blockml.bml.compiler.parser.capability.IsBooleanLiteral-->
+<parcap:IsBooleanLiteral xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>IsBooleanLiteral</name>
-  <type>parcap:IsBooleanLiteral</type>
-  <baseType>core:Capability</baseType>
-  <is>Detect true/false/True/False/… boolean value literals</is>
-
-  <documentation>Detect true/false/True/False/… boolean value literals</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Detect true/false/True/False/… boolean value literals
+  </is>
+  <documentation>
+    Detect true/false/True/False/… boolean value literals
+  </documentation>
   <properties>
     <raw type="type:Text">
-      <documentation>raw. TS type: type:Text. (required)</documentation>
+      <documentation>
+        raw. TS type: type:Text. (required)
+      </documentation>
     </raw>
     <result type="type:Boolean">
-      <documentation>result. TS type: type:Boolean. (required)</documentation>
+      <documentation>
+        result. TS type: type:Boolean. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</parcap:IsBooleanLiteral>

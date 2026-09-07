@@ -1,12 +1,6 @@
-<!--
-  CLI Capability — LoadConfig
-  FQN: org.blockml.bml.cli.capability.LoadConfig
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Capability — LoadConfig
+  FQN: org.blockml.bml.cli.capability.LoadConfig-->
+<clicap:LoadConfig xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,25 +14,29 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>LoadConfig</name>
-  <type>clicap:LoadConfig</type>
-  <baseType>core:Capability</baseType>
-  <is>Load blockml.config.json from project root</is>
-
-  <documentation>CLI1: missing blockml.config.json returns DefaultBomConfig defaults. CLI2: empty targets[] becomes [blockdoc].</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Load blockml.config.json from project root
+  </is>
+  <documentation>
+    CLI1: missing blockml.config.json returns DefaultBomConfig defaults. CLI2: empty targets[] becomes [blockdoc].
+  </documentation>
   <references>
     <see type="clidocumentation:Configuration" relation="SeeAlso" />
     <see type="cliconfig:DefaultBomConfig" relation="SeeAlso" />
   </references>
-
   <properties>
     <cwd type="type:Text">
-      <documentation>Project root directory. Default process.cwd(). (optional)</documentation>
+      <documentation>
+        Project root directory. Default process.cwd(). (optional)
+      </documentation>
     </cwd>
     <result type="cliapi:BomConfig">
-      <documentation>Merged configuration. (required)</documentation>
+      <documentation>
+        Merged configuration. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</clicap:LoadConfig>

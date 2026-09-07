@@ -1,12 +1,6 @@
-<!--
-  Graph — GraphQueryResult
-  FQN: org.blockml.bml.graph.GraphQueryResult
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph — GraphQueryResult
+  FQN: org.blockml.bml.graph.GraphQueryResult-->
+<graph:GraphQueryResult xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,17 +15,25 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>GraphQueryResult</name>
-  <type>graph:GraphQueryResult</type>
-  <baseType>graph:GraphType</baseType>
-  <is>Tabular Cypher query result</is>
-  <documentation>columns are engine column names; each row.values aligns with columns. Ladybug types are not exposed.</documentation>
+  <baseType>
+    graph:GraphType
+  </baseType>
+  <is>
+    Tabular Cypher query result
+  </is>
+  <documentation>
+    columns are engine column names; each row.values aligns with columns. Ladybug types are not exposed.
+  </documentation>
   <properties>
     <columns type="type:Text[]">
-      <documentation>Column names. (required)</documentation>
+      <documentation>
+        Column names. (required)
+      </documentation>
     </columns>
     <rows type="type:Text[]">
-      <documentation>JSON-shaped row values. (required)</documentation>
+      <documentation>
+        JSON-shaped row values. (required)
+      </documentation>
     </rows>
   </properties>
-</block>
+</graph:GraphQueryResult>

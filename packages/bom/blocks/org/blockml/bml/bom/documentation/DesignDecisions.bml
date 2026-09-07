@@ -1,12 +1,6 @@
-<!--
-  BOM Documentation — DesignDecisions
-  FQN: org.blockml.bml.bom.documentation.DesignDecisions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Documentation — DesignDecisions
+  FQN: org.blockml.bml.bom.documentation.DesignDecisions-->
+<bomdocumentation:DesignDecisions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -24,41 +18,43 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>DesignDecisions</name>
-  <type>bomdocumentation:DesignDecisions</type>
-  <baseType>core:Documentation</baseType>
-  <is>Normative Urmodell design decisions</is>
-
-  <documentation>Immutability: Urmodell (BomDocument) is immutable after parse or BomBuilder.seal().
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Normative Urmodell design decisions
+  </is>
+  <documentation>
+    Immutability: Urmodell (BomDocument) is immutable after parse or BomBuilder.seal().
     No utility or renderer writes derived data back. Validator/renderers use pragmatic forks.
-
+    
     Builder / LSP reuse: construction-friendly, provenance-agnostic interfaces. Parser and
     BomBuilder produce the same graph. Source spans optional on types but populated by parser.
-
+    
     Member inheritance: utility lookup only. BOM stores declared members per block.
     resolveEffectiveMembers() → EffectiveMemberSet — never flattened into BOM.
-
+    
     Capabilities: stored in BOM; no synthetic getter/setter generation; renderer interprets.
-
+    
     Member identity: uniqueness by resolved (namespace, name).
-
+    
     Composition: nested inside aggregation on definitions only; instances open aggregations directly.
-
+    
     Sub-Blocks: nested in BlockDefinition.subBlocks[]; FQN = parent.type + "." + name.
-
+    
     Embedded Blocks: root embeddedBlocks[] only — virtual .bml files; FQN = type element.
-
+    
     Directives: flow-control bml:* → directives[] unexpanded. bml:id/version → BlockInstance fields.
     bml:xml → first-class xmlRendering (not directives[]).
-
+    
     XML comments (B11): bind to following element; trailing on next line + blank line (B22).
     Whitespace (B13): not on Urmodell. Dual placement (D9): store authoredPlacement.
     Visibility (B14): logical name in BOM; emit _/__ from visibility.
-
+    
     Instance version: bml:version optional exact assert on external refs (BML_UNKNOWN_VERSION).
     Definition version: effectiveBlockVersion = own version | library.version | error.
     Instance id: bml:id only on BlockInstance.id; no auto-ID in BomDocument; bml:each requires id.
-
-    Property values: deep copy only — never linked. FQN::id cross-instance refs only on associations.</documentation>
-
-</block>
+    
+    Property values: deep copy only — never linked. FQN::id cross-instance refs only on associations.
+  </documentation>
+</bomdocumentation:DesignDecisions>

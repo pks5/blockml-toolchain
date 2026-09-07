@@ -1,12 +1,6 @@
-<!--
-  XSD Capability — EmitTypesXsd
-  FQN: org.blockml.bml.target.xsd.capability.EmitTypesXsd
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--XSD Capability — EmitTypesXsd
+  FQN: org.blockml.bml.target.xsd.capability.EmitTypesXsd-->
+<xsdcap:EmitTypesXsd xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -20,24 +14,28 @@
   xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>EmitTypesXsd</name>
-  <type>xsdcap:EmitTypesXsd</type>
-  <baseType>core:Capability</baseType>
-  <is>Emit types.xsd vocabulary schema</is>
-
-  <documentation>XSD12: elements for org.blockml.bml.type.* short names as xs:string under http://blockml.org/schema/types.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Emit types.xsd vocabulary schema
+  </is>
+  <documentation>
+    XSD12: elements for org.blockml.bml.type.* short names as xs:string under http://blockml.org/schema/types.
+  </documentation>
   <references>
     <see type="xsddocumentation:DomainVocabularyRules" relation="SeeAlso" />
   </references>
-
   <properties>
     <typeRegistry type="type:Text">
-      <documentation>TypeRegistry. (required)</documentation>
+      <documentation>
+        TypeRegistry. (required)
+      </documentation>
     </typeRegistry>
     <result type="type:Text">
-      <documentation>types.xsd XML string. (required)</documentation>
+      <documentation>
+        types.xsd XML string. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</xsdcap:EmitTypesXsd>

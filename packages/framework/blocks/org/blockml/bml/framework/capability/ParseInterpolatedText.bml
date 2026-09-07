@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — ParseInterpolatedText
-  FQN: org.blockml.bml.framework.capability.ParseInterpolatedText
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — ParseInterpolatedText
+  FQN: org.blockml.bml.framework.capability.ParseInterpolatedText-->
+<fwcap:ParseInterpolatedText xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,29 +25,31 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ParseInterpolatedText</name>
-  <type>fwcap:ParseInterpolatedText</type>
-  <baseType>core:Capability</baseType>
-  <is>Parse interpolated text into an InterpolatedStringNode AST</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Parse interpolated text into an InterpolatedStringNode AST
+  </is>
   <documentation>
     Scan authored text for unescaped `${` holes. `\${` is a literal `${`; an even
     number of backslashes immediately before `$` leaves a hole (`\\${` → `\` +
     hole). Restricted profile — same #this lookup as full expressions; no @model,
     @bean, or capability calls.
   </documentation>
-
   <references>
     <see type="fwdocumentation:ExpressionParsing" relation="SeeAlso" />
   </references>
-
   <properties>
     <source type="type:Text">
-      <documentation>source. TS type: type:Text. (required)</documentation>
+      <documentation>
+        source. TS type: type:Text. (required)
+      </documentation>
     </source>
     <outcome type="fwexpression:ParseExpressionOutcome">
-      <documentation>outcome. TS type: fwexpression:ParseExpressionOutcome. (required)</documentation>
+      <documentation>
+        outcome. TS type: fwexpression:ParseExpressionOutcome. (required)
+      </documentation>
     </outcome>
   </properties>
-
-</block>
+</fwcap:ParseInterpolatedText>

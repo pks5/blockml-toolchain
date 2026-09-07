@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — InterpolatedTextValue
-  FQN: org.blockml.bml.bom.value.InterpolatedTextValue
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — InterpolatedTextValue
+  FQN: org.blockml.bml.bom.value.InterpolatedTextValue-->
+<bomvalue:InterpolatedTextValue xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,30 +17,37 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>InterpolatedTextValue</name>
-  <type>bomvalue:InterpolatedTextValue</type>
-  <baseType>bomvalue:MemberValue</baseType>
-  <is>Authored interpolated text member value</is>
-
+  <baseType>
+    bomvalue:MemberValue
+  </baseType>
+  <is>
+    Authored interpolated text member value
+  </is>
   <documentation>
     raw is the full authored text including `${` holes and `\${` escapes. AST via
     parseInterpolatedText() — not stored. Serializer emits raw 1:1.
   </documentation>
-
   <properties>
     <kind type="type:Text">
-      <documentation>kind (required). TS type: type:Text.</documentation>
+      <documentation>
+        kind (required). TS type: type:Text.
+      </documentation>
       <value>interpolated</value>
     </kind>
     <raw type="type:Text">
-      <documentation>Full authored text including ${} holes (required). TS type: type:Text.</documentation>
+      <documentation>
+        Full authored text including ${} holes (required). TS type: type:Text.
+      </documentation>
     </raw>
     <authoredPlacement type="type:Text">
-      <documentation>authoredPlacement (optional). TS type: type:Text.</documentation>
+      <documentation>
+        authoredPlacement (optional). TS type: type:Text.
+      </documentation>
     </authoredPlacement>
     <source type="bomcommon:SourceLocation">
-      <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
+      <documentation>
+        source (optional). TS type: bomcommon:SourceLocation.
+      </documentation>
     </source>
   </properties>
-
-</block>
+</bomvalue:InterpolatedTextValue>

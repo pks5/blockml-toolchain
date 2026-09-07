@@ -1,12 +1,6 @@
-<!--
-  CLI Capability — DefaultOutDir
-  FQN: org.blockml.bml.cli.capability.DefaultOutDir
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Capability — DefaultOutDir
+  FQN: org.blockml.bml.cli.capability.DefaultOutDir-->
+<clicap:DefaultOutDir xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,23 +14,30 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>DefaultOutDir</name>
-  <type>clicap:DefaultOutDir</type>
-  <baseType>core:Capability</baseType>
-  <is>Resolve default output directory for a target</is>
-
-  <documentation>CLI13: xsd returns schemas; blockdoc returns config.outDir or blockdoc; fatblock returns . (invocation directory).</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Resolve default output directory for a target
+  </is>
+  <documentation>
+    CLI13: xsd returns schemas; blockdoc returns config.outDir or blockdoc; fatblock returns . (invocation directory).
+  </documentation>
   <properties>
     <target type="type:Text">
-      <documentation>Registry name. (required)</documentation>
+      <documentation>
+        Registry name. (required)
+      </documentation>
     </target>
     <config type="cliapi:BomConfig">
-      <documentation>Project config. (required)</documentation>
+      <documentation>
+        Project config. (required)
+      </documentation>
     </config>
     <result type="type:Text">
-      <documentation>Default outDir path. (required)</documentation>
+      <documentation>
+        Default outDir path. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</clicap:DefaultOutDir>

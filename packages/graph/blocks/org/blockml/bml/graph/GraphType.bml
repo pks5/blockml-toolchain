@@ -1,12 +1,6 @@
-<!--
-  Graph — GraphType
-  FQN: org.blockml.bml.graph.GraphType
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph — GraphType
+  FQN: org.blockml.bml.graph.GraphType-->
+<graph:GraphType xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,13 +15,19 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>GraphType</name>
-  <type>graph:GraphType</type>
-  <baseType>core:Entity</baseType>
-  <is>Abstract marker for Graph implementation data-structure blocks</is>
-  <documentation>GraphNode, GraphPath, and related ValueTypes used as capability payloads.</documentation>
-  <abstract>true</abstract>
+  <baseType>
+    core:Entity
+  </baseType>
+  <is>
+    Abstract marker for Graph implementation data-structure blocks
+  </is>
+  <documentation>
+    GraphNode, GraphPath, and related ValueTypes used as capability payloads.
+  </documentation>
+  <abstract>
+    true
+  </abstract>
   <references>
     <see type="bom:UrmodellType" relation="SeeAlso" />
   </references>
-</block>
+</graph:GraphType>

@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — VirtualContainerNode
-  FQN: org.blockml.bml.bom.composition.VirtualContainerNode
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — VirtualContainerNode
+  FQN: org.blockml.bml.bom.composition.VirtualContainerNode-->
+<bomcomp:VirtualContainerNode xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,30 +17,41 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>VirtualContainerNode</name>
-  <type>bomcomp:VirtualContainerNode</type>
-  <baseType>bomcomp:CompositionNode</baseType>
-  <is>Virtual bml:container node (kind: virtualContainer)</is>
-
-  <documentation>Virtual bml:container node (kind: virtualContainer)</documentation>
-
+  <baseType>
+    bomcomp:CompositionNode
+  </baseType>
+  <is>
+    Virtual bml:container node (kind: virtualContainer)
+  </is>
+  <documentation>
+    Virtual bml:container node (kind: virtualContainer)
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind (required). TS type: type:Text.</documentation>
+      <documentation>
+        kind (required). TS type: type:Text.
+      </documentation>
       <value>virtualContainer</value>
     </kind>
     <directives type="bomcomp:DirectiveAttribute[]">
-      <documentation>directives (optional). TS type: bomcomp:DirectiveAttribute[].</documentation>
+      <documentation>
+        directives (optional). TS type: bomcomp:DirectiveAttribute[].
+      </documentation>
     </directives>
     <generics type="bomcomp:GenericsBinding">
-      <documentation>Misplaced bml:generics on bml:container. (optional)</documentation>
+      <documentation>
+        Misplaced bml:generics on bml:container. (optional)
+      </documentation>
     </generics>
     <children type="bomcomp:CompositionNode[]">
-      <documentation>children (required). TS type: bomcomp:CompositionNode[].</documentation>
+      <documentation>
+        children (required). TS type: bomcomp:CompositionNode[].
+      </documentation>
     </children>
     <source type="bomcommon:SourceLocation">
-      <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
+      <documentation>
+        source (optional). TS type: bomcommon:SourceLocation.
+      </documentation>
     </source>
   </properties>
-
-</block>
+</bomcomp:VirtualContainerNode>

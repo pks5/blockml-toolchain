@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — ResolvePrefix
-  FQN: org.blockml.bml.compiler.parser.capability.ResolvePrefix
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — ResolvePrefix
+  FQN: org.blockml.bml.compiler.parser.capability.ResolvePrefix-->
+<parcap:ResolvePrefix xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,23 +23,30 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ResolvePrefix</name>
-  <type>parcap:ResolvePrefix</type>
-  <baseType>core:Capability</baseType>
-  <is>Resolve namespace prefix to URI from bindings</is>
-
-  <documentation>Resolve namespace prefix to URI from bindings</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Resolve namespace prefix to URI from bindings
+  </is>
+  <documentation>
+    Resolve namespace prefix to URI from bindings
+  </documentation>
   <properties>
     <prefix type="type:Text">
-      <documentation>prefix. TS type: type:Text. (required)</documentation>
+      <documentation>
+        prefix. TS type: type:Text. (required)
+      </documentation>
     </prefix>
     <bindings type="type:Text">
-      <documentation>bindings. TS type: type:Text. (required)</documentation>
+      <documentation>
+        bindings. TS type: type:Text. (required)
+      </documentation>
     </bindings>
     <uri type="type:Text">
-      <documentation>uri. TS type: type:Text. (required)</documentation>
+      <documentation>
+        uri. TS type: type:Text. (required)
+      </documentation>
     </uri>
   </properties>
-
-</block>
+</parcap:ResolvePrefix>

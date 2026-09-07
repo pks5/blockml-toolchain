@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — EvaluateInterpolatedText
-  FQN: org.blockml.bml.framework.capability.EvaluateInterpolatedText
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — EvaluateInterpolatedText
+  FQN: org.blockml.bml.framework.capability.EvaluateInterpolatedText-->
+<fwcap:EvaluateInterpolatedText xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,20 +25,25 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>EvaluateInterpolatedText</name>
-  <type>fwcap:EvaluateInterpolatedText</type>
-  <baseType>core:Capability</baseType>
-  <is>Evaluate interpolated text against the #this scope</is>
-
-  <documentation>Parses holes then evaluates them with the same #this lookup as full expressions. Result is concatenated Text.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Evaluate interpolated text against the #this scope
+  </is>
+  <documentation>
+    Parses holes then evaluates them with the same #this lookup as full expressions. Result is concatenated Text.
+  </documentation>
   <properties>
     <source type="type:Text">
-      <documentation>source. TS type: type:Text. (required)</documentation>
+      <documentation>
+        source. TS type: type:Text. (required)
+      </documentation>
     </source>
     <value type="type:Text">
-      <documentation>value. TS type: type:Text. (required)</documentation>
+      <documentation>
+        value. TS type: type:Text. (required)
+      </documentation>
     </value>
   </properties>
-
-</block>
+</fwcap:EvaluateInterpolatedText>

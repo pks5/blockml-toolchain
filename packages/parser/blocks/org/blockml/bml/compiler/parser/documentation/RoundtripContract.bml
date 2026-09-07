@@ -1,12 +1,6 @@
-<!--
-  Parser Documentation — RoundtripContract
-  FQN: org.blockml.bml.compiler.parser.documentation.RoundtripContract
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Documentation — RoundtripContract
+  FQN: org.blockml.bml.compiler.parser.documentation.RoundtripContract-->
+<pardocumentation:RoundtripContract xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,26 +24,27 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>RoundtripContract</name>
-  <type>pardocumentation:RoundtripContract</type>
-  <baseType>core:Documentation</baseType>
-  <is>Parse-side roundtrip obligations (B10/B11/B13/B20)</is>
-
-  <documentation>Phase-A gate: bomEquals(stripProvenance(parse(serialize(parse(f)))), parse(f)).
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Parse-side roundtrip obligations (B10/B11/B13/B20)
+  </is>
+  <documentation>
+    Phase-A gate: bomEquals(stripProvenance(parse(serialize(parse(f)))), parse(f)).
     Shared definition in @blockml/bom (B20).
-
+    
     Parser obligations:
     • Preserve semantic content for serializer re-emit
     • Store xmlRendering, authoredPlacement, authoredCharacterDataForm, namespaceBindings
     • Do NOT require storing formatting whitespace (B13)
     • Single-file roundtrip tests do not require TypeRegistry bootstrap
-
-    XML byte fidelity NOT a gate — see @blockml/serializer RoundtripContract.</documentation>
-
+    
+    XML byte fidelity NOT a gate — see @blockml/serializer RoundtripContract.
+  </documentation>
   <references>
     <see type="bomcap:BomEquals" relation="SeeAlso" />
     <see type="serdocumentation:RoundtripContract" relation="SeeAlso" />
     <see type="pardocumentation:Diagnostics" relation="ReadNext" />
   </references>
-
-</block>
+</pardocumentation:RoundtripContract>

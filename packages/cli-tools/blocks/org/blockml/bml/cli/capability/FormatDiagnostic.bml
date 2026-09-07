@@ -1,12 +1,6 @@
-<!--
-  CLI Capability — FormatDiagnostic
-  FQN: org.blockml.bml.cli.capability.FormatDiagnostic
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Capability — FormatDiagnostic
+  FQN: org.blockml.bml.cli.capability.FormatDiagnostic-->
+<clicap:FormatDiagnostic xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,26 +14,30 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>FormatDiagnostic</name>
-  <type>clicap:FormatDiagnostic</type>
-  <baseType>core:Capability</baseType>
-  <is>Format one diagnostic for CLI transcript</is>
-
-  <documentation>CLI17: format severity code file:line — message. Empty source omits location.
-    Output is uncolored text. WriteCliOutput applies CLI24 colors from severity.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Format one diagnostic for CLI transcript
+  </is>
+  <documentation>
+    CLI17: format severity code file:line — message. Empty source omits location.
+    Output is uncolored text. WriteCliOutput applies CLI24 colors from severity.
+  </documentation>
   <references>
     <see type="clidocumentation:ExitCodesAndDiagnostics" relation="SeeAlso" />
     <see type="clicap:WriteCliOutput" relation="SeeAlso" />
   </references>
-
   <properties>
     <diagnostic type="type:Text">
-      <documentation>Diagnostic object with severity, code, message, optional source. (required)</documentation>
+      <documentation>
+        Diagnostic object with severity, code, message, optional source. (required)
+      </documentation>
     </diagnostic>
     <result type="type:Text">
-      <documentation>Single formatted line. (required)</documentation>
+      <documentation>
+        Single formatted line. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</clicap:FormatDiagnostic>

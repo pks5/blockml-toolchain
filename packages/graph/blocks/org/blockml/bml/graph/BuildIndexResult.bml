@@ -1,12 +1,6 @@
-<!--
-  Graph — BuildIndexResult
-  FQN: org.blockml.bml.graph.BuildIndexResult
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph — BuildIndexResult
+  FQN: org.blockml.bml.graph.BuildIndexResult-->
+<graph:BuildIndexResult xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,23 +15,35 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>BuildIndexResult</name>
-  <type>graph:BuildIndexResult</type>
-  <baseType>graph:GraphType</baseType>
-  <is>In-memory graph index plus bootstrap diagnostics</is>
-  <documentation>Returned by buildIndex, rebuildIndex, and openGraph.</documentation>
+  <baseType>
+    graph:GraphType
+  </baseType>
+  <is>
+    In-memory graph index plus bootstrap diagnostics
+  </is>
+  <documentation>
+    Returned by buildIndex, rebuildIndex, and openGraph.
+  </documentation>
   <properties>
     <index type="graph:GraphType">
-      <documentation>Opaque GraphIndex handle. (required)</documentation>
+      <documentation>
+        Opaque GraphIndex handle. (required)
+      </documentation>
     </index>
     <diagnostics type="bomcommon:Diagnostic[]">
-      <documentation>diagnostics (required). TS type: bomcommon:Diagnostic[].</documentation>
+      <documentation>
+        diagnostics (required). TS type: bomcommon:Diagnostic[].
+      </documentation>
     </diagnostics>
     <blocks type="type:Integer">
-      <documentation>Resolved Block nodes. (required)</documentation>
+      <documentation>
+        Resolved Block nodes. (required)
+      </documentation>
     </blocks>
     <members type="type:Integer">
-      <documentation>Member nodes. (required)</documentation>
+      <documentation>
+        Member nodes. (required)
+      </documentation>
     </members>
   </properties>
-</block>
+</graph:BuildIndexResult>

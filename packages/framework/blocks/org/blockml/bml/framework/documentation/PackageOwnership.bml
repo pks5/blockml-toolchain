@@ -1,12 +1,6 @@
-<!--
-  Framework Documentation — PackageOwnership
-  FQN: org.blockml.bml.framework.documentation.PackageOwnership
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Documentation — PackageOwnership
+  FQN: org.blockml.bml.framework.documentation.PackageOwnership-->
+<fwdocumentation:PackageOwnership xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -32,28 +26,29 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PackageOwnership</name>
-  <type>fwdocumentation:PackageOwnership</type>
-  <baseType>core:Documentation</baseType>
-  <is>Toolchain package responsibilities for framework utilities</is>
-
-  <documentation>@blockml/framework — TypeRegistry, bootstrap, forkBom, resolveEffectiveMembers,
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Toolchain package responsibilities for framework utilities
+  </is>
+  <documentation>
+    @blockml/framework — TypeRegistry, bootstrap, forkBom, resolveEffectiveMembers,
     parseExpression, validateTypes, validateConstraints. Owns this BML library.
-
+    
     @blockml/bom — Urmodell types, ValidateOptions/ValidateResult, TypeRegistryReader,
     Diagnostic. Framework consumes; does not redefine.
-
+    
     @blockml/parser — parse() used during bootstrap only.
-
+    
     @blockml/validator — validate() orchestrator; calls framework utilities.
-
+    
     @blockml/core (npm) — language/meta-model BML corpus; bootstrap source.
-
-    @blockml/cli — TypeRegistry bootstrap host and validate/compile orchestration.</documentation>
-
+    
+    @blockml/cli — TypeRegistry bootstrap host and validate/compile orchestration.
+  </documentation>
   <references>
     <see type="fwdocumentation:ScopeExclusions" relation="ReadNext" />
     <see type="bomdocumentation:PackageOwnership" relation="SeeAlso" />
   </references>
-
-</block>
+</fwdocumentation:PackageOwnership>

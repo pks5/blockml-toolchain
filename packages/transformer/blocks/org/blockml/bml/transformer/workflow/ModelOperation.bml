@@ -1,34 +1,28 @@
-<!--
-  Transformer Workflow — ModelOperation
-  FQN: org.blockml.bml.transformer.workflow.ModelOperation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Workflow — ModelOperation
+  FQN: org.blockml.bml.transformer.workflow.ModelOperation-->
+<workflow:ModelOperation xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ModelOperation</name>
-  <type>workflow:ModelOperation</type>
-  <baseType>core:Block</baseType>
-  <is>A self-contained operation of a ModelTransformation</is>
-  <abstract>true</abstract>
-
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    A self-contained operation of a ModelTransformation
+  </is>
   <documentation>
     Abstract envelope for one self-contained (Model-)Operation of a
     ModelTransformation. Concrete subtypes (for example
     `workflow:AgenticOperation`, `workflow:ToolOperation`) add
     type-specific members. Instances
     must be a concrete subtype; this type itself is not instantiated.
-
+    
     The transformer writes envelope fields the same way for every
     subtype. A registered `transformercap:OperationExecutor` does only the
     type-specific work and may return output text.
-
+    
     * `status` — lifecycle state (`workflow:ExecutionStatus`).
     * `startedAt` / `completedAt` — the interval of this operation.
     * `baseCommit` — Git HEAD commit when this operation started.
@@ -50,7 +44,9 @@
       sets `status=Failed`, and aborts remaining operations.
     * `exception` — present if and only if `status` is Failed.
   </documentation>
-
+  <abstract>
+    true
+  </abstract>
   <references>
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:AgenticOperation" relation="SeeAlso" />
@@ -62,22 +58,31 @@
     <see type="core:Exception" relation="SeeAlso" />
     <see type="type:FilePathEntity" relation="SeeAlso" />
   </references>
-
   <properties>
     <name type="type:Text">
-      <documentation>Name of this ModelOperation.</documentation>
+      <documentation>
+        Name of this ModelOperation.
+      </documentation>
     </name>
     <status type="workflow:ExecutionStatus">
-      <documentation>Lifecycle state of this ModelOperation.</documentation>
+      <documentation>
+        Lifecycle state of this ModelOperation.
+      </documentation>
     </status>
     <startedAt type="type:DateTime">
-      <documentation>When this ModelOperation started.</documentation>
+      <documentation>
+        When this ModelOperation started.
+      </documentation>
     </startedAt>
     <baseCommit type="type:Text">
-      <documentation>Git HEAD commit when this ModelOperation started.</documentation>
+      <documentation>
+        Git HEAD commit when this ModelOperation started.
+      </documentation>
     </baseCommit>
     <completedAt type="type:DateTime">
-      <documentation>When this ModelOperation finished.</documentation>
+      <documentation>
+        When this ModelOperation finished.
+      </documentation>
     </completedAt>
     <captureOutput type="type:Boolean">
       <documentation>
@@ -95,10 +100,11 @@
       </documentation>
     </output>
   </properties>
-
   <aggregations>
     <changedFiles type="type:FilePathEntity[]">
-      <documentation>Workspace-relative paths modified during this ModelOperation.</documentation>
+      <documentation>
+        Workspace-relative paths modified during this ModelOperation.
+      </documentation>
     </changedFiles>
     <resultMappings type="workflow:ResultMapping[]">
       <documentation>
@@ -107,8 +113,9 @@
       </documentation>
     </resultMappings>
     <exception type="core:Exception">
-      <documentation>The Exception thrown during this ModelOperation, if any.</documentation>
+      <documentation>
+        The Exception thrown during this ModelOperation, if any.
+      </documentation>
     </exception>
   </aggregations>
-
-</block>
+</workflow:ModelOperation>

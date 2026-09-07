@@ -1,12 +1,6 @@
-<!--
-  Framework — ObjectExpressionEntry
-  FQN: org.blockml.bml.framework.expression.ObjectExpressionEntry
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework — ObjectExpressionEntry
+  FQN: org.blockml.bml.framework.expression.ObjectExpressionEntry-->
+<fwexpression:ObjectExpressionEntry xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,20 +25,25 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ObjectExpressionEntry</name>
-  <type>fwexpression:ObjectExpressionEntry</type>
-  <baseType>framework:FrameworkType</baseType>
-  <is>One key/value pair in an object expression</is>
-
-  <documentation><![CDATA[BML type gap: stands for TypeScript Record<string, ExpressionNode>. Core has no Map ValueType; this struct is the per-entry shape.]]></documentation>
-
+  <baseType>
+    framework:FrameworkType
+  </baseType>
+  <is>
+    One key/value pair in an object expression
+  </is>
+  <documentation>
+    <![CDATA[BML type gap: stands for TypeScript Record<string, ExpressionNode>. Core has no Map ValueType; this struct is the per-entry shape.]]>
+  </documentation>
   <properties>
     <key type="type:Text">
-      <documentation>key. TS type: type:Text. (required)</documentation>
+      <documentation>
+        key. TS type: type:Text. (required)
+      </documentation>
     </key>
     <value type="fwexpression:ExpressionNode">
-      <documentation>value. TS type: fwexpression:ExpressionNode. (required)</documentation>
+      <documentation>
+        value. TS type: fwexpression:ExpressionNode. (required)
+      </documentation>
     </value>
   </properties>
-
-</block>
+</fwexpression:ObjectExpressionEntry>

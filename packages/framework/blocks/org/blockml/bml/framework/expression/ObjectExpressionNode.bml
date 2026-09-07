@@ -1,12 +1,6 @@
-<!--
-  Framework — ObjectExpressionNode
-  FQN: org.blockml.bml.framework.expression.ObjectExpressionNode
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework — ObjectExpressionNode
+  FQN: org.blockml.bml.framework.expression.ObjectExpressionNode-->
+<fwexpression:ObjectExpressionNode xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,21 +25,26 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ObjectExpressionNode</name>
-  <type>fwexpression:ObjectExpressionNode</type>
-  <baseType>fwexpression:ExpressionNode</baseType>
-  <is>Object expression AST node</is>
-
-  <documentation><![CDATA[kind: object. entries: Record<string, ExpressionNode>.]]></documentation>
-
+  <baseType>
+    fwexpression:ExpressionNode
+  </baseType>
+  <is>
+    Object expression AST node
+  </is>
+  <documentation>
+    <![CDATA[kind: object. entries: Record<string, ExpressionNode>.]]>
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind. TS type: type:Text. (required)</documentation>
+      <documentation>
+        kind. TS type: type:Text. (required)
+      </documentation>
       <value>object</value>
     </kind>
     <entries type="fwexpression:ObjectExpressionEntry[]">
-      <documentation>BML type gap: TS Record&lt;string, ExpressionNode&gt;. (required)</documentation>
+      <documentation>
+        BML type gap: TS Record&lt;string, ExpressionNode>. (required)
+      </documentation>
     </entries>
   </properties>
-
-</block>
+</fwexpression:ObjectExpressionNode>

@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — ParseVisibilityFromName
-  FQN: org.blockml.bml.compiler.parser.capability.ParseVisibilityFromName
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — ParseVisibilityFromName
+  FQN: org.blockml.bml.compiler.parser.capability.ParseVisibilityFromName-->
+<parcap:ParseVisibilityFromName xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,24 +23,28 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ParseVisibilityFromName</name>
-  <type>parcap:ParseVisibilityFromName</type>
-  <baseType>core:Capability</baseType>
-  <is>Strip _/__ prefix from localName → logical name + visibility (B14)</is>
-
-  <documentation>Strip _/__ prefix from localName → logical name + visibility (B14)</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Strip _/__ prefix from localName → logical name + visibility (B14)
+  </is>
+  <documentation>
+    Strip _/__ prefix from localName → logical name + visibility (B14)
+  </documentation>
   <references>
     <see type="pardocumentation:DesignDecisions" relation="SeeAlso" />
   </references>
-
   <properties>
     <localName type="type:Text">
-      <documentation>localName. TS type: type:Text. (required)</documentation>
+      <documentation>
+        localName. TS type: type:Text. (required)
+      </documentation>
     </localName>
     <result type="parmap:VisibilityParse">
-      <documentation>result. TS type: parmap:VisibilityParse. (required)</documentation>
+      <documentation>
+        result. TS type: parmap:VisibilityParse. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</parcap:ParseVisibilityFromName>

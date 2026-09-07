@@ -1,12 +1,6 @@
-<!--
-  Builder Documentation — PackageOwnership
-  FQN: org.blockml.bml.builder.documentation.PackageOwnership
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Builder Documentation — PackageOwnership
+  FQN: org.blockml.bml.builder.documentation.PackageOwnership-->
+<builderdocumentation:PackageOwnership xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -20,18 +14,22 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>PackageOwnership</name>
-  <type>builderdocumentation:PackageOwnership</type>
-  <baseType>core:Documentation</baseType>
-  <is>Toolchain responsibilities for Builder</is>
-  <documentation>@blockml/builder — BomBuilder session, mutations, seal(). Owns this BML library.
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Toolchain responsibilities for Builder
+  </is>
+  <documentation>
+    @blockml/builder — BomBuilder session, mutations, seal(). Owns this BML library.
+    
     @blockml/bom — BomDocument and member types.
     @blockml/framework — TypeRegistry (CLI lookup of owning Library / baseType).
     @blockml/parser — load existing documents for edit.
     @blockml/serializer — emit BML after seal.
-    @blockml/cli — blockml new command host.</documentation>
+    @blockml/cli — blockml new command host.
+  </documentation>
   <references>
     <see type="builderdocumentation:ScopeExclusions" relation="ReadNext" />
   </references>
-</block>
+</builderdocumentation:PackageOwnership>

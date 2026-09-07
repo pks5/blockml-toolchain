@@ -1,29 +1,27 @@
-<!--
-  Test fixture — valid Min on numeric Property
-  See packages/framework/test/constraints/constraints.test-spec.yaml
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Test fixture — valid Min on numeric Property
+  See packages/framework/test/constraints/constraints.test-spec.yaml-->
+<test:MinOnProperty xmlns="http://blockml.org/bml"
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:validation="org.blockml.bml.validation"
   xmlns:test="com.blockml.test.constraints">
 
-  <type>test:MinOnProperty</type>
-  <baseType>core:Block</baseType>
-  <is>A constraint test fixture</is>
-  <version>1.0.0</version>
-
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    A constraint test fixture
+  </is>
+  <version>
+    1.0.0
+  </version>
   <properties>
     <count type="type:Integer">
-      <value>5</value>
       <constraints>
-        <constraint:Min value="1" validation="validation:Error"/>
+        <constraint:Min value="1" validation="validation:Error" />
       </constraints>
+      <value>5</value>
     </count>
   </properties>
-</block>
+</test:MinOnProperty>

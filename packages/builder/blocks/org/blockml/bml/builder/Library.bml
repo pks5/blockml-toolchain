@@ -1,12 +1,6 @@
-<!--
-  BlockML Builder Library Descriptor
-  FQN: org.blockml.bml.builder.Library
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Builder Library Descriptor
+  FQN: org.blockml.bml.builder.Library-->
+<builder:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -20,29 +14,28 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Library</name>
-  <type>builder:Library</type>
-  <baseType>core:BlockLibrary</baseType>
-  <is>The BlockML Builder package library catalog</is>
-
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    The BlockML Builder package library catalog
+  </is>
+  <version>
+    0.9.4
+  </version>
   <documentation>
     Canonical BomBuilder specification for BlockML — writable authoring session
     that create/edit/seal BomDocument graphs. TypeScript in packages/builder/src/
     implements this library. Membership is defined exclusively by this blocks list.
   </documentation>
-
-  <version>0.9.4</version>
-
   <language>
-    <English />
+    <blockml:language.English />
   </language>
-
   <properties>
     <description override="true">
       <value>BlockML Builder library</value>
     </description>
   </properties>
-
   <aggregations>
     <readMe override="true">
       <composition>
@@ -82,5 +75,4 @@
       </composition>
     </blocks>
   </aggregations>
-
-</block>
+</builder:Library>

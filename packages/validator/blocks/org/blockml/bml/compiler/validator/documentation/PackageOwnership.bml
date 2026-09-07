@@ -1,12 +1,6 @@
-<!--
-  Validator Documentation — PackageOwnership
-  FQN: org.blockml.bml.compiler.validator.documentation.PackageOwnership
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Validator Documentation — PackageOwnership
+  FQN: org.blockml.bml.compiler.validator.documentation.PackageOwnership-->
+<valdocumentation:PackageOwnership xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -22,30 +16,30 @@
   xmlns:valcap="org.blockml.bml.compiler.validator.capability"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation"
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
->
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>PackageOwnership</name>
-  <type>valdocumentation:PackageOwnership</type>
-  <baseType>core:Documentation</baseType>
-  <is>Toolchain package responsibilities for validation</is>
-
-  <documentation>@blockml/validator — validate() orchestration, style catalog, ValidateResult assembly.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Toolchain package responsibilities for validation
+  </is>
+  <documentation>
+    @blockml/validator — validate() orchestration, style catalog, ValidateResult assembly.
     Owns this BML library including org.blockml.bml.compiler.validator.style.*.
-
+    
     @blockml/bom — Urmodell types, ValidateOptions/ValidateResult (B26), Diagnostic.
     Validator consumes; does not redefine.
-
+    
     @blockml/framework — TypeRegistry, forkBom, validateTypes, validateConstraints,
     bootstrapTypeRegistry. Validator delegates all semantic work here.
-
+    
     @blockml/parser — BML → BomDocument; used indirectly via framework bootstrap.
-
-    @blockml/cli — validate command host; may inject TypeRegistry or bootstrap paths.</documentation>
-
+    
+    @blockml/cli — validate command host; may inject TypeRegistry or bootstrap paths.
+  </documentation>
   <references>
     <see type="valdocumentation:ScopeExclusions" relation="ReadNext" />
     <see type="bomdocumentation:PackageOwnership" relation="SeeAlso" />
   </references>
-
-</block>
+</valdocumentation:PackageOwnership>

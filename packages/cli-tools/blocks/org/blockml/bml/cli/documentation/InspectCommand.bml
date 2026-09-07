@@ -1,12 +1,6 @@
-<!--
-  CLI Documentation — InspectCommand
-  FQN: org.blockml.bml.cli.documentation.InspectCommand
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Documentation — InspectCommand
+  FQN: org.blockml.bml.cli.documentation.InspectCommand-->
+<clidocumentation:InspectCommand xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -22,49 +16,53 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>InspectCommand</name>
-  <type>clidocumentation:InspectCommand</type>
-  <baseType>core:Documentation</baseType>
-  <is>blockml inspect specification</is>
-
-  <documentation><![CDATA[Syntax:
-    blockml inspect FQN [--depth n] [--json] [--src dir] [--libraries a,b]
-
-    Inspect uses the same corpus as validate --all (@blockml/inspect / bootstrapFullProjectRegistry).
-    Output is InspectResult JSON (root, depth, blocks, unresolved, cycles, truncated).
-    Effective members are four optional lists (properties, aggregations, associations, capabilities) with no kind field. Each member includes its first documentation entry when present. Aggregation entries include authored composition instances. Authored documentation see references are compact FQN + relation and are not expanded; first 8, referencesTruncated is the remaining count. Capability entries include implementation language and truncated source. Documentation longer than 400 characters sets documentationTruncated. InspectedBlock.baseType keeps generic arguments. genericTypes lists declared parameters (not subBlocks).
-    Default depth 1, allowed 0, cap 3. --json is accepted and implied.
-    Missing or unknown FQN → exit 2. Unknown FQN may print Did you mean …? when search finds a Block whose last segment matches, or when the token is a .bml path whose document-root FQN is in the corpus.
-    --help and -h print the Printed help page and exit 0.
-
-Printed help:
-Usage: blockml inspect <fqn> [--depth n] [--json] [--src dir] [--libraries a,b]
-       blockml inspect --help
-
-When: you already know the FQN and need the Block already resolved.
-
-Inspect returns compact JSON of a Block from the live TypeRegistry (same corpus as validate --all). No cache file.
-
-Effective members are four optional lists (properties, aggregations, associations, capabilities) with no kind field; inherited included. Empty lists omitted. Expansion follows declared member types, contracts, subBlocks, and generic type arguments — not a copy of the ancestor chain; ancestors are FQN refs. genericTypes are declared parameters; bound types on an instance are SubBlocks of that instance, not of the generic parent.
-
-Flags:
-  --depth n     0 = that Block only; default 1; cap 3. Budget 48 blocks.
-  --json        accepted and implied (output is always JSON)
-  --src dir     source directory override
-  --libraries   extra Library.bml seeds
-
-If truncated is non-empty, inspect the needed child FQN instead of raising depth.
-Not a write format; do not round-trip Inspect JSON to BML.
-A .bml path is not an FQN; inspect may print Did you mean <root FQN>?
-Unknown FQN exits 2. Block and member documentation longer than 400 characters is truncated with an ellipsis and documentationTruncated=true.
-Aggregation members include authored composition instances (enum literals, Library catalog FQNs, nested ModelOperation/Task fills).
-Authored documentation see references are compact FQN + relation and are not expanded; first 8, referencesTruncated is the remaining count.
-Capability members include implementation (language + truncated source).
-
-Related: search (find the FQN), graph (how it connects).]]></documentation>
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    blockml inspect specification
+  </is>
+  <documentation>
+    <![CDATA[
+    Syntax:
+        blockml inspect FQN [--depth n] [--json] [--src dir] [--libraries a,b]
+    
+        Inspect uses the same corpus as validate --all (@blockml/inspect / bootstrapFullProjectRegistry).
+        Output is InspectResult JSON (root, depth, blocks, unresolved, cycles, truncated).
+        Effective members are four optional lists (properties, aggregations, associations, capabilities) with no kind field. Each member includes its first documentation entry when present. Aggregation entries include authored composition instances. Authored documentation see references are compact FQN + relation and are not expanded; first 8, referencesTruncated is the remaining count. Capability entries include implementation language and truncated source. Documentation longer than 400 characters sets documentationTruncated. InspectedBlock.baseType keeps generic arguments. genericTypes lists declared parameters (not subBlocks).
+        Default depth 1, allowed 0, cap 3. --json is accepted and implied.
+        Missing or unknown FQN → exit 2. Unknown FQN may print Did you mean …? when search finds a Block whose last segment matches, or when the token is a .bml path whose document-root FQN is in the corpus.
+        --help and -h print the Printed help page and exit 0.
+    
+    Printed help:
+    Usage: blockml inspect <fqn> [--depth n] [--json] [--src dir] [--libraries a,b]
+           blockml inspect --help
+    
+    When: you already know the FQN and need the Block already resolved.
+    
+    Inspect returns compact JSON of a Block from the live TypeRegistry (same corpus as validate --all). No cache file.
+    
+    Effective members are four optional lists (properties, aggregations, associations, capabilities) with no kind field; inherited included. Empty lists omitted. Expansion follows declared member types, contracts, subBlocks, and generic type arguments — not a copy of the ancestor chain; ancestors are FQN refs. genericTypes are declared parameters; bound types on an instance are SubBlocks of that instance, not of the generic parent.
+    
+    Flags:
+      --depth n     0 = that Block only; default 1; cap 3. Budget 48 blocks.
+      --json        accepted and implied (output is always JSON)
+      --src dir     source directory override
+      --libraries   extra Library.bml seeds
+    
+    If truncated is non-empty, inspect the needed child FQN instead of raising depth.
+    Not a write format; do not round-trip Inspect JSON to BML.
+    A .bml path is not an FQN; inspect may print Did you mean <root FQN>?
+    Unknown FQN exits 2. Block and member documentation longer than 400 characters is truncated with an ellipsis and documentationTruncated=true.
+    Aggregation members include authored composition instances (enum literals, Library catalog FQNs, nested ModelOperation/Task fills).
+    Authored documentation see references are compact FQN + relation and are not expanded; first 8, referencesTruncated is the remaining count.
+    Capability members include implementation (language + truncated source).
+    
+    Related: search (find the FQN), graph (how it connects).
+    ]]>
+  </documentation>
   <references>
     <see type="clidocumentation:Commands" relation="SeeAlso" />
     <see type="clicap:RunInspect" relation="SeeAlso" />
   </references>
-
-</block>
+</clidocumentation:InspectCommand>

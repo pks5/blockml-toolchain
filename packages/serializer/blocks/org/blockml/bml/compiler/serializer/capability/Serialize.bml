@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — Serialize
-  FQN: org.blockml.bml.compiler.serializer.capability.Serialize
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — Serialize
+  FQN: org.blockml.bml.compiler.serializer.capability.Serialize-->
+<sercap:Serialize xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,29 +21,35 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>Serialize</name>
-  <type>sercap:Serialize</type>
-  <baseType>core:Capability</baseType>
-  <is>Public entry: BomDocument → canonical BML XML (B26)</is>
-
-  <documentation>Orchestrates emit pipeline. Emit per B12–B25 / D8–D9. Does not call validator.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Public entry: BomDocument → canonical BML XML (B26)
+  </is>
+  <documentation>
+    Orchestrates emit pipeline. Emit per B12–B25 / D8–D9. Does not call validator.
+  </documentation>
   <references>
     <see type="serdocumentation:PublicApi" relation="SeeAlso" />
     <see type="bomapi:SerializeOptions" relation="SeeAlso" />
     <see type="bomapi:SerializeResult" relation="SeeAlso" />
   </references>
-
   <properties>
     <document type="bomdoc:BomDocument">
-      <documentation>document. TS type: bomdoc:BomDocument. (required)</documentation>
+      <documentation>
+        document. TS type: bomdoc:BomDocument. (required)
+      </documentation>
     </document>
     <options type="bomapi:SerializeOptions">
-      <documentation>Default indent=2, xmlDeclaration=false. (optional)</documentation>
+      <documentation>
+        Default indent=2, xmlDeclaration=false. (optional)
+      </documentation>
     </options>
     <result type="bomapi:SerializeResult">
-      <documentation>result. TS type: bomapi:SerializeResult. (required)</documentation>
+      <documentation>
+        result. TS type: bomapi:SerializeResult. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</sercap:Serialize>

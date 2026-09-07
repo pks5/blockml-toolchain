@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — WithBinding
-  FQN: org.blockml.bml.bom.composition.WithBinding
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — WithBinding
+  FQN: org.blockml.bml.bom.composition.WithBinding-->
+<bomcomp:WithBinding xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,20 +17,25 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>WithBinding</name>
-  <type>bomcomp:WithBinding</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>bml:with binding entry</is>
-
-  <documentation>bml:with binding entry</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    bml:with binding entry
+  </is>
+  <documentation>
+    bml:with binding entry
+  </documentation>
   <properties>
     <name type="type:Text">
-      <documentation>name (required). TS type: type:Text.</documentation>
+      <documentation>
+        name (required). TS type: type:Text.
+      </documentation>
     </name>
     <value type="bomvalue:ExpressionValue">
-      <documentation>value (required). TS type: bomvalue:ExpressionValue.</documentation>
+      <documentation>
+        value (required). TS type: bomvalue:ExpressionValue.
+      </documentation>
     </value>
   </properties>
-
-</block>
+</bomcomp:WithBinding>

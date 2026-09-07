@@ -1,12 +1,6 @@
-<!--
-  LSP Capability — StartLanguageServer
-  FQN: org.blockml.bml.lsp.capability.StartLanguageServer
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP Capability — StartLanguageServer
+  FQN: org.blockml.bml.lsp.capability.StartLanguageServer-->
+<lspcap:StartLanguageServer xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,15 +23,16 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>StartLanguageServer</name>
-  <type>lspcap:StartLanguageServer</type>
-  <baseType>core:Capability</baseType>
-  <is>stdio LSP server entry (bin blockml-lsp)</is>
-
-  <documentation>packages/lsp/dist/server.js — document sync, publishDiagnostics, textDocument/formatting, textDocument/hover, textDocument/documentSymbol, textDocument/definition, textDocument/references, and textDocument/semanticTokens/full.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    stdio LSP server entry (bin blockml-lsp)
+  </is>
+  <documentation>
+    packages/lsp/dist/server.js — document sync, publishDiagnostics, textDocument/formatting, textDocument/hover, textDocument/documentSymbol, textDocument/definition, textDocument/references, and textDocument/semanticTokens/full.
+  </documentation>
   <references>
     <see type="lspdocumentation:ServerLifecycle" relation="SeeAlso" />
   </references>
-
-</block>
+</lspcap:StartLanguageServer>

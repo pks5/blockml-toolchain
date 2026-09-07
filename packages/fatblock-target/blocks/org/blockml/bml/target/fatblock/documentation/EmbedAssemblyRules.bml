@@ -1,12 +1,6 @@
-<!--
-  FatBlock Documentation — EmbedAssemblyRules
-  FQN: org.blockml.bml.target.fatblock.documentation.EmbedAssemblyRules
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock Documentation — EmbedAssemblyRules
+  FQN: org.blockml.bml.target.fatblock.documentation.EmbedAssemblyRules-->
+<fbdocumentation:EmbedAssemblyRules xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -23,12 +17,14 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>EmbedAssemblyRules</name>
-  <type>fbdocumentation:EmbedAssemblyRules</type>
-  <baseType>core:Documentation</baseType>
-  <is>Host and embed assembly invariants (FB12–FB17)</is>
-
-  <documentation>FB12 srcDir required or BML_FATBLOCK_SRC_REQUIRED.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Host and embed assembly invariants (FB12–FB17)
+  </is>
+  <documentation>
+    FB12 srcDir required or BML_FATBLOCK_SRC_REQUIRED.
     FB13 host missing from registry → BML_FATBLOCK_HOST_NOT_FOUND.
     FB14 host.embeddedBlocks.length greater than 0 → BML_FATBLOCK_HOST_HAS_EMBEDDED_BLOCKS.
     FB15 duplicate candidate FQN → BML_DUPLICATE_EMBEDDED_BLOCK.
@@ -36,11 +32,11 @@
     embed with non-empty embeddedBlocks → BML_FATBLOCK_EMBED_HAS_EMBEDDED_BLOCKS.
     FB17 clone each embed; force cloned.embeddedBlocks empty; preserve subBlocks[];
     attach to host clone in sorted FQN order; merge namespaces; any error aborts document null.
-
+    
     Meta-model (BOM): embeds are flat under root; Sub-Blocks forbid embeds — validator owns
-    BML_EMBEDDED_BLOCKS_ON_SUBBLOCK / BML_NESTED_EMBEDDED_BLOCKS.</documentation>
+    BML_EMBEDDED_BLOCKS_ON_SUBBLOCK / BML_NESTED_EMBEDDED_BLOCKS.
+  </documentation>
   <references>
     <see type="fbdocumentation:NamespaceMergeRules" relation="ReadNext" />
   </references>
-
-</block>
+</fbdocumentation:EmbedAssemblyRules>

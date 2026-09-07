@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — ParseGenericsBinding
-  FQN: org.blockml.bml.compiler.parser.capability.ParseGenericsBinding
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — ParseGenericsBinding
+  FQN: org.blockml.bml.compiler.parser.capability.ParseGenericsBinding-->
+<parcap:ParseGenericsBinding xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,30 +23,36 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ParseGenericsBinding</name>
-  <type>parcap:ParseGenericsBinding</type>
-  <baseType>core:Capability</baseType>
-  <is>Parse bml:generics attribute or child element into GenericsBinding</is>
-
-  <documentation>Parse bml:generics as attribute or child element. Attribute form wins.
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Parse bml:generics attribute or child element into GenericsBinding
+  </is>
+  <documentation>
+    Parse bml:generics as attribute or child element. Attribute form wins.
     Stores lossless raw plus parsed TypeExpression arguments when parentheses
-    are present and well-formed.</documentation>
-
+    are present and well-formed.
+  </documentation>
   <references>
     <see type="parcap:ParseGenericArgumentList" relation="SeeAlso" />
     <see type="pardocumentation:AttributeClassification" relation="SeeAlso" />
   </references>
-
   <properties>
     <element type="parmap:XmlDomNode">
-      <documentation>element. TS type: parmap:XmlDomNode. (required)</documentation>
+      <documentation>
+        element. TS type: parmap:XmlDomNode. (required)
+      </documentation>
     </element>
     <ctx type="parmap:MapContext">
-      <documentation>ctx. TS type: parmap:MapContext. (required)</documentation>
+      <documentation>
+        ctx. TS type: parmap:MapContext. (required)
+      </documentation>
     </ctx>
     <binding type="bomcomp:GenericsBinding">
-      <documentation>binding. TS type: bomcomp:GenericsBinding. (optional)</documentation>
+      <documentation>
+        binding. TS type: bomcomp:GenericsBinding. (optional)
+      </documentation>
     </binding>
   </properties>
-
-</block>
+</parcap:ParseGenericsBinding>

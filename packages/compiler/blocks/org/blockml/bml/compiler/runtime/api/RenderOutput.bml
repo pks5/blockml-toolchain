@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime API — RenderOutput
-  FQN: org.blockml.bml.compiler.runtime.api.RenderOutput
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime API — RenderOutput
+  FQN: org.blockml.bml.compiler.runtime.api.RenderOutput-->
+<runapi:RenderOutput xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,19 +19,33 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>RenderOutput</name>
-  <type>runapi:RenderOutput</type>
-  <baseType>runtime:RuntimeType</baseType>
-  <is>Opaque Stage-3 render result</is>
-
-  <documentation>C4/C6: base shape is files[] with optional rootFiles[] and diagnostics[]. Thumbnails are not part of RenderOutput.</documentation>
+  <baseType>
+    runtime:RuntimeType
+  </baseType>
+  <is>
+    Opaque Stage-3 render result
+  </is>
+  <documentation>
+    C4/C6: base shape is files[] with optional rootFiles[] and diagnostics[]. Thumbnails are not part of RenderOutput.
+  </documentation>
   <references>
     <see type="rundocumentation:PublicApi" relation="SeeAlso" />
   </references>
   <properties>
-    <files type="runapi:RenderOutputFile"><documentation>Primary artifacts under outputBasePath. (required)</documentation></files>
-    <rootFiles type="runapi:RenderOutputFile"><documentation>Root-level artifacts (e.g. catalog.xml). (optional)</documentation></rootFiles>
-    <diagnostics type="type:Text"><documentation>Target-emitted diagnostics for CLI merge. (optional)</documentation></diagnostics>
+    <files type="runapi:RenderOutputFile">
+      <documentation>
+        Primary artifacts under outputBasePath. (required)
+      </documentation>
+    </files>
+    <rootFiles type="runapi:RenderOutputFile">
+      <documentation>
+        Root-level artifacts (e.g. catalog.xml). (optional)
+      </documentation>
+    </rootFiles>
+    <diagnostics type="type:Text">
+      <documentation>
+        Target-emitted diagnostics for CLI merge. (optional)
+      </documentation>
+    </diagnostics>
   </properties>
-
-</block>
+</runapi:RenderOutput>

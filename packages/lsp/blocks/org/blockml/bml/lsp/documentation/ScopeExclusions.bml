@@ -1,12 +1,6 @@
-<!--
-  LSP Documentation — ScopeExclusions
-  FQN: org.blockml.bml.lsp.documentation.ScopeExclusions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP Documentation — ScopeExclusions
+  FQN: org.blockml.bml.lsp.documentation.ScopeExclusions-->
+<lspdocumentation:ScopeExclusions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,20 +24,21 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ScopeExclusions</name>
-  <type>lspdocumentation:ScopeExclusions</type>
-  <baseType>core:Documentation</baseType>
-  <is>Explicit out-of-scope for @blockml/lsp V1</is>
-
-  <documentation>    Out of scope:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Explicit out-of-scope for @blockml/lsp V1
+  </is>
+  <documentation>
+    Out of scope:
     • IDE extension UI, TextMate grammar, token colors, and file associations — external packages
     • BomBuilder structural authoring (V3)
     • Completion, workspace/symbol
     • Range formatting, tab indent
-    • Duplicate parse/validate/serialize logic — must delegate to parser/validator/serializer</documentation>
-
+    • Duplicate parse/validate/serialize logic — must delegate to parser/validator/serializer
+  </documentation>
   <references>
     <see type="lspdocumentation:Introduction" relation="SeeAlso" />
   </references>
-
-</block>
+</lspdocumentation:ScopeExclusions>

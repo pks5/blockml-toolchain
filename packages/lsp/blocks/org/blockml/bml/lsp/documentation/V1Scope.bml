@@ -1,12 +1,6 @@
-<!--
-  LSP Documentation — V1Scope
-  FQN: org.blockml.bml.lsp.documentation.V1Scope
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP Documentation — V1Scope
+  FQN: org.blockml.bml.lsp.documentation.V1Scope-->
+<lspdocumentation:V1Scope xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,12 +24,14 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>V1Scope</name>
-  <type>lspdocumentation:V1Scope</type>
-  <baseType>core:Documentation</baseType>
-  <is>Explicit V1 capabilities and exclusions</is>
-
-  <documentation>In scope V1:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Explicit V1 capabilities and exclusions
+  </is>
+  <documentation>
+    In scope V1:
     • textDocument/didOpen, didChange, didClose
     • textDocumentSync Full
     • publishDiagnostics (parse + validate)
@@ -47,15 +43,14 @@
     • textDocument/semanticTokens/full (position-based FrameworkRoles highlight)
     • blockml-lsp stdio binary
     • analyzeDocument, formatDocument, hoverAt, documentSymbols, definitionAt, referencesAt, and semanticTokensFor public API for tests and non-LSP hosts
-
+    
     Out of scope V1:
     • Completion
     • Range formatting, tab indent
     • XSD validation, BomBuilder (V3)
-    • VS Code extension in this repo</documentation>
-
+    • VS Code extension in this repo
+  </documentation>
   <references>
     <see type="lspdocumentation:ScopeExclusions" relation="ReadNext" />
   </references>
-
-</block>
+</lspdocumentation:V1Scope>

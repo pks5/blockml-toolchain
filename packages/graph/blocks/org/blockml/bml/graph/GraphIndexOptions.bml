@@ -1,12 +1,6 @@
-<!--
-  Graph — GraphIndexOptions
-  FQN: org.blockml.bml.graph.GraphIndexOptions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph — GraphIndexOptions
+  FQN: org.blockml.bml.graph.GraphIndexOptions-->
+<graph:GraphIndexOptions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,23 +15,35 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>GraphIndexOptions</name>
-  <type>graph:GraphIndexOptions</type>
-  <baseType>graph:GraphType</baseType>
-  <is>Project and cache location for graph index operations</is>
-  <documentation>rootDir defaults to process.cwd(); srcDir defaults to blocks; indexDir defaults to {rootDir}/.blockml/graph.</documentation>
+  <baseType>
+    graph:GraphType
+  </baseType>
+  <is>
+    Project and cache location for graph index operations
+  </is>
+  <documentation>
+    rootDir defaults to process.cwd(); srcDir defaults to blocks; indexDir defaults to {rootDir}/.blockml/graph.
+  </documentation>
   <properties>
     <rootDir type="type:Text">
-      <documentation>rootDir (optional). TS type: type:Text.</documentation>
+      <documentation>
+        rootDir (optional). TS type: type:Text.
+      </documentation>
     </rootDir>
     <srcDir type="type:Text">
-      <documentation>srcDir (optional). TS type: type:Text.</documentation>
+      <documentation>
+        srcDir (optional). TS type: type:Text.
+      </documentation>
     </srcDir>
     <libraries type="type:Text[]">
-      <documentation>libraries (optional). TS type: type:Text[].</documentation>
+      <documentation>
+        libraries (optional). TS type: type:Text[].
+      </documentation>
     </libraries>
     <indexDir type="type:Text">
-      <documentation>indexDir (optional). TS type: type:Text.</documentation>
+      <documentation>
+        indexDir (optional). TS type: type:Text.
+      </documentation>
     </indexDir>
   </properties>
-</block>
+</graph:GraphIndexOptions>

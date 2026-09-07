@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Documentation — ExternalTargetContract
-  FQN: org.blockml.bml.compiler.runtime.documentation.ExternalTargetContract
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Documentation — ExternalTargetContract
+  FQN: org.blockml.bml.compiler.runtime.documentation.ExternalTargetContract-->
+<rundocumentation:ExternalTargetContract xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -26,38 +20,40 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ExternalTargetContract</name>
-  <type>rundocumentation:ExternalTargetContract</type>
-  <baseType>core:Documentation</baseType>
-  <is>Normative contract for external Stage-3 RenderTargets</is>
-
-  <documentation>RenderTarget: name, accepts[], optional validateRequest, render(request, ctx) → RenderOutput
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Normative contract for external Stage-3 RenderTargets
+  </is>
+  <documentation>
+    RenderTarget: name, accepts[], optional validateRequest, render(request, ctx) → RenderOutput
     (files[] required; optional rootFiles[] at project root, optional diagnostics[] for CLI merge).
     BOM-first hosts call compileBomToOutput(document, targetName, CompileBomOptions) with a required
     TypeRegistry; no re-parse or bootstrap. Host must ensure the document is discoverable in the
     registry when the target looks up by sourceFilePath or FQN.
-
+    
     Stable RenderSession fields for registry targets: typeRegistry, sourceFilePath, outputBasePath,
     targetName, scopeKind, libraryPaths?, corpusRoots?.
     Per-node RenderContext fields (blockFqn, outputRelativePath, child) are for composition renderers;
     registry targets may ignore them.
-
+    
     Domain-specific options (MachineBlocks lib path, active config profiles, …) live in opaque
     targetOptions on CompileRequest / CompileBomOptions — not on CompileOptions or RenderSession.
     Hosts register targets via registerTarget before compile.
-
+    
     Stage-2 guarantee: hosts should run validate() or validateRegistryDocuments on the corpus
     before emit when targets depend on semantic guarantees (embedded blocks, constraints,
     instance refs).     BlockDoc/XSD compile paths may omit full corpus Stage-2 by policy;
     blockml validate remains SSOT for semantic validation.
-
+    
     @blockml/lsp (V1) — editor-agnostic stdio language server (blockml-lsp);
-    IDE clients connect via LSP. See org.blockml.bml.lsp.documentation.Introduction.</documentation>
+    IDE clients connect via LSP. See org.blockml.bml.lsp.documentation.Introduction.
+  </documentation>
   <references>
     <see type="rundocumentation:Diagnostics" relation="ReadNext" />
     <see type="runapi:RenderTarget" relation="SeeAlso" />
     <see type="runcap:CompileBomToOutput" relation="SeeAlso" />
     <see type="rundocumentation:TargetRegistry" relation="SeeAlso" />
   </references>
-
-</block>
+</rundocumentation:ExternalTargetContract>

@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — NamedTypeReference
-  FQN: org.blockml.bml.bom.type.NamedTypeReference
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — NamedTypeReference
+  FQN: org.blockml.bml.bom.type.NamedTypeReference-->
+<bomtype:NamedTypeReference xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,30 +17,41 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>NamedTypeReference</name>
-  <type>bomtype:NamedTypeReference</type>
-  <baseType>bomtype:TypeExpression</baseType>
-  <is>Named type reference expression</is>
-
-  <documentation>Named type reference expression</documentation>
-
+  <baseType>
+    bomtype:TypeExpression
+  </baseType>
+  <is>
+    Named type reference expression
+  </is>
+  <documentation>
+    Named type reference expression
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind (required). TS type: type:Text.</documentation>
+      <documentation>
+        kind (required). TS type: type:Text.
+      </documentation>
       <value>named</value>
     </kind>
     <fqn type="type:Text">
-      <documentation>fqn (required). TS type: type:Text.</documentation>
+      <documentation>
+        fqn (required). TS type: type:Text.
+      </documentation>
     </fqn>
     <typeArguments type="bomtype:TypeExpression[]">
-      <documentation>typeArguments (optional). TS type: bomtype:TypeExpression[].</documentation>
+      <documentation>
+        typeArguments (optional). TS type: bomtype:TypeExpression[].
+      </documentation>
     </typeArguments>
     <instanceConfiguration type="bomtype:InstanceConfiguration">
-      <documentation>instanceConfiguration (optional). TS type: bomtype:InstanceConfiguration.</documentation>
+      <documentation>
+        instanceConfiguration (optional). TS type: bomtype:InstanceConfiguration.
+      </documentation>
     </instanceConfiguration>
     <multiplicity type="bomtype:Multiplicity">
-      <documentation>multiplicity (optional). TS type: bomtype:Multiplicity.</documentation>
+      <documentation>
+        multiplicity (optional). TS type: bomtype:Multiplicity.
+      </documentation>
     </multiplicity>
   </properties>
-
-</block>
+</bomtype:NamedTypeReference>

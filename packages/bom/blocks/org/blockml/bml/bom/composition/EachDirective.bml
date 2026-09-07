@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — EachDirective
-  FQN: org.blockml.bml.bom.composition.EachDirective
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — EachDirective
+  FQN: org.blockml.bml.bom.composition.EachDirective-->
+<bomcomp:EachDirective xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,27 +17,36 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>EachDirective</name>
-  <type>bomcomp:EachDirective</type>
-  <baseType>bomcomp:DirectiveAttribute</baseType>
-  <is>bml:each directive (type: each)</is>
-
-  <documentation>bml:each directive (type: each)</documentation>
-
+  <baseType>
+    bomcomp:DirectiveAttribute
+  </baseType>
+  <is>
+    bml:each directive (type: each)
+  </is>
+  <documentation>
+    bml:each directive (type: each)
+  </documentation>
   <properties>
     <type type="type:Text">
-      <documentation>type (required). TS type: type:Text.</documentation>
+      <documentation>
+        type (required). TS type: type:Text.
+      </documentation>
       <value>each</value>
     </type>
     <variables type="type:Text[]">
-      <documentation>variables (required). TS type: type:Text[].</documentation>
+      <documentation>
+        variables (required). TS type: type:Text[].
+      </documentation>
     </variables>
     <statVariable type="type:Text">
-      <documentation>statVariable (optional). TS type: type:Text.</documentation>
+      <documentation>
+        statVariable (optional). TS type: type:Text.
+      </documentation>
     </statVariable>
     <collection type="bomvalue:ExpressionValue">
-      <documentation>collection (required). TS type: bomvalue:ExpressionValue.</documentation>
+      <documentation>
+        collection (required). TS type: bomvalue:ExpressionValue.
+      </documentation>
     </collection>
   </properties>
-
-</block>
+</bomcomp:EachDirective>

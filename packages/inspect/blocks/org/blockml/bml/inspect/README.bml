@@ -1,12 +1,6 @@
-<!--
-  BlockML Inspect — README
-  FQN: org.blockml.bml.inspect.README
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Inspect — README
+  FQN: org.blockml.bml.inspect.README-->
+<inspect:README xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,21 +15,20 @@
   xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>README</name>
-  <type>inspect:README</type>
-  <baseType>core:ReadMe</baseType>
-  <is>Reading entry for the Inspect library</is>
-
+  <baseType>
+    core:ReadMe
+  </baseType>
+  <is>
+    Reading entry for the Inspect library
+  </is>
   <documentation>
     The @blockml/inspect package projects a Block FQN from the TypeRegistry
     into a compact JSON inspect view for LLMs. No index is persisted.
-
+    
     Start at org.blockml.bml.inspect.documentation.Introduction.
   </documentation>
-
   <references>
     <see type="inspectdocumentation:Introduction" relation="ReadFirst" />
     <see type="inspectdocumentation:PublicApi" relation="SeeAlso" />
   </references>
-
-</block>
+</inspect:README>

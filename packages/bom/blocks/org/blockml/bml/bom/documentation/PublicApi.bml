@@ -1,12 +1,6 @@
-<!--
-  BOM Documentation — PublicApi
-  FQN: org.blockml.bml.bom.documentation.PublicApi
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Documentation — PublicApi
+  FQN: org.blockml.bml.bom.documentation.PublicApi-->
+<bomdocumentation:PublicApi xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -24,37 +18,40 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PublicApi</name>
-  <type>bomdocumentation:PublicApi</type>
-  <baseType>core:Documentation</baseType>
-  <is>Shared parse/serialize/validate results (B26 + Stage 2)</is>
-
-  <documentation><![CDATA[ParseResult: document (BomDocument | null), diagnostics[], success (false if any error).
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Shared parse/serialize/validate results (B26 + Stage 2)
+  </is>
+  <documentation>
+    <![CDATA[
+    ParseResult: document (BomDocument | null), diagnostics[], success (false if any error).
+    
     SerializeResult: text (string | null), diagnostics[], success.
-
+    
     ValidateResult: optional pragmaticModel (forked BomDocument), diagnostics[], success.
-
+    
     ParseOptions: filePath (default "<memory>"), continueOnError (default true),
     optional parseValue host hook (injected after TypeRegistry bootstrap).
-
+    
     SerializeOptions: indent (default 2; 0=compact B13), xmlDeclaration (default false B17/B24).
-
+    
     ValidateOptions: typeRegistry (TypeRegistryReader), bootstrapPaths, libraryPaths, continueOnError (default true).
-
+    
     TypeRegistryReader: minimal get/has surface for ValidateOptions — implemented by @blockml/framework.
-
+    
     bomEquals(a, b): structural equality modulo provenance (B20).
     stripProvenance(node): deep-clone omitting sourceLocation, endLine, endColumn, provenance source.
     Drops SourceLocation-shaped fields such as typeSource/baseTypeSource.
     Preserves ImplementationBlock.source (code body).
-
-    Sync only. No throw on recoverable diagnostics. Diagnostic distinct from org.blockml.bml.core.Diagnostic.]]></documentation>
-
+    
+    Sync only. No throw on recoverable diagnostics. Diagnostic distinct from org.blockml.bml.core.Diagnostic.
+    ]]>
+  </documentation>
   <references>
     <see type="bomapi:ParseResult" relation="Defines" />
     <see type="bomapi:ValidateResult" relation="Defines" />
     <see type="bomcap:BomEquals" relation="Defines" />
   </references>
-
-</block>
+</bomdocumentation:PublicApi>

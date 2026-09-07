@@ -1,12 +1,6 @@
-<!--
-  BlockML Search — README
-  FQN: org.blockml.bml.search.README
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Search — README
+  FQN: org.blockml.bml.search.README-->
+<search:README xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,21 +15,20 @@
   xmlns:searchdocumentation="org.blockml.bml.search.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>README</name>
-  <type>search:README</type>
-  <baseType>core:ReadMe</baseType>
-  <is>Reading entry for the Search library</is>
-
+  <baseType>
+    core:ReadMe
+  </baseType>
+  <is>
+    Reading entry for the Search library
+  </is>
   <documentation>
     The @blockml/search package indexes the effective BML corpus of a project
     (same as blockml validate --all) and serves local full-text search.
-
+    
     Start at org.blockml.bml.search.documentation.Introduction.
   </documentation>
-
   <references>
     <see type="searchdocumentation:Introduction" relation="ReadFirst" />
     <see type="searchdocumentation:PublicApi" relation="SeeAlso" />
   </references>
-
-</block>
+</search:README>

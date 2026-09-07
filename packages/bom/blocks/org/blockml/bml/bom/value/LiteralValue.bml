@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — LiteralValue
-  FQN: org.blockml.bml.bom.value.LiteralValue
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — LiteralValue
+  FQN: org.blockml.bml.bom.value.LiteralValue-->
+<bomvalue:LiteralValue xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,27 +17,36 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>LiteralValue</name>
-  <type>bomvalue:LiteralValue</type>
-  <baseType>bomvalue:MemberValue</baseType>
-  <is>Authored literal member value</is>
-
-  <documentation>value field is a primitive union approximation of TS unknown — MUST NOT be normalized at parse time (lossless roundtrip). Objects/arrays remain a BML type gap.</documentation>
-
+  <baseType>
+    bomvalue:MemberValue
+  </baseType>
+  <is>
+    Authored literal member value
+  </is>
+  <documentation>
+    value field is a primitive union approximation of TS unknown — MUST NOT be normalized at parse time (lossless roundtrip). Objects/arrays remain a BML type gap.
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind (required). TS type: type:Text.</documentation>
+      <documentation>
+        kind (required). TS type: type:Text.
+      </documentation>
       <value>literal</value>
     </kind>
     <value type="type:Text | type:Integer | type:Decimal | type:Boolean">
-      <documentation>BML type gap: TS unknown (authored literal, including objects/arrays). Union covers primitive cases only. (required)</documentation>
+      <documentation>
+        BML type gap: TS unknown (authored literal, including objects/arrays). Union covers primitive cases only. (required)
+      </documentation>
     </value>
     <typeFqn type="type:Text">
-      <documentation>typeFqn (required). TS type: type:Text.</documentation>
+      <documentation>
+        typeFqn (required). TS type: type:Text.
+      </documentation>
     </typeFqn>
     <authoredPlacement type="type:Text">
-      <documentation>"attribute" | "element" when dual placement legal (D9). (optional)</documentation>
+      <documentation>
+        "attribute" | "element" when dual placement legal (D9). (optional)
+      </documentation>
     </authoredPlacement>
   </properties>
-
-</block>
+</bomvalue:LiteralValue>

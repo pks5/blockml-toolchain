@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — StripProvenance
-  FQN: org.blockml.bml.bom.capability.StripProvenance
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — StripProvenance
+  FQN: org.blockml.bml.bom.capability.StripProvenance-->
+<bomcap:StripProvenance xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,20 +17,25 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>StripProvenance</name>
-  <type>bomcap:StripProvenance</type>
-  <baseType>core:Capability</baseType>
-  <is>Deep-clone omitting provenance keys (B20)</is>
-
-  <documentation>Removes sourceLocation, endLine, endColumn, SourceLocation-shaped fields (source, typeSource, baseTypeSource), and SourceInfo recursively. Preserves ImplementationBlock.source (implementation code body). Reference: packages/bom/src/equals.ts.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Deep-clone omitting provenance keys (B20)
+  </is>
+  <documentation>
+    Removes sourceLocation, endLine, endColumn, SourceLocation-shaped fields (source, typeSource, baseTypeSource), and SourceInfo recursively. Preserves ImplementationBlock.source (implementation code body). Reference: packages/bom/src/equals.ts.
+  </documentation>
   <properties>
     <input type="bomcommon:HostValue">
-      <documentation>BML type gap: TS generic T. Deep-clone input. (required)</documentation>
+      <documentation>
+        BML type gap: TS generic T. Deep-clone input. (required)
+      </documentation>
     </input>
     <output type="bomcommon:HostValue">
-      <documentation>BML type gap: TS generic T. Deep-clone without provenance. (required)</documentation>
+      <documentation>
+        BML type gap: TS generic T. Deep-clone without provenance. (required)
+      </documentation>
     </output>
   </properties>
-
-</block>
+</bomcap:StripProvenance>

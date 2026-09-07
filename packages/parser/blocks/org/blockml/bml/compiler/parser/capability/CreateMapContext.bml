@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — CreateMapContext
-  FQN: org.blockml.bml.compiler.parser.capability.CreateMapContext
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — CreateMapContext
+  FQN: org.blockml.bml.compiler.parser.capability.CreateMapContext-->
+<parcap:CreateMapContext xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,33 +23,43 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>CreateMapContext</name>
-  <type>parcap:CreateMapContext</type>
-  <baseType>core:Capability</baseType>
-  <is>Build MapContext for step [5] mapping</is>
-
-  <documentation>Build MapContext for step [5] mapping</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Build MapContext for step [5] mapping
+  </is>
+  <documentation>
+    Build MapContext for step [5] mapping
+  </documentation>
   <references>
     <see type="parmap:MapContext" relation="SeeAlso" />
   </references>
-
   <properties>
     <filePath type="type:Text">
-      <documentation>filePath. TS type: type:Text. (required)</documentation>
+      <documentation>
+        filePath. TS type: type:Text. (required)
+      </documentation>
     </filePath>
     <source type="type:Text">
-      <documentation>source. TS type: type:Text. (required)</documentation>
+      <documentation>
+        source. TS type: type:Text. (required)
+      </documentation>
     </source>
     <bindings type="type:Text">
-      <documentation>bindings. TS type: type:Text. (required)</documentation>
+      <documentation>
+        bindings. TS type: type:Text. (required)
+      </documentation>
     </bindings>
     <options type="parmap:MapContextOptions">
-      <documentation>subBlockIndex, parentBlockType, isRoot, isEmbedded, diagnostics. (optional)</documentation>
+      <documentation>
+        subBlockIndex, parentBlockType, isRoot, isEmbedded, diagnostics. (optional)
+      </documentation>
     </options>
     <context type="parmap:MapContext">
-      <documentation>context. TS type: parmap:MapContext. (required)</documentation>
+      <documentation>
+        context. TS type: parmap:MapContext. (required)
+      </documentation>
     </context>
   </properties>
-
-</block>
+</parcap:CreateMapContext>

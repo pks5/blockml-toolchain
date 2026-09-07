@@ -1,12 +1,6 @@
-<!--
-  FatBlock Documentation — OutputLayout
-  FQN: org.blockml.bml.target.fatblock.documentation.OutputLayout
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock Documentation — OutputLayout
+  FQN: org.blockml.bml.target.fatblock.documentation.OutputLayout-->
+<fbdocumentation:OutputLayout xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -23,18 +17,20 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>OutputLayout</name>
-  <type>fbdocumentation:OutputLayout</type>
-  <baseType>core:Documentation</baseType>
-  <is>Output file naming and host write path</is>
-
-  <documentation>FB18 FatOutputBasename: host FQN → {fqn}.fat.bml.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Output file naming and host write path
+  </is>
+  <documentation>
+    FB18 FatOutputBasename: host FQN → {fqn}.fat.bml.
     Target returns relative path only; CLI writes to the invocation directory or --out.
-
+    
     Single file per render. Content is canonical BML XML from SerializeFatDocument
-    (indent 2, no XML declaration by serializer defaults).</documentation>
+    (indent 2, no XML declaration by serializer defaults).
+  </documentation>
   <references>
     <see type="fbdocumentation:Diagnostics" relation="ReadNext" />
   </references>
-
-</block>
+</fbdocumentation:OutputLayout>

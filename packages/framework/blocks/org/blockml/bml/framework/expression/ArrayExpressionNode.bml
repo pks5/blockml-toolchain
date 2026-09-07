@@ -1,12 +1,6 @@
-<!--
-  Framework — ArrayExpressionNode
-  FQN: org.blockml.bml.framework.expression.ArrayExpressionNode
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework — ArrayExpressionNode
+  FQN: org.blockml.bml.framework.expression.ArrayExpressionNode-->
+<fwexpression:ArrayExpressionNode xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,21 +25,26 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ArrayExpressionNode</name>
-  <type>fwexpression:ArrayExpressionNode</type>
-  <baseType>fwexpression:ExpressionNode</baseType>
-  <is>Array expression AST node</is>
-
-  <documentation>kind: array. elements: ExpressionNode[].</documentation>
-
+  <baseType>
+    fwexpression:ExpressionNode
+  </baseType>
+  <is>
+    Array expression AST node
+  </is>
+  <documentation>
+    kind: array. elements: ExpressionNode[].
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind. TS type: type:Text. (required)</documentation>
+      <documentation>
+        kind. TS type: type:Text. (required)
+      </documentation>
       <value>array</value>
     </kind>
     <elements type="fwexpression:ExpressionNode[]">
-      <documentation>elements. TS type: fwexpression:ExpressionNode[]. (required)</documentation>
+      <documentation>
+        elements. TS type: fwexpression:ExpressionNode[]. (required)
+      </documentation>
     </elements>
   </properties>
-
-</block>
+</fwexpression:ArrayExpressionNode>

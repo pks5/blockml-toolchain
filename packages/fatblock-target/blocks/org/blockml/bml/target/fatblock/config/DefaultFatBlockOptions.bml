@@ -1,12 +1,6 @@
-<!--
-  FatBlock Config — DefaultFatBlockOptions
-  FQN: org.blockml.bml.target.fatblock.config.DefaultFatBlockOptions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock Config — DefaultFatBlockOptions
+  FQN: org.blockml.bml.target.fatblock.config.DefaultFatBlockOptions-->
+<fbconfig:DefaultFatBlockOptions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -22,14 +16,20 @@
   xmlns:serializer="org.blockml.bml.compiler.serializer"
   xmlns:type="org.blockml.bml.type">
 
-  <name>DefaultFatBlockOptions</name>
-  <type>fbconfig:DefaultFatBlockOptions</type>
-  <baseType>fatblock:FatblockType</baseType>
-  <is>Defaults applied by ResolveOptions</is>
-
-  <documentation>FB1: only embeddedBlocksStrategy has a default; srcDir/rootDir/include remain unset until host provides them.</documentation>
+  <baseType>
+    fatblock:FatblockType
+  </baseType>
+  <is>
+    Defaults applied by ResolveOptions
+  </is>
+  <documentation>
+    FB1: only embeddedBlocksStrategy has a default; srcDir/rootDir/include remain unset until host provides them.
+  </documentation>
   <properties>
-    <embeddedBlocksStrategy type="type:Text"><documentation>"error"</documentation></embeddedBlocksStrategy>
+    <embeddedBlocksStrategy type="type:Text">
+      <documentation>
+        "error"
+      </documentation>
+    </embeddedBlocksStrategy>
   </properties>
-
-</block>
+</fbconfig:DefaultFatBlockOptions>

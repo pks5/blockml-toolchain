@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — ResolveLibrarySeeds
-  FQN: org.blockml.bml.framework.capability.ResolveLibrarySeeds
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — ResolveLibrarySeeds
+  FQN: org.blockml.bml.framework.capability.ResolveLibrarySeeds-->
+<fwcap:ResolveLibrarySeeds xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,27 +25,33 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ResolveLibrarySeeds</name>
-  <type>fwcap:ResolveLibrarySeeds</type>
-  <baseType>core:Capability</baseType>
-  <is>Merge package.json blockml.library with extra Library.bml paths</is>
-
-  <documentation>Identity seed from package.json blockml.library first, then extras (config.libraries or --libraries). Absolute paths, deduped by realpath. Missing files keep resolve().</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Merge package.json blockml.library with extra Library.bml paths
+  </is>
+  <documentation>
+    Identity seed from package.json blockml.library first, then extras (config.libraries or --libraries). Absolute paths, deduped by realpath. Missing files keep resolve().
+  </documentation>
   <references>
     <see type="fwcap:BootstrapTypeRegistry" relation="SeeAlso" />
   </references>
-
   <properties>
     <rootDir type="type:Text">
-      <documentation>Package directory. Default process.cwd(). (optional)</documentation>
+      <documentation>
+        Package directory. Default process.cwd(). (optional)
+      </documentation>
     </rootDir>
     <extras type="type:Text[]">
-      <documentation>Additional Library.bml paths. (optional)</documentation>
+      <documentation>
+        Additional Library.bml paths. (optional)
+      </documentation>
     </extras>
     <seeds type="type:Text[]">
-      <documentation>seeds. TS type: type:Text[]. (required)</documentation>
+      <documentation>
+        seeds. TS type: type:Text[]. (required)
+      </documentation>
     </seeds>
   </properties>
-
-</block>
+</fwcap:ResolveLibrarySeeds>

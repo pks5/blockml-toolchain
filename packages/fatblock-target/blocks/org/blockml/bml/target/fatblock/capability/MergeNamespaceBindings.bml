@@ -1,12 +1,6 @@
-<!--
-  FatBlock Capability — MergeNamespaceBindings
-  FQN: org.blockml.bml.target.fatblock.capability.MergeNamespaceBindings
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock Capability — MergeNamespaceBindings
+  FQN: org.blockml.bml.target.fatblock.capability.MergeNamespaceBindings-->
+<fbcap:MergeNamespaceBindings xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -22,27 +16,33 @@
   xmlns:serializer="org.blockml.bml.compiler.serializer"
   xmlns:type="org.blockml.bml.type">
 
-  <name>MergeNamespaceBindings</name>
-  <type>fbcap:MergeNamespaceBindings</type>
-  <baseType>core:Capability</baseType>
-  <is>Union namespace prefix to URI maps</is>
-
-  <documentation>FB9: process sources in order (host then embeds). FB10: same prefix different URI yields BML_NAMESPACE_PREFIX_COLLISION. FB11: missing bindings default empty prefix to http://blockml.org/bml. First writer wins for new prefixes.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Union namespace prefix to URI maps
+  </is>
+  <documentation>
+    FB9: process sources in order (host then embeds). FB10: same prefix different URI yields BML_NAMESPACE_PREFIX_COLLISION. FB11: missing bindings default empty prefix to http://blockml.org/bml. First writer wins for new prefixes.
+  </documentation>
   <references>
     <see type="fbdocumentation:NamespaceMergeRules" relation="SeeAlso" />
   </references>
-
   <properties>
     <sources type="type:Text">
-      <documentation>Ordered { file, bindings? } list. (required)</documentation>
+      <documentation>
+        Ordered { file, bindings? } list. (required)
+      </documentation>
     </sources>
     <bindings type="type:Text">
-      <documentation>Merged prefix to URI map. (required)</documentation>
+      <documentation>
+        Merged prefix to URI map. (required)
+      </documentation>
     </bindings>
     <diagnostics type="type:Text">
-      <documentation>Collision diagnostics. (required)</documentation>
+      <documentation>
+        Collision diagnostics. (required)
+      </documentation>
     </diagnostics>
   </properties>
-
-</block>
+</fbcap:MergeNamespaceBindings>

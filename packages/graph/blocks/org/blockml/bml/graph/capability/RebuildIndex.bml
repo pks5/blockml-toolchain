@@ -1,12 +1,6 @@
-<!--
-  Graph Capability — RebuildIndex
-  FQN: org.blockml.bml.graph.capability.RebuildIndex
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph Capability — RebuildIndex
+  FQN: org.blockml.bml.graph.capability.RebuildIndex-->
+<graphcap:RebuildIndex xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,20 +15,28 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>RebuildIndex</name>
-  <type>graphcap:RebuildIndex</type>
-  <baseType>core:Capability</baseType>
-  <is>Full rebuild and persist of the graph index</is>
-  <documentation>Deletes .blockml/graph/lbug and rebuilds authored nodes and edges, then writes manifest.json. Waits on the same exclusive index lock as OpenIndex so two processes cannot rebuild or query concurrently.</documentation>
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Full rebuild and persist of the graph index
+  </is>
+  <documentation>
+    Deletes .blockml/graph/lbug and rebuilds authored nodes and edges, then writes manifest.json. Waits on the same exclusive index lock as OpenIndex so two processes cannot rebuild or query concurrently.
+  </documentation>
   <references>
     <see type="graphcap:BuildIndex" relation="SeeAlso" />
   </references>
   <properties>
     <options type="graph:GraphIndexOptions">
-      <documentation>options (optional).</documentation>
+      <documentation>
+        options (optional).
+      </documentation>
     </options>
     <result type="graph:BuildIndexResult">
-      <documentation>result (required).</documentation>
+      <documentation>
+        result (required).
+      </documentation>
     </result>
   </properties>
-</block>
+</graphcap:RebuildIndex>

@@ -1,44 +1,37 @@
-<!--
-  Transformer Workflow — ToolOperation
-  FQN: org.blockml.bml.transformer.workflow.ToolOperation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Workflow — ToolOperation
+  FQN: org.blockml.bml.transformer.workflow.ToolOperation-->
+<workflow:ToolOperation xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ToolOperation</name>
-  <type>workflow:ToolOperation</type>
-  <baseType>workflow:ModelOperation</baseType>
-  <is>A ModelOperation that runs an npm CLI tool deterministically</is>
-
+  <baseType>
+    workflow:ModelOperation
+  </baseType>
+  <is>
+    A ModelOperation that runs an npm CLI tool deterministically
+  </is>
   <documentation>
     Concrete `workflow:ModelOperation` whose type-specific work is an
     npm CLI invocation executed by `transformercap:ToolExecutor`.
-
+    
     The envelope `name` is the operation label (for example
     "Validate model"). Do not add a second name for the tool.
-
+    
     * `command` — one npm bin token (`blockml`). Required while pending.
     * `args` — argv after the command (`validate`, `--all`). Optional.
-
+    
     The executor builds argv as `npx`, `command`, then `args`. No shell.
     cwd is the worktree. Must not write `_meta/transform/`. Non-zero
     exit fails the operation. Combined stdout/stderr is the output
     candidate; `captureOutput` decides whether the envelope persists
     that text.
   </documentation>
-
   <references>
     <see type="workflow:ModelOperation" relation="Extends" />
     <see type="transformercap:ToolExecutor" relation="SeeAlso" />
   </references>
-
   <properties>
     <command type="type:Text">
       <documentation>
@@ -52,5 +45,4 @@
       </documentation>
     </args>
   </properties>
-
-</block>
+</workflow:ToolOperation>

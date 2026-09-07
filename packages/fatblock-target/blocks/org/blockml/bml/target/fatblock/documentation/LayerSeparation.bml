@@ -1,12 +1,6 @@
-<!--
-  FatBlock Documentation — LayerSeparation
-  FQN: org.blockml.bml.target.fatblock.documentation.LayerSeparation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock Documentation — LayerSeparation
+  FQN: org.blockml.bml.target.fatblock.documentation.LayerSeparation-->
+<fbdocumentation:LayerSeparation xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -23,29 +17,31 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>LayerSeparation</name>
-  <type>fbdocumentation:LayerSeparation</type>
-  <baseType>core:Documentation</baseType>
-  <is>FatBlock vs BOM vs serializer vs CLI</is>
-
-  <documentation>Layers relevant to FatBlock:
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    FatBlock vs BOM vs serializer vs CLI
+  </is>
+  <documentation>
+    Layers relevant to FatBlock:
+    
     org.blockml.bml.target.fatblock.* (this package) — candidate collection, include filter,
     assemble/merge, FatBlockOptions, FatBlock diagnostics, output basename.
-
+    
     org.blockml.bml.bom.* — embeddedBlocks meta-model; root-only embeds; no nested embeds
     on Sub-Blocks (validator). FatBlock consumes BomDocument / BlockDefinition.
-
+    
     org.blockml.bml.compiler.serializer.* — canonical XML emit of the assembled document.
-
+    
     @blockml/compiler — RenderTarget contract, compileToOutput, document scope.
-
+    
     org.blockml.bml.cli.* — --src / --include / --out / --per-package, default host
     from package.json blockml.library, write {hostFqn}.fat.bml at the invocation directory.
-
-    Sibling targets (blockdoc, xsd) and domain SCAD are out of scope.</documentation>
+    
+    Sibling targets (blockdoc, xsd) and domain SCAD are out of scope.
+  </documentation>
   <references>
     <see type="fbdocumentation:ArchitectureOverview" relation="ReadNext" />
   </references>
-
-</block>
+</fbdocumentation:LayerSeparation>

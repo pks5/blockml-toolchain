@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — Parse
-  FQN: org.blockml.bml.compiler.parser.capability.Parse
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — Parse
+  FQN: org.blockml.bml.compiler.parser.capability.Parse-->
+<parcap:Parse xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,29 +23,35 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>Parse</name>
-  <type>parcap:Parse</type>
-  <baseType>core:Capability</baseType>
-  <is>Public entry: BML XML string → ParseResult (B26)</is>
-
-  <documentation>Orchestrates pipeline [1]–[5]. Does not call validator or expand directives.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Public entry: BML XML string → ParseResult (B26)
+  </is>
+  <documentation>
+    Orchestrates pipeline [1]–[5]. Does not call validator or expand directives.
+  </documentation>
   <references>
     <see type="pardocumentation:PublicApi" relation="SeeAlso" />
     <see type="bomapi:ParseOptions" relation="SeeAlso" />
     <see type="bomapi:ParseResult" relation="SeeAlso" />
   </references>
-
   <properties>
     <source type="type:Text">
-      <documentation>source. TS type: type:Text. (required)</documentation>
+      <documentation>
+        source. TS type: type:Text. (required)
+      </documentation>
     </source>
     <options type="bomapi:ParseOptions">
-      <documentation>Default filePath=&lt;memory>, continueOnError=true. (optional)</documentation>
+      <documentation>
+        Default filePath=&lt;memory>, continueOnError=true. (optional)
+      </documentation>
     </options>
     <result type="bomapi:ParseResult">
-      <documentation>result. TS type: bomapi:ParseResult. (required)</documentation>
+      <documentation>
+        result. TS type: bomapi:ParseResult. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</parcap:Parse>

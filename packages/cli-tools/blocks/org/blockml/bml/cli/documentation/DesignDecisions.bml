@@ -1,12 +1,6 @@
-<!--
-  CLI Documentation — DesignDecisions
-  FQN: org.blockml.bml.cli.documentation.DesignDecisions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Documentation — DesignDecisions
+  FQN: org.blockml.bml.cli.documentation.DesignDecisions-->
+<clidocumentation:DesignDecisions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -21,14 +15,15 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>DesignDecisions</name>
-  <type>clidocumentation:DesignDecisions</type>
-  <baseType>core:Documentation</baseType>
-  <is>Normative CLI decisions CLI1–CLI24</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Normative CLI decisions CLI1–CLI24
+  </is>
   <documentation>
     # Normative CLI decisions CLI1–CLI24
-
+    
     - CLI1 missing blockml.config.json → DefaultBomConfig.
     - CLI2 empty targets[] → ["blockdoc"].
     - CLI3 bootstrapTargets idempotent.
@@ -62,5 +57,4 @@
   <references>
     <see type="clidocumentation:PackageOwnership" relation="ReadNext" />
   </references>
-
-</block>
+</clidocumentation:DesignDecisions>

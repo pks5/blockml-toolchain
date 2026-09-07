@@ -1,12 +1,6 @@
-<!--
-  Inspect — InspectedCapability
-  FQN: org.blockml.bml.inspect.InspectedCapability
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Inspect — InspectedCapability
+  FQN: org.blockml.bml.inspect.InspectedCapability-->
+<inspect:InspectedCapability xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,26 +15,35 @@
   xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>InspectedCapability</name>
-  <type>inspect:InspectedCapability</type>
-  <baseType>inspect:InspectedMember</baseType>
-  <is>One effective capability in an Inspect projection</is>
-
-  <documentation>Projected capability. Includes implementation (language + truncated source) when authored.</documentation>
-
+  <baseType>
+    inspect:InspectedMember
+  </baseType>
+  <is>
+    One effective capability in an Inspect projection
+  </is>
+  <documentation>
+    Projected capability. Includes implementation (language + truncated source) when authored.
+  </documentation>
   <properties>
     <inputType type="inspect:InspectTypeRef">
-      <documentation>Capability input type. (optional)</documentation>
+      <documentation>
+        Capability input type. (optional)
+      </documentation>
     </inputType>
     <outputType type="inspect:InspectTypeRef">
-      <documentation>Capability output type. (optional)</documentation>
+      <documentation>
+        Capability output type. (optional)
+      </documentation>
     </outputType>
     <throws type="type:Text">
-      <documentation>Thrown type FQNs. TS: Text[]. (optional)</documentation>
+      <documentation>
+        Thrown type FQNs. TS: Text[]. (optional)
+      </documentation>
     </throws>
     <implementation type="inspect:InspectedImplementation">
-      <documentation>Authored capability implementation. (optional)</documentation>
+      <documentation>
+        Authored capability implementation. (optional)
+      </documentation>
     </implementation>
   </properties>
-
-</block>
+</inspect:InspectedCapability>

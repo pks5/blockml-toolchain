@@ -1,12 +1,6 @@
-<!--
-  Framework — BinaryExpressionNode
-  FQN: org.blockml.bml.framework.expression.BinaryExpressionNode
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework — BinaryExpressionNode
+  FQN: org.blockml.bml.framework.expression.BinaryExpressionNode-->
+<fwexpression:BinaryExpressionNode xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,27 +25,36 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>BinaryExpressionNode</name>
-  <type>fwexpression:BinaryExpressionNode</type>
-  <baseType>fwexpression:ExpressionNode</baseType>
-  <is>Binary operator expression AST node</is>
-
-  <documentation>kind: binary. operator: + | - | * | /. left/right: ExpressionNode.</documentation>
-
+  <baseType>
+    fwexpression:ExpressionNode
+  </baseType>
+  <is>
+    Binary operator expression AST node
+  </is>
+  <documentation>
+    kind: binary. operator: + | - | * | /. left/right: ExpressionNode.
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind. TS type: type:Text. (required)</documentation>
+      <documentation>
+        kind. TS type: type:Text. (required)
+      </documentation>
       <value>binary</value>
     </kind>
     <operator type="type:Text">
-      <documentation>operator. TS type: type:Text. (required)</documentation>
+      <documentation>
+        operator. TS type: type:Text. (required)
+      </documentation>
     </operator>
     <left type="fwexpression:ExpressionNode">
-      <documentation>left. TS type: fwexpression:ExpressionNode. (required)</documentation>
+      <documentation>
+        left. TS type: fwexpression:ExpressionNode. (required)
+      </documentation>
     </left>
     <right type="fwexpression:ExpressionNode">
-      <documentation>right. TS type: fwexpression:ExpressionNode. (required)</documentation>
+      <documentation>
+        right. TS type: fwexpression:ExpressionNode. (required)
+      </documentation>
     </right>
   </properties>
-
-</block>
+</fwexpression:BinaryExpressionNode>

@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — CreateEmitContext
-  FQN: org.blockml.bml.compiler.serializer.capability.CreateEmitContext
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — CreateEmitContext
+  FQN: org.blockml.bml.compiler.serializer.capability.CreateEmitContext-->
+<sercap:CreateEmitContext xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,28 +21,34 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>CreateEmitContext</name>
-  <type>sercap:CreateEmitContext</type>
-  <baseType>core:Capability</baseType>
-  <is>Build EmitContext from namespace bindings and indent</is>
-
-  <documentation>Sets useQName via HasBmlSemanticQNameBindings.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Build EmitContext from namespace bindings and indent
+  </is>
+  <documentation>
+    Sets useQName via HasBmlSemanticQNameBindings.
+  </documentation>
   <references>
     <see type="seremit:EmitContext" relation="SeeAlso" />
     <see type="sercap:HasBmlSemanticQNameBindings" relation="SeeAlso" />
   </references>
-
   <properties>
     <bindings type="type:Text">
-      <documentation>Record&lt;string, string> namespace bindings. (required)</documentation>
+      <documentation>
+        Record&lt;string, string> namespace bindings. (required)
+      </documentation>
     </bindings>
     <indent type="type:Integer">
-      <documentation>indent. TS type: type:Integer. (required)</documentation>
+      <documentation>
+        indent. TS type: type:Integer. (required)
+      </documentation>
     </indent>
     <context type="seremit:EmitContext">
-      <documentation>context. TS type: seremit:EmitContext. (required)</documentation>
+      <documentation>
+        context. TS type: seremit:EmitContext. (required)
+      </documentation>
     </context>
   </properties>
-
-</block>
+</sercap:CreateEmitContext>

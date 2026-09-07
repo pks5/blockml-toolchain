@@ -1,12 +1,6 @@
-<!--
-  LSP — LspRange
-  FQN: org.blockml.bml.lsp.LspRange
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP — LspRange
+  FQN: org.blockml.bml.lsp.LspRange-->
+<lsp:LspRange xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>LspRange</name>
-  <type>lsp:LspRange</type>
-  <baseType>lsp:LspType</baseType>
-  <is>LSP text range</is>
-
-  <documentation>BML type gap: stands for TypeScript LspRange (packages/lsp/src/positions.ts).</documentation>
-
+  <baseType>
+    lsp:LspType
+  </baseType>
+  <is>
+    LSP text range
+  </is>
+  <documentation>
+    BML type gap: stands for TypeScript LspRange (packages/lsp/src/positions.ts).
+  </documentation>
   <properties>
     <start type="lsp:LspPosition">
-      <documentation>start (required). TS type: lsp:LspPosition.</documentation>
+      <documentation>
+        start (required). TS type: lsp:LspPosition.
+      </documentation>
     </start>
     <end type="lsp:LspPosition">
-      <documentation>end (required). TS type: lsp:LspPosition.</documentation>
+      <documentation>
+        end (required). TS type: lsp:LspPosition.
+      </documentation>
     </end>
   </properties>
-
-</block>
+</lsp:LspRange>

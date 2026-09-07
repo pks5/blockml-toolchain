@@ -1,12 +1,6 @@
-<!--
-  Graph Capability — Query
-  FQN: org.blockml.bml.graph.capability.Query
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph Capability — Query
+  FQN: org.blockml.bml.graph.capability.Query-->
+<graphcap:Query xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,23 +15,33 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Query</name>
-  <type>graphcap:Query</type>
-  <baseType>core:Capability</baseType>
-  <is>Cypher escape hatch over the authored graph</is>
-  <documentation>Executes parameterized Cypher against the Ladybug store. Engine types are not part of the public API. Call schema() first: Ladybug is a Cypher subset — no type(), no shortestPath(). Example is on GraphSchema.example.</documentation>
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Cypher escape hatch over the authored graph
+  </is>
+  <documentation>
+    Executes parameterized Cypher against the Ladybug store. Engine types are not part of the public API. Call schema() first: Ladybug is a Cypher subset — no type(), no shortestPath(). Example is on GraphSchema.example.
+  </documentation>
   <references>
     <see type="graphcap:Schema" relation="SeeAlso" />
   </references>
   <properties>
     <cypher type="type:Text">
-      <documentation>Cypher statement. (required)</documentation>
+      <documentation>
+        Cypher statement. (required)
+      </documentation>
     </cypher>
     <params type="type:Text">
-      <documentation>JSON parameters (optional).</documentation>
+      <documentation>
+        JSON parameters (optional).
+      </documentation>
     </params>
     <result type="graph:GraphQueryResult">
-      <documentation>Tabular result. (required)</documentation>
+      <documentation>
+        Tabular result. (required)
+      </documentation>
     </result>
   </properties>
-</block>
+</graphcap:Query>

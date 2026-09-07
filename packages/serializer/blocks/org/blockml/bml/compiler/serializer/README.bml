@@ -1,12 +1,6 @@
-<!--
-  BlockML Serializer — README
-  FQN: org.blockml.bml.compiler.serializer.README
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Serializer — README
+  FQN: org.blockml.bml.compiler.serializer.README-->
+<serializer:README xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,35 +21,34 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>README</name>
-  <type>serializer:README</type>
-  <baseType>core:ReadMe</baseType>
-  <is>Reading entry for the Serializer compiler library</is>
-
+  <baseType>
+    core:ReadMe
+  </baseType>
+  <is>
+    Reading entry for the Serializer compiler library
+  </is>
   <documentation>
     The @blockml/serializer package converts BomDocument (Urmodell) to canonical BML XML.
     This library (org.blockml.bml.compiler.serializer.*) is the SSOT; TypeScript in
     packages/serializer/src/ implements it. Parity tests in packages/serializer/test/
     verify BML ↔ TS alignment.
-
+    
     Start reading at org.blockml.bml.compiler.serializer.documentation.Introduction (ReadNext chain).
-
+    
     Layer separation:
     • org.blockml.bml.bom.* (@blockml/bom) — Urmodell types serializer reads (BomDocument, …)
     • org.blockml.bml.compiler.serializer.* (this library) — emit rules and architecture
     • org.blockml.bml.definition.* (@blockml/core) — BML meta-model (V2 dynamic emit)
-
+    
     Modules: documentation (narrative specs), emit (internal types), config (constants/order),
     capability (serialize + emit operations).
-
+    
     Not in this library: ParseResult/ParseOptions (@blockml/parser); bomEquals (@blockml/bom).
   </documentation>
-
   <references>
     <see type="serdocumentation:Introduction" relation="ReadFirst" />
     <see type="serdocumentation:DesignDecisions" relation="SeeAlso" />
     <see type="serdocumentation:PublicApi" relation="SeeAlso" />
     <see type="bomdocumentation:PublicApi" relation="SeeAlso" />
   </references>
-
-</block>
+</serializer:README>

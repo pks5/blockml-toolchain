@@ -1,12 +1,6 @@
-<!--
-  CLI Capability — RunTransform
-  FQN: org.blockml.bml.cli.capability.RunTransform
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Capability — RunTransform
+  FQN: org.blockml.bml.cli.capability.RunTransform-->
+<clicap:RunTransform xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -21,14 +15,15 @@
   xmlns:transformer="org.blockml.bml.transformer"
   xmlns:type="org.blockml.bml.type">
 
-  <name>RunTransform</name>
-  <type>clicap:RunTransform</type>
-  <baseType>core:Capability</baseType>
-  <is>Execute blockml transform apply</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Execute blockml transform apply
+  </is>
   <documentation>
     # Execute blockml transform apply
-
+    
     Runs each ModelOperation of an Apply-source ModelTransformation (Prepare,
     then per operation: Running commit, registered executor, Reflect,
     Persist; then Finalize). The CLI supplies Claude Code workers for
@@ -42,30 +37,33 @@
     (exit 0) only when every ModelOperation succeeded and result resolution did
     not throw; otherwise failed (exit 1).
     Pending-contract violations do not start (exit 2). Missing FQN → exit 2.
-
+    
     Lifecycle status and execute/reflect boundary lines always print.
     The complete line is followed by Elapsed … (total wall-clock time).
     --verbose streams each Claude Code session live to the terminal
     (thinking, tool calls, assistant text). Claude-specific; the Transformer
     API stays generic.
   </documentation>
-
   <references>
     <see type="clidocumentation:TransformCommand" relation="SeeAlso" />
     <see type="clicommand:TransformCommand" relation="SeeAlso" />
     <see type="clicommand:TransformApplyCommand" relation="SeeAlso" />
   </references>
-
   <properties>
     <parsed type="cliapi:ParsedArgs">
-      <documentation>Parsed transform args, including optional --library. (required)</documentation>
+      <documentation>
+        Parsed transform args, including optional --library. (required)
+      </documentation>
     </parsed>
     <rootDir type="type:Text">
-      <documentation>Project root. (required)</documentation>
+      <documentation>
+        Project root. (required)
+      </documentation>
     </rootDir>
     <code type="type:Integer">
-      <documentation>Exit code 0|1|2. (required)</documentation>
+      <documentation>
+        Exit code 0|1|2. (required)
+      </documentation>
     </code>
   </properties>
-
-</block>
+</clicap:RunTransform>

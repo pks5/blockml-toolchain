@@ -1,12 +1,6 @@
-<!--
-  Validator Documentation — DesignDecisions
-  FQN: org.blockml.bml.compiler.validator.documentation.DesignDecisions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Validator Documentation — DesignDecisions
+  FQN: org.blockml.bml.compiler.validator.documentation.DesignDecisions-->
+<valdocumentation:DesignDecisions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,37 +17,38 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>DesignDecisions</name>
-  <type>valdocumentation:DesignDecisions</type>
-  <baseType>core:Documentation</baseType>
-  <is>Normative validator design decisions</is>
-
-  <documentation>Pragmatic model (default fork): validate() always forks via forkBom before checks.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Normative validator design decisions
+  </is>
+  <documentation>
+    Pragmatic model (default fork): validate() always forks via forkBom before checks.
     Urmodell input is never mutated.
-
+    
     continueOnError (default true): when false and validation fails, return diagnostics
     without pragmaticModel — host can abort before downstream work.
-
+    
     TypeRegistry injection: hosts with pre-built registry skip bootstrap; supports
     LSP and incremental validation scenarios.
-
+    
     success semantics: false when any diagnostic has severity === "error"; warnings
     and recommendations alone do not fail success.
-
+    
     Style catalog (validateStyle): BML StyleRule documents under style/rule/ are the SSOT.
     Interpreters bind to StyleCheck type FQNs. Unknown checks emit BML_STYLE_UNKNOWN_CHECK.
-
+    
     Bootstrap modes: bootstrapPaths (corpus flat scan) or libraryPaths (Library.bml graph).
     validateVersions runs after validateTypes and before validateConstraints.
-
+    
     Unknown instance memberValues and unresolved type FQNs are errors (not warnings).
     Missing libraries are errors. Domain types must be registered like framework types.
-
+    
     No throw on validation failure — aligns with B26 sync diagnostic API across parser,
-    serializer, validator, and compiler.</documentation>
-
+    serializer, validator, and compiler.
+  </documentation>
   <references>
     <see type="valdocumentation:Diagnostics" relation="ReadNext" />
   </references>
-
-</block>
+</valdocumentation:DesignDecisions>

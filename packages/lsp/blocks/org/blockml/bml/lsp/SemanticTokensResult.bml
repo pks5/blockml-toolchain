@@ -1,12 +1,6 @@
-<!--
-  LSP — SemanticTokensResult
-  FQN: org.blockml.bml.lsp.SemanticTokensResult
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP — SemanticTokensResult
+  FQN: org.blockml.bml.lsp.SemanticTokensResult-->
+<lsp:SemanticTokensResult xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,17 +23,20 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>SemanticTokensResult</name>
-  <type>lsp:SemanticTokensResult</type>
-  <baseType>lsp:LspType</baseType>
-  <is>LSP semanticTokens/full payload</is>
-
-  <documentation>BML type gap: stands for TypeScript SemanticTokensResult (packages/lsp/src/semantic-tokens.ts). data is the LSP 5-int delta encoding (deltaLine, deltaStart, length, tokenType, tokenModifiers).</documentation>
-
+  <baseType>
+    lsp:LspType
+  </baseType>
+  <is>
+    LSP semanticTokens/full payload
+  </is>
+  <documentation>
+    BML type gap: stands for TypeScript SemanticTokensResult (packages/lsp/src/semantic-tokens.ts). data is the LSP 5-int delta encoding (deltaLine, deltaStart, length, tokenType, tokenModifiers).
+  </documentation>
   <properties>
     <data type="type:Integer[]">
-      <documentation>LSP SemanticTokens.data integer array. (required)</documentation>
+      <documentation>
+        LSP SemanticTokens.data integer array. (required)
+      </documentation>
     </data>
   </properties>
-
-</block>
+</lsp:SemanticTokensResult>

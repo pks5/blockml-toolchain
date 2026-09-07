@@ -1,12 +1,6 @@
-<!--
-  Framework Documentation — TypeRegistryBootstrap
-  FQN: org.blockml.bml.framework.documentation.TypeRegistryBootstrap
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Documentation — TypeRegistryBootstrap
+  FQN: org.blockml.bml.framework.documentation.TypeRegistryBootstrap-->
+<fwdocumentation:TypeRegistryBootstrap xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -32,16 +26,18 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>TypeRegistryBootstrap</name>
-  <type>fwdocumentation:TypeRegistryBootstrap</type>
-  <baseType>core:Documentation</baseType>
-  <is>defaultBootstrapPaths and bootstrapTypeRegistry</is>
-
-  <documentation>bootstrapTypeRegistry(options?) supports two modes:
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    defaultBootstrapPaths and bootstrapTypeRegistry
+  </is>
+  <documentation>
+    bootstrapTypeRegistry(options?) supports two modes:
+    
     corpus (default) — walks options.paths (or defaultBootstrapPaths()) for all .bml files,
     parses via @blockml/parser parse(), registers each document root block.
-
+    
     library — when options.libraryPaths is set, resolves each Library.bml dependency graph
     (dependencies, subLibraries) in order, then registers blocks from each library blocks root
     except trees already covered by options.paths (srcDir / corpus). Missing Library path →
@@ -50,43 +46,42 @@
     BML_LIBRARY_NESTING_VIOLATION. Duplicate files of the same type FQN are resolved by
     source priority: a path not under node_modules (workspace / project sources) wins over
     an npm copy; same-origin last write wins. The losing file is not compared and is not kept.
-
+    
     defaultBootstrapPaths(rootDir?) returns BlockML srcDir roots for production
     npm dependencies (package.json dependencies + optionalDependencies) of the nearest
     package, resolved via node_modules walk-up. Used as corpus fallback when no paths
     are given. A BlockML package is identified by blockml.library or blockml.config.json;
     its source root is srcDir (default "blocks", override only in that package's
     blockml.config.json).
-
+    
     resolveLibrarySeeds(rootDir, extras?) prepends package.json blockml.library, then
     extras (config.libraries / --libraries), deduped by realpath.
-
+    
     bootstrapFullProjectRegistry({ rootDir, srcDir?, libraries? }) is the shared
     entry point for `blockml validate --all`, `@blockml/search`, and `@blockml/graph`. It sets
     corpus paths to projectSourceRoots (this package srcDir plus local packages/*
     BlockML modules) and library seeds to resolveLibrarySeeds, then calls
     bootstrapTypeRegistry. The resulting registry is the effective BML corpus:
     local project files plus the library graph including npm BlockML packages.
-
+    
     bootstrapTypeRegistry also indexes Library.bml under all BlockML packages found in
     workspace packages/ and node_modules along the directory walk (FQN search space).
     Local srcDir and workspace packages are indexed before node_modules.
     resolveDepCandidate / findLibraryFileForType pick workspace over npm when the same
     Library type FQN exists in both (Core dogfooding against an installed copy).
-
+    
     BootstrapResult: { registry, diagnostics, exportsByLibrary?, trace? }
     trace lists corpusPaths, seeds, searchRoots (index only), librariesVisited, and
     skippedCoveredRoots. Read errors emit BML_BOOTSTRAP_READ_ERROR (warning). Parse
     diagnostics are collected but do not stop registration of successfully parsed
     documents.
-
+    
     Hosts (@blockml/cli, @blockml/validator) may inject a pre-built TypeRegistry via
     ValidateOptions.typeRegistry instead of bootstrapping. ValidateOptions.libraryPaths
-    selects library mode when typeRegistry is omitted.</documentation>
-
+    selects library mode when typeRegistry is omitted.
+  </documentation>
   <references>
     <see type="fwdocumentation:EffectiveMembers" relation="ReadNext" />
     <see type="fwcap:BootstrapTypeRegistry" relation="Defines" />
   </references>
-
-</block>
+</fwdocumentation:TypeRegistryBootstrap>

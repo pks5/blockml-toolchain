@@ -1,12 +1,6 @@
-<!--
-  LSP Capability — AnalyzeDocument
-  FQN: org.blockml.bml.lsp.capability.AnalyzeDocument
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP Capability — AnalyzeDocument
+  FQN: org.blockml.bml.lsp.capability.AnalyzeDocument-->
+<lspcap:AnalyzeDocument xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,33 +24,41 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>AnalyzeDocument</name>
-  <type>lspcap:AnalyzeDocument</type>
-  <baseType>core:Capability</baseType>
-  <is>Parse and validate a BML document in workspace context</is>
-
-  <documentation>Editor-neutral analysis: parse(text) then validate with a TypeRegistry copy that
-    overlays the open document (same FQN). Cached workspace registry stays disk-only.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Parse and validate a BML document in workspace context
+  </is>
+  <documentation>
+    Editor-neutral analysis: parse(text) then validate with a TypeRegistry copy that
+    overlays the open document (same FQN). Cached workspace registry stays disk-only.
+  </documentation>
   <references>
     <see type="lspdocumentation:PublicApi" relation="SeeAlso" />
     <see type="valcap:Validate" relation="SeeAlso" />
     <see type="parcap:Parse" relation="SeeAlso" />
   </references>
-
   <properties>
     <text type="type:Text">
-      <documentation>text. TS type: type:Text. (required)</documentation>
+      <documentation>
+        text. TS type: type:Text. (required)
+      </documentation>
     </text>
     <filePath type="type:Text">
-      <documentation>filePath. TS type: type:Text. (required)</documentation>
+      <documentation>
+        filePath. TS type: type:Text. (required)
+      </documentation>
     </filePath>
     <workspace type="lsp:WorkspaceState">
-      <documentation>workspace. TS type: lsp:WorkspaceState. (required)</documentation>
+      <documentation>
+        workspace. TS type: lsp:WorkspaceState. (required)
+      </documentation>
     </workspace>
     <result type="lsp:AnalysisResult">
-      <documentation>result. TS type: lsp:AnalysisResult. (required)</documentation>
+      <documentation>
+        result. TS type: lsp:AnalysisResult. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</lspcap:AnalyzeDocument>

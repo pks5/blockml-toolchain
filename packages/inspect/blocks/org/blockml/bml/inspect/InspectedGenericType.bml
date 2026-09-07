@@ -1,12 +1,6 @@
-<!--
-  Inspect — InspectedGenericType
-  FQN: org.blockml.bml.inspect.InspectedGenericType
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Inspect — InspectedGenericType
+  FQN: org.blockml.bml.inspect.InspectedGenericType-->
+<inspect:InspectedGenericType xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,23 +15,30 @@
   xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>InspectedGenericType</name>
-  <type>inspect:InspectedGenericType</type>
-  <baseType>inspect:InspectType</baseType>
-  <is>Declared generic type parameter projection</is>
-
-  <documentation>One genericTypes entry from the inspected Block. baseType is the bound FQN. defaultType is the resolved default when authored (FQN or earlier parameter name).</documentation>
-
+  <baseType>
+    inspect:InspectType
+  </baseType>
+  <is>
+    Declared generic type parameter projection
+  </is>
+  <documentation>
+    One genericTypes entry from the inspected Block. baseType is the bound FQN. defaultType is the resolved default when authored (FQN or earlier parameter name).
+  </documentation>
   <properties>
     <name type="type:Text">
-      <documentation>Parameter name (e.g. T). (required)</documentation>
+      <documentation>
+        Parameter name (e.g. T). (required)
+      </documentation>
     </name>
     <baseType type="inspect:InspectTypeRef">
-      <documentation>Constraint type. (required)</documentation>
+      <documentation>
+        Constraint type. (required)
+      </documentation>
     </baseType>
     <defaultType type="inspect:InspectTypeRef">
-      <documentation>Resolved default type when authored. (optional)</documentation>
+      <documentation>
+        Resolved default type when authored. (optional)
+      </documentation>
     </defaultType>
   </properties>
-
-</block>
+</inspect:InspectedGenericType>

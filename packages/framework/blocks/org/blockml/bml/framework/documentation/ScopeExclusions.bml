@@ -1,12 +1,6 @@
-<!--
-  Framework Documentation — ScopeExclusions
-  FQN: org.blockml.bml.framework.documentation.ScopeExclusions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Documentation — ScopeExclusions
+  FQN: org.blockml.bml.framework.documentation.ScopeExclusions-->
+<fwdocumentation:ScopeExclusions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -32,24 +26,25 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ScopeExclusions</name>
-  <type>fwdocumentation:ScopeExclusions</type>
-  <baseType>core:Documentation</baseType>
-  <is>Explicit out-of-scope for the framework package</is>
-
-  <documentation>Out of scope for @blockml/framework:
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Explicit out-of-scope for the framework package
+  </is>
+  <documentation>
+    Out of scope for @blockml/framework:
+    
     • parse() / serialize() public entry points — @blockml/parser / @blockml/serializer
     • validate() orchestration — @blockml/validator
     • CLI / file orchestration — @blockml/cli
     • Render target emit — @blockml/compiler / domain packages
     • Language BML block authorship — @blockml/core (npm)
     • BomBuilder (V3) — future; framework accepts its output types only
-
-    In scope: Stage-2 utilities on BomDocument with TypeRegistry-backed semantic checks.</documentation>
-
+    
+    In scope: Stage-2 utilities on BomDocument with TypeRegistry-backed semantic checks.
+  </documentation>
   <references>
     <see type="fwdocumentation:Introduction" relation="SeeAlso" />
   </references>
-
-</block>
+</fwdocumentation:ScopeExclusions>

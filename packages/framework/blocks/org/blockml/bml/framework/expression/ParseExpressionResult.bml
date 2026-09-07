@@ -1,12 +1,6 @@
-<!--
-  Framework — ParseExpressionResult
-  FQN: org.blockml.bml.framework.expression.ParseExpressionResult
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework — ParseExpressionResult
+  FQN: org.blockml.bml.framework.expression.ParseExpressionResult-->
+<fwexpression:ParseExpressionResult xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,20 +25,25 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ParseExpressionResult</name>
-  <type>fwexpression:ParseExpressionResult</type>
-  <baseType>framework:FrameworkType</baseType>
-  <is>Successful parseExpression result</is>
-
-  <documentation>Returned when ParseExpressionOutcome.ok === true.</documentation>
-
+  <baseType>
+    framework:FrameworkType
+  </baseType>
+  <is>
+    Successful parseExpression result
+  </is>
+  <documentation>
+    Returned when ParseExpressionOutcome.ok === true.
+  </documentation>
   <properties>
     <ast type="fwexpression:ExpressionNode">
-      <documentation>ast. TS type: fwexpression:ExpressionNode. (required)</documentation>
+      <documentation>
+        ast. TS type: fwexpression:ExpressionNode. (required)
+      </documentation>
     </ast>
     <resultTypeFqn type="type:Text">
-      <documentation>Optional resolved result type FQN. (optional)</documentation>
+      <documentation>
+        Optional resolved result type FQN. (optional)
+      </documentation>
     </resultTypeFqn>
   </properties>
-
-</block>
+</fwexpression:ParseExpressionResult>

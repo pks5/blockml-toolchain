@@ -1,11 +1,5 @@
-<!--
-  Test fixture — roundtrip: constraints on block and multiple member kinds
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Test fixture — roundtrip: constraints on block and multiple member kinds-->
+<test:RoundtripConstraints xmlns="http://blockml.org/bml"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
@@ -14,37 +8,34 @@
   xmlns:validation="org.blockml.bml.validation"
   xmlns:test="com.blockml.test.constraints">
 
-  <type>test:RoundtripConstraints</type>
-  <baseType>core:Block</baseType>
-  <is>A constraint test fixture</is>
-  <version>1.0.0</version>
-
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    A constraint test fixture
+  </is>
+  <version>
+    1.0.0
+  </version>
   <constraints>
-    <constraint:RequiresMember name="width" validation="validation:Warning"/>
+    <constraint:RequiresMember name="width" validation="validation:Warning" />
   </constraints>
-
   <properties>
     <width type="type:Integer">
-      <value>1</value>
       <constraints>
-        <constraint:Min value="0" validation="validation:Error"/>
+        <constraint:Min value="0" validation="validation:Error" />
       </constraints>
+      <value>1</value>
     </width>
   </properties>
-
   <aggregations>
-    <children type="core:Block[]">
-      <constraints>
-        <constraint:AllowedChildType type="core:Block"/>
-      </constraints>
-    </children>
+    <children type="core:Block[]" />
   </aggregations>
-
   <capabilities>
     <ping type="cap:Inbound">
       <constraints>
-        <constraint:RequiresImplementation/>
+        <constraint:RequiresImplementation />
       </constraints>
     </ping>
   </capabilities>
-</block>
+</test:RoundtripConstraints>

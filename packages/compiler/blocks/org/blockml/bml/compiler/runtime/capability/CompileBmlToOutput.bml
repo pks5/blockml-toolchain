@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Capability — CompileBmlToOutput
-  FQN: org.blockml.bml.compiler.runtime.capability.CompileBmlToOutput
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Capability — CompileBmlToOutput
+  FQN: org.blockml.bml.compiler.runtime.capability.CompileBmlToOutput-->
+<runcap:CompileBmlToOutput xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,30 +19,38 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>CompileBmlToOutput</name>
-  <type>runcap:CompileBmlToOutput</type>
-  <baseType>core:Capability</baseType>
-  <is>Document-scope sugar for CompileToOutput</is>
-
-  <documentation>Wraps CompileInput as scope kind document then calls CompileToOutput.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Document-scope sugar for CompileToOutput
+  </is>
+  <documentation>
+    Wraps CompileInput as scope kind document then calls CompileToOutput.
+  </documentation>
   <references>
     <see type="runcap:CompileToOutput" relation="SeeAlso" />
   </references>
-
   <properties>
     <input type="runapi:CompileInput">
-      <documentation>BML source unit. (required)</documentation>
+      <documentation>
+        BML source unit. (required)
+      </documentation>
     </input>
     <targetName type="type:Text">
-      <documentation>Registered target name. (required)</documentation>
+      <documentation>
+        Registered target name. (required)
+      </documentation>
     </targetName>
     <options type="runapi:CompileOptions">
-      <documentation>Host options. (optional)</documentation>
+      <documentation>
+        Host options. (optional)
+      </documentation>
     </options>
     <result type="runapi:CompilerResult">
-      <documentation>RenderOutput envelope. (required)</documentation>
+      <documentation>
+        RenderOutput envelope. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</runcap:CompileBmlToOutput>

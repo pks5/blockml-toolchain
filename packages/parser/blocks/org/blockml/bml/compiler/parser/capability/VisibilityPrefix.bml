@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — VisibilityPrefix
-  FQN: org.blockml.bml.compiler.parser.capability.VisibilityPrefix
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — VisibilityPrefix
+  FQN: org.blockml.bml.compiler.parser.capability.VisibilityPrefix-->
+<parcap:VisibilityPrefix xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>VisibilityPrefix</name>
-  <type>parcap:VisibilityPrefix</type>
-  <baseType>core:Capability</baseType>
-  <is>Map visibility enum to XML prefix (shared with serializer util)</is>
-
-  <documentation>Map visibility enum to XML prefix (shared with serializer util)</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Map visibility enum to XML prefix (shared with serializer util)
+  </is>
+  <documentation>
+    Map visibility enum to XML prefix (shared with serializer util)
+  </documentation>
   <properties>
     <visibility type="type:Text">
-      <documentation>visibility. TS type: type:Text. (optional)</documentation>
+      <documentation>
+        visibility. TS type: type:Text. (optional)
+      </documentation>
     </visibility>
     <prefix type="type:Text">
-      <documentation>prefix. TS type: type:Text. (required)</documentation>
+      <documentation>
+        prefix. TS type: type:Text. (required)
+      </documentation>
     </prefix>
   </properties>
-
-</block>
+</parcap:VisibilityPrefix>

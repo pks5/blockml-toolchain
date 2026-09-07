@@ -1,12 +1,6 @@
-<!--
-  Validator Documentation — Introduction
-  FQN: org.blockml.bml.compiler.validator.documentation.Introduction
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Validator Documentation — Introduction
+  FQN: org.blockml.bml.compiler.validator.documentation.Introduction-->
+<valdocumentation:Introduction xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -22,33 +16,33 @@
   xmlns:valcap="org.blockml.bml.compiler.validator.capability"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation"
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
->
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>Introduction</name>
-  <type>valdocumentation:Introduction</type>
-  <baseType>core:Documentation</baseType>
-  <is>Purpose and scope of the Validator package</is>
-
-  <documentation>The @blockml/validator package provides Stage-2 semantic validation on BomDocument.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Purpose and scope of the Validator package
+  </is>
+  <documentation>
+    The @blockml/validator package provides Stage-2 semantic validation on BomDocument.
     It orchestrates @blockml/framework utilities on a pragmatic fork of the Urmodell.
-
+    
     This library (org.blockml.bml.compiler.validator.*) is the SSOT. TypeScript in
     packages/validator/src/ implements it. Parity tests in packages/validator/test/
     verify BML ↔ TS alignment.
-
+    
     Pipeline placement: BomDocument ← Parser | BomBuilder → Validator → diagnostics +
     optional pragmaticModel. Consumed by @blockml/cli, @blockml/lsp (V2), and hosts.
-
+    
     Validator never mutates the input Urmodell. Abort-on-error is a host concern — not
     enforced inside the validator package.
-
+    
     Validity without XSD: well-formed XML + structural BML + semantic BML against a
-    complete TypeRegistry. CLI validate and LSP share this engine.</documentation>
-
+    complete TypeRegistry. CLI validate and LSP share this engine.
+  </documentation>
   <references>
     <see type="valdocumentation:ValidityContract" relation="ReadNext" />
     <see type="bomdocumentation:Introduction" relation="SeeAlso" />
   </references>
-
-</block>
+</valdocumentation:Introduction>

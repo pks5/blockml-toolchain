@@ -1,12 +1,6 @@
-<!--
-  Serializer Documentation — PackageOwnership
-  FQN: org.blockml.bml.compiler.serializer.documentation.PackageOwnership
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Documentation — PackageOwnership
+  FQN: org.blockml.bml.compiler.serializer.documentation.PackageOwnership-->
+<serdocumentation:PackageOwnership xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -28,29 +22,30 @@
   xmlns:bomcap="org.blockml.bml.bom.capability"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PackageOwnership</name>
-  <type>serdocumentation:PackageOwnership</type>
-  <baseType>core:Documentation</baseType>
-  <is>Toolchain package responsibilities for serialization</is>
-
-  <documentation>@blockml/serializer — BomDocument → canonical BML XML; serialize() → SerializeResult.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Toolchain package responsibilities for serialization
+  </is>
+  <documentation>
+    @blockml/serializer — BomDocument → canonical BML XML; serialize() → SerializeResult.
     Owns emit rules B12–B25 (serializer-side), emit architecture, this BML library.
-
+    
     @blockml/bom — Urmodell types, SerializeOptions/SerializeResult (B26), Diagnostic,
     bomEquals/stripProvenance (B20). Serializer consumes; does not redefine.
-
+    
     @blockml/framework — TypeRegistry, Definition meta-model, bml:xml directive spec (D1–D9).
     V2 serializer consumes; V1 uses hardcoded snapshot.
-
+    
     @blockml/parser — BML → BomDocument; inverse mapping owned separately.
-
+    
     @blockml/lsp (V2) — format document → @blockml/serializer.
-
-    @blockml/compiler / render targets — NOT canonical BML roundtrip; separate emit paths.</documentation>
-
+    
+    @blockml/compiler / render targets — NOT canonical BML roundtrip; separate emit paths.
+  </documentation>
   <references>
     <see type="serdocumentation:ScopeExclusions" relation="ReadNext" />
     <see type="bomdocumentation:PackageOwnership" relation="SeeAlso" />
   </references>
-
-</block>
+</serdocumentation:PackageOwnership>

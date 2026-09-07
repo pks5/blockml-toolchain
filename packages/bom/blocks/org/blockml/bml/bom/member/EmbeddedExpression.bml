@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — EmbeddedExpression
-  FQN: org.blockml.bml.bom.member.EmbeddedExpression
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — EmbeddedExpression
+  FQN: org.blockml.bml.bom.member.EmbeddedExpression-->
+<bommember:EmbeddedExpression xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,23 +17,30 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>EmbeddedExpression</name>
-  <type>bommember:EmbeddedExpression</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Embedded expression region in implementation source</is>
-
-  <documentation>Embedded expression region in implementation source</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Embedded expression region in implementation source
+  </is>
+  <documentation>
+    Embedded expression region in implementation source
+  </documentation>
   <properties>
     <raw type="type:Text">
-      <documentation>raw (required). TS type: type:Text.</documentation>
+      <documentation>
+        raw (required). TS type: type:Text.
+      </documentation>
     </raw>
     <start type="type:Integer">
-      <documentation>start (required). TS type: type:Integer.</documentation>
+      <documentation>
+        start (required). TS type: type:Integer.
+      </documentation>
     </start>
     <end type="type:Integer">
-      <documentation>end (required). TS type: type:Integer.</documentation>
+      <documentation>
+        end (required). TS type: type:Integer.
+      </documentation>
     </end>
   </properties>
-
-</block>
+</bommember:EmbeddedExpression>

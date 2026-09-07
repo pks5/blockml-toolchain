@@ -1,48 +1,41 @@
-<!--
-  Transformer Workflow — ExecutionStatus
-  FQN: org.blockml.bml.transformer.workflow.ExecutionStatus
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Workflow — ExecutionStatus
+  FQN: org.blockml.bml.transformer.workflow.ExecutionStatus-->
+<workflow:ExecutionStatus xmlns="http://blockml.org/bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:type="org.blockml.bml.type"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
-  <name>ExecutionStatus</name>
-  <type>workflow:ExecutionStatus</type>
-  <baseType>type:EnumType</baseType>
-  <is>The lifecycle state of a ModelTransformation or ModelOperation</is>
-
+  <baseType>
+    type:EnumType
+  </baseType>
+  <is>
+    The lifecycle state of a ModelTransformation or ModelOperation
+  </is>
   <documentation>
     Closed set of states a `workflow:ModelTransformation` or
     `workflow:ModelOperation` can be in.
-
+    
     On a started ModelTransformation the target library's `_meta.transform`
     package matches this value. Apply sources: `_meta.transform.pending`
     (one-shot, `template=false`), `_meta.transform.available` (template
     catalog, `template=true`), or any FQN outside `_meta.transform`
     (`template=true`).
-
+    
     * `Pending` — created, not yet started.
     * `Running` — currently executing (`_meta.transform.running`).
     * `Failed` — finished unsuccessfully (`_meta.transform.failed`).
     * `Succeeded` — finished successfully (`_meta.transform.succeeded`).
-
+    
     A ModelOperation uses the same values. Its `Running` state is
     persisted and committed before the registered executor runs
     (recovery boundary). A ModelOperation `Failed` aborts the remaining
     operations and fails the transformation.
   </documentation>
-
   <references>
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:ModelOperation" relation="SeeAlso" />
     <see type="type:EnumType" relation="Extends" />
   </references>
-
   <aggregations>
     <values override="true">
       <composition>
@@ -53,5 +46,4 @@
       </composition>
     </values>
   </aggregations>
-
-</block>
+</workflow:ExecutionStatus>

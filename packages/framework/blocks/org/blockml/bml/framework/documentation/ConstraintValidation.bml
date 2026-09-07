@@ -1,12 +1,6 @@
-<!--
-  Framework Documentation — ConstraintValidation
-  FQN: org.blockml.bml.framework.documentation.ConstraintValidation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Documentation — ConstraintValidation
+  FQN: org.blockml.bml.framework.documentation.ConstraintValidation-->
+<fwdocumentation:ConstraintValidation xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -32,31 +26,32 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ConstraintValidation</name>
-  <type>fwdocumentation:ConstraintValidation</type>
-  <baseType>core:Documentation</baseType>
-  <is>validateConstraints branch dispatch and embed contexts</is>
-
-  <documentation>validateConstraints evaluates constraints on the effective member set from
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    validateConstraints branch dispatch and embed contexts
+  </is>
+  <documentation>
+    validateConstraints evaluates constraints on the effective member set from
     resolveEffectiveMembers (baseType + contracts + local). Property ValuePresent and other
     ValueConstraints on effective PropertyDefinition are checked against authored local values.
-
+    
     Embed contexts for directly declared constraint BlockInstances:
     block — BlockConstraint (RequiresMember), ValueConstraint (Min/Max/ValuePresent)
     property — PropertyConstraint (MustBeReadOnly), ValueConstraint
     aggregation — AggregationConstraint (AllowedChildType)
     association — AssociationConstraint (NoSelfReference)
     capability — CapabilityConstraint (RequiresImplementation)
-
+    
     Wrong branch for context → BML_CONSTRAINT_TARGET_MISMATCH.
     Unknown constraint type → BML_CONSTRAINT_UNKNOWN.
     Violation → BML_CONSTRAINT_VIOLATION.
-
-    Fixtures: packages/framework/test/constraints/fixtures/*.bml</documentation>
-
+    
+    Fixtures: packages/framework/test/constraints/fixtures/*.bml
+  </documentation>
   <references>
     <see type="fwdocumentation:Diagnostics" relation="ReadNext" />
     <see type="fwcap:ValidateConstraints" relation="Defines" />
   </references>
-
-</block>
+</fwdocumentation:ConstraintValidation>

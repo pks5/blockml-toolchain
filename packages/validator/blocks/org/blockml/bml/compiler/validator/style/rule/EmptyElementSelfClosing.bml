@@ -1,12 +1,6 @@
-<!--
-  Validator Style Rule — EmptyElementSelfClosing
-  FQN: org.blockml.bml.compiler.validator.style.EmptyElementSelfClosing
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Validator Style Rule — EmptyElementSelfClosing
+  FQN: org.blockml.bml.compiler.validator.style.EmptyElementSelfClosing-->
+<valstyle:EmptyElementSelfClosing xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomcommon="org.blockml.bml.bom.common"
@@ -16,14 +10,16 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:valstyle="org.blockml.bml.compiler.validator.style">
 
-  <name>EmptyElementSelfClosing</name>
-  <type>valstyle:EmptyElementSelfClosing</type>
-  <baseType>valstyle:StyleRule</baseType>
-  <is>Require self-closing form for empty see references</is>
-
-  <documentation>Empty see tags should be written as self-closing elements:
-    see with attributes and slash, not a paired open-close with no body.</documentation>
-
+  <baseType>
+    valstyle:StyleRule
+  </baseType>
+  <is>
+    Require self-closing form for empty see references
+  </is>
+  <documentation>
+    Empty see tags should be written as self-closing elements:
+    see with attributes and slash, not a paired open-close with no body.
+  </documentation>
   <properties>
     <code override="true">
       <value>BML_STYLE_EMPTY_ELEMENT_SELF_CLOSE</value>
@@ -38,7 +34,6 @@
       <value>Write empty elements as self-closing tags.</value>
     </message>
   </properties>
-
   <aggregations>
     <check override="true">
       <composition>
@@ -46,5 +41,4 @@
       </composition>
     </check>
   </aggregations>
-
-</block>
+</valstyle:EmptyElementSelfClosing>

@@ -1,12 +1,6 @@
-<!--
-  BlockML Compiler Runtime Library
-  FQN: org.blockml.bml.compiler.runtime.Library
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Compiler Runtime Library
+  FQN: org.blockml.bml.compiler.runtime.Library-->
+<runtime:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,29 +19,28 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>Library</name>
-  <type>runtime:Library</type>
-  <baseType>core:BlockLibrary</baseType>
-  <is>The BlockML compiler runtime package library catalog</is>
-
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    The BlockML compiler runtime package library catalog
+  </is>
+  <version>
+    0.9.4
+  </version>
   <documentation>
     Canonical compiler runtime specification for BlockML — compileToOutput, Target
     Registry, compile scope, RenderContext (C1–C7). TypeScript in packages/compiler/src/
     implements this library. Membership is defined exclusively by this blocks list.
   </documentation>
-
-  <version>0.9.4</version>
-
   <language>
-    <English />
+    <blockml:language.English />
   </language>
-
   <properties>
     <description override="true">
       <value>BlockML Compiler runtime library</value>
     </description>
   </properties>
-
   <aggregations>
     <readMe override="true">
       <composition>
@@ -64,7 +57,8 @@
       </composition>
     </dependencies>
     <blocks override="true">
-      <composition><runtime:RuntimeType />
+      <composition>
+        <runtime:RuntimeType />
         <runapi:CompileScopeKind />
         <runapi:CompileInput />
         <runapi:CompileScope />
@@ -111,5 +105,4 @@
       </composition>
     </blocks>
   </aggregations>
-
-</block>
+</runtime:Library>

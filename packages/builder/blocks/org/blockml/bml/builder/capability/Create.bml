@@ -1,12 +1,6 @@
-<!--
-  Builder Capability — Create
-  FQN: org.blockml.bml.builder.capability.Create
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Builder Capability — Create
+  FQN: org.blockml.bml.builder.capability.Create-->
+<buildercap:Create xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,16 +15,18 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>Create</name>
-  <type>buildercap:Create</type>
-  <baseType>core:Capability</baseType>
-  <is>Start a BomBuilder session from scratch</is>
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Start a BomBuilder session from scratch
+  </is>
   <documentation>
     # Start a BomBuilder session from scratch
-
+    
     `BomBuilder.create(options)` builds a draft BlockDefinition with xmlns bindings
     for the BML URI, the block package, and the baseType package.
-
+    
     - Sets `SourceInfo.rootForm` to `type` (doc:DocumentFormat preferred form)
     - Omits `xmlns:xsi` and `xsi:schemaLocation` unless the caller adds them later
   </documentation>
@@ -41,10 +37,14 @@
   </references>
   <properties>
     <options type="builder:CreateBlockOptions">
-      <documentation>options (required).</documentation>
+      <documentation>
+        options (required).
+      </documentation>
     </options>
     <result type="builder:BomBuilder">
-      <documentation>Writable session. (required)</documentation>
+      <documentation>
+        Writable session. (required)
+      </documentation>
     </result>
   </properties>
-</block>
+</buildercap:Create>

@@ -1,12 +1,6 @@
-<!--
-  Builder — BomBuilder
-  FQN: org.blockml.bml.builder.BomBuilder
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Builder — BomBuilder
+  FQN: org.blockml.bml.builder.BomBuilder-->
+<builder:BomBuilder xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -20,17 +14,21 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>BomBuilder</name>
-  <type>builder:BomBuilder</type>
-  <baseType>builder:BuilderType</baseType>
-  <is>Writable authoring session over a BOM draft</is>
-  <documentation>Session created by Create or Edit. Mutations apply only to the draft.
+  <baseType>
+    builder:BuilderType
+  </baseType>
+  <is>
+    Writable authoring session over a BOM draft
+  </is>
+  <documentation>
+    Session created by Create or Edit. Mutations apply only to the draft.
     seal() returns an immutable BomDocument (Urmodell). Does not parse, serialize,
-    validate, or write files. Does not use forkBom (resolve-only).</documentation>
+    validate, or write files. Does not use forkBom (resolve-only).
+  </documentation>
   <references>
     <see type="buildercap:Create" relation="SeeAlso" />
     <see type="buildercap:Edit" relation="SeeAlso" />
     <see type="buildercap:Seal" relation="SeeAlso" />
     <see type="bomdoc:BomDocument" relation="SeeAlso" />
   </references>
-</block>
+</builder:BomBuilder>

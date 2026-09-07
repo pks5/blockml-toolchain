@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — TrimText
-  FQN: org.blockml.bml.compiler.parser.capability.TrimText
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — TrimText
+  FQN: org.blockml.bml.compiler.parser.capability.TrimText-->
+<parcap:TrimText xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,26 +23,29 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>TrimText</name>
-  <type>parcap:TrimText</type>
-  <baseType>core:Capability</baseType>
-  <is>Strip common leading indent, then trim, from text node value</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Strip common leading indent, then trim, from text node value
+  </is>
   <documentation>
     Strip the longest leading whitespace prefix shared by non-empty lines (pretty-print indent), then trim surrounding whitespace. Relative extra indent on individual lines is kept.
-
+    
     If the first line has non-whitespace and no leading space or tab (text glued to the opening tag), that line is excluded from the prefix calculation. One or more leading spaces or tabs on that same line mean the first line counts. A whitespace-only first line is ignored like any blank line.
-
+    
     Used by GetCharacterData for documentation prose and other character-data hosts (B13).
   </documentation>
-
   <properties>
     <value type="type:Text">
-      <documentation>value. TS type: type:Text. (required)</documentation>
+      <documentation>
+        value. TS type: type:Text. (required)
+      </documentation>
     </value>
     <trimmed type="type:Text">
-      <documentation>trimmed. TS type: type:Text. (required)</documentation>
+      <documentation>
+        trimmed. TS type: type:Text. (required)
+      </documentation>
     </trimmed>
   </properties>
-
-</block>
+</parcap:TrimText>

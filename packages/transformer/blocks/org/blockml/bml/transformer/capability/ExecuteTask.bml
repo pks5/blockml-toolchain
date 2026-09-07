@@ -1,26 +1,21 @@
-<!--
-  Transformer Capability — ExecuteTask
-  FQN: org.blockml.bml.transformer.capability.ExecuteTask
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Capability — ExecuteTask
+  FQN: org.blockml.bml.transformer.capability.ExecuteTask-->
+<transformercap:ExecuteTask xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
-  <name>ExecuteTask</name>
-  <type>transformercap:ExecuteTask</type>
-  <baseType>core:Capability</baseType>
-  <is>AgenticExecutor work — perform the Task against the model</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    AgenticExecutor work — perform the Task against the model
+  </is>
   <documentation>
     # Execute Task
-
+    
     Inner work of `transformercap:AgenticExecutor`. Receive the closed Task
     BML fragment and the repository. Execute `run` on that Task
     instance in a new isolated agent process. Look up `Task.run`, the
@@ -29,25 +24,23 @@
     model source so that Task is done. Return agent stdout as the
     output candidate. Do not commit; the envelope persists model
     changes with the operation terminal state.
-
+    
     The agent does not receive the AgenticOperation or the Running
     ModelTransformation identity. Expressions on the snippet are
     already literals.
-
+    
     - Must not write ModelTransformation metadata (including operations) or any
       file under `_meta/transform/`.
     - Default Claude implementation: Edit on *.bml only; deny
       `_meta/transform/` and node_modules/; Bash limited to npx blockml.
     - TS: executor/agentic-executor.ts.
   </documentation>
-
   <references>
     <see type="transformerdocumentation:ArchitectureOverview" relation="SeeAlso" />
     <see type="transformercap:AgenticExecutor" relation="SeeAlso" />
     <see type="workflow:AgenticOperation" relation="SeeAlso" />
     <see type="workflow:Task" relation="SeeAlso" />
   </references>
-
   <properties>
     <task type="type:Text">
       <documentation>
@@ -56,8 +49,9 @@
       </documentation>
     </task>
     <workspaceRoot type="type:Text">
-      <documentation>Repository root this operation may modify. (required)</documentation>
+      <documentation>
+        Repository root this operation may modify. (required)
+      </documentation>
     </workspaceRoot>
   </properties>
-
-</block>
+</transformercap:ExecuteTask>

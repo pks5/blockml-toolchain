@@ -1,12 +1,6 @@
-<!--
-  Builder — CreateBlockOptions
-  FQN: org.blockml.bml.builder.CreateBlockOptions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Builder — CreateBlockOptions
+  FQN: org.blockml.bml.builder.CreateBlockOptions-->
+<builder:CreateBlockOptions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -20,31 +14,47 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>CreateBlockOptions</name>
-  <type>builder:CreateBlockOptions</type>
-  <baseType>builder:BuilderType</baseType>
-  <is>Identity and source options for BomBuilder.create</is>
-  <documentation>type is the root FQN. name defaults to the last FQN segment.
+  <baseType>
+    builder:BuilderType
+  </baseType>
+  <is>
+    Identity and source options for BomBuilder.create
+  </is>
+  <documentation>
+    type is the root FQN. name defaults to the last FQN segment.
     baseType defaults to org.blockml.bml.core.Block. is defaults to name.
-    filePath is stored on SourceInfo for later serialize.</documentation>
+    filePath is stored on SourceInfo for later serialize.
+  </documentation>
   <properties>
     <typeFqn type="type:Text">
-      <documentation>Root block FQN. TS field: type. (required)</documentation>
+      <documentation>
+        Root block FQN. TS field: type. (required)
+      </documentation>
     </typeFqn>
     <name type="type:Text">
-      <documentation>Short class name. Defaults to last FQN segment. (optional)</documentation>
+      <documentation>
+        Short class name. Defaults to last FQN segment. (optional)
+      </documentation>
     </name>
     <baseType type="type:Text">
-      <documentation>Parent type FQN. (optional)</documentation>
+      <documentation>
+        Parent type FQN. (optional)
+      </documentation>
     </baseType>
     <is type="type:Text">
-      <documentation>Idea (Urbild) prose. (optional)</documentation>
+      <documentation>
+        Idea (Urbild) prose. (optional)
+      </documentation>
     </is>
     <documentationText type="type:Text">
-      <documentation>Optional documentation prose. TS field: documentation. (optional)</documentation>
+      <documentation>
+        Optional documentation prose. TS field: documentation. (optional)
+      </documentation>
     </documentationText>
     <filePath type="type:Text">
-      <documentation>SourceInfo.filePath. (optional)</documentation>
+      <documentation>
+        SourceInfo.filePath. (optional)
+      </documentation>
     </filePath>
   </properties>
-</block>
+</builder:CreateBlockOptions>

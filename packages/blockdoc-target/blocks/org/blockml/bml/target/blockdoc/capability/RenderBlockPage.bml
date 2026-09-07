@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Capability — RenderBlockPage
-  FQN: org.blockml.bml.target.blockdoc.capability.RenderBlockPage
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Capability — RenderBlockPage
+  FQN: org.blockml.bml.target.blockdoc.capability.RenderBlockPage-->
+<bdcap:RenderBlockPage xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,44 +21,56 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>RenderBlockPage</name>
-  <type>bdcap:RenderBlockPage</type>
-  <baseType>core:Capability</baseType>
-  <is>Assemble one block HTML document</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Assemble one block HTML document
+  </is>
   <documentation>
     # Assemble one block HTML document
-
+    
     BD6/BD8/BD25: sticky toolbar (BlockDoc + Index + All Blocks + search); header (package path, h1 name, extends/version/is); Documentation prose; member tables; Composition; Sub-Blocks (always relative links to sub.type, not gated on knownFqns); References prefer ref.type as link else url/file text + context.
   </documentation>
-
   <references>
     <see type="bddocumentation:PageChrome" relation="SeeAlso" />
     <see type="bdconfig:PageSectionOrder" relation="SeeAlso" />
   </references>
-
   <properties>
     <block type="bomblock:BlockDefinition">
-      <documentation>Block to document (required).</documentation>
+      <documentation>
+        Block to document (required).
+      </documentation>
     </block>
     <options type="bdapi:BlockDocOptions">
-      <documentation>Resolved options (required).</documentation>
+      <documentation>
+        Resolved options (required).
+      </documentation>
     </options>
     <rootIndexPath type="type:Text">
-      <documentation>Interesting package home (required).</documentation>
+      <documentation>
+        Interesting package home (required).
+      </documentation>
     </rootIndexPath>
     <allBlocksPath type="type:Text">
-      <documentation>All Blocks listing path (required).</documentation>
+      <documentation>
+        All Blocks listing path (required).
+      </documentation>
     </allBlocksPath>
     <knownFqns type="type:Text">
-      <documentation>Set of linkable FQNs (required).</documentation>
+      <documentation>
+        Set of linkable FQNs (required).
+      </documentation>
     </knownFqns>
     <typeRegistry type="type:Text">
-      <documentation>TypeRegistry for inherited member types (optional).</documentation>
+      <documentation>
+        TypeRegistry for inherited member types (optional).
+      </documentation>
     </typeRegistry>
     <result type="bdpage:BlockPage">
-      <documentation>HTML page (required).</documentation>
+      <documentation>
+        HTML page (required).
+      </documentation>
     </result>
   </properties>
-
-</block>
+</bdcap:RenderBlockPage>

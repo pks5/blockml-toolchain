@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Documentation — PublicApi
-  FQN: org.blockml.bml.compiler.runtime.documentation.PublicApi
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Documentation — PublicApi
+  FQN: org.blockml.bml.compiler.runtime.documentation.PublicApi-->
+<rundocumentation:PublicApi xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -26,12 +20,14 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PublicApi</name>
-  <type>rundocumentation:PublicApi</type>
-  <baseType>core:Documentation</baseType>
-  <is>Public TypeScript surface mirrored in this library</is>
-
-  <documentation>Exports (packages/compiler/src/index.ts):
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Public TypeScript surface mirrored in this library
+  </is>
+  <documentation>
+    Exports (packages/compiler/src/index.ts):
     Types: CompileScopeKind, CompileInput, CompileScope, CompileRequest, CompileOptions,
     CompileBomOptions, CompilerResult, ValidateRegistryResult, RenderOutput, RenderOutputFile, RenderSession,
     RenderContext, RenderTarget, ScopeConfigHints, ResolvedScope.
@@ -40,13 +36,13 @@
     Stage 1–2 helpers: compileBmlToBom, validateRegistryDocuments.
     Facade: compileToOutput, compileBomToOutput, compileBmlToOutput.
     Context: createRenderContext, buildRenderSession.
-
-    Modeled as api/*, config/RuntimeConstants, and capability/* on Library.blocks.</documentation>
+    
+    Modeled as api/*, config/RuntimeConstants, and capability/* on Library.blocks.
+  </documentation>
   <references>
     <see type="rundocumentation:CompileIO" relation="ReadNext" />
     <see type="runapi:CompileRequest" relation="SeeAlso" />
     <see type="runcap:CompileToOutput" relation="SeeAlso" />
     <see type="runapi:RenderTarget" relation="SeeAlso" />
   </references>
-
-</block>
+</rundocumentation:PublicApi>

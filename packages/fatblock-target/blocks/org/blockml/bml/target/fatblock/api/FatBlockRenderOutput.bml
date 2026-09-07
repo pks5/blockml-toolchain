@@ -1,12 +1,6 @@
-<!--
-  FatBlock API — FatBlockRenderOutput
-  FQN: org.blockml.bml.target.fatblock.api.FatBlockRenderOutput
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock API — FatBlockRenderOutput
+  FQN: org.blockml.bml.target.fatblock.api.FatBlockRenderOutput-->
+<fbapi:FatBlockRenderOutput xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -22,15 +16,25 @@
   xmlns:serializer="org.blockml.bml.compiler.serializer"
   xmlns:type="org.blockml.bml.type">
 
-  <name>FatBlockRenderOutput</name>
-  <type>fbapi:FatBlockRenderOutput</type>
-  <baseType>fatblock:FatblockType</baseType>
-  <is>Single-file fat .bml RenderOutput with diagnostics</is>
-
-  <documentation>files[] typically one {hostFqn}.fat.bml entry. diagnostics optional; info severity stripped on success path.</documentation>
+  <baseType>
+    fatblock:FatblockType
+  </baseType>
+  <is>
+    Single-file fat .bml RenderOutput with diagnostics
+  </is>
+  <documentation>
+    files[] typically one {hostFqn}.fat.bml entry. diagnostics optional; info severity stripped on success path.
+  </documentation>
   <properties>
-    <files type="type:Text"><documentation>Array of { path, content }. (required)</documentation></files>
-    <diagnostics type="type:Text"><documentation>Diagnostic list from assemble and serialize. (optional)</documentation></diagnostics>
+    <files type="type:Text">
+      <documentation>
+        Array of { path, content }. (required)
+      </documentation>
+    </files>
+    <diagnostics type="type:Text">
+      <documentation>
+        Diagnostic list from assemble and serialize. (optional)
+      </documentation>
+    </diagnostics>
   </properties>
-
-</block>
+</fbapi:FatBlockRenderOutput>

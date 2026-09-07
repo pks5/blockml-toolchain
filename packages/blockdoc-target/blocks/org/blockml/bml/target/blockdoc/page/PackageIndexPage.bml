@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Page — PackageIndexPage
-  FQN: org.blockml.bml.target.blockdoc.page.PackageIndexPage
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Page — PackageIndexPage
+  FQN: org.blockml.bml.target.blockdoc.page.PackageIndexPage-->
+<bdpage:PackageIndexPage xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,24 +21,27 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>PackageIndexPage</name>
-  <type>bdpage:PackageIndexPage</type>
-  <baseType>blockdoc:BlockdocType</baseType>
-  <is>HTML template model for a package prefix index (fqn layout only)</is>
-
+  <baseType>
+    blockdoc:BlockdocType
+  </baseType>
+  <is>
+    HTML template model for a package prefix index (fqn layout only)
+  </is>
   <documentation>
     # HTML template model for a package prefix index (fqn layout only)
-
+    
     Emitted only when outLayout=fqn. Lists direct sub-packages and direct root blocks (not nested Parent.Child as Blocks entries). Includes toolbar and Index→ancestors breadcrumb. Index href is the interesting home (BD27). Empty prefix (site root) is used when FirstInterestingPackagePrefix is empty.
   </documentation>
-
   <properties>
     <packagePrefix type="type:Text">
-      <documentation>Dotted package prefix. (required)</documentation>
+      <documentation>
+        Dotted package prefix. (required)
+      </documentation>
     </packagePrefix>
     <html type="type:Text">
-      <documentation>Full HTML document string. (required)</documentation>
+      <documentation>
+        Full HTML document string. (required)
+      </documentation>
     </html>
   </properties>
-
-</block>
+</bdpage:PackageIndexPage>

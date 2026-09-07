@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — UnknownXmlNode
-  FQN: org.blockml.bml.bom.common.UnknownXmlNode
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — UnknownXmlNode
+  FQN: org.blockml.bml.bom.common.UnknownXmlNode-->
+<bomcommon:UnknownXmlNode xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,29 +17,40 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>UnknownXmlNode</name>
-  <type>bomcommon:UnknownXmlNode</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Preserve-on-error residual for an unknown authored XML element</is>
-
-  <documentation>Stored when a structural BML error is reported so Format/LSP/serialize can roundtrip the authored construct.</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Preserve-on-error residual for an unknown authored XML element
+  </is>
+  <documentation>
+    Stored when a structural BML error is reported so Format/LSP/serialize can roundtrip the authored construct.
+  </documentation>
   <properties>
     <localName type="type:Text">
-      <documentation>localName (required). TS type: type:Text.</documentation>
+      <documentation>
+        localName (required). TS type: type:Text.
+      </documentation>
     </localName>
     <prefix type="type:Text">
-      <documentation>prefix (optional). TS type: type:Text.</documentation>
+      <documentation>
+        prefix (optional). TS type: type:Text.
+      </documentation>
     </prefix>
     <attributes type="type:Text">
-      <documentation>Record of authored attribute name → value. (required)</documentation>
+      <documentation>
+        Record of authored attribute name → value. (required)
+      </documentation>
     </attributes>
     <innerXml type="type:Text">
-      <documentation>innerXml (optional). TS type: type:Text.</documentation>
+      <documentation>
+        innerXml (optional). TS type: type:Text.
+      </documentation>
     </innerXml>
     <source type="bomcommon:SourceLocation">
-      <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
+      <documentation>
+        source (optional). TS type: bomcommon:SourceLocation.
+      </documentation>
     </source>
   </properties>
-
-</block>
+</bomcommon:UnknownXmlNode>

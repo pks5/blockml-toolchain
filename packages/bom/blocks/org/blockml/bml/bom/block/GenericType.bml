@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — GenericType
-  FQN: org.blockml.bml.bom.block.GenericType
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — GenericType
+  FQN: org.blockml.bml.bom.block.GenericType-->
+<bomblock:GenericType xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,23 +17,30 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>GenericType</name>
-  <type>bomblock:GenericType</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Generic type parameter on a Block definition</is>
-
-  <documentation>Generic type parameter on a Block definition</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Generic type parameter on a Block definition
+  </is>
+  <documentation>
+    Generic type parameter on a Block definition
+  </documentation>
   <properties>
     <name type="type:Text">
-      <documentation>name (required). TS type: type:Text.</documentation>
+      <documentation>
+        name (required). TS type: type:Text.
+      </documentation>
     </name>
     <baseType type="type:Text">
-      <documentation>baseType (required). TS type: type:Text.</documentation>
+      <documentation>
+        baseType (required). TS type: type:Text.
+      </documentation>
     </baseType>
     <defaultType type="type:Text">
-      <documentation>defaultType (optional). TS type: type:Text.</documentation>
+      <documentation>
+        defaultType (optional). TS type: type:Text.
+      </documentation>
     </defaultType>
   </properties>
-
-</block>
+</bomblock:GenericType>

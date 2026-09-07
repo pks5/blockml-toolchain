@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — BomDocument
-  FQN: org.blockml.bml.bom.document.BomDocument
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — BomDocument
+  FQN: org.blockml.bml.bom.document.BomDocument-->
+<bomdoc:BomDocument xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,27 +17,35 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>BomDocument</name>
-  <type>bomdoc:BomDocument</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Root Urmodell document — every parsed BML file</is>
-
-  <documentation>Immutable after parse or BomBuilder.seal(). kind is always "block" in V1.</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Root Urmodell document — every parsed BML file
+  </is>
+  <documentation>
+    Immutable after parse or BomBuilder.seal(). kind is always "block" in V1.
+  </documentation>
   <examples>
-    <example title="Calibrator reference shape">Reference BomDocument from com.machineblocks.bml.calibration.Calibrator. Root BlockDefinition with declared members, subBlocks (Utils, Base, StudDiameter, …), and compositions from _utils/_parts aggregations. Inherited native properties are NOT in members[].</example>
+    <example title="Calibrator reference shape">
+      Reference BomDocument from com.machineblocks.bml.calibration.Calibrator. Root BlockDefinition with declared members, subBlocks (Utils, Base, StudDiameter, …), and compositions from _utils/_parts aggregations. Inherited native properties are NOT in members[].
+    </example>
   </examples>
-
   <properties>
     <kind type="type:Text">
-      <documentation>V1: always "block". (required)</documentation>
+      <documentation>
+        V1: always "block". (required)
+      </documentation>
     </kind>
     <source type="bomcommon:SourceInfo">
-      <documentation>source (required). TS type: bomcommon:SourceInfo.</documentation>
+      <documentation>
+        source (required). TS type: bomcommon:SourceInfo.
+      </documentation>
     </source>
     <block type="bomblock:BlockDefinition">
-      <documentation>block (required). TS type: bomblock:BlockDefinition.</documentation>
+      <documentation>
+        block (required). TS type: bomblock:BlockDefinition.
+      </documentation>
     </block>
   </properties>
-
-</block>
+</bomdoc:BomDocument>

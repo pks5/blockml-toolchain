@@ -1,12 +1,6 @@
-<!--
-  XSD Capability — EmitBlockXsd
-  FQN: org.blockml.bml.target.xsd.capability.EmitBlockXsd
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--XSD Capability — EmitBlockXsd
+  FQN: org.blockml.bml.target.xsd.capability.EmitBlockXsd-->
+<xsdcap:EmitBlockXsd xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -20,24 +14,28 @@
   xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>EmitBlockXsd</name>
-  <type>xsdcap:EmitBlockXsd</type>
-  <baseType>core:Capability</baseType>
-  <is>Emit universal bml.xsd schema string</is>
-
-  <documentation>XSD4–XSD11: targetNamespace http://blockml.org/bml; single root element block; mixed=true; choice of unbounded optional xs:element particles; no element xs:any; anyAttribute processContents=lax. Particles = sorted D1 identity + D1 containers + ExtraElementNames filtered.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Emit universal bml.xsd schema string
+  </is>
+  <documentation>
+    XSD4–XSD11: targetNamespace http://blockml.org/bml; single root element block; mixed=true; choice of unbounded optional xs:element particles; no element xs:any; anyAttribute processContents=lax. Particles = sorted D1 identity + D1 containers + ExtraElementNames filtered.
+  </documentation>
   <references>
     <see type="xsddocumentation:ParticleMappingRules" relation="SeeAlso" />
   </references>
-
   <properties>
     <typeRegistry type="type:Text">
-      <documentation>TypeRegistry for meta Definition extras. (required)</documentation>
+      <documentation>
+        TypeRegistry for meta Definition extras. (required)
+      </documentation>
     </typeRegistry>
     <result type="type:Text">
-      <documentation>bml.xsd XML string. (required)</documentation>
+      <documentation>
+        bml.xsd XML string. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</xsdcap:EmitBlockXsd>

@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — ElementSourceLoc
-  FQN: org.blockml.bml.compiler.parser.capability.ElementSourceLoc
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — ElementSourceLoc
+  FQN: org.blockml.bml.compiler.parser.capability.ElementSourceLoc-->
+<parcap:ElementSourceLoc xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,26 +23,35 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ElementSourceLoc</name>
-  <type>parcap:ElementSourceLoc</type>
-  <baseType>core:Capability</baseType>
-  <is>Extract SourceLocation from DOM element line/column attrs</is>
-
-  <documentation>Start from DOM locator line/column when present, else string search. End by scanning source for the matching close tag or self-closing start tag (endLine/endColumn).</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Extract SourceLocation from DOM element line/column attrs
+  </is>
+  <documentation>
+    Start from DOM locator line/column when present, else string search. End by scanning source for the matching close tag or self-closing start tag (endLine/endColumn).
+  </documentation>
   <properties>
     <element type="parmap:XmlDomNode">
-      <documentation>element. TS type: parmap:XmlDomNode. (required)</documentation>
+      <documentation>
+        element. TS type: parmap:XmlDomNode. (required)
+      </documentation>
     </element>
     <filePath type="type:Text">
-      <documentation>filePath. TS type: type:Text. (required)</documentation>
+      <documentation>
+        filePath. TS type: type:Text. (required)
+      </documentation>
     </filePath>
     <source type="type:Text">
-      <documentation>source. TS type: type:Text. (required)</documentation>
+      <documentation>
+        source. TS type: type:Text. (required)
+      </documentation>
     </source>
     <location type="bomcommon:SourceLocation">
-      <documentation>location. TS type: bomcommon:SourceLocation. (required)</documentation>
+      <documentation>
+        location. TS type: bomcommon:SourceLocation. (required)
+      </documentation>
     </location>
   </properties>
-
-</block>
+</parcap:ElementSourceLoc>

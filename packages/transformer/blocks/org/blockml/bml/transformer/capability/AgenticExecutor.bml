@@ -1,23 +1,18 @@
-<!--
-  Transformer Capability — AgenticExecutor
-  FQN: org.blockml.bml.transformer.capability.AgenticExecutor
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Capability — AgenticExecutor
+  FQN: org.blockml.bml.transformer.capability.AgenticExecutor-->
+<transformercap:AgenticExecutor xmlns="http://blockml.org/bml"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
-  <name>AgenticExecutor</name>
-  <type>transformercap:AgenticExecutor</type>
-  <baseType>transformercap:OperationExecutor</baseType>
-  <is>Executor for AgenticOperation — run the Task and return output text</is>
-
+  <baseType>
+    transformercap:OperationExecutor
+  </baseType>
+  <is>
+    Executor for AgenticOperation — run the Task and return output text
+  </is>
   <documentation>
     Default `transformercap:OperationExecutor` for `workflow:AgenticOperation`.
     Closes the Task tree against the ModelTransformation (literal
@@ -30,19 +25,17 @@
     agent stdout as the output candidate. The envelope decides whether
     to persist that text (`captureOutput`) and always collects
     `changedFiles` from git.
-
+    
     Must not write ModelOperation envelope fields, commit, or write
     files under `_meta/transform/`. Does not write the closed snippet
     back onto the running ModelTransformation. TS:
     executor/agentic-executor.ts.
   </documentation>
-
   <references>
     <see type="transformercap:OperationExecutor" relation="Extends" />
     <see type="workflow:AgenticOperation" relation="SeeAlso" />
     <see type="transformercap:ExecuteTask" relation="SeeAlso" />
   </references>
-
   <capabilities>
     <execute override="true" type="cap:Action">
       <documentation>
@@ -54,5 +47,4 @@
       </implementation>
     </execute>
   </capabilities>
-
-</block>
+</transformercap:AgenticExecutor>

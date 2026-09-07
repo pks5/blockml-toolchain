@@ -1,12 +1,6 @@
-<!--
-  Serializer — SerializerConstants
-  FQN: org.blockml.bml.compiler.serializer.config.SerializerConstants
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer — SerializerConstants
+  FQN: org.blockml.bml.compiler.serializer.config.SerializerConstants-->
+<serconfig:SerializerConstants xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,20 +21,25 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>SerializerConstants</name>
-  <type>serconfig:SerializerConstants</type>
-  <baseType>serializer:SerializerType</baseType>
-  <is>Well-known namespace URIs used during emit</is>
-
-  <documentation>Excluded from BML-semantic QName binding detection (B21/B25).</documentation>
-
+  <baseType>
+    serializer:SerializerType
+  </baseType>
+  <is>
+    Well-known namespace URIs used during emit
+  </is>
+  <documentation>
+    Excluded from BML-semantic QName binding detection (B21/B25).
+  </documentation>
   <properties>
     <XSI_NS type="type:Text">
-      <documentation>XSI_NS. TS type: type:Text. (required)</documentation>
+      <documentation>
+        XSI_NS. TS type: type:Text. (required)
+      </documentation>
     </XSI_NS>
     <BML_XMLNS type="type:Text">
-      <documentation>BML_XMLNS. TS type: type:Text. (required)</documentation>
+      <documentation>
+        BML_XMLNS. TS type: type:Text. (required)
+      </documentation>
     </BML_XMLNS>
   </properties>
-
-</block>
+</serconfig:SerializerConstants>

@@ -1,38 +1,33 @@
-<!--
-  Transformer Capability — PersistExecution
-  FQN: org.blockml.bml.transformer.capability.PersistExecution
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Capability — PersistExecution
+  FQN: org.blockml.bml.transformer.capability.PersistExecution-->
+<transformercap:PersistExecution xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
-  <name>PersistExecution</name>
-  <type>transformercap:PersistExecution</type>
-  <baseType>core:Capability</baseType>
-  <is>Process step [4] — write reflection into the current ModelOperation</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Process step [4] — write reflection into the current ModelOperation
+  </is>
   <documentation>
     # Persist Execution
-
+    
     Write `changedFiles`, `output`, `status`, `completedAt`, and on
     failure the BML exception into the current `workflow:ModelOperation`. Then
     commit model changes together with that operation terminal state. Must
     not relocate the ModelTransformation and must not write those fields
     onto the ModelTransformation.
-
+    
     When the executor succeeded, apply this operation's
     `resultMappings` onto `ModelTransformation.result` before writing
     `status=Succeeded`. A mapping fault writes
     `workflow:ResultException` onto the operation, sets `status=Failed`,
     and leaves `ModelTransformation.exception` empty.
-
+    
     Default implementation is a deterministic BOM writer. Always writes
     ModelOperation status. Captured `output` and exception `message`
     are sanitized to XML-safe text before write (illegal XML 1.0
@@ -40,7 +35,6 @@
     `blockml validate` of this archive cannot fail on encoding.
     TS: pipeline/persist.ts and execution/persist.ts.
   </documentation>
-
   <references>
     <see type="transformerdocumentation:ArchitectureOverview" relation="SeeAlso" />
     <see type="transformercap:ReflectOnExecution" relation="SeeAlso" />
@@ -50,10 +44,11 @@
     <see type="workflow:ResultMapping" relation="SeeAlso" />
     <see type="workflow:ResultException" relation="SeeAlso" />
   </references>
-
   <properties>
     <changedFiles type="type:Text[]">
-      <documentation>Workspace-relative paths persisted as FilePathEntity children of ModelOperation.changedFiles. (required)</documentation>
+      <documentation>
+        Workspace-relative paths persisted as FilePathEntity children of ModelOperation.changedFiles. (required)
+      </documentation>
     </changedFiles>
     <output type="type:Text">
       <documentation>
@@ -62,5 +57,4 @@
       </documentation>
     </output>
   </properties>
-
-</block>
+</transformercap:PersistExecution>

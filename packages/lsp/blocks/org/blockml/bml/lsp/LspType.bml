@@ -1,12 +1,6 @@
-<!--
-  LSP — LspType
-  FQN: org.blockml.bml.lsp.LspType
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP — LspType
+  FQN: org.blockml.bml.lsp.LspType-->
+<lsp:LspType xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,17 +23,19 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>LspType</name>
-  <type>lsp:LspType</type>
-  <baseType>core:Entity</baseType>
-  <is>Abstract marker for LSP implementation data-structure blocks</is>
-
-  <documentation>Workspace, analysis, and LSP-protocol ValueTypes used as capability payloads (LspPosition, HoverInfo, OutlineSymbol, …).</documentation>
-
+  <baseType>
+    core:Entity
+  </baseType>
+  <is>
+    Abstract marker for LSP implementation data-structure blocks
+  </is>
+  <documentation>
+    Workspace, analysis, and LSP-protocol ValueTypes used as capability payloads (LspPosition, HoverInfo, OutlineSymbol, …).
+  </documentation>
+  <abstract>
+    true
+  </abstract>
   <references>
     <see type="bom:UrmodellType" relation="SeeAlso" />
   </references>
-
-  <abstract>true</abstract>
-
-</block>
+</lsp:LspType>

@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Capability — CollectCompositionGroups
-  FQN: org.blockml.bml.target.blockdoc.capability.CollectCompositionGroups
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Capability — CollectCompositionGroups
+  FQN: org.blockml.bml.target.blockdoc.capability.CollectCompositionGroups-->
+<bdcap:CollectCompositionGroups xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,24 +21,28 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>CollectCompositionGroups</name>
-  <type>bdcap:CollectCompositionGroups</type>
-  <baseType>core:Capability</baseType>
-  <is>Ordered composition groups with dedupe</is>
-
-  <documentation>BD18: first block.compositions (dedupe by aggregationName), then aggregation members with composition (dedupe by member name).</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Ordered composition groups with dedupe
+  </is>
+  <documentation>
+    BD18: first block.compositions (dedupe by aggregationName), then aggregation members with composition (dedupe by member name).
+  </documentation>
   <references>
     <see type="bddocumentation:MemberAndCompositionRules" relation="SeeAlso" />
   </references>
-
   <properties>
     <block type="bomblock:BlockDefinition">
-      <documentation>Block definition (required).</documentation>
+      <documentation>
+        Block definition (required).
+      </documentation>
     </block>
     <result type="type:Text">
-      <documentation>Ordered {aggregationName, composition} list (required).</documentation>
+      <documentation>
+        Ordered {aggregationName, composition} list (required).
+      </documentation>
     </result>
   </properties>
-
-</block>
+</bdcap:CollectCompositionGroups>

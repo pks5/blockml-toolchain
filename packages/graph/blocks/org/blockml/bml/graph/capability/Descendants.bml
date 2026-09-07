@@ -1,12 +1,6 @@
-<!--
-  Graph Capability — Descendants
-  FQN: org.blockml.bml.graph.capability.Descendants
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph Capability — Descendants
+  FQN: org.blockml.bml.graph.capability.Descendants-->
+<graphcap:Descendants xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,23 +15,33 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Descendants</name>
-  <type>graphcap:Descendants</type>
-  <baseType>core:Capability</baseType>
-  <is>Inverse BASE_TYPE walk</is>
-  <documentation>Only BASE_TYPE. Default depth 16.</documentation>
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Inverse BASE_TYPE walk
+  </is>
+  <documentation>
+    Only BASE_TYPE. Default depth 16.
+  </documentation>
   <references>
     <see type="graphcap:Ancestors" relation="SeeAlso" />
   </references>
   <properties>
     <fqn type="type:Text">
-      <documentation>Block FQN. (required)</documentation>
+      <documentation>
+        Block FQN. (required)
+      </documentation>
     </fqn>
     <depth type="type:Integer">
-      <documentation>Max hops (optional).</documentation>
+      <documentation>
+        Max hops (optional).
+      </documentation>
     </depth>
     <nodes type="graph:GraphNode[]">
-      <documentation>Descendant blocks. (required)</documentation>
+      <documentation>
+        Descendant blocks. (required)
+      </documentation>
     </nodes>
   </properties>
-</block>
+</graphcap:Descendants>

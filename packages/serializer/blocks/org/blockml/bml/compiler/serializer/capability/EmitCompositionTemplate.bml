@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — EmitCompositionTemplate
-  FQN: org.blockml.bml.compiler.serializer.capability.EmitCompositionTemplate
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — EmitCompositionTemplate
+  FQN: org.blockml.bml.compiler.serializer.capability.EmitCompositionTemplate-->
+<sercap:EmitCompositionTemplate xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,30 +21,38 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>EmitCompositionTemplate</name>
-  <type>sercap:EmitCompositionTemplate</type>
-  <baseType>core:Capability</baseType>
-  <is>Emit CompositionTemplate as &lt;composition> element tree</is>
-
-  <documentation><![CDATA[Emit CompositionTemplate as <composition> element tree]]></documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Emit CompositionTemplate as &lt;composition> element tree
+  </is>
+  <documentation>
+    <![CDATA[Emit CompositionTemplate as <composition> element tree]]>
+  </documentation>
   <references>
     <see type="sercap:EmitCompositionNode" relation="SeeAlso" />
   </references>
-
   <properties>
     <writer type="seremit:XmlWriter">
-      <documentation>writer. TS type: seremit:XmlWriter. (required)</documentation>
+      <documentation>
+        writer. TS type: seremit:XmlWriter. (required)
+      </documentation>
     </writer>
     <template type="bomcomp:CompositionTemplate">
-      <documentation>template. TS type: bomcomp:CompositionTemplate. (required)</documentation>
+      <documentation>
+        template. TS type: bomcomp:CompositionTemplate. (required)
+      </documentation>
     </template>
     <context type="seremit:EmitContext">
-      <documentation>context. TS type: seremit:EmitContext. (required)</documentation>
+      <documentation>
+        context. TS type: seremit:EmitContext. (required)
+      </documentation>
     </context>
     <wrapInAggregation type="type:Text">
-      <documentation>Optional aggregation local name wrapper. (optional)</documentation>
+      <documentation>
+        Optional aggregation local name wrapper. (optional)
+      </documentation>
     </wrapInAggregation>
   </properties>
-
-</block>
+</sercap:EmitCompositionTemplate>

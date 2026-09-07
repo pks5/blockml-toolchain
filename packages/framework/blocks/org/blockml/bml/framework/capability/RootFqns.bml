@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — RootFqns
-  FQN: org.blockml.bml.framework.capability.RootFqns
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — RootFqns
+  FQN: org.blockml.bml.framework.capability.RootFqns-->
+<fwcap:RootFqns xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,20 +25,25 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>RootFqns</name>
-  <type>fwcap:RootFqns</type>
-  <baseType>core:Capability</baseType>
-  <is>Root block FQNs from TypeRegistry</is>
-
-  <documentation>Root block FQNs from TypeRegistry</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Root block FQNs from TypeRegistry
+  </is>
+  <documentation>
+    Root block FQNs from TypeRegistry
+  </documentation>
   <properties>
     <registry type="fwcap:TypeRegistry">
-      <documentation>registry. TS type: fwcap:TypeRegistry. (required)</documentation>
+      <documentation>
+        registry. TS type: fwcap:TypeRegistry. (required)
+      </documentation>
     </registry>
     <fqns type="type:Text[]">
-      <documentation>fqns. TS type: type:Text[]. (required)</documentation>
+      <documentation>
+        fqns. TS type: type:Text[]. (required)
+      </documentation>
     </fqns>
   </properties>
-
-</block>
+</fwcap:RootFqns>

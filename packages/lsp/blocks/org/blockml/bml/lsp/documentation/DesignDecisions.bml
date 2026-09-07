@@ -1,12 +1,6 @@
-<!--
-  LSP Documentation — DesignDecisions
-  FQN: org.blockml.bml.lsp.documentation.DesignDecisions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP Documentation — DesignDecisions
+  FQN: org.blockml.bml.lsp.documentation.DesignDecisions-->
+<lspdocumentation:DesignDecisions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,35 +24,37 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>DesignDecisions</name>
-  <type>lspdocumentation:DesignDecisions</type>
-  <baseType>core:Documentation</baseType>
-  <is>Normative LSP V1 design decisions</is>
-
-  <documentation>Editor-agnostic: vscode-languageserver for protocol only; no vscode Extension API in this package.
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Normative LSP V1 design decisions
+  </is>
+  <documentation>
+    Editor-agnostic: vscode-languageserver for protocol only; no vscode Extension API in this package.
+    
     Inline blockml.config.json loading — avoids @blockml/cli dependency chain.
-
+    
     Workspace bootstrap is corpus-first (srcDir). Seed = package.json blockml.library
     then config.libraries (additive, realpath-deduped). npm/workspace packages with
     blockml.library or blockml.config.json are the search index (source root = srcDir,
     default blocks). A library blocks tree already under srcDir is not registered twice.
-
+    
     Full text sync + debounced validation — simpler than incremental parse for V1.
-
+    
     continueOnError true on parse and validate — diagnostics survive partial BOM.
-
+    
     Workspace TypeRegistry cached per rootDir until invalidateWorkspace.
     File watchers trigger a full bootstrap rebuild from disk (not incremental).
     Paths under node_modules are skipped. Analysis, hover, definition, and
     references overlay the open document onto a TypeRegistry copy (same FQN).
     The cached workspace registry stays disk-only. Same type FQN: workspace
     sources win over node_modules.
-
+    
     Format is full-document parse→serialize; spaces only (serializer XmlWriter).
     No edits when parse cannot produce a document. xmlDeclaration inferred from
     a leading XML declaration in the source.
-
+    
     Hover is parse-only (no validator). Hit-test classifies the XML token at
     the cursor (element name, attribute key/value, text) — not the covering
     Urmodell element. Language tags use org.blockml.bml.definition.* member
@@ -66,27 +62,26 @@
     member tags use that member. Range is the token (whole QName). Unknown FQN
     is still shown. Referenced types come from the TypeRegistry with the open
     document overlaid.
-
+    
     Outline is parse-only (no validator, no TypeRegistry). Hierarchical
     DocumentSymbol tree: Block Class, property Property, aggregation/association
     Field, capability Method; children in members then subBlocks then
     embeddedBlocks order. selectionRange equals the element range.
-
+    
     Definition and references share Hover's XML-token hit-test. F12 is only
     offered on type QNames and returns LocationLink with originSelectionRange
     covering the whole prefix:Local, dotted FQN, or unqualified PascalCase in a
     type slot (implicit namespace). Language tags are not definitions. Targets
     and usages come from the TypeRegistry with the open document overlaid.
     includeDeclaration defaults true.
-
+    
     Semantic tokens are an XML-stack walk (no parse()). Element names are classified
     by nesting relative to the nearest document root or nested block, matching
     org.blockml.bml.vscode.theme.FrameworkRoles — same local name, different color
     by position. Nested block re-enters block-body rules. Clients map the
-    legend types to *.bml TextMate scopes; theming stays in the IDE package.</documentation>
-
+    legend types to *.bml TextMate scopes; theming stays in the IDE package.
+  </documentation>
   <references>
     <see type="lspdocumentation:PublicApi" relation="ReadNext" />
   </references>
-
-</block>
+</lspdocumentation:DesignDecisions>

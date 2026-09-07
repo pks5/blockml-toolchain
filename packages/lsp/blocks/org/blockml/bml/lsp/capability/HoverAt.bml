@@ -1,12 +1,6 @@
-<!--
-  LSP Capability — HoverAt
-  FQN: org.blockml.bml.lsp.capability.HoverAt
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP Capability — HoverAt
+  FQN: org.blockml.bml.lsp.capability.HoverAt-->
+<lspcap:HoverAt xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,38 +24,46 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>HoverAt</name>
-  <type>lspcap:HoverAt</type>
-  <baseType>core:Capability</baseType>
-  <is>XML-token hover at an LSP position</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    XML-token hover at an LSP position
+  </is>
   <documentation>
     # XML-token hover at an LSP position
-
+    
     Parse-only (no validator). Classifies the XML token at the cursor (element name, attribute key/value, text). Language tags (name, is, references, properties, …) show documentation from org.blockml.bml.definition.* members via resolveEffectiveMembers. Type QNames show the target TypeRegistry block (is + first documentation). Concrete member tags show that member. Hover range is the token — a whole prefix:Local or dotted FQN, not its parts. Whitespace, comments, and tag punctuation return null. Unknown FQN is still shown. Returns null if parse cannot produce a document.
   </documentation>
-
   <references>
     <see type="lspdocumentation:PublicApi" relation="SeeAlso" />
     <see type="parcap:Parse" relation="SeeAlso" />
   </references>
-
   <properties>
     <text type="type:Text">
-      <documentation>text. TS type: type:Text. (required)</documentation>
+      <documentation>
+        text. TS type: type:Text. (required)
+      </documentation>
     </text>
     <filePath type="type:Text">
-      <documentation>filePath. TS type: type:Text. (required)</documentation>
+      <documentation>
+        filePath. TS type: type:Text. (required)
+      </documentation>
     </filePath>
     <position type="lsp:LspPosition">
-      <documentation>LSP 0-based Position { line, character }. (required)</documentation>
+      <documentation>
+        LSP 0-based Position { line, character }. (required)
+      </documentation>
     </position>
     <workspace type="lsp:WorkspaceState">
-      <documentation>workspace. TS type: lsp:WorkspaceState. (required)</documentation>
+      <documentation>
+        workspace. TS type: lsp:WorkspaceState. (required)
+      </documentation>
     </workspace>
     <result type="lsp:HoverInfo">
-      <documentation>HoverInfo | null. (required)</documentation>
+      <documentation>
+        HoverInfo | null. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</lspcap:HoverAt>

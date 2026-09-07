@@ -1,12 +1,6 @@
-<!--
-  Parser — MapContextOptions
-  FQN: org.blockml.bml.compiler.parser.map.MapContextOptions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser — MapContextOptions
+  FQN: org.blockml.bml.compiler.parser.map.MapContextOptions-->
+<parmap:MapContextOptions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,32 +23,45 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>MapContextOptions</name>
-  <type>parmap:MapContextOptions</type>
-  <baseType>parser:ParserType</baseType>
-  <is>Optional extras when building MapContext</is>
-
-  <documentation>BML type gap: stands for the options argument of createMapContext() (packages/parser/src/map/context.ts).</documentation>
-
+  <baseType>
+    parser:ParserType
+  </baseType>
+  <is>
+    Optional extras when building MapContext
+  </is>
+  <documentation>
+    BML type gap: stands for the options argument of createMapContext() (packages/parser/src/map/context.ts).
+  </documentation>
   <properties>
     <subBlockIndex type="type:Text">
-      <documentation>Map&lt;string, string&gt; sub-block lookup. (optional)</documentation>
+      <documentation>
+        Map&lt;string, string> sub-block lookup. (optional)
+      </documentation>
     </subBlockIndex>
     <parentBlockType type="type:Text">
-      <documentation>Enclosing block type FQN when nested. (optional)</documentation>
+      <documentation>
+        Enclosing block type FQN when nested. (optional)
+      </documentation>
     </parentBlockType>
     <isRoot type="type:Boolean">
-      <documentation>isRoot. TS type: type:Boolean. (optional)</documentation>
+      <documentation>
+        isRoot. TS type: type:Boolean. (optional)
+      </documentation>
     </isRoot>
     <isEmbedded type="type:Boolean">
-      <documentation>isEmbedded. TS type: type:Boolean. (optional)</documentation>
+      <documentation>
+        isEmbedded. TS type: type:Boolean. (optional)
+      </documentation>
     </isEmbedded>
     <diagnostics type="bomcommon:Diagnostic[]">
-      <documentation>diagnostics. TS type: bomcommon:Diagnostic[]. (optional)</documentation>
+      <documentation>
+        diagnostics. TS type: bomcommon:Diagnostic[]. (optional)
+      </documentation>
     </diagnostics>
     <parseValue type="type:Text">
-      <documentation>Optional host parseValue hook from ParseOptions. (optional)</documentation>
+      <documentation>
+        Optional host parseValue hook from ParseOptions. (optional)
+      </documentation>
     </parseValue>
   </properties>
-
-</block>
+</parmap:MapContextOptions>

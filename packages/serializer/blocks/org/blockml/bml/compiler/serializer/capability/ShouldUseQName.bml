@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — ShouldUseQName
-  FQN: org.blockml.bml.compiler.serializer.capability.ShouldUseQName
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — ShouldUseQName
+  FQN: org.blockml.bml.compiler.serializer.capability.ShouldUseQName-->
+<sercap:ShouldUseQName xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,24 +21,28 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>ShouldUseQName</name>
-  <type>sercap:ShouldUseQName</type>
-  <baseType>core:Capability</baseType>
-  <is>Alias for HasBmlSemanticQNameBindings on bindings map</is>
-
-  <documentation>Alias for HasBmlSemanticQNameBindings on bindings map</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Alias for HasBmlSemanticQNameBindings on bindings map
+  </is>
+  <documentation>
+    Alias for HasBmlSemanticQNameBindings on bindings map
+  </documentation>
   <references>
     <see type="sercap:HasBmlSemanticQNameBindings" relation="SeeAlso" />
   </references>
-
   <properties>
     <bindings type="type:Text">
-      <documentation>bindings. TS type: type:Text. (required)</documentation>
+      <documentation>
+        bindings. TS type: type:Text. (required)
+      </documentation>
     </bindings>
     <result type="type:Boolean">
-      <documentation>result. TS type: type:Boolean. (required)</documentation>
+      <documentation>
+        result. TS type: type:Boolean. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</sercap:ShouldUseQName>

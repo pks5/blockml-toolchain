@@ -1,12 +1,6 @@
-<!--
-  Framework Documentation — ExpressionParsing
-  FQN: org.blockml.bml.framework.documentation.ExpressionParsing
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Documentation — ExpressionParsing
+  FQN: org.blockml.bml.framework.documentation.ExpressionParsing-->
+<fwdocumentation:ExpressionParsing xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -32,12 +26,14 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ExpressionParsing</name>
-  <type>fwdocumentation:ExpressionParsing</type>
-  <baseType>core:Documentation</baseType>
-  <is>parseExpression AST — no Urmodell writeback (B4)</is>
-
-  <documentation>parseExpression(source) parses expression text into an ExpressionNode AST.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    parseExpression AST — no Urmodell writeback (B4)
+  </is>
+  <documentation>
+    parseExpression(source) parses expression text into an ExpressionNode AST.
     parseInterpolatedText(source) scans Text for unescaped ${} holes (restricted
     profile). `\${` is a literal `${`; `\\${` is one `\` plus a hole (odd/even
     backslashes immediately before `$`). Lookup is the same as full expressions:
@@ -45,19 +41,18 @@
     Returns ParseExpressionOutcome: { ok: true, result } | { ok: false, error }.
     Empty expression text → BML_EXPRESSION_PARSE_ERROR (write `\${ }` for literal
     delimiter characters).
-
+    
     Parser stores ExpressionValue.raw / InterpolatedTextValue.raw only (B4).
     validateTypes re-parses at validation time and emits BML_EXPRESSION_PARSE_ERROR
     or BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION on failure.
-
+    
     AST node kinds: literal, array, object, property, call, binary, interpolated.
     Optional resultTypeFqn on ParseExpressionResult for typed expression metadata.
-
-    Expression AST is a Stage-2 utility — never written back to Urmodell member values.</documentation>
-
+    
+    Expression AST is a Stage-2 utility — never written back to Urmodell member values.
+  </documentation>
   <references>
     <see type="fwdocumentation:ConstraintValidation" relation="ReadNext" />
     <see type="fwexpression:ExpressionNode" relation="Defines" />
   </references>
-
-</block>
+</fwdocumentation:ExpressionParsing>

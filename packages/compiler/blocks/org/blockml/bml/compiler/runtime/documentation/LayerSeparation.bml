@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Documentation — LayerSeparation
-  FQN: org.blockml.bml.compiler.runtime.documentation.LayerSeparation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Documentation — LayerSeparation
+  FQN: org.blockml.bml.compiler.runtime.documentation.LayerSeparation-->
+<rundocumentation:LayerSeparation xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -26,23 +20,25 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>LayerSeparation</name>
-  <type>rundocumentation:LayerSeparation</type>
-  <baseType>core:Documentation</baseType>
-  <is>What this library owns versus neighbors</is>
-
-  <documentation>Layers:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    What this library owns versus neighbors
+  </is>
+  <documentation>
+    Layers:
     • org.blockml.bml.compiler.runtime.* (this library) — facade, registry, scope, RenderContext
     • org.blockml.bml.compiler.parser.* / validator.* — Stage 1–2 algorithms
     • org.blockml.bml.framework.* — TypeRegistry bootstrap used by compileToOutput
     • org.blockml.bml.cli.* — config bootstrap, write files, C5/C6, exit codes
     • target libraries — RenderTarget.render and typed targetOptions
-
-    Do not double-maintain CLI command matrices or target particle rules here.</documentation>
+    
+    Do not double-maintain CLI command matrices or target particle rules here.
+  </documentation>
   <references>
     <see type="rundocumentation:ArchitectureOverview" relation="ReadNext" />
     <see type="cli:Library" relation="SeeAlso" />
     <see type="framework:Library" relation="SeeAlso" />
   </references>
-
-</block>
+</rundocumentation:LayerSeparation>

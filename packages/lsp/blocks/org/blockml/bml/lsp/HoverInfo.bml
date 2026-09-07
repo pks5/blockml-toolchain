@@ -1,12 +1,6 @@
-<!--
-  LSP — HoverInfo
-  FQN: org.blockml.bml.lsp.HoverInfo
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP — HoverInfo
+  FQN: org.blockml.bml.lsp.HoverInfo-->
+<lsp:HoverInfo xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>HoverInfo</name>
-  <type>lsp:HoverInfo</type>
-  <baseType>lsp:LspType</baseType>
-  <is>Hover result at an LSP position</is>
-
-  <documentation>BML type gap: stands for TypeScript HoverInfo (packages/lsp/src/hover.ts).</documentation>
-
+  <baseType>
+    lsp:LspType
+  </baseType>
+  <is>
+    Hover result at an LSP position
+  </is>
+  <documentation>
+    BML type gap: stands for TypeScript HoverInfo (packages/lsp/src/hover.ts).
+  </documentation>
   <properties>
     <contents type="lsp:MarkupContent">
-      <documentation>contents (required). TS type: lsp:MarkupContent.</documentation>
+      <documentation>
+        contents (required). TS type: lsp:MarkupContent.
+      </documentation>
     </contents>
     <range type="lsp:LspRange">
-      <documentation>range (required). TS type: lsp:LspRange.</documentation>
+      <documentation>
+        range (required). TS type: lsp:LspRange.
+      </documentation>
     </range>
   </properties>
-
-</block>
+</lsp:HoverInfo>

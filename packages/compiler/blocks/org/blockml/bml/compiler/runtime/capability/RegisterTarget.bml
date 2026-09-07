@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Capability — RegisterTarget
-  FQN: org.blockml.bml.compiler.runtime.capability.RegisterTarget
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Capability — RegisterTarget
+  FQN: org.blockml.bml.compiler.runtime.capability.RegisterTarget-->
+<runcap:RegisterTarget xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,23 +19,25 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>RegisterTarget</name>
-  <type>runcap:RegisterTarget</type>
-  <baseType>core:Capability</baseType>
-  <is>Register a RenderTarget in the in-memory Target Registry</is>
-
-  <documentation>C3: overwrites same name; registry starts empty — no built-in targets.
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Register a RenderTarget in the in-memory Target Registry
+  </is>
+  <documentation>
+    C3: overwrites same name; registry starts empty — no built-in targets.
     Validates before store (host programming errors throw): name non-empty; accepts non-empty
-    and only valid CompileScopeKind values; render is a function; validateRequest if set is a function.</documentation>
-
+    and only valid CompileScopeKind values; render is a function; validateRequest if set is a function.
+  </documentation>
   <references>
     <see type="rundocumentation:TargetRegistry" relation="SeeAlso" />
   </references>
-
   <properties>
     <target type="runapi:RenderTarget">
-      <documentation>Target to register. (required)</documentation>
+      <documentation>
+        Target to register. (required)
+      </documentation>
     </target>
   </properties>
-
-</block>
+</runcap:RegisterTarget>

@@ -1,12 +1,6 @@
-<!--
-  XSD Render Target — README
-  FQN: org.blockml.bml.target.xsd.README
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--XSD Render Target — README
+  FQN: org.blockml.bml.target.xsd.README-->
+<xsd:README xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -21,36 +15,35 @@
   xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>README</name>
-  <type>xsd:README</type>
-  <baseType>core:ReadMe</baseType>
-  <is>Reading entry for the XSD render target library</is>
-
+  <baseType>
+    core:ReadMe
+  </baseType>
+  <is>
+    Reading entry for the XSD render target library
+  </is>
   <documentation>
     The @blockml/xsd-target package implements RenderTarget name xsd.
     This library (org.blockml.bml.target.xsd.*) is the SSOT; TypeScript in
     packages/xsd-target/src/ implements it. Tests in packages/xsd-target/test/
     verify behavioral contracts.
-
+    
     Start reading at org.blockml.bml.target.xsd.documentation.Introduction (ReadNext chain).
-
+    
     V1: emit universal bml.xsd (D1 lists + Definition extras), optional types.xsd /
     service.xsd string vocabularies, and root catalog.xml. Generated schema is
     non-authoritative; authoring validity is parse + validate, not this target.
-
+    
     Layer separation:
     • Definition / docs 19 — bml:xml particle grammar
     • org.blockml.bml.target.xsd.* (this library) — schema and catalog emit
     • org.blockml.bml.cli.* — outDir, write, validation escape hatch
-
+    
     Modules: documentation, api/config, capability.
   </documentation>
-
   <references>
     <see type="xsddocumentation:Introduction" relation="ReadFirst" />
     <see type="xsddocumentation:DesignDecisions" relation="SeeAlso" />
     <see type="xsddocumentation:PublicApi" relation="SeeAlso" />
     <see type="xsdcap:Render" relation="SeeAlso" />
   </references>
-
-</block>
+</xsd:README>

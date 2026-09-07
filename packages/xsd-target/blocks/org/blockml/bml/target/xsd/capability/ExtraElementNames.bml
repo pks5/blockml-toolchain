@@ -1,12 +1,6 @@
-<!--
-  XSD Capability — ExtraElementNames
-  FQN: org.blockml.bml.target.xsd.capability.ExtraElementNames
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--XSD Capability — ExtraElementNames
+  FQN: org.blockml.bml.target.xsd.capability.ExtraElementNames-->
+<xsdcap:ExtraElementNames xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -20,24 +14,28 @@
   xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ExtraElementNames</name>
-  <type>xsdcap:ExtraElementNames</type>
-  <baseType>core:Capability</baseType>
-  <is>Collect extra particle names from meta Definition blocks</is>
-
-  <documentation>XSD9/XSD11: walk META_DEFINITION_FQNS if present; recurse members and subBlocks; keep names where MemberPrefersElement; unique sort; exclude D1 identity and container names.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Collect extra particle names from meta Definition blocks
+  </is>
+  <documentation>
+    XSD9/XSD11: walk META_DEFINITION_FQNS if present; recurse members and subBlocks; keep names where MemberPrefersElement; unique sort; exclude D1 identity and container names.
+  </documentation>
   <references>
     <see type="xsdconfig:XsdConstants" relation="SeeAlso" />
   </references>
-
   <properties>
     <typeRegistry type="type:Text">
-      <documentation>TypeRegistry. (required)</documentation>
+      <documentation>
+        TypeRegistry. (required)
+      </documentation>
     </typeRegistry>
     <result type="type:Text">
-      <documentation>Sorted unique element names. (required)</documentation>
+      <documentation>
+        Sorted unique element names. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</xsdcap:ExtraElementNames>

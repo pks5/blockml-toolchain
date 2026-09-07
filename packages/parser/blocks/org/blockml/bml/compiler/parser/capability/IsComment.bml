@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — IsComment
-  FQN: org.blockml.bml.compiler.parser.capability.IsComment
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — IsComment
+  FQN: org.blockml.bml.compiler.parser.capability.IsComment-->
+<parcap:IsComment xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>IsComment</name>
-  <type>parcap:IsComment</type>
-  <baseType>core:Capability</baseType>
-  <is>Type guard: DOM node is comment</is>
-
-  <documentation>Type guard: DOM node is comment</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Type guard: DOM node is comment
+  </is>
+  <documentation>
+    Type guard: DOM node is comment
+  </documentation>
   <properties>
     <node type="parmap:XmlDomNode">
-      <documentation>node. TS type: parmap:XmlDomNode. (required)</documentation>
+      <documentation>
+        node. TS type: parmap:XmlDomNode. (required)
+      </documentation>
     </node>
     <result type="type:Boolean">
-      <documentation>result. TS type: type:Boolean. (required)</documentation>
+      <documentation>
+        result. TS type: type:Boolean. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</parcap:IsComment>

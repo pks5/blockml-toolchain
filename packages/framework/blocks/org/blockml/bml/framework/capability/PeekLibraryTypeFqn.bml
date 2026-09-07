@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — PeekLibraryTypeFqn
-  FQN: org.blockml.bml.framework.capability.PeekLibraryTypeFqn
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — PeekLibraryTypeFqn
+  FQN: org.blockml.bml.framework.capability.PeekLibraryTypeFqn-->
+<fwcap:PeekLibraryTypeFqn xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,24 +25,28 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>PeekLibraryTypeFqn</name>
-  <type>fwcap:PeekLibraryTypeFqn</type>
-  <baseType>core:Capability</baseType>
-  <is>Root type FQN of a Library.bml file</is>
-
-  <documentation>Reads Library.bml and returns document.block.type, or undefined if the file is missing or invalid. Used to compare library identity across realpaths (workspace vs npm copy).</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Root type FQN of a Library.bml file
+  </is>
+  <documentation>
+    Reads Library.bml and returns document.block.type, or undefined if the file is missing or invalid. Used to compare library identity across realpaths (workspace vs npm copy).
+  </documentation>
   <references>
     <see type="fwcap:ResolveLibrarySeeds" relation="SeeAlso" />
   </references>
-
   <properties>
     <libraryPath type="type:Text">
-      <documentation>libraryPath. TS type: type:Text. (required)</documentation>
+      <documentation>
+        libraryPath. TS type: type:Text. (required)
+      </documentation>
     </libraryPath>
     <typeFqn type="type:Text">
-      <documentation>Library type FQN, or undefined. (optional)</documentation>
+      <documentation>
+        Library type FQN, or undefined. (optional)
+      </documentation>
     </typeFqn>
   </properties>
-
-</block>
+</fwcap:PeekLibraryTypeFqn>

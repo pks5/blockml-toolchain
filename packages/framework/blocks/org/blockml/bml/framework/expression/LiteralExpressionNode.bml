@@ -1,12 +1,6 @@
-<!--
-  Framework — LiteralExpressionNode
-  FQN: org.blockml.bml.framework.expression.LiteralExpressionNode
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework — LiteralExpressionNode
+  FQN: org.blockml.bml.framework.expression.LiteralExpressionNode-->
+<fwexpression:LiteralExpressionNode xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,21 +25,26 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>LiteralExpressionNode</name>
-  <type>fwexpression:LiteralExpressionNode</type>
-  <baseType>fwexpression:ExpressionNode</baseType>
-  <is>Literal expression AST node</is>
-
-  <documentation>kind: literal. value: string | number | boolean | null. BML union covers primitives; null is documented only.</documentation>
-
+  <baseType>
+    fwexpression:ExpressionNode
+  </baseType>
+  <is>
+    Literal expression AST node
+  </is>
+  <documentation>
+    kind: literal. value: string | number | boolean | null. BML union covers primitives; null is documented only.
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind. TS type: type:Text. (required)</documentation>
+      <documentation>
+        kind. TS type: type:Text. (required)
+      </documentation>
       <value>literal</value>
     </kind>
     <value type="type:Text | type:Integer | type:Decimal | type:Boolean">
-      <documentation>BML type gap: TS string | number | boolean | null. Union covers primitive cases; null is documented only. (required)</documentation>
+      <documentation>
+        BML type gap: TS string | number | boolean | null. Union covers primitive cases; null is documented only. (required)
+      </documentation>
     </value>
   </properties>
-
-</block>
+</fwexpression:LiteralExpressionNode>

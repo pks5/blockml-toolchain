@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — CharacterDataForm
-  FQN: org.blockml.bml.bom.common.CharacterDataForm
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — CharacterDataForm
+  FQN: org.blockml.bml.bom.common.CharacterDataForm-->
+<bomcommon:CharacterDataForm xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,17 +17,20 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>CharacterDataForm</name>
-  <type>bomcommon:CharacterDataForm</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Authored character data form (D8)</is>
-
-  <documentation>String-literal union: "text" | "cdata".</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Authored character data form (D8)
+  </is>
+  <documentation>
+    String-literal union: "text" | "cdata".
+  </documentation>
   <properties>
     <value type="type:Text">
-      <documentation>value (required). TS type: type:Text.</documentation>
+      <documentation>
+        value (required). TS type: type:Text.
+      </documentation>
     </value>
   </properties>
-
-</block>
+</bomcommon:CharacterDataForm>

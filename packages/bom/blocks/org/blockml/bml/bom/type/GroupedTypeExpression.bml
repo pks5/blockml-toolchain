@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — GroupedTypeExpression
-  FQN: org.blockml.bml.bom.type.GroupedTypeExpression
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — GroupedTypeExpression
+  FQN: org.blockml.bml.bom.type.GroupedTypeExpression-->
+<bomtype:GroupedTypeExpression xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,24 +17,31 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>GroupedTypeExpression</name>
-  <type>bomtype:GroupedTypeExpression</type>
-  <baseType>bomtype:TypeExpression</baseType>
-  <is>Parenthesized type expression with optional outer multiplicity</is>
-
-  <documentation>Grouping wrapper for nested multiplicity, e.g. (T[])[] or (A | B)[]. Inner expression may itself carry multiplicity.</documentation>
-
+  <baseType>
+    bomtype:TypeExpression
+  </baseType>
+  <is>
+    Parenthesized type expression with optional outer multiplicity
+  </is>
+  <documentation>
+    Grouping wrapper for nested multiplicity, e.g. (T[])[] or (A | B)[]. Inner expression may itself carry multiplicity.
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind (required). TS type: type:Text.</documentation>
+      <documentation>
+        kind (required). TS type: type:Text.
+      </documentation>
       <value>grouped</value>
     </kind>
     <expression type="bomtype:TypeExpression">
-      <documentation>expression (required). TS type: bomtype:TypeExpression.</documentation>
+      <documentation>
+        expression (required). TS type: bomtype:TypeExpression.
+      </documentation>
     </expression>
     <multiplicity type="bomtype:Multiplicity">
-      <documentation>multiplicity (optional). TS type: bomtype:Multiplicity.</documentation>
+      <documentation>
+        multiplicity (optional). TS type: bomtype:Multiplicity.
+      </documentation>
     </multiplicity>
   </properties>
-
-</block>
+</bomtype:GroupedTypeExpression>

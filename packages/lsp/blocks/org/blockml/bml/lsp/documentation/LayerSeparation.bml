@@ -1,12 +1,6 @@
-<!--
-  LSP Documentation — LayerSeparation
-  FQN: org.blockml.bml.lsp.documentation.LayerSeparation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP Documentation — LayerSeparation
+  FQN: org.blockml.bml.lsp.documentation.LayerSeparation-->
+<lspdocumentation:LayerSeparation xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,25 +24,26 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>LayerSeparation</name>
-  <type>lspdocumentation:LayerSeparation</type>
-  <baseType>core:Documentation</baseType>
-  <is>LSP vs language-service vs language stack</is>
-
-  <documentation>Layers:
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    LSP vs language-service vs language stack
+  </is>
+  <documentation>
+    Layers:
+    
     org.blockml.bml.lsp.* (@blockml/lsp) — LSP protocol adapter + language-service API.
     No semantic rules here.
-
+    
     @blockml/parser — Stage 1 BML → BomDocument (including source spans for hover).
     @blockml/serializer — BomDocument → canonical BML XML (format).
     @blockml/validator — Stage 2 validate() orchestration.
     @blockml/framework — TypeRegistry bootstrap for workspace.
-
-    External IDE packages — Language Client only; grammar and file associations stay IDE-local.</documentation>
-
+    
+    External IDE packages — Language Client only; grammar and file associations stay IDE-local.
+  </documentation>
   <references>
     <see type="lspdocumentation:ArchitectureOverview" relation="ReadNext" />
   </references>
-
-</block>
+</lspdocumentation:LayerSeparation>

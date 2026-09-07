@@ -1,12 +1,6 @@
-<!--
-  CLI Command — TransformCommand
-  FQN: org.blockml.bml.cli.command.TransformCommand
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Command — TransformCommand
+  FQN: org.blockml.bml.cli.command.TransformCommand-->
+<clicommand:TransformCommand xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -21,12 +15,15 @@
   xmlns:transformer="org.blockml.bml.transformer"
   xmlns:type="org.blockml.bml.type">
 
-  <name>TransformCommand</name>
-  <type>clicommand:TransformCommand</type>
-  <baseType>cli:CliType</baseType>
-  <is>blockml transform command model</is>
-
-  <documentation>blockml transform SUBCOMMAND. Parent command for transformation subcommands. V1 defines apply only. Further subcommands are added to subcommands.</documentation>
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    blockml transform command model
+  </is>
+  <documentation>
+    blockml transform SUBCOMMAND. Parent command for transformation subcommands. V1 defines apply only. Further subcommands are added to subcommands.
+  </documentation>
   <references>
     <see type="clidocumentation:TransformCommand" relation="SeeAlso" />
     <see type="clicommand:TransformApplyCommand" relation="SeeAlso" />
@@ -34,11 +31,12 @@
   </references>
   <aggregations>
     <subcommands type="cli:CliType[]">
-      <documentation>Named subcommands of blockml transform. V1: apply.</documentation>
+      <documentation>
+        Named subcommands of blockml transform. V1: apply.
+      </documentation>
       <composition>
         <clicommand:TransformApplyCommand />
       </composition>
     </subcommands>
   </aggregations>
-
-</block>
+</clicommand:TransformCommand>

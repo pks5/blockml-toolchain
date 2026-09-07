@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — GenericParameterReference
-  FQN: org.blockml.bml.bom.type.GenericParameterReference
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — GenericParameterReference
+  FQN: org.blockml.bml.bom.type.GenericParameterReference-->
+<bomtype:GenericParameterReference xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,21 +17,26 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>GenericParameterReference</name>
-  <type>bomtype:GenericParameterReference</type>
-  <baseType>bomtype:TypeExpression</baseType>
-  <is>Generic parameter reference in type expression</is>
-
-  <documentation>Generic parameter reference in type expression</documentation>
-
+  <baseType>
+    bomtype:TypeExpression
+  </baseType>
+  <is>
+    Generic parameter reference in type expression
+  </is>
+  <documentation>
+    Generic parameter reference in type expression
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind (required). TS type: type:Text.</documentation>
+      <documentation>
+        kind (required). TS type: type:Text.
+      </documentation>
       <value>genericParam</value>
     </kind>
     <name type="type:Text">
-      <documentation>name (required). TS type: type:Text.</documentation>
+      <documentation>
+        name (required). TS type: type:Text.
+      </documentation>
     </name>
   </properties>
-
-</block>
+</bomtype:GenericParameterReference>

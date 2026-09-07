@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — GetExportedFqns
-  FQN: org.blockml.bml.framework.capability.GetExportedFqns
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — GetExportedFqns
+  FQN: org.blockml.bml.framework.capability.GetExportedFqns-->
+<fwcap:GetExportedFqns xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,26 +25,35 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>GetExportedFqns</name>
-  <type>fwcap:GetExportedFqns</type>
-  <baseType>core:Capability</baseType>
-  <is>Exported block FQNs for a library path from BootstrapResult</is>
-
-  <documentation>Exported block FQNs for a library path from BootstrapResult</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Exported block FQNs for a library path from BootstrapResult
+  </is>
+  <documentation>
+    Exported block FQNs for a library path from BootstrapResult
+  </documentation>
   <properties>
     <libraryPath type="type:Text">
-      <documentation>libraryPath. TS type: type:Text. (required)</documentation>
+      <documentation>
+        libraryPath. TS type: type:Text. (required)
+      </documentation>
     </libraryPath>
     <bootstrap type="fwregistry:BootstrapResult">
-      <documentation>bootstrap. TS type: fwregistry:BootstrapResult. (required)</documentation>
+      <documentation>
+        bootstrap. TS type: fwregistry:BootstrapResult. (required)
+      </documentation>
     </bootstrap>
     <rootDir type="type:Text">
-      <documentation>rootDir — default process.cwd(). (optional)</documentation>
+      <documentation>
+        rootDir — default process.cwd(). (optional)
+      </documentation>
     </rootDir>
     <exported type="type:Text">
-      <documentation>Set&lt;exportedFqn&gt; or undefined. (optional)</documentation>
+      <documentation>
+        Set&lt;exportedFqn> or undefined. (optional)
+      </documentation>
     </exported>
   </properties>
-
-</block>
+</fwcap:GetExportedFqns>

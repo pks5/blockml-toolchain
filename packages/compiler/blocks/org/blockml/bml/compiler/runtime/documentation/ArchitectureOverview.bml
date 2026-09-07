@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Documentation — ArchitectureOverview
-  FQN: org.blockml.bml.compiler.runtime.documentation.ArchitectureOverview
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.compiler.runtime.documentation.ArchitectureOverview-->
+<rundocumentation:ArchitectureOverview xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -26,24 +20,26 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ArchitectureOverview</name>
-  <type>rundocumentation:ArchitectureOverview</type>
-  <baseType>core:Documentation</baseType>
-  <is>Modules and compileToOutput data flow</is>
-
-  <documentation>Public modules map to capabilities:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Modules and compileToOutput data flow
+  </is>
+  <documentation>
+    Public modules map to capabilities:
     types.ts → api/*; target-registry.ts → Register/Get/Clear/RegisteredTargetNames;
     scope.ts → ResolveScope, ScopeAccepts;
     compile-bml-to-bom.ts → CompileBmlToBom, ValidateRegistryDocuments;
     compile-to-output.ts → CompileToOutput (+ sugar);
     render-context.ts → BuildRenderSession, CreateRenderContext.
-
+    
     CompileToOutput pipeline: getTarget → validateRequest? → ResolveScope → ScopeAccepts →
     bootstrapForScope (document parse/register or framework bootstrapTypeRegistry) →
-    document ValidateRegistryDocuments → BuildRenderSession → CreateRenderContext → render.</documentation>
+    document ValidateRegistryDocuments → BuildRenderSession → CreateRenderContext → render.
+  </documentation>
   <references>
     <see type="rundocumentation:V1Scope" relation="ReadNext" />
     <see type="runcap:CompileToOutput" relation="SeeAlso" />
   </references>
-
-</block>
+</rundocumentation:ArchitectureOverview>

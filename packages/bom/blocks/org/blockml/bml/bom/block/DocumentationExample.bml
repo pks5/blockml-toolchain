@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — DocumentationExample
-  FQN: org.blockml.bml.bom.block.DocumentationExample
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — DocumentationExample
+  FQN: org.blockml.bml.bom.block.DocumentationExample-->
+<bomblock:DocumentationExample xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,35 +17,50 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>DocumentationExample</name>
-  <type>bomblock:DocumentationExample</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Usage example entry in BOM</is>
-
-  <documentation>Usage example entry in BOM</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Usage example entry in BOM
+  </is>
+  <documentation>
+    Usage example entry in BOM
+  </documentation>
   <properties>
     <title type="type:Text">
-      <documentation>title (required). TS type: type:Text.</documentation>
+      <documentation>
+        title (required). TS type: type:Text.
+      </documentation>
     </title>
     <content type="type:Text">
-      <documentation>content (required). TS type: type:Text.</documentation>
+      <documentation>
+        content (required). TS type: type:Text.
+      </documentation>
     </content>
     <authoredCharacterDataForm type="bomcommon:CharacterDataForm">
-      <documentation>authoredCharacterDataForm (optional). TS type: bomcommon:CharacterDataForm.</documentation>
+      <documentation>
+        authoredCharacterDataForm (optional). TS type: bomcommon:CharacterDataForm.
+      </documentation>
     </authoredCharacterDataForm>
     <contentLanguageFqn type="type:Text">
-      <documentation>contentLanguageFqn (optional). TS type: type:Text.</documentation>
+      <documentation>
+        contentLanguageFqn (optional). TS type: type:Text.
+      </documentation>
     </contentLanguageFqn>
     <snippet type="type:Boolean">
-      <documentation>snippet (optional). TS type: type:Boolean.</documentation>
+      <documentation>
+        snippet (optional). TS type: type:Boolean.
+      </documentation>
     </snippet>
     <namespace type="type:Text">
-      <documentation>namespace (optional). TS type: type:Text.</documentation>
+      <documentation>
+        namespace (optional). TS type: type:Text.
+      </documentation>
     </namespace>
     <source type="bomcommon:SourceLocation">
-      <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
+      <documentation>
+        source (optional). TS type: bomcommon:SourceLocation.
+      </documentation>
     </source>
   </properties>
-
-</block>
+</bomblock:DocumentationExample>

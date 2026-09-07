@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — MergeSourceInfo
-  FQN: org.blockml.bml.compiler.parser.capability.MergeSourceInfo
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — MergeSourceInfo
+  FQN: org.blockml.bml.compiler.parser.capability.MergeSourceInfo-->
+<parcap:MergeSourceInfo xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,26 +23,35 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>MergeSourceInfo</name>
-  <type>parcap:MergeSourceInfo</type>
-  <baseType>core:Capability</baseType>
-  <is>Merge SourceInfo with filePath and format</is>
-
-  <documentation>Merge SourceInfo with filePath and format</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Merge SourceInfo with filePath and format
+  </is>
+  <documentation>
+    Merge SourceInfo with filePath and format
+  </documentation>
   <properties>
     <partial type="bomcommon:SourceInfo">
-      <documentation>partial. TS type: bomcommon:SourceInfo. (required)</documentation>
+      <documentation>
+        partial. TS type: bomcommon:SourceInfo. (required)
+      </documentation>
     </partial>
     <filePath type="type:Text">
-      <documentation>filePath. TS type: type:Text. (required)</documentation>
+      <documentation>
+        filePath. TS type: type:Text. (required)
+      </documentation>
     </filePath>
     <format type="type:Text">
-      <documentation>format. TS type: type:Text. (required)</documentation>
+      <documentation>
+        format. TS type: type:Text. (required)
+      </documentation>
     </format>
     <sourceInfo type="bomcommon:SourceInfo">
-      <documentation>sourceInfo. TS type: bomcommon:SourceInfo. (required)</documentation>
+      <documentation>
+        sourceInfo. TS type: bomcommon:SourceInfo. (required)
+      </documentation>
     </sourceInfo>
   </properties>
-
-</block>
+</parcap:MergeSourceInfo>

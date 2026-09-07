@@ -1,12 +1,6 @@
-<!--
-  CLI Capability — RunCompileFatBlock
-  FQN: org.blockml.bml.cli.capability.RunCompileFatBlock
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Capability — RunCompileFatBlock
+  FQN: org.blockml.bml.cli.capability.RunCompileFatBlock-->
+<clicap:RunCompileFatBlock xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,35 +14,41 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>RunCompileFatBlock</name>
-  <type>clicap:RunCompileFatBlock</type>
-  <baseType>core:Capability</baseType>
-  <is>Execute blockml compile for fatblock document target</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Execute blockml compile for fatblock document target
+  </is>
   <documentation>
     # Execute blockml compile for fatblock document target
-
+    
     CLI14: omitted file and --src default to package.json blockml.library as host and that library directory as the candidate pool; missing both file and library → exit 2. CLI15: fatblock TypeRegistry from package.json blockml.library graph plus core Library (omitted when identity is already that library by realpath or FQN) and srcDir corpus; document scope; writes {hostFqn}.fat.bml at the invocation directory unless --out. CLI23: --per-package loops local packages with blockml.library and writes each {hostFqn}.fat.bml into the invocation directory (or --out).
   </documentation>
-
   <references>
     <see type="clidocumentation:CompileCommand" relation="SeeAlso" />
     <see type="clicap:WorkspaceRoot" relation="SeeAlso" />
   </references>
-
   <properties>
     <parsed type="cliapi:ParsedArgs">
-      <documentation>Parsed compile args with file and srcDir. (required)</documentation>
+      <documentation>
+        Parsed compile args with file and srcDir. (required)
+      </documentation>
     </parsed>
     <rootDir type="type:Text">
-      <documentation>Project root. (required)</documentation>
+      <documentation>
+        Project root. (required)
+      </documentation>
     </rootDir>
     <config type="cliapi:BomConfig">
-      <documentation>Loaded config. (required)</documentation>
+      <documentation>
+        Loaded config. (required)
+      </documentation>
     </config>
     <code type="type:Integer">
-      <documentation>Exit code 0|1|2. (required)</documentation>
+      <documentation>
+        Exit code 0|1|2. (required)
+      </documentation>
     </code>
   </properties>
-
-</block>
+</clicap:RunCompileFatBlock>

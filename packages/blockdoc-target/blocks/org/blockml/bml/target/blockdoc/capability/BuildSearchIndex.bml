@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Capability — BuildSearchIndex
-  FQN: org.blockml.bml.target.blockdoc.capability.BuildSearchIndex
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Capability — BuildSearchIndex
+  FQN: org.blockml.bml.target.blockdoc.capability.BuildSearchIndex-->
+<bdcap:BuildSearchIndex xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,35 +21,39 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>BuildSearchIndex</name>
-  <type>bdcap:BuildSearchIndex</type>
-  <baseType>core:Capability</baseType>
-  <is>Index every emitted block page for quick search</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Index every emitted block page for quick search
+  </is>
   <documentation>
     # Index every emitted block page for quick search
-
+    
     BD24: for each selected FQN that becomes a block page, emit SearchIndexEntry
     with site-root href from FqnToHtmlPath. Keywords = name, type, FQN segments, is, aliases,
     authored KeywordEntry term / typeFqn tail. AssembleSite writes search-index.json and inlines
     the same entries into search.js.
   </documentation>
-
   <references>
     <see type="bdapi:SearchIndex" relation="SeeAlso" />
     <see type="bdcap:AssembleSite" relation="SeeAlso" />
   </references>
-
   <properties>
     <blocks type="bomblock:BlockDefinition">
-      <documentation>Blocks that receive HTML pages (required).</documentation>
+      <documentation>
+        Blocks that receive HTML pages (required).
+      </documentation>
     </blocks>
     <options type="bdapi:BlockDocOptions">
-      <documentation>Resolved options for href layout (required).</documentation>
+      <documentation>
+        Resolved options for href layout (required).
+      </documentation>
     </options>
     <result type="bdapi:SearchIndex">
-      <documentation>Search index document (required).</documentation>
+      <documentation>
+        Search index document (required).
+      </documentation>
     </result>
   </properties>
-
-</block>
+</bdcap:BuildSearchIndex>

@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — XmlRenderingBlock
-  FQN: org.blockml.bml.bom.common.XmlRenderingBlock
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — XmlRenderingBlock
+  FQN: org.blockml.bml.bom.common.XmlRenderingBlock-->
+<bomcommon:XmlRenderingBlock xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,17 +17,20 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>XmlRenderingBlock</name>
-  <type>bomcommon:XmlRenderingBlock</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Block-level bml:xml rendering recipe</is>
-
-  <documentation>First-class xmlRendering — not flow-control directives[]. Lossless raw body.</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Block-level bml:xml rendering recipe
+  </is>
+  <documentation>
+    First-class xmlRendering — not flow-control directives[]. Lossless raw body.
+  </documentation>
   <properties>
     <raw type="type:Text">
-      <documentation>raw (required). TS type: type:Text.</documentation>
+      <documentation>
+        raw (required). TS type: type:Text.
+      </documentation>
     </raw>
   </properties>
-
-</block>
+</bomcommon:XmlRenderingBlock>

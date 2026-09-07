@@ -1,12 +1,6 @@
-<!--
-  BOM Documentation — ArchitectureOverview
-  FQN: org.blockml.bml.bom.documentation.ArchitectureOverview
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.bom.documentation.ArchitectureOverview-->
+<bomdocumentation:ArchitectureOverview xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -24,26 +18,27 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ArchitectureOverview</name>
-  <type>bomdocumentation:ArchitectureOverview</type>
-  <baseType>core:Documentation</baseType>
-  <is>BML source to render pipeline</is>
-
-  <documentation>Pipeline roles:
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    BML source to render pipeline
+  </is>
+  <documentation>
+    Pipeline roles:
+    
     BML source → universal authoring and interchange format
     Urmodell (BOM) → canonical, immutable, lossless parse/build result (SSOT, read-only)
     BomBuilder (V3) → planned writable session; seal() → Urmodell (same types)
     Pragmatic Model → validator default fork + optional renderer forks (resolve only)
     Framework Utilities → derived views / merges on forks — never mutate Urmodell
     Render Target → chooses Urmodell / pragmatic / own forks + optional target working model
-
+    
     Block in BML is the mandatory input concept — not a uniform runtime object model.
     The parser must read block documents; validators walk baseType chains. Internal
-    representation after parse is implementation freedom.</documentation>
-
+    representation after parse is implementation freedom.
+  </documentation>
   <references>
     <see type="bomdocumentation:AbstractionPrinciple" relation="ReadNext" />
   </references>
-
-</block>
+</bomdocumentation:ArchitectureOverview>

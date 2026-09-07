@@ -1,12 +1,6 @@
-<!--
-  BlockML Transformer — README
-  FQN: org.blockml.bml.transformer.README
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Transformer — README
+  FQN: org.blockml.bml.transformer.README-->
+<transformer:README xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:transformer="org.blockml.bml.transformer"
@@ -14,17 +8,18 @@
   xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
-  <name>README</name>
-  <type>transformer:README</type>
-  <baseType>core:ReadMe</baseType>
-  <is>Reading entry for the Transformer library</is>
-
+  <baseType>
+    core:ReadMe
+  </baseType>
+  <is>
+    Reading entry for the Transformer library
+  </is>
   <documentation>
     The @blockml/transformer package owns the BlockML transformer library
     (org.blockml.bml.transformer.*). Workflow types live in
     org.blockml.bml.transformer.workflow.*. Process steps live in
     org.blockml.bml.transformer.capability.*.
-
+    
     The TypeScript engine executes ModelTransformation instances via
     `blockml transform apply EXECUTION-FQN [--library path] [--parameters JSON] [--parameter-mappings JSON]`.
     `--library` selects the target Library.bml for `_meta`; omitted uses
@@ -61,7 +56,6 @@
     Finalize commits the terminal relocation. Transformation intelligence
     lives in the model, not in the engine.
   </documentation>
-
   <references>
     <see type="transformerdocumentation:ArchitectureOverview" relation="ReadFirst" />
     <see type="transformercap:RunTransformation" relation="SeeAlso" />
@@ -87,5 +81,4 @@
     <see type="workflow:InstructionRule" relation="SeeAlso" />
     <see type="workflow:InstructionTask" relation="SeeAlso" />
   </references>
-
-</block>
+</transformer:README>

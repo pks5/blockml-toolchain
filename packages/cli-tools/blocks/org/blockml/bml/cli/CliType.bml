@@ -1,12 +1,6 @@
-<!--
-  CLI — CliType
-  FQN: org.blockml.bml.cli.CliType
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI — CliType
+  FQN: org.blockml.bml.cli.CliType-->
+<cli:CliType xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,12 +14,16 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>CliType</name>
-  <type>cli:CliType</type>
-  <baseType>core:Entity</baseType>
-  <is>Abstract marker for CLI implementation data-structure blocks</is>
-
-  <documentation>All org.blockml.bml.cli.api|config|command.* types extend this marker. Distinct from core:Capability (operations).</documentation>
-  <abstract>true</abstract>
-
-</block>
+  <baseType>
+    core:Entity
+  </baseType>
+  <is>
+    Abstract marker for CLI implementation data-structure blocks
+  </is>
+  <documentation>
+    All org.blockml.bml.cli.api|config|command.* types extend this marker. Distinct from core:Capability (operations).
+  </documentation>
+  <abstract>
+    true
+  </abstract>
+</cli:CliType>

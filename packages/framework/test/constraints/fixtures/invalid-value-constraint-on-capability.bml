@@ -1,27 +1,25 @@
-<!--
-  Test fixture — invalid ValueConstraint on Capability (BML_CONSTRAINT_TARGET_MISMATCH)
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Test fixture — invalid ValueConstraint on Capability (BML_CONSTRAINT_TARGET_MISMATCH)-->
+<test:InvalidValueOnCapability xmlns="http://blockml.org/bml"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:validation="org.blockml.bml.validation"
   xmlns:test="com.blockml.test.constraints">
 
-  <type>test:InvalidValueOnCapability</type>
-  <baseType>core:Block</baseType>
-  <is>A constraint test fixture</is>
-  <version>1.0.0</version>
-
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    A constraint test fixture
+  </is>
+  <version>
+    1.0.0
+  </version>
   <capabilities>
     <render type="cap:Transformation">
       <constraints>
-        <constraint:Min value="1" validation="validation:Error"/>
+        <constraint:Min value="1" validation="validation:Error" />
       </constraints>
     </render>
   </capabilities>
-</block>
+</test:InvalidValueOnCapability>

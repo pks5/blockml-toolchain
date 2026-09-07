@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Capability — EscapeHtml
-  FQN: org.blockml.bml.target.blockdoc.capability.EscapeHtml
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Capability — EscapeHtml
+  FQN: org.blockml.bml.target.blockdoc.capability.EscapeHtml-->
+<bdcap:EscapeHtml xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,20 +21,25 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>EscapeHtml</name>
-  <type>bdcap:EscapeHtml</type>
-  <baseType>core:Capability</baseType>
-  <is>Escape ampersand, angle brackets, and quotes for HTML text/attributes</is>
-
-  <documentation>BD10: replace ampersand, less-than, greater-than, and double-quote with HTML character references (amp, lt, gt, quot).</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Escape ampersand, angle brackets, and quotes for HTML text/attributes
+  </is>
+  <documentation>
+    BD10: replace ampersand, less-than, greater-than, and double-quote with HTML character references (amp, lt, gt, quot).
+  </documentation>
   <properties>
     <text type="type:Text">
-      <documentation>Raw text (required).</documentation>
+      <documentation>
+        Raw text (required).
+      </documentation>
     </text>
     <result type="type:Text">
-      <documentation>Escaped text (required).</documentation>
+      <documentation>
+        Escaped text (required).
+      </documentation>
     </result>
   </properties>
-
-</block>
+</bdcap:EscapeHtml>

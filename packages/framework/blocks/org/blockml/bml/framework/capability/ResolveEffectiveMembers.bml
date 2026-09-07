@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — ResolveEffectiveMembers
-  FQN: org.blockml.bml.framework.capability.ResolveEffectiveMembers
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — ResolveEffectiveMembers
+  FQN: org.blockml.bml.framework.capability.ResolveEffectiveMembers-->
+<fwcap:ResolveEffectiveMembers xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,29 +25,35 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ResolveEffectiveMembers</name>
-  <type>fwcap:ResolveEffectiveMembers</type>
-  <baseType>core:Capability</baseType>
-  <is>Merge members along baseType chain, contracts, and local declarations</is>
-
-  <documentation>Merge members along baseType chain, contracts, and local declarations</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Merge members along baseType chain, contracts, and local declarations
+  </is>
+  <documentation>
+    Merge members along baseType chain, contracts, and local declarations
+  </documentation>
   <references>
     <see type="fwcap:CollectBaseTypeChain" relation="SeeAlso" />
     <see type="fwcap:MemberIdentityKey" relation="SeeAlso" />
     <see type="fwcap:ResolveContracts" relation="SeeAlso" />
   </references>
-
   <properties>
     <block type="bomblock:BlockDefinition">
-      <documentation>block. TS type: bomblock:BlockDefinition. (required)</documentation>
+      <documentation>
+        block. TS type: bomblock:BlockDefinition. (required)
+      </documentation>
     </block>
     <registry type="fwcap:TypeRegistry">
-      <documentation>registry. TS type: fwcap:TypeRegistry. (required)</documentation>
+      <documentation>
+        registry. TS type: fwcap:TypeRegistry. (required)
+      </documentation>
     </registry>
     <members type="bommember:MemberDefinition[]">
-      <documentation>members. TS type: bommember:MemberDefinition[]. (required)</documentation>
+      <documentation>
+        members. TS type: bommember:MemberDefinition[]. (required)
+      </documentation>
     </members>
   </properties>
-
-</block>
+</fwcap:ResolveEffectiveMembers>

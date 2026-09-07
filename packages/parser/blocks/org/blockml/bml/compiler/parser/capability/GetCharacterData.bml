@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — GetCharacterData
-  FQN: org.blockml.bml.compiler.parser.capability.GetCharacterData
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — GetCharacterData
+  FQN: org.blockml.bml.compiler.parser.capability.GetCharacterData-->
+<parcap:GetCharacterData xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>GetCharacterData</name>
-  <type>parcap:GetCharacterData</type>
-  <baseType>core:Capability</baseType>
-  <is>Extract text/CDATA content and authoredCharacterDataForm (D8)</is>
-
-  <documentation>Extract text/CDATA content and authoredCharacterDataForm (D8). Character data is passed through TrimText before the value is stored on the BOM (B13).</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Extract text/CDATA content and authoredCharacterDataForm (D8)
+  </is>
+  <documentation>
+    Extract text/CDATA content and authoredCharacterDataForm (D8). Character data is passed through TrimText before the value is stored on the BOM (B13).
+  </documentation>
   <properties>
     <element type="parmap:XmlDomNode">
-      <documentation>element. TS type: parmap:XmlDomNode. (required)</documentation>
+      <documentation>
+        element. TS type: parmap:XmlDomNode. (required)
+      </documentation>
     </element>
     <data type="parmap:CharacterData">
-      <documentation>data. TS type: parmap:CharacterData. (required)</documentation>
+      <documentation>
+        data. TS type: parmap:CharacterData. (required)
+      </documentation>
     </data>
   </properties>
-
-</block>
+</parcap:GetCharacterData>

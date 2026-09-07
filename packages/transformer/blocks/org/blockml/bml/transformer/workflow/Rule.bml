@@ -1,46 +1,41 @@
-<!--
-  Transformer Workflow — Rule
-  FQN: org.blockml.bml.transformer.workflow.Rule
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Workflow — Rule
+  FQN: org.blockml.bml.transformer.workflow.Rule-->
+<workflow:Rule xmlns="http://blockml.org/bml"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
-  <name>Rule</name>
-  <type>workflow:Rule</type>
-  <baseType>core:Block</baseType>
-  <is>A rule to observe while executing a task</is>
-
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    A rule to observe while executing a task
+  </is>
+  <isnot>
+    Not a Prerequisite (precondition before Task.run), not a Criterion (acceptance
+    after Task.run), and not a BlockML validation Constraint
+    (org.blockml.bml.core.Constraint / org.blockml.bml.constraint.*).
+  </isnot>
   <documentation>
     Abstract obligation during Task.run. Unlike Prerequisite (precondition) and
     Criterion (acceptance), a Rule constrains how the run proceeds rather than gating it.
   </documentation>
-
-  <isNot>Not a Prerequisite (precondition before Task.run), not a Criterion (acceptance
-    after Task.run), and not a BlockML validation Constraint
-    (org.blockml.bml.core.Constraint / org.blockml.bml.constraint.*).</isNot>
-
+  <abstract>
+    true
+  </abstract>
   <references>
     <see type="workflow:Prerequisite" relation="ContrastsWith" />
     <see type="workflow:Criterion" relation="ContrastsWith" />
     <see type="workflow:Task" relation="SeeAlso" />
   </references>
-
-  <abstract>true</abstract>
-
   <capabilities>
-    <apply type="cap:Action">
-      <abstract>true</abstract>
+    <apply abstract="true" type="cap:Action">
       <throws>
         <workflow:ExecutionException />
       </throws>
-      <documentation>Apply this rule in the current Task.run context. Concrete subtypes supply the Action implementation.</documentation>
+      <documentation>
+        Apply this rule in the current Task.run context. Concrete subtypes supply the Action implementation.
+      </documentation>
     </apply>
   </capabilities>
-
-</block>
+</workflow:Rule>

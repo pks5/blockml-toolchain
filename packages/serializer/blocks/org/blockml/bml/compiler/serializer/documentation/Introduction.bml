@@ -1,12 +1,6 @@
-<!--
-  Serializer Documentation — Introduction
-  FQN: org.blockml.bml.compiler.serializer.documentation.Introduction
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Documentation — Introduction
+  FQN: org.blockml.bml.compiler.serializer.documentation.Introduction-->
+<serdocumentation:Introduction xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -28,30 +22,31 @@
   xmlns:bomcap="org.blockml.bml.bom.capability"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>Introduction</name>
-  <type>serdocumentation:Introduction</type>
-  <baseType>core:Documentation</baseType>
-  <is>Purpose and scope of the Serializer package</is>
-
-  <documentation>The @blockml/serializer package converts BomDocument (Urmodell) to canonical BML XML.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Purpose and scope of the Serializer package
+  </is>
+  <documentation>
+    The @blockml/serializer package converts BomDocument (Urmodell) to canonical BML XML.
     It is the inverse of the parser mapping — enabling BML → BOM → BML roundtrip.
-
+    
     This library (org.blockml.bml.compiler.serializer.*) is the SSOT. TypeScript in
     packages/serializer/src/ implements it. Parity tests in packages/serializer/test/
     verify BML ↔ TS alignment.
-
+    
     The serializer is NOT a render target emitter (SCAD, JSON, …). Target output stays
     in @blockml/compiler and domain target packages.
-
+    
     Pipeline placement: BomDocument ← Parser | BomBuilder; BomDocument → Serializer → BML XML.
     Consumes types from @blockml/bom only — no dependency on @blockml/parser or @blockml/validator.
-
+    
     V1 ships a hardcoded inverse mapper aligned with docs/13. Meta-driven output via
-    Definition blocks + bml:xml is deferred to V2 (see org.blockml.bml.core).</documentation>
-
+    Definition blocks + bml:xml is deferred to V2 (see org.blockml.bml.core).
+  </documentation>
   <references>
     <see type="serdocumentation:LayerSeparation" relation="ReadNext" />
     <see type="bomdocumentation:Introduction" relation="SeeAlso" />
   </references>
-
-</block>
+</serdocumentation:Introduction>

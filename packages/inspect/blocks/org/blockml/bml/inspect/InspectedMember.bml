@@ -1,12 +1,6 @@
-<!--
-  Inspect — InspectedMember
-  FQN: org.blockml.bml.inspect.InspectedMember
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Inspect — InspectedMember
+  FQN: org.blockml.bml.inspect.InspectedMember-->
+<inspect:InspectedMember xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,48 +15,67 @@
   xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>InspectedMember</name>
-  <type>inspect:InspectedMember</type>
-  <baseType>inspect:InspectType</baseType>
-  <is>Shared fields for a projected member</is>
-  <abstract>true</abstract>
-
+  <baseType>
+    inspect:InspectType
+  </baseType>
+  <is>
+    Shared fields for a projected member
+  </is>
   <documentation>
     Abstract base for the four kind-specific inspect member types.
-
+    
     No kind discriminator — the owning InspectedBlock aggregation names the kind.
     inheritedFrom is omitted when the member is declared on the inspected Block.
     First documentation entry is projected when present; truncated to 400 characters with documentationTruncated.
   </documentation>
-
+  <abstract>
+    true
+  </abstract>
   <properties>
     <name type="type:Text">
-      <documentation>Logical member name. (required)</documentation>
+      <documentation>
+        Logical member name. (required)
+      </documentation>
     </name>
     <documentation type="type:Text">
-      <documentation>First documentation entry. Truncated to 400 characters with an ellipsis when longer. (optional)</documentation>
+      <documentation>
+        First documentation entry. Truncated to 400 characters with an ellipsis when longer. (optional)
+      </documentation>
     </documentation>
     <documentationTruncated type="type:Boolean">
-      <documentation>true when documentation was truncated. (optional)</documentation>
+      <documentation>
+        true when documentation was truncated. (optional)
+      </documentation>
     </documentationTruncated>
     <inheritedFrom type="type:Text">
-      <documentation>Declaring ancestor or contract FQN. (optional)</documentation>
+      <documentation>
+        Declaring ancestor or contract FQN. (optional)
+      </documentation>
     </inheritedFrom>
     <visibility type="type:Text">
-      <documentation>Member visibility. (optional)</documentation>
+      <documentation>
+        Member visibility. (optional)
+      </documentation>
     </visibility>
     <readOnly type="type:Boolean">
-      <documentation>true when the member is read-only. (optional)</documentation>
+      <documentation>
+        true when the member is read-only. (optional)
+      </documentation>
     </readOnly>
     <abstract type="type:Boolean">
-      <documentation>true when the member is abstract. (optional)</documentation>
+      <documentation>
+        true when the member is abstract. (optional)
+      </documentation>
     </abstract>
     <final type="type:Boolean">
-      <documentation>true when the member is final. (optional)</documentation>
+      <documentation>
+        true when the member is final. (optional)
+      </documentation>
     </final>
     <override type="type:Boolean">
-      <documentation>true when the member overrides an ancestor. (optional)</documentation>
+      <documentation>
+        true when the member overrides an ancestor. (optional)
+      </documentation>
     </override>
   </properties>
-
-</block>
+</inspect:InspectedMember>

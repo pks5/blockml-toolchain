@@ -1,12 +1,6 @@
-<!--
-  LSP Documentation — ServerLifecycle
-  FQN: org.blockml.bml.lsp.documentation.ServerLifecycle
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP Documentation — ServerLifecycle
+  FQN: org.blockml.bml.lsp.documentation.ServerLifecycle-->
+<lspdocumentation:ServerLifecycle xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,47 +24,48 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ServerLifecycle</name>
-  <type>lspdocumentation:ServerLifecycle</type>
-  <baseType>core:Documentation</baseType>
-  <is>LSP server initialize and document handlers</is>
-
-  <documentation>initialize: resolve workspace root from rootUri or workspaceFolders[0];
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    LSP server initialize and document handlers
+  </is>
+  <documentation>
+    initialize: resolve workspace root from rootUri or workspaceFolders[0];
     createWorkspace(rootDir).
-
+    
     onDidOpenTextDocument: store TextDocument, validate immediately.
     onDidChangeTextDocument: debounce 400ms, re-validate.
     onDidCloseTextDocument: clear diagnostics.
-
+    
     onInitialized: if the client supports dynamic file watchers, register
     **/*.bml, **/blockml.config.json, **/package.json.
     onDidChangeWatchedFiles: debounce 400ms, invalidateWorkspace, re-bootstrap,
     re-validate all open documents. node_modules paths are ignored.
     Refresh uses the disk snapshot — unsaved buffers are not overlaid into the registry.
-
+    
     onDocumentFormatting: formatDocument on the in-memory buffer; one full-document
     TextEdit, empty list if unchanged, or none if parse cannot produce a document.
-
+    
     onHover: hoverAt on the in-memory buffer; XML token at the cursor;
     language / type-QName / member Markdown. Parse-only — no validator.
-
+    
     onDocumentSymbol: documentSymbols on the in-memory buffer; hierarchical
     Urmodell tree. Parse-only — no validator. selectionRange equals range.
-
+    
     onDefinition / onReferences: XML-token hitAt on the in-memory buffer, then
     TypeRegistry from disk. F12 on type QNames — prefix:Local, dotted FQN, or
     unqualified PascalCase in a type slot (implicit namespace). LocationLink covers
     the whole QName. includeDeclaration controls whether the defining block.source
     is included.
-
+    
     onSemanticTokens: semanticTokensFor on the in-memory buffer; XML-stack walk
     classified by FrameworkRoles position (no parser, no TypeRegistry). Nested
     block re-enters L1. Legend token types map to *.bml TextMate scopes in the client.
-
-    Bootstrap errors (BML_LIBRARY_*) published once per workspace on each document until fixed.</documentation>
-
+    
+    Bootstrap errors (BML_LIBRARY_*) published once per workspace on each document until fixed.
+  </documentation>
   <references>
     <see type="lspcap:StartLanguageServer" relation="Defines" />
   </references>
-
-</block>
+</lspdocumentation:ServerLifecycle>

@@ -1,12 +1,6 @@
-<!--
-  Builder Capability — AddAggregation
-  FQN: org.blockml.bml.builder.capability.AddAggregation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Builder Capability — AddAggregation
+  FQN: org.blockml.bml.builder.capability.AddAggregation-->
+<buildercap:AddAggregation xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -20,21 +14,29 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>AddAggregation</name>
-  <type>buildercap:AddAggregation</type>
-  <baseType>core:Capability</baseType>
-  <is>Declare an aggregation on the draft block</is>
-  <documentation>Appends an aggregation member with a named type expression.
-    Duplicate names throw.</documentation>
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Declare an aggregation on the draft block
+  </is>
+  <documentation>
+    Appends an aggregation member with a named type expression.
+    Duplicate names throw.
+  </documentation>
   <references>
     <see type="builder:AddAggregationOptions" relation="SeeAlso" />
   </references>
   <properties>
     <options type="builder:AddAggregationOptions">
-      <documentation>options (required).</documentation>
+      <documentation>
+        options (required).
+      </documentation>
     </options>
     <result type="builder:BomBuilder">
-      <documentation>This session. (required)</documentation>
+      <documentation>
+        This session. (required)
+      </documentation>
     </result>
   </properties>
-</block>
+</buildercap:AddAggregation>

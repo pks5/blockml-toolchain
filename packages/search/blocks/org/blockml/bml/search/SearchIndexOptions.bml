@@ -1,12 +1,6 @@
-<!--
-  Search — SearchIndexOptions
-  FQN: org.blockml.bml.search.SearchIndexOptions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Search — SearchIndexOptions
+  FQN: org.blockml.bml.search.SearchIndexOptions-->
+<search:SearchIndexOptions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,26 +15,35 @@
   xmlns:searchdocumentation="org.blockml.bml.search.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>SearchIndexOptions</name>
-  <type>search:SearchIndexOptions</type>
-  <baseType>search:SearchType</baseType>
-  <is>Project and cache location for index operations</is>
-
-  <documentation>rootDir defaults to process.cwd(); srcDir defaults to blocks; indexDir defaults to {rootDir}/.blockml/search.</documentation>
-
+  <baseType>
+    search:SearchType
+  </baseType>
+  <is>
+    Project and cache location for index operations
+  </is>
+  <documentation>
+    rootDir defaults to process.cwd(); srcDir defaults to blocks; indexDir defaults to {rootDir}/.blockml/search.
+  </documentation>
   <properties>
     <rootDir type="type:Text">
-      <documentation>rootDir (optional). TS type: type:Text.</documentation>
+      <documentation>
+        rootDir (optional). TS type: type:Text.
+      </documentation>
     </rootDir>
     <srcDir type="type:Text">
-      <documentation>srcDir (optional). TS type: type:Text.</documentation>
+      <documentation>
+        srcDir (optional). TS type: type:Text.
+      </documentation>
     </srcDir>
     <libraries type="type:Text[]">
-      <documentation>libraries (optional). TS type: type:Text[].</documentation>
+      <documentation>
+        libraries (optional). TS type: type:Text[].
+      </documentation>
     </libraries>
     <indexDir type="type:Text">
-      <documentation>indexDir (optional). TS type: type:Text.</documentation>
+      <documentation>
+        indexDir (optional). TS type: type:Text.
+      </documentation>
     </indexDir>
   </properties>
-
-</block>
+</search:SearchIndexOptions>

@@ -1,47 +1,42 @@
-<!--
-  Transformer Workflow — Criterion
-  FQN: org.blockml.bml.transformer.workflow.Criterion
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Workflow — Criterion
+  FQN: org.blockml.bml.transformer.workflow.Criterion-->
+<workflow:Criterion xmlns="http://blockml.org/bml"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Criterion</name>
-  <type>workflow:Criterion</type>
-  <baseType>core:Block</baseType>
-  <is>An acceptance criterion for a completed task</is>
-
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    An acceptance criterion for a completed task
+  </is>
+  <isnot>
+    Not a Prerequisite (precondition before Task.run), not a workflow Rule
+    (obligation during Task.run), and not a BlockML validation Constraint
+    (org.blockml.bml.core.Constraint / org.blockml.bml.constraint.*).
+  </isnot>
   <documentation>
     Abstract acceptance (success) condition. After Task.run, each success criterion
     must hold. Concrete subtypes implement isSatisfied; this type carries no
     implementation. Preconditions before the task belong on Prerequisite, not here.
   </documentation>
-
-  <isNot>Not a Prerequisite (precondition before Task.run), not a workflow Rule
-    (obligation during Task.run), and not a BlockML validation Constraint
-    (org.blockml.bml.core.Constraint / org.blockml.bml.constraint.*).</isNot>
-
+  <abstract>
+    true
+  </abstract>
   <references>
     <see type="workflow:Prerequisite" relation="ContrastsWith" />
     <see type="workflow:Rule" relation="ContrastsWith" />
   </references>
-
-  <abstract>true</abstract>
-
   <capabilities>
-    <isSatisfied type="cap:Outbound" outputType="type:Boolean">
+    <isSatisfied abstract="true" type="cap:Outbound" outputType="type:Boolean">
       <throws>
         <workflow:ExecutionException />
       </throws>
-      <abstract>true</abstract>
-      <documentation>Whether this acceptance criterion currently holds. Concrete subtypes supply the Outbound implementation.</documentation>
+      <documentation>
+        Whether this acceptance criterion currently holds. Concrete subtypes supply the Outbound implementation.
+      </documentation>
     </isSatisfied>
   </capabilities>
-
-</block>
+</workflow:Criterion>

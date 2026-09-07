@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Capability — RelativeHref
-  FQN: org.blockml.bml.target.blockdoc.capability.RelativeHref
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Capability — RelativeHref
+  FQN: org.blockml.bml.target.blockdoc.capability.RelativeHref-->
+<bdcap:RelativeHref xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,27 +21,33 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>RelativeHref</name>
-  <type>bdcap:RelativeHref</type>
-  <baseType>core:Capability</baseType>
-  <is>Compute relative href from one HTML path to another</is>
-
-  <documentation>BD9: pop file segment from from-path; count common directory prefix; ups=0 → './' else '../'*ups + remainder.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Compute relative href from one HTML path to another
+  </is>
+  <documentation>
+    BD9: pop file segment from from-path; count common directory prefix; ups=0 → './' else '../'*ups + remainder.
+  </documentation>
   <references>
     <see type="bddocumentation:PathAndLayout" relation="SeeAlso" />
   </references>
-
   <properties>
     <fromPath type="type:Text">
-      <documentation>Current page relative path (required).</documentation>
+      <documentation>
+        Current page relative path (required).
+      </documentation>
     </fromPath>
     <toPath type="type:Text">
-      <documentation>Target relative path (required).</documentation>
+      <documentation>
+        Target relative path (required).
+      </documentation>
     </toPath>
     <result type="type:Text">
-      <documentation>Relative href (required).</documentation>
+      <documentation>
+        Relative href (required).
+      </documentation>
     </result>
   </properties>
-
-</block>
+</bdcap:RelativeHref>

@@ -1,12 +1,6 @@
-<!--
-  Framework — BootstrapOptions
-  FQN: org.blockml.bml.framework.registry.BootstrapOptions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework — BootstrapOptions
+  FQN: org.blockml.bml.framework.registry.BootstrapOptions-->
+<fwregistry:BootstrapOptions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,23 +25,30 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>BootstrapOptions</name>
-  <type>fwregistry:BootstrapOptions</type>
-  <baseType>framework:FrameworkType</baseType>
-  <is>Options for bootstrapTypeRegistry corpus or library graph modes</is>
-
-  <documentation>paths — flat corpus scan roots. libraryPaths — Library.bml entry points for dependency-ordered library mode. rootDir — relative path resolution base.</documentation>
-
+  <baseType>
+    framework:FrameworkType
+  </baseType>
+  <is>
+    Options for bootstrapTypeRegistry corpus or library graph modes
+  </is>
+  <documentation>
+    paths — flat corpus scan roots. libraryPaths — Library.bml entry points for dependency-ordered library mode. rootDir — relative path resolution base.
+  </documentation>
   <properties>
     <paths type="type:Text[]">
-      <documentation>Corpus roots for flat scan mode. (optional)</documentation>
+      <documentation>
+        Corpus roots for flat scan mode. (optional)
+      </documentation>
     </paths>
     <libraryPaths type="type:Text[]">
-      <documentation>Library.bml file paths for library graph mode. (optional)</documentation>
+      <documentation>
+        Library.bml file paths for library graph mode. (optional)
+      </documentation>
     </libraryPaths>
     <rootDir type="type:Text">
-      <documentation>Working directory for relative paths. (optional)</documentation>
+      <documentation>
+        Working directory for relative paths. (optional)
+      </documentation>
     </rootDir>
   </properties>
-
-</block>
+</fwregistry:BootstrapOptions>

@@ -1,12 +1,6 @@
-<!--
-  CLI Capability — BootstrapProjectTypeRegistry
-  FQN: org.blockml.bml.cli.capability.BootstrapProjectTypeRegistry
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Capability — BootstrapProjectTypeRegistry
+  FQN: org.blockml.bml.cli.capability.BootstrapProjectTypeRegistry-->
+<clicap:BootstrapProjectTypeRegistry xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,24 +14,28 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>BootstrapProjectTypeRegistry</name>
-  <type>clicap:BootstrapProjectTypeRegistry</type>
-  <baseType>core:Capability</baseType>
-  <is>CLI wrapper around framework bootstrapTypeRegistry</is>
-
-  <documentation>CLI6: libraryPaths from resolveLibrarySeeds (package.json blockml.library then extras). Default paths=[srcDir]; validate passes corpusPaths=project source roots (srcDir plus local packages/*). Merges CLI overrides for --src and --libraries (extras only).</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    CLI wrapper around framework bootstrapTypeRegistry
+  </is>
+  <documentation>
+    CLI6: libraryPaths from resolveLibrarySeeds (package.json blockml.library then extras). Default paths=[srcDir]; validate passes corpusPaths=project source roots (srcDir plus local packages/*). Merges CLI overrides for --src and --libraries (extras only).
+  </documentation>
   <references>
     <see type="clidocumentation:RuntimeBootstrap" relation="SeeAlso" />
   </references>
-
   <properties>
     <options type="cliapi:CliBootstrapOptions">
-      <documentation>Bootstrap options. (required)</documentation>
+      <documentation>
+        Bootstrap options. (required)
+      </documentation>
     </options>
     <result type="type:Text">
-      <documentation>BootstrapResult with registry and diagnostics. (required)</documentation>
+      <documentation>
+        BootstrapResult with registry and diagnostics. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</clicap:BootstrapProjectTypeRegistry>

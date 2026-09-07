@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — DefaultBootstrapPaths
-  FQN: org.blockml.bml.framework.capability.DefaultBootstrapPaths
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — DefaultBootstrapPaths
+  FQN: org.blockml.bml.framework.capability.DefaultBootstrapPaths-->
+<fwcap:DefaultBootstrapPaths xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,20 +25,25 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>DefaultBootstrapPaths</name>
-  <type>fwcap:DefaultBootstrapPaths</type>
-  <baseType>core:Capability</baseType>
-  <is>Corpus fallback paths from production BlockML npm dependencies</is>
-
-  <documentation>Nearest package.json dependencies + optionalDependencies that have blockml.library or blockml.config.json. Resolve via node_modules walk-up. Package source root is srcDir (default blocks; foreign blockml.config.json may override srcDir only).</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Corpus fallback paths from production BlockML npm dependencies
+  </is>
+  <documentation>
+    Nearest package.json dependencies + optionalDependencies that have blockml.library or blockml.config.json. Resolve via node_modules walk-up. Package source root is srcDir (default blocks; foreign blockml.config.json may override srcDir only).
+  </documentation>
   <properties>
     <rootDir type="type:Text">
-      <documentation>Default process.cwd(). (optional)</documentation>
+      <documentation>
+        Default process.cwd(). (optional)
+      </documentation>
     </rootDir>
     <paths type="type:Text[]">
-      <documentation>paths. TS type: type:Text[]. (required)</documentation>
+      <documentation>
+        paths. TS type: type:Text[]. (required)
+      </documentation>
     </paths>
   </properties>
-
-</block>
+</fwcap:DefaultBootstrapPaths>

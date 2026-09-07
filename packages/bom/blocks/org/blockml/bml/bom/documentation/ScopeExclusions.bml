@@ -1,12 +1,6 @@
-<!--
-  BOM Documentation — ScopeExclusions
-  FQN: org.blockml.bml.bom.documentation.ScopeExclusions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Documentation — ScopeExclusions
+  FQN: org.blockml.bml.bom.documentation.ScopeExclusions-->
+<bomdocumentation:ScopeExclusions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -24,13 +18,15 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ScopeExclusions</name>
-  <type>bomdocumentation:ScopeExclusions</type>
-  <baseType>core:Documentation</baseType>
-  <is>Topics intentionally outside @blockml/bom</is>
-
-  <documentation>Not specified in this library:
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Topics intentionally outside @blockml/bom
+  </is>
+  <documentation>
+    Not specified in this library:
+    
     Expression AST node union → 10_expression_language.md
     Embedded expressions in implementations → 10_expression_language.md
     BML → BOM mapping algorithm → @blockml/parser, 13_bml_to_bom_mapping.md
@@ -41,7 +37,7 @@
     MBOM → SCAD → 04_types.md, 05_scad_renderer.md
     ManagedObject / synthetic accessors → 08_managed_object.md
     Built-in #math / #strings → @blockml/core services
-
-    Also outside Urmodell: EffectiveMemberSet, TypeRegistry (core utilities).</documentation>
-
-</block>
+    
+    Also outside Urmodell: EffectiveMemberSet, TypeRegistry (core utilities).
+  </documentation>
+</bomdocumentation:ScopeExclusions>

@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Documentation — CompileIO
-  FQN: org.blockml.bml.compiler.runtime.documentation.CompileIO
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Documentation — CompileIO
+  FQN: org.blockml.bml.compiler.runtime.documentation.CompileIO-->
+<rundocumentation:CompileIO xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -26,26 +20,26 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>CompileIO</name>
-  <type>rundocumentation:CompileIO</type>
-  <baseType>core:Documentation</baseType>
-  <is>Compile I/O model (C4)</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Compile I/O model (C4)
+  </is>
   <documentation>
     # Compile I/O model (C4)
-
+    
     C4: BlockML has no mandatory input↔output cardinality. Targets decide how many files
     (including zero) and may attach side fields on RenderOutput subtypes.
-
+    
     Hosts write files; the compiler returns opaque RenderOutput.
-
+    
     MachineBlocks 1 BML → 1 SCAD is a domain convention, not a compiler rule.
-
+    
     TypeRegistry population follows resolved scope (document vs library vs corpus), not a fixed I/O map.
   </documentation>
   <references>
     <see type="rundocumentation:CompileScopeRules" relation="ReadNext" />
     <see type="runapi:RenderOutput" relation="SeeAlso" />
   </references>
-
-</block>
+</rundocumentation:CompileIO>

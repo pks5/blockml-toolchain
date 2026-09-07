@@ -1,12 +1,6 @@
-<!--
-  Graph Documentation — PackageOwnership
-  FQN: org.blockml.bml.graph.documentation.PackageOwnership
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph Documentation — PackageOwnership
+  FQN: org.blockml.bml.graph.documentation.PackageOwnership-->
+<graphdocumentation:PackageOwnership xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,16 +15,20 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>PackageOwnership</name>
-  <type>graphdocumentation:PackageOwnership</type>
-  <baseType>core:Documentation</baseType>
-  <is>Toolchain responsibilities for Graph</is>
-  <documentation>@blockml/graph — index, persistence, semantic API, query API. Owns this BML library.
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Toolchain responsibilities for Graph
+  </is>
+  <documentation>
+    @blockml/graph — index, persistence, semantic API, query API. Owns this BML library.
+    
     @blockml/framework — project discovery and TypeRegistry bootstrap (same corpus as validate --all).
     @blockml/cli — blockml graph command host.
-    @blockml/bom — BlockDefinition members and SourceLocation.</documentation>
+    @blockml/bom — BlockDefinition members and SourceLocation.
+  </documentation>
   <references>
     <see type="graphdocumentation:ScopeExclusions" relation="ReadNext" />
   </references>
-</block>
+</graphdocumentation:PackageOwnership>

@@ -1,12 +1,6 @@
-<!--
-  Graph Capability — Schema
-  FQN: org.blockml.bml.graph.capability.Schema
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph Capability — Schema
+  FQN: org.blockml.bml.graph.capability.Schema-->
+<graphcap:Schema xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,17 +15,25 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Schema</name>
-  <type>graphcap:Schema</type>
-  <baseType>core:Capability</baseType>
-  <is>Stable node and relation documentation</is>
-  <documentation>Returns node table names, authored relation names, a prose description, and a Ladybug Cypher example. Description names the supported subset (MATCH/WHERE/RETURN/ORDER BY/LIMIT, named relations, $params) and what is missing (type(), shortestPath()).</documentation>
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Stable node and relation documentation
+  </is>
+  <documentation>
+    Returns node table names, authored relation names, a prose description, and a Ladybug Cypher example. Description names the supported subset (MATCH/WHERE/RETURN/ORDER BY/LIMIT, named relations, $params) and what is missing (type(), shortestPath()).
+  </documentation>
   <properties>
     <schema type="type:Text">
-      <documentation>Schema description. (required)</documentation>
+      <documentation>
+        Schema description. (required)
+      </documentation>
     </schema>
     <example type="type:Text">
-      <documentation>Minimal working Cypher. (required)</documentation>
+      <documentation>
+        Minimal working Cypher. (required)
+      </documentation>
     </example>
   </properties>
-</block>
+</graphcap:Schema>

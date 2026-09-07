@@ -1,12 +1,6 @@
-<!--
-  CLI Config — CommandRegistry
-  FQN: org.blockml.bml.cli.config.CommandRegistry
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Config — CommandRegistry
+  FQN: org.blockml.bml.cli.config.CommandRegistry-->
+<cliconfig:CommandRegistry xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,23 +14,65 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>CommandRegistry</name>
-  <type>cliconfig:CommandRegistry</type>
-  <baseType>cli:CliType</baseType>
-  <is>Command names and V1 implementation status</is>
-
-  <documentation>V1 implements validate, compile, search, graph, inspect, transform, and new. Later: init, watch, activate-config.</documentation>
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    Command names and V1 implementation status
+  </is>
+  <documentation>
+    V1 implements validate, compile, search, graph, inspect, transform, and new. Later: init, watch, activate-config.
+  </documentation>
   <properties>
-    <validate type="type:Boolean"><documentation>true — implemented in V1.</documentation></validate>
-    <compile type="type:Boolean"><documentation>true — implemented in V1.</documentation></compile>
-    <search type="type:Boolean"><documentation>true — implemented in V1.</documentation></search>
-    <graph type="type:Boolean"><documentation>true — implemented in V1.</documentation></graph>
-    <transform type="type:Boolean"><documentation>true — implemented in V1.</documentation></transform>
-    <new type="type:Boolean"><documentation>true — implemented in V1.</documentation></new>
-    <init type="type:Boolean"><documentation>false — planned.</documentation></init>
-    <inspect type="type:Boolean"><documentation>true — implemented in V1.</documentation></inspect>
-    <watch type="type:Boolean"><documentation>false — planned.</documentation></watch>
-    <activateConfig type="type:Boolean"><documentation>false — planned.</documentation></activateConfig>
+    <validate type="type:Boolean">
+      <documentation>
+        true — implemented in V1.
+      </documentation>
+    </validate>
+    <compile type="type:Boolean">
+      <documentation>
+        true — implemented in V1.
+      </documentation>
+    </compile>
+    <search type="type:Boolean">
+      <documentation>
+        true — implemented in V1.
+      </documentation>
+    </search>
+    <graph type="type:Boolean">
+      <documentation>
+        true — implemented in V1.
+      </documentation>
+    </graph>
+    <transform type="type:Boolean">
+      <documentation>
+        true — implemented in V1.
+      </documentation>
+    </transform>
+    <new type="type:Boolean">
+      <documentation>
+        true — implemented in V1.
+      </documentation>
+    </new>
+    <init type="type:Boolean">
+      <documentation>
+        false — planned.
+      </documentation>
+    </init>
+    <inspect type="type:Boolean">
+      <documentation>
+        true — implemented in V1.
+      </documentation>
+    </inspect>
+    <watch type="type:Boolean">
+      <documentation>
+        false — planned.
+      </documentation>
+    </watch>
+    <activateConfig type="type:Boolean">
+      <documentation>
+        false — planned.
+      </documentation>
+    </activateConfig>
   </properties>
-
-</block>
+</cliconfig:CommandRegistry>

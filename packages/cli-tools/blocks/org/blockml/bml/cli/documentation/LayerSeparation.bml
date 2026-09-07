@@ -1,12 +1,6 @@
-<!--
-  CLI Documentation — LayerSeparation
-  FQN: org.blockml.bml.cli.documentation.LayerSeparation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Documentation — LayerSeparation
+  FQN: org.blockml.bml.cli.documentation.LayerSeparation-->
+<clidocumentation:LayerSeparation xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -21,34 +15,36 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>LayerSeparation</name>
-  <type>clidocumentation:LayerSeparation</type>
-  <baseType>core:Documentation</baseType>
-  <is>CLI vs compiler vs framework vs targets</is>
-
-  <documentation>Layers relevant to the CLI:
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    CLI vs compiler vs framework vs targets
+  </is>
+  <documentation>
+    Layers relevant to the CLI:
+    
     org.blockml.bml.cli.* (this package) — commands, args, config, bootstrap order, file I/O.
-
+    
     @blockml/compiler — compileToOutput, CompileRequest, Target Registry, compile scope resolution (C7).
     CLI builds requests; compiler owns facade semantics.
-
+    
     @blockml/framework — bootstrapTypeRegistry, TypeRegistry. CLI wraps as bootstrapProjectTypeRegistry.
-
+    
     @blockml/transformer — sequential ModelOperations on a ModelTransformation. CLI wraps as RunTransform and supplies the default AgenticExecutor agent.
-
+    
     @blockml/graph — authored structural graph. CLI wraps as RunGraph.
-
+    
     @blockml/inspect — compact Block inspect view. CLI wraps as RunInspect.
-
+    
     @blockml/builder — BomBuilder session. CLI wraps as RunNew.
-
+    
     Target packages (@blockml/blockdoc-target, xsd-target, fatblock-target) — RenderTarget impls
     and targetOptions types. CLI registers via bootstrapTargets; does not own render algorithms.
-
-    @machineblocks/cli — domain host for SCAD product; out of scope for this library.</documentation>
+    
+    @machineblocks/cli — domain host for SCAD product; out of scope for this library.
+  </documentation>
   <references>
     <see type="clidocumentation:ArchitectureOverview" relation="ReadNext" />
   </references>
-
-</block>
+</clidocumentation:LayerSeparation>

@@ -1,12 +1,6 @@
-<!--
-  LSP Documentation — PublicApi
-  FQN: org.blockml.bml.lsp.documentation.PublicApi
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP Documentation — PublicApi
+  FQN: org.blockml.bml.lsp.documentation.PublicApi-->
+<lspdocumentation:PublicApi xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,12 +24,14 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PublicApi</name>
-  <type>lspdocumentation:PublicApi</type>
-  <baseType>core:Documentation</baseType>
-  <is>Exported API from packages/lsp/src/index.ts</is>
-
-  <documentation>    analyzeDocument(text, filePath, workspace): AnalysisResult
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Exported API from packages/lsp/src/index.ts
+  </is>
+  <documentation>
+    analyzeDocument(text, filePath, workspace): AnalysisResult
     formatDocument(text, options?): string | null
     hoverAt(text, filePath, position, workspace): HoverInfo | null
     documentSymbols(text, filePath): OutlineSymbol[] | null
@@ -48,9 +44,9 @@
     bomLocationToRange(loc, documentText?): LSP Range
     bomSeverityToLsp(severity): LSP DiagnosticSeverity
     diagnosticToLsp(diagnostic, documentText?): LSP Diagnostic
-
-    Server entry (not exported from index): packages/lsp/dist/server.js via bin blockml-lsp.</documentation>
-
+    
+    Server entry (not exported from index): packages/lsp/dist/server.js via bin blockml-lsp.
+  </documentation>
   <references>
     <see type="lspcap:AnalyzeDocument" relation="Defines" />
     <see type="lspcap:FormatDocument" relation="Defines" />
@@ -61,5 +57,4 @@
     <see type="lspcap:SemanticTokensFor" relation="Defines" />
     <see type="lspdocumentation:DesignDecisions" relation="ReadNext" />
   </references>
-
-</block>
+</lspdocumentation:PublicApi>

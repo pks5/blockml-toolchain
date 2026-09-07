@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Capability — RenderToolbar
-  FQN: org.blockml.bml.target.blockdoc.capability.RenderToolbar
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Capability — RenderToolbar
+  FQN: org.blockml.bml.target.blockdoc.capability.RenderToolbar-->
+<bdcap:RenderToolbar xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,40 +21,46 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>RenderToolbar</name>
-  <type>bdcap:RenderToolbar</type>
-  <baseType>core:Capability</baseType>
-  <is>Sticky black site toolbar with Index, All Blocks, and quick search</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Sticky black site toolbar with Index, All Blocks, and quick search
+  </is>
   <documentation>
     # Sticky black site toolbar with Index, All Blocks, and quick search
-
+    
     BD25/BD27: sticky black header on every HTML page. Left: brand "BlockDoc" then
     Index (interesting package home) then All Blocks (full listing). Right: search field matching
     keywords in the inlined search.js index; dropdown up to 12 hits; click or Enter navigates
     to the block page. Ranking: exact name, then name prefix, then other keyword hits.
-
+    
     Package-index breadcrumb Index uses the same interesting-home href as the toolbar Index.
   </documentation>
-
   <references>
     <see type="bddocumentation:PageChrome" relation="SeeAlso" />
     <see type="bdcap:BuildSearchIndex" relation="SeeAlso" />
   </references>
-
   <properties>
     <pagePath type="type:Text">
-      <documentation>This page path for relative hrefs (required).</documentation>
+      <documentation>
+        This page path for relative hrefs (required).
+      </documentation>
     </pagePath>
     <rootIndexPath type="type:Text">
-      <documentation>Interesting package home (required).</documentation>
+      <documentation>
+        Interesting package home (required).
+      </documentation>
     </rootIndexPath>
     <allBlocksPath type="type:Text">
-      <documentation>All Blocks listing path (required).</documentation>
+      <documentation>
+        All Blocks listing path (required).
+      </documentation>
     </allBlocksPath>
     <result type="type:Text">
-      <documentation>Toolbar HTML (required).</documentation>
+      <documentation>
+        Toolbar HTML (required).
+      </documentation>
     </result>
   </properties>
-
-</block>
+</bdcap:RenderToolbar>

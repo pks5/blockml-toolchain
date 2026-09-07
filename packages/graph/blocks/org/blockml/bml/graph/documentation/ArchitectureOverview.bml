@@ -1,12 +1,6 @@
-<!--
-  Graph Documentation — ArchitectureOverview
-  FQN: org.blockml.bml.graph.documentation.ArchitectureOverview
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.graph.documentation.ArchitectureOverview-->
+<graphdocumentation:ArchitectureOverview xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,19 +15,23 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ArchitectureOverview</name>
-  <type>graphdocumentation:ArchitectureOverview</type>
-  <baseType>core:Documentation</baseType>
-  <is>Corpus to index to Graph API</is>
-  <documentation>BML files → bootstrapFullProjectRegistry → TypeRegistry → authored Block/Member nodes and edges → Ladybug store → .blockml/graph/ cache → Graph API.
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Corpus to index to Graph API
+  </is>
+  <documentation>
+    BML files → bootstrapFullProjectRegistry → TypeRegistry → authored Block/Member nodes and edges → Ladybug store → .blockml/graph/ cache → Graph API.
+    
     Graph corpus == validate --all corpus. Index is a derived cache; BML remains source of truth.
-
+    
     Only authored edges are stored. Transitive relations are computed by traversals.
     BASE_TYPE is the resolved parent Block, not generic arguments on the baseType expression. Generic arguments may appear as HAS_SUBBLOCK when they are nested SubBlocks.
     Persistence: .blockml/graph/lbug plus manifest.json (package.json/lockfile hashes, indexed file mtimes). Missing or stale index → full rebuild.
-    Ladybug is exclusive. openGraph/rebuildIndex take .blockml/graph/index.lock until close() and retry if the database file is locked.</documentation>
+    Ladybug is exclusive. openGraph/rebuildIndex take .blockml/graph/index.lock until close() and retry if the database file is locked.
+  </documentation>
   <references>
     <see type="graphdocumentation:V1Scope" relation="ReadNext" />
   </references>
-</block>
+</graphdocumentation:ArchitectureOverview>

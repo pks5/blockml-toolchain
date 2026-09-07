@@ -1,12 +1,6 @@
-<!--
-  Search — SearchResult
-  FQN: org.blockml.bml.search.SearchResult
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Search — SearchResult
+  FQN: org.blockml.bml.search.SearchResult-->
+<search:SearchResult xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,29 +15,40 @@
   xmlns:searchdocumentation="org.blockml.bml.search.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>SearchResult</name>
-  <type>search:SearchResult</type>
-  <baseType>search:SearchType</baseType>
-  <is>One ranked hit from search()</is>
-
-  <documentation>Abstracted from Orama hits. Sorted by exact FQN match first, then score descending, then FQN.</documentation>
-
+  <baseType>
+    search:SearchType
+  </baseType>
+  <is>
+    One ranked hit from search()
+  </is>
+  <documentation>
+    Abstracted from Orama hits. Sorted by exact FQN match first, then score descending, then FQN.
+  </documentation>
   <properties>
     <fqn type="type:Text">
-      <documentation>fqn (required). TS type: type:Text.</documentation>
+      <documentation>
+        fqn (required). TS type: type:Text.
+      </documentation>
     </fqn>
     <name type="type:Text">
-      <documentation>name (required). TS type: type:Text.</documentation>
+      <documentation>
+        name (required). TS type: type:Text.
+      </documentation>
     </name>
     <file type="type:Text">
-      <documentation>file (required). TS type: type:Text.</documentation>
+      <documentation>
+        file (required). TS type: type:Text.
+      </documentation>
     </file>
     <score type="type:Number">
-      <documentation>score (required). TS type: type:Number.</documentation>
+      <documentation>
+        score (required). TS type: type:Number.
+      </documentation>
     </score>
     <library type="type:Text">
-      <documentation>library (optional). TS type: type:Text.</documentation>
+      <documentation>
+        library (optional). TS type: type:Text.
+      </documentation>
     </library>
   </properties>
-
-</block>
+</search:SearchResult>

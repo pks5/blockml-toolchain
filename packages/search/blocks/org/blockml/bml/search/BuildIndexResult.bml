@@ -1,12 +1,6 @@
-<!--
-  Search — BuildIndexResult
-  FQN: org.blockml.bml.search.BuildIndexResult
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Search — BuildIndexResult
+  FQN: org.blockml.bml.search.BuildIndexResult-->
+<search:BuildIndexResult xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,23 +15,30 @@
   xmlns:searchdocumentation="org.blockml.bml.search.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>BuildIndexResult</name>
-  <type>search:BuildIndexResult</type>
-  <baseType>search:SearchType</baseType>
-  <is>In-memory index plus bootstrap diagnostics</is>
-
-  <documentation>Returned by buildIndex, rebuildIndex, and openIndex.</documentation>
-
+  <baseType>
+    search:SearchType
+  </baseType>
+  <is>
+    In-memory index plus bootstrap diagnostics
+  </is>
+  <documentation>
+    Returned by buildIndex, rebuildIndex, and openIndex.
+  </documentation>
   <properties>
     <index type="search:SearchType">
-      <documentation>Opaque SearchIndex handle. (required)</documentation>
+      <documentation>
+        Opaque SearchIndex handle. (required)
+      </documentation>
     </index>
     <diagnostics type="bomcommon:Diagnostic[]">
-      <documentation>diagnostics (required). TS type: bomcommon:Diagnostic[].</documentation>
+      <documentation>
+        diagnostics (required). TS type: bomcommon:Diagnostic[].
+      </documentation>
     </diagnostics>
     <documents type="type:Integer">
-      <documentation>documents (required). TS type: type:Integer.</documentation>
+      <documentation>
+        documents (required). TS type: type:Integer.
+      </documentation>
     </documents>
   </properties>
-
-</block>
+</search:BuildIndexResult>

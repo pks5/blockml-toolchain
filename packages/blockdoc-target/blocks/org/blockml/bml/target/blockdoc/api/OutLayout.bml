@@ -1,12 +1,6 @@
-<!--
-  BlockDoc API — OutLayout
-  FQN: org.blockml.bml.target.blockdoc.api.OutLayout
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc API — OutLayout
+  FQN: org.blockml.bml.target.blockdoc.api.OutLayout-->
+<bdapi:OutLayout xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,17 +21,20 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>OutLayout</name>
-  <type>bdapi:OutLayout</type>
-  <baseType>blockdoc:BlockdocType</baseType>
-  <is>URL path layout under outDir: fqn | package</is>
-
-  <documentation>String-literal union: "fqn" | "package". BD2: fqn = a/b/C.html; package = a/b/index.html (collides if multiple blocks share a package).</documentation>
-
+  <baseType>
+    blockdoc:BlockdocType
+  </baseType>
+  <is>
+    URL path layout under outDir: fqn | package
+  </is>
+  <documentation>
+    String-literal union: "fqn" | "package". BD2: fqn = a/b/C.html; package = a/b/index.html (collides if multiple blocks share a package).
+  </documentation>
   <properties>
     <value type="type:Text">
-      <documentation>value (required). "fqn" or "package".</documentation>
+      <documentation>
+        value (required). "fqn" or "package".
+      </documentation>
     </value>
   </properties>
-
-</block>
+</bdapi:OutLayout>

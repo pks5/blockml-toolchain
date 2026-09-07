@@ -1,12 +1,6 @@
-<!--
-  BOM Documentation — PackageOwnership
-  FQN: org.blockml.bml.bom.documentation.PackageOwnership
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Documentation — PackageOwnership
+  FQN: org.blockml.bml.bom.documentation.PackageOwnership-->
+<bomdocumentation:PackageOwnership xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -24,34 +18,36 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PackageOwnership</name>
-  <type>bomdocumentation:PackageOwnership</type>
-  <baseType>core:Documentation</baseType>
-  <is>Toolchain package responsibilities for the Urmodell</is>
-
-  <documentation>@blockml/bom — all Urmodell interfaces, ParseResult/SerializeResult/ValidateResult (B26 + Stage 2),
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Toolchain package responsibilities for the Urmodell
+  </is>
+  <documentation>
+    @blockml/bom — all Urmodell interfaces, ParseResult/SerializeResult/ValidateResult (B26 + Stage 2),
     ValidateOptions, TypeRegistryReader, Diagnostic (compiler result type), bomEquals/stripProvenance (B20).
-
+    
     @blockml/builder — BomBuilder writable session; seal() → BomDocument.
-
+    
     @blockml/framework — TypeRegistry, forkBom, resolveEffectiveMembers, validateTypes, parseExpression.
     Utilities never mutate Urmodell.
-
+    
     @blockml/core — BlockML language BML corpus (org.blockml.bml.*); npm SSOT in node_modules.
-
+    
     @blockml/parser — BML → BomDocument mapper; single file per invocation; parse() → ParseResult.
     Does not own BOM interfaces or expand directives.
-
+    
     @blockml/serializer — BomDocument → canonical BML XML; serialize() → SerializeResult.
-
+    
     @blockml/validator — checks on BomDocument using framework utilities.
-
+    
     @blockml/cli — TypeRegistry bootstrap, validateTypes/validateConstraints, compile pipeline.
-
+    
     @blockml/lsp (V2) — reuses parser, validator, serializer; no parallel IDE AST.
-
+    
     @blockml/compiler — Target Registry facade.
-
-    @machineblocks/core — domain BML; extends TypeRegistry bootstrap.</documentation>
-
-</block>
+    
+    @machineblocks/core — domain BML; extends TypeRegistry bootstrap.
+  </documentation>
+</bomdocumentation:PackageOwnership>

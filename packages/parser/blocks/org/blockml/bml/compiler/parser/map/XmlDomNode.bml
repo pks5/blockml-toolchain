@@ -1,12 +1,6 @@
-<!--
-  Parser — XmlDomNode
-  FQN: org.blockml.bml.compiler.parser.map.XmlDomNode
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser — XmlDomNode
+  FQN: org.blockml.bml.compiler.parser.map.XmlDomNode-->
+<parmap:XmlDomNode xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,11 +23,13 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>XmlDomNode</name>
-  <type>parmap:XmlDomNode</type>
-  <baseType>parser:ParserType</baseType>
-  <is>Host XML DOM node from @xmldom/xmldom</is>
-
-  <documentation>BML type gap: stands for TypeScript Node | Element | Document (@xmldom/xmldom). Core has no DOM ValueType; this is a host-boundary type, not a reconstructed DOM struct.</documentation>
-
-</block>
+  <baseType>
+    parser:ParserType
+  </baseType>
+  <is>
+    Host XML DOM node from @xmldom/xmldom
+  </is>
+  <documentation>
+    BML type gap: stands for TypeScript Node | Element | Document (@xmldom/xmldom). Core has no DOM ValueType; this is a host-boundary type, not a reconstructed DOM struct.
+  </documentation>
+</parmap:XmlDomNode>

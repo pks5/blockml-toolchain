@@ -1,12 +1,6 @@
-<!--
-  FatBlock Documentation — Introduction
-  FQN: org.blockml.bml.target.fatblock.documentation.Introduction
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock Documentation — Introduction
+  FQN: org.blockml.bml.target.fatblock.documentation.Introduction-->
+<fbdocumentation:Introduction xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -23,28 +17,30 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>Introduction</name>
-  <type>fbdocumentation:Introduction</type>
-  <baseType>core:Documentation</baseType>
-  <is>Purpose and scope of the FatBlock render target</is>
-
-  <documentation>The @blockml/fatblock-target package implements RenderTarget registry name fatblock.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Purpose and scope of the FatBlock render target
+  </is>
+  <documentation>
+    The @blockml/fatblock-target package implements RenderTarget registry name fatblock.
     It emits one portable .bml file with peer root blocks inlined under the host root
     embeddedBlocks aggregation (Inline Library model).
-
+    
     This library (org.blockml.bml.target.fatblock.*) is the SSOT. TypeScript in
     packages/fatblock-target/src/ implements it. Tests in packages/fatblock-target/test/
     encode behavioral contracts.
-
+    
     V1 is a folder-bundle target: document scope, srcDir (--src) peer pool
     (CLI defaults host and srcDir from package.json blockml.library),
     optional include FQN filters. Not transitive dependency closure (that is v2).
-
+    
     Pipeline: ResolveOptions → AssembleFatDocument → SerializeFatDocument → {hostFqn}.fat.bml.
-    Host CLI wiring (flags, exit codes) lives in org.blockml.bml.cli.*</documentation>
+    Host CLI wiring (flags, exit codes) lives in org.blockml.bml.cli.*
+  </documentation>
   <references>
     <see type="fbdocumentation:LayerSeparation" relation="ReadNext" />
     <see type="fbcap:Render" relation="SeeAlso" />
   </references>
-
-</block>
+</fbdocumentation:Introduction>

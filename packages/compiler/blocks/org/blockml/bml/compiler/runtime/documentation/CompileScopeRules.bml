@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Documentation — CompileScopeRules
-  FQN: org.blockml.bml.compiler.runtime.documentation.CompileScopeRules
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Documentation — CompileScopeRules
+  FQN: org.blockml.bml.compiler.runtime.documentation.CompileScopeRules-->
+<rundocumentation:CompileScopeRules xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -26,23 +20,24 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>CompileScopeRules</name>
-  <type>rundocumentation:CompileScopeRules</type>
-  <baseType>core:Documentation</baseType>
-  <is>Compile scope resolution and accepts (C7)</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Compile scope resolution and accepts (C7)
+  </is>
   <documentation>
     # Compile scope resolution and accepts (C7)
-
+    
     Kinds: document | library | corpus | auto.
-
+    
     ResolveScope: document requires scope.document; library uses libraries then hints.libraries;
     corpus uses roots then hints.roots; auto prefers libraries then roots; else BML_COMPILE_SCOPE_EMPTY.
-
+    
     ScopeAccepts: exact kind match, or accepts includes auto and kind is library or corpus.
-
+    
     CompileToOutput rejects with BML_TARGET_SCOPE_MISMATCH when ScopeAccepts is false.
-
+    
     Accepts matrix for concrete targets lives in target libraries / CLI TargetCliMatrix — not here.
   </documentation>
   <references>
@@ -50,5 +45,4 @@
     <see type="runcap:ResolveScope" relation="SeeAlso" />
     <see type="runcap:ScopeAccepts" relation="SeeAlso" />
   </references>
-
-</block>
+</rundocumentation:CompileScopeRules>

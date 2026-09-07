@@ -1,12 +1,6 @@
-<!--
-  LSP — LspLocationLink
-  FQN: org.blockml.bml.lsp.LspLocationLink
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP — LspLocationLink
+  FQN: org.blockml.bml.lsp.LspLocationLink-->
+<lsp:LspLocationLink xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>LspLocationLink</name>
-  <type>lsp:LspLocationLink</type>
-  <baseType>lsp:LspType</baseType>
-  <is>Go-to-definition origin range and target location</is>
-
-  <documentation>BML type gap: stands for TypeScript LspLocationLink (packages/lsp/src/navigation.ts).</documentation>
-
+  <baseType>
+    lsp:LspType
+  </baseType>
+  <is>
+    Go-to-definition origin range and target location
+  </is>
+  <documentation>
+    BML type gap: stands for TypeScript LspLocationLink (packages/lsp/src/navigation.ts).
+  </documentation>
   <properties>
     <originSelectionRange type="lsp:LspRange">
-      <documentation>originSelectionRange (required). TS type: lsp:LspRange.</documentation>
+      <documentation>
+        originSelectionRange (required). TS type: lsp:LspRange.
+      </documentation>
     </originSelectionRange>
     <target type="lsp:LspLocation">
-      <documentation>target (required). TS type: lsp:LspLocation.</documentation>
+      <documentation>
+        target (required). TS type: lsp:LspLocation.
+      </documentation>
     </target>
   </properties>
-
-</block>
+</lsp:LspLocationLink>

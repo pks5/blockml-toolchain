@@ -1,12 +1,6 @@
-<!--
-  XSD API — XsdOptions
-  FQN: org.blockml.bml.target.xsd.api.XsdOptions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--XSD API — XsdOptions
+  FQN: org.blockml.bml.target.xsd.api.XsdOptions-->
+<xsdapi:XsdOptions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -20,19 +14,29 @@
   xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>XsdOptions</name>
-  <type>xsdapi:XsdOptions</type>
-  <baseType>xsd:XsdType</baseType>
-  <is>Opaque targetOptions payload for registry name xsd</is>
-
-  <documentation>XSD15: emitDomainSchemas default true. XSD16: includeNonExported reserved unused for V1 emit.</documentation>
+  <baseType>
+    xsd:XsdType
+  </baseType>
+  <is>
+    Opaque targetOptions payload for registry name xsd
+  </is>
+  <documentation>
+    XSD15: emitDomainSchemas default true. XSD16: includeNonExported reserved unused for V1 emit.
+  </documentation>
   <references>
     <see type="xsddocumentation:PublicApi" relation="SeeAlso" />
     <see type="xsdcap:ResolveOptions" relation="SeeAlso" />
   </references>
   <properties>
-    <includeNonExported type="type:Boolean"><documentation>Reserved; unused for V1 emit. Default true. (optional)</documentation></includeNonExported>
-    <emitDomainSchemas type="type:Boolean"><documentation>When false, skip types.xsd / service.xsd and their catalog entries. Default true. (optional)</documentation></emitDomainSchemas>
+    <includeNonExported type="type:Boolean">
+      <documentation>
+        Reserved; unused for V1 emit. Default true. (optional)
+      </documentation>
+    </includeNonExported>
+    <emitDomainSchemas type="type:Boolean">
+      <documentation>
+        When false, skip types.xsd / service.xsd and their catalog entries. Default true. (optional)
+      </documentation>
+    </emitDomainSchemas>
   </properties>
-
-</block>
+</xsdapi:XsdOptions>

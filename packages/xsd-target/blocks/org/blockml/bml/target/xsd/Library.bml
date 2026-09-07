@@ -1,12 +1,6 @@
-<!--
-  XSD Render Target Library
-  FQN: org.blockml.bml.target.xsd.Library
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--XSD Render Target Library
+  FQN: org.blockml.bml.target.xsd.Library-->
+<xsd:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -21,30 +15,29 @@
   xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Library</name>
-  <type>xsd:Library</type>
-  <baseType>core:BlockLibrary</baseType>
-  <is>The XSD schema render target library catalog</is>
-
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    The XSD schema render target library catalog
+  </is>
+  <version>
+    0.9.4
+  </version>
   <documentation>
     Canonical XSD specification for BlockML — registry name xsd, bml.xsd particles,
     domain vocabularies, catalog.xml (XSD1–XSD18). TypeScript in
     packages/xsd-target/src/ implements this library. Membership is defined
     exclusively by this blocks list.
   </documentation>
-
-  <version>0.9.4</version>
-
   <language>
-    <English />
+    <blockml:language.English />
   </language>
-
   <properties>
     <description override="true">
       <value>XSD render target library</value>
     </description>
   </properties>
-
   <aggregations>
     <readMe override="true">
       <composition>
@@ -58,7 +51,8 @@
       </composition>
     </dependencies>
     <blocks override="true">
-      <composition><xsd:XsdType />
+      <composition>
+        <xsd:XsdType />
         <xsdapi:XsdOptions />
         <xsdapi:XsdRenderOutput />
         <xsdapi:CatalogEntry />
@@ -89,5 +83,4 @@
       </composition>
     </blocks>
   </aggregations>
-
-</block>
+</xsd:Library>

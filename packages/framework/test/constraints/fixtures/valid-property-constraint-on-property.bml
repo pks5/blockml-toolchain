@@ -1,28 +1,26 @@
-<!--
-  Test fixture — valid PropertyConstraint on property
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Test fixture — valid PropertyConstraint on property-->
+<test:PropertyConstraintOnProperty xmlns="http://blockml.org/bml"
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:validation="org.blockml.bml.validation"
   xmlns:test="com.blockml.test.constraints">
 
-  <type>test:PropertyConstraintOnProperty</type>
-  <baseType>core:Block</baseType>
-  <is>A constraint test fixture</is>
-  <version>1.0.0</version>
-
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    A constraint test fixture
+  </is>
+  <version>
+    1.0.0
+  </version>
   <properties>
-    <token type="type:Text" readOnly="true">
-      <value>fixed</value>
+    <token readOnly="true" type="type:Text">
       <constraints>
-        <constraint:MustBeReadOnly validation="validation:Error"/>
+        <constraint:MustBeReadOnly validation="validation:Error" />
       </constraints>
+      <value>fixed</value>
     </token>
   </properties>
-</block>
+</test:PropertyConstraintOnProperty>

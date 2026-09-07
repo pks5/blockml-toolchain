@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Capability — ClearTargets
-  FQN: org.blockml.bml.compiler.runtime.capability.ClearTargets
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Capability — ClearTargets
+  FQN: org.blockml.bml.compiler.runtime.capability.ClearTargets-->
+<runcap:ClearTargets xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,17 +19,16 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>ClearTargets</name>
-  <type>runcap:ClearTargets</type>
-  <baseType>core:Capability</baseType>
-  <is>Clear all registered targets</is>
-
-  <documentation>Used by tests and host re-bootstrap. C3: no default re-seed.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Clear all registered targets
+  </is>
+  <documentation>
+    Used by tests and host re-bootstrap. C3: no default re-seed.
+  </documentation>
   <references>
     <see type="rundocumentation:TargetRegistry" relation="SeeAlso" />
   </references>
-
-
-
-</block>
+</runcap:ClearTargets>

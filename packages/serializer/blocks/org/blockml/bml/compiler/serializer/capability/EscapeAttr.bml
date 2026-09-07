@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — EscapeAttr
-  FQN: org.blockml.bml.compiler.serializer.capability.EscapeAttr
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — EscapeAttr
+  FQN: org.blockml.bml.compiler.serializer.capability.EscapeAttr-->
+<sercap:EscapeAttr xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,24 +21,27 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>EscapeAttr</name>
-  <type>sercap:EscapeAttr</type>
-  <baseType>core:Capability</baseType>
-  <is>Escape string for XML attribute value</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Escape string for XML attribute value
+  </is>
   <documentation>
     Escape string for XML attribute value. Same XML-safe sanitization
     as EscapeText (illegal XML 1.0 chars and U+FFFD become `\uXXXX`),
-    then `&amp;` `&quot;` `&lt;`.
+    then `&amp;` `"` `&lt;`.
   </documentation>
-
   <properties>
     <value type="type:Text">
-      <documentation>value. TS type: type:Text. (required)</documentation>
+      <documentation>
+        value. TS type: type:Text. (required)
+      </documentation>
     </value>
     <escaped type="type:Text">
-      <documentation>escaped. TS type: type:Text. (required)</documentation>
+      <documentation>
+        escaped. TS type: type:Text. (required)
+      </documentation>
     </escaped>
   </properties>
-
-</block>
+</sercap:EscapeAttr>

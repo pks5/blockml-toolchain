@@ -1,12 +1,6 @@
-<!--
-  CLI Documentation — TransformCommand
-  FQN: org.blockml.bml.cli.documentation.TransformCommand
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Documentation — TransformCommand
+  FQN: org.blockml.bml.cli.documentation.TransformCommand-->
+<clidocumentation:TransformCommand xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -22,101 +16,105 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>TransformCommand</name>
-  <type>clidocumentation:TransformCommand</type>
-  <baseType>core:Documentation</baseType>
-  <is>blockml transform specification</is>
-
-  <documentation><![CDATA[Syntax:
-    blockml transform apply EXECUTION-FQN [--library path] [--verbose] [--parameters JSON] [--parameter-mappings JSON]
-
-    transform is a parent command. V1 defines the apply subcommand only.
-    Further transform subcommands are declared on clicommand:TransformCommand
-    subcommands.
-
-    EXECUTION-FQN is a ModelTransformation Apply source:
-    {library}._meta.transform.pending (template=false, source moved),
-    {library}._meta.transform.available (template=true, source stays),
-    or any FQN outside _meta.transform (template=true, source stays).
-    Other _meta.transform packages are rejected. Tasks are not accepted
-    directly.
-
-    Target library for `_meta` is --library (a path to that library's
-    Library.bml). Omitted: package.json blockml.library of the current
-    working directory. Missing both is exit 2. Distinct from --libraries
-    (registry seeds). In a multi-package repo, cwd selects the default
-    target library.
-
-    --parameters is JSON of any value. StructType: merged over pending
-    (CLI wins; nested objects merge; arrays replace). Other types: CLI
-    replaces pending. Prepare checks the result against bound T (default
-    type:Text) and writes a value only when one exists (not "" / {}).
-    Omitted --parameters is no overlay. --parameter-mappings is a JSON
-    array of ParameterMapping objects; a non-empty CLI array wins over
-    pending parameterMappings and ignores --parameters.
-
-    The transformer takes an exclusive worktree lock, then prepares the
-    ModelTransformation and runs each ModelOperation in order: persist
-    operation Running, dispatch the registered OperationExecutor,
-    Reflect, Persist results onto that operation. Default
-    Prepare/Finalize are deterministic. Default executor for
-    AgenticOperation is AgenticExecutor (Claude Code) that changes BML
-    only. Default executor for ToolOperation is ToolExecutor (npm CLI
-    via npx). Default Reflect is deterministic (git changedFiles after the)
-    executor; output when ModelOperation.captureOutput is true). Default
-    Persist writes those fields onto the operation.
-    Finalize relocates to _meta.transform.succeeded only when every
-    ModelOperation succeeded and result resolution did not throw;
-    otherwise _meta.transform.failed and a
-    non-zero exit. A failed ModelOperation aborts the rest.
-
-    Lifecycle lines (ModelTransformation and operation status,
-    execute/reflect start and done) always print so progress is visible
-    without --verbose. The last lifecycle lines are the complete
-    status and Elapsed … (total wall-clock time).
-
-    Only one transform may run at a time in the same Git worktree. A second
-    call fails immediately (exit 2) with no wait. Different worktrees may
-    run in parallel.
-
-    --verbose streams additional agent-session detail (thinking, tools, text).
-    It does not control the lifecycle lines.
-
-    The worktree must be clean at start and before each ModelOperation
-    (exit 2 otherwise). Prepare records baseCommit from HEAD and commits
-    the running relocation. Each ModelOperation commits Running first,
-    then commits model changes with the operation terminal state. Finalize commits the
-    succeeded or failed relocation.
-
-    Pending-contract violations never start the execution (exit 2).
-
-Printed help:
-Usage: blockml transform apply <execution-fqn> [--library path] [--verbose] [--parameters json] [--parameter-mappings json]
-       blockml transform --help
-
-When: run a ModelTransformation.
-
-transform is a parent command. V1 defines apply only.
-EXECUTION-FQN is a pending one-shot, an available template, or a template outside _meta.transform.
---library is a path to the target Library.bml. Omitted: cwd package.json blockml.library. Missing both is exit 2.
-
-Pipeline stage constraints belong to the Execute / Reflect prompts, not here.
-
-Flags:
-  --library path    target Library.bml for _meta (default: cwd package.json blockml.library)
-  --verbose         stream additional agent-session detail
-  --parameters json           JSON value for parameters (object merge when T is StructType)
-  --parameter-mappings json   JSON array of ParameterMapping objects; ignores --parameters
-
-Only one transform may run at a time in the same Git worktree.
-The worktree must be clean at start and before each ModelOperation.
-
-Related: validate, inspect.]]></documentation>
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    blockml transform specification
+  </is>
+  <documentation>
+    <![CDATA[
+    Syntax:
+        blockml transform apply EXECUTION-FQN [--library path] [--verbose] [--parameters JSON] [--parameter-mappings JSON]
+    
+        transform is a parent command. V1 defines the apply subcommand only.
+        Further transform subcommands are declared on clicommand:TransformCommand
+        subcommands.
+    
+        EXECUTION-FQN is a ModelTransformation Apply source:
+        {library}._meta.transform.pending (template=false, source moved),
+        {library}._meta.transform.available (template=true, source stays),
+        or any FQN outside _meta.transform (template=true, source stays).
+        Other _meta.transform packages are rejected. Tasks are not accepted
+        directly.
+    
+        Target library for `_meta` is --library (a path to that library's
+        Library.bml). Omitted: package.json blockml.library of the current
+        working directory. Missing both is exit 2. Distinct from --libraries
+        (registry seeds). In a multi-package repo, cwd selects the default
+        target library.
+    
+        --parameters is JSON of any value. StructType: merged over pending
+        (CLI wins; nested objects merge; arrays replace). Other types: CLI
+        replaces pending. Prepare checks the result against bound T (default
+        type:Text) and writes a value only when one exists (not "" / {}).
+        Omitted --parameters is no overlay. --parameter-mappings is a JSON
+        array of ParameterMapping objects; a non-empty CLI array wins over
+        pending parameterMappings and ignores --parameters.
+    
+        The transformer takes an exclusive worktree lock, then prepares the
+        ModelTransformation and runs each ModelOperation in order: persist
+        operation Running, dispatch the registered OperationExecutor,
+        Reflect, Persist results onto that operation. Default
+        Prepare/Finalize are deterministic. Default executor for
+        AgenticOperation is AgenticExecutor (Claude Code) that changes BML
+        only. Default executor for ToolOperation is ToolExecutor (npm CLI
+        via npx). Default Reflect is deterministic (git changedFiles after the)
+        executor; output when ModelOperation.captureOutput is true). Default
+        Persist writes those fields onto the operation.
+        Finalize relocates to _meta.transform.succeeded only when every
+        ModelOperation succeeded and result resolution did not throw;
+        otherwise _meta.transform.failed and a
+        non-zero exit. A failed ModelOperation aborts the rest.
+    
+        Lifecycle lines (ModelTransformation and operation status,
+        execute/reflect start and done) always print so progress is visible
+        without --verbose. The last lifecycle lines are the complete
+        status and Elapsed … (total wall-clock time).
+    
+        Only one transform may run at a time in the same Git worktree. A second
+        call fails immediately (exit 2) with no wait. Different worktrees may
+        run in parallel.
+    
+        --verbose streams additional agent-session detail (thinking, tools, text).
+        It does not control the lifecycle lines.
+    
+        The worktree must be clean at start and before each ModelOperation
+        (exit 2 otherwise). Prepare records baseCommit from HEAD and commits
+        the running relocation. Each ModelOperation commits Running first,
+        then commits model changes with the operation terminal state. Finalize commits the
+        succeeded or failed relocation.
+    
+        Pending-contract violations never start the execution (exit 2).
+    
+    Printed help:
+    Usage: blockml transform apply <execution-fqn> [--library path] [--verbose] [--parameters json] [--parameter-mappings json]
+           blockml transform --help
+    
+    When: run a ModelTransformation.
+    
+    transform is a parent command. V1 defines apply only.
+    EXECUTION-FQN is a pending one-shot, an available template, or a template outside _meta.transform.
+    --library is a path to the target Library.bml. Omitted: cwd package.json blockml.library. Missing both is exit 2.
+    
+    Pipeline stage constraints belong to the Execute / Reflect prompts, not here.
+    
+    Flags:
+      --library path    target Library.bml for _meta (default: cwd package.json blockml.library)
+      --verbose         stream additional agent-session detail
+      --parameters json           JSON value for parameters (object merge when T is StructType)
+      --parameter-mappings json   JSON array of ParameterMapping objects; ignores --parameters
+    
+    Only one transform may run at a time in the same Git worktree.
+    The worktree must be clean at start and before each ModelOperation.
+    
+    Related: validate, inspect.
+    ]]>
+  </documentation>
   <references>
     <see type="clidocumentation:Commands" relation="SeeAlso" />
     <see type="clicommand:TransformCommand" relation="SeeAlso" />
     <see type="clicommand:TransformApplyCommand" relation="SeeAlso" />
     <see type="clicap:RunTransform" relation="SeeAlso" />
   </references>
-
-</block>
+</clidocumentation:TransformCommand>

@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — ParseBooleanAttribute
-  FQN: org.blockml.bml.compiler.parser.capability.ParseBooleanAttribute
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — ParseBooleanAttribute
+  FQN: org.blockml.bml.compiler.parser.capability.ParseBooleanAttribute-->
+<parcap:ParseBooleanAttribute xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ParseBooleanAttribute</name>
-  <type>parcap:ParseBooleanAttribute</type>
-  <baseType>core:Capability</baseType>
-  <is>Parse boolean XML attribute value</is>
-
-  <documentation>Parse boolean XML attribute value</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Parse boolean XML attribute value
+  </is>
+  <documentation>
+    Parse boolean XML attribute value
+  </documentation>
   <properties>
     <raw type="type:Text">
-      <documentation>raw. TS type: type:Text. (required)</documentation>
+      <documentation>
+        raw. TS type: type:Text. (required)
+      </documentation>
     </raw>
     <value type="type:Boolean">
-      <documentation>value. TS type: type:Boolean. (required)</documentation>
+      <documentation>
+        value. TS type: type:Boolean. (required)
+      </documentation>
     </value>
   </properties>
-
-</block>
+</parcap:ParseBooleanAttribute>

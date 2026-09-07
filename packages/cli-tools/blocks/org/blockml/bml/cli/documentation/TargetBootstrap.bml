@@ -1,12 +1,6 @@
-<!--
-  CLI Documentation — TargetBootstrap
-  FQN: org.blockml.bml.cli.documentation.TargetBootstrap
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Documentation — TargetBootstrap
+  FQN: org.blockml.bml.cli.documentation.TargetBootstrap-->
+<clidocumentation:TargetBootstrap xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -21,23 +15,25 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>TargetBootstrap</name>
-  <type>clidocumentation:TargetBootstrap</type>
-  <baseType>core:Documentation</baseType>
-  <is>targets[] and registerTarget wiring (C3)</is>
-
-  <documentation>CLI3: bootstrapTargets is async idempotent (bootstrapped flag).
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    targets[] and registerTarget wiring (C3)
+  </is>
+  <documentation>
+    CLI3: bootstrapTargets is async idempotent (bootstrapped flag).
     CLI4: V1 built-ins — blockdoc → BlockDocTarget, xsd → XsdTarget, fatblock → FatBlockTarget.
     CLI5: unknown name in targets[] throws configuration error.
     Custom targets: registerTargetFactory (host API) or targetPackages plugin load.
-
+    
     config.targets[] defines available targets; CLI target argument selects which to compile.
     Default targets when omitted: ["blockdoc"].
-
+    
     validate and inspect do NOT call bootstrapTargets.
-    Domain targets (machineblocks-v3-scad) registered by @machineblocks/cli — not this package.</documentation>
+    Domain targets (machineblocks-v3-scad) registered by @machineblocks/cli — not this package.
+  </documentation>
   <references>
     <see type="clidocumentation:TargetCliMatrix" relation="ReadNext" />
   </references>
-
-</block>
+</clidocumentation:TargetBootstrap>

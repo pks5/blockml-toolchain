@@ -1,12 +1,6 @@
-<!--
-  LSP — MarkupContent
-  FQN: org.blockml.bml.lsp.MarkupContent
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP — MarkupContent
+  FQN: org.blockml.bml.lsp.MarkupContent-->
+<lsp:MarkupContent xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>MarkupContent</name>
-  <type>lsp:MarkupContent</type>
-  <baseType>lsp:LspType</baseType>
-  <is>Markdown hover contents</is>
-
-  <documentation>BML type gap: stands for TypeScript MarkupContent (packages/lsp/src/hover.ts). kind is always markdown.</documentation>
-
+  <baseType>
+    lsp:LspType
+  </baseType>
+  <is>
+    Markdown hover contents
+  </is>
+  <documentation>
+    BML type gap: stands for TypeScript MarkupContent (packages/lsp/src/hover.ts). kind is always markdown.
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>Always "markdown". (required)</documentation>
+      <documentation>
+        Always "markdown". (required)
+      </documentation>
     </kind>
     <value type="type:Text">
-      <documentation>value (required). TS type: type:Text.</documentation>
+      <documentation>
+        value (required). TS type: type:Text.
+      </documentation>
     </value>
   </properties>
-
-</block>
+</lsp:MarkupContent>

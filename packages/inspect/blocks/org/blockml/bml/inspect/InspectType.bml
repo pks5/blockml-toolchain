@@ -1,12 +1,6 @@
-<!--
-  Inspect — InspectType
-  FQN: org.blockml.bml.inspect.InspectType
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Inspect — InspectType
+  FQN: org.blockml.bml.inspect.InspectType-->
+<inspect:InspectType xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,13 +15,16 @@
   xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>InspectType</name>
-  <type>inspect:InspectType</type>
-  <baseType>core:Entity</baseType>
-  <is>Abstract marker for Inspect projection data-structure blocks</is>
-
-  <documentation>InspectResult, InspectedBlock, and related ValueTypes used as capability payloads.</documentation>
-
-  <abstract>true</abstract>
-
-</block>
+  <baseType>
+    core:Entity
+  </baseType>
+  <is>
+    Abstract marker for Inspect projection data-structure blocks
+  </is>
+  <documentation>
+    InspectResult, InspectedBlock, and related ValueTypes used as capability payloads.
+  </documentation>
+  <abstract>
+    true
+  </abstract>
+</inspect:InspectType>

@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — ParseGenericArgumentList
-  FQN: org.blockml.bml.compiler.parser.capability.ParseGenericArgumentList
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — ParseGenericArgumentList
+  FQN: org.blockml.bml.compiler.parser.capability.ParseGenericArgumentList-->
+<parcap:ParseGenericArgumentList xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,29 +23,35 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ParseGenericArgumentList</name>
-  <type>parcap:ParseGenericArgumentList</type>
-  <baseType>core:Capability</baseType>
-  <is>Parse a parenthesized TypeExpression list for bml:generics</is>
-
-  <documentation>Parse a parenthesized TypeExpression list for bml:generics.
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Parse a parenthesized TypeExpression list for bml:generics
+  </is>
+  <documentation>
+    Parse a parenthesized TypeExpression list for bml:generics.
     Outer parentheses are required. Reuses the TypeExpression parser used by
-    baseType generic applications, without a leading type name.</documentation>
-
+    baseType generic applications, without a leading type name.
+  </documentation>
   <references>
     <see type="parcap:ParseTypeExpression" relation="SeeAlso" />
   </references>
-
   <properties>
     <raw type="type:Text">
-      <documentation>raw. TS type: type:Text. (required)</documentation>
+      <documentation>
+        raw. TS type: type:Text. (required)
+      </documentation>
     </raw>
     <bindings type="type:Text">
-      <documentation>xmlns prefix bindings. (required)</documentation>
+      <documentation>
+        xmlns prefix bindings. (required)
+      </documentation>
     </bindings>
     <arguments type="bomtype:TypeExpression[]">
-      <documentation>arguments. TS type: bomtype:TypeExpression[]. (required)</documentation>
+      <documentation>
+        arguments. TS type: bomtype:TypeExpression[]. (required)
+      </documentation>
     </arguments>
   </properties>
-
-</block>
+</parcap:ParseGenericArgumentList>

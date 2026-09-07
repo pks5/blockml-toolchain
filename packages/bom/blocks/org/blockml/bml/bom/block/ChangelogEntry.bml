@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — ChangelogEntry
-  FQN: org.blockml.bml.bom.block.ChangelogEntry
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — ChangelogEntry
+  FQN: org.blockml.bml.bom.block.ChangelogEntry-->
+<bomblock:ChangelogEntry xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,26 +17,35 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ChangelogEntry</name>
-  <type>bomblock:ChangelogEntry</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Changelog entry in BOM</is>
-
-  <documentation>Changelog entry in BOM</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Changelog entry in BOM
+  </is>
+  <documentation>
+    Changelog entry in BOM
+  </documentation>
   <properties>
     <version type="type:Text">
-      <documentation>version (required). TS type: type:Text.</documentation>
+      <documentation>
+        version (required). TS type: type:Text.
+      </documentation>
     </version>
     <text type="type:Text">
-      <documentation>text (required). TS type: type:Text.</documentation>
+      <documentation>
+        text (required). TS type: type:Text.
+      </documentation>
     </text>
     <languageFqn type="type:Text">
-      <documentation>languageFqn (optional). TS type: type:Text.</documentation>
+      <documentation>
+        languageFqn (optional). TS type: type:Text.
+      </documentation>
     </languageFqn>
     <source type="bomcommon:SourceLocation">
-      <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
+      <documentation>
+        source (optional). TS type: bomcommon:SourceLocation.
+      </documentation>
     </source>
   </properties>
-
-</block>
+</bomblock:ChangelogEntry>

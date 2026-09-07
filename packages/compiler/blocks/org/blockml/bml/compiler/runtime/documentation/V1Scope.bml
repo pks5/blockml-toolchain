@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Documentation — V1Scope
-  FQN: org.blockml.bml.compiler.runtime.documentation.V1Scope
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Documentation — V1Scope
+  FQN: org.blockml.bml.compiler.runtime.documentation.V1Scope-->
+<rundocumentation:V1Scope xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -26,12 +20,14 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>V1Scope</name>
-  <type>rundocumentation:V1Scope</type>
-  <baseType>core:Documentation</baseType>
-  <is>What V1 delivers</is>
-
-  <documentation>V1 includes:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    What V1 delivers
+  </is>
+  <documentation>
+    V1 includes:
     • compileToOutput / compileBmlToOutput; compileBomToOutput BOM-first with required TypeRegistry
     • In-memory Target Registry with no built-in targets; registerTarget validates contract
     • Scope kinds document | library | corpus | auto with ScopeConfigHints merge
@@ -40,11 +36,11 @@
     • Diagnostics BML_UNKNOWN_TARGET, BML_TARGET_SCOPE_MISMATCH, BML_COMPILE_SCOPE_EMPTY,
       BML_MISSING_TYPE_REGISTRY
     • Browser-safe package surface (no Node-only APIs in public contracts)
-
+    
     V1 does NOT include CLI targets[] bootstrap, file I/O, incremental cache (C5),
-    thumbnails (C6), or target-specific emit.</documentation>
+    thumbnails (C6), or target-specific emit.
+  </documentation>
   <references>
     <see type="rundocumentation:PublicApi" relation="ReadNext" />
   </references>
-
-</block>
+</rundocumentation:V1Scope>

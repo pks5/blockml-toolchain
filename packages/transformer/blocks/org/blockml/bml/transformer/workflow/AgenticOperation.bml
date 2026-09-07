@@ -1,26 +1,21 @@
-<!--
-  Transformer Workflow — AgenticOperation
-  FQN: org.blockml.bml.transformer.workflow.AgenticOperation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Workflow — AgenticOperation
+  FQN: org.blockml.bml.transformer.workflow.AgenticOperation-->
+<workflow:AgenticOperation xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type">
 
-  <name>AgenticOperation</name>
-  <type>workflow:AgenticOperation</type>
-  <baseType>workflow:ModelOperation</baseType>
-  <is>A ModelOperation that runs a Task in an isolated agent process</is>
-
+  <baseType>
+    workflow:ModelOperation
+  </baseType>
+  <is>
+    A ModelOperation that runs a Task in an isolated agent process
+  </is>
   <documentation>
     Concrete `workflow:ModelOperation` whose type-specific work is a
     `workflow:Task` executed by `transformercap:AgenticExecutor`.
-
+    
     The envelope fields (`status`, timestamps, `baseCommit`,
     `captureOutput`, `output`, `changedFiles`, `resultMappings`,
     `exception`) are inherited.
@@ -30,17 +25,16 @@
     agent interprets `Task.run`; it does not see this envelope. Default
     executor: isolated agent process; output candidate is agent stdout.
   </documentation>
-
   <references>
     <see type="workflow:ModelOperation" relation="Extends" />
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="transformercap:AgenticExecutor" relation="SeeAlso" />
   </references>
-
   <aggregations>
     <task type="workflow:Task">
-      <documentation>The Task the AgenticExecutor performs for this operation.</documentation>
+      <documentation>
+        The Task the AgenticExecutor performs for this operation.
+      </documentation>
     </task>
   </aggregations>
-
-</block>
+</workflow:AgenticOperation>

@@ -1,12 +1,6 @@
-<!--
-  Search — SearchDocument
-  FQN: org.blockml.bml.search.SearchDocument
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Search — SearchDocument
+  FQN: org.blockml.bml.search.SearchDocument-->
+<search:SearchDocument xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,47 +15,70 @@
   xmlns:searchdocumentation="org.blockml.bml.search.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>SearchDocument</name>
-  <type>search:SearchDocument</type>
-  <baseType>search:SearchType</baseType>
-  <is>Indexed block record derived from BOM</is>
-
-  <documentation>One SearchDocument per TypeRegistry FQN (root and subBlocks). Aliases, keywords, and documentation stay separate fields.</documentation>
-
+  <baseType>
+    search:SearchType
+  </baseType>
+  <is>
+    Indexed block record derived from BOM
+  </is>
+  <documentation>
+    One SearchDocument per TypeRegistry FQN (root and subBlocks). Aliases, keywords, and documentation stay separate fields.
+  </documentation>
   <properties>
     <id type="type:Text">
-      <documentation>Same as fqn. (required)</documentation>
+      <documentation>
+        Same as fqn. (required)
+      </documentation>
     </id>
     <fqn type="type:Text">
-      <documentation>fqn (required). TS type: type:Text.</documentation>
+      <documentation>
+        fqn (required). TS type: type:Text.
+      </documentation>
     </fqn>
     <name type="type:Text">
-      <documentation>name (required). TS type: type:Text.</documentation>
+      <documentation>
+        name (required). TS type: type:Text.
+      </documentation>
     </name>
     <aliases type="type:Text[]">
-      <documentation>aliases (required). TS type: type:Text[].</documentation>
+      <documentation>
+        aliases (required). TS type: type:Text[].
+      </documentation>
     </aliases>
     <keywords type="type:Text[]">
-      <documentation>keywords (required). TS type: type:Text[].</documentation>
+      <documentation>
+        keywords (required). TS type: type:Text[].
+      </documentation>
     </keywords>
     <documentation type="type:Text">
-      <documentation>documentation (required). TS type: type:Text.</documentation>
+      <documentation>
+        documentation (required). TS type: type:Text.
+      </documentation>
     </documentation>
     <file type="type:Text">
-      <documentation>file (required). TS type: type:Text.</documentation>
+      <documentation>
+        file (required). TS type: type:Text.
+      </documentation>
     </file>
     <library type="type:Text">
-      <documentation>library (optional). TS type: type:Text.</documentation>
+      <documentation>
+        library (optional). TS type: type:Text.
+      </documentation>
     </library>
     <type type="type:Text">
-      <documentation>type (optional). TS type: type:Text.</documentation>
+      <documentation>
+        type (optional). TS type: type:Text.
+      </documentation>
     </type>
     <baseType type="type:Text">
-      <documentation>baseType (optional). TS type: type:Text.</documentation>
+      <documentation>
+        baseType (optional). TS type: type:Text.
+      </documentation>
     </baseType>
     <idea type="type:Text">
-      <documentation>idea (optional). TS type: type:Text.</documentation>
+      <documentation>
+        idea (optional). TS type: type:Text.
+      </documentation>
     </idea>
   </properties>
-
-</block>
+</search:SearchDocument>

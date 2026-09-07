@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — DocumentElement
-  FQN: org.blockml.bml.compiler.parser.capability.DocumentElement
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — DocumentElement
+  FQN: org.blockml.bml.compiler.parser.capability.DocumentElement-->
+<parcap:DocumentElement xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>DocumentElement</name>
-  <type>parcap:DocumentElement</type>
-  <baseType>core:Capability</baseType>
-  <is>Get root element from DOM document</is>
-
-  <documentation>Get root element from DOM document</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Get root element from DOM document
+  </is>
+  <documentation>
+    Get root element from DOM document
+  </documentation>
   <properties>
     <document type="parmap:XmlDomNode">
-      <documentation>document. TS type: parmap:XmlDomNode. (required)</documentation>
+      <documentation>
+        document. TS type: parmap:XmlDomNode. (required)
+      </documentation>
     </document>
     <element type="parmap:XmlDomNode">
-      <documentation>Element | null (optional)</documentation>
+      <documentation>
+        Element | null (optional)
+      </documentation>
     </element>
   </properties>
-
-</block>
+</parcap:DocumentElement>

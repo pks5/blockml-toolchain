@@ -1,12 +1,6 @@
-<!--
-  Serializer Documentation — V1Scope
-  FQN: org.blockml.bml.compiler.serializer.documentation.V1Scope
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Documentation — V1Scope
+  FQN: org.blockml.bml.compiler.serializer.documentation.V1Scope-->
+<serdocumentation:V1Scope xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -28,26 +22,27 @@
   xmlns:bomcap="org.blockml.bml.bom.capability"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>V1Scope</name>
-  <type>serdocumentation:V1Scope</type>
-  <baseType>core:Documentation</baseType>
-  <is>Phase A hardcoded inverse vs V2 meta-serializer</is>
-
-  <documentation>V1 (Phase A): hardcoded inverse mapper in @blockml/serializer. Emit order (B12)
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Phase A hardcoded inverse vs V2 meta-serializer
+  </is>
+  <documentation>
+    V1 (Phase A): hardcoded inverse mapper in @blockml/serializer. Emit order (B12)
     is a frozen snapshot of Definition member declaration order — see serdocumentation:EmitOrder.
     Sufficient for the roundtrip gate (B10).
-
+    
     V2 (deferred): meta-driven serializer reads Definition .bml files via TypeRegistry,
     resolves effective members dynamically, and emits per bml:xml metadata (D1–D9 in
     org.blockml.bml.core). Aligns with 19_definition_blocks_and_bml_xml.md.
-
+    
     V1 serializer note: roundtrip tests still catch mapping gaps and information loss even
     without meta-driven emit. When Definition .bml members are reordered, V1 requires updating
-    the hardcoded BLOCK_EMIT_ORDER; V2 picks up changes automatically.</documentation>
-
+    the hardcoded BLOCK_EMIT_ORDER; V2 picks up changes automatically.
+  </documentation>
   <references>
     <see type="serdocumentation:PublicApi" relation="ReadNext" />
     <see type="def:BlockDefinition" relation="SeeAlso" />
   </references>
-
-</block>
+</serdocumentation:V1Scope>

@@ -1,12 +1,6 @@
-<!--
-  Parser Documentation — ExpressionCapture
-  FQN: org.blockml.bml.compiler.parser.documentation.ExpressionCapture
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Documentation — ExpressionCapture
+  FQN: org.blockml.bml.compiler.parser.documentation.ExpressionCapture-->
+<pardocumentation:ExpressionCapture xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,26 +24,27 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ExpressionCapture</name>
-  <type>pardocumentation:ExpressionCapture</type>
-  <baseType>core:Documentation</baseType>
-  <is>Raw expression storage — no AST in Urmodell (B4)</is>
-
-  <documentation>${ … } attribute/element values → ExpressionValue { raw, source }.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Raw expression storage — no AST in Urmodell (B4)
+  </is>
+  <documentation>
+    ${ … } attribute/element values → ExpressionValue { raw, source }.
     Mixed text with unescaped ${ … } holes → InterpolatedTextValue { raw, source }.
     `\${` is a literal `${` (odd backslashes immediately before `$`). A value whose
     only openers are escaped is LiteralValue after unescape — BOM stores `${`, not
     `\${`. Implementation CDATA → embeddedExpressions[] with source offsets.
-
+    
     Parser step [5] captures raw text only. AST construction via parseExpression()
     / parseInterpolatedText() in @blockml/framework (Stage 2 utility) — never stored
     on Urmodell.
-
-    inputType/outputType on capabilities → TypeExpression at map time (B3).</documentation>
-
+    
+    inputType/outputType on capabilities → TypeExpression at map time (B3).
+  </documentation>
   <references>
     <see type="pardocumentation:SingleFileScope" relation="ReadNext" />
     <see type="parcap:ExpressionFromRaw" relation="SeeAlso" />
   </references>
-
-</block>
+</pardocumentation:ExpressionCapture>

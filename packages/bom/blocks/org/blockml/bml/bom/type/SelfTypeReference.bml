@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — SelfTypeReference
-  FQN: org.blockml.bml.bom.type.SelfTypeReference
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — SelfTypeReference
+  FQN: org.blockml.bml.bom.type.SelfTypeReference-->
+<bomtype:SelfTypeReference xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,18 +17,21 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>SelfTypeReference</name>
-  <type>bomtype:SelfTypeReference</type>
-  <baseType>bomtype:TypeExpression</baseType>
-  <is>Self type reference (bml:Self)</is>
-
-  <documentation>Self type reference (bml:Self)</documentation>
-
+  <baseType>
+    bomtype:TypeExpression
+  </baseType>
+  <is>
+    Self type reference (bml:Self)
+  </is>
+  <documentation>
+    Self type reference (bml:Self)
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>kind (required). TS type: type:Text.</documentation>
+      <documentation>
+        kind (required). TS type: type:Text.
+      </documentation>
       <value>self</value>
     </kind>
   </properties>
-
-</block>
+</bomtype:SelfTypeReference>

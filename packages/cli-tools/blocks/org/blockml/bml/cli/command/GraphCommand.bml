@@ -1,12 +1,6 @@
-<!--
-  CLI Command — GraphCommand
-  FQN: org.blockml.bml.cli.command.GraphCommand
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Command — GraphCommand
+  FQN: org.blockml.bml.cli.command.GraphCommand-->
+<clicommand:GraphCommand xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -22,27 +16,69 @@
   xmlns:search="org.blockml.bml.search"
   xmlns:type="org.blockml.bml.type">
 
-  <name>GraphCommand</name>
-  <type>clicommand:GraphCommand</type>
-  <baseType>cli:CliType</baseType>
-  <is>blockml graph command model</is>
-
-  <documentation>blockml graph SUBCOMMAND. Corpus is validate --all via @blockml/graph. Subcommands: index, neighbors, uses, used-by, ancestors, descendants, members, path, query, schema.</documentation>
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    blockml graph command model
+  </is>
+  <documentation>
+    blockml graph SUBCOMMAND. Corpus is validate --all via @blockml/graph. Subcommands: index, neighbors, uses, used-by, ancestors, descendants, members, path, query, schema.
+  </documentation>
   <references>
     <see type="clidocumentation:GraphCommand" relation="SeeAlso" />
     <see type="clicap:RunGraph" relation="SeeAlso" />
   </references>
   <properties>
-    <subcommand type="type:Text"><documentation>Graph subcommand. (required)</documentation></subcommand>
-    <graphFqn type="type:Text"><documentation>Block FQN, or path start FQN. A .bml path is not an FQN; unknown tokens may suggest the file's root FQN. (optional)</documentation></graphFqn>
-    <graphTo type="type:Text"><documentation>Path end FQN. (optional)</documentation></graphTo>
-    <query type="type:Text"><documentation>Cypher for graph query. (optional)</documentation></query>
-    <json type="type:Boolean"><documentation>Print JSON. (optional)</documentation></json>
-    <force type="type:Boolean"><documentation>Alias of full rebuild for graph index. (optional)</documentation></force>
-    <depth type="type:Integer"><documentation>uses/used-by/neighbors hops (default 1); ancestors/descendants/path max hops (default 16). members ignores --depth. (optional)</documentation></depth>
-    <origin type="type:Text"><documentation>--origin filter for uses/used-by/neighbors. (optional)</documentation></origin>
-    <relation type="type:Text"><documentation>--relation filter for uses/used-by/neighbors. (optional)</documentation></relation>
-    <limit type="type:Integer"><documentation>--limit cap after filters for uses/used-by/neighbors. (optional)</documentation></limit>
+    <subcommand type="type:Text">
+      <documentation>
+        Graph subcommand. (required)
+      </documentation>
+    </subcommand>
+    <graphFqn type="type:Text">
+      <documentation>
+        Block FQN, or path start FQN. A .bml path is not an FQN; unknown tokens may suggest the file's root FQN. (optional)
+      </documentation>
+    </graphFqn>
+    <graphTo type="type:Text">
+      <documentation>
+        Path end FQN. (optional)
+      </documentation>
+    </graphTo>
+    <query type="type:Text">
+      <documentation>
+        Cypher for graph query. (optional)
+      </documentation>
+    </query>
+    <json type="type:Boolean">
+      <documentation>
+        Print JSON. (optional)
+      </documentation>
+    </json>
+    <force type="type:Boolean">
+      <documentation>
+        Alias of full rebuild for graph index. (optional)
+      </documentation>
+    </force>
+    <depth type="type:Integer">
+      <documentation>
+        uses/used-by/neighbors hops (default 1); ancestors/descendants/path max hops (default 16). members ignores --depth. (optional)
+      </documentation>
+    </depth>
+    <origin type="type:Text">
+      <documentation>
+        --origin filter for uses/used-by/neighbors. (optional)
+      </documentation>
+    </origin>
+    <relation type="type:Text">
+      <documentation>
+        --relation filter for uses/used-by/neighbors. (optional)
+      </documentation>
+    </relation>
+    <limit type="type:Integer">
+      <documentation>
+        --limit cap after filters for uses/used-by/neighbors. (optional)
+      </documentation>
+    </limit>
   </properties>
-
-</block>
+</clicommand:GraphCommand>

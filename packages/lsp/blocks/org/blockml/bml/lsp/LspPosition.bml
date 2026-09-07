@@ -1,12 +1,6 @@
-<!--
-  LSP — LspPosition
-  FQN: org.blockml.bml.lsp.LspPosition
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP — LspPosition
+  FQN: org.blockml.bml.lsp.LspPosition-->
+<lsp:LspPosition xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>LspPosition</name>
-  <type>lsp:LspPosition</type>
-  <baseType>lsp:LspType</baseType>
-  <is>LSP 0-based text position</is>
-
-  <documentation>BML type gap: stands for TypeScript LspPosition (packages/lsp/src/positions.ts). Core has no LSP protocol ValueType.</documentation>
-
+  <baseType>
+    lsp:LspType
+  </baseType>
+  <is>
+    LSP 0-based text position
+  </is>
+  <documentation>
+    BML type gap: stands for TypeScript LspPosition (packages/lsp/src/positions.ts). Core has no LSP protocol ValueType.
+  </documentation>
   <properties>
     <line type="type:Integer">
-      <documentation>0-based line. (required)</documentation>
+      <documentation>
+        0-based line. (required)
+      </documentation>
     </line>
     <character type="type:Integer">
-      <documentation>0-based character. (required)</documentation>
+      <documentation>
+        0-based character. (required)
+      </documentation>
     </character>
   </properties>
-
-</block>
+</lsp:LspPosition>

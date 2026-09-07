@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — ElementPrefix
-  FQN: org.blockml.bml.compiler.parser.capability.ElementPrefix
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — ElementPrefix
+  FQN: org.blockml.bml.compiler.parser.capability.ElementPrefix-->
+<parcap:ElementPrefix xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ElementPrefix</name>
-  <type>parcap:ElementPrefix</type>
-  <baseType>core:Capability</baseType>
-  <is>Get element namespace prefix</is>
-
-  <documentation>Get element namespace prefix</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Get element namespace prefix
+  </is>
+  <documentation>
+    Get element namespace prefix
+  </documentation>
   <properties>
     <element type="parmap:XmlDomNode">
-      <documentation>element. TS type: parmap:XmlDomNode. (required)</documentation>
+      <documentation>
+        element. TS type: parmap:XmlDomNode. (required)
+      </documentation>
     </element>
     <prefix type="type:Text">
-      <documentation>prefix. TS type: type:Text. (required)</documentation>
+      <documentation>
+        prefix. TS type: type:Text. (required)
+      </documentation>
     </prefix>
   </properties>
-
-</block>
+</parcap:ElementPrefix>

@@ -1,12 +1,6 @@
-<!--
-  XSD Config — DefaultXsdOptions
-  FQN: org.blockml.bml.target.xsd.config.DefaultXsdOptions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--XSD Config — DefaultXsdOptions
+  FQN: org.blockml.bml.target.xsd.config.DefaultXsdOptions-->
+<xsdconfig:DefaultXsdOptions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -20,14 +14,22 @@
   xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>DefaultXsdOptions</name>
-  <type>xsdconfig:DefaultXsdOptions</type>
-  <baseType>xsd:XsdType</baseType>
-  <is>Defaults applied by ResolveOptions</is>
-
+  <baseType>
+    xsd:XsdType
+  </baseType>
+  <is>
+    Defaults applied by ResolveOptions
+  </is>
   <properties>
-    <includeNonExported type="type:Boolean"><documentation>true</documentation></includeNonExported>
-    <emitDomainSchemas type="type:Boolean"><documentation>true</documentation></emitDomainSchemas>
+    <includeNonExported type="type:Boolean">
+      <documentation>
+        true
+      </documentation>
+    </includeNonExported>
+    <emitDomainSchemas type="type:Boolean">
+      <documentation>
+        true
+      </documentation>
+    </emitDomainSchemas>
   </properties>
-
-</block>
+</xsdconfig:DefaultXsdOptions>

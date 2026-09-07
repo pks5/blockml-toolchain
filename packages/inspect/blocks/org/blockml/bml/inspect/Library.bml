@@ -1,12 +1,6 @@
-<!--
-  BlockML Inspect Library Descriptor
-  FQN: org.blockml.bml.inspect.Library
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Inspect Library Descriptor
+  FQN: org.blockml.bml.inspect.Library-->
+<inspect:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,29 +15,28 @@
   xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Library</name>
-  <type>inspect:Library</type>
-  <baseType>core:BlockLibrary</baseType>
-  <is>The BlockML Inspect package library catalog</is>
-
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    The BlockML Inspect package library catalog
+  </is>
+  <version>
+    0.9.4
+  </version>
   <documentation>
     Canonical inspect-view specification for BlockML — ephemeral JSON projection
     of a Block from the validate --all TypeRegistry. TypeScript in packages/inspect/src/
     implements this library. Membership is defined exclusively by this blocks list.
   </documentation>
-
-  <version>0.9.4</version>
-
   <language>
-    <English />
+    <blockml:language.English />
   </language>
-
   <properties>
     <description override="true">
       <value>BlockML Inspect library</value>
     </description>
   </properties>
-
   <aggregations>
     <readMe override="true">
       <composition>
@@ -85,5 +78,4 @@
       </composition>
     </blocks>
   </aggregations>
-
-</block>
+</inspect:Library>

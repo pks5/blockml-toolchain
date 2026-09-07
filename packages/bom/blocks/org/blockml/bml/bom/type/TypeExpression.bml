@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — TypeExpression
-  FQN: org.blockml.bml.bom.type.TypeExpression
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — TypeExpression
+  FQN: org.blockml.bml.bom.type.TypeExpression-->
+<bomtype:TypeExpression xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,13 +17,16 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>TypeExpression</name>
-  <type>bomtype:TypeExpression</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Abstract parse-time type expression union</is>
-
-  <documentation>Not a language ValueType. Parsed at map time into structured AST.</documentation>
-
-  <abstract>true</abstract>
-
-</block>
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Abstract parse-time type expression union
+  </is>
+  <documentation>
+    Not a language ValueType. Parsed at map time into structured AST.
+  </documentation>
+  <abstract>
+    true
+  </abstract>
+</bomtype:TypeExpression>

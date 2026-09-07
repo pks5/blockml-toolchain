@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — ProjectSourceRoots
-  FQN: org.blockml.bml.framework.capability.ProjectSourceRoots
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — ProjectSourceRoots
+  FQN: org.blockml.bml.framework.capability.ProjectSourceRoots-->
+<fwcap:ProjectSourceRoots xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,23 +25,30 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ProjectSourceRoots</name>
-  <type>fwcap:ProjectSourceRoots</type>
-  <baseType>core:Capability</baseType>
-  <is>Project-owned BML roots for this package plus local packages/*</is>
-
-  <documentation>This package's srcDir plus local packages/* BlockML modules (blockml.library or blockml.config.json). Does not walk parent workspaces or node_modules.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Project-owned BML roots for this package plus local packages/*
+  </is>
+  <documentation>
+    This package's srcDir plus local packages/* BlockML modules (blockml.library or blockml.config.json). Does not walk parent workspaces or node_modules.
+  </documentation>
   <properties>
     <rootDir type="type:Text">
-      <documentation>Project root. (required)</documentation>
+      <documentation>
+        Project root. (required)
+      </documentation>
     </rootDir>
     <srcDir type="type:Text">
-      <documentation>Default blocks. (optional)</documentation>
+      <documentation>
+        Default blocks. (optional)
+      </documentation>
     </srcDir>
     <roots type="type:Text[]">
-      <documentation>roots. TS type: type:Text[]. (required)</documentation>
+      <documentation>
+        roots. TS type: type:Text[]. (required)
+      </documentation>
     </roots>
   </properties>
-
-</block>
+</fwcap:ProjectSourceRoots>

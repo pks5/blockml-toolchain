@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — FindLocalMember
-  FQN: org.blockml.bml.framework.capability.FindLocalMember
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — FindLocalMember
+  FQN: org.blockml.bml.framework.capability.FindLocalMember-->
+<fwcap:FindLocalMember xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,28 +25,34 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>FindLocalMember</name>
-  <type>fwcap:FindLocalMember</type>
-  <baseType>core:Capability</baseType>
-  <is>Find a member declared on this block, not inherited</is>
-
-  <documentation>Looks up memberIdentityKey(member) in block.members only. Returns the local declaration, or undefined when the member is inherited or absent.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Find a member declared on this block, not inherited
+  </is>
+  <documentation>
+    Looks up memberIdentityKey(member) in block.members only. Returns the local declaration, or undefined when the member is inherited or absent.
+  </documentation>
   <references>
     <see type="fwcap:MemberIdentityKey" relation="SeeAlso" />
     <see type="fwcap:ResolveEffectiveMembers" relation="SeeAlso" />
   </references>
-
   <properties>
     <block type="bomblock:BlockDefinition">
-      <documentation>block. TS type: bomblock:BlockDefinition. (required)</documentation>
+      <documentation>
+        block. TS type: bomblock:BlockDefinition. (required)
+      </documentation>
     </block>
     <member type="bommember:MemberDefinition">
-      <documentation>member. TS type: bommember:MemberDefinition. (required)</documentation>
+      <documentation>
+        member. TS type: bommember:MemberDefinition. (required)
+      </documentation>
     </member>
     <local type="bommember:MemberDefinition">
-      <documentation>Declared member on this block, or undefined. (optional)</documentation>
+      <documentation>
+        Declared member on this block, or undefined. (optional)
+      </documentation>
     </local>
   </properties>
-
-</block>
+</fwcap:FindLocalMember>

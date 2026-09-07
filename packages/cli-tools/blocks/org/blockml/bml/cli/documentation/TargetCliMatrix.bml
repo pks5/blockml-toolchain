@@ -1,12 +1,6 @@
-<!--
-  CLI Documentation — TargetCliMatrix
-  FQN: org.blockml.bml.cli.documentation.TargetCliMatrix
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Documentation — TargetCliMatrix
+  FQN: org.blockml.bml.cli.documentation.TargetCliMatrix-->
+<clidocumentation:TargetCliMatrix xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -21,23 +15,25 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>TargetCliMatrix</name>
-  <type>clidocumentation:TargetCliMatrix</type>
-  <baseType>core:Documentation</baseType>
-  <is>Per-target CLI requirements</is>
-
-  <documentation>CLI19 matrix (V1):
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Per-target CLI requirements
+  </is>
+  <documentation>
+    CLI19 matrix (V1):
+    
     blockdoc — file omit; --all ignored; default outDir blockdoc; without --src/--libraries: project packages with blockml.library as corpus (all .bml); else scope auto: libraries[] else roots[srcDir]
     xsd — file omit; --all ignored; default outDir schemas; may write root catalog.xml
     fatblock — file optional (default package.json blockml.library); --src optional
     (default host directory); --per-package one {hostFqn}.fat.bml per local library
     package, all written to the invocation directory (or --out)
-
+    
     Planned machineblocks-v3-scad — document target; file required; --all loops srcDir;
-    registered by domain CLI not @blockml/cli.</documentation>
+    registered by domain CLI not @blockml/cli.
+  </documentation>
   <references>
     <see type="clidocumentation:ExitCodesAndDiagnostics" relation="ReadNext" />
   </references>
-
-</block>
+</clidocumentation:TargetCliMatrix>

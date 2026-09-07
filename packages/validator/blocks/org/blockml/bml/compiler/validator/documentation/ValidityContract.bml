@@ -1,12 +1,6 @@
-<!--
-  Validator Documentation — ValidityContract
-  FQN: org.blockml.bml.compiler.validator.documentation.ValidityContract
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Validator Documentation — ValidityContract
+  FQN: org.blockml.bml.compiler.validator.documentation.ValidityContract-->
+<valdocumentation:ValidityContract xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -24,33 +18,34 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ValidityContract</name>
-  <type>valdocumentation:ValidityContract</type>
-  <baseType>core:Documentation</baseType>
-  <is>What counts as valid BlockML without XSD</is>
-
-  <documentation>valid BlockML = well-formed XML + valid BML structure + valid BML semantics.
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    What counts as valid BlockML without XSD
+  </is>
+  <documentation>
+    valid BlockML = well-formed XML + valid BML structure + valid BML semantics.
+    
     CLI blockml validate and LSP analyzeDocument consume the same parse + validate engine.
     Generated XSD is a non-authoritative render-target projection and is not consulted.
-
+    
     Severity: error = not valid BlockML; warning = valid but problematic (deprecation
     or mechanical style); recommendation = quality improvement; info = hint.
     Unknown element, attribute, member, type, block, or missing library is error.
-
+    
     Semantic checks (this package / framework): every type FQN must resolve in the
     TypeRegistry or be a well-known primitive; instance typeFqn and memberValues keys
     must match effective members. Unresolved references are errors. A missing library
     is BML_LIBRARY_RESOLVE_ERROR — analogous to a Java class without its Maven artifact.
-
+    
     Structural/semantic errors are node-local: they set success=false but keep the BOM
     (preserve-on-error). XML syntax errors may yield document null.
-
-    Unknown instance members stay in memberValues plus BML_UNKNOWN_PROPERTY error.</documentation>
-
+    
+    Unknown instance members stay in memberValues plus BML_UNKNOWN_PROPERTY error.
+  </documentation>
   <references>
     <see type="pardocumentation:StructuralGrammar" relation="SeeAlso" />
     <see type="valdocumentation:ValidationPipeline" relation="ReadNext" />
   </references>
-
-</block>
+</valdocumentation:ValidityContract>

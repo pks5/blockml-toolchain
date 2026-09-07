@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — DetectFormat
-  FQN: org.blockml.bml.compiler.parser.capability.DetectFormat
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — DetectFormat
+  FQN: org.blockml.bml.compiler.parser.capability.DetectFormat-->
+<parcap:DetectFormat xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,24 +23,28 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>DetectFormat</name>
-  <type>parcap:DetectFormat</type>
-  <baseType>core:Capability</baseType>
-  <is>Format detector — step [1] (B24)</is>
-
-  <documentation><![CDATA[Strip UTF-8 BOM; detect xml when first non-whitespace is '<'.]]></documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Format detector — step [1] (B24)
+  </is>
+  <documentation>
+    <![CDATA[Strip UTF-8 BOM; detect xml when first non-whitespace is '<'.]]>
+  </documentation>
   <references>
     <see type="pardocumentation:ArchitectureOverview" relation="SeeAlso" />
   </references>
-
   <properties>
     <source type="type:Text">
-      <documentation>source. TS type: type:Text. (required)</documentation>
+      <documentation>
+        source. TS type: type:Text. (required)
+      </documentation>
     </source>
     <format type="type:Text">
-      <documentation>"xml" | null (optional)</documentation>
+      <documentation>
+        "xml" | null (optional)
+      </documentation>
     </format>
   </properties>
-
-</block>
+</parcap:DetectFormat>

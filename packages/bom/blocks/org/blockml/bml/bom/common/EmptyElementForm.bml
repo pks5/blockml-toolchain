@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — EmptyElementForm
-  FQN: org.blockml.bml.bom.common.EmptyElementForm
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — EmptyElementForm
+  FQN: org.blockml.bml.bom.common.EmptyElementForm-->
+<bomcommon:EmptyElementForm xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,17 +17,20 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>EmptyElementForm</name>
-  <type>bomcommon:EmptyElementForm</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Authored empty-element form (paired vs self-closing)</is>
-
-  <documentation>String-literal union: "selfClosing" | "paired". Recorded on empty elements such as documentation see references.</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Authored empty-element form (paired vs self-closing)
+  </is>
+  <documentation>
+    String-literal union: "selfClosing" | "paired". Recorded on empty elements such as documentation see references.
+  </documentation>
   <properties>
     <value type="type:Text">
-      <documentation>value (required). TS type: type:Text.</documentation>
+      <documentation>
+        value (required). TS type: type:Text.
+      </documentation>
     </value>
   </properties>
-
-</block>
+</bomcommon:EmptyElementForm>

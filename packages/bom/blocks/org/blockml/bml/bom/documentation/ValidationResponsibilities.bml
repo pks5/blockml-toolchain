@@ -1,12 +1,6 @@
-<!--
-  BOM Documentation — ValidationResponsibilities
-  FQN: org.blockml.bml.bom.documentation.ValidationResponsibilities
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Documentation — ValidationResponsibilities
+  FQN: org.blockml.bml.bom.documentation.ValidationResponsibilities-->
+<bomdocumentation:ValidationResponsibilities xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -24,13 +18,15 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ValidationResponsibilities</name>
-  <type>bomdocumentation:ValidationResponsibilities</type>
-  <baseType>core:Documentation</baseType>
-  <is>Full validator checklist on BomDocument</is>
-
-  <documentation>Parser produces BomDocument. Validator (@blockml/validator + @blockml/framework) checks:
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Full validator checklist on BomDocument
+  </is>
+  <documentation>
+    Parser produces BomDocument. Validator (@blockml/validator + @blockml/framework) checks:
+    
     Member namespace uniqueness; baseType in TypeRegistry; property values inline deep copies;
     resolveEffectiveMembers for expression refs; effective version (BML_MISSING_VERSION);
     library block.version >= library.version; bml:version asserts (BML_UNKNOWN_VERSION);
@@ -41,11 +37,10 @@
     contracts merge order; validateConstraints after resolveEffectiveMembers;
     readOnly enforcement (BML_READONLY_MEMBER_WRITE); library blocks/deps resolve;
     no outer library re-export from inner library (BML_LIBRARY_NESTING_VIOLATION).
-
-    Validator does NOT expand directives, assign auto-IDs, or interpret aggregations.</documentation>
-
+    
+    Validator does NOT expand directives, assign auto-IDs, or interpret aggregations.
+  </documentation>
   <references>
     <see type="bomdocumentation:RelatedDiagnostics" relation="SeeAlso" />
   </references>
-
-</block>
+</bomdocumentation:ValidationResponsibilities>

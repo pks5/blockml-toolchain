@@ -1,12 +1,6 @@
-<!--
-  FatBlock Documentation — PublicApi
-  FQN: org.blockml.bml.target.fatblock.documentation.PublicApi
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock Documentation — PublicApi
+  FQN: org.blockml.bml.target.fatblock.documentation.PublicApi-->
+<fbdocumentation:PublicApi xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -23,12 +17,14 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PublicApi</name>
-  <type>fbdocumentation:PublicApi</type>
-  <baseType>core:Documentation</baseType>
-  <is>Public TypeScript and capability surface</is>
-
-  <documentation>Package @blockml/fatblock-target exports:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Public TypeScript and capability surface
+  </is>
+  <documentation>
+    Package @blockml/fatblock-target exports:
     • FatBlockTarget — RenderTarget; name fatblock; accepts document;
       validateRequest; render → FatBlockRenderOutput
     • FatBlockOptions / DEFAULT_FATBLOCK_OPTIONS / resolveFatBlockOptions
@@ -36,13 +32,13 @@
     • collectCandidateFqns / rootFqnsByFilePath
     • filterByIncludes / matchesIncludePattern
     • mergeNamespaceBindings / cloneBlockDefinition / fatOutputBasename
-
-    BML: fbcap:Render, ValidateRequest, AssembleFatDocument, api/FatBlockOptions.</documentation>
+    
+    BML: fbcap:Render, ValidateRequest, AssembleFatDocument, api/FatBlockOptions.
+  </documentation>
   <references>
     <see type="fbdocumentation:CandidateCollection" relation="ReadNext" />
     <see type="fbcap:Render" relation="Defines" />
     <see type="fbapi:FatBlockOptions" relation="Defines" />
     <see type="fbcap:AssembleFatDocument" relation="Defines" />
   </references>
-
-</block>
+</fbdocumentation:PublicApi>

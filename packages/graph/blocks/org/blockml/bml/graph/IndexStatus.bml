@@ -1,12 +1,6 @@
-<!--
-  Graph — IndexStatus
-  FQN: org.blockml.bml.graph.IndexStatus
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph — IndexStatus
+  FQN: org.blockml.bml.graph.IndexStatus-->
+<graph:IndexStatus xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,23 +15,35 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>IndexStatus</name>
-  <type>graph:IndexStatus</type>
-  <baseType>graph:GraphType</baseType>
-  <is>Presence and freshness of the persisted graph index</is>
-  <documentation>state is missing, ready, or stale.</documentation>
+  <baseType>
+    graph:GraphType
+  </baseType>
+  <is>
+    Presence and freshness of the persisted graph index
+  </is>
+  <documentation>
+    state is missing, ready, or stale.
+  </documentation>
   <properties>
     <state type="type:Text">
-      <documentation>state (required). TS type: type:Text.</documentation>
+      <documentation>
+        state (required). TS type: type:Text.
+      </documentation>
     </state>
     <blocks type="type:Integer">
-      <documentation>blocks (optional). TS type: type:Integer.</documentation>
+      <documentation>
+        blocks (optional). TS type: type:Integer.
+      </documentation>
     </blocks>
     <members type="type:Integer">
-      <documentation>members (optional). TS type: type:Integer.</documentation>
+      <documentation>
+        members (optional). TS type: type:Integer.
+      </documentation>
     </members>
     <indexDir type="type:Text">
-      <documentation>indexDir (required). TS type: type:Text.</documentation>
+      <documentation>
+        indexDir (required). TS type: type:Text.
+      </documentation>
     </indexDir>
   </properties>
-</block>
+</graph:IndexStatus>

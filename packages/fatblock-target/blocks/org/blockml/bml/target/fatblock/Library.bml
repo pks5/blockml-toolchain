@@ -1,12 +1,6 @@
-<!--
-  FatBlock Render Target Library
-  FQN: org.blockml.bml.target.fatblock.Library
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock Render Target Library
+  FQN: org.blockml.bml.target.fatblock.Library-->
+<fatblock:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -22,32 +16,31 @@
   xmlns:serializer="org.blockml.bml.compiler.serializer"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Library</name>
-  <type>fatblock:Library</type>
-  <baseType>core:BlockLibrary</baseType>
-  <is>The FatBlock portable .bml render target library catalog</is>
-
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    The FatBlock portable .bml render target library catalog
+  </is>
+  <version>
+    0.9.4
+  </version>
   <documentation>
     # The FatBlock portable .bml render target library catalog
-
+    
     Canonical FatBlock specification for BlockML — registry name fatblock, folder-pool
     candidates, embed assembly, namespace merge, {hostFqn}.fat.bml (FB1–FB20). TypeScript in
     packages/fatblock-target/src/ implements this library. Membership is defined
     exclusively by this blocks list.
   </documentation>
-
-  <version>0.9.4</version>
-
   <language>
-    <English />
+    <blockml:language.English />
   </language>
-
   <properties>
     <description override="true">
       <value>FatBlock render target library</value>
     </description>
   </properties>
-
   <aggregations>
     <readMe override="true">
       <composition>
@@ -62,7 +55,8 @@
       </composition>
     </dependencies>
     <blocks override="true">
-      <composition><fatblock:FatblockType />
+      <composition>
+        <fatblock:FatblockType />
         <fbapi:FatBlockOptions />
         <fbapi:FatBlockRenderOutput />
         <fbapi:AssembleFatDocumentResult />
@@ -96,5 +90,4 @@
       </composition>
     </blocks>
   </aggregations>
-
-</block>
+</fatblock:Library>

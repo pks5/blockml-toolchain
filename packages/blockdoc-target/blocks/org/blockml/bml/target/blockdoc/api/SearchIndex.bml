@@ -1,12 +1,6 @@
-<!--
-  BlockDoc API — SearchIndex
-  FQN: org.blockml.bml.target.blockdoc.api.SearchIndex
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc API — SearchIndex
+  FQN: org.blockml.bml.target.blockdoc.api.SearchIndex-->
+<bdapi:SearchIndex xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,22 +21,24 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>SearchIndex</name>
-  <type>bdapi:SearchIndex</type>
-  <baseType>blockdoc:BlockdocType</baseType>
-  <is>Site-root search-index.json document</is>
-
-  <documentation>BD24: emitted as search-index.json at the site root. Same block list is inlined into search.js so quick search works without fetch (file://).</documentation>
-
+  <baseType>
+    blockdoc:BlockdocType
+  </baseType>
+  <is>
+    Site-root search-index.json document
+  </is>
+  <documentation>
+    BD24: emitted as search-index.json at the site root. Same block list is inlined into search.js so quick search works without fetch (file://).
+  </documentation>
   <references>
     <see type="bdapi:SearchIndexEntry" relation="SeeAlso" />
     <see type="bdcap:BuildSearchIndex" relation="SeeAlso" />
   </references>
-
   <properties>
     <blocks type="bdapi:SearchIndexEntry">
-      <documentation>Indexed blocks, one per emitted block page (required).</documentation>
+      <documentation>
+        Indexed blocks, one per emitted block page (required).
+      </documentation>
     </blocks>
   </properties>
-
-</block>
+</bdapi:SearchIndex>

@@ -1,45 +1,39 @@
-<!--
-  Transformer Capability — OperationExecutor
-  FQN: org.blockml.bml.transformer.capability.OperationExecutor
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Capability — OperationExecutor
+  FQN: org.blockml.bml.transformer.capability.OperationExecutor-->
+<transformercap:OperationExecutor xmlns="http://blockml.org/bml"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:core="org.blockml.bml.core"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
-  <name>OperationExecutor</name>
-  <type>transformercap:OperationExecutor</type>
-  <baseType>core:Block</baseType>
-  <is>A registered executor for a concrete ModelOperation subtype</is>
-  <abstract>true</abstract>
-
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    A registered executor for a concrete ModelOperation subtype
+  </is>
   <documentation>
     Plugin contract for type-specific ModelOperation work. The transformer
     looks up an executor by the instance type FQN (most specific match on
     the base-type chain). Missing executor or the abstract
     `workflow:ModelOperation` itself is an execution error.
-
+    
     `execute` does only what differs per operation type and may return
     output text. It must not write envelope fields, commit, or write
     files under `_meta/transform/`. The orchestrator writes `status`,
     timestamps, `baseCommit`, `changedFiles`, `output` (when
     `captureOutput`), and `exception` the same way for every executor.
   </documentation>
-
+  <abstract>
+    true
+  </abstract>
   <references>
     <see type="workflow:ModelOperation" relation="SeeAlso" />
     <see type="transformercap:AgenticExecutor" relation="SeeAlso" />
     <see type="transformercap:ToolExecutor" relation="SeeAlso" />
   </references>
-
   <capabilities>
-    <execute type="cap:Action">
-      <abstract>true</abstract>
+    <execute abstract="true" type="cap:Action">
       <documentation>
         Perform the type-specific work and optionally return output text.
         Protected: concrete executors override this. The orchestrator
@@ -47,5 +41,4 @@
       </documentation>
     </execute>
   </capabilities>
-
-</block>
+</transformercap:OperationExecutor>

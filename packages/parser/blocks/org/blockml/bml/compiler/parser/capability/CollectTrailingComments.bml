@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — CollectTrailingComments
-  FQN: org.blockml.bml.compiler.parser.capability.CollectTrailingComments
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — CollectTrailingComments
+  FQN: org.blockml.bml.compiler.parser.capability.CollectTrailingComments-->
+<parcap:CollectTrailingComments xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,27 +23,33 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>CollectTrailingComments</name>
-  <type>parcap:CollectTrailingComments</type>
-  <baseType>core:Capability</baseType>
-  <is>Collect comment siblings after element (B11)</is>
-
-  <documentation>Collect comment siblings after element (B11)</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Collect comment siblings after element (B11)
+  </is>
+  <documentation>
+    Collect comment siblings after element (B11)
+  </documentation>
   <references>
     <see type="pardocumentation:XmlCommentsParse" relation="SeeAlso" />
   </references>
-
   <properties>
     <siblings type="parmap:XmlDomNode[]">
-      <documentation>siblings. TS type: parmap:XmlDomNode[]. (required)</documentation>
+      <documentation>
+        siblings. TS type: parmap:XmlDomNode[]. (required)
+      </documentation>
     </siblings>
     <index type="type:Integer">
-      <documentation>index. TS type: type:Integer. (required)</documentation>
+      <documentation>
+        index. TS type: type:Integer. (required)
+      </documentation>
     </index>
     <comments type="type:Text[]">
-      <documentation>comments. TS type: type:Text[]. (required)</documentation>
+      <documentation>
+        comments. TS type: type:Text[]. (required)
+      </documentation>
     </comments>
   </properties>
-
-</block>
+</parcap:CollectTrailingComments>

@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — AliasEntry
-  FQN: org.blockml.bml.bom.block.AliasEntry
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — AliasEntry
+  FQN: org.blockml.bml.bom.block.AliasEntry-->
+<bomblock:AliasEntry xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,29 +17,40 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>AliasEntry</name>
-  <type>bomblock:AliasEntry</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Alias Entity instance in BOM</is>
-
-  <documentation>Alias Entity instance in BOM</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Alias Entity instance in BOM
+  </is>
+  <documentation>
+    Alias Entity instance in BOM
+  </documentation>
   <properties>
     <typeFqn type="type:Text">
-      <documentation>typeFqn (required). TS type: type:Text.</documentation>
+      <documentation>
+        typeFqn (required). TS type: type:Text.
+      </documentation>
     </typeFqn>
     <name type="type:Text">
-      <documentation>name (optional). TS type: type:Text.</documentation>
+      <documentation>
+        name (optional). TS type: type:Text.
+      </documentation>
     </name>
     <languageFqn type="type:Text">
-      <documentation>languageFqn (optional). TS type: type:Text.</documentation>
+      <documentation>
+        languageFqn (optional). TS type: type:Text.
+      </documentation>
     </languageFqn>
     <legacy type="type:Boolean">
-      <documentation>legacy (optional). TS type: type:Boolean.</documentation>
+      <documentation>
+        legacy (optional). TS type: type:Boolean.
+      </documentation>
     </legacy>
     <source type="bomcommon:SourceLocation">
-      <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
+      <documentation>
+        source (optional). TS type: bomcommon:SourceLocation.
+      </documentation>
     </source>
   </properties>
-
-</block>
+</bomblock:AliasEntry>

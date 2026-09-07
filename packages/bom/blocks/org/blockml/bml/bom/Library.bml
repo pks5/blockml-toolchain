@@ -1,12 +1,6 @@
-<!--
-  BlockML BOM Library Descriptor
-  FQN: org.blockml.bml.bom.Library
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML BOM Library Descriptor
+  FQN: org.blockml.bml.bom.Library-->
+<bom:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -24,34 +18,33 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:cap="org.blockml.bml.capability">
 
-  <name>Library</name>
-  <type>bom:Library</type>
-  <baseType>core:BlockLibrary</baseType>
-  <is>The BlockML BOM Urmodell library catalog</is>
-
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    The BlockML BOM Urmodell library catalog
+  </is>
+  <version>
+    0.9.4
+  </version>
   <documentation>
     # The BlockML BOM Urmodell library catalog
-
+    
     Canonical BOM object model (Urmodell) for BlockML — TypeScript contracts in packages/bom/src/
     implement this library. Consumed by parser, serializer, validator, compiler, and LSP.
-
+    
     Distinct from org.blockml.bml.definition.* (BML meta-model in @blockml/core).
-
+    
     Membership is defined exclusively by this blocks list.
   </documentation>
-
-  <version>0.9.4</version>
-
   <language>
-    <English />
+    <blockml:language.English />
   </language>
-
   <properties>
     <description override="true">
       <value>BlockML BOM Urmodell library</value>
     </description>
   </properties>
-
   <aggregations>
     <readMe override="true">
       <composition>
@@ -161,5 +154,4 @@
       </composition>
     </blocks>
   </aggregations>
-
-</block>
+</bom:Library>

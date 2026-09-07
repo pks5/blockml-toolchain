@@ -1,12 +1,6 @@
-<!--
-  Parser Documentation — XmlCommentsParse
-  FQN: org.blockml.bml.compiler.parser.documentation.XmlCommentsParse
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Documentation — XmlCommentsParse
+  FQN: org.blockml.bml.compiler.parser.documentation.XmlCommentsParse-->
+<pardocumentation:XmlCommentsParse xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,24 +24,27 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>XmlCommentsParse</name>
-  <type>pardocumentation:XmlCommentsParse</type>
-  <baseType>core:Documentation</baseType>
-  <is>Comment binding algorithm (B11 parse side)</is>
-
-  <documentation><![CDATA[Cross-ref: org.blockml.bml.bom.documentation.XmlComments for Urmodell storage model.
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Comment binding algorithm (B11 parse side)
+  </is>
+  <documentation>
+    <![CDATA[
+    Cross-ref: org.blockml.bml.bom.documentation.XmlComments for Urmodell storage model.
+    
     Parse algorithm:
     • pendingLeading comments → bind to next element as leadingComments
     • Comments after element end tag → trailingComments on that element
     • Storage: xmlTrivia on elements, memberSectionTrivia, metadataTrivia
-
+    
     Comment bodies only — without <!-- / -->. Whitespace/layout not stored (B13).
-    Re-emit rules (B22) → @blockml/serializer.]]></documentation>
-
+    Re-emit rules (B22) → @blockml/serializer.
+    ]]>
+  </documentation>
   <references>
     <see type="bomdocumentation:XmlComments" relation="SeeAlso" />
     <see type="pardocumentation:TypeDescriptorParsing" relation="ReadNext" />
   </references>
-
-</block>
+</pardocumentation:XmlCommentsParse>

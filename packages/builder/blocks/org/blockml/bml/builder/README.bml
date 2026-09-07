@@ -1,12 +1,6 @@
-<!--
-  BlockML Builder — README
-  FQN: org.blockml.bml.builder.README
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Builder — README
+  FQN: org.blockml.bml.builder.README-->
+<builder:README xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -20,17 +14,21 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>README</name>
-  <type>builder:README</type>
-  <baseType>core:ReadMe</baseType>
-  <is>Reading entry for the Builder library</is>
-  <documentation>The @blockml/builder package provides BomBuilder, a writable authoring
+  <baseType>
+    core:ReadMe
+  </baseType>
+  <is>
+    Reading entry for the Builder library
+  </is>
+  <documentation>
+    The @blockml/builder package provides BomBuilder, a writable authoring
     session that creates or edits a BOM graph and seal()s it to an immutable
     Urmodell (BomDocument). Serializer and validator consume that document.
-
-    Start at org.blockml.bml.builder.documentation.Introduction.</documentation>
+    
+    Start at org.blockml.bml.builder.documentation.Introduction.
+  </documentation>
   <references>
     <see type="builderdocumentation:Introduction" relation="ReadFirst" />
     <see type="builderdocumentation:PublicApi" relation="SeeAlso" />
   </references>
-</block>
+</builder:README>

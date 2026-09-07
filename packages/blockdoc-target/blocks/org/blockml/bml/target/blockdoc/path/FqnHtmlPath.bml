@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Path — FqnHtmlPath
-  FQN: org.blockml.bml.target.blockdoc.path.FqnHtmlPath
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Path — FqnHtmlPath
+  FQN: org.blockml.bml.target.blockdoc.path.FqnHtmlPath-->
+<bdpath:FqnHtmlPath xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,23 +21,30 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>FqnHtmlPath</name>
-  <type>bdpath:FqnHtmlPath</type>
-  <baseType>blockdoc:BlockdocType</baseType>
-  <is>Relative HTML path derived from an FQN and OutLayout</is>
-
-  <documentation>Result of FqnToHtmlPath. BD7: fqn layout → segments joined with / + .html; package layout → all but last segment + /index.html.</documentation>
-
+  <baseType>
+    blockdoc:BlockdocType
+  </baseType>
+  <is>
+    Relative HTML path derived from an FQN and OutLayout
+  </is>
+  <documentation>
+    Result of FqnToHtmlPath. BD7: fqn layout → segments joined with / + .html; package layout → all but last segment + /index.html.
+  </documentation>
   <properties>
     <fqn type="type:Text">
-      <documentation>Source fully-qualified name. (required)</documentation>
+      <documentation>
+        Source fully-qualified name. (required)
+      </documentation>
     </fqn>
     <outLayout type="bdapi:OutLayout">
-      <documentation>Layout mode. (required)</documentation>
+      <documentation>
+        Layout mode. (required)
+      </documentation>
     </outLayout>
     <path type="type:Text">
-      <documentation>Relative path under outDir. (required)</documentation>
+      <documentation>
+        Relative path under outDir. (required)
+      </documentation>
     </path>
   </properties>
-
-</block>
+</bdpath:FqnHtmlPath>

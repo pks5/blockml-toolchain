@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Capability — ResolveOptions
-  FQN: org.blockml.bml.target.blockdoc.capability.ResolveOptions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Capability — ResolveOptions
+  FQN: org.blockml.bml.target.blockdoc.capability.ResolveOptions-->
+<bdcap:ResolveOptions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,25 +21,29 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ResolveOptions</name>
-  <type>bdcap:ResolveOptions</type>
-  <baseType>core:Capability</baseType>
-  <is>Merge opaque targetOptions into required BlockDocOptions</is>
-
-  <documentation>BD3: missing fields take defaults from BlockDocConstants (siteMode=merged, outLayout=fqn, includeNonExported=true).</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Merge opaque targetOptions into required BlockDocOptions
+  </is>
+  <documentation>
+    BD3: missing fields take defaults from BlockDocConstants (siteMode=merged, outLayout=fqn, includeNonExported=true).
+  </documentation>
   <references>
     <see type="bddocumentation:PublicApi" relation="SeeAlso" />
     <see type="bdconfig:BlockDocConstants" relation="SeeAlso" />
   </references>
-
   <properties>
     <targetOptions type="type:Text">
-      <documentation>Opaque CompileRequest.targetOptions (optional).</documentation>
+      <documentation>
+        Opaque CompileRequest.targetOptions (optional).
+      </documentation>
     </targetOptions>
     <result type="bdapi:BlockDocOptions">
-      <documentation>Fully resolved options (required).</documentation>
+      <documentation>
+        Fully resolved options (required).
+      </documentation>
     </result>
   </properties>
-
-</block>
+</bdcap:ResolveOptions>

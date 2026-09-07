@@ -1,12 +1,6 @@
-<!--
-  LSP Documentation — Introduction
-  FQN: org.blockml.bml.lsp.documentation.Introduction
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP Documentation — Introduction
+  FQN: org.blockml.bml.lsp.documentation.Introduction-->
+<lspdocumentation:Introduction xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,29 +24,30 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>Introduction</name>
-  <type>lspdocumentation:Introduction</type>
-  <baseType>core:Documentation</baseType>
-  <is>Purpose and scope of the LSP package</is>
-
-  <documentation>The @blockml/lsp package provides an editor-agnostic Language Server for BML.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Purpose and scope of the LSP package
+  </is>
+  <documentation>
+    The @blockml/lsp package provides an editor-agnostic Language Server for BML.
     It is a thin LSP adapter over the existing language loop — not a second parser or AST.
-
+    
     This library (org.blockml.bml.lsp.*) is the SSOT. TypeScript in packages/lsp/src/
     implements it. IDE-specific clients (VS Code extension with TextMate grammar, etc.)
     live outside this repository and connect via stdio LSP.
-
+    
     V1: textDocument sync + publishDiagnostics (parse + Stage-2 validate)
     + textDocument/formatting (parse → serialize)
     + textDocument/hover (XML-token hit-test + TypeRegistry)
     + textDocument/documentSymbol (Urmodell outline tree)
     + textDocument/definition and textDocument/references (hit-test + TypeRegistry)
     + textDocument/semanticTokens/full (position-based FrameworkRoles highlight).
-    Semantics: @blockml/parser, @blockml/serializer, @blockml/validator, @blockml/framework.</documentation>
-
+    Semantics: @blockml/parser, @blockml/serializer, @blockml/validator, @blockml/framework.
+  </documentation>
   <references>
     <see type="lspdocumentation:LayerSeparation" relation="ReadNext" />
     <see type="valdocumentation:Introduction" relation="SeeAlso" />
   </references>
-
-</block>
+</lspdocumentation:Introduction>

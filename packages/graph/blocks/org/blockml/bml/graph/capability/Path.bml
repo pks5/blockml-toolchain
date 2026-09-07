@@ -1,12 +1,6 @@
-<!--
-  Graph Capability — Path
-  FQN: org.blockml.bml.graph.capability.Path
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph Capability — Path
+  FQN: org.blockml.bml.graph.capability.Path-->
+<graphcap:Path xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,23 +15,35 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Path</name>
-  <type>graphcap:Path</type>
-  <baseType>core:Capability</baseType>
-  <is>Shortest authored path between two blocks</is>
-  <documentation>Walks outgoing authored edges only (the same direction as uses), including HAS_MEMBER and MEMBER_TYPE so provenance is preserved. Incoming edges are used-by, not path. Each hop is a GraphNeighbor with direction outgoing.</documentation>
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Shortest authored path between two blocks
+  </is>
+  <documentation>
+    Walks outgoing authored edges only (the same direction as uses), including HAS_MEMBER and MEMBER_TYPE so provenance is preserved. Incoming edges are used-by, not path. Each hop is a GraphNeighbor with direction outgoing.
+  </documentation>
   <properties>
     <from type="type:Text">
-      <documentation>Start FQN. (required)</documentation>
+      <documentation>
+        Start FQN. (required)
+      </documentation>
     </from>
     <to type="type:Text">
-      <documentation>End FQN. (required)</documentation>
+      <documentation>
+        End FQN. (required)
+      </documentation>
     </to>
     <depth type="type:Integer">
-      <documentation>Max hops (optional).</documentation>
+      <documentation>
+        Max hops (optional).
+      </documentation>
     </depth>
     <path type="graph:GraphPath">
-      <documentation>Path or absent. (optional)</documentation>
+      <documentation>
+        Path or absent. (optional)
+      </documentation>
     </path>
   </properties>
-</block>
+</graphcap:Path>

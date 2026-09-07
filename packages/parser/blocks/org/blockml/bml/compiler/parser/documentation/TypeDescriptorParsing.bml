@@ -1,12 +1,6 @@
-<!--
-  Parser Documentation — TypeDescriptorParsing
-  FQN: org.blockml.bml.compiler.parser.documentation.TypeDescriptorParsing
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Documentation — TypeDescriptorParsing
+  FQN: org.blockml.bml.compiler.parser.documentation.TypeDescriptorParsing-->
+<pardocumentation:TypeDescriptorParsing xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,24 +24,25 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>TypeDescriptorParsing</name>
-  <type>pardocumentation:TypeDescriptorParsing</type>
-  <baseType>core:Documentation</baseType>
-  <is>TypeExpression parsing at map time</is>
-
-  <documentation>Parse type attribute strings into BOM TypeExpression shapes (defined in @blockml/bom).
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    TypeExpression parsing at map time
+  </is>
+  <documentation>
+    Parse type attribute strings into BOM TypeExpression shapes (defined in @blockml/bom).
+    
     • Named type refs → resolved FQN via namespace bindings + implicit namespaces
     • Union (A | B), struct ({ a: T }), multiplicity, nested (T[])[], generics (including unions as arguments), self refs
     • Ungrouped stacked multiplicity Integer[][] → BML_INVALID_TYPE_REFERENCE
     • Boolean.True/Boolean.False preserved as type refs (B16) — not rewritten to literals
     • Boolean values normalized to lowercase (B15)
     • Failure → BML_UNKNOWN_TYPE
-    • Anonymous struct at specialized sites; context-bound implicit namespaces per 02_mbml.md</documentation>
-
+    • Anonymous struct at specialized sites; context-bound implicit namespaces per 02_mbml.md
+  </documentation>
   <references>
     <see type="parcap:ParseTypeExpression" relation="Defines" />
     <see type="pardocumentation:BlockMetadataMapping" relation="ReadNext" />
   </references>
-
-</block>
+</pardocumentation:TypeDescriptorParsing>

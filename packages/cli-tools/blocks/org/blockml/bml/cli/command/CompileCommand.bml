@@ -1,12 +1,6 @@
-<!--
-  CLI Command — CompileCommand
-  FQN: org.blockml.bml.cli.command.CompileCommand
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Command — CompileCommand
+  FQN: org.blockml.bml.cli.command.CompileCommand-->
+<clicommand:CompileCommand xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,20 +14,34 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>CompileCommand</name>
-  <type>clicommand:CompileCommand</type>
-  <baseType>cli:CliType</baseType>
-  <is>blockml compile command model</is>
-
-  <documentation>CLI12–CLI16: compile to registered target. Default target blockdoc when omitted. Fatblock without file uses package.json blockml.library.</documentation>
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    blockml compile command model
+  </is>
+  <documentation>
+    CLI12–CLI16: compile to registered target. Default target blockdoc when omitted. Fatblock without file uses package.json blockml.library.
+  </documentation>
   <references>
     <see type="clidocumentation:CompileCommand" relation="SeeAlso" />
     <see type="clicap:RunCompile" relation="SeeAlso" />
   </references>
   <properties>
-    <target type="type:Text"><documentation>Registry name. Default blockdoc. (optional)</documentation></target>
-    <file type="type:Text"><documentation>Host document for fatblock; defaults to package.json blockml.library. (optional)</documentation></file>
-    <all type="type:Boolean"><documentation>Document targets only — loop srcDir. (optional)</documentation></all>
+    <target type="type:Text">
+      <documentation>
+        Registry name. Default blockdoc. (optional)
+      </documentation>
+    </target>
+    <file type="type:Text">
+      <documentation>
+        Host document for fatblock; defaults to package.json blockml.library. (optional)
+      </documentation>
+    </file>
+    <all type="type:Boolean">
+      <documentation>
+        Document targets only — loop srcDir. (optional)
+      </documentation>
+    </all>
   </properties>
-
-</block>
+</clicommand:CompileCommand>

@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — EmitConstraintInstances
-  FQN: org.blockml.bml.compiler.serializer.capability.EmitConstraintInstances
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — EmitConstraintInstances
+  FQN: org.blockml.bml.compiler.serializer.capability.EmitConstraintInstances-->
+<sercap:EmitConstraintInstances xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,23 +21,30 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>EmitConstraintInstances</name>
-  <type>sercap:EmitConstraintInstances</type>
-  <baseType>core:Capability</baseType>
-  <is>Emit constraint BlockInstance children</is>
-
-  <documentation>Emit constraint BlockInstance children</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Emit constraint BlockInstance children
+  </is>
+  <documentation>
+    Emit constraint BlockInstance children
+  </documentation>
   <properties>
     <writer type="seremit:XmlWriter">
-      <documentation>writer. TS type: seremit:XmlWriter. (required)</documentation>
+      <documentation>
+        writer. TS type: seremit:XmlWriter. (required)
+      </documentation>
     </writer>
     <instances type="bomcomp:BlockInstance[]">
-      <documentation>instances. TS type: bomcomp:BlockInstance[]. (required)</documentation>
+      <documentation>
+        instances. TS type: bomcomp:BlockInstance[]. (required)
+      </documentation>
     </instances>
     <context type="seremit:EmitContext">
-      <documentation>context. TS type: seremit:EmitContext. (required)</documentation>
+      <documentation>
+        context. TS type: seremit:EmitContext. (required)
+      </documentation>
     </context>
   </properties>
-
-</block>
+</sercap:EmitConstraintInstances>

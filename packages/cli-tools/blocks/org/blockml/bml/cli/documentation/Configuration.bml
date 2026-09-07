@@ -1,12 +1,6 @@
-<!--
-  CLI Documentation — Configuration
-  FQN: org.blockml.bml.cli.documentation.Configuration
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Documentation — Configuration
+  FQN: org.blockml.bml.cli.documentation.Configuration-->
+<clidocumentation:Configuration xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -21,13 +15,15 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>Configuration</name>
-  <type>clidocumentation:Configuration</type>
-  <baseType>core:Documentation</baseType>
-  <is>blockml.config.json and later bom-cli.config.json</is>
-
-  <documentation>V1 CLI reads blockml.config.json from project root:
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    blockml.config.json and later bom-cli.config.json
+  </is>
+  <documentation>
+    V1 CLI reads blockml.config.json from project root:
+    
     • outDir — default "blockdoc" (CLI DefaultBomConfig)
     • srcDir — default "blocks" (recommended BlockML source folder)
     • libraries — extra Library.bml seeds (appended to package.json blockml.library)
@@ -35,13 +31,13 @@
     • targetPackages — registry name → npm package for plugin load
     • targetOptions — opaque per-target; keys = registry names
     • defaultTarget — compile default when target omitted; default blockdoc
-
+    
     Fields documented in MD but not read by V1 minimal CLI (later):
     thumbsDir, mbLibPath, openscadPath, activeConfig, bmlExtensions.
-
-    bom-cli.config.json command/flag renaming — planned; not V1.</documentation>
+    
+    bom-cli.config.json command/flag renaming — planned; not V1.
+  </documentation>
   <references>
     <see type="clidocumentation:TargetBootstrap" relation="ReadNext" />
   </references>
-
-</block>
+</clidocumentation:Configuration>

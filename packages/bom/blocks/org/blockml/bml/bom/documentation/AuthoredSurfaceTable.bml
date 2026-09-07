@@ -1,12 +1,6 @@
-<!--
-  BOM Documentation — AuthoredSurfaceTable
-  FQN: org.blockml.bml.bom.documentation.AuthoredSurfaceTable
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Documentation — AuthoredSurfaceTable
+  FQN: org.blockml.bml.bom.documentation.AuthoredSurfaceTable-->
+<bomdocumentation:AuthoredSurfaceTable xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -24,14 +18,15 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>AuthoredSurfaceTable</name>
-  <type>bomdocumentation:AuthoredSurfaceTable</type>
-  <baseType>core:Documentation</baseType>
-  <is>What BOM stores vs what downstream interprets</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    What BOM stores vs what downstream interprets
+  </is>
   <documentation>
     # What BOM stores vs what downstream interprets
-
+    
     - bml:each / bml:if / bml:with → directives[] unexpanded → Renderer expands
     - xmlns / xmlns:prefix → SourceInfo.namespaceBindings 1:1 authored → Serializer QName emit (B21)
     - xsi:schemaLocation / xsi:noNamespaceSchemaLocation → SourceInfo (B25) → re-emit on root
@@ -52,5 +47,4 @@
     - Capabilities → CapabilityDefinition in BOM → Renderer interprets (not invoked at parse)
     - XML comments → XmlTrivia on following element (B11) → Serializer re-emits
   </documentation>
-
-</block>
+</bomdocumentation:AuthoredSurfaceTable>

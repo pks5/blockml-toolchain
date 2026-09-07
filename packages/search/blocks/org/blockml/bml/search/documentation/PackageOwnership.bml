@@ -1,12 +1,6 @@
-<!--
-  Search Documentation — PackageOwnership
-  FQN: org.blockml.bml.search.documentation.PackageOwnership
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Search Documentation — PackageOwnership
+  FQN: org.blockml.bml.search.documentation.PackageOwnership-->
+<searchdocumentation:PackageOwnership xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -22,19 +16,20 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PackageOwnership</name>
-  <type>searchdocumentation:PackageOwnership</type>
-  <baseType>core:Documentation</baseType>
-  <is>Toolchain responsibilities for Search</is>
-
-  <documentation>@blockml/search — index, persistence, Search API. Owns this BML library.
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Toolchain responsibilities for Search
+  </is>
+  <documentation>
+    @blockml/search — index, persistence, Search API. Owns this BML library.
+    
     @blockml/framework — project discovery and TypeRegistry bootstrap (same corpus as validate --all).
     @blockml/cli — blockml search command host.
-    @blockml/bom — SearchDocument fields come from BlockDefinition.</documentation>
-
+    @blockml/bom — SearchDocument fields come from BlockDefinition.
+  </documentation>
   <references>
     <see type="searchdocumentation:ScopeExclusions" relation="ReadNext" />
   </references>
-
-</block>
+</searchdocumentation:PackageOwnership>

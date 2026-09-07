@@ -1,12 +1,6 @@
-<!--
-  Framework — ParseExpressionError
-  FQN: org.blockml.bml.framework.expression.ParseExpressionError
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework — ParseExpressionError
+  FQN: org.blockml.bml.framework.expression.ParseExpressionError-->
+<fwexpression:ParseExpressionError xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,20 +25,25 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ParseExpressionError</name>
-  <type>fwexpression:ParseExpressionError</type>
-  <baseType>framework:FrameworkType</baseType>
-  <is>Failed parseExpression error detail</is>
-
-  <documentation>Returned when ParseExpressionOutcome.ok === false.</documentation>
-
+  <baseType>
+    framework:FrameworkType
+  </baseType>
+  <is>
+    Failed parseExpression error detail
+  </is>
+  <documentation>
+    Returned when ParseExpressionOutcome.ok === false.
+  </documentation>
   <properties>
     <message type="type:Text">
-      <documentation>message. TS type: type:Text. (required)</documentation>
+      <documentation>
+        message. TS type: type:Text. (required)
+      </documentation>
     </message>
     <offset type="type:Integer">
-      <documentation>offset. TS type: type:Integer. (required)</documentation>
+      <documentation>
+        offset. TS type: type:Integer. (required)
+      </documentation>
     </offset>
   </properties>
-
-</block>
+</fwexpression:ParseExpressionError>

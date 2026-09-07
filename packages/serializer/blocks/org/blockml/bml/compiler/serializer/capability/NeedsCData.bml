@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — NeedsCData
-  FQN: org.blockml.bml.compiler.serializer.capability.NeedsCData
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — NeedsCData
+  FQN: org.blockml.bml.compiler.serializer.capability.NeedsCData-->
+<sercap:NeedsCData xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,20 +21,25 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>NeedsCData</name>
-  <type>sercap:NeedsCData</type>
-  <baseType>core:Capability</baseType>
-  <is>Detect whether text requires CDATA wrapping (D8)</is>
-
-  <documentation>Detect whether text requires CDATA wrapping (D8)</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Detect whether text requires CDATA wrapping (D8)
+  </is>
+  <documentation>
+    Detect whether text requires CDATA wrapping (D8)
+  </documentation>
   <properties>
     <text type="type:Text">
-      <documentation>text. TS type: type:Text. (required)</documentation>
+      <documentation>
+        text. TS type: type:Text. (required)
+      </documentation>
     </text>
     <result type="type:Boolean">
-      <documentation>result. TS type: type:Boolean. (required)</documentation>
+      <documentation>
+        result. TS type: type:Boolean. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</sercap:NeedsCData>

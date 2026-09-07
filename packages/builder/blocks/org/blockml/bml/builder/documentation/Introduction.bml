@@ -1,12 +1,6 @@
-<!--
-  Builder Documentation — Introduction
-  FQN: org.blockml.bml.builder.documentation.Introduction
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Builder Documentation — Introduction
+  FQN: org.blockml.bml.builder.documentation.Introduction-->
+<builderdocumentation:Introduction xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -20,19 +14,23 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Introduction</name>
-  <type>builderdocumentation:Introduction</type>
-  <baseType>core:Documentation</baseType>
-  <is>Purpose and scope of the Builder package</is>
-  <documentation>The @blockml/builder package provides BomBuilder, the writable authoring API
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Purpose and scope of the Builder package
+  </is>
+  <documentation>
+    The @blockml/builder package provides BomBuilder, the writable authoring API
     for BlockML. A session builds or edits a BOM graph and seal() produces a normal
     Urmodell (BomDocument). Parser-origin and builder-origin documents share types.
-
+    
     This library (org.blockml.bml.builder.*) is the SSOT. TypeScript in
-    packages/builder/src/ implements it. File I/O lives in @blockml/cli (blockml new).</documentation>
+    packages/builder/src/ implements it. File I/O lives in @blockml/cli (blockml new).
+  </documentation>
   <references>
     <see type="builderdocumentation:LayerSeparation" relation="ReadNext" />
     <see type="buildercap:Create" relation="SeeAlso" />
     <see type="bomdoc:BomDocument" relation="SeeAlso" />
   </references>
-</block>
+</builderdocumentation:Introduction>

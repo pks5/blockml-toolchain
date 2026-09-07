@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Capability — ScopeAccepts
-  FQN: org.blockml.bml.compiler.runtime.capability.ScopeAccepts
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Capability — ScopeAccepts
+  FQN: org.blockml.bml.compiler.runtime.capability.ScopeAccepts-->
+<runcap:ScopeAccepts xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,27 +19,33 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>ScopeAccepts</name>
-  <type>runcap:ScopeAccepts</type>
-  <baseType>core:Capability</baseType>
-  <is>Whether a resolved kind is accepted by a target accepts list</is>
-
-  <documentation>True if accepts includes the resolved kind; also true if accepts includes auto and kind is library or corpus.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Whether a resolved kind is accepted by a target accepts list
+  </is>
+  <documentation>
+    True if accepts includes the resolved kind; also true if accepts includes auto and kind is library or corpus.
+  </documentation>
   <references>
     <see type="rundocumentation:CompileScopeRules" relation="SeeAlso" />
   </references>
-
   <properties>
     <resolvedKind type="type:Text">
-      <documentation>document | library | corpus. (required)</documentation>
+      <documentation>
+        document | library | corpus. (required)
+      </documentation>
     </resolvedKind>
     <accepts type="type:Text">
-      <documentation>Target accepts array. (required)</documentation>
+      <documentation>
+        Target accepts array. (required)
+      </documentation>
     </accepts>
     <result type="type:Boolean">
-      <documentation>True if accepted. (required)</documentation>
+      <documentation>
+        True if accepted. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</runcap:ScopeAccepts>

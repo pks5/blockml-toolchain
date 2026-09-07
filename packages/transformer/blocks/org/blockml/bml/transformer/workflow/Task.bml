@@ -1,45 +1,46 @@
-<!--
-  Transformer Workflow — Task
-  FQN: org.blockml.bml.transformer.workflow.Task
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Workflow — Task
+  FQN: org.blockml.bml.transformer.workflow.Task-->
+<workflow:Task xmlns="http://blockml.org/bml"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:lang="org.blockml.bml.language"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Task</name>
-  <type>workflow:Task</type>
-  <baseType>core:Block</baseType>
-  <is>An executable workflow task</is>
-
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    An executable workflow task
+  </is>
+  <isnot>
+    Not an authoring TaskGuide (org.blockml.bml.core.TaskGuide / org.blockml.bml.task.*).
+  </isnot>
   <documentation>
     Abstract workflow unit. Callers invoke run. Concrete subtypes override protected
     execute with the task's actual action. run itself is the outer template
     (prerequisites, rules, execute until successCriteria).
   </documentation>
-
-  <isNot>Not an authoring TaskGuide (org.blockml.bml.core.TaskGuide / org.blockml.bml.task.*).</isNot>
-
-  <abstract>true</abstract>
-
+  <abstract>
+    true
+  </abstract>
   <aggregations>
     <prerequisites type="workflow:Prerequisite[]">
-      <documentation>Preconditions that must hold before this task may run.</documentation>
+      <documentation>
+        Preconditions that must hold before this task may run.
+      </documentation>
     </prerequisites>
     <rules type="workflow:Rule[]">
-      <documentation>Rules to observe while this task runs.</documentation>
+      <documentation>
+        Rules to observe while this task runs.
+      </documentation>
     </rules>
     <successCriteria type="workflow:Criterion[]">
-      <documentation>Acceptance criteria that must hold for this task to be considered successful.</documentation>
+      <documentation>
+        Acceptance criteria that must hold for this task to be considered successful.
+      </documentation>
     </successCriteria>
   </aggregations>
-
   <capabilities>
     <run type="cap:Action">
       <throws>
@@ -51,30 +52,28 @@
         execute until every success criterion holds. Callers invoke this; override
         execute, not run.
       </documentation>
-      <implementation language="lang:PseudoCode"><![CDATA[
-
-for each prerequisite in #this.prerequisites:
-    prerequisite.require()
-
-for each rule in #this.rules:
-    rule.apply()
-
-repeat:
-    #this._execute()
-
-    allSatisfied = true
-
-    for each successCriterion in #this.successCriteria:
-        if not successCriterion.isSatisfied():
-            allSatisfied = false
-
-until allSatisfied
-
-      ]]></implementation>
+      <implementation language="lang:PseudoCode">
+        <![CDATA[
+        for each prerequisite in #this.prerequisites:
+            prerequisite.require()
+        
+        for each rule in #this.rules:
+            rule.apply()
+        
+        repeat:
+            #this._execute()
+        
+            allSatisfied = true
+        
+            for each successCriterion in #this.successCriteria:
+                if not successCriterion.isSatisfied():
+                    allSatisfied = false
+        
+        until allSatisfied
+        ]]>
+      </implementation>
     </run>
-
-    <_execute type="cap:Action">
-      <abstract>true</abstract>
+    <_execute abstract="true" type="cap:Action">
       <throws>
         <workflow:ExecutionException />
       </throws>
@@ -84,5 +83,4 @@ until allSatisfied
       </documentation>
     </_execute>
   </capabilities>
-
-</block>
+</workflow:Task>

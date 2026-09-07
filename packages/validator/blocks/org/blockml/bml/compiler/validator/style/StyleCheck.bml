@@ -1,12 +1,6 @@
-<!--
-  Validator Style — StyleCheck
-  FQN: org.blockml.bml.compiler.validator.style.StyleCheck
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Validator Style — StyleCheck
+  FQN: org.blockml.bml.compiler.validator.style.StyleCheck-->
+<valstyle:StyleCheck xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -14,14 +8,17 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:valstyle="org.blockml.bml.compiler.validator.style">
 
-  <name>StyleCheck</name>
-  <type>valstyle:StyleCheck</type>
-  <baseType>validator:ValidatorType</baseType>
-  <is>Abstract marker for a style-check interpreter kind</is>
-
-  <documentation>Concrete check types bind to a TypeScript interpreter in validateStyle.
-    Unknown check types emit BML_STYLE_UNKNOWN_CHECK (info) and are skipped.</documentation>
-
-  <abstract>true</abstract>
-
-</block>
+  <baseType>
+    validator:ValidatorType
+  </baseType>
+  <is>
+    Abstract marker for a style-check interpreter kind
+  </is>
+  <documentation>
+    Concrete check types bind to a TypeScript interpreter in validateStyle.
+    Unknown check types emit BML_STYLE_UNKNOWN_CHECK (info) and are skipped.
+  </documentation>
+  <abstract>
+    true
+  </abstract>
+</valstyle:StyleCheck>

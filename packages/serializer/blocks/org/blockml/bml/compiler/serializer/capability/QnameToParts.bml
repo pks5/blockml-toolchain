@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — QnameToParts
-  FQN: org.blockml.bml.compiler.serializer.capability.QnameToParts
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — QnameToParts
+  FQN: org.blockml.bml.compiler.serializer.capability.QnameToParts-->
+<sercap:QnameToParts xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,20 +21,25 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>QnameToParts</name>
-  <type>sercap:QnameToParts</type>
-  <baseType>core:Capability</baseType>
-  <is>Split prefixed QName into prefix and local name</is>
-
-  <documentation>Split prefixed QName into prefix and local name</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Split prefixed QName into prefix and local name
+  </is>
+  <documentation>
+    Split prefixed QName into prefix and local name
+  </documentation>
   <properties>
     <qname type="type:Text">
-      <documentation>qname. TS type: type:Text. (required)</documentation>
+      <documentation>
+        qname. TS type: type:Text. (required)
+      </documentation>
     </qname>
     <parts type="type:Text">
-      <documentation>{ prefix, local } (required)</documentation>
+      <documentation>
+        { prefix, local } (required)
+      </documentation>
     </parts>
   </properties>
-
-</block>
+</sercap:QnameToParts>

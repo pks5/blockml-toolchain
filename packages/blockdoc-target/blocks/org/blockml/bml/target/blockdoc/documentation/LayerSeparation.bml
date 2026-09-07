@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Documentation — LayerSeparation
-  FQN: org.blockml.bml.target.blockdoc.documentation.LayerSeparation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Documentation — LayerSeparation
+  FQN: org.blockml.bml.target.blockdoc.documentation.LayerSeparation-->
+<bddocumentation:LayerSeparation xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -28,29 +22,31 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>LayerSeparation</name>
-  <type>bddocumentation:LayerSeparation</type>
-  <baseType>core:Documentation</baseType>
-  <is>BlockDoc vs compiler vs BOM vs other targets</is>
-
-  <documentation>Layers relevant to BlockDoc:
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    BlockDoc vs compiler vs BOM vs other targets
+  </is>
+  <documentation>
+    Layers relevant to BlockDoc:
+    
     org.blockml.bml.bom.* (@blockml/bom) — Urmodell types BlockDoc reads (BlockDefinition,
     MemberDefinition, TypeExpression, CompositionTemplate, …).
-
+    
     org.blockml.bml.target.blockdoc.* (this package) — path/link/page/site rules, options,
     RenderTarget contract for registry name blockdoc.
-
+    
     @blockml/compiler — RenderTarget interface, CompileRequest, Target Registry, compileToOutput.
     Owns scope resolution (document|library|corpus|auto); BlockDoc only declares accepts[].
-
+    
     @blockml/cli — bootstrapTargets from blockml.config.json targets[] (default ["blockdoc"]);
     writes RenderOutput files. Not part of this library.
-
+    
     Sibling toolchain targets (xsd, fatblock) and domain targets (machineblocks-v3-scad)
-    are separate packages with their own libraries.</documentation>
+    are separate packages with their own libraries.
+  </documentation>
   <references>
     <see type="bddocumentation:ArchitectureOverview" relation="ReadNext" />
   </references>
-
-</block>
+</bddocumentation:LayerSeparation>

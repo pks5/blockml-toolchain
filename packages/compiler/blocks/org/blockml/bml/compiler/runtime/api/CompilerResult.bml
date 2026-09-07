@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime API — CompilerResult
-  FQN: org.blockml.bml.compiler.runtime.api.CompilerResult
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime API — CompilerResult
+  FQN: org.blockml.bml.compiler.runtime.api.CompilerResult-->
+<runapi:CompilerResult xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,19 +19,33 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>CompilerResult</name>
-  <type>runapi:CompilerResult</type>
-  <baseType>runtime:RuntimeType</baseType>
-  <is>Success flag, diagnostics, and optional output</is>
-
-  <documentation>Generic envelope CompilerResult of T. success is false if any error diagnostic, including target output.diagnostics folded by renderWithTarget.</documentation>
+  <baseType>
+    runtime:RuntimeType
+  </baseType>
+  <is>
+    Success flag, diagnostics, and optional output
+  </is>
+  <documentation>
+    Generic envelope CompilerResult of T. success is false if any error diagnostic, including target output.diagnostics folded by renderWithTarget.
+  </documentation>
   <references>
     <see type="rundocumentation:PublicApi" relation="SeeAlso" />
   </references>
   <properties>
-    <output type="type:Text"><documentation>Typed output or null. (optional)</documentation></output>
-    <diagnostics type="type:Text"><documentation>Diagnostic list. (required)</documentation></diagnostics>
-    <success type="type:Boolean"><documentation>True when no error diagnostics. (required)</documentation></success>
+    <output type="type:Text">
+      <documentation>
+        Typed output or null. (optional)
+      </documentation>
+    </output>
+    <diagnostics type="type:Text">
+      <documentation>
+        Diagnostic list. (required)
+      </documentation>
+    </diagnostics>
+    <success type="type:Boolean">
+      <documentation>
+        True when no error diagnostics. (required)
+      </documentation>
+    </success>
   </properties>
-
-</block>
+</runapi:CompilerResult>

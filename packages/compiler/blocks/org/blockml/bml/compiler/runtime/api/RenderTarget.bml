@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime API — RenderTarget
-  FQN: org.blockml.bml.compiler.runtime.api.RenderTarget
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime API — RenderTarget
+  FQN: org.blockml.bml.compiler.runtime.api.RenderTarget-->
+<runapi:RenderTarget xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,20 +19,38 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>RenderTarget</name>
-  <type>runapi:RenderTarget</type>
-  <baseType>runtime:RuntimeType</baseType>
-  <is>Registered Stage-3 render target contract</is>
-
-  <documentation>C3/C7: name, accepts[], optional validateRequest, render(request, ctx).</documentation>
+  <baseType>
+    runtime:RuntimeType
+  </baseType>
+  <is>
+    Registered Stage-3 render target contract
+  </is>
+  <documentation>
+    C3/C7: name, accepts[], optional validateRequest, render(request, ctx).
+  </documentation>
   <references>
     <see type="rundocumentation:PublicApi" relation="SeeAlso" />
   </references>
   <properties>
-    <name type="type:Text"><documentation>Registry key / CLI target name. (required)</documentation></name>
-    <accepts type="type:Text"><documentation>CompileScopeKind values this target accepts. (required)</documentation></accepts>
-    <validateRequest type="type:Text"><documentation>Optional request validation returning diagnostics. (optional)</documentation></validateRequest>
-    <render type="type:Text"><documentation>Produce RenderOutput from request and context. (required)</documentation></render>
+    <name type="type:Text">
+      <documentation>
+        Registry key / CLI target name. (required)
+      </documentation>
+    </name>
+    <accepts type="type:Text">
+      <documentation>
+        CompileScopeKind values this target accepts. (required)
+      </documentation>
+    </accepts>
+    <validateRequest type="type:Text">
+      <documentation>
+        Optional request validation returning diagnostics. (optional)
+      </documentation>
+    </validateRequest>
+    <render type="type:Text">
+      <documentation>
+        Produce RenderOutput from request and context. (required)
+      </documentation>
+    </render>
   </properties>
-
-</block>
+</runapi:RenderTarget>

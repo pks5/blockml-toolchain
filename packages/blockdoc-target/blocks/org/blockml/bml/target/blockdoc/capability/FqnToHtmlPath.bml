@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Capability — FqnToHtmlPath
-  FQN: org.blockml.bml.target.blockdoc.capability.FqnToHtmlPath
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Capability — FqnToHtmlPath
+  FQN: org.blockml.bml.target.blockdoc.capability.FqnToHtmlPath-->
+<bdcap:FqnToHtmlPath xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,27 +21,33 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>FqnToHtmlPath</name>
-  <type>bdcap:FqnToHtmlPath</type>
-  <baseType>core:Capability</baseType>
-  <is>Map FQN + OutLayout to relative HTML path</is>
-
-  <documentation>BD7: outLayout fqn → join('.') segments with '/' + '.html'. outLayout package → all but last segment + '/index.html' (single-segment FQN → that segment + '/index.html').</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Map FQN + OutLayout to relative HTML path
+  </is>
+  <documentation>
+    BD7: outLayout fqn → join('.') segments with '/' + '.html'. outLayout package → all but last segment + '/index.html' (single-segment FQN → that segment + '/index.html').
+  </documentation>
   <references>
     <see type="bddocumentation:PathAndLayout" relation="SeeAlso" />
   </references>
-
   <properties>
     <fqn type="type:Text">
-      <documentation>Fully-qualified name (required).</documentation>
+      <documentation>
+        Fully-qualified name (required).
+      </documentation>
     </fqn>
     <outLayout type="bdapi:OutLayout">
-      <documentation>Layout mode (required).</documentation>
+      <documentation>
+        Layout mode (required).
+      </documentation>
     </outLayout>
     <result type="bdpath:FqnHtmlPath">
-      <documentation>Relative path result (required).</documentation>
+      <documentation>
+        Relative path result (required).
+      </documentation>
     </result>
   </properties>
-
-</block>
+</bdcap:FqnToHtmlPath>

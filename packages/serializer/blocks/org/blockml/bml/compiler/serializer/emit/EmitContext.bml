@@ -1,12 +1,6 @@
-<!--
-  Serializer — EmitContext
-  FQN: org.blockml.bml.compiler.serializer.emit.EmitContext
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer — EmitContext
+  FQN: org.blockml.bml.compiler.serializer.emit.EmitContext-->
+<seremit:EmitContext xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,23 +21,30 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>EmitContext</name>
-  <type>seremit:EmitContext</type>
-  <baseType>serializer:SerializerType</baseType>
-  <is>Per-serialize emit configuration and namespace mode</is>
-
-  <documentation>Created by createEmitContext(). useQName is true when document has BML-semantic prefixed xmlns bindings (B21).</documentation>
-
+  <baseType>
+    serializer:SerializerType
+  </baseType>
+  <is>
+    Per-serialize emit configuration and namespace mode
+  </is>
+  <documentation>
+    Created by createEmitContext(). useQName is true when document has BML-semantic prefixed xmlns bindings (B21).
+  </documentation>
   <properties>
     <bindings type="type:Text">
-      <documentation>Map: prefix → namespace URI from SourceInfo.namespaceBindings. (required)</documentation>
+      <documentation>
+        Map: prefix → namespace URI from SourceInfo.namespaceBindings. (required)
+      </documentation>
     </bindings>
     <useQName type="type:Boolean">
-      <documentation>true when hasBmlSemanticQNameBindings(bindings). (required)</documentation>
+      <documentation>
+        true when hasBmlSemanticQNameBindings(bindings). (required)
+      </documentation>
     </useQName>
     <indent type="type:Integer">
-      <documentation>Pretty-print indent spaces; 0 = compact (B13). (required)</documentation>
+      <documentation>
+        Pretty-print indent spaces; 0 = compact (B13). (required)
+      </documentation>
     </indent>
   </properties>
-
-</block>
+</seremit:EmitContext>

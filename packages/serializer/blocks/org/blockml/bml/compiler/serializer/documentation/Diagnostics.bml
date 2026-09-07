@@ -1,12 +1,6 @@
-<!--
-  Serializer Documentation — Diagnostics
-  FQN: org.blockml.bml.compiler.serializer.documentation.Diagnostics
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Documentation — Diagnostics
+  FQN: org.blockml.bml.compiler.serializer.documentation.Diagnostics-->
+<serdocumentation:Diagnostics xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -28,23 +22,24 @@
   xmlns:bomcap="org.blockml.bml.bom.capability"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>Diagnostics</name>
-  <type>serdocumentation:Diagnostics</type>
-  <baseType>core:Documentation</baseType>
-  <is>Serializer diagnostics and host policy</is>
-
-  <documentation>BML_NAMESPACE_UNBOUND — emitted when QName-emit mode requires a namespace prefix
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Serializer diagnostics and host policy
+  </is>
+  <documentation>
+    BML_NAMESPACE_UNBOUND — emitted when QName-emit mode requires a namespace prefix
     that is not bound in document.source.namespaceBindings. Error severity; prefer still
     emitting text when possible so host can decide abort policy.
-
+    
     Host policy (CLI / IDE): whether to refuse serialize after Stage-2 diagnostics is an
     orchestrator decision. The serializer package does not call the validator.
-
-    Diagnostic type: org.blockml.bml.bom.common.Diagnostic (shared with parser/compiler).</documentation>
-
+    
+    Diagnostic type: org.blockml.bml.bom.common.Diagnostic (shared with parser/compiler).
+  </documentation>
   <references>
     <see type="bomcommon:Diagnostic" relation="SeeAlso" />
     <see type="serdocumentation:PackageOwnership" relation="ReadNext" />
   </references>
-
-</block>
+</serdocumentation:Diagnostics>

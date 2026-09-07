@@ -1,12 +1,6 @@
-<!--
-  FatBlock Capability — SerializeFatDocument
-  FQN: org.blockml.bml.target.fatblock.capability.SerializeFatDocument
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock Capability — SerializeFatDocument
+  FQN: org.blockml.bml.target.fatblock.capability.SerializeFatDocument-->
+<fbcap:SerializeFatDocument xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -22,27 +16,33 @@
   xmlns:serializer="org.blockml.bml.compiler.serializer"
   xmlns:type="org.blockml.bml.type">
 
-  <name>SerializeFatDocument</name>
-  <type>fbcap:SerializeFatDocument</type>
-  <baseType>core:Capability</baseType>
-  <is>Serialize fat BomDocument to canonical BML XML</is>
-
-  <documentation>FB17: call @blockml/serializer serialize(document, { indent: 2 }). Returns text and diagnostics.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Serialize fat BomDocument to canonical BML XML
+  </is>
+  <documentation>
+    FB17: call @blockml/serializer serialize(document, { indent: 2 }). Returns text and diagnostics.
+  </documentation>
   <references>
     <see type="fbdocumentation:OutputLayout" relation="SeeAlso" />
   </references>
-
   <properties>
     <document type="bomdoc:BomDocument">
-      <documentation>Assembled fat document. (required)</documentation>
+      <documentation>
+        Assembled fat document. (required)
+      </documentation>
     </document>
     <text type="type:Text">
-      <documentation>Serialized XML or null. (optional)</documentation>
+      <documentation>
+        Serialized XML or null. (optional)
+      </documentation>
     </text>
     <diagnostics type="type:Text">
-      <documentation>Serialize diagnostics. (required)</documentation>
+      <documentation>
+        Serialize diagnostics. (required)
+      </documentation>
     </diagnostics>
   </properties>
-
-</block>
+</fbcap:SerializeFatDocument>

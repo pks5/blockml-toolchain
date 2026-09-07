@@ -1,12 +1,6 @@
-<!--
-  XSD Capability — Render
-  FQN: org.blockml.bml.target.xsd.capability.Render
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--XSD Capability — Render
+  FQN: org.blockml.bml.target.xsd.capability.Render-->
+<xsdcap:Render xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -20,28 +14,34 @@
   xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Render</name>
-  <type>xsdcap:Render</type>
-  <baseType>core:Capability</baseType>
-  <is>Public RenderTarget entry: TypeRegistry to XSD files and catalog</is>
-
-  <documentation>XSD1–XSD3: name xsd; accepts library|corpus|auto; always emit bml.xsd. XSD14–XSD15: always rootFiles catalog.xml; if emitDomainSchemas append types.xsd and service.xsd with catalog entries. Uses session typeRegistry and outputBasePath.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Public RenderTarget entry: TypeRegistry to XSD files and catalog
+  </is>
+  <documentation>
+    XSD1–XSD3: name xsd; accepts library|corpus|auto; always emit bml.xsd. XSD14–XSD15: always rootFiles catalog.xml; if emitDomainSchemas append types.xsd and service.xsd with catalog entries. Uses session typeRegistry and outputBasePath.
+  </documentation>
   <references>
     <see type="xsddocumentation:PublicApi" relation="SeeAlso" />
     <see type="xsdcap:EmitBlockXsd" relation="SeeAlso" />
   </references>
-
   <properties>
     <request type="type:Text">
-      <documentation>CompileRequest with targetOptions. (required)</documentation>
+      <documentation>
+        CompileRequest with targetOptions. (required)
+      </documentation>
     </request>
     <renderContext type="type:Text">
-      <documentation>RenderContext. (required)</documentation>
+      <documentation>
+        RenderContext. (required)
+      </documentation>
     </renderContext>
     <result type="xsdapi:XsdRenderOutput">
-      <documentation>files and rootFiles. (required)</documentation>
+      <documentation>
+        files and rootFiles. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</xsdcap:Render>

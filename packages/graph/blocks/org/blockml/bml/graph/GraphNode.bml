@@ -1,12 +1,6 @@
-<!--
-  Graph — GraphNode
-  FQN: org.blockml.bml.graph.GraphNode
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph — GraphNode
+  FQN: org.blockml.bml.graph.GraphNode-->
+<graph:GraphNode xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,38 +15,60 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>GraphNode</name>
-  <type>graph:GraphNode</type>
-  <baseType>graph:GraphType</baseType>
-  <is>Block or Member node in the authored graph</is>
-  <documentation>kind is block or member. Member ids are ownerFqn#kind:name. origin is workspace, dependency, or unresolved.</documentation>
+  <baseType>
+    graph:GraphType
+  </baseType>
+  <is>
+    Block or Member node in the authored graph
+  </is>
+  <documentation>
+    kind is block or member. Member ids are ownerFqn#kind:name. origin is workspace, dependency, or unresolved.
+  </documentation>
   <properties>
     <kind type="type:Text">
-      <documentation>block or member. (required)</documentation>
+      <documentation>
+        block or member. (required)
+      </documentation>
     </kind>
     <fqn type="type:Text">
-      <documentation>Block FQN or member id. (required)</documentation>
+      <documentation>
+        Block FQN or member id. (required)
+      </documentation>
     </fqn>
     <name type="type:Text">
-      <documentation>Short name. (required)</documentation>
+      <documentation>
+        Short name. (required)
+      </documentation>
     </name>
     <file type="type:Text">
-      <documentation>Source file path. (required)</documentation>
+      <documentation>
+        Source file path. (required)
+      </documentation>
     </file>
     <origin type="type:Text">
-      <documentation>workspace | dependency | unresolved. (required)</documentation>
+      <documentation>
+        workspace | dependency | unresolved. (required)
+      </documentation>
     </origin>
     <resolved type="type:Boolean">
-      <documentation>false for stub nodes. (required)</documentation>
+      <documentation>
+        false for stub nodes. (required)
+      </documentation>
     </resolved>
     <library type="type:Text">
-      <documentation>Package prefix. (optional)</documentation>
+      <documentation>
+        Package prefix. (optional)
+      </documentation>
     </library>
     <memberKind type="type:Text">
-      <documentation>property | aggregation | association | capability. (optional)</documentation>
+      <documentation>
+        property | aggregation | association | capability. (optional)
+      </documentation>
     </memberKind>
     <displayFqn type="type:Text">
-      <documentation>Display FQN such as Wall.size. (optional)</documentation>
+      <documentation>
+        Display FQN such as Wall.size. (optional)
+      </documentation>
     </displayFqn>
   </properties>
-</block>
+</graph:GraphNode>

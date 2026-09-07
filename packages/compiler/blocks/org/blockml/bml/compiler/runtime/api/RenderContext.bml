@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime API — RenderContext
-  FQN: org.blockml.bml.compiler.runtime.api.RenderContext
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime API — RenderContext
+  FQN: org.blockml.bml.compiler.runtime.api.RenderContext-->
+<runapi:RenderContext xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,19 +19,33 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>RenderContext</name>
-  <type>runapi:RenderContext</type>
-  <baseType>runtime:RuntimeType</baseType>
-  <is>Per-node render context with child fork</is>
-
-  <documentation>C1: session plus blockFqn and outputRelativePath; child() forks without mutating session.</documentation>
+  <baseType>
+    runtime:RuntimeType
+  </baseType>
+  <is>
+    Per-node render context with child fork
+  </is>
+  <documentation>
+    C1: session plus blockFqn and outputRelativePath; child() forks without mutating session.
+  </documentation>
   <references>
     <see type="rundocumentation:PublicApi" relation="SeeAlso" />
   </references>
   <properties>
-    <session type="runapi:RenderSession"><documentation>Shared session. (required)</documentation></session>
-    <blockFqn type="type:Text"><documentation>Current block FQN. (required)</documentation></blockFqn>
-    <outputRelativePath type="type:Text"><documentation>Relative output path hint. (required)</documentation></outputRelativePath>
+    <session type="runapi:RenderSession">
+      <documentation>
+        Shared session. (required)
+      </documentation>
+    </session>
+    <blockFqn type="type:Text">
+      <documentation>
+        Current block FQN. (required)
+      </documentation>
+    </blockFqn>
+    <outputRelativePath type="type:Text">
+      <documentation>
+        Relative output path hint. (required)
+      </documentation>
+    </outputRelativePath>
   </properties>
-
-</block>
+</runapi:RenderContext>

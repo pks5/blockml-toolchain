@@ -1,12 +1,6 @@
-<!--
-  Graph — GraphNeighbor
-  FQN: org.blockml.bml.graph.GraphNeighbor
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph — GraphNeighbor
+  FQN: org.blockml.bml.graph.GraphNeighbor-->
+<graph:GraphNeighbor xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,32 +15,50 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>GraphNeighbor</name>
-  <type>graph:GraphNeighbor</type>
-  <baseType>graph:GraphType</baseType>
-  <is>One semantic 1-hop result</is>
-  <documentation>Block-level uses/usedBy/neighbors result. via is the Member that explains a MEMBER_TYPE hop. source is set when the edge is owned by a block other than the queried FQN (uses/used-by/neighbors depth &gt; 1).</documentation>
+  <baseType>
+    graph:GraphType
+  </baseType>
+  <is>
+    One semantic 1-hop result
+  </is>
+  <documentation>
+    Block-level uses/usedBy/neighbors result. via is the Member that explains a MEMBER_TYPE hop. source is set when the edge is owned by a block other than the queried FQN (uses/used-by/neighbors depth > 1).
+  </documentation>
   <properties>
     <node type="graph:GraphNode">
-      <documentation>Neighbor block. (required)</documentation>
+      <documentation>
+        Neighbor block. (required)
+      </documentation>
     </node>
     <relation type="type:Text">
-      <documentation>Authored relation. (required)</documentation>
+      <documentation>
+        Authored relation. (required)
+      </documentation>
     </relation>
     <direction type="type:Text">
-      <documentation>outgoing or incoming. (required)</documentation>
+      <documentation>
+        outgoing or incoming. (required)
+      </documentation>
     </direction>
     <via type="graph:GraphNode">
-      <documentation>Member node when the hop goes through a member. (optional)</documentation>
+      <documentation>
+        Member node when the hop goes through a member. (optional)
+      </documentation>
     </via>
     <source type="graph:GraphNode">
-      <documentation>Block that owns this edge when it is not the queried FQN. (optional)</documentation>
+      <documentation>
+        Block that owns this edge when it is not the queried FQN. (optional)
+      </documentation>
     </source>
     <file type="type:Text">
-      <documentation>Provenance file. (optional)</documentation>
+      <documentation>
+        Provenance file. (optional)
+      </documentation>
     </file>
     <line type="type:Integer">
-      <documentation>Provenance line. (optional)</documentation>
+      <documentation>
+        Provenance line. (optional)
+      </documentation>
     </line>
   </properties>
-</block>
+</graph:GraphNeighbor>

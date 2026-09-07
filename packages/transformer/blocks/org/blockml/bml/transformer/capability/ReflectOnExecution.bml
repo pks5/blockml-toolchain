@@ -1,47 +1,42 @@
-<!--
-  Transformer Capability — ReflectOnExecution
-  FQN: org.blockml.bml.transformer.capability.ReflectOnExecution
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Capability — ReflectOnExecution
+  FQN: org.blockml.bml.transformer.capability.ReflectOnExecution-->
+<transformercap:ReflectOnExecution xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation">
 
-  <name>ReflectOnExecution</name>
-  <type>transformercap:ReflectOnExecution</type>
-  <baseType>core:Capability</baseType>
-  <is>Process step [3] — observe executor output without changing the model</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Process step [3] — observe executor output without changing the model
+  </is>
   <documentation>
     # Reflect on Execution
-
+    
     Envelope step after the operation executor. Deterministic. No agent
     process. Must not change the model — Persist writes those fields
     onto the ModelOperation.
-
+    
     * `changedFiles` — workspace-relative paths from the git worktree
       trace after the executor (excluding `_meta/transform/`).
     * `output` — executor output text, only when this operation's
       `captureOutput` is true.
-
+    
     Skipped when the executor throws. `output` never decides Succeeded
     vs Failed. TS: pipeline/reflect.ts.
   </documentation>
-
   <references>
     <see type="transformerdocumentation:ArchitectureOverview" relation="SeeAlso" />
     <see type="transformercap:ExecuteTask" relation="SeeAlso" />
     <see type="transformercap:PersistExecution" relation="SeeAlso" />
   </references>
-
   <properties>
     <changedFiles type="type:Text[]">
-      <documentation>Paths modified during Execute, from the git worktree trace. (required)</documentation>
+      <documentation>
+        Paths modified during Execute, from the git worktree trace. (required)
+      </documentation>
     </changedFiles>
     <output type="type:Text">
       <documentation>
@@ -50,5 +45,4 @@
       </documentation>
     </output>
   </properties>
-
-</block>
+</transformercap:ReflectOnExecution>

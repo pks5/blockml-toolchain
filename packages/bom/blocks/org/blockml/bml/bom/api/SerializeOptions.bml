@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — SerializeOptions
-  FQN: org.blockml.bml.bom.api.SerializeOptions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — SerializeOptions
+  FQN: org.blockml.bml.bom.api.SerializeOptions-->
+<bomapi:SerializeOptions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,20 +17,25 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>SerializeOptions</name>
-  <type>bomapi:SerializeOptions</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Options for serialize() (B26)</is>
-
-  <documentation>Options for serialize() (B26)</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Options for serialize() (B26)
+  </is>
+  <documentation>
+    Options for serialize() (B26)
+  </documentation>
   <properties>
     <indent type="type:Integer">
-      <documentation>Default: 2. 0 = compact (B13). (optional)</documentation>
+      <documentation>
+        Default: 2. 0 = compact (B13). (optional)
+      </documentation>
     </indent>
     <xmlDeclaration type="type:Boolean">
-      <documentation>Default: false (B17/B24). (optional)</documentation>
+      <documentation>
+        Default: false (B17/B24). (optional)
+      </documentation>
     </xmlDeclaration>
   </properties>
-
-</block>
+</bomapi:SerializeOptions>

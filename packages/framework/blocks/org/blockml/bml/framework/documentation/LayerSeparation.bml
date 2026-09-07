@@ -1,12 +1,6 @@
-<!--
-  Framework Documentation — LayerSeparation
-  FQN: org.blockml.bml.framework.documentation.LayerSeparation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Documentation — LayerSeparation
+  FQN: org.blockml.bml.framework.documentation.LayerSeparation-->
+<fwdocumentation:LayerSeparation xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -32,31 +26,32 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>LayerSeparation</name>
-  <type>fwdocumentation:LayerSeparation</type>
-  <baseType>core:Documentation</baseType>
-  <is>Framework vs BOM vs parser vs validator vs core</is>
-
-  <documentation>Five layers relevant to framework utilities:
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Framework vs BOM vs parser vs validator vs core
+  </is>
+  <documentation>
+    Five layers relevant to framework utilities:
+    
     org.blockml.bml.bom.* (@blockml/bom) — Urmodell data structures (BomDocument, …).
     ValidateOptions, ValidateResult, TypeRegistryReader (B26) live here.
-
+    
     org.blockml.bml.framework.* (this package) — TypeRegistry, fork/resolve/validate utilities,
     parseExpression AST (Stage 2). Does not own validate() orchestration.
-
+    
     org.blockml.bml.compiler.parser.* (@blockml/parser) — BML → BomDocument (Stage 1).
     bootstrapTypeRegistry calls parse() on corpus files.
-
+    
     org.blockml.bml.compiler.validator.* (@blockml/validator) — validate() entry point;
     orchestrates framework utilities on a pragmatic fork.
-
+    
     org.blockml.bml.definition.* (@blockml/core) — BML meta-model corpus (npm).
-    Framework reads Definition types via TypeRegistry; does not duplicate grammar blocks.</documentation>
-
+    Framework reads Definition types via TypeRegistry; does not duplicate grammar blocks.
+  </documentation>
   <references>
     <see type="fwdocumentation:ArchitectureOverview" relation="ReadNext" />
     <see type="bomdocumentation:LayerSeparation" relation="SeeAlso" />
   </references>
-
-</block>
+</fwdocumentation:LayerSeparation>

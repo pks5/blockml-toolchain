@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Capability — CompileBomToOutput
-  FQN: org.blockml.bml.compiler.runtime.capability.CompileBomToOutput
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Capability — CompileBomToOutput
+  FQN: org.blockml.bml.compiler.runtime.capability.CompileBomToOutput-->
+<runcap:CompileBomToOutput xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,44 +19,50 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>CompileBomToOutput</name>
-  <type>runcap:CompileBomToOutput</type>
-  <baseType>core:Capability</baseType>
-  <is>BOM-first Stage-3 sugar with required TypeRegistry</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    BOM-first Stage-3 sugar with required TypeRegistry
+  </is>
   <documentation>
     # BOM-first Stage-3 sugar with required TypeRegistry
-
+    
     Renders an existing BomDocument without re-parse or bootstrap.
-
+    
     Requires CompileBomOptions.typeRegistry (BML_MISSING_TYPE_REGISTRY when absent).
-
+    
     Document scope only — target.accepts must include document.
-
+    
     Registry is passed through unchanged; host owns registry contents.
-
+    
     Synthetic CompileRequest uses scope kind document and optional targetOptions.
   </documentation>
-
   <references>
     <see type="runcap:CompileToOutput" relation="SeeAlso" />
     <see type="runapi:CompileBomOptions" relation="SeeAlso" />
     <see type="rundocumentation:ExternalTargetContract" relation="SeeAlso" />
   </references>
-
   <properties>
     <document type="type:Text">
-      <documentation>BomDocument to render. (required)</documentation>
+      <documentation>
+        BomDocument to render. (required)
+      </documentation>
     </document>
     <targetName type="type:Text">
-      <documentation>Registered target name. (required)</documentation>
+      <documentation>
+        Registered target name. (required)
+      </documentation>
     </targetName>
     <options type="runapi:CompileBomOptions">
-      <documentation>BOM-first options including required typeRegistry. (required)</documentation>
+      <documentation>
+        BOM-first options including required typeRegistry. (required)
+      </documentation>
     </options>
     <result type="runapi:CompilerResult">
-      <documentation>RenderOutput envelope. (required)</documentation>
+      <documentation>
+        RenderOutput envelope. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</runcap:CompileBomToOutput>

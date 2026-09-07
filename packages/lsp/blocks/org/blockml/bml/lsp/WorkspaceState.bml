@@ -1,12 +1,6 @@
-<!--
-  LSP — WorkspaceState
-  FQN: org.blockml.bml.lsp.WorkspaceState
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP — WorkspaceState
+  FQN: org.blockml.bml.lsp.WorkspaceState-->
+<lsp:WorkspaceState xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,26 +23,35 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>WorkspaceState</name>
-  <type>lsp:WorkspaceState</type>
-  <baseType>lsp:LspType</baseType>
-  <is>Cached workspace TypeRegistry and bootstrap diagnostics</is>
-
-  <documentation>Per-root-dir language-service workspace. createWorkspace() builds and caches this.</documentation>
-
+  <baseType>
+    lsp:LspType
+  </baseType>
+  <is>
+    Cached workspace TypeRegistry and bootstrap diagnostics
+  </is>
+  <documentation>
+    Per-root-dir language-service workspace. createWorkspace() builds and caches this.
+  </documentation>
   <properties>
     <rootDir type="type:Text">
-      <documentation>Absolute workspace root. (required)</documentation>
+      <documentation>
+        Absolute workspace root. (required)
+      </documentation>
     </rootDir>
     <config type="type:Text">
-      <documentation>Loaded BomConfig (srcDir, libraries). (required)</documentation>
+      <documentation>
+        Loaded BomConfig (srcDir, libraries). (required)
+      </documentation>
     </config>
     <registry type="fwcap:TypeRegistry">
-      <documentation>Bootstrapped TypeRegistry for this workspace. (required)</documentation>
+      <documentation>
+        Bootstrapped TypeRegistry for this workspace. (required)
+      </documentation>
     </registry>
     <bootstrapDiagnostics type="bomcommon:Diagnostic[]">
-      <documentation>Library-graph bootstrap errors kept for analysis. (required)</documentation>
+      <documentation>
+        Library-graph bootstrap errors kept for analysis. (required)
+      </documentation>
     </bootstrapDiagnostics>
   </properties>
-
-</block>
+</lsp:WorkspaceState>

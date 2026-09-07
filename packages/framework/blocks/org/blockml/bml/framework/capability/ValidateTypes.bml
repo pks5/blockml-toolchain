@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — ValidateTypes
-  FQN: org.blockml.bml.framework.capability.ValidateTypes
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — ValidateTypes
+  FQN: org.blockml.bml.framework.capability.ValidateTypes-->
+<fwcap:ValidateTypes xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,28 +25,29 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ValidateTypes</name>
-  <type>fwcap:ValidateTypes</type>
-  <baseType>core:Capability</baseType>
-  <is>Semantic type checks on BomDocument using TypeRegistry</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Semantic type checks on BomDocument using TypeRegistry
+  </is>
   <documentation>
     Semantic type checks on BomDocument using TypeRegistry.
-
+    
     Existence is classified per declared ValueType — there is no shared MemberReference parent:
-
+    
     - TypeReference, PackageReference, InstanceReference, PropertyReference, AggregationReference,
       AssociationReference, CapabilityReference, and the matching *ReferenceEntity wrappers
     - Identifier types (`TypeIdentifier`, `MemberIdentifier`, …) are syntax-only and are not
       existence-checked
-
+    
     TypeReference / TypeReferenceEntity literals stay authored text (QName or
     TypeExpression). The reference walk re-parses them with
     document.source.namespaceBindings — the same xmlns map as type attributes —
     then existence-checks the resolved FQNs. Canonical default is checked once
     (property.value; values[namespace=""] is the same entry). Prefixed
     PropertyValueEntry facets are not existence-checked.
-
+    
     After the reference walk, canonical BML literals with a declared PrimitiveType are
     checked via fwcap:EvaluateParseValue (property.value / values[namespace=""]).
     Prefixed / annotation-namespaced PropertyValueEntry values (scad:value and other
@@ -60,7 +55,7 @@
     BML lexical values. TODO: a matching prefixed type (for example scad:type for
     scad:value) so each facet can be parseValue-checked in its own language.
     Failure → BML_INVALID_VALUE. Existence stays on the reference walk.
-
+    
     Local redeclarations that merge with a member from the baseType chain or from
     contracts[] must set override="true" on every member kind — property, aggregation,
     association, and capability. Filling an inherited aggregation with composition
@@ -68,23 +63,26 @@
     override="true" without a matching inherited or contract member →
     BML_OVERRIDE_WITHOUT_PARENT. Override is not inherited; each layer must set it.
   </documentation>
-
   <references>
     <see type="fwcap:ResolveEffectiveMembers" relation="SeeAlso" />
     <see type="fwcap:ParseExpression" relation="SeeAlso" />
     <see type="fwcap:EvaluateParseValue" relation="SeeAlso" />
   </references>
-
   <properties>
     <document type="bomdoc:BomDocument">
-      <documentation>document. TS type: bomdoc:BomDocument. (required)</documentation>
+      <documentation>
+        document. TS type: bomdoc:BomDocument. (required)
+      </documentation>
     </document>
     <registry type="fwcap:TypeRegistry">
-      <documentation>registry. TS type: fwcap:TypeRegistry. (required)</documentation>
+      <documentation>
+        registry. TS type: fwcap:TypeRegistry. (required)
+      </documentation>
     </registry>
     <diagnostics type="bomcommon:Diagnostic[]">
-      <documentation>diagnostics. TS type: bomcommon:Diagnostic[]. (required)</documentation>
+      <documentation>
+        diagnostics. TS type: bomcommon:Diagnostic[]. (required)
+      </documentation>
     </diagnostics>
   </properties>
-
-</block>
+</fwcap:ValidateTypes>

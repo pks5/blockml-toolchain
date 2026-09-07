@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Capability — AssembleSite
-  FQN: org.blockml.bml.target.blockdoc.capability.AssembleSite
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Capability — AssembleSite
+  FQN: org.blockml.bml.target.blockdoc.capability.AssembleSite-->
+<bdcap:AssembleSite xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,41 +21,47 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>AssembleSite</name>
-  <type>bdcap:AssembleSite</type>
-  <baseType>core:Capability</baseType>
-  <is>Orchestrate full multi-file site emission</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Orchestrate full multi-file site emission
+  </is>
   <documentation>
     # Orchestrate full multi-file site emission
-
+    
     BD23/BD24/BD27: emit one HTML per selected FQN (nested via findBlock on subBlocks);
     emit all-blocks.html (BD21 listing); merged + fqn → index.html redirects to
     FirstInterestingPackagePrefix (or virtual root package index when empty); perLibrary →
     {libPrefix}/all-blocks.html (libPrefix = Library type with .Library stripped); if outLayout=fqn
     emit package indexes for all prefixes; emit search-index.json and search.js for every block page.
   </documentation>
-
   <references>
     <see type="bddocumentation:SiteAssembly" relation="SeeAlso" />
     <see type="bdcap:Render" relation="SeeAlso" />
     <see type="bdcap:BuildSearchIndex" relation="SeeAlso" />
     <see type="bdcap:FirstInterestingPackagePrefix" relation="SeeAlso" />
   </references>
-
   <properties>
     <request type="type:Text">
-      <documentation>CompileRequest with targetOptions (required).</documentation>
+      <documentation>
+        CompileRequest with targetOptions (required).
+      </documentation>
     </request>
     <typeRegistry type="type:Text">
-      <documentation>TypeRegistry (required).</documentation>
+      <documentation>
+        TypeRegistry (required).
+      </documentation>
     </typeRegistry>
     <libraryPaths type="type:Text">
-      <documentation>Library paths from session (optional).</documentation>
+      <documentation>
+        Library paths from session (optional).
+      </documentation>
     </libraryPaths>
     <result type="bdapi:BlockDocRenderOutput">
-      <documentation>files[] (required).</documentation>
+      <documentation>
+        files[] (required).
+      </documentation>
     </result>
   </properties>
-
-</block>
+</bdcap:AssembleSite>

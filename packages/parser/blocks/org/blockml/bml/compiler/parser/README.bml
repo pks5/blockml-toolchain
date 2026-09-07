@@ -1,12 +1,6 @@
-<!--
-  BlockML Parser — README
-  FQN: org.blockml.bml.compiler.parser.README
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Parser — README
+  FQN: org.blockml.bml.compiler.parser.README-->
+<parser:README xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,31 +23,31 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>README</name>
-  <type>parser:README</type>
-  <baseType>core:ReadMe</baseType>
-  <is>Reading entry for the Parser compiler library</is>
-
+  <baseType>
+    core:ReadMe
+  </baseType>
+  <is>
+    Reading entry for the Parser compiler library
+  </is>
   <documentation>
     The @blockml/parser package converts BML XML to BomDocument (Urmodell).
     This library (org.blockml.bml.compiler.parser.*) is the SSOT; TypeScript in
     packages/parser/src/ implements it. Parity tests in packages/parser/test/
     verify BML ↔ TS alignment.
-
+    
     Start reading at org.blockml.bml.compiler.parser.documentation.Introduction (ReadNext chain).
-
+    
     Layer separation:
     • org.blockml.bml.bom.* (@blockml/bom) — Urmodell types parser produces
     • org.blockml.bml.compiler.parser.* (this library) — mapping rules and pipeline
     • org.blockml.bml.compiler.serializer.* (@blockml/serializer) — inverse emit
     • org.blockml.bml.definition.* (@blockml/core) — BML meta-model
-
+    
     Modules: documentation (narrative specs), map (MapContext), config (constants),
     capability (parse + map operations).
-
+    
     Not in this library: SerializeResult (@blockml/serializer); bomEquals (@blockml/bom).
   </documentation>
-
   <references>
     <see type="pardocumentation:Introduction" relation="ReadFirst" />
     <see type="pardocumentation:DesignDecisions" relation="SeeAlso" />
@@ -61,5 +55,4 @@
     <see type="bomdocumentation:PublicApi" relation="SeeAlso" />
     <see type="serdocumentation:Introduction" relation="SeeAlso" />
   </references>
-
-</block>
+</parser:README>

@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — TypeDescriptor
-  FQN: org.blockml.bml.bom.type.TypeDescriptor
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — TypeDescriptor
+  FQN: org.blockml.bml.bom.type.TypeDescriptor-->
+<bomtype:TypeDescriptor xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,15 +17,16 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>TypeDescriptor</name>
-  <type>bomtype:TypeDescriptor</type>
-  <baseType>bomtype:TypeExpression</baseType>
-  <is>V1 alias for TypeExpression</is>
-
-  <documentation>Alias kept for Capability inputType/outputType. Same shape as TypeExpression.</documentation>
-
+  <baseType>
+    bomtype:TypeExpression
+  </baseType>
+  <is>
+    V1 alias for TypeExpression
+  </is>
+  <documentation>
+    Alias kept for Capability inputType/outputType. Same shape as TypeExpression.
+  </documentation>
   <aliases>
-    <alias type="bomtype:TypeExpression" />
+    <blockml:meta.alias />
   </aliases>
-
-</block>
+</bomtype:TypeDescriptor>

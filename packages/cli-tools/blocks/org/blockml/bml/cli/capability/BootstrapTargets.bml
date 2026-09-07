@@ -1,12 +1,6 @@
-<!--
-  CLI Capability — BootstrapTargets
-  FQN: org.blockml.bml.cli.capability.BootstrapTargets
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Capability — BootstrapTargets
+  FQN: org.blockml.bml.cli.capability.BootstrapTargets-->
+<clicap:BootstrapTargets xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,29 +14,31 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>BootstrapTargets</name>
-  <type>clicap:BootstrapTargets</type>
-  <baseType>core:Capability</baseType>
-  <is>Register render targets from config.targets[]</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Register render targets from config.targets[]
+  </is>
   <documentation>
     # Register render targets from config.targets[]
-
+    
     CLI3: async idempotent — second call no-op. CLI4: built-in factories blockdoc, xsd, fatblock; custom via registerTargetFactory or targetPackages plugin load. CLI5: unknown name in targets[] throws. Also registers requested target name for this run. resetBootstrapTargets clears registry.
   </documentation>
-
   <references>
     <see type="clidocumentation:TargetBootstrap" relation="SeeAlso" />
     <see type="cliconfig:CliConstants" relation="SeeAlso" />
   </references>
-
   <properties>
     <config type="cliapi:BomConfig">
-      <documentation>Project config with targets[]. (required)</documentation>
+      <documentation>
+        Project config with targets[]. (required)
+      </documentation>
     </config>
     <requested type="type:Text">
-      <documentation>Target names needed for this invocation. (optional)</documentation>
+      <documentation>
+        Target names needed for this invocation. (optional)
+      </documentation>
     </requested>
   </properties>
-
-</block>
+</clicap:BootstrapTargets>

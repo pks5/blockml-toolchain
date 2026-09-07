@@ -1,12 +1,6 @@
-<!--
-  Validator Documentation — ValidationPipeline
-  FQN: org.blockml.bml.compiler.validator.documentation.ValidationPipeline
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Validator Documentation — ValidationPipeline
+  FQN: org.blockml.bml.compiler.validator.documentation.ValidationPipeline-->
+<valdocumentation:ValidationPipeline xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,13 +17,15 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ValidationPipeline</name>
-  <type>valdocumentation:ValidationPipeline</type>
-  <baseType>core:Documentation</baseType>
-  <is>validate() orchestration steps</is>
-
-  <documentation>validate(document, options?) pipeline (packages/validator/src/validate.ts):
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    validate() orchestration steps
+  </is>
+  <documentation>
+    validate(document, options?) pipeline (packages/validator/src/validate.ts):
+    
     1. Resolve TypeRegistry — options.typeRegistry if instanceof TypeRegistry,
        else bootstrapTypeRegistry({ paths, libraryPaths, rootDir })
     2. forkBom(document) → pragmaticModel (structuredClone working copy)
@@ -45,17 +41,16 @@
     12. validateStyle(pragmaticModel) → append warning/recommendation diagnostics
     13. success = no diagnostic with severity === "error"
     14. Return ValidateResult { pragmaticModel?, diagnostics, success }
-
+    
     When continueOnError === false and success === false, pragmaticModel is omitted
     from the result (early return with diagnostics only).
-
+    
     Out of scope in this pipeline: SCAD/MachineBlocks Stage-3 render validation;
-    MemberGroups axis constraints (MB-only).</documentation>
-
+    MemberGroups axis constraints (MB-only).
+  </documentation>
   <references>
     <see type="valdocumentation:PublicApi" relation="ReadNext" />
     <see type="valcap:Validate" relation="Defines" />
     <see type="valcap:ValidateStyle" relation="SeeAlso" />
   </references>
-
-</block>
+</valdocumentation:ValidationPipeline>

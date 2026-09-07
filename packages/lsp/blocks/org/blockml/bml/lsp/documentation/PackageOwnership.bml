@@ -1,12 +1,6 @@
-<!--
-  LSP Documentation — PackageOwnership
-  FQN: org.blockml.bml.lsp.documentation.PackageOwnership
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP Documentation — PackageOwnership
+  FQN: org.blockml.bml.lsp.documentation.PackageOwnership-->
+<lspdocumentation:PackageOwnership xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,18 +24,19 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PackageOwnership</name>
-  <type>lspdocumentation:PackageOwnership</type>
-  <baseType>core:Documentation</baseType>
-  <is>Toolchain responsibilities for LSP</is>
-
-  <documentation>@blockml/lsp — LSP server, language-service, workspace bootstrap. Owns this BML library.
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Toolchain responsibilities for LSP
+  </is>
+  <documentation>
+    @blockml/lsp — LSP server, language-service, workspace bootstrap. Owns this BML library.
+    
     @blockml/parser / @blockml/serializer / @blockml/validator / @blockml/framework — semantic backend.
-    External VS Code (or other) extension — Language Client, TextMate grammar, token colors, .bml file association.</documentation>
-
+    External VS Code (or other) extension — Language Client, TextMate grammar, token colors, .bml file association.
+  </documentation>
   <references>
     <see type="lspdocumentation:ScopeExclusions" relation="ReadNext" />
   </references>
-
-</block>
+</lspdocumentation:PackageOwnership>

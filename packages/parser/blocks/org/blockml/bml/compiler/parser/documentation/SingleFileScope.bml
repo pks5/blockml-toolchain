@@ -1,12 +1,6 @@
-<!--
-  Parser Documentation — SingleFileScope
-  FQN: org.blockml.bml.compiler.parser.documentation.SingleFileScope
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Documentation — SingleFileScope
+  FQN: org.blockml.bml.compiler.parser.documentation.SingleFileScope-->
+<pardocumentation:SingleFileScope xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,23 +24,24 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>SingleFileScope</name>
-  <type>pardocumentation:SingleFileScope</type>
-  <baseType>core:Documentation</baseType>
-  <is>One BomDocument per parse(); external refs as strings (B5)</is>
-
-  <documentation>parse() produces exactly one BomDocument per invocation.
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    One BomDocument per parse(); external refs as strings (B5)
+  </is>
+  <documentation>
+    parse() produces exactly one BomDocument per invocation.
+    
     Cross-file references stored in authored form:
     • type/baseType FQNs as resolved strings
     • Preset refs as FQN::id strings (unmerged)
     • bml:version on instances — no registry lookup at parse time
-
+    
     TypeRegistry bootstrap, effective member resolution, cross-file validation →
-    @blockml/cli orchestrator + @blockml/framework utilities + @blockml/validator.</documentation>
-
+    @blockml/cli orchestrator + @blockml/framework utilities + @blockml/validator.
+  </documentation>
   <references>
     <see type="pardocumentation:DesignDecisions" relation="ReadNext" />
   </references>
-
-</block>
+</pardocumentation:SingleFileScope>

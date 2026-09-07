@@ -1,12 +1,6 @@
-<!--
-  Validator Capability — Validate
-  FQN: org.blockml.bml.compiler.validator.capability.Validate
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Validator Capability — Validate
+  FQN: org.blockml.bml.compiler.validator.capability.Validate-->
+<valcap:Validate xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -22,15 +16,17 @@
   xmlns:valcap="org.blockml.bml.compiler.validator.capability"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>Validate</name>
-  <type>valcap:Validate</type>
-  <baseType>core:Capability</baseType>
-  <is>Public entry: BomDocument → ValidateResult (B26)</is>
-
-  <documentation>Orchestrates TypeRegistry bootstrap/injection, forkBom, semantic framework
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Public entry: BomDocument → ValidateResult (B26)
+  </is>
+  <documentation>
+    Orchestrates TypeRegistry bootstrap/injection, forkBom, semantic framework
     checks, and validateStyle. Does not mutate input Urmodell. Style diagnostics never
-    fail success.</documentation>
-
+    fail success.
+  </documentation>
   <references>
     <see type="valdocumentation:PublicApi" relation="SeeAlso" />
     <see type="bomapi:ValidateOptions" relation="SeeAlso" />
@@ -41,17 +37,21 @@
     <see type="valcap:ValidateStyle" relation="SeeAlso" />
     <see type="fwcap:BootstrapTypeRegistry" relation="SeeAlso" />
   </references>
-
   <properties>
     <document type="bomdoc:BomDocument">
-      <documentation>document. TS type: bomdoc:BomDocument. (required)</documentation>
+      <documentation>
+        document. TS type: bomdoc:BomDocument. (required)
+      </documentation>
     </document>
     <options type="bomapi:ValidateOptions">
-      <documentation>Default continueOnError=true. (optional)</documentation>
+      <documentation>
+        Default continueOnError=true. (optional)
+      </documentation>
     </options>
     <result type="bomapi:ValidateResult">
-      <documentation>result. TS type: bomapi:ValidateResult. (required)</documentation>
+      <documentation>
+        result. TS type: bomapi:ValidateResult. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</valcap:Validate>

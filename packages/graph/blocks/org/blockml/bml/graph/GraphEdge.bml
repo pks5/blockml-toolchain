@@ -1,12 +1,6 @@
-<!--
-  Graph — GraphEdge
-  FQN: org.blockml.bml.graph.GraphEdge
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph — GraphEdge
+  FQN: org.blockml.bml.graph.GraphEdge-->
+<graph:GraphEdge xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,29 +15,45 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>GraphEdge</name>
-  <type>graph:GraphEdge</type>
-  <baseType>graph:GraphType</baseType>
-  <is>Authored relation between graph nodes</is>
-  <documentation>relation is one of BASE_TYPE, CONTRACT, HAS_SUBBLOCK, HAS_MEMBER, MEMBER_TYPE, INPUT_TYPE, OUTPUT_TYPE, THROWS.</documentation>
+  <baseType>
+    graph:GraphType
+  </baseType>
+  <is>
+    Authored relation between graph nodes
+  </is>
+  <documentation>
+    relation is one of BASE_TYPE, CONTRACT, HAS_SUBBLOCK, HAS_MEMBER, MEMBER_TYPE, INPUT_TYPE, OUTPUT_TYPE, THROWS.
+  </documentation>
   <properties>
     <relation type="type:Text">
-      <documentation>Authored relation name. (required)</documentation>
+      <documentation>
+        Authored relation name. (required)
+      </documentation>
     </relation>
     <from type="type:Text">
-      <documentation>Source node id. (required)</documentation>
+      <documentation>
+        Source node id. (required)
+      </documentation>
     </from>
     <to type="type:Text">
-      <documentation>Target node id. (required)</documentation>
+      <documentation>
+        Target node id. (required)
+      </documentation>
     </to>
     <file type="type:Text">
-      <documentation>Provenance file. (optional)</documentation>
+      <documentation>
+        Provenance file. (optional)
+      </documentation>
     </file>
     <line type="type:Integer">
-      <documentation>Provenance line. (optional)</documentation>
+      <documentation>
+        Provenance line. (optional)
+      </documentation>
     </line>
     <cardinality type="type:Text">
-      <documentation>Optional multiplicity on MEMBER_TYPE. (optional)</documentation>
+      <documentation>
+        Optional multiplicity on MEMBER_TYPE. (optional)
+      </documentation>
     </cardinality>
   </properties>
-</block>
+</graph:GraphEdge>

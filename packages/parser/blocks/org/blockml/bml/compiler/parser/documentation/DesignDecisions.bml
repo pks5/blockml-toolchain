@@ -1,12 +1,6 @@
-<!--
-  Parser Documentation — DesignDecisions
-  FQN: org.blockml.bml.compiler.parser.documentation.DesignDecisions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Documentation — DesignDecisions
+  FQN: org.blockml.bml.compiler.parser.documentation.DesignDecisions-->
+<pardocumentation:DesignDecisions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,14 +24,16 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>DesignDecisions</name>
-  <type>pardocumentation:DesignDecisions</type>
-  <baseType>core:Documentation</baseType>
-  <is>Normative parser design decisions</is>
-
-  <documentation><![CDATA[
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Normative parser design decisions
+  </is>
+  <documentation>
+    <![CDATA[
     # Normative parser design decisions
-
+    
     - B2: unknown bml:* → error at map (BML_UNKNOWN_DIRECTIVE); unknown instance members → validator error (BML_UNKNOWN_PROPERTY).
     - B3: inputType/outputType → TypeExpression at map time.
     - B4: ExpressionValue.raw only; AST via core utility.
@@ -53,10 +49,9 @@
     - B24: format detector (BOM strip, first '<').
     - B25: store xmlns:xsi + schemaLocation on SourceInfo; record rootForm (block vs type-as-root).
     - B26: parse() entry; types in @blockml/bom.
-  ]]></documentation>
-
+    ]]>
+  </documentation>
   <references>
     <see type="pardocumentation:RoundtripContract" relation="ReadNext" />
   </references>
-
-</block>
+</pardocumentation:DesignDecisions>

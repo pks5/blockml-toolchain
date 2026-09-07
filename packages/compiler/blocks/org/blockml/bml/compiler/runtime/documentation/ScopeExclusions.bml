@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Documentation — ScopeExclusions
-  FQN: org.blockml.bml.compiler.runtime.documentation.ScopeExclusions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Documentation — ScopeExclusions
+  FQN: org.blockml.bml.compiler.runtime.documentation.ScopeExclusions-->
+<rundocumentation:ScopeExclusions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -26,18 +20,20 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ScopeExclusions</name>
-  <type>rundocumentation:ScopeExclusions</type>
-  <baseType>core:Documentation</baseType>
-  <is>Explicitly out of compiler runtime V1 library scope</is>
-
-  <documentation>Out of scope for this library / V1:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Explicitly out of compiler runtime V1 library scope
+  </is>
+  <documentation>
+    Out of scope for this library / V1:
     • CLI targets[] bootstrap order and dual CLI model
     • Writing RenderOutput files to disk
     • Incremental .bom-cache (C5) and thumbnails (C6)
     • Target-specific targetOptions schemas and emit
     • Parser/serializer/validator mapping and constraint algorithms
     • SCAD NativeBlock / engine-maker processors
-    • Codegen from BML to TypeScript (structural SSOT only)</documentation>
-
-</block>
+    • Codegen from BML to TypeScript (structural SSOT only)
+  </documentation>
+</rundocumentation:ScopeExclusions>

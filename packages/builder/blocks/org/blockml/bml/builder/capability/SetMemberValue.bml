@@ -1,12 +1,6 @@
-<!--
-  Builder Capability — SetMemberValue
-  FQN: org.blockml.bml.builder.capability.SetMemberValue
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Builder Capability — SetMemberValue
+  FQN: org.blockml.bml.builder.capability.SetMemberValue-->
+<buildercap:SetMemberValue xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -20,21 +14,31 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>SetMemberValue</name>
-  <type>buildercap:SetMemberValue</type>
-  <baseType>core:Capability</baseType>
-  <is>Set a literal value on a declared property</is>
-  <documentation>Finds a property by name and sets its literal value. Throws when the
-    member is missing or not a property.</documentation>
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Set a literal value on a declared property
+  </is>
+  <documentation>
+    Finds a property by name and sets its literal value. Throws when the
+    member is missing or not a property.
+  </documentation>
   <properties>
     <name type="type:Text">
-      <documentation>Property name. (required)</documentation>
+      <documentation>
+        Property name. (required)
+      </documentation>
     </name>
     <value type="type:Text">
-      <documentation>Literal value. (required)</documentation>
+      <documentation>
+        Literal value. (required)
+      </documentation>
     </value>
     <result type="builder:BomBuilder">
-      <documentation>This session. (required)</documentation>
+      <documentation>
+        This session. (required)
+      </documentation>
     </result>
   </properties>
-</block>
+</buildercap:SetMemberValue>

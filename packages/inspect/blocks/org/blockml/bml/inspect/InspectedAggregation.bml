@@ -1,12 +1,6 @@
-<!--
-  Inspect — InspectedAggregation
-  FQN: org.blockml.bml.inspect.InspectedAggregation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Inspect — InspectedAggregation
+  FQN: org.blockml.bml.inspect.InspectedAggregation-->
+<inspect:InspectedAggregation xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,25 +15,32 @@
   xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>InspectedAggregation</name>
-  <type>inspect:InspectedAggregation</type>
-  <baseType>inspect:InspectedMember</baseType>
-  <is>One effective aggregation in an Inspect projection</is>
-
-  <documentation>Projected aggregation. instances holds authored composition children when present — enum literals, Library catalog refs, nested ModelOperation/Task fills.</documentation>
-
+  <baseType>
+    inspect:InspectedMember
+  </baseType>
+  <is>
+    One effective aggregation in an Inspect projection
+  </is>
+  <documentation>
+    Projected aggregation. instances holds authored composition children when present — enum literals, Library catalog refs, nested ModelOperation/Task fills.
+  </documentation>
   <properties>
     <type type="inspect:InspectTypeRef">
-      <documentation>Projected aggregation type. (optional)</documentation>
+      <documentation>
+        Projected aggregation type. (optional)
+      </documentation>
     </type>
     <cardinality type="type:Text">
-      <documentation>Aggregation cardinality. (optional)</documentation>
+      <documentation>
+        Aggregation cardinality. (optional)
+      </documentation>
     </cardinality>
   </properties>
   <aggregations>
     <instances type="inspect:InspectedInstance[]">
-      <documentation>Authored composition children. (optional)</documentation>
+      <documentation>
+        Authored composition children. (optional)
+      </documentation>
     </instances>
   </aggregations>
-
-</block>
+</inspect:InspectedAggregation>

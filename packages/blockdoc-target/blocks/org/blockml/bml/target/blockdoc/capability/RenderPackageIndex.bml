@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Capability — RenderPackageIndex
-  FQN: org.blockml.bml.target.blockdoc.capability.RenderPackageIndex
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Capability — RenderPackageIndex
+  FQN: org.blockml.bml.target.blockdoc.capability.RenderPackageIndex-->
+<bdcap:RenderPackageIndex xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,39 +21,53 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>RenderPackageIndex</name>
-  <type>bdcap:RenderPackageIndex</type>
-  <baseType>core:Capability</baseType>
-  <is>Assemble package prefix index HTML (fqn layout)</is>
-
-  <documentation>BD22: direct blocks where fqnToPackagePrefix(fqn)===prefix; direct sub-packages = next segment under prefix; breadcrumb Index / linked ancestors / current plain. Index href is the interesting home (BD27).</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Assemble package prefix index HTML (fqn layout)
+  </is>
+  <documentation>
+    BD22: direct blocks where fqnToPackagePrefix(fqn)===prefix; direct sub-packages = next segment under prefix; breadcrumb Index / linked ancestors / current plain. Index href is the interesting home (BD27).
+  </documentation>
   <references>
     <see type="bddocumentation:SiteAssembly" relation="SeeAlso" />
   </references>
-
   <properties>
     <packagePrefix type="type:Text">
-      <documentation>Package prefix (required).</documentation>
+      <documentation>
+        Package prefix (required).
+      </documentation>
     </packagePrefix>
     <rootFqns type="type:Text">
-      <documentation>Root FQN list (required).</documentation>
+      <documentation>
+        Root FQN list (required).
+      </documentation>
     </rootFqns>
     <options type="bdapi:BlockDocOptions">
-      <documentation>Resolved options (required).</documentation>
+      <documentation>
+        Resolved options (required).
+      </documentation>
     </options>
     <indexPath type="type:Text">
-      <documentation>This package index path (required).</documentation>
+      <documentation>
+        This package index path (required).
+      </documentation>
     </indexPath>
     <rootIndexPath type="type:Text">
-      <documentation>Interesting package home (required).</documentation>
+      <documentation>
+        Interesting package home (required).
+      </documentation>
     </rootIndexPath>
     <allBlocksPath type="type:Text">
-      <documentation>All Blocks listing path (required).</documentation>
+      <documentation>
+        All Blocks listing path (required).
+      </documentation>
     </allBlocksPath>
     <result type="bdpage:PackageIndexPage">
-      <documentation>HTML page (required).</documentation>
+      <documentation>
+        HTML page (required).
+      </documentation>
     </result>
   </properties>
-
-</block>
+</bdcap:RenderPackageIndex>

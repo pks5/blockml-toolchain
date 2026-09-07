@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Capability — ValidateRegistryDocuments
-  FQN: org.blockml.bml.compiler.runtime.capability.ValidateRegistryDocuments
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Capability — ValidateRegistryDocuments
+  FQN: org.blockml.bml.compiler.runtime.capability.ValidateRegistryDocuments-->
+<runcap:ValidateRegistryDocuments xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,29 +19,35 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>ValidateRegistryDocuments</name>
-  <type>runcap:ValidateRegistryDocuments</type>
-  <baseType>core:Capability</baseType>
-  <is>Re-validate BomDocuments in a TypeRegistry</is>
-
-  <documentation>Dedupes by filePath; optional filePaths filter (undefined = all; empty = none); continueOnError true.
-    Returns ValidateRegistryResult: diagnostics, blocksTested (unique filePaths), blocksWithErrors (documents with !success).</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Re-validate BomDocuments in a TypeRegistry
+  </is>
+  <documentation>
+    Dedupes by filePath; optional filePaths filter (undefined = all; empty = none); continueOnError true.
+    Returns ValidateRegistryResult: diagnostics, blocksTested (unique filePaths), blocksWithErrors (documents with !success).
+  </documentation>
   <references>
     <see type="validator:Library" relation="SeeAlso" />
     <see type="runapi:ValidateRegistryResult" relation="SeeAlso" />
   </references>
-
   <properties>
     <typeRegistry type="type:Text">
-      <documentation>TypeRegistry. (required)</documentation>
+      <documentation>
+        TypeRegistry. (required)
+      </documentation>
     </typeRegistry>
     <filePaths type="type:Text">
-      <documentation>Optional path filter. undefined = all documents; empty = none. (optional)</documentation>
+      <documentation>
+        Optional path filter. undefined = all documents; empty = none. (optional)
+      </documentation>
     </filePaths>
     <result type="runapi:ValidateRegistryResult">
-      <documentation>diagnostics, blocksTested, blocksWithErrors. (required)</documentation>
+      <documentation>
+        diagnostics, blocksTested, blocksWithErrors. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</runcap:ValidateRegistryDocuments>

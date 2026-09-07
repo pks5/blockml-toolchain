@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Capability — BuildRenderSession
-  FQN: org.blockml.bml.compiler.runtime.capability.BuildRenderSession
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Capability — BuildRenderSession
+  FQN: org.blockml.bml.compiler.runtime.capability.BuildRenderSession-->
+<runcap:BuildRenderSession xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,25 +19,29 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>BuildRenderSession</name>
-  <type>runcap:BuildRenderSession</type>
-  <baseType>core:Capability</baseType>
-  <is>Construct RenderSession from bootstrap or BOM-first results</is>
-
-  <documentation>C1: defaults sourceFilePath to the literal placeholder scope (angle brackets),
-    outputBasePath to dot. Session fields are domain-agnostic.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Construct RenderSession from bootstrap or BOM-first results
+  </is>
+  <documentation>
+    C1: defaults sourceFilePath to the literal placeholder scope (angle brackets),
+    outputBasePath to dot. Session fields are domain-agnostic.
+  </documentation>
   <references>
     <see type="rundocumentation:RenderContextRules" relation="SeeAlso" />
   </references>
-
   <properties>
     <options type="type:Text">
-      <documentation>Session field bag including typeRegistry, targetName, scopeKind. (required)</documentation>
+      <documentation>
+        Session field bag including typeRegistry, targetName, scopeKind. (required)
+      </documentation>
     </options>
     <result type="runapi:RenderSession">
-      <documentation>Immutable session. (required)</documentation>
+      <documentation>
+        Immutable session. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</runcap:BuildRenderSession>

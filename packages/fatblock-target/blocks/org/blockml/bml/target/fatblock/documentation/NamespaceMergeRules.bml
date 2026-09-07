@@ -1,12 +1,6 @@
-<!--
-  FatBlock Documentation — NamespaceMergeRules
-  FQN: org.blockml.bml.target.fatblock.documentation.NamespaceMergeRules
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock Documentation — NamespaceMergeRules
+  FQN: org.blockml.bml.target.fatblock.documentation.NamespaceMergeRules-->
+<fbdocumentation:NamespaceMergeRules xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -23,20 +17,22 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>NamespaceMergeRules</name>
-  <type>fbdocumentation:NamespaceMergeRules</type>
-  <baseType>core:Documentation</baseType>
-  <is>Stage-2 namespace merge before emit (FB9–FB11, D2)</is>
-
-  <documentation>FB9: merge host bindings first, then each embed source in candidate order.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Stage-2 namespace merge before emit (FB9–FB11, D2)
+  </is>
+  <documentation>
+    FB9: merge host bindings first, then each embed source in candidate order.
     FB11: missing bindings default empty prefix to http://blockml.org/bml.
     FB10: same prefix, different URI → BML_NAMESPACE_PREFIX_COLLISION (no silent rewrite;
     no inventing new prefixes). First writer wins for new prefixes.
-
+    
     Aligns with docs/19 Definition / bml:xml D2 consumer rules. Serializer may still emit
-    BML_NAMESPACE_UNBOUND if a QName lacks a binding after merge.</documentation>
+    BML_NAMESPACE_UNBOUND if a QName lacks a binding after merge.
+  </documentation>
   <references>
     <see type="fbdocumentation:OutputLayout" relation="ReadNext" />
   </references>
-
-</block>
+</fbdocumentation:NamespaceMergeRules>

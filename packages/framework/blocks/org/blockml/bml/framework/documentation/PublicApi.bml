@@ -1,12 +1,6 @@
-<!--
-  Framework Documentation — PublicApi
-  FQN: org.blockml.bml.framework.documentation.PublicApi
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Documentation — PublicApi
+  FQN: org.blockml.bml.framework.documentation.PublicApi-->
+<fwdocumentation:PublicApi xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -32,13 +26,16 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PublicApi</name>
-  <type>fwdocumentation:PublicApi</type>
-  <baseType>core:Documentation</baseType>
-  <is>Framework public exports from index.ts</is>
-
-  <documentation><![CDATA[Public exports from @blockml/framework (packages/framework/src/index.ts):
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Framework public exports from index.ts
+  </is>
+  <documentation>
+    <![CDATA[
+    Public exports from @blockml/framework (packages/framework/src/index.ts):
+    
     TypeRegistry — class; register/get/has/keys/size/withOverlay on BomDocument index
     bootstrapTypeRegistry(options?) → BootstrapResult
     bootstrapFullProjectRegistry({ rootDir, srcDir?, libraries? }) → BootstrapResult
@@ -70,14 +67,14 @@
     validateConstraints(document, registry) → Diagnostic[]
     getPropertyNumericValue(property) → number | undefined
     isLiteralValue(value) → boolean
-
+    
     Types: BootstrapResult, BootstrapTrace, BootstrapOptions, ExpressionNode, ParseExpressionResult, ParseExpressionOutcome
-
-    Not exported from index: getLiteralNumericValue (internal helper in validate-types.ts).]]></documentation>
-
+    
+    Not exported from index: getLiteralNumericValue (internal helper in validate-types.ts).
+    ]]>
+  </documentation>
   <references>
     <see type="fwdocumentation:TypeRegistryBootstrap" relation="ReadNext" />
     <see type="bomapi:TypeRegistryReader" relation="SeeAlso" />
   </references>
-
-</block>
+</fwdocumentation:PublicApi>

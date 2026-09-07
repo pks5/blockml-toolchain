@@ -1,12 +1,6 @@
-<!--
-  Validator Style — StyleRule
-  FQN: org.blockml.bml.compiler.validator.style.StyleRule
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Validator Style — StyleRule
+  FQN: org.blockml.bml.compiler.validator.style.StyleRule-->
+<valstyle:StyleRule xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomcommon="org.blockml.bml.bom.common"
@@ -17,37 +11,47 @@
   xmlns:valstyle="org.blockml.bml.compiler.validator.style"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>StyleRule</name>
-  <type>valstyle:StyleRule</type>
-  <baseType>validator:ValidatorType</baseType>
-  <is>Catalog entry for a BML authoring quality rule</is>
-
-  <documentation>SSOT for one style check. Concrete rules extend this type. validateStyle loads
+  <baseType>
+    validator:ValidatorType
+  </baseType>
+  <is>
+    Catalog entry for a BML authoring quality rule
+  </is>
+  <documentation>
+    SSOT for one style check. Concrete rules extend this type. validateStyle loads
     rule documents from this package blocks/ and dispatches on check type FQN.
-    Warnings and recommendations never set ValidateResult.success to false.</documentation>
-
+    Warnings and recommendations never set ValidateResult.success to false.
+  </documentation>
   <properties>
     <code type="type:Text">
-      <documentation>Diagnostic code, e.g. BML_STYLE_PREFER_CDATA. (required)</documentation>
+      <documentation>
+        Diagnostic code, e.g. BML_STYLE_PREFER_CDATA. (required)
+      </documentation>
     </code>
     <severity type="bomcommon:DiagnosticSeverity">
-      <documentation>warning or recommendation for v1 style rules. (required)</documentation>
+      <documentation>
+        warning or recommendation for v1 style rules. (required)
+      </documentation>
     </severity>
     <appliesTo type="type:Text">
-      <documentation>Human-readable target, e.g. block documentation. (required)</documentation>
+      <documentation>
+        Human-readable target, e.g. block documentation. (required)
+      </documentation>
     </appliesTo>
     <message type="type:Text">
-      <documentation>Diagnostic message emitted on match. (required)</documentation>
+      <documentation>
+        Diagnostic message emitted on match. (required)
+      </documentation>
     </message>
   </properties>
-
   <aggregations>
     <check>
-      <documentation>StyleCheck subtype that selects the TypeScript interpreter. (required)</documentation>
+      <documentation>
+        StyleCheck subtype that selects the TypeScript interpreter. (required)
+      </documentation>
       <composition>
         <valstyle:StyleCheck />
       </composition>
     </check>
   </aggregations>
-
-</block>
+</valstyle:StyleRule>

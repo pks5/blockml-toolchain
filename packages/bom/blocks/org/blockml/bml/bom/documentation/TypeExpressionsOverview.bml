@@ -1,12 +1,6 @@
-<!--
-  BOM Documentation — TypeExpressionsOverview
-  FQN: org.blockml.bml.bom.documentation.TypeExpressionsOverview
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Documentation — TypeExpressionsOverview
+  FQN: org.blockml.bml.bom.documentation.TypeExpressionsOverview-->
+<bomdocumentation:TypeExpressionsOverview xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -24,25 +18,26 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>TypeExpressionsOverview</name>
-  <type>bomdocumentation:TypeExpressionsOverview</type>
-  <baseType>core:Documentation</baseType>
-  <is>Parse-time type expression model</is>
-
-  <documentation>TypeExpression (alias TypeDescriptor in V1) — structured parse-time AST, not a ValueType.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Parse-time type expression model
+  </is>
+  <documentation>
+    TypeExpression (alias TypeDescriptor in V1) — structured parse-time AST, not a ValueType.
     Used for Capability inputType/outputType and Property type attributes.
-
+    
     Union variants: named, union, grouped, genericParam, self, anonymousStruct.
     grouped wraps a TypeExpression for nested multiplicity: (T[])[] or (A | B)[].
-
+    
     Anonymous struct = shorthand for inline class with ordered fields (FunctionMapping positional order).
     Single primitive = NamedTypeReference directly — not wrapped in one-field struct.
-
+    
     Union variant discrimination and AST are validateTypes()/parseExpression() utility results —
-    not stored in Canonical BOM.</documentation>
-
+    not stored in Canonical BOM.
+  </documentation>
   <references>
     <see type="bomtype:TypeExpression" relation="Defines" />
   </references>
-
-</block>
+</bomdocumentation:TypeExpressionsOverview>

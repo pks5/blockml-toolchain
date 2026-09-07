@@ -1,12 +1,6 @@
-<!--
-  Inspect Documentation — DesignDecisions
-  FQN: org.blockml.bml.inspect.documentation.DesignDecisions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Inspect Documentation — DesignDecisions
+  FQN: org.blockml.bml.inspect.documentation.DesignDecisions-->
+<inspectdocumentation:DesignDecisions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -22,39 +16,38 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>DesignDecisions</name>
-  <type>inspectdocumentation:DesignDecisions</type>
-  <baseType>core:Documentation</baseType>
-  <is>Normative Inspect decisions INSPECT1–INSPECT11</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Normative Inspect decisions INSPECT1–INSPECT11
+  </is>
   <documentation>
     # Normative Inspect decisions INSPECT1–INSPECT11
-
+    
     INSPECT1 CLI verb is inspect; the projection is an Inspect view, not a Resolved BOM.
-
+    
     INSPECT2 JSON-only output; --json is accepted and implied.
-
+    
     INSPECT3 Default depth 1, allowed 0, cap 3.
-
+    
     INSPECT4 Members are effective and grouped into properties, aggregations, associations, and capabilities. No kind field. Empty groups omitted. inheritedFrom from findLocalMember plus baseType/contract owners.
-
+    
     INSPECT5 Expansion follows declared member types, contracts, subBlocks, baseType generic arguments, and genericTypes defaultType FQNs — not the baseType parent, not generic bounds, and not inherited member types.
-
+    
     INSPECT6 Leaf FQNs: org.blockml.bml.type.* and org.blockml.bml.core.ValueType.
-
+    
     INSPECT7 Flat blocks map; cycles, unresolved, truncated are explicit FQN lists.
-
+    
     INSPECT8 Max 48 expanded blocks; Block and member documentation truncated to 400 characters with an ellipsis and documentationTruncated=true.
-
+    
     INSPECT9 No persistent index; live TypeRegistry via bootstrapFullProjectRegistry.
-
+    
     INSPECT10 Inspect does not flatten into BOM and does not round-trip to BML.
-
+    
     INSPECT11 Authored documentation see references are compact FQN + relation on InspectedBlock. First 8 are shown; referencesTruncated is the count of additional authored entries not shown. They do not expand depth and are not structural graph edges.
   </documentation>
-
   <references>
     <see type="inspectdocumentation:PackageOwnership" relation="ReadNext" />
   </references>
-
-</block>
+</inspectdocumentation:DesignDecisions>

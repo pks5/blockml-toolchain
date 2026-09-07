@@ -1,12 +1,6 @@
-<!--
-  CLI Command — SearchCommand
-  FQN: org.blockml.bml.cli.command.SearchCommand
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Command — SearchCommand
+  FQN: org.blockml.bml.cli.command.SearchCommand-->
+<clicommand:SearchCommand xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -21,21 +15,39 @@
   xmlns:search="org.blockml.bml.search"
   xmlns:type="org.blockml.bml.type">
 
-  <name>SearchCommand</name>
-  <type>clicommand:SearchCommand</type>
-  <baseType>cli:CliType</baseType>
-  <is>blockml search command model</is>
-
-  <documentation>blockml search QUERY [--json] [--limit n]; blockml search index [--force]. Corpus is validate --all via @blockml/search.</documentation>
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    blockml search command model
+  </is>
+  <documentation>
+    blockml search QUERY [--json] [--limit n]; blockml search index [--force]. Corpus is validate --all via @blockml/search.
+  </documentation>
   <references>
     <see type="clidocumentation:SearchCommand" relation="SeeAlso" />
     <see type="clicap:RunSearch" relation="SeeAlso" />
   </references>
   <properties>
-    <query type="type:Text"><documentation>Search query. Mutually exclusive with index=true. (optional)</documentation></query>
-    <index type="type:Boolean"><documentation>Rebuild the local search index. (optional)</documentation></index>
-    <json type="type:Boolean"><documentation>Print SearchResult[] as JSON. (optional)</documentation></json>
-    <force type="type:Boolean"><documentation>V1 alias of full rebuild. (optional)</documentation></force>
+    <query type="type:Text">
+      <documentation>
+        Search query. Mutually exclusive with index=true. (optional)
+      </documentation>
+    </query>
+    <index type="type:Boolean">
+      <documentation>
+        Rebuild the local search index. (optional)
+      </documentation>
+    </index>
+    <json type="type:Boolean">
+      <documentation>
+        Print SearchResult[] as JSON. (optional)
+      </documentation>
+    </json>
+    <force type="type:Boolean">
+      <documentation>
+        V1 alias of full rebuild. (optional)
+      </documentation>
+    </force>
   </properties>
-
-</block>
+</clicommand:SearchCommand>

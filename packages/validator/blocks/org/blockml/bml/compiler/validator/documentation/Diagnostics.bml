@@ -1,12 +1,6 @@
-<!--
-  Validator Documentation — Diagnostics
-  FQN: org.blockml.bml.compiler.validator.documentation.Diagnostics
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Validator Documentation — Diagnostics
+  FQN: org.blockml.bml.compiler.validator.documentation.Diagnostics-->
+<valdocumentation:Diagnostics xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -22,33 +16,33 @@
   xmlns:valcap="org.blockml.bml.compiler.validator.capability"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation"
-  xmlns:fwconfig="org.blockml.bml.framework.config"
->
+  xmlns:fwconfig="org.blockml.bml.framework.config">
 
-  <name>Diagnostics</name>
-  <type>valdocumentation:Diagnostics</type>
-  <baseType>core:Documentation</baseType>
-  <is>Validator diagnostics and host abort policy</is>
-
-  <documentation>    The validator aggregates diagnostics from framework utilities (validateTypes,
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Validator diagnostics and host abort policy
+  </is>
+  <documentation>
+    The validator aggregates diagnostics from framework utilities (validateTypes,
     validateConstraints, validateGenerics), bootstrap (when TypeRegistry is built inline), and validateStyle.
-
+    
     Diagnostic type: org.blockml.bml.bom.common.Diagnostic (shared across toolchain).
     Style codes: BML_STYLE_PREFER_CDATA, BML_STYLE_PREFER_MARKDOWN,
     BML_STYLE_EMPTY_ELEMENT_SELF_CLOSE, BML_STYLE_LEGACY_BLOCK_WRAPPER,
     BML_STYLE_REDUNDANT_TYPE, BML_STYLE_REDUNDANT_NAME,
     BML_STYLE_UNKNOWN_CHECK.
-
+    
     Host policy: CLI, IDE, and other orchestrators decide whether error diagnostics
     block serialize, compile, or other downstream steps. The validator package does
     not enforce abort-on-error — it reports diagnostics and success flag only.
     Style warnings and recommendations do not fail success.
-
-    Cross-ref diagnostic codes: org.blockml.bml.framework.config.FrameworkDiagnosticCodes</documentation>
-
+    
+    Cross-ref diagnostic codes: org.blockml.bml.framework.config.FrameworkDiagnosticCodes
+  </documentation>
   <references>
     <see type="fwconfig:FrameworkDiagnosticCodes" relation="SeeAlso" />
     <see type="valdocumentation:PackageOwnership" relation="ReadNext" />
   </references>
-
-</block>
+</valdocumentation:Diagnostics>

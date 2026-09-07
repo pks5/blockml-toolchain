@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — FormatMemberValue
-  FQN: org.blockml.bml.compiler.serializer.capability.FormatMemberValue
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — FormatMemberValue
+  FQN: org.blockml.bml.compiler.serializer.capability.FormatMemberValue-->
+<sercap:FormatMemberValue xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,33 +21,35 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>FormatMemberValue</name>
-  <type>sercap:FormatMemberValue</type>
-  <baseType>core:Capability</baseType>
-  <is>Format MemberValue for XML attribute emission</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Format MemberValue for XML attribute emission
+  </is>
   <documentation>
     Format MemberValue for XML attribute emission.
-
+    
     ExpressionValue emits `${ raw }`. InterpolatedTextValue emits authored raw
     unchanged (escapes and holes). String LiteralValue re-escapes every `${` as
     `\${` (and doubles backslashes that precede `${`) so ParseMemberValue
     round-trips to the same literal. JSON arrays/objects are not interpolation-
     escaped — they stay structural tokens.
   </documentation>
-
   <references>
     <see type="sercap:FormatBoolean" relation="SeeAlso" />
     <see type="sercap:EscapeAttr" relation="SeeAlso" />
   </references>
-
   <properties>
     <value type="bomvalue:MemberValue">
-      <documentation>value. TS type: bomvalue:MemberValue. (required)</documentation>
+      <documentation>
+        value. TS type: bomvalue:MemberValue. (required)
+      </documentation>
     </value>
     <text type="type:Text">
-      <documentation>text. TS type: type:Text. (required)</documentation>
+      <documentation>
+        text. TS type: type:Text. (required)
+      </documentation>
     </text>
   </properties>
-
-</block>
+</sercap:FormatMemberValue>

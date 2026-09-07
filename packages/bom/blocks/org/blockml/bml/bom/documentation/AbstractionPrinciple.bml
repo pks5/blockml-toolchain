@@ -1,12 +1,6 @@
-<!--
-  BOM Documentation — AbstractionPrinciple
-  FQN: org.blockml.bml.bom.documentation.AbstractionPrinciple
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Documentation — AbstractionPrinciple
+  FQN: org.blockml.bml.bom.documentation.AbstractionPrinciple-->
+<bomdocumentation:AbstractionPrinciple xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -24,23 +18,24 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>AbstractionPrinciple</name>
-  <type>bomdocumentation:AbstractionPrinciple</type>
-  <baseType>core:Documentation</baseType>
-  <is>Lossless representation and roundtrip guarantee</is>
-
-  <documentation>A BOM document is a lossless representation of BML source. It preserves authored
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Lossless representation and roundtrip guarantee
+  </is>
+  <documentation>
+    A BOM document is a lossless representation of BML source. It preserves authored
     structure and values — directives, aggregation declarations, literal syntax, unresolved
     type references, namespace bindings, and bml:xml metadata. BOM makes no statement about
     directive expansion, aggregation interpretation, or block rendering.
-
+    
     Maximum authored surface: render targets and the serializer must read as much of the
     original document as the Urmodell can carry. Prefer first-class fields over hidden side channels.
-
-    BML → BOM → BML must always be possible.</documentation>
-
+    
+    BML → BOM → BML must always be possible.
+  </documentation>
   <references>
     <see type="bomdocumentation:AuthoredSurfaceTable" relation="ReadNext" />
   </references>
-
-</block>
+</bomdocumentation:AbstractionPrinciple>

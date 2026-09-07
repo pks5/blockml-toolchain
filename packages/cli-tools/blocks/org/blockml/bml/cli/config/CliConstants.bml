@@ -1,12 +1,6 @@
-<!--
-  CLI Config — CliConstants
-  FQN: org.blockml.bml.cli.config.CliConstants
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Config — CliConstants
+  FQN: org.blockml.bml.cli.config.CliConstants-->
+<cliconfig:CliConstants xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,21 +14,57 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>CliConstants</name>
-  <type>cliconfig:CliConstants</type>
-  <baseType>cli:CliType</baseType>
-  <is>Well-known CLI constants</is>
-
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    Well-known CLI constants
+  </is>
   <properties>
-    <USAGE type="type:Text"><documentation>Short syntax printed on configuration errors. Not the --help page.</documentation></USAGE>
-    <HELP type="type:Text"><documentation>Root help page printed by --help / -h / help. SSOT: clidocumentation:Help.</documentation></HELP>
-    <SUPPORTED_TARGETS type="type:Text"><documentation>V1: blockdoc, xsd, fatblock.</documentation></SUPPORTED_TARGETS>
-    <DOCUMENT_TARGETS type="type:Text"><documentation>Document target fatblock: host file or package.json blockml.library.</documentation></DOCUMENT_TARGETS>
-    <DEFAULT_TARGETS type="type:Text"><documentation>targets[] default when omitted: ["blockdoc"].</documentation></DEFAULT_TARGETS>
-    <BIN_NAME type="type:Text"><documentation>blockml</documentation></BIN_NAME>
-    <BML_DOCUMENT_NS type="type:Text"><documentation>http://blockml.org/bml — catalog key for bml.xsd.</documentation></BML_DOCUMENT_NS>
-    <BML_XSD_SCHEMAS_MISSING type="type:Text"><documentation>Warning when catalog or bml.xsd is absent; XSD step skipped.</documentation></BML_XSD_SCHEMAS_MISSING>
-    <BML_XSD_VALIDATION_ERROR type="type:Text"><documentation>XML does not validate against bml.xsd.</documentation></BML_XSD_VALIDATION_ERROR>
+    <USAGE type="type:Text">
+      <documentation>
+        Short syntax printed on configuration errors. Not the --help page.
+      </documentation>
+    </USAGE>
+    <HELP type="type:Text">
+      <documentation>
+        Root help page printed by --help / -h / help. SSOT: clidocumentation:Help.
+      </documentation>
+    </HELP>
+    <SUPPORTED_TARGETS type="type:Text">
+      <documentation>
+        V1: blockdoc, xsd, fatblock.
+      </documentation>
+    </SUPPORTED_TARGETS>
+    <DOCUMENT_TARGETS type="type:Text">
+      <documentation>
+        Document target fatblock: host file or package.json blockml.library.
+      </documentation>
+    </DOCUMENT_TARGETS>
+    <DEFAULT_TARGETS type="type:Text">
+      <documentation>
+        targets[] default when omitted: ["blockdoc"].
+      </documentation>
+    </DEFAULT_TARGETS>
+    <BIN_NAME type="type:Text">
+      <documentation>
+        blockml
+      </documentation>
+    </BIN_NAME>
+    <BML_DOCUMENT_NS type="type:Text">
+      <documentation>
+        http://blockml.org/bml — catalog key for bml.xsd.
+      </documentation>
+    </BML_DOCUMENT_NS>
+    <BML_XSD_SCHEMAS_MISSING type="type:Text">
+      <documentation>
+        Warning when catalog or bml.xsd is absent; XSD step skipped.
+      </documentation>
+    </BML_XSD_SCHEMAS_MISSING>
+    <BML_XSD_VALIDATION_ERROR type="type:Text">
+      <documentation>
+        XML does not validate against bml.xsd.
+      </documentation>
+    </BML_XSD_VALIDATION_ERROR>
   </properties>
-
-</block>
+</cliconfig:CliConstants>

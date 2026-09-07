@@ -1,12 +1,6 @@
-<!--
-  FatBlock API — AssembleFatDocumentResult
-  FQN: org.blockml.bml.target.fatblock.api.AssembleFatDocumentResult
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock API — AssembleFatDocumentResult
+  FQN: org.blockml.bml.target.fatblock.api.AssembleFatDocumentResult-->
+<fbapi:AssembleFatDocumentResult xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -22,14 +16,22 @@
   xmlns:serializer="org.blockml.bml.compiler.serializer"
   xmlns:type="org.blockml.bml.type">
 
-  <name>AssembleFatDocumentResult</name>
-  <type>fbapi:AssembleFatDocumentResult</type>
-  <baseType>fatblock:FatblockType</baseType>
-  <is>Result of assembleFatDocument</is>
-
+  <baseType>
+    fatblock:FatblockType
+  </baseType>
+  <is>
+    Result of assembleFatDocument
+  </is>
   <properties>
-    <document type="bomdoc:BomDocument"><documentation>Assembled fat BomDocument or null on error. (optional)</documentation></document>
-    <diagnostics type="type:Text"><documentation>Error diagnostics collected during assemble. (required)</documentation></diagnostics>
+    <document type="bomdoc:BomDocument">
+      <documentation>
+        Assembled fat BomDocument or null on error. (optional)
+      </documentation>
+    </document>
+    <diagnostics type="type:Text">
+      <documentation>
+        Error diagnostics collected during assemble. (required)
+      </documentation>
+    </diagnostics>
   </properties>
-
-</block>
+</fbapi:AssembleFatDocumentResult>

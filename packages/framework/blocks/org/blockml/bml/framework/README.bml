@@ -1,12 +1,6 @@
-<!--
-  BlockML Framework — README
-  FQN: org.blockml.bml.framework.README
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Framework — README
+  FQN: org.blockml.bml.framework.README-->
+<framework:README xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,35 +25,35 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>README</name>
-  <type>framework:README</type>
-  <baseType>core:ReadMe</baseType>
-  <is>Reading entry for the Framework utilities library</is>
-
+  <baseType>
+    core:ReadMe
+  </baseType>
+  <is>
+    Reading entry for the Framework utilities library
+  </is>
   <documentation>
     The @blockml/framework package provides Stage-2 utilities: TypeRegistry,
     bootstrapTypeRegistry, forkBom, resolveEffectiveMembers, parseExpression,
     validateTypes, and validateConstraints.
-
+    
     This library (org.blockml.bml.framework.*) is the SSOT; TypeScript in
     packages/framework/src/ implements it. Parity tests in packages/framework/test/
     verify BML ↔ TS alignment.
-
+    
     Start reading at org.blockml.bml.framework.documentation.Introduction (ReadNext chain).
-
+    
     Layer separation:
     • org.blockml.bml.bom.* (@blockml/bom) — Urmodell types framework operates on
     • org.blockml.bml.framework.* (this library) — Stage-2 utilities
     • org.blockml.bml.compiler.parser.* (@blockml/parser) — parse() for bootstrap
     • org.blockml.bml.compiler.validator.* (@blockml/validator) — validate() orchestrator
     • org.blockml.bml.definition.* (@blockml/core) — language BML corpus (npm)
-
+    
     Modules: documentation (narrative specs), registry, expression, config,
     capability (public operations).
-
+    
     Not in this library: validate() orchestration (@blockml/validator); parse()/serialize() entry points.
   </documentation>
-
   <references>
     <see type="fwdocumentation:Introduction" relation="ReadFirst" />
     <see type="fwdocumentation:PublicApi" relation="SeeAlso" />
@@ -67,5 +61,4 @@
     <see type="pardocumentation:Introduction" relation="SeeAlso" />
     <see type="valdocumentation:Introduction" relation="SeeAlso" />
   </references>
-
-</block>
+</framework:README>

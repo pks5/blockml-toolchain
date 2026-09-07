@@ -1,12 +1,6 @@
-<!--
-  LSP Capability — DocumentSymbols
-  FQN: org.blockml.bml.lsp.capability.DocumentSymbols
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP Capability — DocumentSymbols
+  FQN: org.blockml.bml.lsp.capability.DocumentSymbols-->
+<lspcap:DocumentSymbols xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,28 +24,34 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>DocumentSymbols</name>
-  <type>lspcap:DocumentSymbols</type>
-  <baseType>core:Capability</baseType>
-  <is>Hierarchical document outline from the Urmodell</is>
-
-  <documentation>Parse-only (no validator, no TypeRegistry). Walks Block members, subBlocks, and embeddedBlocks into a DocumentSymbol tree. selectionRange equals range. Returns null if parse cannot produce a document.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Hierarchical document outline from the Urmodell
+  </is>
+  <documentation>
+    Parse-only (no validator, no TypeRegistry). Walks Block members, subBlocks, and embeddedBlocks into a DocumentSymbol tree. selectionRange equals range. Returns null if parse cannot produce a document.
+  </documentation>
   <references>
     <see type="lspdocumentation:PublicApi" relation="SeeAlso" />
     <see type="parcap:Parse" relation="SeeAlso" />
   </references>
-
   <properties>
     <text type="type:Text">
-      <documentation>text. TS type: type:Text. (required)</documentation>
+      <documentation>
+        text. TS type: type:Text. (required)
+      </documentation>
     </text>
     <filePath type="type:Text">
-      <documentation>filePath. TS type: type:Text. (required)</documentation>
+      <documentation>
+        filePath. TS type: type:Text. (required)
+      </documentation>
     </filePath>
     <result type="lsp:OutlineSymbol[]">
-      <documentation>OutlineSymbol[] | null. (required)</documentation>
+      <documentation>
+        OutlineSymbol[] | null. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</lspcap:DocumentSymbols>

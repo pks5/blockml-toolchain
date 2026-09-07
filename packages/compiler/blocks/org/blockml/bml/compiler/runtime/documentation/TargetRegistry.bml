@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Documentation — TargetRegistry
-  FQN: org.blockml.bml.compiler.runtime.documentation.TargetRegistry
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Documentation — TargetRegistry
+  FQN: org.blockml.bml.compiler.runtime.documentation.TargetRegistry-->
+<rundocumentation:TargetRegistry xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -26,24 +20,25 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>TargetRegistry</name>
-  <type>rundocumentation:TargetRegistry</type>
-  <baseType>core:Documentation</baseType>
-  <is>Target Registry contract (C3)</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Target Registry contract (C3)
+  </is>
   <documentation>
     # Target Registry contract (C3)
-
+    
     In-memory Map of name → RenderTarget. registerTarget overwrites; getTarget may miss;
     clearTargets empties; registeredTargetNames lists keys.
-
+    
     No default targets ship in @blockml/compiler. Hosts (CLI bootstrapTargets, tests, browsers)
     call registerTarget before compileToOutput.
-
+    
     registerTarget validates: non-empty name; non-empty accepts with only valid CompileScopeKind
     values; render is a function; validateRequest if present is a function. Invalid hosts throw
     (programming error — not a BML authoring diagnostic).
-
+    
     Config targets[] and package loading order are CLI-owned (SeeAlso RuntimeBootstrap).
   </documentation>
   <references>
@@ -51,5 +46,4 @@
     <see type="runcap:RegisterTarget" relation="SeeAlso" />
     <see type="cli:Library" relation="SeeAlso" />
   </references>
-
-</block>
+</rundocumentation:TargetRegistry>

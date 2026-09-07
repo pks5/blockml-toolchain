@@ -1,12 +1,6 @@
-<!--
-  CLI Command — ValidateCommand
-  FQN: org.blockml.bml.cli.command.ValidateCommand
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Command — ValidateCommand
+  FQN: org.blockml.bml.cli.command.ValidateCommand-->
+<clicommand:ValidateCommand xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,19 +14,29 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ValidateCommand</name>
-  <type>clicommand:ValidateCommand</type>
-  <baseType>cli:CliType</baseType>
-  <is>blockml validate command model</is>
-
-  <documentation>CLI10/CLI11: validate file XOR --all; default = project sources; --all = entire registry; no target bootstrap; no output files.</documentation>
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    blockml validate command model
+  </is>
+  <documentation>
+    CLI10/CLI11: validate file XOR --all; default = project sources; --all = entire registry; no target bootstrap; no output files.
+  </documentation>
   <references>
     <see type="clidocumentation:ValidateCommand" relation="SeeAlso" />
     <see type="clicap:RunValidate" relation="SeeAlso" />
   </references>
   <properties>
-    <file type="type:Text"><documentation>Single file path. Mutually exclusive with all=true. (optional)</documentation></file>
-    <all type="type:Boolean"><documentation>Validate every document in the registry, including npm libraries. (optional)</documentation></all>
+    <file type="type:Text">
+      <documentation>
+        Single file path. Mutually exclusive with all=true. (optional)
+      </documentation>
+    </file>
+    <all type="type:Boolean">
+      <documentation>
+        Validate every document in the registry, including npm libraries. (optional)
+      </documentation>
+    </all>
   </properties>
-
-</block>
+</clicommand:ValidateCommand>

@@ -1,12 +1,6 @@
-<!--
-  Inspect Documentation — V1Scope
-  FQN: org.blockml.bml.inspect.documentation.V1Scope
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Inspect Documentation — V1Scope
+  FQN: org.blockml.bml.inspect.documentation.V1Scope-->
+<inspectdocumentation:V1Scope xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -22,12 +16,14 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>V1Scope</name>
-  <type>inspectdocumentation:V1Scope</type>
-  <baseType>core:Documentation</baseType>
-  <is>Explicit V1 capabilities</is>
-
-  <documentation>In scope V1:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Explicit V1 capabilities
+  </is>
+  <documentation>
+    In scope V1:
     • inspectBlock / inspectProject over the validate --all TypeRegistry
     • Effective members grouped into properties, aggregations, associations, capabilities (no kind field) with inheritedFrom and first documentation entry
     • Compact TypeExpression projection; baseType keeps generic arguments; genericTypes on InspectedBlock
@@ -37,11 +33,10 @@
     • Capability implementation language and truncated source
     • documentationTruncated when Block or member documentation exceeds 400 characters
     • JSON-only CLI: blockml inspect FQN [--depth n]
-
-    Out of scope: see ScopeExclusions.</documentation>
-
+    
+    Out of scope: see ScopeExclusions.
+  </documentation>
   <references>
     <see type="inspectdocumentation:ScopeExclusions" relation="SeeAlso" />
   </references>
-
-</block>
+</inspectdocumentation:V1Scope>

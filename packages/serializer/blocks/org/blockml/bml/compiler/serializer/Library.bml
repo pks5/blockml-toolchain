@@ -1,12 +1,6 @@
-<!--
-  BlockML Serializer Library Descriptor
-  FQN: org.blockml.bml.compiler.serializer.Library
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Serializer Library Descriptor
+  FQN: org.blockml.bml.compiler.serializer.Library-->
+<serializer:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,34 +21,33 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>Library</name>
-  <type>serializer:Library</type>
-  <baseType>core:BlockLibrary</baseType>
-  <is>The BlockML Serializer compiler package library catalog</is>
-
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    The BlockML Serializer compiler package library catalog
+  </is>
+  <version>
+    0.9.4
+  </version>
   <documentation>
     # The BlockML Serializer compiler package library catalog
-
+    
     Canonical serializer specification for BlockML — emit rules (B12–B25), emit architecture,
     and serialize() contract. TypeScript in packages/serializer/src/ implements this library.
-
+    
     Input/output Urmodell types live in org.blockml.bml.bom.* (@blockml/bom).
-
+    
     Membership is defined exclusively by this blocks list.
   </documentation>
-
-  <version>0.9.4</version>
-
   <language>
-    <English />
+    <blockml:language.English />
   </language>
-
   <properties>
     <description override="true">
       <value>BlockML Serializer library</value>
     </description>
   </properties>
-
   <aggregations>
     <readMe override="true">
       <composition>
@@ -111,5 +104,4 @@
       </composition>
     </blocks>
   </aggregations>
-
-</block>
+</serializer:Library>

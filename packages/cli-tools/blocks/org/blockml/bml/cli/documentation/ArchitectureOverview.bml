@@ -1,12 +1,6 @@
-<!--
-  CLI Documentation — ArchitectureOverview
-  FQN: org.blockml.bml.cli.documentation.ArchitectureOverview
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.cli.documentation.ArchitectureOverview-->
+<clidocumentation:ArchitectureOverview xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -21,23 +15,25 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ArchitectureOverview</name>
-  <type>clidocumentation:ArchitectureOverview</type>
-  <baseType>core:Documentation</baseType>
-  <is>Module map and command flow</is>
-
-  <documentation>Entry: clicap:RunCli (runCli) → ParseArgs → dispatch.
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Module map and command flow
+  </is>
+  <documentation>
+    Entry: clicap:RunCli (runCli) → ParseArgs → dispatch.
+    
     validate flow: LoadConfig → BootstrapProjectTypeRegistry (full registry) →
     compileBmlToBom (file) or validateRegistryDocuments (project sources, or entire registry with --all).
-
+    
     compile flow (library/corpus): LoadConfig → BootstrapTargets → BootstrapProjectTypeRegistry
     → compileToOutput(scope auto) → WriteOutputFiles.
-
+    
     compile flow (fatblock): LoadConfig → BootstrapTargets → project library graph
     plus core Library and srcDir corpus → compileToOutput(document) → write
     {hostFqn}.fat.bml at the invocation directory.
-
+    
     TypeScript module map:
     • cli.ts → RunCli, ParseArgs, RunValidate, RunCompile, RunCompileFatBlock, RunSearch, RunGraph, RunInspect, RunNew, RunTransform, FormatDiagnostic
     • load-config.ts → LoadConfig, api/BomConfig
@@ -49,9 +45,9 @@
     • run-inspect.ts → RunInspect
     • run-new.ts → RunNew
     • run-transform.ts → RunTransform
-    • write-output.ts → WriteOutputFiles</documentation>
+    • write-output.ts → WriteOutputFiles
+  </documentation>
   <references>
     <see type="clidocumentation:V1Scope" relation="ReadNext" />
   </references>
-
-</block>
+</clidocumentation:ArchitectureOverview>

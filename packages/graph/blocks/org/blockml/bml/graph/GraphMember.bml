@@ -1,12 +1,6 @@
-<!--
-  Graph — GraphMember
-  FQN: org.blockml.bml.graph.GraphMember
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph — GraphMember
+  FQN: org.blockml.bml.graph.GraphMember-->
+<graph:GraphMember xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,26 +15,40 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>GraphMember</name>
-  <type>graph:GraphMember</type>
-  <baseType>graph:GraphType</baseType>
-  <is>Authored or inherited member view</is>
-  <documentation>inheritedFrom is set when the member is declared on an ancestor or contract, not stored as a derived HAS_MEMBER edge.</documentation>
+  <baseType>
+    graph:GraphType
+  </baseType>
+  <is>
+    Authored or inherited member view
+  </is>
+  <documentation>
+    inheritedFrom is set when the member is declared on an ancestor or contract, not stored as a derived HAS_MEMBER edge.
+  </documentation>
   <properties>
     <node type="graph:GraphNode">
-      <documentation>Member node. (required)</documentation>
+      <documentation>
+        Member node. (required)
+      </documentation>
     </node>
     <relation type="type:Text">
-      <documentation>HAS_MEMBER. (required)</documentation>
+      <documentation>
+        HAS_MEMBER. (required)
+      </documentation>
     </relation>
     <inheritedFrom type="type:Text">
-      <documentation>Owner FQN when inherited. (optional)</documentation>
+      <documentation>
+        Owner FQN when inherited. (optional)
+      </documentation>
     </inheritedFrom>
     <file type="type:Text">
-      <documentation>Provenance file. (optional)</documentation>
+      <documentation>
+        Provenance file. (optional)
+      </documentation>
     </file>
     <line type="type:Integer">
-      <documentation>Provenance line. (optional)</documentation>
+      <documentation>
+        Provenance line. (optional)
+      </documentation>
     </line>
   </properties>
-</block>
+</graph:GraphMember>

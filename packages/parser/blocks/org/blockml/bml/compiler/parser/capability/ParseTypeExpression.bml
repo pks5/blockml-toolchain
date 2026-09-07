@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — ParseTypeExpression
-  FQN: org.blockml.bml.compiler.parser.capability.ParseTypeExpression
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — ParseTypeExpression
+  FQN: org.blockml.bml.compiler.parser.capability.ParseTypeExpression-->
+<parcap:ParseTypeExpression xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,30 +23,38 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ParseTypeExpression</name>
-  <type>parcap:ParseTypeExpression</type>
-  <baseType>core:Capability</baseType>
-  <is>Parse type attribute string to TypeExpression</is>
-
-  <documentation>Parse type attribute string to TypeExpression</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Parse type attribute string to TypeExpression
+  </is>
+  <documentation>
+    Parse type attribute string to TypeExpression
+  </documentation>
   <references>
     <see type="pardocumentation:TypeDescriptorParsing" relation="SeeAlso" />
   </references>
-
   <properties>
     <raw type="type:Text">
-      <documentation>raw. TS type: type:Text. (required)</documentation>
+      <documentation>
+        raw. TS type: type:Text. (required)
+      </documentation>
     </raw>
     <ctx type="parmap:MapContext">
-      <documentation>ctx. TS type: parmap:MapContext. (required)</documentation>
+      <documentation>
+        ctx. TS type: parmap:MapContext. (required)
+      </documentation>
     </ctx>
     <implicitContext type="type:Text">
-      <documentation>implicitContext. TS type: type:Text. (optional)</documentation>
+      <documentation>
+        implicitContext. TS type: type:Text. (optional)
+      </documentation>
     </implicitContext>
     <expression type="bomtype:TypeExpression">
-      <documentation>expression. TS type: bomtype:TypeExpression. (required)</documentation>
+      <documentation>
+        expression. TS type: bomtype:TypeExpression. (required)
+      </documentation>
     </expression>
   </properties>
-
-</block>
+</parcap:ParseTypeExpression>

@@ -1,12 +1,6 @@
-<!--
-  CLI Capability — RunCli
-  FQN: org.blockml.bml.cli.capability.RunCli
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Capability — RunCli
+  FQN: org.blockml.bml.cli.capability.RunCli-->
+<clicap:RunCli xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,25 +14,25 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>RunCli</name>
-  <type>clicap:RunCli</type>
-  <baseType>core:Capability</baseType>
-  <is>Public CLI entry: argv + cwd to exit code and stderr</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Public CLI entry: argv + cwd to exit code and stderr
+  </is>
   <documentation>
     # Public CLI entry: argv + cwd to exit code and stderr
-
+    
     CLI18: validate command to RunValidate; compile to RunCompile; search to RunSearch; graph to RunGraph; inspect to RunInspect; transform apply to RunTransform; unknown command or transform subcommand exit 2 with short USAGE.
     --help / -h / help print the help page (clidocumentation:Help, or the command Printed help) and exit 0. Help does not load config or the TypeRegistry.
-
+    
     Uncaught throws → Internal CLI error: message, exit 2 (application error, not BML diagnostics).
-
+    
     Direct-run entrypoint when invoked as blockml bin (CLI21: compare realpath of argv[1]
     and this module so npm node_modules/.bin/blockml symlinks still invoke runCli).
-
+    
     Bin path calls WriteCliOutput (CLI24 colors); runCli itself returns uncolored stderr.
   </documentation>
-
   <references>
     <see type="clidocumentation:PublicApi" relation="SeeAlso" />
     <see type="clidocumentation:Help" relation="SeeAlso" />
@@ -49,17 +43,21 @@
     <see type="clicap:RunTransform" relation="SeeAlso" />
     <see type="clicap:WriteCliOutput" relation="SeeAlso" />
   </references>
-
   <properties>
     <argv type="type:Text">
-      <documentation>CLI arguments. (required)</documentation>
+      <documentation>
+        CLI arguments. (required)
+      </documentation>
     </argv>
     <cwd type="type:Text">
-      <documentation>Working directory. (required)</documentation>
+      <documentation>
+        Working directory. (required)
+      </documentation>
     </cwd>
     <result type="cliapi:CliResult">
-      <documentation>Exit code and stderr. (required)</documentation>
+      <documentation>
+        Exit code and stderr. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</clicap:RunCli>

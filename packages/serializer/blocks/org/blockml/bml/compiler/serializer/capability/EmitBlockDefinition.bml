@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — EmitBlockDefinition
-  FQN: org.blockml.bml.compiler.serializer.capability.EmitBlockDefinition
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — EmitBlockDefinition
+  FQN: org.blockml.bml.compiler.serializer.capability.EmitBlockDefinition-->
+<sercap:EmitBlockDefinition xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,36 +21,48 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>EmitBlockDefinition</name>
-  <type>sercap:EmitBlockDefinition</type>
-  <baseType>core:Capability</baseType>
-  <is>Emit full BlockDefinition tree in BLOCK_EMIT_ORDER (B12)</is>
-
-  <documentation><![CDATA[Walks serconfig:BlockEmitOrder; delegates to member/composition/type emit helpers.
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Emit full BlockDefinition tree in BLOCK_EMIT_ORDER (B12)
+  </is>
+  <documentation>
+    <![CDATA[
+    Walks serconfig:BlockEmitOrder; delegates to member/composition/type emit helpers.
     omitTypeChild is true when the wrapper tag already supplies the type (root, embed, or
-    preferred Sub-Block). omitNameChild is true when a Sub-Block tag already supplies the name.]]></documentation>
-
+    preferred Sub-Block). omitNameChild is true when a Sub-Block tag already supplies the name.
+    ]]>
+  </documentation>
   <references>
     <see type="serconfig:BlockEmitOrder" relation="SeeAlso" />
     <see type="serdocumentation:EmitOrder" relation="SeeAlso" />
   </references>
-
   <properties>
     <writer type="seremit:XmlWriter">
-      <documentation>writer. TS type: seremit:XmlWriter. (required)</documentation>
+      <documentation>
+        writer. TS type: seremit:XmlWriter. (required)
+      </documentation>
     </writer>
     <block type="bomblock:BlockDefinition">
-      <documentation>block. TS type: bomblock:BlockDefinition. (required)</documentation>
+      <documentation>
+        block. TS type: bomblock:BlockDefinition. (required)
+      </documentation>
     </block>
     <context type="seremit:EmitContext">
-      <documentation>context. TS type: seremit:EmitContext. (required)</documentation>
+      <documentation>
+        context. TS type: seremit:EmitContext. (required)
+      </documentation>
     </context>
     <omitTypeChild type="type:Boolean">
-      <documentation>Skip child type when the wrapper tag already supplies it. TS type: type:Boolean. (optional)</documentation>
+      <documentation>
+        Skip child type when the wrapper tag already supplies it. TS type: type:Boolean. (optional)
+      </documentation>
     </omitTypeChild>
     <omitNameChild type="type:Boolean">
-      <documentation>Skip child name when a Sub-Block tag already supplies it. TS type: type:Boolean. (optional)</documentation>
+      <documentation>
+        Skip child name when a Sub-Block tag already supplies it. TS type: type:Boolean. (optional)
+      </documentation>
     </omitNameChild>
   </properties>
-
-</block>
+</sercap:EmitBlockDefinition>

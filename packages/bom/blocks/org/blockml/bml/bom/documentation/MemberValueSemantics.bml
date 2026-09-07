@@ -1,12 +1,6 @@
-<!--
-  BOM Documentation — MemberValueSemantics
-  FQN: org.blockml.bml.bom.documentation.MemberValueSemantics
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Documentation — MemberValueSemantics
+  FQN: org.blockml.bml.bom.documentation.MemberValueSemantics-->
+<bomdocumentation:MemberValueSemantics xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -24,26 +18,27 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>MemberValueSemantics</name>
-  <type>bomdocumentation:MemberValueSemantics</type>
-  <baseType>core:Documentation</baseType>
-  <is>Property value deep-copy rules</is>
-
-  <documentation>Property values are never linked — always deep copies on instances and definitions.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Property value deep-copy rules
+  </is>
+  <documentation>
+    Property values are never linked — always deep copies on instances and definitions.
     Cross-instance FQN::id references exist only on associations (basePresets, Step.part, …).
-
+    
     EnumType tokens (Standard, FQN::id) are resolution keys — BOM stores id + typeFqn only.
     Struct/primitive literals stay inline in authored form — not normalized at parse time.
-
+    
     LiteralValue: kind literal, opaque value, typeFqn, optional authoredPlacement (D9).
     ExpressionValue: kind expression, raw ${} text only in BOM; AST via parseExpression().
     InterpolatedTextValue: kind interpolated, full authored text with ${} holes; AST via parseInterpolatedText().
     AddressValue: parsed org.blockml.bml.type.Address shape.
-
-    Preset/config merge copies into render-time view — never writes references back to BomDocument.</documentation>
-
+    
+    Preset/config merge copies into render-time view — never writes references back to BomDocument.
+  </documentation>
   <references>
     <see type="bomvalue:MemberValue" relation="Defines" />
   </references>
-
-</block>
+</bomdocumentation:MemberValueSemantics>

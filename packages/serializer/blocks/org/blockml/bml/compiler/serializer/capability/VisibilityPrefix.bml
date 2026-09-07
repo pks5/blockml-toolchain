@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — VisibilityPrefix
-  FQN: org.blockml.bml.compiler.serializer.capability.VisibilityPrefix
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — VisibilityPrefix
+  FQN: org.blockml.bml.compiler.serializer.capability.VisibilityPrefix-->
+<sercap:VisibilityPrefix xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,24 +21,28 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>VisibilityPrefix</name>
-  <type>sercap:VisibilityPrefix</type>
-  <baseType>core:Capability</baseType>
-  <is>Map visibility enum to XML localName prefix (B14)</is>
-
-  <documentation>Map visibility enum to XML localName prefix (B14)</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Map visibility enum to XML localName prefix (B14)
+  </is>
+  <documentation>
+    Map visibility enum to XML localName prefix (B14)
+  </documentation>
   <references>
     <see type="serdocumentation:EmitRules" relation="SeeAlso" />
   </references>
-
   <properties>
     <visibility type="type:Text">
-      <documentation>private | protected | public | undefined (optional)</documentation>
+      <documentation>
+        private | protected | public | undefined (optional)
+      </documentation>
     </visibility>
     <prefix type="type:Text">
-      <documentation>__ | _ | (empty) (required)</documentation>
+      <documentation>
+        __ | _ | (empty) (required)
+      </documentation>
     </prefix>
   </properties>
-
-</block>
+</sercap:VisibilityPrefix>

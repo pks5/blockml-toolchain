@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — SourceInfo
-  FQN: org.blockml.bml.bom.common.SourceInfo
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — SourceInfo
+  FQN: org.blockml.bml.bom.common.SourceInfo-->
+<bomcommon:SourceInfo xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,34 +17,47 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>SourceInfo</name>
-  <type>bomcommon:SourceInfo</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Parse metadata for a BomDocument</is>
-
-  <documentation>Document-level source metadata. namespaceBindings preserves authored xmlns order (B21).
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Parse metadata for a BomDocument
+  </is>
+  <documentation>
+    Document-level source metadata. namespaceBindings preserves authored xmlns order (B21).
     rootForm records whether the document root was legacy block or a type-as-root tag
-    (doc:DocumentFormat) so serialize can re-emit the authored form.</documentation>
-
+    (doc:DocumentFormat) so serialize can re-emit the authored form.
+  </documentation>
   <properties>
     <filePath type="type:Text">
-      <documentation>filePath (required). TS type: type:Text.</documentation>
+      <documentation>
+        filePath (required). TS type: type:Text.
+      </documentation>
     </filePath>
     <format type="type:Text">
-      <documentation>Always "xml" for authoring. (required)</documentation>
+      <documentation>
+        Always "xml" for authoring. (required)
+      </documentation>
     </format>
     <namespaceBindings type="type:Text">
-      <documentation>Map: prefix key ("" = default xmlns) → namespace identifier. (optional)</documentation>
+      <documentation>
+        Map: prefix key ("" = default xmlns) → namespace identifier. (optional)
+      </documentation>
     </namespaceBindings>
     <schemaLocation type="type:Text">
-      <documentation>schemaLocation (optional). TS type: type:Text.</documentation>
+      <documentation>
+        schemaLocation (optional). TS type: type:Text.
+      </documentation>
     </schemaLocation>
     <noNamespaceSchemaLocation type="type:Text">
-      <documentation>noNamespaceSchemaLocation (optional). TS type: type:Text.</documentation>
+      <documentation>
+        noNamespaceSchemaLocation (optional). TS type: type:Text.
+      </documentation>
     </noNamespaceSchemaLocation>
     <rootForm type="type:Text">
-      <documentation>Authored document root form: "block" (legacy) or "type" (type-as-root). TS type: type:Text. (optional)</documentation>
+      <documentation>
+        Authored document root form: "block" (legacy) or "type" (type-as-root). TS type: type:Text. (optional)
+      </documentation>
     </rootForm>
   </properties>
-
-</block>
+</bomcommon:SourceInfo>

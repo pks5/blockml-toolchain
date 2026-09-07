@@ -1,65 +1,67 @@
-<!--
-  Transformer Capability — FinalizeExecution
-  FQN: org.blockml.bml.transformer.capability.FinalizeExecution
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Capability — FinalizeExecution
+  FQN: org.blockml.bml.transformer.capability.FinalizeExecution-->
+<transformercap:FinalizeExecution xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
-  <name>FinalizeExecution</name>
-  <type>transformercap:FinalizeExecution</type>
-  <baseType>core:Capability</baseType>
-  <is>Process step [5] — complete the ModelTransformation lifecycle</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Process step [5] — complete the ModelTransformation lifecycle
+  </is>
   <documentation>
     # Finalize Execution
-
+    
     Set completedAt, duration, and status, then relocate the running
     ModelTransformation to `_meta.transform.succeeded` or
     `_meta.transform.failed`. `duration` is the wall-clock elapsed time
     from Prepare through this step. `Succeeded` only when every
     ModelOperation succeeded. After that relocation, commit.
-
+    
     Does not resolve `result`. Persist already applied each succeeding
     operation's `resultMappings`. A ModelOperation failure, including a
     ResultException from those mappings, leaves
     `ModelTransformation.exception` empty. Prepare may already have
     written `workflow:ParametersException` onto `exception`.
-
+    
     Default implementation is deterministic. Runs after every started execution,
     including a failed ModelOperation. Does not write output, changedFiles,
     or operation exception onto the ModelTransformation. TS: pipeline/finalize.ts.
   </documentation>
-
   <references>
     <see type="transformerdocumentation:ArchitectureOverview" relation="SeeAlso" />
     <see type="transformercap:PersistExecution" relation="SeeAlso" />
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
   </references>
-
   <properties>
     <runningFqn type="type:Text">
-      <documentation>Running ModelTransformation FQN to finalize. (required)</documentation>
+      <documentation>
+        Running ModelTransformation FQN to finalize. (required)
+      </documentation>
     </runningFqn>
     <terminalFqn type="type:Text">
-      <documentation>Succeeded or failed ModelTransformation FQN after relocation. (required)</documentation>
+      <documentation>
+        Succeeded or failed ModelTransformation FQN after relocation. (required)
+      </documentation>
     </terminalFqn>
     <status type="workflow:ExecutionStatus">
-      <documentation>Terminal status Succeeded or Failed. (required)</documentation>
+      <documentation>
+        Terminal status Succeeded or Failed. (required)
+      </documentation>
     </status>
     <completedAt type="type:DateTime">
-      <documentation>When this execution finished. (required)</documentation>
+      <documentation>
+        When this execution finished. (required)
+      </documentation>
     </completedAt>
     <duration type="type:Duration">
-      <documentation>Wall-clock elapsed time from Prepare through Finalize. (required)</documentation>
+      <documentation>
+        Wall-clock elapsed time from Prepare through Finalize. (required)
+      </documentation>
     </duration>
   </properties>
-
-</block>
+</transformercap:FinalizeExecution>

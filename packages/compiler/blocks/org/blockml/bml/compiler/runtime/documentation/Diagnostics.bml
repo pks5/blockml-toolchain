@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Documentation — Diagnostics
-  FQN: org.blockml.bml.compiler.runtime.documentation.Diagnostics
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Documentation — Diagnostics
+  FQN: org.blockml.bml.compiler.runtime.documentation.Diagnostics-->
+<rundocumentation:Diagnostics xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -26,32 +20,32 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>Diagnostics</name>
-  <type>rundocumentation:Diagnostics</type>
-  <baseType>core:Documentation</baseType>
-  <is>Compiler envelope diagnostic codes</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Compiler envelope diagnostic codes
+  </is>
   <documentation>
     # Compiler envelope diagnostic codes
-
+    
     Runtime-owned codes:
     BML_UNKNOWN_TARGET — getTarget missed.
-
+    
     BML_TARGET_SCOPE_MISMATCH — resolved kind not accepted.
-
+    
     BML_COMPILE_SCOPE_EMPTY — missing document/libraries/roots or auto empty.
-
+    
     BML_MISSING_TYPE_REGISTRY — compileBomToOutput called without typeRegistry.
-
+    
     Parse/validate diagnostics are forwarded from parser/validator.
-
+    
     success on CompilerResult is false if any diagnostic has severity error.
-
+    
     CLI maps diagnostics to exit codes — not modeled here.
   </documentation>
   <references>
     <see type="rundocumentation:DesignDecisions" relation="ReadNext" />
     <see type="runconfig:RuntimeConstants" relation="SeeAlso" />
   </references>
-
-</block>
+</rundocumentation:Diagnostics>

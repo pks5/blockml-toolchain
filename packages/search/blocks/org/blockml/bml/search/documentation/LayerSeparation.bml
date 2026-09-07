@@ -1,12 +1,6 @@
-<!--
-  Search Documentation — LayerSeparation
-  FQN: org.blockml.bml.search.documentation.LayerSeparation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Search Documentation — LayerSeparation
+  FQN: org.blockml.bml.search.documentation.LayerSeparation-->
+<searchdocumentation:LayerSeparation xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -22,22 +16,23 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>LayerSeparation</name>
-  <type>searchdocumentation:LayerSeparation</type>
-  <baseType>core:Documentation</baseType>
-  <is>Search vs framework vs parser vs CLI</is>
-
-  <documentation>Layers:
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Search vs framework vs parser vs CLI
+  </is>
+  <documentation>
+    Layers:
+    
     org.blockml.bml.search.* (@blockml/search) — SearchDocument mapping, Orama index, persistence, Search API.
     @blockml/framework — Discovery and TypeRegistry bootstrap (bootstrapFullProjectRegistry).
     @blockml/parser / @blockml/bom — Normalized aliases, keywords, documentation, FQNs.
     @blockml/cli — Human and --json CLI over this package.
-
-    Search does not parse BML with a second XML/regex path. It does not own a separate corpus.</documentation>
-
+    
+    Search does not parse BML with a second XML/regex path. It does not own a separate corpus.
+  </documentation>
   <references>
     <see type="searchdocumentation:ArchitectureOverview" relation="ReadNext" />
   </references>
-
-</block>
+</searchdocumentation:LayerSeparation>

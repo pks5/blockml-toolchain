@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — IfDirective
-  FQN: org.blockml.bml.bom.composition.IfDirective
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — IfDirective
+  FQN: org.blockml.bml.bom.composition.IfDirective-->
+<bomcomp:IfDirective xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,21 +17,26 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>IfDirective</name>
-  <type>bomcomp:IfDirective</type>
-  <baseType>bomcomp:DirectiveAttribute</baseType>
-  <is>bml:if directive (type: if)</is>
-
-  <documentation>bml:if directive (type: if)</documentation>
-
+  <baseType>
+    bomcomp:DirectiveAttribute
+  </baseType>
+  <is>
+    bml:if directive (type: if)
+  </is>
+  <documentation>
+    bml:if directive (type: if)
+  </documentation>
   <properties>
     <type type="type:Text">
-      <documentation>type (required). TS type: type:Text.</documentation>
+      <documentation>
+        type (required). TS type: type:Text.
+      </documentation>
       <value>if</value>
     </type>
     <condition type="bomvalue:ExpressionValue">
-      <documentation>condition (required). TS type: bomvalue:ExpressionValue.</documentation>
+      <documentation>
+        condition (required). TS type: bomvalue:ExpressionValue.
+      </documentation>
     </condition>
   </properties>
-
-</block>
+</bomcomp:IfDirective>

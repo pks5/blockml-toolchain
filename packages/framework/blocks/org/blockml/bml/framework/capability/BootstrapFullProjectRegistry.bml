@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — BootstrapFullProjectRegistry
-  FQN: org.blockml.bml.framework.capability.BootstrapFullProjectRegistry
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — BootstrapFullProjectRegistry
+  FQN: org.blockml.bml.framework.capability.BootstrapFullProjectRegistry-->
+<fwcap:BootstrapFullProjectRegistry xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,32 +25,40 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>BootstrapFullProjectRegistry</name>
-  <type>fwcap:BootstrapFullProjectRegistry</type>
-  <baseType>core:Capability</baseType>
-  <is>Bootstrap the same corpus as blockml validate --all</is>
-
-  <documentation>projectSourceRoots plus resolveLibrarySeeds, then bootstrapTypeRegistry. Resulting registry includes local project BML and the library graph (npm BlockML packages). Search and validate --all must use this entry point.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Bootstrap the same corpus as blockml validate --all
+  </is>
+  <documentation>
+    projectSourceRoots plus resolveLibrarySeeds, then bootstrapTypeRegistry. Resulting registry includes local project BML and the library graph (npm BlockML packages). Search and validate --all must use this entry point.
+  </documentation>
   <references>
     <see type="fwcap:ProjectSourceRoots" relation="SeeAlso" />
     <see type="fwcap:BootstrapTypeRegistry" relation="SeeAlso" />
     <see type="fwcap:ResolveLibrarySeeds" relation="SeeAlso" />
   </references>
-
   <properties>
     <rootDir type="type:Text">
-      <documentation>Project root. (required)</documentation>
+      <documentation>
+        Project root. (required)
+      </documentation>
     </rootDir>
     <srcDir type="type:Text">
-      <documentation>Default blocks. (optional)</documentation>
+      <documentation>
+        Default blocks. (optional)
+      </documentation>
     </srcDir>
     <libraries type="type:Text[]">
-      <documentation>Extra Library.bml seeds (config.libraries / --libraries). (optional)</documentation>
+      <documentation>
+        Extra Library.bml seeds (config.libraries / --libraries). (optional)
+      </documentation>
     </libraries>
     <result type="fwregistry:BootstrapResult">
-      <documentation>result. TS type: fwregistry:BootstrapResult. (required)</documentation>
+      <documentation>
+        result. TS type: fwregistry:BootstrapResult. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</fwcap:BootstrapFullProjectRegistry>

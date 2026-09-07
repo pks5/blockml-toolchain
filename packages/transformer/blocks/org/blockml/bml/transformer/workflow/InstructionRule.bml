@@ -1,44 +1,39 @@
-<!--
-  Transformer Workflow — InstructionRule
-  FQN: org.blockml.bml.transformer.workflow.InstructionRule
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Workflow — InstructionRule
+  FQN: org.blockml.bml.transformer.workflow.InstructionRule-->
+<workflow:InstructionRule xmlns="http://blockml.org/bml"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:lang="org.blockml.bml.language"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type">
 
-  <name>InstructionRule</name>
-  <type>workflow:InstructionRule</type>
-  <baseType>workflow:Rule</baseType>
-  <is>A rule described by instruction prose</is>
-
+  <baseType>
+    workflow:Rule
+  </baseType>
+  <is>
+    A rule described by instruction prose
+  </is>
   <documentation>
     Rule whose obligation is stated as free-form instructions. Follow the instructions
     text while executing the enclosing Task.
   </documentation>
-
   <references>
     <see type="workflow:Rule" relation="Extends" />
   </references>
-
   <properties>
     <instructions type="type:Text">
-      <documentation>Prose that states what must be observed during Task.run.</documentation>
+      <documentation>
+        Prose that states what must be observed during Task.run.
+      </documentation>
     </instructions>
   </properties>
-
   <capabilities>
     <apply override="true" type="cap:Action">
-      <documentation>Read the instructions property and follow it in the current Task.run context.</documentation>
+      <documentation>
+        Read the instructions property and follow it in the current Task.run context.
+      </documentation>
       <implementation language="lang:English">
         <![CDATA[Read the instructions and follow them.]]>
       </implementation>
     </apply>
   </capabilities>
-
-</block>
+</workflow:InstructionRule>

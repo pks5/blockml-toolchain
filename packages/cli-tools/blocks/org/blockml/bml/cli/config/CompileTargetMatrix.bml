@@ -1,12 +1,6 @@
-<!--
-  CLI Config — CompileTargetMatrix
-  FQN: org.blockml.bml.cli.config.CompileTargetMatrix
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Config — CompileTargetMatrix
+  FQN: org.blockml.bml.cli.config.CompileTargetMatrix-->
+<cliconfig:CompileTargetMatrix xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,16 +14,30 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>CompileTargetMatrix</name>
-  <type>cliconfig:CompileTargetMatrix</type>
-  <baseType>cli:CliType</baseType>
-  <is>Target-specific CLI argument requirements (V1)</is>
-
-  <documentation>CLI19 target matrix. Document fatblock defaults file from package.json blockml.library; library/corpus omit file; --all ignored for corpus targets.</documentation>
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    Target-specific CLI argument requirements (V1)
+  </is>
+  <documentation>
+    CLI19 target matrix. Document fatblock defaults file from package.json blockml.library; library/corpus omit file; --all ignored for corpus targets.
+  </documentation>
   <properties>
-    <blockdoc type="type:Text"><documentation>file omit; --all no; default outDir blockdoc; no --src/--libraries → project blockml.library packages as corpus; else auto libraries[] then srcDir.</documentation></blockdoc>
-    <xsd type="type:Text"><documentation>file omit; --all no; scope auto libraries[]; default outDir schemas.</documentation></xsd>
-    <fatblock type="type:Text"><documentation>file optional (default package.json blockml.library); --src optional (default host directory); --per-package one {hostFqn}.fat.bml per local library package at the invocation directory.</documentation></fatblock>
+    <blockdoc type="type:Text">
+      <documentation>
+        file omit; --all no; default outDir blockdoc; no --src/--libraries → project blockml.library packages as corpus; else auto libraries[] then srcDir.
+      </documentation>
+    </blockdoc>
+    <xsd type="type:Text">
+      <documentation>
+        file omit; --all no; scope auto libraries[]; default outDir schemas.
+      </documentation>
+    </xsd>
+    <fatblock type="type:Text">
+      <documentation>
+        file optional (default package.json blockml.library); --src optional (default host directory); --per-package one {hostFqn}.fat.bml per local library package at the invocation directory.
+      </documentation>
+    </fatblock>
   </properties>
-
-</block>
+</cliconfig:CompileTargetMatrix>

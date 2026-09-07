@@ -1,12 +1,6 @@
-<!--
-  BlockML Compiler Runtime — README
-  FQN: org.blockml.bml.compiler.runtime.README
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Compiler Runtime — README
+  FQN: org.blockml.bml.compiler.runtime.README-->
+<runtime:README xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,36 +19,35 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>README</name>
-  <type>runtime:README</type>
-  <baseType>core:ReadMe</baseType>
-  <is>Reading entry for the compiler runtime library</is>
-
+  <baseType>
+    core:ReadMe
+  </baseType>
+  <is>
+    Reading entry for the compiler runtime library
+  </is>
   <documentation>
     The @blockml/compiler package implements the Stage-3 facade and Target Registry.
     This library (org.blockml.bml.compiler.runtime.*) is the SSOT; TypeScript in
     packages/compiler/src/ implements it. Tests in packages/compiler/test/ verify contracts.
-
+    
     Start reading at org.blockml.bml.compiler.runtime.documentation.Introduction (ReadNext chain).
-
+    
     V1: compileToOutput with document|library|corpus|auto scope, empty Target Registry
     (hosts register targets), RenderContext/Session, opaque RenderOutput. CLI owns
     bootstrap, write, C5/C6.
-
+    
     Layer separation:
     • parser / validator / framework — Stage 1–2 and TypeRegistry
     • org.blockml.bml.compiler.runtime.* (this library) — facade and registry
     • org.blockml.bml.cli.* — host orchestration
     • target libraries — render emit
-
+    
     Modules: documentation, api/config, capability.
   </documentation>
-
   <references>
     <see type="rundocumentation:Introduction" relation="ReadFirst" />
     <see type="rundocumentation:DesignDecisions" relation="SeeAlso" />
     <see type="rundocumentation:PublicApi" relation="SeeAlso" />
     <see type="runcap:CompileToOutput" relation="SeeAlso" />
   </references>
-
-</block>
+</runtime:README>

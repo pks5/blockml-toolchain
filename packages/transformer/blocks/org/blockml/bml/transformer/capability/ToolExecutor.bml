@@ -1,23 +1,18 @@
-<!--
-  Transformer Capability — ToolExecutor
-  FQN: org.blockml.bml.transformer.capability.ToolExecutor
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Capability — ToolExecutor
+  FQN: org.blockml.bml.transformer.capability.ToolExecutor-->
+<transformercap:ToolExecutor xmlns="http://blockml.org/bml"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
-  <name>ToolExecutor</name>
-  <type>transformercap:ToolExecutor</type>
-  <baseType>transformercap:OperationExecutor</baseType>
-  <is>Executor for ToolOperation — run npx command args and return output text</is>
-
+  <baseType>
+    transformercap:OperationExecutor
+  </baseType>
+  <is>
+    Executor for ToolOperation — run npx command args and return output text
+  </is>
   <documentation>
     Default `transformercap:OperationExecutor` for `workflow:ToolOperation`.
     Intended argv: `npx`, `command`, then `args`. Deterministic. No
@@ -25,12 +20,10 @@
     commit, or write files under `_meta/transform/`. Combined
     stdout/stderr is the output candidate. TS: executor/tool-executor.ts.
   </documentation>
-
   <references>
     <see type="transformercap:OperationExecutor" relation="Extends" />
     <see type="workflow:ToolOperation" relation="SeeAlso" />
   </references>
-
   <capabilities>
     <execute override="true" type="cap:Action">
       <documentation>
@@ -43,5 +36,4 @@
       </implementation>
     </execute>
   </capabilities>
-
-</block>
+</transformercap:ToolExecutor>

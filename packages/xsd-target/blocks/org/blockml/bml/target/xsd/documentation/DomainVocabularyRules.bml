@@ -1,12 +1,6 @@
-<!--
-  XSD Documentation — DomainVocabularyRules
-  FQN: org.blockml.bml.target.xsd.documentation.DomainVocabularyRules
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--XSD Documentation — DomainVocabularyRules
+  FQN: org.blockml.bml.target.xsd.documentation.DomainVocabularyRules-->
+<xsddocumentation:DomainVocabularyRules xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -22,21 +16,22 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>DomainVocabularyRules</name>
-  <type>xsddocumentation:DomainVocabularyRules</type>
-  <baseType>core:Documentation</baseType>
-  <is>types.xsd and service.xsd vocabularies (XSD12–XSD13)</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    types.xsd and service.xsd vocabularies (XSD12–XSD13)
+  </is>
   <documentation>
     # types.xsd and service.xsd vocabularies (XSD12–XSD13)
-
+    
     XSD12: EmitTypesXsd — VocabularyElements under TYPE_FQN_PREFIX as xs:element type=xs:string
     in BML_TYPES_NS (http://blockml.org/schema/types).
-
+    
     XSD13: EmitServiceXsd — same for SERVICE_FQN_PREFIX under BML_SERVICE_NS.
-
+    
     Short name = last FQN segment after dot; sorted.
-
+    
     Gated by emitDomainSchemas (XSD15). Not MachineBlocks domain schemas.
   </documentation>
   <references>
@@ -44,5 +39,4 @@
     <see type="xsdcap:EmitTypesXsd" relation="SeeAlso" />
     <see type="xsdcap:EmitServiceXsd" relation="SeeAlso" />
   </references>
-
-</block>
+</xsddocumentation:DomainVocabularyRules>

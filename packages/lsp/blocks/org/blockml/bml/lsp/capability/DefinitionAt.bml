@@ -1,12 +1,6 @@
-<!--
-  LSP Capability — DefinitionAt
-  FQN: org.blockml.bml.lsp.capability.DefinitionAt
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP Capability — DefinitionAt
+  FQN: org.blockml.bml.lsp.capability.DefinitionAt-->
+<lspcap:DefinitionAt xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,38 +24,46 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>DefinitionAt</name>
-  <type>lspcap:DefinitionAt</type>
-  <baseType>core:Capability</baseType>
-  <is>Go-to-definition from a type QName via TypeRegistry</is>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Go-to-definition from a type QName via TypeRegistry
+  </is>
   <documentation>
     # Go-to-definition from a type QName via TypeRegistry
-
+    
     Parse-only XML-token hit-test. Resolvable type QNames (prefix:Local, dotted FQN, or unqualified PascalCase in a type slot via implicit namespace) are jump targets. Returns LocationLink[]: originSelectionRange covers the whole QName; target is registry.get(fqn).block.source with the open document overlaid. Language tags and concrete member tags are not definitions. Unknown FQN, no hit, or no document → null.
   </documentation>
-
   <references>
     <see type="lspdocumentation:PublicApi" relation="SeeAlso" />
     <see type="parcap:Parse" relation="SeeAlso" />
   </references>
-
   <properties>
     <text type="type:Text">
-      <documentation>text. TS type: type:Text. (required)</documentation>
+      <documentation>
+        text. TS type: type:Text. (required)
+      </documentation>
     </text>
     <filePath type="type:Text">
-      <documentation>filePath. TS type: type:Text. (required)</documentation>
+      <documentation>
+        filePath. TS type: type:Text. (required)
+      </documentation>
     </filePath>
     <position type="lsp:LspPosition">
-      <documentation>LSP 0-based Position { line, character }. (required)</documentation>
+      <documentation>
+        LSP 0-based Position { line, character }. (required)
+      </documentation>
     </position>
     <workspace type="lsp:WorkspaceState">
-      <documentation>workspace. TS type: lsp:WorkspaceState. (required)</documentation>
+      <documentation>
+        workspace. TS type: lsp:WorkspaceState. (required)
+      </documentation>
     </workspace>
     <result type="lsp:LspLocationLink[]">
-      <documentation>LspLocationLink[] | null. (required)</documentation>
+      <documentation>
+        LspLocationLink[] | null. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</lspcap:DefinitionAt>

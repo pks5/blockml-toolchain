@@ -1,12 +1,6 @@
-<!--
-  Search Documentation — ArchitectureOverview
-  FQN: org.blockml.bml.search.documentation.ArchitectureOverview
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Search Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.search.documentation.ArchitectureOverview-->
+<searchdocumentation:ArchitectureOverview xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -22,21 +16,22 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ArchitectureOverview</name>
-  <type>searchdocumentation:ArchitectureOverview</type>
-  <baseType>core:Documentation</baseType>
-  <is>Corpus to index to Search API</is>
-
-  <documentation>BML files → bootstrapFullProjectRegistry → TypeRegistry → SearchDocument[] → Orama index → .blockml/search/ cache → Search API.
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Corpus to index to Search API
+  </is>
+  <documentation>
+    BML files → bootstrapFullProjectRegistry → TypeRegistry → SearchDocument[] → Orama index → .blockml/search/ cache → Search API.
+    
     Search corpus == validate --all corpus. Index is a derived cache; BML remains source of truth.
-
+    
     Ranking: exact FQN match (document id) first, then field boost (Orama): fqn 10, name 8, aliases 6, keywords 6, documentation 1.
-
-    Persistence: .blockml/search/orama.json plus manifest.json (package.json/lockfile hashes, indexed file mtimes). Missing or stale index → full rebuild.</documentation>
-
+    
+    Persistence: .blockml/search/orama.json plus manifest.json (package.json/lockfile hashes, indexed file mtimes). Missing or stale index → full rebuild.
+  </documentation>
   <references>
     <see type="searchdocumentation:V1Scope" relation="ReadNext" />
   </references>
-
-</block>
+</searchdocumentation:ArchitectureOverview>

@@ -1,12 +1,6 @@
-<!--
-  XSD Documentation — CatalogAndOutputLayout
-  FQN: org.blockml.bml.target.xsd.documentation.CatalogAndOutputLayout
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--XSD Documentation — CatalogAndOutputLayout
+  FQN: org.blockml.bml.target.xsd.documentation.CatalogAndOutputLayout-->
+<xsddocumentation:CatalogAndOutputLayout xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -22,24 +16,26 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>CatalogAndOutputLayout</name>
-  <type>xsddocumentation:CatalogAndOutputLayout</type>
-  <baseType>core:Documentation</baseType>
-  <is>Output files and OASIS catalog (XSD14)</is>
-
-  <documentation>files[]: always bml.xsd; if emitDomainSchemas also types.xsd and service.xsd
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Output files and OASIS catalog (XSD14)
+  </is>
+  <documentation>
+    files[]: always bml.xsd; if emitDomainSchemas also types.xsd and service.xsd
     (paths relative to session outputBasePath / CLI default schemas/).
     rootFiles[]: always catalog.xml at project root (CLI writes separately).
-
+    
     XSD14: OASIS xmlns urn:oasis:names:tc:entity:xmlns:xml:catalog;
     one uri per CatalogEntry (name=namespaceUri, uri=CatalogRelativePath).
     CatalogRelativePath: normalize slashes, strip trailing, return ./outDir/file.
-
-    IDE catalog usage is host/docs 15; generation rules live here.</documentation>
+    
+    IDE catalog usage is host/docs 15; generation rules live here.
+  </documentation>
   <references>
     <see type="xsddocumentation:Diagnostics" relation="ReadNext" />
     <see type="xsdcap:EmitCatalogXml" relation="SeeAlso" />
     <see type="cli:Library" relation="SeeAlso" />
   </references>
-
-</block>
+</xsddocumentation:CatalogAndOutputLayout>

@@ -1,12 +1,6 @@
-<!--
-  CLI Config — CliColorScheme
-  FQN: org.blockml.bml.cli.config.CliColorScheme
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Config — CliColorScheme
+  FQN: org.blockml.bml.cli.config.CliColorScheme-->
+<cliconfig:CliColorScheme xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,20 +14,42 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>CliColorScheme</name>
-  <type>cliconfig:CliColorScheme</type>
-  <baseType>cli:CliType</baseType>
-  <is>Terminal color roles for CLI output</is>
-
-  <documentation>CLI24 palette. ANSI SGR when color is enabled (TTY, or FORCE_COLOR);
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    Terminal color roles for CLI output
+  </is>
+  <documentation>
+    CLI24 palette. ANSI SGR when color is enabled (TTY, or FORCE_COLOR);
     disabled when NO_COLOR is set. Info uses the terminal default foreground (white on dark terminals).
-    Recommendation is reserved for future diagnostics.</documentation>
+    Recommendation is reserved for future diagnostics.
+  </documentation>
   <properties>
-    <error type="type:Text"><documentation>Red (ANSI 31). Diagnostic severity error and failure/config status.</documentation></error>
-    <warning type="type:Text"><documentation>Yellow (ANSI 33). Diagnostic severity warning.</documentation></warning>
-    <recommendation type="type:Text"><documentation>Blue (ANSI 34). Future recommendation diagnostics.</documentation></recommendation>
-    <info type="type:Text"><documentation>Default/white. Normal status, verbose lists, usage.</documentation></info>
-    <success type="type:Text"><documentation>Green (ANSI 32). Validation/compilation succeeded status.</documentation></success>
+    <error type="type:Text">
+      <documentation>
+        Red (ANSI 31). Diagnostic severity error and failure/config status.
+      </documentation>
+    </error>
+    <warning type="type:Text">
+      <documentation>
+        Yellow (ANSI 33). Diagnostic severity warning.
+      </documentation>
+    </warning>
+    <recommendation type="type:Text">
+      <documentation>
+        Blue (ANSI 34). Future recommendation diagnostics.
+      </documentation>
+    </recommendation>
+    <info type="type:Text">
+      <documentation>
+        Default/white. Normal status, verbose lists, usage.
+      </documentation>
+    </info>
+    <success type="type:Text">
+      <documentation>
+        Green (ANSI 32). Validation/compilation succeeded status.
+      </documentation>
+    </success>
   </properties>
-
-</block>
+</cliconfig:CliColorScheme>

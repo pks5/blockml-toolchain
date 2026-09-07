@@ -1,12 +1,6 @@
-<!--
-  XSD API — CatalogEntry
-  FQN: org.blockml.bml.target.xsd.api.CatalogEntry
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--XSD API — CatalogEntry
+  FQN: org.blockml.bml.target.xsd.api.CatalogEntry-->
+<xsdapi:CatalogEntry xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -20,14 +14,22 @@
   xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>CatalogEntry</name>
-  <type>xsdapi:CatalogEntry</type>
-  <baseType>xsd:XsdType</baseType>
-  <is>One OASIS catalog uri mapping</is>
-
+  <baseType>
+    xsd:XsdType
+  </baseType>
+  <is>
+    One OASIS catalog uri mapping
+  </is>
   <properties>
-    <namespaceUri type="type:Text"><documentation>XML namespace URI (catalog name attribute). (required)</documentation></namespaceUri>
-    <relativePath type="type:Text"><documentation>Relative schema path e.g. ./schemas/bml.xsd. (required)</documentation></relativePath>
+    <namespaceUri type="type:Text">
+      <documentation>
+        XML namespace URI (catalog name attribute). (required)
+      </documentation>
+    </namespaceUri>
+    <relativePath type="type:Text">
+      <documentation>
+        Relative schema path e.g. ./schemas/bml.xsd. (required)
+      </documentation>
+    </relativePath>
   </properties>
-
-</block>
+</xsdapi:CatalogEntry>

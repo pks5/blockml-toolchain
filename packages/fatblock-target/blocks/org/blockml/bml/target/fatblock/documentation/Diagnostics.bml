@@ -1,12 +1,6 @@
-<!--
-  FatBlock Documentation — Diagnostics
-  FQN: org.blockml.bml.target.fatblock.documentation.Diagnostics
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--FatBlock Documentation — Diagnostics
+  FQN: org.blockml.bml.target.fatblock.documentation.Diagnostics-->
+<fbdocumentation:Diagnostics xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -23,12 +17,14 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>Diagnostics</name>
-  <type>fbdocumentation:Diagnostics</type>
-  <baseType>core:Documentation</baseType>
-  <is>FatBlock-owned and shared diagnostic codes</is>
-
-  <documentation>Owned / emitted by this package:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    FatBlock-owned and shared diagnostic codes
+  </is>
+  <documentation>
+    Owned / emitted by this package:
     • BML_FATBLOCK_SRC_REQUIRED — missing srcDir
     • BML_FATBLOCK_HOST_NOT_FOUND — host file not a registry root
     • BML_FATBLOCK_HOST_HAS_EMBEDDED_BLOCKS — host already has embeds
@@ -36,13 +32,13 @@
     • BML_FATBLOCK_EMBED_HAS_EMBEDDED_BLOCKS — candidate already has embeds
     • BML_DUPLICATE_EMBEDDED_BLOCK — same FQN twice in candidates
     • BML_NAMESPACE_PREFIX_COLLISION — conflicting prefix to URI
-
+    
     Shared upstream (not reimplemented here): BML_EMBEDDED_BLOCKS_ON_SUBBLOCK,
     BML_NESTED_EMBEDDED_BLOCKS (validator); BML_NAMESPACE_UNBOUND (serializer).
-
-    Severity: all FatBlock codes are error. CLI exit: config → 2; assemble → 1.</documentation>
+    
+    Severity: all FatBlock codes are error. CLI exit: config → 2; assemble → 1.
+  </documentation>
   <references>
     <see type="fbdocumentation:DesignDecisions" relation="ReadNext" />
   </references>
-
-</block>
+</fbdocumentation:Diagnostics>

@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Documentation — PathAndLayout
-  FQN: org.blockml.bml.target.blockdoc.documentation.PathAndLayout
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Documentation — PathAndLayout
+  FQN: org.blockml.bml.target.blockdoc.documentation.PathAndLayout-->
+<bddocumentation:PathAndLayout xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -28,31 +22,33 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PathAndLayout</name>
-  <type>bddocumentation:PathAndLayout</type>
-  <baseType>core:Documentation</baseType>
-  <is>FQN paths, package prefixes, relative hrefs (BD7–BD12)</is>
-
-  <documentation>BD7 FqnToHtmlPath:
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    FQN paths, package prefixes, relative hrefs (BD7–BD12)
+  </is>
+  <documentation>
+    BD7 FqnToHtmlPath:
     • fqn: org.blockml.bml.core.Block → org/blockml/bml/core/Block.html
     • package: same → org/blockml/bml/core/index.html
-
+    
     Package prefix = all segments except last (Library → org.blockml.bml for ….Library).
     Package index path = prefix dots→slashes + /index.html.
-
+    
     BD9 RelativeHref: pop file segment from from; common prefix; ups=0 → ./ else ../ * ups.
-
+    
     BD12 package indexes only when outLayout=fqn; prefixes = all ancestors of root FQN packages.
     Empty prefix maps to index.html (virtual root package index when BD27 home is empty).
-
+    
     BD27 FirstInterestingPackagePrefix: skip single-child prefixes with no direct blocks;
     merged index.html redirects to that package index when outLayout=fqn.
-
-    perLibrary library prefix = Library type FQN with trailing .Library stripped.</documentation>
+    
+    perLibrary library prefix = Library type FQN with trailing .Library stripped.
+  </documentation>
   <references>
     <see type="bddocumentation:TypeLinkRules" relation="ReadNext" />
     <see type="bdcap:FqnToHtmlPath" relation="SeeAlso" />
     <see type="bdcap:RelativeHref" relation="SeeAlso" />
   </references>
-
-</block>
+</bddocumentation:PathAndLayout>

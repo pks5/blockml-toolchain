@@ -1,12 +1,6 @@
-<!--
-  CLI Capability — ValidateAgainstXsd
-  FQN: org.blockml.bml.cli.capability.ValidateAgainstXsd
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Capability — ValidateAgainstXsd
+  FQN: org.blockml.bml.cli.capability.ValidateAgainstXsd-->
+<clicap:ValidateAgainstXsd xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -20,31 +14,37 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ValidateAgainstXsd</name>
-  <type>clicap:ValidateAgainstXsd</type>
-  <baseType>core:Capability</baseType>
-  <is>Standalone XSD helper — not part of blockml validate</is>
-
-  <documentation>Optional tooling against generated bml.xsd. Not invoked by RunValidate.
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Standalone XSD helper — not part of blockml validate
+  </is>
+  <documentation>
+    Optional tooling against generated bml.xsd. Not invoked by RunValidate.
     Validity of BML is parse + @blockml/validator. XSD generation is compile xsd.
     Missing schemas → warning BML_XSD_SCHEMAS_MISSING.
-    Schema violations → error BML_XSD_VALIDATION_ERROR.</documentation>
-
+    Schema violations → error BML_XSD_VALIDATION_ERROR.
+  </documentation>
   <references>
     <see type="clicap:RunValidate" relation="SeeAlso" />
     <see type="cliconfig:CliConstants" relation="SeeAlso" />
   </references>
-
   <properties>
     <filePaths type="type:Text">
-      <documentation>Absolute or project-relative .bml paths to validate. (required)</documentation>
+      <documentation>
+        Absolute or project-relative .bml paths to validate. (required)
+      </documentation>
     </filePaths>
     <rootDir type="type:Text">
-      <documentation>Project root for catalog/schema resolution. (required)</documentation>
+      <documentation>
+        Project root for catalog/schema resolution. (required)
+      </documentation>
     </rootDir>
     <result type="type:Text">
-      <documentation>Diagnostic[] from XSD step. (required)</documentation>
+      <documentation>
+        Diagnostic[] from XSD step. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</clicap:ValidateAgainstXsd>

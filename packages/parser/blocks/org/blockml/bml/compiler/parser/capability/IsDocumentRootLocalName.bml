@@ -1,12 +1,6 @@
-<!--
-  Parser Capability — IsDocumentRootLocalName
-  FQN: org.blockml.bml.compiler.parser.capability.IsDocumentRootLocalName
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Capability — IsDocumentRootLocalName
+  FQN: org.blockml.bml.compiler.parser.capability.IsDocumentRootLocalName-->
+<parcap:IsDocumentRootLocalName xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,28 +24,34 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>IsDocumentRootLocalName</name>
-  <type>parcap:IsDocumentRootLocalName</type>
-  <baseType>core:Capability</baseType>
-  <is>True when a local name may wrap a Block definition</is>
-
-  <documentation><![CDATA[True for legacy block or a type-or-name tag: optional visibility
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    True when a local name may wrap a Block definition
+  </is>
+  <documentation>
+    <![CDATA[
+    True for legacy block or a type-or-name tag: optional visibility
     underscores, then an uppercase letter, then letters, digits, or underscores.
     Used for the document root, Sub-Blocks under subBlocks, and embeds under
-    embeddedBlocks (doc:DocumentFormat).]]></documentation>
-
+    embeddedBlocks (doc:DocumentFormat).
+    ]]>
+  </documentation>
   <references>
     <see type="parcap:AssertBlockRoot" relation="SeeAlso" />
     <see type="doc:DocumentFormat" relation="SeeAlso" />
   </references>
-
   <properties>
     <local type="type:Text">
-      <documentation>Element local name. TS type: type:Text. (required)</documentation>
+      <documentation>
+        Element local name. TS type: type:Text. (required)
+      </documentation>
     </local>
     <allowed type="type:Boolean">
-      <documentation>allowed. TS type: type:Boolean. (required)</documentation>
+      <documentation>
+        allowed. TS type: type:Boolean. (required)
+      </documentation>
     </allowed>
   </properties>
-
-</block>
+</parcap:IsDocumentRootLocalName>

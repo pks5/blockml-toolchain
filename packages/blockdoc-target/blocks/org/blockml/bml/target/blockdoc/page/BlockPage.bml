@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Page — BlockPage
-  FQN: org.blockml.bml.target.blockdoc.page.BlockPage
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Page — BlockPage
+  FQN: org.blockml.bml.target.blockdoc.page.BlockPage-->
+<bdpage:BlockPage xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,20 +21,25 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>BlockPage</name>
-  <type>bdpage:BlockPage</type>
-  <baseType>blockdoc:BlockdocType</baseType>
-  <is>HTML template model for one block documentation page</is>
-
-  <documentation>Emitted by RenderBlockPage. Toolbar chrome (BD25); no FQN/baseType/is definition list; no block-page breadcrumb nav (BD8).</documentation>
-
+  <baseType>
+    blockdoc:BlockdocType
+  </baseType>
+  <is>
+    HTML template model for one block documentation page
+  </is>
+  <documentation>
+    Emitted by RenderBlockPage. Toolbar chrome (BD25); no FQN/baseType/is definition list; no block-page breadcrumb nav (BD8).
+  </documentation>
   <properties>
     <blockType type="type:Text">
-      <documentation>Block FQN (page title). (required)</documentation>
+      <documentation>
+        Block FQN (page title). (required)
+      </documentation>
     </blockType>
     <html type="type:Text">
-      <documentation>Full HTML document string. (required)</documentation>
+      <documentation>
+        Full HTML document string. (required)
+      </documentation>
     </html>
   </properties>
-
-</block>
+</bdpage:BlockPage>

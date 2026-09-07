@@ -1,12 +1,6 @@
-<!--
-  BlockML Search Library Descriptor
-  FQN: org.blockml.bml.search.Library
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Search Library Descriptor
+  FQN: org.blockml.bml.search.Library-->
+<search:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,29 +15,28 @@
   xmlns:searchdocumentation="org.blockml.bml.search.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>Library</name>
-  <type>search:Library</type>
-  <baseType>core:BlockLibrary</baseType>
-  <is>The BlockML Search package library catalog</is>
-
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    The BlockML Search package library catalog
+  </is>
+  <version>
+    0.9.4
+  </version>
   <documentation>
     Canonical search specification for BlockML — local full-text search over the
     validate --all BML corpus. TypeScript in packages/search/src/ implements this library.
     Membership is defined exclusively by this blocks list.
   </documentation>
-
-  <version>0.9.4</version>
-
   <language>
-    <English />
+    <blockml:language.English />
   </language>
-
   <properties>
     <description override="true">
       <value>BlockML Search library</value>
     </description>
   </properties>
-
   <aggregations>
     <readMe override="true">
       <composition>
@@ -83,5 +76,4 @@
       </composition>
     </blocks>
   </aggregations>
-
-</block>
+</search:Library>

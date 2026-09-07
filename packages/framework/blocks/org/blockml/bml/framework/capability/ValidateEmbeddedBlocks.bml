@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — ValidateEmbeddedBlocks
-  FQN: org.blockml.bml.framework.capability.ValidateEmbeddedBlocks
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — ValidateEmbeddedBlocks
+  FQN: org.blockml.bml.framework.capability.ValidateEmbeddedBlocks-->
+<fwcap:ValidateEmbeddedBlocks xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,20 +25,25 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ValidateEmbeddedBlocks</name>
-  <type>fwcap:ValidateEmbeddedBlocks</type>
-  <baseType>core:Capability</baseType>
-  <is>Embedded block and sub-block placement rules</is>
-
-  <documentation>Embedded block and sub-block placement rules</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Embedded block and sub-block placement rules
+  </is>
+  <documentation>
+    Embedded block and sub-block placement rules
+  </documentation>
   <properties>
     <document type="bomdoc:BomDocument">
-      <documentation>document. TS type: bomdoc:BomDocument. (required)</documentation>
+      <documentation>
+        document. TS type: bomdoc:BomDocument. (required)
+      </documentation>
     </document>
     <diagnostics type="bomcommon:Diagnostic[]">
-      <documentation>diagnostics. TS type: bomcommon:Diagnostic[]. (required)</documentation>
+      <documentation>
+        diagnostics. TS type: bomcommon:Diagnostic[]. (required)
+      </documentation>
     </diagnostics>
   </properties>
-
-</block>
+</fwcap:ValidateEmbeddedBlocks>

@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Documentation — Introduction
-  FQN: org.blockml.bml.compiler.runtime.documentation.Introduction
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Documentation — Introduction
+  FQN: org.blockml.bml.compiler.runtime.documentation.Introduction-->
+<rundocumentation:Introduction xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -26,24 +20,26 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>Introduction</name>
-  <type>rundocumentation:Introduction</type>
-  <baseType>core:Documentation</baseType>
-  <is>Purpose and scope of the compiler runtime</is>
-
-  <documentation>The @blockml/compiler package implements the Stage-3 facade and Target Registry.
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Purpose and scope of the compiler runtime
+  </is>
+  <documentation>
+    The @blockml/compiler package implements the Stage-3 facade and Target Registry.
     Normative entry is compileToOutput (C2). Targets register via registerTarget; the
     registry ships with no defaults (C3). Compile scope kinds and auto resolution are C7.
-
+    
     This library (org.blockml.bml.compiler.runtime.*) is the SSOT. TypeScript in
     packages/compiler/src/ implements it. Tests in packages/compiler/test/ encode contracts.
-
+    
     Host wiring (targets[] bootstrap, file write, exit codes, C5/C6) lives in
     org.blockml.bml.cli.*. Target emit rules live in each target library.
-    Parser/validator algorithms live in their own libraries; this package orchestrates them.</documentation>
+    Parser/validator algorithms live in their own libraries; this package orchestrates them.
+  </documentation>
   <references>
     <see type="rundocumentation:LayerSeparation" relation="ReadNext" />
     <see type="runcap:CompileToOutput" relation="SeeAlso" />
   </references>
-
-</block>
+</rundocumentation:Introduction>

@@ -1,12 +1,6 @@
-<!--
-  BOM Documentation — RelatedDiagnostics
-  FQN: org.blockml.bml.bom.documentation.RelatedDiagnostics
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Documentation — RelatedDiagnostics
+  FQN: org.blockml.bml.bom.documentation.RelatedDiagnostics-->
+<bomdocumentation:RelatedDiagnostics xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -24,12 +18,14 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>RelatedDiagnostics</name>
-  <type>bomdocumentation:RelatedDiagnostics</type>
-  <baseType>core:Documentation</baseType>
-  <is>BOM-relevant diagnostic codes</is>
-
-  <documentation>BML_MISSING_BASE_TYPE, BML_MISSING_BLOCK_TYPE, BML_BLOCK_NAME_TYPE_MISMATCH,
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    BOM-relevant diagnostic codes
+  </is>
+  <documentation>
+    BML_MISSING_BASE_TYPE, BML_MISSING_BLOCK_TYPE, BML_BLOCK_NAME_TYPE_MISMATCH,
     BML_MISSING_SUBBLOCK_NAME, BML_SUBBLOCK_TYPE_MISMATCH, BML_EMBEDDED_BLOCKS_ON_SUBBLOCK,
     BML_NESTED_EMBEDDED_BLOCKS, BML_DUPLICATE_EMBEDDED_BLOCK, BML_DEFINITION_TYPE_MISMATCH,
     BML_MISSING_EMBEDDED_BLOCK_TYPE, BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE, BML_AMBIGUOUS_TYPE,
@@ -45,7 +41,7 @@
     BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED, BML_READONLY_MEMBER_WRITE, BML_STANDALONE_COMPOSITION,
     BML_NESTED_COMPOSITION, BML_NAMESPACE_*, BML_XML_*, BML_PRESET_CYCLE, BML_GENERIC_*, BML_TYPE_BOUND_NOT_SATISFIED,
     BML_UNKNOWN_CONTRACT, BML_CONTRACT_*, BML_EXPR_UNKNOWN_PROPERTY.
-
-    Full catalog: org.blockml.bml.diagnostic.* (@blockml/core) and 06_compiler.md.</documentation>
-
-</block>
+    
+    Full catalog: org.blockml.bml.diagnostic.* (@blockml/core) and 06_compiler.md.
+  </documentation>
+</bomdocumentation:RelatedDiagnostics>

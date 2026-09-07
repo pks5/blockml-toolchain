@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime API — CompileScope
-  FQN: org.blockml.bml.compiler.runtime.api.CompileScope
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime API — CompileScope
+  FQN: org.blockml.bml.compiler.runtime.api.CompileScope-->
+<runapi:CompileScope xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,21 +19,43 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>CompileScope</name>
-  <type>runapi:CompileScope</type>
-  <baseType>runtime:RuntimeType</baseType>
-  <is>Compile scope payload on CompileRequest</is>
-
-  <documentation>C7 scope kinds with optional document, libraries, roots, includeDependencies.</documentation>
+  <baseType>
+    runtime:RuntimeType
+  </baseType>
+  <is>
+    Compile scope payload on CompileRequest
+  </is>
+  <documentation>
+    C7 scope kinds with optional document, libraries, roots, includeDependencies.
+  </documentation>
   <references>
     <see type="rundocumentation:PublicApi" relation="SeeAlso" />
   </references>
   <properties>
-    <kind type="type:Text"><documentation>CompileScopeKind value. (required)</documentation></kind>
-    <document type="runapi:CompileInput"><documentation>Required when kind is document. (optional)</documentation></document>
-    <libraries type="type:Text"><documentation>Library.bml paths. (optional)</documentation></libraries>
-    <roots type="type:Text"><documentation>Corpus root directories. (optional)</documentation></roots>
-    <includeDependencies type="type:Boolean"><documentation>Reserved; host may pass through. (optional)</documentation></includeDependencies>
+    <kind type="type:Text">
+      <documentation>
+        CompileScopeKind value. (required)
+      </documentation>
+    </kind>
+    <document type="runapi:CompileInput">
+      <documentation>
+        Required when kind is document. (optional)
+      </documentation>
+    </document>
+    <libraries type="type:Text">
+      <documentation>
+        Library.bml paths. (optional)
+      </documentation>
+    </libraries>
+    <roots type="type:Text">
+      <documentation>
+        Corpus root directories. (optional)
+      </documentation>
+    </roots>
+    <includeDependencies type="type:Boolean">
+      <documentation>
+        Reserved; host may pass through. (optional)
+      </documentation>
+    </includeDependencies>
   </properties>
-
-</block>
+</runapi:CompileScope>

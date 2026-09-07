@@ -1,12 +1,6 @@
-<!--
-  LSP — LspLocation
-  FQN: org.blockml.bml.lsp.LspLocation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--LSP — LspLocation
+  FQN: org.blockml.bml.lsp.LspLocation-->
+<lsp:LspLocation xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,20 +23,25 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>LspLocation</name>
-  <type>lsp:LspLocation</type>
-  <baseType>lsp:LspType</baseType>
-  <is>URI plus range for a workspace location</is>
-
-  <documentation>BML type gap: stands for TypeScript LspLocation (packages/lsp/src/navigation.ts).</documentation>
-
+  <baseType>
+    lsp:LspType
+  </baseType>
+  <is>
+    URI plus range for a workspace location
+  </is>
+  <documentation>
+    BML type gap: stands for TypeScript LspLocation (packages/lsp/src/navigation.ts).
+  </documentation>
   <properties>
     <uri type="type:Text">
-      <documentation>uri (required). TS type: type:Text.</documentation>
+      <documentation>
+        uri (required). TS type: type:Text.
+      </documentation>
     </uri>
     <range type="lsp:LspRange">
-      <documentation>range (required). TS type: lsp:LspRange.</documentation>
+      <documentation>
+        range (required). TS type: lsp:LspRange.
+      </documentation>
     </range>
   </properties>
-
-</block>
+</lsp:LspLocation>

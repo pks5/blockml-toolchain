@@ -1,12 +1,6 @@
-<!--
-  Search — IndexStatus
-  FQN: org.blockml.bml.search.IndexStatus
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Search — IndexStatus
+  FQN: org.blockml.bml.search.IndexStatus-->
+<search:IndexStatus xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,23 +15,30 @@
   xmlns:searchdocumentation="org.blockml.bml.search.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>IndexStatus</name>
-  <type>search:IndexStatus</type>
-  <baseType>search:SearchType</baseType>
-  <is>Presence and freshness of the persisted index</is>
-
-  <documentation>state is missing, ready, or stale.</documentation>
-
+  <baseType>
+    search:SearchType
+  </baseType>
+  <is>
+    Presence and freshness of the persisted index
+  </is>
+  <documentation>
+    state is missing, ready, or stale.
+  </documentation>
   <properties>
     <state type="type:Text">
-      <documentation>state (required). TS type: type:Text.</documentation>
+      <documentation>
+        state (required). TS type: type:Text.
+      </documentation>
     </state>
     <documents type="type:Integer">
-      <documentation>documents (optional). TS type: type:Integer.</documentation>
+      <documentation>
+        documents (optional). TS type: type:Integer.
+      </documentation>
     </documents>
     <indexDir type="type:Text">
-      <documentation>indexDir (required). TS type: type:Text.</documentation>
+      <documentation>
+        indexDir (required). TS type: type:Text.
+      </documentation>
     </indexDir>
   </properties>
-
-</block>
+</search:IndexStatus>

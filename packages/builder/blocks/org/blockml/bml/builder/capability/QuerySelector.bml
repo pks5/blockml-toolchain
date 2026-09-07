@@ -1,12 +1,6 @@
-<!--
-  Builder Capability — QuerySelector
-  FQN: org.blockml.bml.builder.capability.QuerySelector
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Builder Capability — QuerySelector
+  FQN: org.blockml.bml.builder.capability.QuerySelector-->
+<buildercap:QuerySelector xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -20,21 +14,31 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
-  <name>QuerySelector</name>
-  <type>buildercap:QuerySelector</type>
-  <baseType>core:Capability</baseType>
-  <is>Find a declared member by section path</is>
-  <documentation><![CDATA[V1 selectors: properties.<name> and aggregations.<name>.
-    Returns the member or undefined.]]></documentation>
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Find a declared member by section path
+  </is>
+  <documentation>
+    <![CDATA[
+    V1 selectors: properties.<name> and aggregations.<name>.
+    Returns the member or undefined.
+    ]]>
+  </documentation>
   <references>
     <see type="builder:BomBuilder" relation="SeeAlso" />
   </references>
   <properties>
     <selector type="type:Text">
-      <documentation>Member path. (required)</documentation>
+      <documentation>
+        Member path. (required)
+      </documentation>
     </selector>
     <result type="type:Text">
-      <documentation>Found member name, or empty when missing. (optional)</documentation>
+      <documentation>
+        Found member name, or empty when missing. (optional)
+      </documentation>
     </result>
   </properties>
-</block>
+</buildercap:QuerySelector>

@@ -1,12 +1,6 @@
-<!--
-  Serializer — BlockEmitOrder
-  FQN: org.blockml.bml.compiler.serializer.config.BlockEmitOrder
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer — BlockEmitOrder
+  FQN: org.blockml.bml.compiler.serializer.config.BlockEmitOrder-->
+<serconfig:BlockEmitOrder xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,17 +21,20 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>BlockEmitOrder</name>
-  <type>serconfig:BlockEmitOrder</type>
-  <baseType>serializer:SerializerType</baseType>
-  <is>V1 hardcoded canonical &lt;block> child sequence (B12)</is>
-
-  <documentation>Frozen snapshot of Definition member declaration order for Phase A. V2 reads Definition .bml dynamically.</documentation>
-
+  <baseType>
+    serializer:SerializerType
+  </baseType>
+  <is>
+    V1 hardcoded canonical &lt;block> child sequence (B12)
+  </is>
+  <documentation>
+    Frozen snapshot of Definition member declaration order for Phase A. V2 reads Definition .bml dynamically.
+  </documentation>
   <properties>
     <entries type="type:Text[]">
-      <documentation>Ordered: name, type, baseType, is, isNot, version, definition, since, status, summary, documentation, abstract, final, keywords, changelog, examples, references, constraints, aliases, language, genericTypes, contracts, properties, aggregations, associations, capabilities, subBlocks, embeddedBlocks, bml:xml (required)</documentation>
+      <documentation>
+        Ordered: name, type, baseType, is, isNot, version, definition, since, status, summary, documentation, abstract, final, keywords, changelog, examples, references, constraints, aliases, language, genericTypes, contracts, properties, aggregations, associations, capabilities, subBlocks, embeddedBlocks, bml:xml (required)
+      </documentation>
     </entries>
   </properties>
-
-</block>
+</serconfig:BlockEmitOrder>

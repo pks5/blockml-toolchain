@@ -1,12 +1,6 @@
-<!--
-  CLI Command — InspectCommand
-  FQN: org.blockml.bml.cli.command.InspectCommand
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Command — InspectCommand
+  FQN: org.blockml.bml.cli.command.InspectCommand-->
+<clicommand:InspectCommand xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -21,20 +15,34 @@
   xmlns:inspect="org.blockml.bml.inspect"
   xmlns:type="org.blockml.bml.type">
 
-  <name>InspectCommand</name>
-  <type>clicommand:InspectCommand</type>
-  <baseType>cli:CliType</baseType>
-  <is>blockml inspect command model</is>
-
-  <documentation>blockml inspect FQN [--depth n] [--json] [--src] [--libraries]. Corpus is validate --all via @blockml/inspect. JSON-only InspectResult.</documentation>
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    blockml inspect command model
+  </is>
+  <documentation>
+    blockml inspect FQN [--depth n] [--json] [--src] [--libraries]. Corpus is validate --all via @blockml/inspect. JSON-only InspectResult.
+  </documentation>
   <references>
     <see type="clidocumentation:InspectCommand" relation="SeeAlso" />
     <see type="clicap:RunInspect" relation="SeeAlso" />
   </references>
   <properties>
-    <inspectFqn type="type:Text"><documentation>Block FQN to inspect. A .bml path is not an FQN; unknown tokens may suggest the file's root FQN. (required)</documentation></inspectFqn>
-    <depth type="type:Integer"><documentation>Expansion depth 0..3. Default 1. (optional)</documentation></depth>
-    <json type="type:Boolean"><documentation>Accepted and implied; output is always JSON. (optional)</documentation></json>
+    <inspectFqn type="type:Text">
+      <documentation>
+        Block FQN to inspect. A .bml path is not an FQN; unknown tokens may suggest the file's root FQN. (required)
+      </documentation>
+    </inspectFqn>
+    <depth type="type:Integer">
+      <documentation>
+        Expansion depth 0..3. Default 1. (optional)
+      </documentation>
+    </depth>
+    <json type="type:Boolean">
+      <documentation>
+        Accepted and implied; output is always JSON. (optional)
+      </documentation>
+    </json>
   </properties>
-
-</block>
+</clicommand:InspectCommand>

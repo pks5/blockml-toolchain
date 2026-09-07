@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — BlockInstance
-  FQN: org.blockml.bml.bom.composition.BlockInstance
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — BlockInstance
+  FQN: org.blockml.bml.bom.composition.BlockInstance-->
+<bomcomp:BlockInstance xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,56 +17,85 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>BlockInstance</name>
-  <type>bomcomp:BlockInstance</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>Concrete child block in a composition</is>
-
-  <documentation>Concrete child block in a composition</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    Concrete child block in a composition
+  </is>
+  <documentation>
+    Concrete child block in a composition
+  </documentation>
   <properties>
     <typeFqn type="type:Text">
-      <documentation>typeFqn (required). TS type: type:Text.</documentation>
+      <documentation>
+        typeFqn (required). TS type: type:Text.
+      </documentation>
     </typeFqn>
     <id type="bomvalue:MemberValue">
-      <documentation>id (optional). TS type: bomvalue:MemberValue.</documentation>
+      <documentation>
+        id (optional). TS type: bomvalue:MemberValue.
+      </documentation>
     </id>
     <version type="bomvalue:MemberValue">
-      <documentation>version (optional). TS type: bomvalue:MemberValue.</documentation>
+      <documentation>
+        version (optional). TS type: bomvalue:MemberValue.
+      </documentation>
     </version>
     <bean type="bomvalue:MemberValue">
-      <documentation>bean (optional). TS type: bomvalue:MemberValue.</documentation>
+      <documentation>
+        bean (optional). TS type: bomvalue:MemberValue.
+      </documentation>
     </bean>
     <scope type="type:Text">
-      <documentation>"local" | "context". (optional)</documentation>
+      <documentation>
+        "local" | "context". (optional)
+      </documentation>
     </scope>
     <generics type="bomcomp:GenericsBinding">
-      <documentation>Authored bml:generics on this instance. Binds genericTypes; overrides defaultType. (optional)</documentation>
+      <documentation>
+        Authored bml:generics on this instance. Binds genericTypes; overrides defaultType. (optional)
+      </documentation>
     </generics>
     <basePresets type="type:Text">
-      <documentation>basePresets (optional). TS type: type:Text.</documentation>
+      <documentation>
+        basePresets (optional). TS type: type:Text.
+      </documentation>
     </basePresets>
     <renderGroup type="type:Text">
-      <documentation>renderGroup (optional). TS type: type:Text.</documentation>
+      <documentation>
+        renderGroup (optional). TS type: type:Text.
+      </documentation>
     </renderGroup>
     <namespace type="type:Text">
-      <documentation>namespace (optional). TS type: type:Text.</documentation>
+      <documentation>
+        namespace (optional). TS type: type:Text.
+      </documentation>
     </namespace>
     <memberValues type="type:Text">
-      <documentation>Record&lt;string, MemberValue>. (required)</documentation>
+      <documentation>
+        Record&lt;string, MemberValue>. (required)
+      </documentation>
     </memberValues>
     <aggregationCompositions type="bomcomp:InstanceAggregationComposition[]">
-      <documentation>aggregationCompositions (optional). TS type: bomcomp:InstanceAggregationComposition[].</documentation>
+      <documentation>
+        aggregationCompositions (optional). TS type: bomcomp:InstanceAggregationComposition[].
+      </documentation>
     </aggregationCompositions>
     <xmlTrivia type="bomcommon:XmlTrivia">
-      <documentation>xmlTrivia (optional). TS type: bomcommon:XmlTrivia.</documentation>
+      <documentation>
+        xmlTrivia (optional). TS type: bomcommon:XmlTrivia.
+      </documentation>
     </xmlTrivia>
     <source type="bomcommon:SourceLocation">
-      <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
+      <documentation>
+        source (optional). TS type: bomcommon:SourceLocation.
+      </documentation>
     </source>
     <unknownAttributes type="type:Text">
-      <documentation>Unknown bml:* attributes preserved for roundtrip. (optional)</documentation>
+      <documentation>
+        Unknown bml:* attributes preserved for roundtrip. (optional)
+      </documentation>
     </unknownAttributes>
   </properties>
-
-</block>
+</bomcomp:BlockInstance>

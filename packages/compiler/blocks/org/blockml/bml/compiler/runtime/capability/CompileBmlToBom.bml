@@ -1,12 +1,6 @@
-<!--
-  Compiler Runtime Capability — CompileBmlToBom
-  FQN: org.blockml.bml.compiler.runtime.capability.CompileBmlToBom
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Compiler Runtime Capability — CompileBmlToBom
+  FQN: org.blockml.bml.compiler.runtime.capability.CompileBmlToBom-->
+<runcap:CompileBmlToBom xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -25,28 +19,34 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
-  <name>CompileBmlToBom</name>
-  <type>runcap:CompileBmlToBom</type>
-  <baseType>core:Capability</baseType>
-  <is>Parse then validate a single BML document to BomDocument</is>
-
-  <documentation>Orchestrates parser parse and validator validate; does not own mapping algorithms.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Parse then validate a single BML document to BomDocument
+  </is>
+  <documentation>
+    Orchestrates parser parse and validator validate; does not own mapping algorithms.
+  </documentation>
   <references>
     <see type="parser:Library" relation="SeeAlso" />
     <see type="validator:Library" relation="SeeAlso" />
   </references>
-
   <properties>
     <input type="runapi:CompileInput">
-      <documentation>Source unit. (required)</documentation>
+      <documentation>
+        Source unit. (required)
+      </documentation>
     </input>
     <options type="runapi:CompileOptions">
-      <documentation>May supply typeRegistry. (optional)</documentation>
+      <documentation>
+        May supply typeRegistry. (optional)
+      </documentation>
     </options>
     <result type="runapi:CompilerResult">
-      <documentation>BomDocument envelope. (required)</documentation>
+      <documentation>
+        BomDocument envelope. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</runcap:CompileBmlToBom>

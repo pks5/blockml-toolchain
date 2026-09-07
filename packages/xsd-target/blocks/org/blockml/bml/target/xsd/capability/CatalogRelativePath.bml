@@ -1,12 +1,6 @@
-<!--
-  XSD Capability — CatalogRelativePath
-  FQN: org.blockml.bml.target.xsd.capability.CatalogRelativePath
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--XSD Capability — CatalogRelativePath
+  FQN: org.blockml.bml.target.xsd.capability.CatalogRelativePath-->
+<xsdcap:CatalogRelativePath xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomblock="org.blockml.bml.bom.block"
@@ -20,23 +14,30 @@
   xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>CatalogRelativePath</name>
-  <type>xsdcap:CatalogRelativePath</type>
-  <baseType>core:Capability</baseType>
-  <is>Build catalog uri path for a schema file under outDir</is>
-
-  <documentation>XSD14: normalize backslashes to slash; strip trailing slashes; return ./outDir/schemaFileName.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Build catalog uri path for a schema file under outDir
+  </is>
+  <documentation>
+    XSD14: normalize backslashes to slash; strip trailing slashes; return ./outDir/schemaFileName.
+  </documentation>
   <properties>
     <outDir type="type:Text">
-      <documentation>Output base path. (required)</documentation>
+      <documentation>
+        Output base path. (required)
+      </documentation>
     </outDir>
     <schemaFileName type="type:Text">
-      <documentation>e.g. bml.xsd. (required)</documentation>
+      <documentation>
+        e.g. bml.xsd. (required)
+      </documentation>
     </schemaFileName>
     <result type="type:Text">
-      <documentation>Relative path. (required)</documentation>
+      <documentation>
+        Relative path. (required)
+      </documentation>
     </result>
   </properties>
-
-</block>
+</xsdcap:CatalogRelativePath>

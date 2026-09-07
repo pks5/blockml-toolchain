@@ -1,21 +1,20 @@
-<!--
-  Transformer Workflow — ParameterMapping
-  FQN: org.blockml.bml.transformer.workflow.ParameterMapping
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Transformer Workflow — ParameterMapping
+  FQN: org.blockml.bml.transformer.workflow.ParameterMapping-->
+<workflow:ParameterMapping xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type">
 
-  <name>ParameterMapping</name>
-  <type>workflow:ParameterMapping</type>
-  <baseType>core:Block</baseType>
-  <is>A mapping from a source Property onto the transformation parameters</is>
-
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    A mapping from a source Property onto the transformation parameters
+  </is>
+  <isnot>
+    Not a validator or Constraint, not an existence-checked
+    type:PropertyReference, and not a ResultMapping.
+  </isnot>
   <documentation>
     DTO that describes how a source Property maps onto a transformation
     `parameters`. This type does not validate: it does not check that
@@ -24,29 +23,25 @@
     `workflow:ModelTransformation` and throws
     `workflow:ParametersException` on the transformation when a rule
     fails.
-
+    
     * `source` — required `type:PropertyIdentifier` of the Property to
       read. Unchecked at authoring time. At runtime the path is closed
       against the enclosing ModelTransformation, then looked up.
     * `sourcePath` — optional OpenUI5 model path into `source`.
     * `parameterPath` — optional OpenUI5 model path into `parameters`.
-
+    
     Path rules match `workflow:ResultMapping`: valid only on a
     `type:StructType` or an array. A numeric segment selects an array
     index (0-based). A name segment selects a Struct field. A non-array
     Struct's first segment must be a name. A path into a scalar is
     invalid.
-
+    
     No paths: the whole source value replaces `parameters`.
     `parameterPath` on an unset `parameters` initializes empty `T`
     (`{}` or `[]`). Writing creates missing Struct fields. Array index
     equal to length appends; a greater index fails. Reading a missing
     field or index fails. Selected leaf types must be equal.
   </documentation>
-
-  <isNot>Not a validator or Constraint, not an existence-checked
-    type:PropertyReference, and not a ResultMapping.</isNot>
-
   <references>
     <see type="type:PropertyIdentifier" relation="SeeAlso" />
     <see type="type:StructType" relation="SeeAlso" />
@@ -54,7 +49,6 @@
     <see type="workflow:ModelTransformation" relation="SeeAlso" />
     <see type="workflow:ParametersException" relation="SeeAlso" />
   </references>
-
   <properties>
     <source type="type:PropertyIdentifier">
       <documentation>
@@ -76,5 +70,4 @@
       </documentation>
     </parameterPath>
   </properties>
-
-</block>
+</workflow:ParameterMapping>

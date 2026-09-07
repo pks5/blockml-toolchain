@@ -1,12 +1,6 @@
-<!--
-  BlockDoc Render — DocMarkup
-  FQN: org.blockml.bml.target.blockdoc.render.DocMarkup
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockDoc Render — DocMarkup
+  FQN: org.blockml.bml.target.blockdoc.render.DocMarkup-->
+<bdrender:DocMarkup xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,17 +21,20 @@
   xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
   xmlns:type="org.blockml.bml.type">
 
-  <name>DocMarkup</name>
-  <type>bdrender:DocMarkup</type>
-  <baseType>blockdoc:BlockdocType</baseType>
-  <is>HTML fragment string produced by render helpers</is>
-
-  <documentation>Opaque HTML markup fragment (escaped text and/or anchor tags). Used as capability output type for type links, member cells, navigation fragments.</documentation>
-
+  <baseType>
+    blockdoc:BlockdocType
+  </baseType>
+  <is>
+    HTML fragment string produced by render helpers
+  </is>
+  <documentation>
+    Opaque HTML markup fragment (escaped text and/or anchor tags). Used as capability output type for type links, member cells, navigation fragments.
+  </documentation>
   <properties>
     <html type="type:Text">
-      <documentation>HTML fragment. (required)</documentation>
+      <documentation>
+        HTML fragment. (required)
+      </documentation>
     </html>
   </properties>
-
-</block>
+</bdrender:DocMarkup>

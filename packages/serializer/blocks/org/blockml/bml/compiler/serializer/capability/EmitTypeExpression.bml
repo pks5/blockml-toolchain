@@ -1,12 +1,6 @@
-<!--
-  Serializer Capability — EmitTypeExpression
-  FQN: org.blockml.bml.compiler.serializer.capability.EmitTypeExpression
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Serializer Capability — EmitTypeExpression
+  FQN: org.blockml.bml.compiler.serializer.capability.EmitTypeExpression-->
+<sercap:EmitTypeExpression xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -27,28 +21,34 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
-  <name>EmitTypeExpression</name>
-  <type>sercap:EmitTypeExpression</type>
-  <baseType>core:Capability</baseType>
-  <is>Serialize TypeExpression to attribute string</is>
-
-  <documentation>Named, union, struct, multiplicity, generic, self refs. Uses FqnToQName when context.useQName.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Serialize TypeExpression to attribute string
+  </is>
+  <documentation>
+    Named, union, struct, multiplicity, generic, self refs. Uses FqnToQName when context.useQName.
+  </documentation>
   <references>
     <see type="sercap:FqnToQName" relation="SeeAlso" />
     <see type="serdocumentation:EmitRules" relation="SeeAlso" />
   </references>
-
   <properties>
     <expression type="bomtype:TypeExpression">
-      <documentation>expression. TS type: bomtype:TypeExpression. (required)</documentation>
+      <documentation>
+        expression. TS type: bomtype:TypeExpression. (required)
+      </documentation>
     </expression>
     <context type="seremit:EmitContext">
-      <documentation>context. TS type: seremit:EmitContext. (required)</documentation>
+      <documentation>
+        context. TS type: seremit:EmitContext. (required)
+      </documentation>
     </context>
     <text type="type:Text">
-      <documentation>text. TS type: type:Text. (required)</documentation>
+      <documentation>
+        text. TS type: type:Text. (required)
+      </documentation>
     </text>
   </properties>
-
-</block>
+</sercap:EmitTypeExpression>

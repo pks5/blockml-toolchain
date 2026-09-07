@@ -1,12 +1,6 @@
-<!--
-  Inspect — InspectOptions
-  FQN: org.blockml.bml.inspect.InspectOptions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Inspect — InspectOptions
+  FQN: org.blockml.bml.inspect.InspectOptions-->
+<inspect:InspectOptions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,29 +15,40 @@
   xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>InspectOptions</name>
-  <type>inspect:InspectOptions</type>
-  <baseType>inspect:InspectType</baseType>
-  <is>Options for inspectBlock and inspectProject</is>
-
-  <documentation>Default depth 1, max depth 3, default maxBlocks 48. inspectProject also accepts srcDir and libraries for bootstrapFullProjectRegistry.</documentation>
-
+  <baseType>
+    inspect:InspectType
+  </baseType>
+  <is>
+    Options for inspectBlock and inspectProject
+  </is>
+  <documentation>
+    Default depth 1, max depth 3, default maxBlocks 48. inspectProject also accepts srcDir and libraries for bootstrapFullProjectRegistry.
+  </documentation>
   <properties>
     <depth type="type:Integer">
-      <documentation>Expansion depth. (optional)</documentation>
+      <documentation>
+        Expansion depth. (optional)
+      </documentation>
     </depth>
     <rootDir type="type:Text">
-      <documentation>Project root for relative paths and origin. (optional)</documentation>
+      <documentation>
+        Project root for relative paths and origin. (optional)
+      </documentation>
     </rootDir>
     <srcDir type="type:Text">
-      <documentation>Source directory override. (optional)</documentation>
+      <documentation>
+        Source directory override. (optional)
+      </documentation>
     </srcDir>
     <libraries type="type:Text">
-      <documentation>Extra library paths. TS: Text[]. (optional)</documentation>
+      <documentation>
+        Extra library paths. TS: Text[]. (optional)
+      </documentation>
     </libraries>
     <maxBlocks type="type:Integer">
-      <documentation>Expansion budget. (optional)</documentation>
+      <documentation>
+        Expansion budget. (optional)
+      </documentation>
     </maxBlocks>
   </properties>
-
-</block>
+</inspect:InspectOptions>

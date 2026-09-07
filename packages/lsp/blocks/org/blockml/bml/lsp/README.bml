@@ -1,12 +1,6 @@
-<!--
-  BlockML LSP — README
-  FQN: org.blockml.bml.lsp.README
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML LSP — README
+  FQN: org.blockml.bml.lsp.README-->
+<lsp:README xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -29,24 +23,23 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
-  <name>README</name>
-  <type>lsp:README</type>
-  <baseType>core:ReadMe</baseType>
-  <is>Reading entry for the LSP library</is>
-
+  <baseType>
+    core:ReadMe
+  </baseType>
+  <is>
+    Reading entry for the LSP library
+  </is>
   <documentation>
     The @blockml/lsp package provides an editor-agnostic Language Server for BML (stdio).
     IDE clients (VS Code extension, etc.) connect via LSP; grammar and file associations
     stay in IDE-specific packages.
-
+    
     Start at org.blockml.bml.lsp.documentation.Introduction.
-
+    
     Bin: blockml-lsp → packages/lsp/dist/server.js
   </documentation>
-
   <references>
     <see type="lspdocumentation:Introduction" relation="ReadFirst" />
     <see type="lspdocumentation:PublicApi" relation="SeeAlso" />
   </references>
-
-</block>
+</lsp:README>

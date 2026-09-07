@@ -1,12 +1,6 @@
-<!--
-  Graph Capability — BuildIndex
-  FQN: org.blockml.bml.graph.capability.BuildIndex
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph Capability — BuildIndex
+  FQN: org.blockml.bml.graph.capability.BuildIndex-->
+<graphcap:BuildIndex xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,21 +15,29 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>BuildIndex</name>
-  <type>graphcap:BuildIndex</type>
-  <baseType>core:Capability</baseType>
-  <is>Build an in-memory graph index from the validate --all corpus</is>
-  <documentation>Calls bootstrapFullProjectRegistry, maps authored Block and Member nodes, and creates a Ladybug in-memory store. Does not write to disk.</documentation>
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Build an in-memory graph index from the validate --all corpus
+  </is>
+  <documentation>
+    Calls bootstrapFullProjectRegistry, maps authored Block and Member nodes, and creates a Ladybug in-memory store. Does not write to disk.
+  </documentation>
   <references>
     <see type="fwcap:BootstrapFullProjectRegistry" relation="SeeAlso" />
     <see type="graphcap:RebuildIndex" relation="SeeAlso" />
   </references>
   <properties>
     <options type="graph:GraphIndexOptions">
-      <documentation>options (optional).</documentation>
+      <documentation>
+        options (optional).
+      </documentation>
     </options>
     <result type="graph:BuildIndexResult">
-      <documentation>result (required).</documentation>
+      <documentation>
+        result (required).
+      </documentation>
     </result>
   </properties>
-</block>
+</graphcap:BuildIndex>

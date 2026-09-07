@@ -1,12 +1,6 @@
-<!--
-  Graph Capability — OpenIndex
-  FQN: org.blockml.bml.graph.capability.OpenIndex
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph Capability — OpenIndex
+  FQN: org.blockml.bml.graph.capability.OpenIndex-->
+<graphcap:OpenIndex xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,20 +15,28 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>OpenIndex</name>
-  <type>graphcap:OpenIndex</type>
-  <baseType>core:Capability</baseType>
-  <is>Load a ready graph index or rebuild when missing or stale</is>
-  <documentation>Load a ready index or rebuild when missing or stale. The Ladybug database is exclusive; openGraph waits on an index lock if another process holds the graph, then loads or rebuilds. close() releases the lock.</documentation>
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Load a ready graph index or rebuild when missing or stale
+  </is>
+  <documentation>
+    Load a ready index or rebuild when missing or stale. The Ladybug database is exclusive; openGraph waits on an index lock if another process holds the graph, then loads or rebuilds. close() releases the lock.
+  </documentation>
   <references>
     <see type="graphcap:RebuildIndex" relation="SeeAlso" />
   </references>
   <properties>
     <options type="graph:GraphIndexOptions">
-      <documentation>options (optional).</documentation>
+      <documentation>
+        options (optional).
+      </documentation>
     </options>
     <result type="graph:BuildIndexResult">
-      <documentation>result (required).</documentation>
+      <documentation>
+        result (required).
+      </documentation>
     </result>
   </properties>
-</block>
+</graphcap:OpenIndex>

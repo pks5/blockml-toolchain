@@ -1,12 +1,6 @@
-<!--
-  Graph — GraphPath
-  FQN: org.blockml.bml.graph.GraphPath
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Graph — GraphPath
+  FQN: org.blockml.bml.graph.GraphPath-->
+<graph:GraphPath xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -21,20 +15,30 @@
   xmlns:graphdocumentation="org.blockml.bml.graph.documentation"
   xmlns:type="org.blockml.bml.type">
 
-  <name>GraphPath</name>
-  <type>graph:GraphPath</type>
-  <baseType>graph:GraphType</baseType>
-  <is>Shortest authored path between two blocks</is>
-  <documentation>hops are GraphNeighbor values with direction outgoing. Member nodes explain MEMBER_TYPE connections. path does not walk incoming edges.</documentation>
+  <baseType>
+    graph:GraphType
+  </baseType>
+  <is>
+    Shortest authored path between two blocks
+  </is>
+  <documentation>
+    hops are GraphNeighbor values with direction outgoing. Member nodes explain MEMBER_TYPE connections. path does not walk incoming edges.
+  </documentation>
   <properties>
     <from type="graph:GraphNode">
-      <documentation>Start block. (required)</documentation>
+      <documentation>
+        Start block. (required)
+      </documentation>
     </from>
     <to type="graph:GraphNode">
-      <documentation>End block. (required)</documentation>
+      <documentation>
+        End block. (required)
+      </documentation>
     </to>
     <hops type="graph:GraphNeighbor[]">
-      <documentation>Ordered hops including members. (required)</documentation>
+      <documentation>
+        Ordered hops including members. (required)
+      </documentation>
     </hops>
   </properties>
-</block>
+</graph:GraphPath>

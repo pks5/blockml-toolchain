@@ -1,12 +1,6 @@
-<!--
-  BOM Urmodell — InstanceConfiguration
-  FQN: org.blockml.bml.bom.type.InstanceConfiguration
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BOM Urmodell — InstanceConfiguration
+  FQN: org.blockml.bml.bom.type.InstanceConfiguration-->
+<bomtype:InstanceConfiguration xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -23,20 +17,25 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
-  <name>InstanceConfiguration</name>
-  <type>bomtype:InstanceConfiguration</type>
-  <baseType>bom:UrmodellType</baseType>
-  <is>ValueType instance configuration on a type reference</is>
-
-  <documentation>ValueType instance configuration on a type reference</documentation>
-
+  <baseType>
+    bom:UrmodellType
+  </baseType>
+  <is>
+    ValueType instance configuration on a type reference
+  </is>
+  <documentation>
+    ValueType instance configuration on a type reference
+  </documentation>
   <properties>
     <named type="type:Text">
-      <documentation>Map: ValueType property name → LiteralValue | ExpressionValue. (optional)</documentation>
+      <documentation>
+        Map: ValueType property name → LiteralValue | ExpressionValue. (optional)
+      </documentation>
     </named>
     <positional type="bomvalue:MemberValue[]">
-      <documentation>positional (optional). TS type: bomvalue:MemberValue[].</documentation>
+      <documentation>
+        positional (optional). TS type: bomvalue:MemberValue[].
+      </documentation>
     </positional>
   </properties>
-
-</block>
+</bomtype:InstanceConfiguration>

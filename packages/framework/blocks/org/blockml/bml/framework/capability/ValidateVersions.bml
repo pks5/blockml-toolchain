@@ -1,12 +1,6 @@
-<!--
-  Framework Capability — ValidateVersions
-  FQN: org.blockml.bml.framework.capability.ValidateVersions
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Capability — ValidateVersions
+  FQN: org.blockml.bml.framework.capability.ValidateVersions-->
+<fwcap:ValidateVersions xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -31,27 +25,33 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
-  <name>ValidateVersions</name>
-  <type>fwcap:ValidateVersions</type>
-  <baseType>core:Capability</baseType>
-  <is>Minimal effectiveBlockVersion and bml:version assert checks</is>
-
-  <documentation>BML_MISSING_VERSION on standalone root blocks outside framework library convention. BML_UNKNOWN_VERSION when bml:version pin does not match a registered block version.</documentation>
-
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Minimal effectiveBlockVersion and bml:version assert checks
+  </is>
+  <documentation>
+    BML_MISSING_VERSION on standalone root blocks outside framework library convention. BML_UNKNOWN_VERSION when bml:version pin does not match a registered block version.
+  </documentation>
   <references>
     <see type="bomdocumentation:VersionRules" relation="SeeAlso" />
   </references>
-
   <properties>
     <document type="bomdoc:BomDocument">
-      <documentation>document. TS type: bomdoc:BomDocument. (required)</documentation>
+      <documentation>
+        document. TS type: bomdoc:BomDocument. (required)
+      </documentation>
     </document>
     <registry type="fwcap:TypeRegistry">
-      <documentation>registry. TS type: fwcap:TypeRegistry. (required)</documentation>
+      <documentation>
+        registry. TS type: fwcap:TypeRegistry. (required)
+      </documentation>
     </registry>
     <diagnostics type="bomcommon:Diagnostic[]">
-      <documentation>diagnostics. TS type: bomcommon:Diagnostic[]. (required)</documentation>
+      <documentation>
+        diagnostics. TS type: bomcommon:Diagnostic[]. (required)
+      </documentation>
     </diagnostics>
   </properties>
-
-</block>
+</fwcap:ValidateVersions>

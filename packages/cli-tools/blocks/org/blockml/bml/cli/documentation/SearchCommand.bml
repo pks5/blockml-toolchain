@@ -1,12 +1,6 @@
-<!--
-  CLI Documentation — SearchCommand
-  FQN: org.blockml.bml.cli.documentation.SearchCommand
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--CLI Documentation — SearchCommand
+  FQN: org.blockml.bml.cli.documentation.SearchCommand-->
+<clidocumentation:SearchCommand xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -22,45 +16,49 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>SearchCommand</name>
-  <type>clidocumentation:SearchCommand</type>
-  <baseType>core:Documentation</baseType>
-  <is>blockml search specification</is>
-
-  <documentation><![CDATA[Syntax:
-    blockml search QUERY [--json] [--limit n] [--src dir] [--libraries a,b]
-    blockml search index [--force] [--src dir] [--libraries a,b]
-
-    QUERY may be multiple unquoted tokens. The sole positional token "index" is the rebuild subcommand.
-
-    Search uses the same corpus as validate --all (@blockml/search / bootstrapFullProjectRegistry).
-    Missing or stale .blockml/search/ is rebuilt automatically before a query.
-    --json prints SearchResult[] (fqn, name, file, score, library?).
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    blockml search specification
+  </is>
+  <documentation>
+    <![CDATA[
+    Syntax:
+        blockml search QUERY [--json] [--limit n] [--src dir] [--libraries a,b]
+        blockml search index [--force] [--src dir] [--libraries a,b]
+    
+        QUERY may be multiple unquoted tokens. The sole positional token "index" is the rebuild subcommand.
+    
+        Search uses the same corpus as validate --all (@blockml/search / bootstrapFullProjectRegistry).
+        Missing or stale .blockml/search/ is rebuilt automatically before a query.
+        --json prints SearchResult[] (fqn, name, file, score, library?).
+        Human lines: score, FQN, relative file path.
+    
+    Printed help:
+    Usage: blockml search <query> [--json] [--limit n] [--src dir] [--libraries a,b]
+           blockml search index [--force] [--src dir] [--libraries a,b]
+           blockml search --help
+    
+    When: find FQNs before scanning directories.
+    
+    Corpus is the same as validate --all. Missing or stale .blockml/search/ is rebuilt automatically before a query.
+    The sole positional token "index" is the rebuild subcommand. QUERY may be multiple unquoted tokens.
+    
+    Flags:
+      --json        SearchResult[] (fqn, name, file, score, library?)
+      --limit n     max hits
+      --force       full rebuild for search index
+      --src / --libraries   corpus overrides
+    
     Human lines: score, FQN, relative file path.
-
-Printed help:
-Usage: blockml search <query> [--json] [--limit n] [--src dir] [--libraries a,b]
-       blockml search index [--force] [--src dir] [--libraries a,b]
-       blockml search --help
-
-When: find FQNs before scanning directories.
-
-Corpus is the same as validate --all. Missing or stale .blockml/search/ is rebuilt automatically before a query.
-The sole positional token "index" is the rebuild subcommand. QUERY may be multiple unquoted tokens.
-
-Flags:
-  --json        SearchResult[] (fqn, name, file, score, library?)
-  --limit n     max hits
-  --force       full rebuild for search index
-  --src / --libraries   corpus overrides
-
-Human lines: score, FQN, relative file path.
-Rebuild the index if results look stale or sources have changed.
-
-Related: inspect (resolve a found FQN), graph (how it connects).]]></documentation>
+    Rebuild the index if results look stale or sources have changed.
+    
+    Related: inspect (resolve a found FQN), graph (how it connects).
+    ]]>
+  </documentation>
   <references>
     <see type="clidocumentation:Commands" relation="SeeAlso" />
     <see type="clicap:RunSearch" relation="SeeAlso" />
   </references>
-
-</block>
+</clidocumentation:SearchCommand>

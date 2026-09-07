@@ -1,12 +1,6 @@
-<!--
-  Parser Documentation — LayerSeparation
-  FQN: org.blockml.bml.compiler.parser.documentation.LayerSeparation
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Parser Documentation — LayerSeparation
+  FQN: org.blockml.bml.compiler.parser.documentation.LayerSeparation-->
+<pardocumentation:LayerSeparation xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -30,31 +24,32 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>LayerSeparation</name>
-  <type>pardocumentation:LayerSeparation</type>
-  <baseType>core:Documentation</baseType>
-  <is>Parser vs BOM vs core vs serializer vs validator</is>
-
-  <documentation>Five layers relevant to parsing:
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Parser vs BOM vs core vs serializer vs validator
+  </is>
+  <documentation>
+    Five layers relevant to parsing:
+    
     org.blockml.bml.bom.* (@blockml/bom) — Urmodell data structures the parser produces
     (BomDocument, BlockDefinition, MemberDefinition, …). ParseOptions and ParseResult (B26).
-
+    
     org.blockml.bml.compiler.parser.* (this package) — BML → BOM mapping algorithm,
     Stage 1 pipeline [1]–[5], parse() entry point contract.
-
+    
     org.blockml.bml.definition.* (@blockml/core) — BML meta-model. Parser links to Definition
     blocks for canonical paths; does not duplicate language grammar.
-
+    
     org.blockml.bml.compiler.serializer.* (@blockml/serializer) — inverse mapping (BOM → BML).
     Emit rules B12–B25 live there, not here.
-
+    
     @blockml/framework utilities — parseExpression() (Stage 2 AST), TypeRegistry, validateTypes.
-    Parser stores ExpressionValue.raw only (B4); never writes AST to Urmodell.</documentation>
-
+    Parser stores ExpressionValue.raw only (B4); never writes AST to Urmodell.
+  </documentation>
   <references>
     <see type="pardocumentation:ArchitectureOverview" relation="ReadNext" />
     <see type="bomdocumentation:LayerSeparation" relation="SeeAlso" />
   </references>
-
-</block>
+</pardocumentation:LayerSeparation>

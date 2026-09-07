@@ -1,28 +1,26 @@
-<!--
-  Test fixture — valid ValuePresent on Property
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Test fixture — valid ValuePresent on Property-->
+<test:ValuePresentOnProperty xmlns="http://blockml.org/bml"
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:validation="org.blockml.bml.validation"
   xmlns:test="com.blockml.test.constraints">
 
-  <type>test:ValuePresentOnProperty</type>
-  <baseType>core:Block</baseType>
-  <is>A constraint test fixture</is>
-  <version>1.0.0</version>
-
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    A constraint test fixture
+  </is>
+  <version>
+    1.0.0
+  </version>
   <properties>
     <label type="type:Text">
-      <value>hello</value>
       <constraints>
-        <constraint:ValuePresent validation="validation:Error"/>
+        <constraint:ValuePresent validation="validation:Error" />
       </constraints>
+      <value>hello</value>
     </label>
   </properties>
-</block>
+</test:ValuePresentOnProperty>

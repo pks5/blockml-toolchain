@@ -1,12 +1,6 @@
-<!--
-  Framework Documentation — Introduction
-  FQN: org.blockml.bml.framework.documentation.Introduction
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Documentation — Introduction
+  FQN: org.blockml.bml.framework.documentation.Introduction-->
+<fwdocumentation:Introduction xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -32,28 +26,29 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>Introduction</name>
-  <type>fwdocumentation:Introduction</type>
-  <baseType>core:Documentation</baseType>
-  <is>Purpose and scope of the Framework utilities package</is>
-
-  <documentation>The @blockml/framework package provides Stage-2 framework utilities: TypeRegistry,
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Purpose and scope of the Framework utilities package
+  </is>
+  <documentation>
+    The @blockml/framework package provides Stage-2 framework utilities: TypeRegistry,
     bootstrapTypeRegistry, forkBom, resolveEffectiveMembers, parseExpression, validateTypes,
     and validateConstraints.
-
+    
     This library (org.blockml.bml.framework.*) is the SSOT. TypeScript in
     packages/framework/src/ implements it. Parity tests in packages/framework/test/
     verify BML ↔ TS alignment.
-
+    
     Stage-2 placement: after parse (Stage 1) and before render/compile targets.
     Consumed by @blockml/validator (orchestrator) and @blockml/cli (bootstrap host).
-
+    
     Language BML corpus remains in npm @blockml/core (node_modules). Framework utilities
-    operate on BomDocument (Urmodell) from @blockml/bom — they do not redefine meta-model blocks.</documentation>
-
+    operate on BomDocument (Urmodell) from @blockml/bom — they do not redefine meta-model blocks.
+  </documentation>
   <references>
     <see type="fwdocumentation:LayerSeparation" relation="ReadNext" />
     <see type="bomdocumentation:Introduction" relation="SeeAlso" />
   </references>
-
-</block>
+</fwdocumentation:Introduction>

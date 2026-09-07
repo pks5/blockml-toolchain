@@ -1,12 +1,6 @@
-<!--
-  Framework Documentation — Diagnostics
-  FQN: org.blockml.bml.framework.documentation.Diagnostics
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Framework Documentation — Diagnostics
+  FQN: org.blockml.bml.framework.documentation.Diagnostics-->
+<fwdocumentation:Diagnostics xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:bomapi="org.blockml.bml.bom.api"
@@ -32,13 +26,15 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>Diagnostics</name>
-  <type>fwdocumentation:Diagnostics</type>
-  <baseType>core:Documentation</baseType>
-  <is>Framework diagnostic codes</is>
-
-  <documentation>Diagnostic codes emitted by framework utilities (see fwconfig:FrameworkDiagnosticCodes):
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Framework diagnostic codes
+  </is>
+  <documentation>
+    Diagnostic codes emitted by framework utilities (see fwconfig:FrameworkDiagnosticCodes):
+    
     validateTypes (type-driven reference walk — declared ValueType, never the field name):
     • BML_UNKNOWN_BASE_TYPE — baseType FQN not in TypeRegistry (at baseTypeSource)
     • BML_UNKNOWN_CONTRACT — contracts[] FQN not in TypeRegistry
@@ -60,37 +56,36 @@
       TODO: a matching prefixed type (scad:type for scad:value) so each facet can be
       checked in its target language. Message is the thrown Error text. Expressions,
       interpolation, unions, StructType, and EnumType are skipped.
-
+    
     validateInstances:
     • BML_UNKNOWN_TYPE — composition instance typeFqn not in TypeRegistry
     • BML_UNKNOWN_PROPERTY — instance memberValues key not in effective members (error)
-
+    
     validateGenerics:
     • BML_OPEN_GENERIC_INSTANCE — aggregated domain Block instance still has open genericTypes without bml:generics (not TypeReferenceEntity sugar)
     • BML_GENERICS_DIRECTIVE_NOT_ALLOWED — bml:generics not on a Block instance (including TypeReferenceEntity QName sugar)
     • BML_GENERICS_ARGUMENT_MISMATCH — bml:generics does not match declared genericTypes (including on a non-generic type)
     • BML_MISSING_GENERIC_TYPE_ARGUMENT — directive present but a required argument has no defaultType
     • BML_GENERIC_CONSTRAINT_VIOLATION — argument fails parameter baseType via satisfiesTypeBound
-
+    
     validateVersions:
     • BML_MISSING_VERSION — standalone root block missing effective version (non-framework convention)
     • BML_UNKNOWN_VERSION — bml:version pin does not match registered block version
-
+    
     validateConstraints:
     • BML_CONSTRAINT_VIOLATION — constraint predicate failed
     • BML_CONSTRAINT_UNKNOWN — unrecognized constraint type FQN
     • BML_CONSTRAINT_TARGET_MISMATCH — constraint branch wrong for embed context
-
+    
     bootstrap:
     • BML_BOOTSTRAP_READ_ERROR — file read failure during corpus walk (warning)
     • BML_LIBRARY_RESOLVE_ERROR — Library.bml path or dependency could not be resolved
     • BML_LIBRARY_NESTING_VIOLATION — outer library re-exports inner-only block
-
-    Diagnostic type: org.blockml.bml.bom.common.Diagnostic.</documentation>
-
+    
+    Diagnostic type: org.blockml.bml.bom.common.Diagnostic.
+  </documentation>
   <references>
     <see type="fwconfig:FrameworkDiagnosticCodes" relation="Defines" />
     <see type="fwdocumentation:PackageOwnership" relation="ReadNext" />
   </references>
-
-</block>
+</fwdocumentation:Diagnostics>

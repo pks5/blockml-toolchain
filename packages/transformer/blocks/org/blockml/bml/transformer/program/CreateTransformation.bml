@@ -1,40 +1,17 @@
 <!--Program — CreateTransformation
   FQN: org.blockml.bml.transformer.program.CreateTransformation-->
-<block xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<program:CreateTransformation xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:program="org.blockml.bml.transformer.program"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
+  xmlns:program="org.blockml.bml.transformer.program">
 
-  <name>
-    CreateTransformation
-  </name>
-  <type>
-    program:CreateTransformation
-  </type>
   <baseType>
-    workflow:ModelTransformation(Parameters, type:Text)
+    workflow:ModelTransformation(program:CreateTransformation.Parameters, type:Text)
   </baseType>
   <is>
     A program that creates a new ModelTransformation
   </is>
-  <subBlocks>
-    <block>
-      <name>Parameters</name>
-      <baseType>type:StructType</baseType>
-      <is>Run parameters for this transformation</is>
-      <properties>
-        <fqn type="type:TypeIdentifier">
-          <documentation>The FQN of the new transformation</documentation>
-        </fqn>
-        <objective type="type:Text">
-          <documentation>The objective of the new transformation</documentation>
-        </objective>
-      </properties>
-    </block>
-  </subBlocks>
   <properties>
     <description override="true">
       <value>A program that creates a new ModelTransformation</value>
@@ -55,8 +32,7 @@
         <workflow:AgenticOperation name="Create Transformation Block" status="Pending" captureOutput="true">
           <task>
             <workflow:InstructionTask>
-              <instructions>
-Create a new ModelTransformation block with the FQN:
+              <instructions>Create a new ModelTransformation block with the FQN:
 
 ${ #this.parameters.fqn }
 
@@ -78,14 +54,33 @@ Determine how many operations are required to achieve the objective. Use the sma
 
 For each operation, define its responsibility clearly and ensure that the operations together form a coherent execution flow.
 
-The resulting block must be a complete and valid ModelTransformation definition.
-
-              </instructions>
+The resulting block must be a complete and valid ModelTransformation definition.</instructions>
             </workflow:InstructionTask>
           </task>
         </workflow:AgenticOperation>
       </composition>
     </operations>
-    
   </aggregations>
-</block>
+  <subBlocks>
+    <Parameters>
+      <baseType>
+        type:StructType
+      </baseType>
+      <is>
+        Run parameters for this transformation
+      </is>
+      <properties>
+        <fqn type="type:TypeIdentifier">
+          <documentation>
+            The FQN of the new transformation
+          </documentation>
+        </fqn>
+        <objective type="type:Text">
+          <documentation>
+            The objective of the new transformation
+          </documentation>
+        </objective>
+      </properties>
+    </Parameters>
+  </subBlocks>
+</program:CreateTransformation>
