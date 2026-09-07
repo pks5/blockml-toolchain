@@ -36,7 +36,11 @@
       output text onto `output`. Default false: `output` stays unset.
     * `output` — optional text this operation produced (agent stdout,
       tool stdout, or a deterministic summary). Present only when
-      `captureOutput` is true.
+      `captureOutput` is true. Persist sanitizes the text so the
+      archive stays well-formed XML: XML 1.0 illegal characters and
+      U+FFFD (replacement character) become `\uXXXX` escapes. Entity
+      escaping of ampersand and less-than is not enough — U+FFFD is a
+      legal XML Char but the parser treats it as an encoding error.
     * `changedFiles` — workspace-relative paths modified during this
       operation (`type:FilePathEntity[]`).
     * `resultMappings` — optional `workflow:ResultMapping` list. When
@@ -86,6 +90,8 @@
       <documentation>
         Optional text this ModelOperation produced. Written by the
         envelope when captureOutput is true. Absent otherwise.
+        Sanitized to XML-safe text (illegal XML 1.0 chars and U+FFFD
+        become \uXXXX) so the archive remains parseable.
       </documentation>
     </output>
   </properties>

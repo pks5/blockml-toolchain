@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { emitCharacterData, XmlWriter } from "../src/emit/xml.js";
+import { emitCharacterData, escapeAttr, escapeText, XmlWriter } from "../src/emit/xml.js";
 
 describe("emitCharacterData", () => {
   it("indents each line of multiline text", () => {
@@ -37,5 +37,20 @@ describe("emitCharacterData", () => {
     writer.pushDepth();
     emitCharacterData(writer, "hello", "cdata");
     expect(writer.toString()).toBe("  <![CDATA[hello]]>");
+  });
+
+  it("escapes U+FFFD and illegal XML chars in text", () => {
+    expect(escapeText("ladr\uFFFDo\u0000")).toBe("ladr\\uFFFDo\\u0000");
+    expect(escapeText("a < b & c")).toBe("a &lt; b &amp; c");
+  });
+
+  it("escapes U+FFFD and illegal XML chars in attributes", () => {
+    expect(escapeAttr('say "ladr\uFFFDo"')).toBe("say &quot;ladr\\uFFFDo&quot;");
+  });
+
+  it("sanitizes U+FFFD inside CDATA", () => {
+    const writer = new XmlWriter(0);
+    emitCharacterData(writer, "ladr\uFFFDo", "cdata");
+    expect(writer.toString()).toBe("<![CDATA[ladr\\uFFFDo]]>");
   });
 });

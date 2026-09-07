@@ -32,7 +32,13 @@
   <baseType>core:Capability</baseType>
   <is>Escape string for XML text content</is>
 
-  <documentation>Escape string for XML text content</documentation>
+  <documentation>
+    Escape string for XML text content. Replaces XML 1.0 illegal
+    characters and U+FFFD with `\uXXXX` (or `\u{XXXXXX}` above BMP)
+    before escaping `&amp;` and `&lt;`. U+FFFD is a legal XML Char
+    but @xmldom/xmldom reports it as an encoding error
+    (BML_MALFORMED_XML).
+  </documentation>
 
   <properties>
     <value type="type:Text">

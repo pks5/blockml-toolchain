@@ -46,7 +46,7 @@
     <output type="type:Text">
       <documentation>
         Executor output text. Present when ModelOperation.captureOutput is true.
-        (optional)
+        Persist sanitizes it to XML-safe text. (optional)
       </documentation>
     </output>
   </properties>

@@ -48,15 +48,49 @@ export class XmlWriter {
   }
 }
 
+/**
+ * XML 1.0 Char minus U+FFFD. FFFD is a legal XML Char, but @xmldom/xmldom
+ * reports it as "Unicode replacement character detected" → BML_MALFORMED_XML.
+ */
+function sanitizeXmlText(value: string): string {
+  let out = "";
+  for (const ch of value) {
+    const cp = ch.codePointAt(0)!;
+    if (isSafeXmlChar(cp)) {
+      out += ch;
+      continue;
+    }
+    out +=
+      cp <= 0xffff
+        ? `\\u${cp.toString(16).toUpperCase().padStart(4, "0")}`
+        : `\\u{${cp.toString(16).toUpperCase()}}`;
+  }
+  return out;
+}
+
+function isSafeXmlChar(cp: number): boolean {
+  if (cp === 0xfffd) {
+    return false;
+  }
+  return (
+    cp === 0x9 ||
+    cp === 0xa ||
+    cp === 0xd ||
+    (cp >= 0x20 && cp <= 0xd7ff) ||
+    (cp >= 0xe000 && cp <= 0xfffc) ||
+    (cp >= 0x10000 && cp <= 0x10ffff)
+  );
+}
+
 export function escapeAttr(value: string): string {
-  return value
+  return sanitizeXmlText(value)
     .replace(/&/g, "&amp;")
     .replace(/"/g, "&quot;")
     .replace(/</g, "&lt;");
 }
 
 export function escapeText(value: string): string {
-  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  return sanitizeXmlText(value).replace(/&/g, "&amp;").replace(/</g, "&lt;");
 }
 
 export function needsCData(text: string): boolean {
@@ -68,10 +102,11 @@ export function emitCharacterData(
   text: string,
   form?: "text" | "cdata",
 ): void {
-  const lines = text.split("\n");
+  const safe = sanitizeXmlText(text);
+  const lines = safe.split("\n");
   if (form === "cdata") {
     if (lines.length <= 1) {
-      writer.line(`<![CDATA[${text}]]>`);
+      writer.line(`<![CDATA[${safe}]]>`);
       return;
     }
     writer.line("<![CDATA[");

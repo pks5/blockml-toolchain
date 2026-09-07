@@ -200,6 +200,39 @@ describe("Transformer pipeline", () => {
     expect(succeeded).toContain(">agent said hello</output>");
   });
 
+  it("sanitizes captureOutput so U+FFFD and illegal XML chars cannot break the archive", async () => {
+    writeProject(TMP, {
+      "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+        name: "JokeTest",
+        captureOutput: true,
+      }),
+    });
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: {
+        async execute() {
+          return {
+            success: true,
+            stdout: `ladr\uFFFDo\u0000 and <raw>`,
+          };
+        },
+      },
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(true);
+    const succeeded = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/succeeded/${generated}.bml`),
+      "utf8",
+    );
+    expect(succeeded).not.toContain("\uFFFD");
+    expect(succeeded).not.toContain("\u0000");
+    expect(succeeded).toContain("ladr\\uFFFD");
+    expect(succeeded).toContain("\\u0000");
+    expect(succeeded).toContain("&lt;raw>");
+  });
+
   it("writes ToolExecutor output onto ToolOperation.output when captureOutput is true", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
@@ -269,6 +302,29 @@ describe("Transformer pipeline", () => {
         join(TMP, `blocks/com/example/model/_meta/transform/running/${generated}.bml`),
       ),
     ).toBe(false);
+  });
+
+  it("sanitizes exception messages the same way as captureOutput", async () => {
+    writePending();
+    const generated = "T00001_JokeTest_20260830T011702";
+    const transformer = new Transformer({
+      workspaceRoot: TMP,
+      agent: {
+        async execute() {
+          return { success: false, exitCode: 1, error: "ladr\uFFFDo failed" };
+        },
+      },
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(false);
+    const failed = readFileSync(
+      join(TMP, `blocks/com/example/model/_meta/transform/failed/${generated}.bml`),
+      "utf8",
+    );
+    expect(failed).not.toContain("\uFFFD");
+    expect(failed).toContain("ladr\\uFFFD");
+    expect(failed).toContain("<exception");
   });
 
   it("rejects construction without an agent or a complete pipeline", () => {

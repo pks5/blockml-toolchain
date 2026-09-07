@@ -34,7 +34,11 @@
     and leaves `ModelTransformation.exception` empty.
 
     Default implementation is a deterministic BOM writer. Always writes
-    ModelOperation status. TS: pipeline/persist.ts and execution/persist.ts.
+    ModelOperation status. Captured `output` and exception `message`
+    are sanitized to XML-safe text before write (illegal XML 1.0
+    characters and U+FFFD become `\uXXXX`) so a later
+    `blockml validate` of this archive cannot fail on encoding.
+    TS: pipeline/persist.ts and execution/persist.ts.
   </documentation>
 
   <references>
@@ -52,7 +56,10 @@
       <documentation>Workspace-relative paths persisted as FilePathEntity children of ModelOperation.changedFiles. (required)</documentation>
     </changedFiles>
     <output type="type:Text">
-      <documentation>Text to persist onto ModelOperation.output when captureOutput was true. (optional)</documentation>
+      <documentation>
+        Text to persist onto ModelOperation.output when captureOutput
+        was true. Sanitized to XML-safe text before write. (optional)
+      </documentation>
     </output>
   </properties>
 

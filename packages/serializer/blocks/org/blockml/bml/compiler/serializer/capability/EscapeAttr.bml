@@ -32,7 +32,11 @@
   <baseType>core:Capability</baseType>
   <is>Escape string for XML attribute value</is>
 
-  <documentation>Escape string for XML attribute value</documentation>
+  <documentation>
+    Escape string for XML attribute value. Same XML-safe sanitization
+    as EscapeText (illegal XML 1.0 chars and U+FFFD become `\uXXXX`),
+    then `&amp;` `&quot;` `&lt;`.
+  </documentation>
 
   <properties>
     <value type="type:Text">

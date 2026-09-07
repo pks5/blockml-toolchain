@@ -250,8 +250,43 @@ export function setOperationCompletedAt(instance: BlockInstance, iso: string): v
   setOperationMember(instance, "completedAt", DATETIME_TYPE_FQN, iso);
 }
 
+/**
+ * XML 1.0 Char minus U+FFFD. Matches serializer sanitizeXmlText: illegal
+ * controls and the replacement character become `\uXXXX` so captured
+ * executor output cannot make the archive unparseable.
+ */
+export function sanitizePersistedText(value: string): string {
+  let out = "";
+  for (const ch of value) {
+    const cp = ch.codePointAt(0)!;
+    if (isSafeXmlChar(cp)) {
+      out += ch;
+      continue;
+    }
+    out +=
+      cp <= 0xffff
+        ? `\\u${cp.toString(16).toUpperCase().padStart(4, "0")}`
+        : `\\u{${cp.toString(16).toUpperCase()}}`;
+  }
+  return out;
+}
+
+function isSafeXmlChar(cp: number): boolean {
+  if (cp === 0xfffd) {
+    return false;
+  }
+  return (
+    cp === 0x9 ||
+    cp === 0xa ||
+    cp === 0xd ||
+    (cp >= 0x20 && cp <= 0xd7ff) ||
+    (cp >= 0xe000 && cp <= 0xfffc) ||
+    (cp >= 0x10000 && cp <= 0x10ffff)
+  );
+}
+
 export function setOperationOutput(instance: BlockInstance, output: string): void {
-  setOperationMember(instance, "output", TEXT_TYPE_FQN, output);
+  setOperationMember(instance, "output", TEXT_TYPE_FQN, sanitizePersistedText(output));
 }
 
 export function setOperationChangedFiles(
@@ -380,7 +415,7 @@ export function setOperationException(
         memberValues: {
           message: {
             kind: "literal",
-            value: message,
+            value: sanitizePersistedText(message),
             typeFqn: TEXT_TYPE_FQN,
             authoredPlacement: "element",
           },

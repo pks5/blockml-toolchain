@@ -32,7 +32,7 @@
   <baseType>core:Capability</baseType>
   <is>Emit text or CDATA character data (D8)</is>
 
-  <documentation>Emit text or CDATA character data (D8). Multiline values are written one XmlWriter line each so pretty-print indent applies per line; parse TrimText then recovers the BOM string (B13).</documentation>
+  <documentation>Emit text or CDATA character data (D8). Multiline values are written one XmlWriter line each so pretty-print indent applies per line; parse TrimText then recovers the BOM string (B13). Both forms run the same XML-safe sanitization as EscapeText before emit so U+FFFD and illegal XML 1.0 characters never reach the file.</documentation>
 
   <references>
     <see type="sercap:EscapeText" relation="SeeAlso" />
