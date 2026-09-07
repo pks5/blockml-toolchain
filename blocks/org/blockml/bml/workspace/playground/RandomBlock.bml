@@ -1,0 +1,49 @@
+<!--Workspace Playground — RandomBlock
+  FQN: org.blockml.bml.workspace.playground.RandomBlock-->
+<playground:RandomBlock xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:playground="org.blockml.bml.workspace.playground">
+
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    A frost calendar carved into the door of a shepherd's refuge on the Col de Vionne, where each traveller who meets the season's first frost scratches a stroke and the date beside it
+  </is>
+  <documentation>
+    Produced by the "Create Random Block" step of playground:MyTestTransformation
+    during a BlockML workspace transform execution. Every run wipes whatever
+    stood here before and writes freshly invented, arbitrary material, so the
+    names, tallies, and dates below are neither stable nor authoritative.
+  </documentation>
+  <properties>
+    <title type="type:Text">
+      <value>The Frost Door of the Vionne Refuge</value>
+    </title>
+    <keeper type="type:Text">
+      <value>Loosely tended by Amélie Berthod, who re-planes the door every June and photographs the old planks before the marks are sanded away</value>
+    </keeper>
+    <location type="type:Text">
+      <value>A dry-stone refuge at 1,940 metres on the Col de Vionne, where the path up from the dairy meets the ridge track and the wind drops just long enough to strike a match</value>
+    </location>
+    <practice type="type:Text">
+      <value>The custom is simple: if you cross the col on the night the first frost of autumn silvers the grass, you cut one short stroke into the left-hand plank with whatever knife you carry and scratch the date under it. A pencil stub on a string lets you add your parish if you want the tally argued over at the spring fair, where the earliest mark wins its maker a wheel of tomme and the right to name the coming winter. Herders, surveyors, and one travelling piano tuner keep the door filling; when the plank runs out of room Amélie lifts it down, and a fresh one goes up unmarked for the next year to start on.</value>
+    </practice>
+    <marksCutThisAutumn type="type:Integer">
+      <value>47</value>
+    </marksCutThisAutumn>
+    <earliestFrostElevationMetres type="type:Integer">
+      <value>1610</value>
+    </earliestFrostElevationMetres>
+    <doorPlanksRetiredSinceOpening type="type:Integer">
+      <value>9</value>
+    </doorPlanksRetiredSinceOpening>
+    <recordedAt type="type:DateTime">
+      <value>2026-09-08T01:06:43</value>
+    </recordedAt>
+    <doorFirstHung type="type:DateTime">
+      <value>2004-10-11T17:30:00</value>
+    </doorFirstHung>
+  </properties>
+</playground:RandomBlock>
