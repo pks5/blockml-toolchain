@@ -1,13 +1,13 @@
 <!--Workspace available transform — PoemTestTemplate
-  FQN: org.blockml.bml.workspace._meta.transform.running.T00037_PoemTestTemplate_20260907T223204-->
-<running:T00037_PoemTestTemplate_20260907T223204 xmlns="http://blockml.org/bml"
+  FQN: org.blockml.bml.workspace._meta.transform.succeeded.T00037_PoemTestTemplate_20260907T223204-->
+<succeeded:T00037_PoemTestTemplate_20260907T223204 xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:running="org.blockml.bml.workspace._meta.transform.running">
+  xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded">
 
   <baseType>
-    workflow:ModelTransformation(running:T00037_PoemTestTemplate_20260907T223204.Parameters, type:Text)
+    workflow:ModelTransformation(succeeded:T00037_PoemTestTemplate_20260907T223204.Parameters, type:Text)
   </baseType>
   <is>
     A pending ModelTransformation that creates a playground Poem block
@@ -17,7 +17,7 @@
       <value>A transformation that creates a playground Poem block</value>
     </description>
     <status override="true" type="workflow:ExecutionStatus">
-      <value>Running</value>
+      <value>Succeeded</value>
     </status>
     <createdAt override="true" type="type:DateTime">
       <value>2026-08-30T01:40:20</value>
@@ -25,7 +25,7 @@
     <template override="true" type="type:Boolean">
       <value>false</value>
     </template>
-    <parameters override="true" type="running:T00037_PoemTestTemplate_20260907T223204.Parameters">
+    <parameters override="true" type="succeeded:T00037_PoemTestTemplate_20260907T223204.Parameters">
       <value>{translationLanguage:"German",storyLanguage:"Spanish",topic:"A Futuristic city and a dog",targetBlock:"org.blockml.bml.workspace.playground.MyLatestStory"}</value>
     </parameters>
     <executionId override="true" type="type:UUID">
@@ -83,6 +83,12 @@ und zu seinen Füßen schlägt lau, was nicht programmiert wurde;
 morgen wird es mehr Türme geben, mehr Stille, mehr Metall,
 doch immer einen Kupferhund, der das Lied behütet.</value>
     </result>
+    <completedAt override="true" type="type:DateTime">
+      <value>2026-09-07T22:35:10</value>
+    </completedAt>
+    <duration override="true" type="type:Duration">
+      <value>PT3M6.822S</value>
+    </duration>
   </properties>
   <aggregations>
     <operations override="true">
@@ -1263,4 +1269,4 @@ to ${ #this.parameters.translationLanguage }.</instructions>
       </properties>
     </Parameters>
   </subBlocks>
-</running:T00037_PoemTestTemplate_20260907T223204>
+</succeeded:T00037_PoemTestTemplate_20260907T223204>
