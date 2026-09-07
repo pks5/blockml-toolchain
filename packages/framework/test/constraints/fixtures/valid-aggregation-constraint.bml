@@ -15,6 +15,10 @@
     1.0.0
   </version>
   <aggregations>
-    <children type="core:Block[]" />
+    <children type="core:Block[]">
+      <constraints>
+        <constraint:AllowedChildType type="core:Block" validation="validation:Error" />
+      </constraints>
+    </children>
   </aggregations>
 </test:AggregationConstraint>

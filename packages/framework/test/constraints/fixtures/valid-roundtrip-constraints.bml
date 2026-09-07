@@ -29,7 +29,11 @@
     </width>
   </properties>
   <aggregations>
-    <children type="core:Block[]" />
+    <children type="core:Block[]">
+      <constraints>
+        <constraint:AllowedChildType type="core:Block" />
+      </constraints>
+    </children>
   </aggregations>
   <capabilities>
     <ping type="cap:Inbound">

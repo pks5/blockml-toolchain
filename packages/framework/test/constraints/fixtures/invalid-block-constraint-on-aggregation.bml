@@ -15,6 +15,10 @@
     1.0.0
   </version>
   <aggregations>
-    <items type="core:Block[]" />
+    <items type="core:Block[]">
+      <constraints>
+        <constraint:RequiresMember name="width" validation="validation:Error" />
+      </constraints>
+    </items>
   </aggregations>
 </test:InvalidBlockOnAggregation>

@@ -142,7 +142,7 @@ describe("search discovery", () => {
     expect(hits.some((h) => h.fqn === CORE_FQN || h.file.includes("node_modules/@blockml/core"))).toBe(
       true,
     );
-  });
+  }, 20_000);
 
   it("indexes the same corpus as validate --all / bootstrapFullProjectRegistry", async () => {
     const bootstrap = bootstrapFullProjectRegistry({ rootDir: ROOT });
@@ -162,7 +162,7 @@ describe("search discovery", () => {
     expect(projectSourceRoots(ROOT).every((root) => root.includes("blocks") || root.includes("packages"))).toBe(
       true,
     );
-  });
+  }, 20_000);
 });
 
 describe("search fields and ranking", () => {

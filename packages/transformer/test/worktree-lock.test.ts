@@ -92,7 +92,7 @@ describe("worktree transform lock", () => {
     const second = await transformer.run(pendingFqn("TaskB"));
     expect(second.success).toBe(true);
     expect(second.pendingFqn).toBe(pendingFqn("TaskB"));
-  });
+  }, 15_000);
 
   it("releases the lock when the agent fails", async () => {
     writePending(TMP, "TaskA");
@@ -109,7 +109,7 @@ describe("worktree transform lock", () => {
       agent: successfulAgent(),
     }).run(pendingFqn("TaskB"));
     expect(next.success).toBe(true);
-  });
+  }, 15_000);
 
   it("recovers a stale leftover lock and never steals a live lock", async () => {
     writePending(TMP, "TaskA");

@@ -15,6 +15,10 @@
     1.0.0
   </version>
   <associations>
-    <parent type="org.blockml.bml.type.InstanceReference(core:Block)" />
+    <parent type="org.blockml.bml.type.InstanceReference(core:Block)">
+      <constraints>
+        <constraint:NoSelfReference validation="validation:Error" />
+      </constraints>
+    </parent>
   </associations>
 </test:AssociationConstraint>

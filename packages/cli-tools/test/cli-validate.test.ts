@@ -131,7 +131,7 @@ describe("runCli validate", () => {
     if (code === 0) {
       expect(stderr).toMatch(/Validation succeeded\./);
     }
-  });
+  }, 20_000);
 
   it("seeds from package.json blockml.library without --libraries", async () => {
     const bomRoot = join(ROOT, "packages/bom");

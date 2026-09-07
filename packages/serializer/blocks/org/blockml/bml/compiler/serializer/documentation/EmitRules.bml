@@ -48,7 +48,9 @@
     SHOULD omit: abstract/final/override/readOnly when false, empty containers, visibility
     when prefix encodes it, default-false flags, …
     MUST NOT omit: required identity, true flags, non-default enums, authoredPlacement (D9),
-    authored CDATA form (D8), comments, …
+    authored CDATA form (D8), comments, member constraints / suggestions / groups (keep an
+    element body — do not self-close aggregation or association tags that still have those
+    children), …
     
     XSI infrastructure (B25):
     Re-emit every stored namespaceBindings entry (including xsi) and, when present,
@@ -60,8 +62,9 @@
     SourceInfo.rootForm "type" → emit the type QName / TypeIdentifier as the root tag
     and omit child <type> and <name>. Nested definition wrappers follow BlockDefinition.wrapperForm:
     Sub-Blocks emit the unqualified name tag; embeds emit the type tag like the root.
-    Legacy wrapperForm "block" (or omitted) stays <block>. New documents from
-    BomBuilder.create use rootForm type and omit xsi / schemaLocation.
+    Legacy wrapperForm "block" (or omitted) stays <block>. Do not invent a child
+    <type> on a legacy Sub-Block whose type was inferred as parentType.name.
+    New documents from BomBuilder.create use rootForm type and omit xsi / schemaLocation.
     ]]>
   </documentation>
   <references>

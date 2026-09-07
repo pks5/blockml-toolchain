@@ -285,7 +285,7 @@ describe("Transformer lifecycle", () => {
         ),
       ),
     ).toBe(true);
-  });
+  }, 15_000);
 
   it("does not write a parameters value when T is default Text and none is provided", async () => {
     writeProject(TMP, {

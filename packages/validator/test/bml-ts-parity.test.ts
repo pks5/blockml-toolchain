@@ -137,7 +137,7 @@ describe("Validator BML ↔ TS parity", () => {
     expect(library).toContain("<blockml:Library />");
     expect(library).toContain("<bom:Library />");
     expect(library).toContain("<framework:Library />");
-    expect(library).toContain("<version>0.9.5</version>");
+    expect(library).toMatch(/<version>\s*0\.9\.5\s*<\/version>/);
     expect(library).toContain("core:BlockLibrary");
   });
 

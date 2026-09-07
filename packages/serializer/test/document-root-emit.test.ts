@@ -63,6 +63,32 @@ describe("document root form-fidelity", () => {
     expect(xml.text).not.toMatch(/<type>/);
   });
 
+  it("does not invent <type> on a legacy Sub-Block that only authored <name>", () => {
+    const source = [
+      `<test:Sample ${NS}>`,
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "  <subBlocks>",
+      "    <block>",
+      "      <name>Utils</name>",
+      "      <baseType>core:Block</baseType>",
+      "      <is>helpers</is>",
+      "    </block>",
+      "  </subBlocks>",
+      "</test:Sample>",
+    ].join("\n");
+    const parsed = parse(source, { filePath: "sub-legacy-no-type.bml" });
+    const xml = serialize(parsed.document!);
+    expect(xml.text).toMatch(/<block>/);
+    expect(xml.text).toMatch(/<name>/);
+    expect(xml.text).not.toMatch(/<type>/);
+    const second = parse(xml.text!, { filePath: "sub-legacy-no-type.bml" });
+    expect(second.document!.block.subBlocks[0]?.authoredTypeChild).toBeUndefined();
+    expect(second.document!.block.subBlocks[0]?.type).toBe(
+      "com.blockml.test.root.Sample.Utils",
+    );
+  });
+
   it("still emits nested <block> with child <type>", () => {
     const source = [
       `<test:Sample ${NS}>`,
@@ -124,6 +150,38 @@ describe("document root form-fidelity", () => {
     expect(xml.text).toMatch(/<test:Sample\b/);
     expect(xml.text).not.toMatch(/<blockml:/);
     expect(xml.text).not.toMatch(/<nested:Sample\b/);
+  });
+
+  it("keeps aggregation and association constraints instead of self-closing", () => {
+    const source = [
+      `<test:Sample ${NS} xmlns:constraint="org.blockml.bml.constraint">`,
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "  <aggregations>",
+      "    <children type=\"core:Block[]\">",
+      "      <constraints>",
+      "        <constraint:AllowedChildType type=\"core:Block\" />",
+      "      </constraints>",
+      "    </children>",
+      "  </aggregations>",
+      "  <associations>",
+      "    <parent type=\"core:Block\">",
+      "      <constraints>",
+      "        <constraint:NoSelfReference />",
+      "      </constraints>",
+      "    </parent>",
+      "  </associations>",
+      "</test:Sample>",
+    ].join("\n");
+    const parsed = parse(source, { filePath: "member-constraints.bml" });
+    expect(parsed.document).not.toBeNull();
+    const xml = serialize(parsed.document!);
+    expect(xml.success).toBe(true);
+    expect(xml.text).toContain("<constraints>");
+    expect(xml.text).toContain("AllowedChildType");
+    expect(xml.text).toContain("NoSelfReference");
+    expect(xml.text).not.toMatch(/<children[^>]*\/>/);
+    expect(xml.text).not.toMatch(/<parent[^>]*\/>/);
   });
 
   it("re-emits a qualified embed tag and omits child <type>", () => {

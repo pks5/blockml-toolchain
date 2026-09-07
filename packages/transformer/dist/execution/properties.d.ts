@@ -20,6 +20,12 @@ export declare function setOperationStatus(instance: BlockInstance, status: Exec
 export declare function setOperationStartedAt(instance: BlockInstance, iso: string): void;
 export declare function setOperationBaseCommit(instance: BlockInstance, commit: string): void;
 export declare function setOperationCompletedAt(instance: BlockInstance, iso: string): void;
+/**
+ * XML 1.0 Char minus U+FFFD. Matches serializer sanitizeXmlText: illegal
+ * controls and the replacement character become `\uXXXX` so captured
+ * executor output cannot make the archive unparseable.
+ */
+export declare function sanitizePersistedText(value: string): string;
 export declare function setOperationOutput(instance: BlockInstance, output: string): void;
 export declare function setOperationChangedFiles(instance: BlockInstance, paths: readonly string[]): void;
 export declare function getOperationResultMappings(instance: BlockInstance): BlockInstance[];

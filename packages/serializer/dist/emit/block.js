@@ -251,7 +251,7 @@ function emitBlockField(writer, block, key, ctx, omitTypeChild = false, omitName
                 writer.line("<subBlocks>");
                 writer.pushDepth();
                 for (const sb of block.subBlocks) {
-                    emitNestedBlock(writer, sb, ctx, "subBlock");
+                    emitNestedBlock(writer, sb, ctx, "subBlock", block.type);
                 }
                 writer.popDepth();
                 writer.line("</subBlocks>");
@@ -294,13 +294,20 @@ function nestedDefinitionTag(block, ctx, kind) {
     const lastDot = block.type.lastIndexOf(".");
     return lastDot === -1 ? block.type : block.type.slice(lastDot + 1);
 }
-function emitNestedBlock(writer, block, ctx, kind) {
+function isInferredSubBlockType(block, parentType) {
+    if (block.authoredTypeChild || !parentType || !block.name || !block.type) {
+        return false;
+    }
+    return block.type === `${parentType}.${block.name}`;
+}
+function emitNestedBlock(writer, block, ctx, kind, parentType) {
     const preferred = block.wrapperForm === "type";
     const tag = preferred ? nestedDefinitionTag(block, ctx, kind) : "block";
+    const omitTypeChild = preferred || (kind === "subBlock" && isInferredSubBlockType(block, parentType));
     writer.comments(block.xmlTrivia);
     writer.line(`<${tag}>`);
     writer.pushDepth();
-    emitBlockDefinition(writer, block, ctx, preferred, preferred);
+    emitBlockDefinition(writer, block, ctx, omitTypeChild, preferred);
     writer.popDepth();
     writer.line(`</${tag}>`);
     writer.comments(block.xmlTrivia, true);
@@ -512,16 +519,7 @@ function emitMember(writer, member, ctx) {
             if (member.default)
                 attrs.push('default="true"');
             const hasComp = !!member.composition;
-            const hasBody = hasComp ||
-                (member.documentations?.length ?? 0) > 0 ||
-                (member.summaries?.length ?? 0) > 0 ||
-                (member.examples?.length ?? 0) > 0 ||
-                (member.references?.length ?? 0) > 0 ||
-                member.since !== undefined ||
-                (member.keywords?.length ?? 0) > 0 ||
-                (member.changelog?.length ?? 0) > 0 ||
-                member.xmlRendering?.authoredPlacement === "element" ||
-                (member.unknownElements?.length ?? 0) > 0;
+            const hasBody = hasComp || memberHasCommonBody(member);
             if (!hasBody) {
                 writer.line(`<${tag}${attrs.length ? " " + attrs.join(" ") : ""} />`);
                 break;
@@ -542,10 +540,10 @@ function emitMember(writer, member, ctx) {
         }
         case "association": {
             attrs.push(`type="${escapeAttr(emitTypeExpression(member.type, ctx.bindings, ctx.useQName))}"`);
-            if (member.unknownElements?.length) {
+            if (memberHasCommonBody(member)) {
                 writer.line(`<${tag} ${attrs.join(" ")}>`);
                 writer.pushDepth();
-                emitUnknownXmlNodes(writer, member.unknownElements);
+                emitMemberCommonChildren(writer, member, ctx);
                 writer.popDepth();
                 writer.line(`</${tag}>`);
             }
@@ -564,16 +562,7 @@ function emitMember(writer, member, ctx) {
             }
             const hasBody = member.throws !== undefined ||
                 !!member.implementation ||
-                (member.documentations?.length ?? 0) > 0 ||
-                (member.summaries?.length ?? 0) > 0 ||
-                (member.examples?.length ?? 0) > 0 ||
-                (member.references?.length ?? 0) > 0 ||
-                member.since !== undefined ||
-                (member.keywords?.length ?? 0) > 0 ||
-                (member.changelog?.length ?? 0) > 0 ||
-                (member.constraints?.length ?? 0) > 0 ||
-                member.xmlRendering?.authoredPlacement === "element" ||
-                (member.unknownElements?.length ?? 0) > 0;
+                memberHasCommonBody(member);
             if (!hasBody) {
                 writer.line(`<${tag} ${attrs.join(" ")} />`);
                 break;
@@ -606,6 +595,24 @@ function emitMember(writer, member, ctx) {
         }
     }
     writer.comments(member.xmlTrivia, true);
+}
+function memberHasCommonBody(member) {
+    const suggestions = member.kind === "property" ? member.suggestions : undefined;
+    const groups = member.kind === "property" || member.kind === "aggregation"
+        ? member.groups
+        : undefined;
+    return ((member.documentations?.length ?? 0) > 0 ||
+        (member.summaries?.length ?? 0) > 0 ||
+        (member.examples?.length ?? 0) > 0 ||
+        (member.references?.length ?? 0) > 0 ||
+        member.since !== undefined ||
+        (member.keywords?.length ?? 0) > 0 ||
+        (member.changelog?.length ?? 0) > 0 ||
+        (member.constraints?.length ?? 0) > 0 ||
+        (suggestions?.length ?? 0) > 0 ||
+        (groups?.length ?? 0) > 0 ||
+        member.xmlRendering?.authoredPlacement === "element" ||
+        (member.unknownElements?.length ?? 0) > 0);
 }
 function emitMemberGroups(writer, groups, ctx) {
     if (!groups?.length) {
