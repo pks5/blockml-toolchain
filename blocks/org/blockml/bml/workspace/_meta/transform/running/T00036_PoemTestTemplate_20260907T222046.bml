@@ -1,0 +1,100 @@
+<!--Workspace available transform — PoemTestTemplate
+  FQN: org.blockml.bml.workspace._meta.transform.running.T00036_PoemTestTemplate_20260907T222046-->
+<running:T00036_PoemTestTemplate_20260907T222046 xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:running="org.blockml.bml.workspace._meta.transform.running">
+
+  <baseType>
+    workflow:ModelTransformation(running:T00036_PoemTestTemplate_20260907T222046.Parameters, type:Text)
+  </baseType>
+  <is>
+    A pending ModelTransformation that creates a playground Poem block
+  </is>
+  <properties>
+    <description override="true">
+      <value>A transformation that creates a playground Poem block</value>
+    </description>
+    <status override="true" type="workflow:ExecutionStatus">
+      <value>Running</value>
+    </status>
+    <createdAt override="true" type="type:DateTime">
+      <value>2026-08-30T01:40:20</value>
+    </createdAt>
+    <template override="true" type="type:Boolean">
+      <value>false</value>
+    </template>
+    <parameters override="true" type="running:T00036_PoemTestTemplate_20260907T222046.Parameters">
+      <value>{translationLanguage:"German",storyLanguage:"Spanish",topic:"A Futuristic city and a dog",targetBlock:"org.blockml.bml.workspace.playground.MyLatestStory"}</value>
+    </parameters>
+    <executionId override="true" type="type:UUID">
+      <value>2c42e650-2565-4331-8edb-3f877a976563</value>
+    </executionId>
+    <sequence override="true" type="type:Integer">
+      <value>36</value>
+    </sequence>
+    <startedAt override="true" type="type:DateTime">
+      <value>2026-09-07T22:20:46</value>
+    </startedAt>
+    <baseCommit override="true" type="type:Text">
+      <value>9aa31a6252643f7492d7c86fba6ac6989c86dc9e</value>
+    </baseCommit>
+  </properties>
+  <aggregations>
+    <operations override="true">
+      <composition>
+        <workflow:AgenticOperation name="Create Poem" status="Pending" captureOutput="true">
+          <task>
+            <workflow:InstructionTask>
+              <instructions>Create or update the block 
+${ #this.parameters.targetBlock } 
+that contains a random song in ${ #this.parameters.storyLanguage } 
+about ${ #this.parameters.topic }. 
+For each execution create a new song.
+The song should be structured with the following properties:
+- title (type:Text)
+- artist (type:Text)
+- song (type:Text)
+- language (type:Text)
+- date (type:DateTime)</instructions>
+            </workflow:InstructionTask>
+          </task>
+        </workflow:AgenticOperation>
+        <workflow:ToolOperation name="Validate" status="Pending" captureOutput="true" command="blockml">
+          <args>[&quot;validate&quot;]</args>
+        </workflow:ToolOperation>
+        <workflow:AgenticOperation name="Translate Poem" status="Pending">
+          <resultMappings>
+            <workflow:ResultMapping>
+              <source>${ #strings.concat( #this.parameters.targetBlock, '.properties.song') }</source>
+            </workflow:ResultMapping>
+          </resultMappings>
+          <task>
+            <workflow:InstructionTask>
+              <instructions>Translate the song in 
+${ #this.parameters.targetBlock } 
+to ${ #this.parameters.translationLanguage }.</instructions>
+            </workflow:InstructionTask>
+          </task>
+        </workflow:AgenticOperation>
+      </composition>
+    </operations>
+  </aggregations>
+  <subBlocks>
+    <Parameters>
+      <baseType>
+        type:StructType
+      </baseType>
+      <is>
+        Run parameters for this poem transformation
+      </is>
+      <properties>
+        <topic type="type:Text" />
+        <storyLanguage type="type:Text" />
+        <translationLanguage type="type:Text" />
+        <targetBlock type="type:Text" />
+      </properties>
+    </Parameters>
+  </subBlocks>
+</running:T00036_PoemTestTemplate_20260907T222046>
