@@ -117,9 +117,15 @@ describe("Validator BML ↔ TS parity", () => {
       "PreferCDataWhenNeedsEscape",
       "PreferMarkdownStructure",
       "PreferEmptyElementSelfClosing",
+      "PreferTypeAsTag",
+      "PreferOmitRedundantType",
+      "PreferOmitSubBlockIdentity",
       "CDataWhenEscaping",
       "MarkdownStructure",
       "EmptyElementSelfClosing",
+      "TypeAsTag",
+      "OmitRedundantType",
+      "OmitSubBlockIdentity",
       "ValidateStyle",
     ]) {
       expect(catalog.has(name), `Library.bml missing ${name}`).toBe(true);

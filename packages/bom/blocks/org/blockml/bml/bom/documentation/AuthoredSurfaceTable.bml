@@ -37,6 +37,7 @@
     - xsi:schemaLocation / xsi:noNamespaceSchemaLocation → SourceInfo (B25) → re-emit on root
     - document root tag → SourceInfo.rootForm ("block" | "type") → Serializer form-fidelity (doc:DocumentFormat)
     - Sub-Block / embed wrapper tag → BlockDefinition.wrapperForm → Serializer form-fidelity
+    - child name / type elements on a definition → authoredNameChild / authoredTypeChild → style warnings (doc:DocumentFormat)
     - bml:xml → xmlRendering block+member — NOT directives[] → Serializer, FatBlock, XSD
     - bml:generics → BlockInstance.generics (and illegal-host copies) — NOT directives[] → Validator binds genericTypes (open params required; defaultType may be overridden)
     - element|attribute dual placement → authoredPlacement (D9) → MUST roundtrip authored form

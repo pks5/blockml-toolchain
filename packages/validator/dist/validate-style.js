@@ -24,6 +24,27 @@ const FALLBACK_RULES = [
         message: "Write empty elements as self-closing tags.",
         check: "PreferEmptyElementSelfClosing",
     },
+    {
+        name: "TypeAsTag",
+        code: "BML_STYLE_LEGACY_BLOCK_WRAPPER",
+        severity: "warning",
+        message: "Prefer a type-or-name tag instead of the legacy block wrapper.",
+        check: "PreferTypeAsTag",
+    },
+    {
+        name: "OmitRedundantType",
+        code: "BML_STYLE_REDUNDANT_TYPE",
+        severity: "warning",
+        message: "Omit child type when the element tag already supplies the type.",
+        check: "PreferOmitRedundantType",
+    },
+    {
+        name: "OmitSubBlockIdentity",
+        code: "BML_STYLE_REDUNDANT_SUBBLOCK_IDENTITY",
+        severity: "warning",
+        message: "Omit child name and type on preferred-form Sub-Blocks; the tag is the name and the type is derived.",
+        check: "PreferOmitSubBlockIdentity",
+    },
 ];
 function styleRuleDir() {
     const here = dirname(fileURLToPath(import.meta.url));
@@ -84,13 +105,13 @@ function styleDiag(rule, file, source) {
         source: loc(file, source),
     };
 }
-function walkBlocks(block, visit) {
-    visit(block);
+function walkBlocks(block, role, visit) {
+    visit(block, role);
     for (const sub of block.subBlocks) {
-        walkBlocks(sub, visit);
+        walkBlocks(sub, "subBlock", visit);
     }
     for (const emb of block.embeddedBlocks) {
-        walkBlocks(emb, visit);
+        walkBlocks(emb, "embedded", visit);
     }
 }
 function collectReferences(block) {
@@ -100,21 +121,38 @@ function collectReferences(block) {
     }
     return refs;
 }
-function runPreferCData(rule, block, file, out) {
+function runPreferTypeAsTag(rule, block, _role, file, out) {
+    if (block.wrapperForm === "block") {
+        out.push(styleDiag(rule, file, block.source));
+    }
+}
+function runPreferOmitRedundantType(rule, block, role, file, out) {
+    if (block.wrapperForm === "type" && role !== "subBlock" && block.authoredTypeChild) {
+        out.push(styleDiag(rule, file, block.typeSource ?? block.source));
+    }
+}
+function runPreferOmitSubBlockIdentity(rule, block, role, file, out) {
+    if (role === "subBlock" &&
+        block.wrapperForm === "type" &&
+        (block.authoredNameChild || block.authoredTypeChild)) {
+        out.push(styleDiag(rule, file, block.source));
+    }
+}
+function runPreferCData(rule, block, _role, file, out) {
     for (const prose of block.documentations ?? []) {
         if (needsCData(prose.text) && prose.authoredCharacterDataForm !== "cdata") {
             out.push(styleDiag(rule, file, prose.source));
         }
     }
 }
-function runPreferMarkdown(rule, block, file, out) {
+function runPreferMarkdown(rule, block, _role, file, out) {
     for (const prose of block.documentations ?? []) {
         if (prose.text.length > MARKDOWN_MIN_LENGTH && !hasMarkdownStructure(prose.text)) {
             out.push(styleDiag(rule, file, prose.source));
         }
     }
 }
-function runPreferSelfClosing(rule, block, file, out) {
+function runPreferSelfClosing(rule, block, _role, file, out) {
     for (const ref of collectReferences(block)) {
         if (ref.context.trim() === "" && ref.authoredEmptyElementForm === "paired") {
             out.push(styleDiag(rule, file, ref.source));
@@ -125,6 +163,9 @@ const INTERPRETERS = {
     PreferCDataWhenNeedsEscape: runPreferCData,
     PreferMarkdownStructure: runPreferMarkdown,
     PreferEmptyElementSelfClosing: runPreferSelfClosing,
+    PreferTypeAsTag: runPreferTypeAsTag,
+    PreferOmitRedundantType: runPreferOmitRedundantType,
+    PreferOmitSubBlockIdentity: runPreferOmitSubBlockIdentity,
 };
 export function validateStyle(document) {
     const file = document.source.filePath;
@@ -140,8 +181,8 @@ export function validateStyle(document) {
             });
             continue;
         }
-        walkBlocks(document.block, (block) => {
-            run(rule, block, file, diagnostics);
+        walkBlocks(document.block, "root", (block, role) => {
+            run(rule, block, role, file, diagnostics);
         });
     }
     return diagnostics;

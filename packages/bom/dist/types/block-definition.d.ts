@@ -37,6 +37,10 @@ export interface BlockDefinition {
      * Omitted on hand-built BOM defaults to `"block"` on serialize.
      */
     wrapperForm?: "block" | "type";
+    /** True when a child `<name>` element was authored. */
+    authoredNameChild?: boolean;
+    /** True when a child `<type>` element was authored. */
+    authoredTypeChild?: boolean;
     /** Parent type FQN. Omitted in some corpus files. */
     baseType?: string;
     /**

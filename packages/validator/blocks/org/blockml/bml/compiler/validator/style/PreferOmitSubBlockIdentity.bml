@@ -1,0 +1,15 @@
+<!--
+  Validator Style Check — PreferOmitSubBlockIdentity
+  FQN: org.blockml.bml.compiler.validator.style.PreferOmitSubBlockIdentity
+-->
+<style:PreferOmitSubBlockIdentity
+  xmlns="http://blockml.org/bml"
+  xmlns:style="org.blockml.bml.compiler.validator.style">
+
+  <is>Warn when a preferred-form Sub-Block still declares name or type</is>
+
+  <documentation>Matches a Sub-Block whose tag is the local name (wrapperForm type)
+    but still authors a child name or type element. The tag is the name;
+    type is derived from the parent (doc:TypeIdentityDerivation).</documentation>
+
+</style:PreferOmitSubBlockIdentity>

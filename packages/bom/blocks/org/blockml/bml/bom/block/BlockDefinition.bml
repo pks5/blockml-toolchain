@@ -152,6 +152,12 @@
     <wrapperForm type="type:Text">
       <documentation>Authored definition wrapper: "block" (legacy) or "type" (tag-as-identity). TS type: type:Text. (optional)</documentation>
     </wrapperForm>
+    <authoredNameChild type="type:Boolean">
+      <documentation>True when a child &lt;name&gt; element was authored. Omitted when absent. (optional)</documentation>
+    </authoredNameChild>
+    <authoredTypeChild type="type:Boolean">
+      <documentation>True when a child &lt;type&gt; element was authored. Omitted when absent. (optional)</documentation>
+    </authoredTypeChild>
   </properties>
 
 </block>

@@ -40,6 +40,8 @@ describe("document root dual format", () => {
     expect(result.document!.block.type).toBe("com.blockml.test.root.Sample");
     expect(result.document!.block.baseType).toBe("org.blockml.bml.core.Block");
     expect(result.document!.source.rootForm).toBe("block");
+    expect(result.document!.block.authoredNameChild).toBe(true);
+    expect(result.document!.block.authoredTypeChild).toBe(true);
   });
 
   it("maps a qualified type-as-root tag without <type>", () => {
@@ -55,6 +57,8 @@ describe("document root dual format", () => {
     expect(result.document!.block.type).toBe("com.blockml.test.root.Sample");
     expect(result.document!.block.baseType).toBe("org.blockml.bml.core.Block");
     expect(result.document!.source.rootForm).toBe("type");
+    expect(result.document!.block.authoredNameChild).toBeUndefined();
+    expect(result.document!.block.authoredTypeChild).toBeUndefined();
   });
 
   it("accepts optional <name> on a qualified root when it matches lastSegment", () => {
@@ -208,6 +212,8 @@ describe("nested definition wrappers", () => {
     expect(inner?.name).toBe("Inner");
     expect(inner?.type).toBe("com.blockml.test.root.Sample.Inner");
     expect(inner?.wrapperForm).toBe("type");
+    expect(inner?.authoredNameChild).toBeUndefined();
+    expect(inner?.authoredTypeChild).toBeUndefined();
   });
 
   it("maps a visibility-prefixed Sub-Block tag", () => {
@@ -269,6 +275,7 @@ describe("nested definition wrappers", () => {
     const result = parse(source, { filePath: "sub-legacy.bml" });
     expect(result.success).toBe(true);
     expect(result.document!.block.subBlocks[0]?.wrapperForm).toBe("block");
+    expect(result.document!.block.subBlocks[0]?.authoredNameChild).toBe(true);
     expect(result.document!.block.subBlocks[0]?.name).toBe("Inner");
     expect(result.document!.block.subBlocks[0]?.type).toBe(
       "com.blockml.test.root.Sample.Inner",

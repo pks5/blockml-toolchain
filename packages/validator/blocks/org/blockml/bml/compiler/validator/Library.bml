@@ -73,9 +73,15 @@
         <valstyle:PreferCDataWhenNeedsEscape />
         <valstyle:PreferMarkdownStructure />
         <valstyle:PreferEmptyElementSelfClosing />
+        <valstyle:PreferTypeAsTag />
+        <valstyle:PreferOmitRedundantType />
+        <valstyle:PreferOmitSubBlockIdentity />
         <valstyle:CDataWhenEscaping />
         <valstyle:MarkdownStructure />
         <valstyle:EmptyElementSelfClosing />
+        <valstyle:TypeAsTag />
+        <valstyle:OmitRedundantType />
+        <valstyle:OmitSubBlockIdentity />
         <valdocumentation:Introduction />
         <valdocumentation:ValidityContract />
         <valdocumentation:LayerSeparation />

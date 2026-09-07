@@ -17,6 +17,19 @@ function sample(body: string): string {
   ].join("\n");
 }
 
+function preferred(body = ""): string {
+  return [
+    `<test:Sample xmlns="http://blockml.org/bml"`,
+    `  xmlns:core="org.blockml.bml.core"`,
+    `  xmlns:test="com.blockml.test.style">`,
+    `  <baseType>core:Block</baseType>`,
+    `  <is>sample</is>`,
+    `  <version>1.0.0</version>`,
+    body,
+    `</test:Sample>`,
+  ].join("\n");
+}
+
 const LONG_UNSTRUCTURED =
   "This is a long documentation paragraph that keeps going without any markdown heading, list, or blank line so the style catalog should recommend structure. ".repeat(4);
 
@@ -119,5 +132,142 @@ describe("validateStyle catalog", () => {
     });
     const codes = new Set(validateStyle(parsed.document!).map((d) => d.code));
     expect(codes.has("BML_STYLE_UNKNOWN_CHECK")).toBe(false);
+  });
+
+  it("warns on the legacy block wrapper", () => {
+    const parsed = parse(sample("  <documentation>ok</documentation>"), {
+      filePath: "style-legacy-root.bml",
+    });
+    const hit = validateStyle(parsed.document!).find(
+      (d) => d.code === "BML_STYLE_LEGACY_BLOCK_WRAPPER",
+    );
+    expect(hit).toBeDefined();
+    expect(hit!.severity).toBe("warning");
+  });
+
+  it("does not warn about the wrapper when the preferred type tag is used", () => {
+    const parsed = parse(preferred(), { filePath: "style-type-tag.bml" });
+    const diags = validateStyle(parsed.document!);
+    expect(diags.some((d) => d.code === "BML_STYLE_LEGACY_BLOCK_WRAPPER")).toBe(false);
+    expect(diags.some((d) => d.code === "BML_STYLE_REDUNDANT_TYPE")).toBe(false);
+  });
+
+  it("warns when a preferred-form Block still declares type", () => {
+    const parsed = parse(
+      [
+        `<test:Sample xmlns="http://blockml.org/bml"`,
+        `  xmlns:core="org.blockml.bml.core"`,
+        `  xmlns:test="com.blockml.test.style">`,
+        `  <type>test:Sample</type>`,
+        `  <baseType>core:Block</baseType>`,
+        `  <is>sample</is>`,
+        `</test:Sample>`,
+      ].join("\n"),
+      { filePath: "style-redundant-type.bml" },
+    );
+    const hit = validateStyle(parsed.document!).find((d) => d.code === "BML_STYLE_REDUNDANT_TYPE");
+    expect(hit).toBeDefined();
+    expect(hit!.severity).toBe("warning");
+  });
+
+  it("warns when a preferred-form embed still declares type", () => {
+    const parsed = parse(
+      preferred(
+        [
+          "  <embeddedBlocks>",
+          "    <test:Helper>",
+          "      <type>test:Helper</type>",
+          "      <baseType>core:Block</baseType>",
+          "      <is>embed</is>",
+          "    </test:Helper>",
+          "  </embeddedBlocks>",
+        ].join("\n"),
+      ),
+      { filePath: "style-redundant-embed-type.bml" },
+    );
+    const diags = validateStyle(parsed.document!);
+    expect(diags.some((d) => d.code === "BML_STYLE_REDUNDANT_TYPE")).toBe(true);
+    expect(diags.some((d) => d.code === "BML_STYLE_REDUNDANT_SUBBLOCK_IDENTITY")).toBe(false);
+  });
+
+  it("warns when a preferred-form Sub-Block still declares name or type", () => {
+    const withName = parse(
+      preferred(
+        [
+          "  <subBlocks>",
+          "    <Inner>",
+          "      <name>Inner</name>",
+          "      <baseType>core:Block</baseType>",
+          "      <is>inner</is>",
+          "    </Inner>",
+          "  </subBlocks>",
+        ].join("\n"),
+      ),
+      { filePath: "style-sub-name.bml" },
+    );
+    expect(
+      validateStyle(withName.document!).some((d) => d.code === "BML_STYLE_REDUNDANT_SUBBLOCK_IDENTITY"),
+    ).toBe(true);
+
+    const withType = parse(
+      preferred(
+        [
+          "  <subBlocks>",
+          "    <Inner>",
+          "      <type>test:Sample.Inner</type>",
+          "      <baseType>core:Block</baseType>",
+          "      <is>inner</is>",
+          "    </Inner>",
+          "  </subBlocks>",
+        ].join("\n"),
+      ),
+      { filePath: "style-sub-type.bml" },
+    );
+    const typeDiags = validateStyle(withType.document!);
+    expect(typeDiags.some((d) => d.code === "BML_STYLE_REDUNDANT_SUBBLOCK_IDENTITY")).toBe(true);
+    expect(typeDiags.some((d) => d.code === "BML_STYLE_REDUNDANT_TYPE")).toBe(false);
+  });
+
+  it("does not warn on a preferred-form Sub-Block without name or type", () => {
+    const parsed = parse(
+      preferred(
+        [
+          "  <subBlocks>",
+          "    <Inner>",
+          "      <baseType>core:Block</baseType>",
+          "      <is>inner</is>",
+          "    </Inner>",
+          "  </subBlocks>",
+        ].join("\n"),
+      ),
+      { filePath: "style-sub-ok.bml" },
+    );
+    const diags = validateStyle(parsed.document!);
+    expect(diags.some((d) => d.code === "BML_STYLE_REDUNDANT_SUBBLOCK_IDENTITY")).toBe(false);
+    expect(diags.some((d) => d.code === "BML_STYLE_LEGACY_BLOCK_WRAPPER")).toBe(false);
+  });
+
+  it("warns on a nested legacy block wrapper and stays successful", () => {
+    const parsed = parse(
+      preferred(
+        [
+          "  <subBlocks>",
+          "    <block>",
+          "      <name>Inner</name>",
+          "      <baseType>core:Block</baseType>",
+          "      <is>inner</is>",
+          "    </block>",
+          "  </subBlocks>",
+        ].join("\n"),
+      ),
+      { filePath: "style-sub-legacy.bml" },
+    );
+    const diags = validateStyle(parsed.document!);
+    expect(diags.some((d) => d.code === "BML_STYLE_LEGACY_BLOCK_WRAPPER")).toBe(true);
+    expect(diags.some((d) => d.code === "BML_STYLE_REDUNDANT_SUBBLOCK_IDENTITY")).toBe(false);
+
+    const result = validate(parsed.document!);
+    expect(result.success).toBe(true);
+    expect(result.diagnostics.some((d) => d.code === "BML_STYLE_LEGACY_BLOCK_WRAPPER")).toBe(true);
   });
 });

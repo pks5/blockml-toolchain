@@ -517,10 +517,12 @@ function mapMetadataFields(element, block, ctx) {
         switch (local) {
             case "name":
                 block.name = getTextOrAttr(child) ?? block.name;
+                block.authoredNameChild = true;
                 break;
             case "type":
                 block.type = withElementLocation(ctx.filePath, ctx.source, child, () => resolveBlockReference(getTextOrAttr(child) ?? "", ctx.bindings, ctx.subBlockIndex, ctx.parentBlockType));
                 block.typeSource = elementSourceLoc(ctx.filePath, ctx.source, child);
+                block.authoredTypeChild = true;
                 ctx.parentBlockType = block.type;
                 break;
             case "baseType": {

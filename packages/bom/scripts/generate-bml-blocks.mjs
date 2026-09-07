@@ -546,6 +546,8 @@ const blocks = [
       { name: "unknownElements", type: "bomcommon:UnknownXmlNode[]" },
       { name: "unknownAttributes", type: "type:Text", doc: "Record of unknown attributes on the grammar node." },
       { name: "wrapperForm", type: "type:Text", doc: 'Authored definition wrapper: "block" (legacy) or "type" (tag-as-identity).' },
+      { name: "authoredNameChild", type: "type:Boolean", doc: "True when a child <name> element was authored." },
+      { name: "authoredTypeChild", type: "type:Boolean", doc: "True when a child <type> element was authored." },
     ],
   },
 

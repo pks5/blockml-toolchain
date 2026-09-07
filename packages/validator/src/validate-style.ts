@@ -42,6 +42,28 @@ const FALLBACK_RULES: StyleRuleRecord[] = [
     message: "Write empty elements as self-closing tags.",
     check: "PreferEmptyElementSelfClosing",
   },
+  {
+    name: "TypeAsTag",
+    code: "BML_STYLE_LEGACY_BLOCK_WRAPPER",
+    severity: "warning",
+    message: "Prefer a type-or-name tag instead of the legacy block wrapper.",
+    check: "PreferTypeAsTag",
+  },
+  {
+    name: "OmitRedundantType",
+    code: "BML_STYLE_REDUNDANT_TYPE",
+    severity: "warning",
+    message: "Omit child type when the element tag already supplies the type.",
+    check: "PreferOmitRedundantType",
+  },
+  {
+    name: "OmitSubBlockIdentity",
+    code: "BML_STYLE_REDUNDANT_SUBBLOCK_IDENTITY",
+    severity: "warning",
+    message:
+      "Omit child name and type on preferred-form Sub-Blocks; the tag is the name and the type is derived.",
+    check: "PreferOmitSubBlockIdentity",
+  },
 ];
 
 function styleRuleDir(): string {
@@ -118,13 +140,19 @@ function styleDiag(
   };
 }
 
-function walkBlocks(block: BlockDefinition, visit: (b: BlockDefinition) => void): void {
-  visit(block);
+type DefinitionRole = "root" | "subBlock" | "embedded";
+
+function walkBlocks(
+  block: BlockDefinition,
+  role: DefinitionRole,
+  visit: (b: BlockDefinition, role: DefinitionRole) => void,
+): void {
+  visit(block, role);
   for (const sub of block.subBlocks) {
-    walkBlocks(sub, visit);
+    walkBlocks(sub, "subBlock", visit);
   }
   for (const emb of block.embeddedBlocks) {
-    walkBlocks(emb, visit);
+    walkBlocks(emb, "embedded", visit);
   }
 }
 
@@ -136,9 +164,58 @@ function collectReferences(block: BlockDefinition): DocumentationReference[] {
   return refs;
 }
 
+type StyleInterpreter = (
+  rule: StyleRuleRecord,
+  block: BlockDefinition,
+  role: DefinitionRole,
+  file: string,
+  out: Diagnostic[],
+) => void;
+
+function runPreferTypeAsTag(
+  rule: StyleRuleRecord,
+  block: BlockDefinition,
+  _role: DefinitionRole,
+  file: string,
+  out: Diagnostic[],
+): void {
+  if (block.wrapperForm === "block") {
+    out.push(styleDiag(rule, file, block.source));
+  }
+}
+
+function runPreferOmitRedundantType(
+  rule: StyleRuleRecord,
+  block: BlockDefinition,
+  role: DefinitionRole,
+  file: string,
+  out: Diagnostic[],
+): void {
+  if (block.wrapperForm === "type" && role !== "subBlock" && block.authoredTypeChild) {
+    out.push(styleDiag(rule, file, block.typeSource ?? block.source));
+  }
+}
+
+function runPreferOmitSubBlockIdentity(
+  rule: StyleRuleRecord,
+  block: BlockDefinition,
+  role: DefinitionRole,
+  file: string,
+  out: Diagnostic[],
+): void {
+  if (
+    role === "subBlock" &&
+    block.wrapperForm === "type" &&
+    (block.authoredNameChild || block.authoredTypeChild)
+  ) {
+    out.push(styleDiag(rule, file, block.source));
+  }
+}
+
 function runPreferCData(
   rule: StyleRuleRecord,
   block: BlockDefinition,
+  _role: DefinitionRole,
   file: string,
   out: Diagnostic[],
 ): void {
@@ -152,6 +229,7 @@ function runPreferCData(
 function runPreferMarkdown(
   rule: StyleRuleRecord,
   block: BlockDefinition,
+  _role: DefinitionRole,
   file: string,
   out: Diagnostic[],
 ): void {
@@ -165,6 +243,7 @@ function runPreferMarkdown(
 function runPreferSelfClosing(
   rule: StyleRuleRecord,
   block: BlockDefinition,
+  _role: DefinitionRole,
   file: string,
   out: Diagnostic[],
 ): void {
@@ -175,18 +254,13 @@ function runPreferSelfClosing(
   }
 }
 
-const INTERPRETERS: Record<
-  string,
-  (
-    rule: StyleRuleRecord,
-    block: BlockDefinition,
-    file: string,
-    out: Diagnostic[],
-  ) => void
-> = {
+const INTERPRETERS: Record<string, StyleInterpreter> = {
   PreferCDataWhenNeedsEscape: runPreferCData,
   PreferMarkdownStructure: runPreferMarkdown,
   PreferEmptyElementSelfClosing: runPreferSelfClosing,
+  PreferTypeAsTag: runPreferTypeAsTag,
+  PreferOmitRedundantType: runPreferOmitRedundantType,
+  PreferOmitSubBlockIdentity: runPreferOmitSubBlockIdentity,
 };
 
 export function validateStyle(document: BomDocument): Diagnostic[] {
@@ -203,8 +277,8 @@ export function validateStyle(document: BomDocument): Diagnostic[] {
       });
       continue;
     }
-    walkBlocks(document.block, (block) => {
-      run(rule, block, file, diagnostics);
+    walkBlocks(document.block, "root", (block, role) => {
+      run(rule, block, role, file, diagnostics);
     });
   }
   return diagnostics;

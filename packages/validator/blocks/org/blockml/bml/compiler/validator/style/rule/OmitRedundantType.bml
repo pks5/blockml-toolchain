@@ -1,0 +1,39 @@
+<!--
+  Validator Style Rule — OmitRedundantType
+  FQN: org.blockml.bml.compiler.validator.style.OmitRedundantType
+-->
+<style:OmitRedundantType
+  xmlns="http://blockml.org/bml"
+  xmlns:style="org.blockml.bml.compiler.validator.style">
+
+  <name>OmitRedundantType</name>
+  <baseType>style:StyleRule</baseType>
+  <is>Omit child type when the element tag already supplies the type</is>
+
+  <documentation>On a preferred-form root or embedded Block the element tag is the
+    type. A child type element is redundant (doc:DocumentFormat).</documentation>
+
+  <properties>
+    <code override="true">
+      <value>BML_STYLE_REDUNDANT_TYPE</value>
+    </code>
+    <severity override="true">
+      <value>warning</value>
+    </severity>
+    <appliesTo override="true">
+      <value>preferred-form root or embed</value>
+    </appliesTo>
+    <message override="true">
+      <value>Omit child type when the element tag already supplies the type.</value>
+    </message>
+  </properties>
+
+  <aggregations>
+    <check override="true">
+      <composition>
+        <style:PreferOmitRedundantType />
+      </composition>
+    </check>
+  </aggregations>
+
+</style:OmitRedundantType>

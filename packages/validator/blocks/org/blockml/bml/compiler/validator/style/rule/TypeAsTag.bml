@@ -1,0 +1,39 @@
+<!--
+  Validator Style Rule — TypeAsTag
+  FQN: org.blockml.bml.compiler.validator.style.TypeAsTag
+-->
+<style:TypeAsTag
+  xmlns="http://blockml.org/bml"
+  xmlns:style="org.blockml.bml.compiler.validator.style">
+
+  <name>TypeAsTag</name>
+  <baseType>style:StyleRule</baseType>
+  <is>Prefer type-or-name tags over the legacy block wrapper</is>
+
+  <documentation>The legacy block wrapper remains valid. New and edited definitions
+    should use the type-or-name tag (doc:DocumentFormat).</documentation>
+
+  <properties>
+    <code override="true">
+      <value>BML_STYLE_LEGACY_BLOCK_WRAPPER</value>
+    </code>
+    <severity override="true">
+      <value>warning</value>
+    </severity>
+    <appliesTo override="true">
+      <value>definition wrapper</value>
+    </appliesTo>
+    <message override="true">
+      <value>Prefer a type-or-name tag instead of the legacy block wrapper.</value>
+    </message>
+  </properties>
+
+  <aggregations>
+    <check override="true">
+      <composition>
+        <style:PreferTypeAsTag />
+      </composition>
+    </check>
+  </aggregations>
+
+</style:TypeAsTag>
