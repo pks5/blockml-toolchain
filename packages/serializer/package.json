@@ -1,6 +1,6 @@
 {
   "name": "@blockml/serializer",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "BlockML serializer — BOM (Urmodell) to canonical BML XML",
   "license": "Apache-2.0",
   "repository": {
@@ -32,7 +32,7 @@
     "test": "vitest run packages/serializer/test"
   },
   "dependencies": {
-    "@blockml/bom": "^0.9.4",
+    "@blockml/bom": "^0.9.5",
     "@blockml/core": "^1.2.1"
   },
   "engines": {
