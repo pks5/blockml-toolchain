@@ -62,8 +62,7 @@
 
 Fresh content this run: a midnight bicycle-lamp lending shelf outside an all-night bakery on a Norwegian fish quay — unrelated to the previous run's roadside single-glove cabinet.
 
-Validation: `blockml validate` succeeds — 751 blocks, 0 errors. The only note on the new file is a style recommendation (`BML_STYLE_PREFER_MARKDOWN`) for the prose documentation block; no error or warning. No other files changed; `_meta/transform/` and the `ModelTransformation` block were left untouched.
-</output>
+Validation: `blockml validate` succeeds — 751 blocks, 0 errors. The only note on the new file is a style recommendation (`BML_STYLE_PREFER_MARKDOWN`) for the prose documentation block; no error or warning. No other files changed; `_meta/transform/` and the `ModelTransformation` block were left untouched.</output>
           <completedAt>2026-09-07T22:14:16</completedAt>
           <task>
             <workflow:InstructionTask>
@@ -89,8 +88,10 @@ ModelTransformation metadata or files under _meta/transform/.</instructions>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/RandomBlock.bml" />
           </changedFiles>
         </workflow:AgenticOperation>
-        <workflow:ToolOperation name="Validate" status="Pending" captureOutput="true" command="blockml">
+        <workflow:ToolOperation name="Validate" status="Running" captureOutput="true" command="blockml">
           <args>[&quot;validate&quot;]</args>
+          <startedAt>2026-09-07T22:14:17</startedAt>
+          <baseCommit>c40ba1c8ec506c529e6a5079c9594d2443a27c78</baseCommit>
         </workflow:ToolOperation>
       </composition>
     </operations>
