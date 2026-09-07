@@ -411,7 +411,7 @@ function emitNestedBlock(
   writer.comments(block.xmlTrivia);
   writer.line(`<${tag}>`);
   writer.pushDepth();
-  emitBlockDefinition(writer, block, ctx, preferred, preferred && kind === "subBlock");
+  emitBlockDefinition(writer, block, ctx, preferred, preferred);
   writer.popDepth();
   writer.line(`</${tag}>`);
   writer.comments(block.xmlTrivia, true);

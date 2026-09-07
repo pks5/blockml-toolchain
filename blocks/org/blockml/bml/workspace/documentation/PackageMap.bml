@@ -23,9 +23,6 @@
   xmlns:wsdocumentation="org.blockml.bml.workspace.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>
-    PackageMap
-  </name>
   <baseType>
     core:Documentation
   </baseType>

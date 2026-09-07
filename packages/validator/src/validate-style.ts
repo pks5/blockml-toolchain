@@ -57,12 +57,11 @@ const FALLBACK_RULES: StyleRuleRecord[] = [
     check: "PreferOmitRedundantType",
   },
   {
-    name: "OmitSubBlockIdentity",
-    code: "BML_STYLE_REDUNDANT_SUBBLOCK_IDENTITY",
+    name: "OmitRedundantName",
+    code: "BML_STYLE_REDUNDANT_NAME",
     severity: "warning",
-    message:
-      "Omit child name and type on preferred-form Sub-Blocks; the tag is the name and the type is derived.",
-    check: "PreferOmitSubBlockIdentity",
+    message: "Omit child name when the element tag already supplies the name.",
+    check: "PreferOmitRedundantName",
   },
 ];
 
@@ -97,7 +96,8 @@ function loadStyleCatalog(): StyleRuleRecord[] {
       continue;
     }
     const text = readFileSync(join(dir, entry), "utf8");
-    const name = text.match(/<name>([^<]+)<\/name>/)?.[1]?.trim();
+    const name =
+      text.match(/<name>([^<]+)<\/name>/)?.[1]?.trim() ?? entry.replace(/\.bml$/, "");
     const code = propertyValue(text, "code");
     const severity = propertyValue(text, "severity") as DiagnosticSeverity | undefined;
     const message = propertyValue(text, "message");
@@ -187,27 +187,23 @@ function runPreferTypeAsTag(
 function runPreferOmitRedundantType(
   rule: StyleRuleRecord,
   block: BlockDefinition,
-  role: DefinitionRole,
+  _role: DefinitionRole,
   file: string,
   out: Diagnostic[],
 ): void {
-  if (block.wrapperForm === "type" && role !== "subBlock" && block.authoredTypeChild) {
+  if (block.wrapperForm === "type" && block.authoredTypeChild) {
     out.push(styleDiag(rule, file, block.typeSource ?? block.source));
   }
 }
 
-function runPreferOmitSubBlockIdentity(
+function runPreferOmitRedundantName(
   rule: StyleRuleRecord,
   block: BlockDefinition,
-  role: DefinitionRole,
+  _role: DefinitionRole,
   file: string,
   out: Diagnostic[],
 ): void {
-  if (
-    role === "subBlock" &&
-    block.wrapperForm === "type" &&
-    (block.authoredNameChild || block.authoredTypeChild)
-  ) {
+  if (block.wrapperForm === "type" && block.authoredNameChild) {
     out.push(styleDiag(rule, file, block.source));
   }
 }
@@ -260,7 +256,7 @@ const INTERPRETERS: Record<string, StyleInterpreter> = {
   PreferEmptyElementSelfClosing: runPreferSelfClosing,
   PreferTypeAsTag: runPreferTypeAsTag,
   PreferOmitRedundantType: runPreferOmitRedundantType,
-  PreferOmitSubBlockIdentity: runPreferOmitSubBlockIdentity,
+  PreferOmitRedundantName: runPreferOmitRedundantName,
 };
 
 export function validateStyle(document: BomDocument): Diagnostic[] {

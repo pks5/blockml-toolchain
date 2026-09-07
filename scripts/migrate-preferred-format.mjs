@@ -106,14 +106,11 @@ function hasPairedEmptySee(block) {
   return false;
 }
 
-function definitionNeedsRewrite(block, role) {
+function definitionNeedsRewrite(block, _role) {
   if (block.wrapperForm !== "type") {
     return true;
   }
-  if (role !== "subBlock" && block.authoredTypeChild) {
-    return true;
-  }
-  if (role === "subBlock" && (block.authoredNameChild || block.authoredTypeChild)) {
+  if (block.authoredTypeChild || block.authoredNameChild) {
     return true;
   }
   if (hasPairedEmptySee(block)) {

@@ -19,9 +19,6 @@
   xmlns:wsdocumentation="org.blockml.bml.workspace.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>
-    ReadingOrder
-  </name>
   <baseType>
     core:Documentation
   </baseType>

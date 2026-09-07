@@ -194,7 +194,7 @@ export const documentationBlocks = [
     Document root form (doc:DocumentFormat):
     SourceInfo.rootForm "block" (or omitted) → emit <block> and child <type>.
     SourceInfo.rootForm "type" → emit the type QName / TypeIdentifier as the root tag
-    and omit child <type>. Nested definition wrappers follow BlockDefinition.wrapperForm:
+    and omit child <type> and <name>. Nested definition wrappers follow BlockDefinition.wrapperForm:
     Sub-Blocks emit the unqualified name tag; embeds emit the type tag like the root.
     Legacy wrapperForm "block" (or omitted) stays <block>. New documents from
     BomBuilder.create use rootForm type and omit xsi / schemaLocation.`,

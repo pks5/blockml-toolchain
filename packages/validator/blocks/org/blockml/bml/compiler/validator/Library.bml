@@ -75,13 +75,13 @@
         <valstyle:PreferEmptyElementSelfClosing />
         <valstyle:PreferTypeAsTag />
         <valstyle:PreferOmitRedundantType />
-        <valstyle:PreferOmitSubBlockIdentity />
+        <valstyle:PreferOmitRedundantName />
         <valstyle:CDataWhenEscaping />
         <valstyle:MarkdownStructure />
         <valstyle:EmptyElementSelfClosing />
         <valstyle:TypeAsTag />
         <valstyle:OmitRedundantType />
-        <valstyle:OmitSubBlockIdentity />
+        <valstyle:OmitRedundantName />
         <valdocumentation:Introduction />
         <valdocumentation:ValidityContract />
         <valdocumentation:LayerSeparation />

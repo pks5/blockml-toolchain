@@ -6,9 +6,6 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded">
 
-  <name>
-    T00003_PoemTest_20260831T193409
-  </name>
   <baseType>
     workflow:ModelTransformation
   </baseType>

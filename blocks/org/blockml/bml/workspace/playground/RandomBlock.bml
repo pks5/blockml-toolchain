@@ -5,9 +5,6 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:playground="org.blockml.bml.workspace.playground">
 
-  <name>
-    RandomBlock
-  </name>
   <baseType>
     core:Documentation
   </baseType>

@@ -7,9 +7,6 @@
   xmlns:program="org.blockml.bml.transformer.program"
   xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded">
 
-  <name>
-    T00030_CreateTransformation_20260906T031803
-  </name>
   <baseType>
     workflow:ModelTransformation(succeeded:T00030_CreateTransformation_20260906T031803.Parameters, type:Text)
   </baseType>

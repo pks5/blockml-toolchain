@@ -6,9 +6,6 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:playground="org.blockml.bml.workspace.playground">
 
-  <name>
-    MyTestTransformation
-  </name>
   <baseType>
     workflow:ModelTransformation(playground:MyTestTransformation.Parameters, type:Text)
   </baseType>

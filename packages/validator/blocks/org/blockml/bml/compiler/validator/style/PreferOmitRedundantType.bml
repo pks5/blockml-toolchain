@@ -8,8 +8,8 @@
 
   <is>Warn when a preferred-form Block still declares a type child</is>
 
-  <documentation>Matches a root or embedded Block in type-as-tag form that still
-    authors a child type element. The tag already supplies the type
-    (doc:DocumentFormat).</documentation>
+  <documentation>Matches any preferred-form definition (root, Sub-Block, or embed)
+    that still authors a child type element. The tag already supplies the
+    type, or the Sub-Block type is derived (doc:DocumentFormat).</documentation>
 
 </style:PreferOmitRedundantType>

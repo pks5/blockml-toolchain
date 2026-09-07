@@ -28,7 +28,7 @@ export function serialize(document, options = {}) {
     emitRootStartTag(writer, bindings, document.source.schemaLocation, document.source.noNamespaceSchemaLocation, document.block.unknownAttributes, rootTag);
     writer.pushDepth();
     writer.blank();
-    emitBlockDefinition(writer, document.block, ctx, rootForm === "type");
+    emitBlockDefinition(writer, document.block, ctx, rootForm === "type", rootForm === "type");
     writer.popDepth();
     writer.line(`</${rootTag}>`);
     return {

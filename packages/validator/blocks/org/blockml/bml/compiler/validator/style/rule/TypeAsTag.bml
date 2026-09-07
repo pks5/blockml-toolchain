@@ -6,7 +6,6 @@
   xmlns="http://blockml.org/bml"
   xmlns:style="org.blockml.bml.compiler.validator.style">
 
-  <name>TypeAsTag</name>
   <baseType>style:StyleRule</baseType>
   <is>Prefer type-or-name tags over the legacy block wrapper</is>
 

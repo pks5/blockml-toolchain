@@ -39,11 +39,11 @@ const FALLBACK_RULES = [
         check: "PreferOmitRedundantType",
     },
     {
-        name: "OmitSubBlockIdentity",
-        code: "BML_STYLE_REDUNDANT_SUBBLOCK_IDENTITY",
+        name: "OmitRedundantName",
+        code: "BML_STYLE_REDUNDANT_NAME",
         severity: "warning",
-        message: "Omit child name and type on preferred-form Sub-Blocks; the tag is the name and the type is derived.",
-        check: "PreferOmitSubBlockIdentity",
+        message: "Omit child name when the element tag already supplies the name.",
+        check: "PreferOmitRedundantName",
     },
 ];
 function styleRuleDir() {
@@ -73,7 +73,7 @@ function loadStyleCatalog() {
             continue;
         }
         const text = readFileSync(join(dir, entry), "utf8");
-        const name = text.match(/<name>([^<]+)<\/name>/)?.[1]?.trim();
+        const name = text.match(/<name>([^<]+)<\/name>/)?.[1]?.trim() ?? entry.replace(/\.bml$/, "");
         const code = propertyValue(text, "code");
         const severity = propertyValue(text, "severity");
         const message = propertyValue(text, "message");
@@ -126,15 +126,13 @@ function runPreferTypeAsTag(rule, block, _role, file, out) {
         out.push(styleDiag(rule, file, block.source));
     }
 }
-function runPreferOmitRedundantType(rule, block, role, file, out) {
-    if (block.wrapperForm === "type" && role !== "subBlock" && block.authoredTypeChild) {
+function runPreferOmitRedundantType(rule, block, _role, file, out) {
+    if (block.wrapperForm === "type" && block.authoredTypeChild) {
         out.push(styleDiag(rule, file, block.typeSource ?? block.source));
     }
 }
-function runPreferOmitSubBlockIdentity(rule, block, role, file, out) {
-    if (role === "subBlock" &&
-        block.wrapperForm === "type" &&
-        (block.authoredNameChild || block.authoredTypeChild)) {
+function runPreferOmitRedundantName(rule, block, _role, file, out) {
+    if (block.wrapperForm === "type" && block.authoredNameChild) {
         out.push(styleDiag(rule, file, block.source));
     }
 }
@@ -165,7 +163,7 @@ const INTERPRETERS = {
     PreferEmptyElementSelfClosing: runPreferSelfClosing,
     PreferTypeAsTag: runPreferTypeAsTag,
     PreferOmitRedundantType: runPreferOmitRedundantType,
-    PreferOmitSubBlockIdentity: runPreferOmitSubBlockIdentity,
+    PreferOmitRedundantName: runPreferOmitRedundantName,
 };
 export function validateStyle(document) {
     const file = document.source.filePath;

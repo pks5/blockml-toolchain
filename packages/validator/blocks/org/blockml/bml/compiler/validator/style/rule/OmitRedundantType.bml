@@ -6,12 +6,12 @@
   xmlns="http://blockml.org/bml"
   xmlns:style="org.blockml.bml.compiler.validator.style">
 
-  <name>OmitRedundantType</name>
   <baseType>style:StyleRule</baseType>
   <is>Omit child type when the element tag already supplies the type</is>
 
-  <documentation>On a preferred-form root or embedded Block the element tag is the
-    type. A child type element is redundant (doc:DocumentFormat).</documentation>
+  <documentation>On a preferred-form definition the element tag is the type
+    (root / embed) or the type is derived (Sub-Block). A child type
+    element is redundant (doc:DocumentFormat).</documentation>
 
   <properties>
     <code override="true">
@@ -21,7 +21,7 @@
       <value>warning</value>
     </severity>
     <appliesTo override="true">
-      <value>preferred-form root or embed</value>
+      <value>preferred-form definition</value>
     </appliesTo>
     <message override="true">
       <value>Omit child type when the element tag already supplies the type.</value>

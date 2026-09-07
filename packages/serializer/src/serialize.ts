@@ -47,7 +47,7 @@ export function serialize(
   );
   writer.pushDepth();
   writer.blank();
-  emitBlockDefinition(writer, document.block, ctx, rootForm === "type");
+  emitBlockDefinition(writer, document.block, ctx, rootForm === "type", rootForm === "type");
   writer.popDepth();
   writer.line(`</${rootTag}>`);
 

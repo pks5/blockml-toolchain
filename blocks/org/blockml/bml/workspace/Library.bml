@@ -23,9 +23,6 @@
   xmlns:workspace="org.blockml.bml.workspace"
   xmlns:wsdocumentation="org.blockml.bml.workspace.documentation">
 
-  <name>
-    Library
-  </name>
   <baseType>
     core:BlockLibrary
   </baseType>

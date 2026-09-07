@@ -36,7 +36,7 @@
     Diagnostic type: org.blockml.bml.bom.common.Diagnostic (shared across toolchain).
     Style codes: BML_STYLE_PREFER_CDATA, BML_STYLE_PREFER_MARKDOWN,
     BML_STYLE_EMPTY_ELEMENT_SELF_CLOSE, BML_STYLE_LEGACY_BLOCK_WRAPPER,
-    BML_STYLE_REDUNDANT_TYPE, BML_STYLE_REDUNDANT_SUBBLOCK_IDENTITY,
+    BML_STYLE_REDUNDANT_TYPE, BML_STYLE_REDUNDANT_NAME,
     BML_STYLE_UNKNOWN_CHECK.
 
     Host policy: CLI, IDE, and other orchestrators decide whether error diagnostics

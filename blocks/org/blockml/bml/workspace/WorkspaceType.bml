@@ -8,9 +8,6 @@
   xmlns:workspace="org.blockml.bml.workspace"
   xmlns:wsdocumentation="org.blockml.bml.workspace.documentation">
 
-  <name>
-    WorkspaceType
-  </name>
   <baseType>
     core:Entity
   </baseType>

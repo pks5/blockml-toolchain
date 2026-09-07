@@ -18,9 +18,6 @@
   xmlns:workspace="org.blockml.bml.workspace"
   xmlns:wsdocumentation="org.blockml.bml.workspace.documentation">
 
-  <name>
-    README
-  </name>
   <baseType>
     core:ReadMe
   </baseType>

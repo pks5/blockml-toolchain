@@ -150,6 +150,7 @@ describe("validateStyle catalog", () => {
     const diags = validateStyle(parsed.document!);
     expect(diags.some((d) => d.code === "BML_STYLE_LEGACY_BLOCK_WRAPPER")).toBe(false);
     expect(diags.some((d) => d.code === "BML_STYLE_REDUNDANT_TYPE")).toBe(false);
+    expect(diags.some((d) => d.code === "BML_STYLE_REDUNDANT_NAME")).toBe(false);
   });
 
   it("warns when a preferred-form Block still declares type", () => {
@@ -187,7 +188,25 @@ describe("validateStyle catalog", () => {
     );
     const diags = validateStyle(parsed.document!);
     expect(diags.some((d) => d.code === "BML_STYLE_REDUNDANT_TYPE")).toBe(true);
-    expect(diags.some((d) => d.code === "BML_STYLE_REDUNDANT_SUBBLOCK_IDENTITY")).toBe(false);
+    expect(diags.some((d) => d.code === "BML_STYLE_REDUNDANT_NAME")).toBe(false);
+  });
+
+  it("warns when a preferred-form Block still declares name", () => {
+    const parsed = parse(
+      [
+        `<test:Sample xmlns="http://blockml.org/bml"`,
+        `  xmlns:core="org.blockml.bml.core"`,
+        `  xmlns:test="com.blockml.test.style">`,
+        `  <name>Sample</name>`,
+        `  <baseType>core:Block</baseType>`,
+        `  <is>sample</is>`,
+        `</test:Sample>`,
+      ].join("\n"),
+      { filePath: "style-redundant-name.bml" },
+    );
+    const hit = validateStyle(parsed.document!).find((d) => d.code === "BML_STYLE_REDUNDANT_NAME");
+    expect(hit).toBeDefined();
+    expect(hit!.severity).toBe("warning");
   });
 
   it("warns when a preferred-form Sub-Block still declares name or type", () => {
@@ -206,7 +225,7 @@ describe("validateStyle catalog", () => {
       { filePath: "style-sub-name.bml" },
     );
     expect(
-      validateStyle(withName.document!).some((d) => d.code === "BML_STYLE_REDUNDANT_SUBBLOCK_IDENTITY"),
+      validateStyle(withName.document!).some((d) => d.code === "BML_STYLE_REDUNDANT_NAME"),
     ).toBe(true);
 
     const withType = parse(
@@ -224,8 +243,8 @@ describe("validateStyle catalog", () => {
       { filePath: "style-sub-type.bml" },
     );
     const typeDiags = validateStyle(withType.document!);
-    expect(typeDiags.some((d) => d.code === "BML_STYLE_REDUNDANT_SUBBLOCK_IDENTITY")).toBe(true);
-    expect(typeDiags.some((d) => d.code === "BML_STYLE_REDUNDANT_TYPE")).toBe(false);
+    expect(typeDiags.some((d) => d.code === "BML_STYLE_REDUNDANT_TYPE")).toBe(true);
+    expect(typeDiags.some((d) => d.code === "BML_STYLE_REDUNDANT_NAME")).toBe(false);
   });
 
   it("does not warn on a preferred-form Sub-Block without name or type", () => {
@@ -243,7 +262,8 @@ describe("validateStyle catalog", () => {
       { filePath: "style-sub-ok.bml" },
     );
     const diags = validateStyle(parsed.document!);
-    expect(diags.some((d) => d.code === "BML_STYLE_REDUNDANT_SUBBLOCK_IDENTITY")).toBe(false);
+    expect(diags.some((d) => d.code === "BML_STYLE_REDUNDANT_NAME")).toBe(false);
+    expect(diags.some((d) => d.code === "BML_STYLE_REDUNDANT_TYPE")).toBe(false);
     expect(diags.some((d) => d.code === "BML_STYLE_LEGACY_BLOCK_WRAPPER")).toBe(false);
   });
 
@@ -264,7 +284,7 @@ describe("validateStyle catalog", () => {
     );
     const diags = validateStyle(parsed.document!);
     expect(diags.some((d) => d.code === "BML_STYLE_LEGACY_BLOCK_WRAPPER")).toBe(true);
-    expect(diags.some((d) => d.code === "BML_STYLE_REDUNDANT_SUBBLOCK_IDENTITY")).toBe(false);
+    expect(diags.some((d) => d.code === "BML_STYLE_REDUNDANT_NAME")).toBe(false);
 
     const result = validate(parsed.document!);
     expect(result.success).toBe(true);

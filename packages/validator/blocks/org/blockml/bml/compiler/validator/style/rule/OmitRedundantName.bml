@@ -1,0 +1,39 @@
+<!--
+  Validator Style Rule — OmitRedundantName
+  FQN: org.blockml.bml.compiler.validator.style.OmitRedundantName
+-->
+<style:OmitRedundantName
+  xmlns="http://blockml.org/bml"
+  xmlns:style="org.blockml.bml.compiler.validator.style">
+
+  <baseType>style:StyleRule</baseType>
+  <is>Omit child name when the element tag already supplies the name</is>
+
+  <documentation>On a preferred-form definition the element tag is the name
+    (Sub-Block) or lastSegment of the type (root / embed). A child name
+    element is redundant (doc:DocumentFormat).</documentation>
+
+  <properties>
+    <code override="true">
+      <value>BML_STYLE_REDUNDANT_NAME</value>
+    </code>
+    <severity override="true">
+      <value>warning</value>
+    </severity>
+    <appliesTo override="true">
+      <value>preferred-form definition</value>
+    </appliesTo>
+    <message override="true">
+      <value>Omit child name when the element tag already supplies the name.</value>
+    </message>
+  </properties>
+
+  <aggregations>
+    <check override="true">
+      <composition>
+        <style:PreferOmitRedundantName />
+      </composition>
+    </check>
+  </aggregations>
+
+</style:OmitRedundantName>

@@ -6,9 +6,6 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded">
 
-  <name>
-    T00028_TravelPostcardTemplate_20260905T210230
-  </name>
   <baseType>
     workflow:ModelTransformation(succeeded:T00028_TravelPostcardTemplate_20260905T210230.Parameters, succeeded:T00028_TravelPostcardTemplate_20260905T210230.Result)
   </baseType>

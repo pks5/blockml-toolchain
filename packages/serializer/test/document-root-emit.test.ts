@@ -43,6 +43,7 @@ describe("document root form-fidelity", () => {
     expect(xml.text).toMatch(/<test:Sample\b/);
     expect(xml.text).toMatch(/<\/test:Sample>/);
     expect(xml.text).not.toMatch(/<type>/);
+    expect(xml.text).not.toMatch(/<name>/);
     expect(xml.text).not.toMatch(/<block\b/);
   });
 

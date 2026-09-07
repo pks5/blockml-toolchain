@@ -7,9 +7,6 @@
   xmlns:playground="org.blockml.bml.workspace.playground"
   xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded">
 
-  <name>
-    T00033_MyTestTransformation_20260906T043458
-  </name>
   <baseType>
     workflow:ModelTransformation(succeeded:T00033_MyTestTransformation_20260906T043458.Parameters, type:Text)
   </baseType>

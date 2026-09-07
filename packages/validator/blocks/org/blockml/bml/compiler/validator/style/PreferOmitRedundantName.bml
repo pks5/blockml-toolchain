@@ -1,0 +1,15 @@
+<!--
+  Validator Style Check — PreferOmitRedundantName
+  FQN: org.blockml.bml.compiler.validator.style.PreferOmitRedundantName
+-->
+<style:PreferOmitRedundantName
+  xmlns="http://blockml.org/bml"
+  xmlns:style="org.blockml.bml.compiler.validator.style">
+
+  <is>Warn when a preferred-form Block still declares a name child</is>
+
+  <documentation>Matches any preferred-form definition (root, Sub-Block, or embed)
+    that still authors a child name element. The tag already supplies the
+    name (doc:DocumentFormat).</documentation>
+
+</style:PreferOmitRedundantName>

@@ -13,9 +13,6 @@
   xmlns:wsdocumentation="org.blockml.bml.workspace.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>
-    Introduction
-  </name>
   <baseType>
     core:Documentation
   </baseType>
