@@ -1,0 +1,77 @@
+<!--Workspace Playground — MyLatestStory
+  FQN: org.blockml.bml.workspace.playground.MyLatestStory-->
+<playground:MyLatestStory xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:playground="org.blockml.bml.workspace.playground">
+
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    A random structured song produced by a workspace transform execution, in Spanish, about a futuristic city and a dog
+  </is>
+  <documentation>
+    Produced by the "Create Poem" step of a BlockML workspace transform execution.
+    Each run discards whatever stood here before and writes a freshly composed
+    Spanish song about a futuristic city and a dog, carried as typed properties,
+    so none of the text below is stable or authoritative.
+  </documentation>
+  <properties>
+    <title type="type:Text">
+      <value>El can de la Avenida de Cristal</value>
+    </title>
+    <artist type="type:Text">
+      <value>Los Faroles de Neón</value>
+    </artist>
+    <song type="type:Text">
+      <value>(Estrofa 1)
+La ciudad se levanta sobre rieles de vidrio,
+mil ventanas encendidas como ojos sin sueño,
+y en la plaza de acero, donde nadie pasea,
+un perro gris olfatea lo que el viento trajo.
+
+(Estrofa 2)
+No lleva collar, ni número, ni dueño que lo llame,
+solo el mapa de las calles guardado en su nariz;
+los coches vuelan mudos, las farolas quieren hablar,
+pero él persigue el eco de una vieja cicatriz.
+
+(Estribillo)
+Corre, can, corre, bajo el cielo de neón,
+que la Torre Nueve todavía tiene voz;
+si el futuro es una máquina sin sitio para el corazón,
+tú serás el guardián de lo que fuimos los dos.
+
+(Estrofa 3)
+Un niño lo saluda desde un puente de titanio,
+le lanza un pan de luz que sabe a lluvia de verdad,
+y el perro mueve la cola como un péndulo de agua,
+midiendo con su alegría la distancia a la ciudad.
+
+(Estribillo)
+Corre, can, corre, bajo el cielo de neón,
+que la Torre Nueve todavía tiene voz;
+si el futuro es una máquina sin sitio para el corazón,
+tú serás el guardián de lo que fuimos los dos.
+
+(Puente)
+Cuando se apaguen las pantallas y el ascensor se duerma,
+cuando el último dron regrese a su rincón,
+quedará su silueta recortada en el vapor,
+un latido analógico en mitad del procesador.
+
+(Final)
+La ciudad se levanta sobre rieles de vidrio,
+y a sus pies late tibio un pequeño corazón;
+mañana habrá más torres, más silencio, más metal,
+pero siempre habrá un perro cuidando la canción.</value>
+    </song>
+    <language type="type:Text">
+      <value>Spanish</value>
+    </language>
+    <date type="type:DateTime">
+      <value>2026-09-07T22:20:46</value>
+    </date>
+  </properties>
+</playground:MyLatestStory>
