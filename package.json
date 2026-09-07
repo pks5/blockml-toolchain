@@ -65,6 +65,9 @@
     "validate": "node packages/cli-tools/dist/cli.js validate",
     "search:index": "node packages/cli-tools/dist/cli.js search index",
     "typecheck": "tsc --build --emitDeclarationOnly",
+    "vbump:major": "node scripts/vbump.mjs major",
+    "vbump:minor": "node scripts/vbump.mjs minor",
+    "vbump:patch": "node scripts/vbump.mjs patch",
     "publish:packages": "bash scripts/publish-packages.sh"
   },
   "engines": {
