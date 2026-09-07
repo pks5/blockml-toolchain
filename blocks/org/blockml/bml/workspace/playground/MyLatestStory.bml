@@ -19,59 +19,59 @@
   </documentation>
   <properties>
     <title type="type:Text">
-      <value>El can de la Avenida de Cristal</value>
+      <value>Perro de Cobre bajo la Cúpula</value>
     </title>
     <artist type="type:Text">
-      <value>Los Faroles de Neón</value>
+      <value>Marisol y los Circuitos</value>
     </artist>
     <song type="type:Text">
       <value>(Estrofa 1)
-La ciudad se levanta sobre rieles de vidrio,
-mil ventanas encendidas como ojos sin sueño,
-y en la plaza de acero, donde nadie pasea,
-un perro gris olfatea lo que el viento trajo.
+Amanece en la cúpula de luz de la ciudad,
+los trenes de aire trazan hilos sobre el bulevar,
+y entre torres que respiran con pulmones de cristal
+trota un perro de cobre que no sabe adónde va.
 
 (Estrofa 2)
-No lleva collar, ni número, ni dueño que lo llame,
-solo el mapa de las calles guardado en su nariz;
-los coches vuelan mudos, las farolas quieren hablar,
-pero él persigue el eco de una vieja cicatriz.
+Nadie apuntó su nombre en el registro central,
+ningún dron lo vigila, ningún sensor lo quiere hallar,
+lleva el polvo de mil calles pegado al corazón
+y una chispa en la mirada que la máquina no da.
 
 (Estribillo)
-Corre, can, corre, bajo el cielo de neón,
-que la Torre Nueve todavía tiene voz;
-si el futuro es una máquina sin sitio para el corazón,
-tú serás el guardián de lo que fuimos los dos.
+Ladra, perro, ladra, que la noche es de neón,
+que la ciudad del futuro olvidó tu canción;
+si los relojes mandan y se apaga el corazón,
+tú serás la brújula que guarde nuestro amor.
 
 (Estrofa 3)
-Un niño lo saluda desde un puente de titanio,
-le lanza un pan de luz que sabe a lluvia de verdad,
-y el perro mueve la cola como un péndulo de agua,
-midiendo con su alegría la distancia a la ciudad.
+Una anciana en el andén le comparte medio pan,
+él le lame los dedos como quien firma un pacto de paz,
+las farolas parpadean un saludo en clave morse
+y la plaza de titanio se ablanda al respirar.
 
 (Estribillo)
-Corre, can, corre, bajo el cielo de neón,
-que la Torre Nueve todavía tiene voz;
-si el futuro es una máquina sin sitio para el corazón,
-tú serás el guardián de lo que fuimos los dos.
+Ladra, perro, ladra, que la noche es de neón,
+que la ciudad del futuro olvidó tu canción;
+si los relojes mandan y se apaga el corazón,
+tú serás la brújula que guarde nuestro amor.
 
 (Puente)
-Cuando se apaguen las pantallas y el ascensor se duerma,
-cuando el último dron regrese a su rincón,
-quedará su silueta recortada en el vapor,
-un latido analógico en mitad del procesador.
+Cuando callen los anuncios y el metro se detenga,
+cuando el último satélite se hunda en su rincón,
+quedará su trote suave por la avenida vacía,
+un compás de carne y sueño dentro del procesador.
 
 (Final)
-La ciudad se levanta sobre rieles de vidrio,
-y a sus pies late tibio un pequeño corazón;
-mañana habrá más torres, más silencio, más metal,
-pero siempre habrá un perro cuidando la canción.</value>
+Amanece en la cúpula de luz de la ciudad,
+y a sus pies late tibio lo que no se programó;
+habrá más torres mañana, más silencio, más metal,
+pero siempre un perro de cobre cuidando la canción.</value>
     </song>
     <language type="type:Text">
       <value>Spanish</value>
     </language>
     <date type="type:DateTime">
-      <value>2026-09-07T22:20:46</value>
+      <value>2026-09-07T22:32:04</value>
     </date>
   </properties>
 </playground:MyLatestStory>
