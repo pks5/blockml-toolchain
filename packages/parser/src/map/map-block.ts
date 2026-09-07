@@ -69,6 +69,7 @@ import {
   collectMemberGrammarAttributes,
   isAllowedRootChild,
   isCharacterDataHost,
+  reportDiagnostic,
   reportDuplicateComposition,
   reportDuplicatePropertyValue,
   reportStandaloneComposition,
@@ -76,6 +77,7 @@ import {
   reportUnknownElement,
   toUnknownXmlNode,
 } from "./structural.js";
+import { V1_ROOT_ELEMENT } from "../pipeline/root-type.js";
 
 const MEMBER_SECTIONS = new Set([
   "properties",
@@ -83,6 +85,81 @@ const MEMBER_SECTIONS = new Set([
   "associations",
   "capabilities",
 ]);
+
+function lastTypeSegment(type: string): string {
+  return type.split(".").pop() ?? type;
+}
+
+function rootTypesAgree(tagType: string, childType: string): boolean {
+  if (tagType === childType) {
+    return true;
+  }
+  if (tagType.includes(".") && childType.includes(".")) {
+    return false;
+  }
+  return lastTypeSegment(tagType) === lastTypeSegment(childType);
+}
+
+function preferResolvedType(tagType: string, childType: string): string {
+  if (childType.includes(".") && !tagType.includes(".")) {
+    return childType;
+  }
+  return tagType.includes(".") ? tagType : childType;
+}
+
+function typeFromRootTag(element: Element, ctx: MapContext): string | undefined {
+  const local = elementLocalName(element);
+  if (local === V1_ROOT_ELEMENT) {
+    return undefined;
+  }
+  const prefix = elementPrefix(element);
+  if (!prefix) {
+    return local;
+  }
+  return withElementLocation(ctx.filePath, ctx.source, element, () =>
+    resolveBlockReference(
+      `${prefix}:${local}`,
+      ctx.bindings,
+      ctx.subBlockIndex,
+      ctx.parentBlockType,
+    ),
+  );
+}
+
+function applyRootTypeIdentity(
+  element: Element,
+  block: BlockDefinition,
+  ctx: MapContext,
+  tagType: string | undefined,
+): void {
+  if (tagType) {
+    if (block.type && !rootTypesAgree(tagType, block.type)) {
+      reportDiagnostic(
+        ctx,
+        "BML_MAP_ERROR",
+        `BML_MAP_ERROR: root tag type ${tagType} disagrees with <type> ${block.type}`,
+        elementSourceLoc(ctx.filePath, ctx.source, element),
+      );
+      block.type = tagType;
+      block.typeSource = elementSourceLoc(ctx.filePath, ctx.source, element);
+    } else if (block.type) {
+      block.type = preferResolvedType(tagType, block.type);
+    } else {
+      block.type = tagType;
+      block.typeSource = elementSourceLoc(ctx.filePath, ctx.source, element);
+    }
+    ctx.parentBlockType = block.type;
+    return;
+  }
+  if (!block.type) {
+    reportDiagnostic(
+      ctx,
+      "BML_MISSING_BLOCK_TYPE",
+      "BML_MISSING_BLOCK_TYPE: neither root tag nor <type> supplies a type",
+      elementSourceLoc(ctx.filePath, ctx.source, element),
+    );
+  }
+}
 
 function mapBlockDefinition(
   element: Element,
@@ -113,6 +190,13 @@ function mapBlockDefinition(
   const blockGenerics = parseGenericsBinding(element, ctx, typeResolveOptions(ctx));
   if (blockGenerics) {
     block.generics = blockGenerics;
+  }
+
+  const tagType = ctx.isRoot ? typeFromRootTag(element, ctx) : undefined;
+  if (tagType) {
+    block.type = tagType;
+    block.typeSource = elementSourceLoc(ctx.filePath, ctx.source, element);
+    ctx.parentBlockType = tagType;
   }
 
   const childElements = elementChildren(element);
@@ -171,6 +255,10 @@ function mapBlockDefinition(
   seedSubBlockIndex(element, block, ctx, parentType, subBlocksRaw);
 
   mapMetadataFields(element, block, ctx);
+
+  if (ctx.isRoot) {
+    applyRootTypeIdentity(element, block, ctx, tagType);
+  }
 
   if (!block.name) {
     block.name = block.type.split(".").pop() ?? "Block";

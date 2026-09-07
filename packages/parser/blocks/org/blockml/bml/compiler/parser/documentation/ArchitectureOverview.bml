@@ -40,7 +40,7 @@
     Stage 1 pipeline:
     [1] Format detect (B24) — detectFormat(); strip UTF-8 BOM; first '<' → xml
     [2] XML DOM (B18) — parseXmlDom() via @xmldom/xmldom
-    [3] Root type resolver — assertBlockRoot(); V1: <block> only
+    [3] Root type resolver — assertBlockRoot(); <block> or type-as-root tag (doc:DocumentFormat)
     [4] Namespace resolver — extractNamespaceBindings(), mergeSourceInfo(); FQN resolution
     [5] BML → BOM mapper — mapDocumentBlock() → BomDocument
 
@@ -61,6 +61,7 @@
   <references>
     <see type="pardocumentation:V1Scope" relation="ReadNext" />
     <see type="parcap:Parse" relation="Defines" />
+    <see type="doc:DocumentFormat" relation="SeeAlso" />
   </references>
 
 </block>

@@ -35,7 +35,10 @@
   <baseType>core:Documentation</baseType>
   <is>Block definition metadata field mapping</is>
 
-  <documentation><![CDATA[Map <block> child elements to BlockDefinition fields:
+  <documentation><![CDATA[Map document-root child elements to BlockDefinition fields.
+    The root tag may be legacy <block> or a type tag (doc:DocumentFormat). A type-as-root
+    tag supplies type (and effective name); child <type> is omitted unless it repeats
+    the same FQN.
 
     Identity: name, type, baseType, is, isNot, version, definition
     Structural: since, status, summary, documentation, abstract, final

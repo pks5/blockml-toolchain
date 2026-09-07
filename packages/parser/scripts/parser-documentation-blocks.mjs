@@ -61,7 +61,7 @@ export const documentationBlocks = [
     Stage 1 pipeline:
     [1] Format detect (B24) — detectFormat(); strip UTF-8 BOM; first '<' → xml
     [2] XML DOM (B18) — parseXmlDom() via @xmldom/xmldom
-    [3] Root type resolver — assertBlockRoot(); V1: <block> only
+    [3] Root type resolver — assertBlockRoot(); <block> or type-as-root tag (doc:DocumentFormat)
     [4] Namespace resolver — extractNamespaceBindings(), mergeSourceInfo(); FQN resolution
     [5] BML → BOM mapper — mapDocumentBlock() → BomDocument
 
@@ -81,13 +81,14 @@ export const documentationBlocks = [
     refs: [
       { type: "pardocumentation:V1Scope", relation: "ReadNext" },
       { type: "parcap:Parse", relation: "Defines" },
+      { type: "doc:DocumentFormat", relation: "SeeAlso" },
     ],
   },
   {
     name: "V1Scope",
     is: "Phase A parser slice and deferred features",
     doc: `V1 (Phase A) parser implements:
-    • Hardcoded BML → BOM mapper for <block> root documents
+    • Hardcoded BML → BOM mapper for document roots (<block> or type tag; doc:DocumentFormat)
     • Single-file scope (B5) — no TypeRegistry bootstrap in parse()
     • Stage 1 structural BML validation (unknown Gerüst tags/attributes/directives); no TypeRegistry semantic checks (B8: XSD not Stage 1)
     • JSON BML authoring not planned (B6)
@@ -258,7 +259,10 @@ export const documentationBlocks = [
   {
     name: "BlockMetadataMapping",
     is: "Block definition metadata field mapping",
-    doc: `Map <block> child elements to BlockDefinition fields:
+    doc: `Map document-root child elements to BlockDefinition fields.
+    The root tag may be legacy <block> or a type tag (doc:DocumentFormat). A type-as-root
+    tag supplies type (and effective name); child <type> is omitted unless it repeats
+    the same FQN.
 
     Identity: name, type, baseType, is, isNot, version, definition
     Structural: since, status, summary, documentation, abstract, final
@@ -386,8 +390,9 @@ export const documentationBlocks = [
     • BML_UNSUPPORTED_FORMAT — format detect failed
     • BML_MALFORMED_XML — DOM parse error
     • BML_MISSING_ROOT — no document element
-    • BML_INVALID_ROOT — not <block> (V1)
-    • BML_MAP_ERROR — mapping exception
+    • BML_INVALID_ROOT — not <block> and not a type-as-root tag (doc:DocumentFormat)
+    • BML_MISSING_BLOCK_TYPE — legacy <block> supplies neither root tag type nor <type>
+    • BML_MAP_ERROR — mapping exception, including root-tag type vs child <type> mismatch
 
     Map-time codes (mapper modules):
     • BML_UNKNOWN_NAMESPACE_PREFIX, BML_UNQUALIFIED_BLOCK_REFERENCE

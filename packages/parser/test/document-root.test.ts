@@ -1,0 +1,175 @@
+import { describe, expect, it } from "vitest";
+import { parse } from "../src/parse.js";
+
+const NS = [
+  'xmlns="http://blockml.org/bml"',
+  'xmlns:core="org.blockml.bml.core"',
+  'xmlns:type="org.blockml.bml.type"',
+  'xmlns:test="com.blockml.test.root"',
+].join(" ");
+
+function legacy(body = ""): string {
+  return [
+    `<block ${NS}>`,
+    "  <name>Sample</name>",
+    "  <type>test:Sample</type>",
+    "  <baseType>core:Block</baseType>",
+    "  <is>sample</is>",
+    body,
+    "</block>",
+  ].join("\n");
+}
+
+describe("document root dual format", () => {
+  it("keeps legacy <block> plus <type> identity", () => {
+    const result = parse(legacy(), { filePath: "legacy.bml" });
+    expect(result.success).toBe(true);
+    expect(result.document).not.toBeNull();
+    expect(result.document!.block.name).toBe("Sample");
+    expect(result.document!.block.type).toBe("com.blockml.test.root.Sample");
+    expect(result.document!.block.baseType).toBe("org.blockml.bml.core.Block");
+  });
+
+  it("maps a qualified type-as-root tag without <type>", () => {
+    const source = [
+      `<test:Sample ${NS}>`,
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "</test:Sample>",
+    ].join("\n");
+    const result = parse(source, { filePath: "qualified.bml" });
+    expect(result.success).toBe(true);
+    expect(result.document!.block.name).toBe("Sample");
+    expect(result.document!.block.type).toBe("com.blockml.test.root.Sample");
+    expect(result.document!.block.baseType).toBe("org.blockml.bml.core.Block");
+  });
+
+  it("accepts optional <name> on a qualified root when it matches lastSegment", () => {
+    const source = [
+      `<test:Sample ${NS}>`,
+      "  <name>Sample</name>",
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "</test:Sample>",
+    ].join("\n");
+    const result = parse(source, { filePath: "qualified-name.bml" });
+    expect(result.success).toBe(true);
+    expect(result.document!.block.name).toBe("Sample");
+    expect(result.document!.block.type).toBe("com.blockml.test.root.Sample");
+  });
+
+  it("maps an unqualified type-as-root tag as the TypeIdentifier", () => {
+    const source = [
+      `<Sample ${NS}>`,
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "</Sample>",
+    ].join("\n");
+    const result = parse(source, { filePath: "unqualified.bml" });
+    expect(result.success).toBe(true);
+    expect(result.document!.block.name).toBe("Sample");
+    expect(result.document!.block.type).toBe("Sample");
+  });
+
+  it("promotes an unqualified root to the child <type> FQN when last segments match", () => {
+    const source = [
+      `<Sample ${NS}>`,
+      "  <type>test:Sample</type>",
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "</Sample>",
+    ].join("\n");
+    const result = parse(source, { filePath: "unqualified-plus-type.bml" });
+    expect(result.success).toBe(true);
+    expect(result.document!.block.type).toBe("com.blockml.test.root.Sample");
+    expect(result.document!.block.name).toBe("Sample");
+  });
+
+  it("accepts a repeating <type> that resolves to the same FQN as the root tag", () => {
+    const source = [
+      `<test:Sample ${NS}>`,
+      "  <type>test:Sample</type>",
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "</test:Sample>",
+    ].join("\n");
+    const result = parse(source, { filePath: "qualified-plus-type.bml" });
+    expect(result.success).toBe(true);
+    expect(result.document!.block.type).toBe("com.blockml.test.root.Sample");
+  });
+
+  it("reports when root tag type and child <type> resolve differently", () => {
+    const source = [
+      `<test:Sample ${NS}>`,
+      "  <type>test:Other</type>",
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "</test:Sample>",
+    ].join("\n");
+    const result = parse(source, { filePath: "type-conflict.bml", continueOnError: true });
+    expect(result.document).not.toBeNull();
+    expect(result.success).toBe(false);
+    const diag = result.diagnostics.find((d) => d.code === "BML_MAP_ERROR");
+    expect(diag).toBeDefined();
+    expect(diag!.message).toContain("disagrees");
+    expect(result.document!.block.type).toBe("com.blockml.test.root.Sample");
+  });
+
+  it("reports BML_MISSING_BLOCK_TYPE for legacy <block> without <type>", () => {
+    const source = [
+      `<block ${NS}>`,
+      "  <name>Sample</name>",
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "</block>",
+    ].join("\n");
+    const result = parse(source, { filePath: "missing-type.bml", continueOnError: true });
+    expect(result.document).not.toBeNull();
+    expect(result.success).toBe(false);
+    expect(result.diagnostics.some((d) => d.code === "BML_MISSING_BLOCK_TYPE")).toBe(true);
+    expect(result.document!.block.name).toBe("Sample");
+    expect(result.document!.block.type).toBe("");
+  });
+
+  it("still rejects a non-type camelCase root", () => {
+    const source = `<notBlock ${NS}></notBlock>`;
+    const result = parse(source, { filePath: "invalid-root.bml" });
+    expect(result.document).toBeNull();
+    expect(result.success).toBe(false);
+    expect(result.diagnostics.some((d) => d.code === "BML_INVALID_ROOT")).toBe(true);
+  });
+
+  it("rejects an undeclared XML prefix on a qualified root", () => {
+    const source = [
+      `<nope:Sample ${NS}>`,
+      "  <baseType>core:Block</baseType>",
+      "</nope:Sample>",
+    ].join("\n");
+    const result = parse(source, { filePath: "unknown-prefix-root.bml", continueOnError: true });
+    expect(result.success).toBe(false);
+    expect(result.diagnostics.some((d) => d.code === "BML_MALFORMED_XML")).toBe(true);
+  });
+
+  it("maps members on a qualified root the same as on legacy <block>", () => {
+    const members = [
+      "  <properties>",
+      '    <count type="type:Integer" />',
+      "  </properties>",
+    ].join("\n");
+    const legacyResult = parse(legacy(members), { filePath: "legacy-members.bml" });
+    const typed = [
+      `<test:Sample ${NS}>`,
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      members,
+      "</test:Sample>",
+    ].join("\n");
+    const typedResult = parse(typed, { filePath: "typed-members.bml" });
+    expect(legacyResult.success).toBe(true);
+    expect(typedResult.success).toBe(true);
+    expect(typedResult.document!.block.members).toHaveLength(1);
+    expect(typedResult.document!.block.members[0]?.name).toBe("count");
+    expect(typedResult.document!.block.type).toBe(legacyResult.document!.block.type);
+    expect(typedResult.document!.block.name).toBe(legacyResult.document!.block.name);
+  });
+});

@@ -32,9 +32,9 @@
   <name>MapDocumentBlock</name>
   <type>parcap:MapDocumentBlock</type>
   <baseType>core:Capability</baseType>
-  <is>Map root &lt;block> to BomDocument — step [5] entry</is>
+  <is>Map document root to BomDocument — step [5] entry</is>
 
-  <documentation><![CDATA[Map root <block> to BomDocument — step [5] entry]]></documentation>
+  <documentation><![CDATA[Map document root (<block> or type tag) to BomDocument — step [5] entry]]></documentation>
 
   <references>
     <see type="parcap:MapBlock" relation="SeeAlso" />

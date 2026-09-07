@@ -27,18 +27,22 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability"
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
-  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
+  xmlns:doc="org.blockml.bml.documentation">
 
   <name>AssertBlockRoot</name>
   <type>parcap:AssertBlockRoot</type>
   <baseType>core:Capability</baseType>
-  <is>Root type resolver — step [3]; V1 requires &lt;block></is>
+  <is>Root type resolver — step [3]; &lt;block> or a type tag</is>
 
-  <documentation>Throws BML_INVALID_ROOT when localName !== block.</documentation>
+  <documentation><![CDATA[Accepts legacy <block> or a type-as-root tag (PascalCase local
+    name, optional Package prefix). Throws BML_INVALID_ROOT otherwise
+    (doc:DocumentFormat).]]></documentation>
 
   <references>
     <see type="parconfig:ParserConstants" relation="SeeAlso" />
     <see type="pardocumentation:ArchitectureOverview" relation="SeeAlso" />
+    <see type="doc:DocumentFormat" relation="SeeAlso" />
   </references>
 
   <properties>
