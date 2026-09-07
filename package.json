@@ -10,7 +10,7 @@
     "library": "./blocks/org/blockml/bml/workspace/Library.bml"
   },
   "dependencies": {
-    "@blockml/core": "^1.1.2",
+    "@blockml/core": "^1.2.0",
     "@machineblocks/core": "^3.0.0-A2"
   },
   "devDependencies": {
