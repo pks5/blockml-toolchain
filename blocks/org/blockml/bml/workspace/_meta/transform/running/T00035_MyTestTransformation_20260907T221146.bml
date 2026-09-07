@@ -48,9 +48,23 @@
   <aggregations>
     <operations override="true">
       <composition>
-        <workflow:AgenticOperation name="Create Random Block" status="Running" captureOutput="true">
+        <workflow:AgenticOperation name="Create Random Block" status="Succeeded" captureOutput="true">
           <startedAt>2026-09-07T22:11:46</startedAt>
           <baseCommit>70bfbe98ff3f50a6ba7a8e38bf9796f61bc7d4b7</baseCommit>
+          <output>Done. Created `blocks/org/blockml/bml/workspace/playground/RandomBlock.bml` — the FQN `org.blockml.bml.workspace.playground.RandomBlock`.
+
+- **name**: `RandomBlock`
+- **type/tag**: `playground:RandomBlock`
+- **baseType**: `core:Documentation`
+- **is**: one-line description of the random content
+- **documentation**: paragraph noting it was produced by the &quot;Create Random Block&quot; step of `playground:MyTestTransformation` and is replaced each run
+- **properties**: four `type:Text` (title, custodian, location, summary), four `type:Integer` (lamp counts, coins, shelf length), two `type:DateTime` — `recordedAt` set to now (`2026-09-07T22:16:33`) and `shelfMountedOn` in the past
+
+Fresh content this run: a midnight bicycle-lamp lending shelf outside an all-night bakery on a Norwegian fish quay — unrelated to the previous run's roadside single-glove cabinet.
+
+Validation: `blockml validate` succeeds — 751 blocks, 0 errors. The only note on the new file is a style recommendation (`BML_STYLE_PREFER_MARKDOWN`) for the prose documentation block; no error or warning. No other files changed; `_meta/transform/` and the `ModelTransformation` block were left untouched.
+</output>
+          <completedAt>2026-09-07T22:14:16</completedAt>
           <task>
             <workflow:InstructionTask>
               <instructions>Create or update the block ${ #this.parameters.targetBlock }
@@ -71,6 +85,9 @@ Write only under the playground package. Do not edit
 ModelTransformation metadata or files under _meta/transform/.</instructions>
             </workflow:InstructionTask>
           </task>
+          <changedFiles>
+            <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/RandomBlock.bml" />
+          </changedFiles>
         </workflow:AgenticOperation>
         <workflow:ToolOperation name="Validate" status="Pending" captureOutput="true" command="blockml">
           <args>[&quot;validate&quot;]</args>

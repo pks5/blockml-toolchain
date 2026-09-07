@@ -1,0 +1,55 @@
+<!--Workspace Playground — RandomBlock
+  FQN: org.blockml.bml.workspace.playground.RandomBlock-->
+<playground:RandomBlock xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:playground="org.blockml.bml.workspace.playground">
+
+  <name>
+    RandomBlock
+  </name>
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    A midnight lending shelf of bicycle lamps outside an all-night bakery, where riders borrow a light and leave a coin or a warm roll in its place
+  </is>
+  <documentation>
+    Produced by the "Create Random Block" step of playground:MyTestTransformation
+    during a BlockML workspace transform execution. Each run discards whatever
+    stood here before and writes freshly invented, arbitrary material, so none
+    of the names, numbers, or dates below are stable or authoritative.
+  </documentation>
+  <properties>
+    <title type="type:Text">
+      <value>The Lamp Shelf at Håkonsen's Night Bakery</value>
+    </title>
+    <custodian type="type:Text">
+      <value>Minded by Trine Håkonsen, who bakes from two in the morning and clips fresh batteries into the lamps while the first loaves prove</value>
+    </custodian>
+    <location type="type:Text">
+      <value>A weatherboarded bakery on Sildegata, one street back from the fish quay, where the harbour wind funnels between the ice plant and the chandlery</value>
+    </location>
+    <summary type="type:Text">
+      <value>A pine shelf bolted beside the bakery door holds a row of red rear lamps and white front lamps, each on a short brass hook. The rule, chalked on a slate, is: take a lamp if yours has died, ride home safe, and bring it back within three nights or leave something for the tin — coins, a candle, or a roll still warm from your own kitchen. A ship's logbook on a chain records the lamp taken, the street it is headed for, and whether the borrower wants waking with a knock if it is not returned. Dock workers, nurses on the late shift, and one accordion teacher keep the shelf turning over; twice a winter the whole row goes out at once and Trine rides the streets at dawn collecting them back.</value>
+    </summary>
+    <lampsOnTheShelfTonight type="type:Integer">
+      <value>18</value>
+    </lampsOnTheShelfTonight>
+    <loansLoggedThisMonth type="type:Integer">
+      <value>204</value>
+    </loansLoggedThisMonth>
+    <coinsInTheTin type="type:Integer">
+      <value>1375</value>
+    </coinsInTheTin>
+    <shelfLengthCentimetres type="type:Integer">
+      <value>142</value>
+    </shelfLengthCentimetres>
+    <recordedAt type="type:DateTime">
+      <value>2026-09-07T22:16:33</value>
+    </recordedAt>
+    <shelfMountedOn type="type:DateTime">
+      <value>2021-02-17T04:05:00</value>
+    </shelfMountedOn>
+  </properties>
+</playground:RandomBlock>
