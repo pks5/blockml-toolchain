@@ -2,7 +2,7 @@ import { elementLocalName, elementPrefix } from "../util/xml.js";
 /** Legacy document root. Type identity comes from child `<type>`. */
 export const V1_ROOT_ELEMENT = "block";
 /** Block name local part — PascalCase, optional visibility underscores. */
-const TYPE_AS_ROOT_LOCAL = /^(?:_+)?[A-Z][a-zA-Z0-9]*$/;
+const TYPE_AS_ROOT_LOCAL = /^(?:_+)?[A-Z][A-Za-z0-9_]*$/;
 function authoredRootTag(element) {
     const local = elementLocalName(element);
     const prefix = elementPrefix(element);

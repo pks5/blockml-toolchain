@@ -32,7 +32,9 @@
   <baseType>core:Capability</baseType>
   <is>Convert resolved FQN to prefixed QName using bindings (B21)</is>
 
-  <documentation>On missing binding in QName mode, emit BML_NAMESPACE_UNBOUND diagnostic.</documentation>
+  <documentation>Picks the longest matching package URI so a type tag stays a TypeIdentifier
+    (workspace:Library, not blockml:workspace.Library). On missing binding in
+    QName mode, emit BML_NAMESPACE_UNBOUND diagnostic.</documentation>
 
   <references>
     <see type="serdocumentation:EmitRules" relation="SeeAlso" />

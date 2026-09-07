@@ -1,28 +1,25 @@
-<!--
-  Workspace Playground — RandomBlock
-  FQN: org.blockml.bml.workspace.playground.RandomBlock
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Workspace Playground — RandomBlock
+  FQN: org.blockml.bml.workspace.playground.RandomBlock-->
+<playground:RandomBlock xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:playground="org.blockml.bml.workspace.playground">
 
-  <name>RandomBlock</name>
-  <type>playground:RandomBlock</type>
-  <baseType>core:Documentation</baseType>
-  <is>A lending register for a roadside glass cabinet where travellers leave one glove and take another that fits better</is>
-
+  <name>
+    RandomBlock
+  </name>
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    A lending register for a roadside glass cabinet where travellers leave one glove and take another that fits better
+  </is>
   <documentation>
     Produced by a BlockML workspace transform execution — the "Create Random
     Block" step of playground:MyTestTransformation. Every run replaces this
     block with freshly invented, arbitrary material, so nothing recorded
     here is stable or authoritative.
   </documentation>
-
   <properties>
     <title type="type:Text">
       <value>The Single-Glove Cabinet at the Kettleburn Turning</value>
@@ -55,5 +52,4 @@
       <value>2019-11-03T09:30:00</value>
     </cabinetInstalledOn>
   </properties>
-
-</block>
+</playground:RandomBlock>

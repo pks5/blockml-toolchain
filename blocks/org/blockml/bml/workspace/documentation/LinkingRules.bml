@@ -1,12 +1,6 @@
-<!--
-  Workspace Documentation — LinkingRules
-  FQN: org.blockml.bml.workspace.documentation.LinkingRules
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Workspace Documentation — LinkingRules
+  FQN: org.blockml.bml.workspace.documentation.LinkingRules-->
+<wsdocumentation:LinkingRules xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -15,13 +9,18 @@
   xmlns:wsdocumentation="org.blockml.bml.workspace.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>LinkingRules</name>
-  <type>wsdocumentation:LinkingRules</type>
-  <baseType>core:Documentation</baseType>
-  <is>Normative monorepo BML linking and SSOT rules</is>
-
-  <documentation>Normative rules for this monorepo:
-
+  <name>
+    LinkingRules
+  </name>
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Normative monorepo BML linking and SSOT rules
+  </is>
+  <documentation>
+    Normative rules for this monorepo:
+    
     1. Workspace → packages only. org.blockml.bml.workspace.Library may list package
        libraries in dependencies. Package Library.bml files must never depend on
        org.blockml.bml.workspace.Library.
@@ -32,11 +31,10 @@
     4. Hub SSOT. The root package.json blockml.library points at this workspace
        Library — the entry for monorepo documentation and orientation.
     5. Markdown transitional. docs/*.md is holding text until migrated into BML;
-       prefer package and workspace BML libraries as authoritative.</documentation>
-
+       prefer package and workspace BML libraries as authoritative.
+  </documentation>
   <references>
     <see type="wsdocumentation:Introduction" relation="SeeAlso" />
     <see type="wsdocumentation:PackageMap" relation="SeeAlso" />
   </references>
-
-</block>
+</wsdocumentation:LinkingRules>

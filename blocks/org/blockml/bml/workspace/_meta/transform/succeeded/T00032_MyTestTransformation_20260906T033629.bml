@@ -1,20 +1,15 @@
 <!--Workspace Playground — MyTestTransformation
   FQN: org.blockml.bml.workspace._meta.transform.succeeded.T00032_MyTestTransformation_20260906T033629-->
-<block xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<succeeded:T00032_MyTestTransformation_20260906T033629 xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
   xmlns:playground="org.blockml.bml.workspace.playground"
-  xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
+  xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded">
 
   <name>
     T00032_MyTestTransformation_20260906T033629
   </name>
-  <type>
-    succeeded:T00032_MyTestTransformation_20260906T033629
-  </type>
   <baseType>
     workflow:ModelTransformation(succeeded:T00032_MyTestTransformation_20260906T033629.Parameters, type:Text)
   </baseType>
@@ -110,13 +105,7 @@ Validation succeeded. Tested 739 blocks, 0 with errors, 0 warnings, 4 recommenda
     </operations>
   </aggregations>
   <subBlocks>
-    <block>
-      <name>
-        Parameters
-      </name>
-      <type>
-        succeeded:T00032_MyTestTransformation_20260906T033629.Parameters
-      </type>
+    <Parameters>
       <baseType>
         type:StructType
       </baseType>
@@ -126,6 +115,6 @@ Validation succeeded. Tested 739 blocks, 0 with errors, 0 warnings, 4 recommenda
       <properties>
         <targetBlock type="type:Text" />
       </properties>
-    </block>
+    </Parameters>
   </subBlocks>
-</block>
+</succeeded:T00032_MyTestTransformation_20260906T033629>

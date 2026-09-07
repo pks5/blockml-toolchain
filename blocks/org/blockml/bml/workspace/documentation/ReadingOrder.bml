@@ -1,12 +1,6 @@
-<!--
-  Workspace Documentation — ReadingOrder
-  FQN: org.blockml.bml.workspace.documentation.ReadingOrder
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Workspace Documentation — ReadingOrder
+  FQN: org.blockml.bml.workspace.documentation.ReadingOrder-->
+<wsdocumentation:ReadingOrder xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:cli="org.blockml.bml.cli"
@@ -25,13 +19,18 @@
   xmlns:wsdocumentation="org.blockml.bml.workspace.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ReadingOrder</name>
-  <type>wsdocumentation:ReadingOrder</type>
-  <baseType>core:Documentation</baseType>
-  <is>Recommended reading path across package libraries</is>
-
-  <documentation>Suggested order for onboarding (each library README → Introduction chain):
-
+  <name>
+    ReadingOrder
+  </name>
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    Recommended reading path across package libraries
+  </is>
+  <documentation>
+    Suggested order for onboarding (each library README → Introduction chain):
+    
     1. This hub — workspace Introduction → PackageMap → ArchitectureOverview
     2. org.blockml.bml (core language) — @blockml/core
     3. org.blockml.bml.bom — Urmodell types
@@ -40,14 +39,13 @@
     6. org.blockml.bml.compiler.runtime — compileToOutput / Target Registry
     7. org.blockml.bml.cli — validate / compile host CLI
     8. Target libraries as needed — blockdoc, xsd, fatblock
-
+    
     Dive into a package library only for that package’s contracts; return here for
-    monorepo orientation.</documentation>
-
+    monorepo orientation.
+  </documentation>
   <references>
     <see type="wsdocumentation:LinkingRules" relation="ReadNext" />
     <see type="bom:Library" relation="SeeAlso" />
     <see type="cli:Library" relation="SeeAlso" />
   </references>
-
-</block>
+</wsdocumentation:ReadingOrder>

@@ -107,6 +107,24 @@ describe("document root form-fidelity", () => {
     expect(xml.text).not.toMatch(/<name>\s*Inner\s*<\/name>/);
   });
 
+  it("uses the longest xmlns package for a type-as-root tag", () => {
+    const source = [
+      `<block ${NS} xmlns:blockml="org.blockml.bml" xmlns:nested="com.blockml.test.root">`,
+      "  <name>Sample</name>",
+      "  <type>test:Sample</type>",
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "</block>",
+    ].join("\n");
+    const parsed = parse(source, { filePath: "longest.bml" });
+    parsed.document!.source.rootForm = "type";
+    parsed.document!.block.wrapperForm = "type";
+    const xml = serialize(parsed.document!);
+    expect(xml.text).toMatch(/<test:Sample\b/);
+    expect(xml.text).not.toMatch(/<blockml:/);
+    expect(xml.text).not.toMatch(/<nested:Sample\b/);
+  });
+
   it("re-emits a qualified embed tag and omits child <type>", () => {
     const source = [
       `<test:Sample ${NS}>`,

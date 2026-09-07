@@ -1,12 +1,6 @@
-<!--
-  Workspace Documentation — PackageMap
-  FQN: org.blockml.bml.workspace.documentation.PackageMap
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Workspace Documentation — PackageMap
+  FQN: org.blockml.bml.workspace.documentation.PackageMap-->
+<wsdocumentation:PackageMap xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:builder="org.blockml.bml.builder"
@@ -29,13 +23,18 @@
   xmlns:wsdocumentation="org.blockml.bml.workspace.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>PackageMap</name>
-  <type>wsdocumentation:PackageMap</type>
-  <baseType>core:Documentation</baseType>
-  <is>npm package to BML library map for this monorepo</is>
-
-  <documentation>Linked libraries (npm → BML FQN → blocks path):
-
+  <name>
+    PackageMap
+  </name>
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    npm package to BML library map for this monorepo
+  </is>
+  <documentation>
+    Linked libraries (npm → BML FQN → blocks path):
+    
     • @blockml/core (external) → org.blockml.bml.Library
       → node_modules/@blockml/core/blocks/org/blockml/bml/Library.bml
     • @blockml/bom → org.blockml.bml.bom.Library
@@ -68,13 +67,12 @@
       → packages/xsd-target/blocks/org/blockml/bml/target/xsd/Library.bml
     • @blockml/fatblock-target → org.blockml.bml.target.fatblock.Library
       → packages/fatblock-target/blocks/org/blockml/bml/target/fatblock/Library.bml
-
+    
     This hub → org.blockml.bml.workspace.Library
-      → blocks/org/blockml/bml/workspace/Library.bml</documentation>
-
+      → blocks/org/blockml/bml/workspace/Library.bml
+  </documentation>
   <references>
     <see type="wsdocumentation:ArchitectureOverview" relation="ReadNext" />
     <see type="wsdocumentation:ReadingOrder" relation="SeeAlso" />
   </references>
-
-</block>
+</wsdocumentation:PackageMap>

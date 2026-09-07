@@ -1,12 +1,6 @@
-<!--
-  Workspace — WorkspaceType
-  FQN: org.blockml.bml.workspace.WorkspaceType
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Workspace — WorkspaceType
+  FQN: org.blockml.bml.workspace.WorkspaceType-->
+<workspace:WorkspaceType xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -14,12 +8,19 @@
   xmlns:workspace="org.blockml.bml.workspace"
   xmlns:wsdocumentation="org.blockml.bml.workspace.documentation">
 
-  <name>WorkspaceType</name>
-  <type>workspace:WorkspaceType</type>
-  <baseType>core:Entity</baseType>
-  <is>Abstract marker for workspace hub documentation blocks</is>
-
-  <documentation>Marker for org.blockml.bml.workspace.* hub types. This library is documentation-only; it does not export capabilities or runtime APIs.</documentation>
-  <abstract>true</abstract>
-
-</block>
+  <name>
+    WorkspaceType
+  </name>
+  <baseType>
+    core:Entity
+  </baseType>
+  <is>
+    Abstract marker for workspace hub documentation blocks
+  </is>
+  <documentation>
+    Marker for org.blockml.bml.workspace.* hub types. This library is documentation-only; it does not export capabilities or runtime APIs.
+  </documentation>
+  <abstract>
+    true
+  </abstract>
+</workspace:WorkspaceType>

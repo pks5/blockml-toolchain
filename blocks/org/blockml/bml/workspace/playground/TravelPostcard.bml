@@ -1,27 +1,24 @@
-<!--
-  Workspace Playground — TravelPostcard
-  FQN: org.blockml.bml.workspace.playground.TravelPostcard
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Workspace Playground — TravelPostcard
+  FQN: org.blockml.bml.workspace.playground.TravelPostcard-->
+<playground:TravelPostcard xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:playground="org.blockml.bml.workspace.playground">
 
-  <name>TravelPostcard</name>
-  <type>playground:TravelPostcard</type>
-  <baseType>core:Documentation</baseType>
-  <is>A short travel postcard in English about Lisbon</is>
-
+  <name>
+    TravelPostcard
+  </name>
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    A short travel postcard in English about Lisbon
+  </is>
   <documentation>
     A structured travel postcard produced by a workspace transform execution,
     in English, about Lisbon. Each transform execution replaces this block
     with a freshly composed postcard.
   </documentation>
-
   <properties>
     <title type="type:Text">
       <value>Greetings from the Alfama</value>
@@ -46,5 +43,4 @@ This afternoon I walked out to Belem, ate two custard tarts still warm from the 
       <value>2026-09-05T21:02:30</value>
     </date>
   </properties>
-
-</block>
+</playground:TravelPostcard>

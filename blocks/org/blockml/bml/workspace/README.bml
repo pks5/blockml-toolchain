@@ -1,12 +1,6 @@
-<!--
-  BlockML Workspace — README
-  FQN: org.blockml.bml.workspace.README
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Workspace — README
+  FQN: org.blockml.bml.workspace.README-->
+<workspace:README xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:cli="org.blockml.bml.cli"
@@ -24,24 +18,27 @@
   xmlns:workspace="org.blockml.bml.workspace"
   xmlns:wsdocumentation="org.blockml.bml.workspace.documentation">
 
-  <name>README</name>
-  <type>workspace:README</type>
-  <baseType>core:ReadMe</baseType>
-  <is>Reading entry for the BlockML workspace library</is>
-
+  <name>
+    README
+  </name>
+  <baseType>
+    core:ReadMe
+  </baseType>
+  <is>
+    Reading entry for the BlockML workspace library
+  </is>
   <documentation>
     This monorepo hosts the BlockML toolchain (@blockml/* only) — the domain-agnostic
     CLI and packages that turn BML into a typed BOM and render-target outputs.
-
+    
     This library (org.blockml.bml.workspace.*) is the monorepo documentation hub and
     SSOT entry. It depends on each package BML library; packages never depend back here.
-
+    
     Start reading at org.blockml.bml.workspace.documentation.Introduction (ReadNext chain).
-
+    
     Package detail lives in the linked libraries under packages/*/blocks/.
     Markdown under docs/ is transitional holding text.
   </documentation>
-
   <references>
     <see type="wsdocumentation:Introduction" relation="ReadFirst" />
     <see type="wsdocumentation:PackageMap" relation="SeeAlso" />
@@ -58,5 +55,4 @@
     <see type="validator:README" relation="SeeAlso" />
     <see type="xsd:README" relation="SeeAlso" />
   </references>
-
-</block>
+</workspace:README>

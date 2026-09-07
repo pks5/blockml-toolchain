@@ -1,27 +1,24 @@
-<!--
-  Workspace Playground — MyStory
-  FQN: org.blockml.bml.workspace.playground.MyStory
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Workspace Playground — MyStory
+  FQN: org.blockml.bml.workspace.playground.MyStory-->
+<playground:MyStory xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:playground="org.blockml.bml.workspace.playground">
 
-  <name>MyStory</name>
-  <type>playground:MyStory</type>
-  <baseType>core:Documentation</baseType>
-  <is>A random structured story produced by a workspace transform execution, in German, about a squirrel and a mouse</is>
-
+  <name>
+    MyStory
+  </name>
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    A random structured story produced by a workspace transform execution, in German, about a squirrel and a mouse
+  </is>
   <documentation>
     A structured German story about a squirrel and a mouse. The story text and its
     metadata are carried as typed properties. Each transform execution replaces
     this block with a freshly composed story.
   </documentation>
-
   <properties>
     <title type="type:Text">
       <value>Das Eichel-Hauptbuch</value>
@@ -62,5 +59,4 @@ Pindle redete sich ein, er habe eine Eichel verloren. Doch in jener Nacht schlie
       <value>Bedeckt und kühl, mit stetigem herbstlichem Nieselregen, der am späten Nachmittag in Nebel überging</value>
     </weather>
   </properties>
-
-</block>
+</playground:MyStory>

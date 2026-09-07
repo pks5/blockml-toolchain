@@ -26,6 +26,7 @@ describe("isDocumentRootLocalName", () => {
     expect(isDocumentRootLocalName("block")).toBe(true);
     expect(isDocumentRootLocalName("MyLatestStory")).toBe(true);
     expect(isDocumentRootLocalName("_Helper")).toBe(true);
+    expect(isDocumentRootLocalName("T00001_PoemTest_20260830T232831")).toBe(true);
     expect(isDocumentRootLocalName("notBlock")).toBe(false);
     expect(isDocumentRootLocalName("properties")).toBe(false);
   });

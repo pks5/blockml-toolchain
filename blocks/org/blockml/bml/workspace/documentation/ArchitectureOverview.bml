@@ -1,12 +1,6 @@
-<!--
-  Workspace Documentation — ArchitectureOverview
-  FQN: org.blockml.bml.workspace.documentation.ArchitectureOverview
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--Workspace Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.workspace.documentation.ArchitectureOverview-->
+<wsdocumentation:ArchitectureOverview xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:cli="org.blockml.bml.cli"
@@ -27,30 +21,34 @@
   xmlns:wsdocumentation="org.blockml.bml.workspace.documentation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <name>ArchitectureOverview</name>
-  <type>wsdocumentation:ArchitectureOverview</type>
-  <baseType>core:Documentation</baseType>
-  <is>High-level BlockML toolchain pipeline</is>
-
-  <documentation>Toolchain data flow:
-
+  <name>
+    ArchitectureOverview
+  </name>
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    High-level BlockML toolchain pipeline
+  </is>
+  <documentation>
+    Toolchain data flow:
+    
     BML (.bml, XML) → @blockml/parser → Urmodell (canonical BOM, @blockml/bom)
     → @blockml/validator / @blockml/framework utilities
     → @blockml/compiler (runtime facade + Target Registry)
     → render targets (blockdoc, xsd, fatblock, …)
     → emitters / on-disk output
-
+    
     @blockml/serializer round-trips Urmodell → BML.
     @blockml/cli (blockml) owns host bootstrap, config, validate/compile/search/graph orchestration,
     and writing RenderOutput.
-
+    
     The core is domain-agnostic. Domain knowledge lives in domain packages and
-    domain CLIs outside this repo.</documentation>
-
+    domain CLIs outside this repo.
+  </documentation>
   <references>
     <see type="wsdocumentation:ReadingOrder" relation="ReadNext" />
     <see type="cli:Library" relation="SeeAlso" />
     <see type="runtime:Library" relation="SeeAlso" />
   </references>
-
-</block>
+</wsdocumentation:ArchitectureOverview>

@@ -1,19 +1,14 @@
 <!--Workspace pending transform — TravelPostcardTemplate
   FQN: org.blockml.bml.workspace._meta.transform.succeeded.T00027_TravelPostcardTemplate_20260905T205817-->
-<block xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<succeeded:T00027_TravelPostcardTemplate_20260905T205817 xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
+  xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded">
 
   <name>
     T00027_TravelPostcardTemplate_20260905T205817
   </name>
-  <type>
-    succeeded:T00027_TravelPostcardTemplate_20260905T205817
-  </type>
   <baseType>
     workflow:ModelTransformation(succeeded:T00027_TravelPostcardTemplate_20260905T205817.Parameters, succeeded:T00027_TravelPostcardTemplate_20260905T205817.Result)
   </baseType>
@@ -143,13 +138,7 @@ _meta/transform/.</instructions>
     </operations>
   </aggregations>
   <subBlocks>
-    <block>
-      <name>
-        Parameters
-      </name>
-      <type>
-        succeeded:T00027_TravelPostcardTemplate_20260905T205817.Parameters
-      </type>
+    <Parameters>
       <baseType>
         type:StructType
       </baseType>
@@ -161,14 +150,8 @@ _meta/transform/.</instructions>
         <language type="type:Text" />
         <targetBlock type="type:Text" />
       </properties>
-    </block>
-    <block>
-      <name>
-        Result
-      </name>
-      <type>
-        succeeded:T00027_TravelPostcardTemplate_20260905T205817.Result
-      </type>
+    </Parameters>
+    <Result>
       <baseType>
         type:StructType
       </baseType>
@@ -180,6 +163,6 @@ _meta/transform/.</instructions>
         <destination type="type:Text" />
         <opening type="type:Text" />
       </properties>
-    </block>
+    </Result>
   </subBlocks>
-</block>
+</succeeded:T00027_TravelPostcardTemplate_20260905T205817>

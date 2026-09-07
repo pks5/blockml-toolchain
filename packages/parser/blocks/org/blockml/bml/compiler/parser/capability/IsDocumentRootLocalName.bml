@@ -35,9 +35,10 @@
   <baseType>core:Capability</baseType>
   <is>True when a local name may wrap a Block definition</is>
 
-  <documentation><![CDATA[True for legacy block or a PascalCase type-or-name tag
-    (optional visibility underscores). Used for the document root, Sub-Blocks under
-    subBlocks, and embeds under embeddedBlocks (doc:DocumentFormat).]]></documentation>
+  <documentation><![CDATA[True for legacy block or a type-or-name tag: optional visibility
+    underscores, then an uppercase letter, then letters, digits, or underscores.
+    Used for the document root, Sub-Blocks under subBlocks, and embeds under
+    embeddedBlocks (doc:DocumentFormat).]]></documentation>
 
   <references>
     <see type="parcap:AssertBlockRoot" relation="SeeAlso" />

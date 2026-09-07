@@ -1,19 +1,14 @@
 <!--Workspace pending transform — JokeTest
   FQN: org.blockml.bml.workspace._meta.transform.succeeded.T00001_JokeTest_20260830T014020-->
-<block xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<succeeded:T00001_PoemTest_20260830T232831 xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
+  xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded">
 
   <name>
     T00001_PoemTest_20260830T232831
   </name>
-  <type>
-    succeeded:T00001_PoemTest_20260830T232831
-  </type>
   <baseType>
     workflow:ModelTransformation
   </baseType>
@@ -76,4 +71,4 @@
       </composition>
     </operations>
   </aggregations>
-</block>
+</succeeded:T00001_PoemTest_20260830T232831>

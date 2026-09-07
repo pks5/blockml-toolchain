@@ -22,11 +22,17 @@ export function fqnToQName(
     ([prefix, uri]) => prefix !== "" && uri !== XSI_NS && uri !== BML_XMLNS,
   );
 
+  let bestPrefix: string | undefined;
+  let bestUri = "";
   for (const [prefix, uri] of entries) {
     const dotPrefix = `${uri}.`;
-    if (fqn.startsWith(dotPrefix)) {
-      return `${prefix}:${fqn.slice(dotPrefix.length)}`;
+    if (fqn.startsWith(dotPrefix) && uri.length > bestUri.length) {
+      bestPrefix = prefix;
+      bestUri = uri;
     }
+  }
+  if (bestPrefix !== undefined) {
+    return `${bestPrefix}:${fqn.slice(bestUri.length + 1)}`;
   }
 
   return fqn;

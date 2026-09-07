@@ -1,12 +1,6 @@
-<!--
-  BlockML Workspace Library
-  FQN: org.blockml.bml.workspace.Library
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+<!--BlockML Workspace Library
+  FQN: org.blockml.bml.workspace.Library-->
+<workspace:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:builder="org.blockml.bml.builder"
@@ -29,29 +23,31 @@
   xmlns:workspace="org.blockml.bml.workspace"
   xmlns:wsdocumentation="org.blockml.bml.workspace.documentation">
 
-  <name>Library</name>
-  <type>workspace:Library</type>
-  <baseType>core:BlockLibrary</baseType>
-  <is>The BlockML monorepo workspace library catalog</is>
-
+  <name>
+    Library
+  </name>
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    The BlockML monorepo workspace library catalog
+  </is>
+  <version>
+    0.9.4
+  </version>
   <documentation>
     Documentation and SSOT hub for the BlockML toolchain monorepo. Links package
     BML libraries (workspace → packages only). Membership is defined exclusively
     by this blocks list. Package libraries must not depend back on this library.
   </documentation>
-
-  <version>0.9.4</version>
-
   <language>
-    <English />
+    <blockml:language.English />
   </language>
-
   <properties>
     <description override="true">
       <value>BlockML workspace monorepo library</value>
     </description>
   </properties>
-
   <aggregations>
     <readMe override="true">
       <composition>
@@ -79,7 +75,8 @@
       </composition>
     </dependencies>
     <blocks override="true">
-      <composition><workspace:WorkspaceType />
+      <composition>
+        <workspace:WorkspaceType />
         <wsdocumentation:Introduction />
         <wsdocumentation:PackageMap />
         <wsdocumentation:ArchitectureOverview />
@@ -88,5 +85,4 @@
       </composition>
     </blocks>
   </aggregations>
-
-</block>
+</workspace:Library>

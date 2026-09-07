@@ -5,7 +5,7 @@ import { elementLocalName, elementPrefix } from "../util/xml.js";
 export const V1_ROOT_ELEMENT = "block";
 
 /** Block name local part — PascalCase, optional visibility underscores. */
-const TYPE_AS_ROOT_LOCAL = /^(?:_+)?[A-Z][a-zA-Z0-9]*$/;
+const TYPE_AS_ROOT_LOCAL = /^(?:_+)?[A-Z][A-Za-z0-9_]*$/;
 
 function authoredRootTag(element: Element): string {
   const local = elementLocalName(element);

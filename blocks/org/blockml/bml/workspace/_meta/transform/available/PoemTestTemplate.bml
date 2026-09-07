@@ -1,38 +1,20 @@
 <!--Workspace available transform — PoemTestTemplate
   FQN: org.blockml.bml.workspace._meta.transform.available.PoemTestTemplate-->
-<block xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<available:PoemTestTemplate xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
-  xmlns:available="org.blockml.bml.workspace._meta.transform.available"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
+  xmlns:available="org.blockml.bml.workspace._meta.transform.available">
 
   <name>
     PoemTestTemplate
   </name>
-  <type>
-    available:PoemTestTemplate
-  </type>
   <baseType>
-    workflow:ModelTransformation(Parameters, type:Text)
+    workflow:ModelTransformation(available:PoemTestTemplate.Parameters, type:Text)
   </baseType>
   <is>
     A pending ModelTransformation that creates a playground Poem block
   </is>
-  <subBlocks>
-    <block>
-      <name>Parameters</name>
-      <baseType>type:StructType</baseType>
-      <is>Run parameters for this poem transformation</is>
-      <properties>
-        <topic type="type:Text" />
-        <storyLanguage type="type:Text" />
-        <translationLanguage type="type:Text" />
-        <targetBlock type="type:Text" />
-      </properties>
-    </block>
-  </subBlocks>
   <properties>
     <description override="true">
       <value>A transformation that creates a playground Poem block</value>
@@ -53,24 +35,22 @@
         <workflow:AgenticOperation name="Create Poem" status="Pending" captureOutput="true">
           <task>
             <workflow:InstructionTask>
-              <instructions>
-                Create or update the block 
-                ${ #this.parameters.targetBlock } 
-                that contains a random song in ${ #this.parameters.storyLanguage } 
-                about ${ #this.parameters.topic }. 
-                For each execution create a new song.
-                The song should be structured with the following properties:
-                - title (type:Text)
-                - artist (type:Text)
-                - song (type:Text)
-                - language (type:Text)
-                - date (type:DateTime)
-              </instructions>
+              <instructions>Create or update the block 
+${ #this.parameters.targetBlock } 
+that contains a random song in ${ #this.parameters.storyLanguage } 
+about ${ #this.parameters.topic }. 
+For each execution create a new song.
+The song should be structured with the following properties:
+- title (type:Text)
+- artist (type:Text)
+- song (type:Text)
+- language (type:Text)
+- date (type:DateTime)</instructions>
             </workflow:InstructionTask>
           </task>
         </workflow:AgenticOperation>
         <workflow:ToolOperation name="Validate" status="Pending" captureOutput="true" command="blockml">
-          <args>["validate"]</args>
+          <args>[&quot;validate&quot;]</args>
         </workflow:ToolOperation>
         <workflow:AgenticOperation name="Translate Poem" status="Pending">
           <resultMappings>
@@ -80,16 +60,29 @@
           </resultMappings>
           <task>
             <workflow:InstructionTask>
-              <instructions>
-                Translate the song in 
-                ${ #this.parameters.targetBlock } 
-                to ${ #this.parameters.translationLanguage }.
-              </instructions>
+              <instructions>Translate the song in 
+${ #this.parameters.targetBlock } 
+to ${ #this.parameters.translationLanguage }.</instructions>
             </workflow:InstructionTask>
           </task>
         </workflow:AgenticOperation>
       </composition>
     </operations>
-    
   </aggregations>
-</block>
+  <subBlocks>
+    <Parameters>
+      <baseType>
+        type:StructType
+      </baseType>
+      <is>
+        Run parameters for this poem transformation
+      </is>
+      <properties>
+        <topic type="type:Text" />
+        <storyLanguage type="type:Text" />
+        <translationLanguage type="type:Text" />
+        <targetBlock type="type:Text" />
+      </properties>
+    </Parameters>
+  </subBlocks>
+</available:PoemTestTemplate>
