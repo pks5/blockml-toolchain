@@ -62,7 +62,7 @@ export const documentationBlocks = [
     [1] Format detect (B24) — detectFormat(); strip UTF-8 BOM; first '<' → xml
     [2] XML DOM (B18) — parseXmlDom() via @xmldom/xmldom
     [3] Root type resolver — assertBlockRoot(); <block> or type-as-root tag (doc:DocumentFormat)
-    [4] Namespace resolver — extractNamespaceBindings(), mergeSourceInfo(); FQN resolution
+    [4] Namespace resolver — extractNamespaceBindings(), mergeSourceInfo(); FQN resolution; rootForm
     [5] BML → BOM mapper — mapDocumentBlock() → BomDocument
 
     Module decomposition (packages/parser/src/):
@@ -358,7 +358,7 @@ export const documentationBlocks = [
     B19: redundant aggregation type — map must not apply.
     B23: preserve xmlRendering + D6 recipe at Stage 1.
     B24: format detector (BOM strip, first '<').
-    B25: store xmlns:xsi + schemaLocation on SourceInfo.
+    B25: store xmlns:xsi + schemaLocation on SourceInfo; record rootForm (block vs type-as-root).
     B26: parse() entry; types in @blockml/bom.`,
     refs: [
       { type: "pardocumentation:RoundtripContract", relation: "ReadNext" },

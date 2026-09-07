@@ -40,8 +40,8 @@
     2. createEmitContext(bindings, indent) → EmitContext { bindings, useQName, indent }
     3. new XmlWriter(indent) — line-oriented XML builder with depth/indent
     4. Optional <?xml version="1.0" encoding="UTF-8"?> when xmlDeclaration=true
-    5. emitRootStartTag — root <block> with xmlns* and xsi:schemaLocation (B25)
-    6. emitBlockDefinition — walk BlockDefinition in BLOCK_EMIT_ORDER (B12)
+    5. emitRootStartTag — authored root tag (block or type) with xmlns* and optional xsi (B25)
+    6. emitBlockDefinition — walk BlockDefinition in BLOCK_EMIT_ORDER (B12); omit child type when rootForm is type
     7. Return { text: writer.toString(), diagnostics, success }
 
     Module decomposition (packages/serializer/src/):

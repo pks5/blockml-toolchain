@@ -263,7 +263,7 @@ const capabilities = [
     pkg: "capability",
     prefix: "parcap",
     name: "ExtractNamespaceBindings",
-    is: "Extract xmlns* from root element — step [4]",
+    is: "Extract xmlns*, xsi schema locations, and authored rootForm from the document root",
     inputs: [{ name: "element", type: "parmap:XmlDomNode", required: true }],
     output: { name: "sourceInfo", type: "bomcommon:SourceInfo", required: true },
     refs: ["pardocumentation:AttributeClassification"],

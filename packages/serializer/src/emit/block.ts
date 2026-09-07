@@ -95,9 +95,10 @@ export function emitBlockDefinition(
   writer: XmlWriter,
   block: BlockDefinition,
   ctx: EmitContext,
+  omitTypeChild = false,
 ): void {
   for (const key of BLOCK_EMIT_ORDER) {
-    emitBlockField(writer, block, key, ctx);
+    emitBlockField(writer, block, key, ctx, omitTypeChild);
   }
   emitUnknownXmlNodes(writer, block.unknownElements);
 }
@@ -107,6 +108,7 @@ function emitBlockField(
   block: BlockDefinition,
   key: (typeof BLOCK_EMIT_ORDER)[number],
   ctx: EmitContext,
+  omitTypeChild = false,
 ): void {
   switch (key) {
     case "name":
@@ -115,6 +117,9 @@ function emitBlockField(
       }
       break;
     case "type":
+      if (omitTypeChild) {
+        break;
+      }
       if (block.type) {
         emitSimpleElement(
           writer,
@@ -859,6 +864,7 @@ export function emitRootStartTag(
   schemaLocation?: string,
   noNamespaceSchemaLocation?: string,
   unknownAttributes?: Record<string, string>,
+  rootTag = "block",
 ): void {
   const attrs: string[] = [];
   for (const [prefix, uri] of Object.entries(bindings)) {
@@ -881,5 +887,5 @@ export function emitRootStartTag(
       attrs.push(`${name}="${escapeAttr(value)}"`);
     }
   }
-  writer.line(`<block ${attrs.join("\n  ")}>`);
+  writer.line(`<${rootTag} ${attrs.join("\n  ")}>`);
 }

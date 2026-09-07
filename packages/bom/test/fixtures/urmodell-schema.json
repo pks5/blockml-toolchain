@@ -73,6 +73,11 @@
           "name": "noNamespaceSchemaLocation",
           "type": "type:Text",
           "required": false
+        },
+        {
+          "name": "rootForm",
+          "type": "type:Text",
+          "required": false
         }
       ]
     },

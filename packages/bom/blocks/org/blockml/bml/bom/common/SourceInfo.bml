@@ -28,7 +28,9 @@
   <baseType>bom:UrmodellType</baseType>
   <is>Parse metadata for a BomDocument</is>
 
-  <documentation>Document-level source metadata. namespaceBindings preserves authored xmlns order (B21).</documentation>
+  <documentation>Document-level source metadata. namespaceBindings preserves authored xmlns order (B21).
+    rootForm records whether the document root was legacy block or a type-as-root tag
+    (doc:DocumentFormat) so serialize can re-emit the authored form.</documentation>
 
   <properties>
     <filePath type="type:Text">
@@ -46,6 +48,9 @@
     <noNamespaceSchemaLocation type="type:Text">
       <documentation>noNamespaceSchemaLocation (optional). TS type: type:Text.</documentation>
     </noNamespaceSchemaLocation>
+    <rootForm type="type:Text">
+      <documentation>Authored document root form: "block" (legacy) or "type" (type-as-root). TS type: type:Text. (optional)</documentation>
+    </rootForm>
   </properties>
 
 </block>

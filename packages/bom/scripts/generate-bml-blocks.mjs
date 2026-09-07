@@ -68,13 +68,14 @@ const blocks = [
     prefix: "bomcommon",
     name: "SourceInfo",
     is: "Parse metadata for a BomDocument",
-    doc: "Document-level source metadata. namespaceBindings preserves authored xmlns order (B21).",
+    doc: "Document-level source metadata. namespaceBindings preserves authored xmlns order (B21). rootForm records whether the document root was legacy block or a type-as-root tag (doc:DocumentFormat) so serialize can re-emit the authored form.",
     fields: [
       { name: "filePath", type: "type:Text", required: true },
       { name: "format", type: "type:Text", required: true, doc: 'Always "xml" for authoring.' },
       { name: "namespaceBindings", type: "type:Text", doc: "Map: prefix key (\"\" = default xmlns) → namespace identifier." },
       { name: "schemaLocation", type: "type:Text" },
       { name: "noNamespaceSchemaLocation", type: "type:Text" },
+      { name: "rootForm", type: "type:Text", doc: 'Authored document root form: "block" (legacy) or "type" (type-as-root).' },
     ],
   },
   {

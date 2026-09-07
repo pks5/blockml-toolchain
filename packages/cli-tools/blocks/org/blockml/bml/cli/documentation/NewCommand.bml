@@ -31,8 +31,9 @@
     blockml new FQN [--baseType FQN] [--is text] [--src dir] [--libraries a,b]
 
     Defaults: --baseType org.blockml.bml.core.Block; --is is the short name.
-    Creates one .bml file via BomBuilder and adds a catalog child on the owning
-    Library.bml when a pkg.Library prefix exists in the registry.
+    Creates one .bml file via BomBuilder in the preferred type-as-root form
+    (doc:DocumentFormat) without xmlns:xsi / xsi:schemaLocation, and adds a catalog
+    child on the owning Library.bml when a pkg.Library prefix exists in the registry.
     Does not overwrite an existing file.
 
 Printed help:
@@ -49,6 +50,7 @@ Related: inspect, validate.]]></documentation>
   <references>
     <see type="clidocumentation:Commands" relation="SeeAlso" />
     <see type="clicap:RunNew" relation="SeeAlso" />
+    <see type="doc:DocumentFormat" relation="SeeAlso" />
   </references>
 
 </block>

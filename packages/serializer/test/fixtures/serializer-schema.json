@@ -156,6 +156,11 @@
           "name": "context",
           "type": "seremit:EmitContext",
           "required": true
+        },
+        {
+          "name": "omitTypeChild",
+          "type": "type:Boolean",
+          "required": false
         }
       ],
       "output": null
@@ -182,6 +187,16 @@
         },
         {
           "name": "noNamespaceSchemaLocation",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "unknownAttributes",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "rootTag",
           "type": "type:Text",
           "required": false
         }

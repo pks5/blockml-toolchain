@@ -1,12 +1,15 @@
 import type { SourceInfo } from "@blockml/bom";
 import type { Element } from "@xmldom/xmldom";
 import { BML_XMLNS, XSI_NS } from "../util/qname.js";
+import { V1_ROOT_ELEMENT } from "./root-type.js";
+import { elementLocalName } from "../util/xml.js";
 
 export function extractNamespaceBindings(element: Element): SourceInfo {
   const info: SourceInfo = {
     filePath: "",
     format: "xml",
     namespaceBindings: {},
+    rootForm: elementLocalName(element) === V1_ROOT_ELEMENT ? "block" : "type",
   };
 
   if (element.attributes) {

@@ -64,8 +64,8 @@ export const documentationBlocks = [
     2. createEmitContext(bindings, indent) → EmitContext { bindings, useQName, indent }
     3. new XmlWriter(indent) — line-oriented XML builder with depth/indent
     4. Optional <?xml version="1.0" encoding="UTF-8"?> when xmlDeclaration=true
-    5. emitRootStartTag — root <block> with xmlns* and xsi:schemaLocation (B25)
-    6. emitBlockDefinition — walk BlockDefinition in BLOCK_EMIT_ORDER (B12)
+    5. emitRootStartTag — authored root tag (block or type) with xmlns* and optional xsi (B25)
+    6. emitBlockDefinition — walk BlockDefinition in BLOCK_EMIT_ORDER (B12); omit child type when rootForm is type
     7. Return { text: writer.toString(), diagnostics, success }
 
     Module decomposition (packages/serializer/src/):
@@ -189,11 +189,18 @@ export const documentationBlocks = [
     XSI infrastructure (B25):
     Re-emit every stored namespaceBindings entry (including xsi) and, when present,
     xsi:schemaLocation / xsi:noNamespaceSchemaLocation on root start-tag.
-    Do not invent schemaLocation when absent.`,
+    Do not invent schemaLocation or xmlns:xsi when absent.
+
+    Document root form (doc:DocumentFormat):
+    SourceInfo.rootForm "block" (or omitted) → emit <block> and child <type>.
+    SourceInfo.rootForm "type" → emit the type QName / TypeIdentifier as the root tag
+    and omit child <type>. Nested sub-blocks stay <block>. New documents from
+    BomBuilder.create use rootForm type and omit xsi / schemaLocation.`,
     refs: [
       { type: "serdocumentation:XmlCommentsEmit", relation: "ReadNext" },
       { type: "sercap:FqnToQName", relation: "SeeAlso" },
       { type: "sercap:VisibilityPrefix", relation: "SeeAlso" },
+      { type: "doc:DocumentFormat", relation: "SeeAlso" },
     ],
   },
   {

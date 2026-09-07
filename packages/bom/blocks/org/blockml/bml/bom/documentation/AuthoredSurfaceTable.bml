@@ -35,6 +35,7 @@
     - bml:each / bml:if / bml:with → directives[] unexpanded → Renderer expands
     - xmlns / xmlns:prefix → SourceInfo.namespaceBindings 1:1 authored → Serializer QName emit (B21)
     - xsi:schemaLocation / xsi:noNamespaceSchemaLocation → SourceInfo (B25) → re-emit on root
+    - document root tag → SourceInfo.rootForm ("block" | "type") → Serializer form-fidelity (doc:DocumentFormat)
     - bml:xml → xmlRendering block+member — NOT directives[] → Serializer, FatBlock, XSD
     - bml:generics → BlockInstance.generics (and illegal-host copies) — NOT directives[] → Validator binds genericTypes (open params required; defaultType may be overridden)
     - element|attribute dual placement → authoredPlacement (D9) → MUST roundtrip authored form

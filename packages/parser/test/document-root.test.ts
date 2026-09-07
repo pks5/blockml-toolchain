@@ -39,6 +39,7 @@ describe("document root dual format", () => {
     expect(result.document!.block.name).toBe("Sample");
     expect(result.document!.block.type).toBe("com.blockml.test.root.Sample");
     expect(result.document!.block.baseType).toBe("org.blockml.bml.core.Block");
+    expect(result.document!.source.rootForm).toBe("block");
   });
 
   it("maps a qualified type-as-root tag without <type>", () => {
@@ -53,6 +54,7 @@ describe("document root dual format", () => {
     expect(result.document!.block.name).toBe("Sample");
     expect(result.document!.block.type).toBe("com.blockml.test.root.Sample");
     expect(result.document!.block.baseType).toBe("org.blockml.bml.core.Block");
+    expect(result.document!.source.rootForm).toBe("type");
   });
 
   it("accepts optional <name> on a qualified root when it matches lastSegment", () => {
@@ -80,6 +82,7 @@ describe("document root dual format", () => {
     expect(result.success).toBe(true);
     expect(result.document!.block.name).toBe("Sample");
     expect(result.document!.block.type).toBe("Sample");
+    expect(result.document!.source.rootForm).toBe("type");
   });
 
   it("promotes an unqualified root to the child <type> FQN when last segments match", () => {

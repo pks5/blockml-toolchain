@@ -32,9 +32,10 @@
   <name>ExtractNamespaceBindings</name>
   <type>parcap:ExtractNamespaceBindings</type>
   <baseType>core:Capability</baseType>
-  <is>Extract xmlns* from root element — step [4]</is>
+  <is>Extract xmlns*, xsi schema locations, and authored rootForm from the document root</is>
 
-  <documentation>Extract xmlns* from root element — step [4]</documentation>
+  <documentation>Extract xmlns*, xsi schema locations, and authored rootForm from the
+    document root (legacy block vs type-as-root).</documentation>
 
   <references>
     <see type="pardocumentation:AttributeClassification" relation="SeeAlso" />

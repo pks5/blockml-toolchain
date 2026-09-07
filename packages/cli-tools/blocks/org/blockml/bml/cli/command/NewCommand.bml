@@ -26,7 +26,7 @@
   <baseType>cli:CliType</baseType>
   <is>blockml new command model</is>
 
-  <documentation>blockml new FQN [--baseType FQN] [--is text]. Creates a .bml file via @blockml/builder and adds the Block to the owning Library catalog.</documentation>
+  <documentation>blockml new FQN [--baseType FQN] [--is text]. Creates a type-as-root .bml file via @blockml/builder (no xsi/schemaLocation) and adds the Block to the owning Library catalog.</documentation>
   <references>
     <see type="clidocumentation:NewCommand" relation="SeeAlso" />
     <see type="clicap:RunNew" relation="SeeAlso" />

@@ -32,8 +32,9 @@
 
     Resolves the destination path from the owning Library (longest pkg.Library
     prefix in the TypeRegistry) or {srcDir}/{fqn-as-path}.bml. Creates the Block
-    with BomBuilder.create, serializes, and writes the file. When a Library is
-    found, edits Library.blocks to export the new FQN.
+    with BomBuilder.create (type-as-root, no xsi/schemaLocation), serializes, and
+    writes the file. When a Library is found, edits Library.blocks to export the
+    new FQN. Existing Library files keep their authored root form.
 
     Existing destination file → exit 1. Missing FQN → exit 2.
   </documentation>

@@ -1,4 +1,4 @@
-import { BML_XMLNS, DEFAULT_BASE_TYPE, ENGLISH_FQN, orderedBindings, packageOfFqn, prefixForPackage, SCHEMA_LOCATION, shortNameOfFqn, XSI_NS, } from "./namespaces.js";
+import { BML_XMLNS, DEFAULT_BASE_TYPE, ENGLISH_FQN, orderedBindings, packageOfFqn, prefixForPackage, shortNameOfFqn, XSI_NS, } from "./namespaces.js";
 function literalValue(value, typeFqn) {
     return { kind: "literal", value, typeFqn };
 }
@@ -27,7 +27,6 @@ export class BomBuilder {
         ensureArrays(this.document.block);
         this.document.source.namespaceBindings ??= {
             "": BML_XMLNS,
-            xsi: XSI_NS,
         };
     }
     static create(options) {
@@ -40,7 +39,6 @@ export class BomBuilder {
         const idea = options.is?.trim() || name;
         const bindings = {
             "": BML_XMLNS,
-            xsi: XSI_NS,
         };
         bindPackage(bindings, packageOfFqn(type));
         bindPackage(bindings, packageOfFqn(baseType));
@@ -48,7 +46,7 @@ export class BomBuilder {
             filePath: options.filePath ?? "",
             format: "xml",
             namespaceBindings: orderedBindings(bindings),
-            schemaLocation: SCHEMA_LOCATION,
+            rootForm: "type",
         };
         const block = {
             name,
@@ -210,7 +208,7 @@ export class BomBuilder {
     seal() {
         const sealed = structuredClone(this.document);
         ensureArrays(sealed.block);
-        sealed.source.namespaceBindings = orderedBindings(sealed.source.namespaceBindings ?? { "": BML_XMLNS, xsi: XSI_NS });
+        sealed.source.namespaceBindings = orderedBindings(sealed.source.namespaceBindings ?? { "": BML_XMLNS });
         return sealed;
     }
     bindings() {

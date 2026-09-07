@@ -33,13 +33,13 @@ const BLOCK_EMIT_ORDER = [
     "embeddedBlocks",
     "bml:xml",
 ];
-export function emitBlockDefinition(writer, block, ctx) {
+export function emitBlockDefinition(writer, block, ctx, omitTypeChild = false) {
     for (const key of BLOCK_EMIT_ORDER) {
-        emitBlockField(writer, block, key, ctx);
+        emitBlockField(writer, block, key, ctx, omitTypeChild);
     }
     emitUnknownXmlNodes(writer, block.unknownElements);
 }
-function emitBlockField(writer, block, key, ctx) {
+function emitBlockField(writer, block, key, ctx, omitTypeChild = false) {
     switch (key) {
         case "name":
             if (block.name) {
@@ -47,6 +47,9 @@ function emitBlockField(writer, block, key, ctx) {
             }
             break;
         case "type":
+            if (omitTypeChild) {
+                break;
+            }
             if (block.type) {
                 emitSimpleElement(writer, "type", ctx.useQName ? fqnToQName(block.type, ctx.bindings) : block.type);
             }
@@ -688,7 +691,7 @@ function emitLiteralBody(val) {
     }
     return escapeText(formatLiteralValue(val.value));
 }
-export function emitRootStartTag(writer, bindings, schemaLocation, noNamespaceSchemaLocation, unknownAttributes) {
+export function emitRootStartTag(writer, bindings, schemaLocation, noNamespaceSchemaLocation, unknownAttributes, rootTag = "block") {
     const attrs = [];
     for (const [prefix, uri] of Object.entries(bindings)) {
         if (prefix === "") {
@@ -709,6 +712,6 @@ export function emitRootStartTag(writer, bindings, schemaLocation, noNamespaceSc
             attrs.push(`${name}="${escapeAttr(value)}"`);
         }
     }
-    writer.line(`<block ${attrs.join("\n  ")}>`);
+    writer.line(`<${rootTag} ${attrs.join("\n  ")}>`);
 }
 //# sourceMappingURL=block.js.map

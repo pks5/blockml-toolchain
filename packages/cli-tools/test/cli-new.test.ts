@@ -113,6 +113,11 @@ describe("blockml new CLI", () => {
     expect(code, stderr).toBe(0);
     expect(stderr).toMatch(/Created /);
     const created = readFileSync(join(TMP, "blocks/com/example/Foo.bml"), "utf8");
+    expect(created).toMatch(/<example:Foo\b/);
+    expect(created).toMatch(/<\/example:Foo>/);
+    expect(created).not.toContain("xsi:schemaLocation");
+    expect(created).not.toContain("xmlns:xsi");
+    expect(created).not.toMatch(/<type>/);
     expect(created).toContain("Foo");
     expect(created).toContain("com.example");
     expect(created).toContain("A foo block");

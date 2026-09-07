@@ -24,14 +24,19 @@ describe("BomBuilder", () => {
     expect(sealed.block.baseType).toBe("org.blockml.bml.core.Block");
     expect(sealed.block.is).toBe("A demo face");
     expect(sealed.source.namespaceBindings?.[""]).toBe("http://blockml.org/bml");
-    expect(sealed.source.namespaceBindings?.xsi).toBe(
-      "http://www.w3.org/2001/XMLSchema-instance",
-    );
+    expect(sealed.source.namespaceBindings?.xsi).toBeUndefined();
+    expect(sealed.source.schemaLocation).toBeUndefined();
+    expect(sealed.source.rootForm).toBe("type");
     expect(sealed.source.namespaceBindings?.core).toBe("org.blockml.bml.core");
     expect(sealed.source.namespaceBindings?.widget).toBe("com.example.widget");
 
     const xml = serialize(sealed);
     expect(xml.success).toBe(true);
+    expect(xml.text).toMatch(/<widget:Face\b/);
+    expect(xml.text).toMatch(/<\/widget:Face>/);
+    expect(xml.text).not.toMatch(/<type>/);
+    expect(xml.text).not.toContain("xsi:schemaLocation");
+    expect(xml.text).not.toContain("xmlns:xsi");
     expect(xml.text).toContain("Face");
     expect(xml.text).toContain("com.example.widget");
     expect(xml.text).toMatch(/width/);

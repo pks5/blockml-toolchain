@@ -18,17 +18,26 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:framework="org.blockml.bml.framework"
-  xmlns:type="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
 
   <name>Create</name>
   <type>buildercap:Create</type>
   <baseType>core:Capability</baseType>
   <is>Start a BomBuilder session from scratch</is>
-  <documentation>BomBuilder.create(options). Builds a draft BlockDefinition with canonical xmlns
-    bindings for the BML URI, xsi, the block package, and the baseType package.</documentation>
+  <documentation>
+    # Start a BomBuilder session from scratch
+
+    `BomBuilder.create(options)` builds a draft BlockDefinition with xmlns bindings
+    for the BML URI, the block package, and the baseType package.
+
+    - Sets `SourceInfo.rootForm` to `type` (doc:DocumentFormat preferred form)
+    - Omits `xmlns:xsi` and `xsi:schemaLocation` unless the caller adds them later
+  </documentation>
   <references>
     <see type="builder:CreateBlockOptions" relation="SeeAlso" />
     <see type="builder:BomBuilder" relation="SeeAlso" />
+    <see type="doc:DocumentFormat" relation="SeeAlso" />
   </references>
   <properties>
     <options type="builder:CreateBlockOptions">

@@ -22,6 +22,12 @@ export interface SourceInfo {
     schemaLocation?: string;
     /** Authored xsi:noNamespaceSchemaLocation when present. */
     noNamespaceSchemaLocation?: string;
+    /**
+     * Authored document root form (doc:DocumentFormat).
+     * `"block"` = legacy `<block>`; `"type"` = type-as-root tag.
+     * Omitted on hand-built BOM defaults to `"block"` on serialize.
+     */
+    rootForm?: "block" | "type";
 }
 /**
  * XML comment trivia bound to an element (B11).
