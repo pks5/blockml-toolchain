@@ -58,8 +58,7 @@
 
 `npx blockml validate`: **754 blocks, 0 errors, 0 warnings**. `inspect` resolves the block with no unresolved refs. The single `BML_STYLE_PREFER_MARKDOWN` recommendation on the documentation line matches the prior RandomBlock and other repo blocks; it's advisory, not an error.
 
-No changes to `MyTestTransformation` / `ModelTransformation` metadata or anything under `_meta/transform/`.
-</output>
+No changes to `MyTestTransformation` / `ModelTransformation` metadata or anything under `_meta/transform/`.</output>
           <completedAt>2026-09-08T01:07:22</completedAt>
           <task>
             <workflow:InstructionTask>
@@ -85,8 +84,10 @@ ModelTransformation metadata or files under _meta/transform/.</instructions>
             <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/RandomBlock.bml" />
           </changedFiles>
         </workflow:AgenticOperation>
-        <workflow:ToolOperation name="Validate" status="Pending" captureOutput="true" command="blockml">
+        <workflow:ToolOperation name="Validate" status="Running" captureOutput="true" command="blockml">
           <args>validate</args>
+          <startedAt>2026-09-08T01:07:24</startedAt>
+          <baseCommit>cb13cc98252dbaac5ec77c8ffbe0034dafb76a88</baseCommit>
         </workflow:ToolOperation>
       </composition>
     </operations>
