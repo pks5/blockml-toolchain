@@ -45,7 +45,9 @@ describe("blockml help pages", () => {
 
     const scan = await runCli(["scan", "--help"]);
     expect(scan.code).toBe(0);
-    expect(scan.stderr).toMatch(/When: list packages or types/);
+    expect(scan.stderr).toMatch(/When: list every package or type/);
+    expect(scan.stderr).toMatch(/scan type pkg\.\*\*/);
+    expect(scan.stderr).toMatch(/Quote tokens that contain/);
 
     const validate = await runCli(["validate", "--help"], ROOT);
     expect(validate.code).toBe(0);

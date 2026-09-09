@@ -40,18 +40,40 @@
            blockml scan type <selector>… [--json] [--src dir] [--libraries a,b]
            blockml scan --help
     
-    When: list packages or types that match Core selectors (not full-text search).
+    When: list every package or type in the corpus that matches one or more Core selectors.
+    Not full-text search — no score, no --limit, no index. Use search to find FQNs by words.
     
-    Corpus is the same as validate --all. Matching is PackageSelector / TypeSelector
-    parseValue + matches. scan type pkg.** includes types in that package and descendants.
-    scan package pkg.** is descendant packages only (not the starting package).
+    Corpus is the same as validate --all (live TypeRegistry). Matching is PackageSelector /
+    TypeSelector parseValue + matches. Multiple selectors are OR.
+    
+    Subcommands:
+      package   PackageSelector tokens → matching package identifiers
+      type      TypeSelector tokens → matching type FQNs
+    
+    Selectors:
+      Exact name is the most specific selector (a PackageIdentifier or TypeIdentifier).
+      * as a segment — exactly one segment. ** as a segment — one or more (1..n, not 0..n).
+      * inside a segment — characters in that segment only.
+    
+      scan type pkg.*         types directly in pkg
+      scan type pkg.**        types in pkg and all descendant packages
+      scan type pkg.**.Name   Name only in child packages of pkg (not pkg.Name)
+      scan package pkg.*      direct child packages (not pkg itself)
+      scan package pkg.**     descendant packages (not pkg itself)
+    
+    Quote tokens that contain * or ** so the shell does not expand them.
     
     Flags:
       --json        string[] of matching identifiers
       --src / --libraries   corpus overrides
     
-    Human lines: one PackageIdentifier or type FQN per line, sorted.
-    Quote selectors that contain * or ** so the shell does not expand them.
+    Human: one identifier per line, sorted. Empty: No matches. / [] . Invalid selector
+    or missing package|type / selectors: exit 2.
+    
+    Examples:
+      blockml scan type org.blockml.bml.core.Block
+      blockml scan type 'org.blockml.bml.core.**'
+      blockml scan package 'org.blockml.bml.*' --json
     
     Related: search (find FQNs by text), inspect (resolve a found FQN).
     ]]>

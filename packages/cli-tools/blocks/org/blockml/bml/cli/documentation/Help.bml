@@ -43,7 +43,7 @@
     Generic grep, find, and file reads remain allowed. They are not the first way into the model.
     
     Workflow:
-      task → search → FQNs → inspect (graph if structure) → targeted BML read → smallest BML edit → validate
+      task → search or scan → FQNs → inspect (graph if structure) → targeted BML read → smallest BML edit → validate
            → update companions to match (compile and/or edit)
     
     Commands:
