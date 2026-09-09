@@ -412,6 +412,7 @@ const blocks = [
       { name: "name", type: "type:Text", required: true },
       { name: "baseType", type: "type:Text", required: true },
       { name: "defaultType", type: "type:Text" },
+      { name: "documentations", type: "bomblock:DocumentationProseEntry[]" },
     ],
   },
   {

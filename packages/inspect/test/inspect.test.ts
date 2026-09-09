@@ -460,7 +460,9 @@ describe("inspectProject", () => {
         extra: [
           "  <documentation>box</documentation>",
           "  <genericTypes>",
-          '    <T baseType="core:Block" defaultType="test:Widget" />',
+          '    <T baseType="core:Block" defaultType="test:Widget">',
+          "      <documentation>payload type</documentation>",
+          "    </T>",
           "  </genericTypes>",
           "  <properties>",
           '    <item type="T"/>',
@@ -476,6 +478,7 @@ describe("inspectProject", () => {
         name: "T",
         baseType: { kind: "named", ref: "org.blockml.bml.core.Block" },
         defaultType: { kind: "named", ref: `${NS}.Widget` },
+        documentation: "payload type",
       },
     ]);
     const item = box?.properties?.find((m) => m.name === "item");

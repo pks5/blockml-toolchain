@@ -48,6 +48,9 @@
     • authoredPlacement stored for dual element|attribute forms (D9)
     • authoredCharacterDataForm for text vs CDATA (D8)
     • authoredNameChild / authoredTypeChild when child name / type elements are present
+    • genericTypes entries: name = element local name; baseType / defaultType attributes;
+    documentation children → GenericType.documentations (same prose shape as members;
+    not the enclosing Block's documentations[])
     • TrimText on character data: common leading indent stripped, then trim; a first line glued to the opening tag (no leading whitespace) is excluded from the prefix (B13)
     • Visibility prefixes stripped → logical name + visibility (B14 parse half)
     ]]>

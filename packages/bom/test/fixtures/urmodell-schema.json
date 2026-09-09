@@ -718,6 +718,11 @@
           "name": "defaultType",
           "type": "type:Text",
           "required": false
+        },
+        {
+          "name": "documentations",
+          "type": "bomblock:DocumentationProseEntry[]",
+          "required": false
         }
       ]
     },

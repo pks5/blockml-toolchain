@@ -963,12 +963,19 @@ function mapGenericTypes(element, ctx) {
     return elementChildren(element).map((c) => {
         const defaultType = getAttribute(c, "defaultType");
         const raw = getAttribute(c, "baseType") ?? getTextOrAttr(c) ?? "org.blockml.bml.core.Block";
+        const documentations = [];
+        for (const child of elementChildren(c)) {
+            if (elementLocalName(child) === "documentation") {
+                documentations.push(mapProseEntry(child, ctx));
+            }
+        }
         return {
             name: elementLocalName(c),
             baseType: withElementLocation(ctx.filePath, ctx.source, c, () => namedTypeFqn(raw, ctx, ctx.parentBlockType)),
             ...(defaultType !== undefined
                 ? { defaultType: resolveGenericDefaultType(defaultType, ctx) }
                 : {}),
+            ...(documentations.length > 0 ? { documentations } : {}),
         };
     });
 }

@@ -1289,6 +1289,12 @@ function mapGenericTypes(element: Element, ctx: MapContext): GenericType[] {
     const defaultType = getAttribute(c, "defaultType");
     const raw =
       getAttribute(c, "baseType") ?? getTextOrAttr(c) ?? "org.blockml.bml.core.Block";
+    const documentations: DocumentationProseEntry[] = [];
+    for (const child of elementChildren(c)) {
+      if (elementLocalName(child) === "documentation") {
+        documentations.push(mapProseEntry(child, ctx));
+      }
+    }
     return {
       name: elementLocalName(c),
       baseType: withElementLocation(ctx.filePath, ctx.source, c, () =>
@@ -1297,6 +1303,7 @@ function mapGenericTypes(element: Element, ctx: MapContext): GenericType[] {
       ...(defaultType !== undefined
         ? { defaultType: resolveGenericDefaultType(defaultType, ctx) }
         : {}),
+      ...(documentations.length > 0 ? { documentations } : {}),
     };
   });
 }

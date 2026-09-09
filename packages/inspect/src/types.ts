@@ -87,6 +87,8 @@ export interface InspectedGenericType {
   name: string;
   baseType: InspectTypeRef;
   defaultType?: InspectTypeRef;
+  documentation?: string;
+  documentationTruncated?: boolean;
 }
 
 export interface InspectedReference {

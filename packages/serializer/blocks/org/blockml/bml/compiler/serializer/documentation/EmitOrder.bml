@@ -49,6 +49,8 @@
     Inside containers:
     • properties/aggregations/associations/capabilities — members[] filtered by kind, BOM order
     • genericTypes/contracts/aliases/… — corresponding BOM array order
+    • genericTypes entry: self-close when only attributes; documentation children from
+    GenericType.documentations (same prose emit as members)
     • subBlocks/embeddedBlocks — subBlocks[] / embeddedBlocks[] order
     • Member element internals — V1 hardcoded from MemberDefinition.bml; V2 from Definition files
     

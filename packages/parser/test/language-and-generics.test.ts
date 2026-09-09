@@ -46,4 +46,35 @@ describe("genericTypes defaultType", () => {
     expect(generics[0]?.defaultType).toBe("org.blockml.bml.type.Text");
     expect(generics[1]?.defaultType).toBe("T");
   });
+
+  it("maps documentation children onto GenericType.documentations", () => {
+    const source = [
+      '<block xmlns="http://blockml.org/bml"',
+      ' xmlns:core="org.blockml.bml.core"',
+      ' xmlns:test="com.blockml.test.generics">',
+      "  <name>Host</name>",
+      "  <type>test:Host</type>",
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "  <genericTypes>",
+      '    <T baseType="core:ValueType">',
+      "      <documentation>Payload type for this host.</documentation>",
+      "    </T>",
+      '    <R baseType="core:Block" />',
+      "  </genericTypes>",
+      "</block>",
+    ].join("\n");
+    const result = parse(source, { filePath: "generic-docs.bml" });
+    expect(result.document).not.toBeNull();
+    const generics = result.document!.block.genericTypes ?? [];
+    expect(generics[0]?.documentations).toEqual([
+      expect.objectContaining({
+        namespace: "",
+        text: "Payload type for this host.",
+        languageFqn: "org.blockml.bml.language.English",
+      }),
+    ]);
+    expect(generics[1]?.documentations).toBeUndefined();
+    expect(result.document!.block.documentations).toBeUndefined();
+  });
 });

@@ -22,7 +22,7 @@
     Declared generic type parameter projection
   </is>
   <documentation>
-    One genericTypes entry from the inspected Block. baseType is the bound FQN. defaultType is the resolved default when authored (FQN or earlier parameter name).
+    One genericTypes entry from the inspected Block. baseType is the bound FQN. defaultType is the resolved default when authored (FQN or earlier parameter name). documentation is the first GenericType.documentations entry, truncated like Block and member documentation.
   </documentation>
   <properties>
     <name type="type:Text">
@@ -40,5 +40,15 @@
         Resolved default type when authored. (optional)
       </documentation>
     </defaultType>
+    <documentation type="type:Text">
+      <documentation>
+        First authored genericTypes documentation entry. (optional)
+      </documentation>
+    </documentation>
+    <documentationTruncated type="type:Boolean">
+      <documentation>
+        True when documentation was truncated. (optional)
+      </documentation>
+    </documentationTruncated>
   </properties>
 </inspect:InspectedGenericType>

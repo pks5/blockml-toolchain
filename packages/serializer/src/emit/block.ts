@@ -298,7 +298,17 @@ function emitBlockField(
           ]
             .filter(Boolean)
             .join(" ");
-          writer.line(`<${gt.name} ${attrs} />`);
+          if (gt.documentations?.length) {
+            writer.line(`<${gt.name} ${attrs}>`);
+            writer.pushDepth();
+            for (const d of gt.documentations) {
+              emitProse(writer, "documentation", d, ctx);
+            }
+            writer.popDepth();
+            writer.line(`</${gt.name}>`);
+          } else {
+            writer.line(`<${gt.name} ${attrs} />`);
+          }
         }
         writer.popDepth();
         writer.line("</genericTypes>");

@@ -32,6 +32,12 @@ export interface GenericType {
    * Concrete TypeExpression, or the name of an earlier sibling generic parameter.
    */
   defaultType?: string;
+  /**
+   * Authored documentation on this genericTypes entry
+   * (`def:GenericTypeDefinition.documentation`). Not part of the enclosing
+   * Block's documentations[].
+   */
+  documentations?: DocumentationProseEntry[];
 }
 
 export interface BlockDefinition {

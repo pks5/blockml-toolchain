@@ -42,5 +42,12 @@
         defaultType (optional). TS type: type:Text.
       </documentation>
     </defaultType>
+    <documentations type="bomblock:DocumentationProseEntry[]">
+      <documentation>
+        Technical documentation on this genericTypes entry — maps
+        def:GenericTypeDefinition.documentation. Lives on this GenericType, not on the
+        enclosing Block's documentations[]. (optional)
+      </documentation>
+    </documentations>
   </properties>
 </bomblock:GenericType>
