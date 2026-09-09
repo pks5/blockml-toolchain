@@ -1,14 +1,14 @@
 <!--Workspace Playground — MyTestTransformation
-  FQN: org.blockml.bml.workspace._meta.transform.running.T00039_MyTestTransformation_20260909T224653-->
-<running:T00039_MyTestTransformation_20260909T224653 xmlns="http://blockml.org/bml"
+  FQN: org.blockml.bml.workspace._meta.transform.succeeded.T00039_MyTestTransformation_20260909T224653-->
+<succeeded:T00039_MyTestTransformation_20260909T224653 xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
   xmlns:playground="org.blockml.bml.workspace.playground"
-  xmlns:running="org.blockml.bml.workspace._meta.transform.running">
+  xmlns:succeeded="org.blockml.bml.workspace._meta.transform.succeeded">
 
   <baseType>
-    workflow:ModelTransformation(running:T00039_MyTestTransformation_20260909T224653.Parameters, type:Text)
+    workflow:ModelTransformation(succeeded:T00039_MyTestTransformation_20260909T224653.Parameters, type:Text)
   </baseType>
   <is>
     A pending ModelTransformation that creates a random playground Block
@@ -18,7 +18,7 @@
       <value>A transformation that creates a random playground Block</value>
     </description>
     <status override="true" type="workflow:ExecutionStatus">
-      <value>Running</value>
+      <value>Succeeded</value>
     </status>
     <createdAt override="true" type="type:DateTime">
       <value>2026-09-06T00:00:00</value>
@@ -26,7 +26,7 @@
     <template override="true" type="type:Boolean">
       <value>false</value>
     </template>
-    <parameters override="true" type="running:T00039_MyTestTransformation_20260909T224653.Parameters">
+    <parameters override="true" type="succeeded:T00039_MyTestTransformation_20260909T224653.Parameters">
       <value>{targetBlock:"org.blockml.bml.workspace.playground.RandomBlock"}</value>
     </parameters>
     <executionId override="true" type="type:UUID">
@@ -41,6 +41,12 @@
     <baseCommit override="true" type="type:Text">
       <value>6963a3c94d292dd8cd5296555c957e04e134b3e9</value>
     </baseCommit>
+    <completedAt override="true" type="type:DateTime">
+      <value>2026-09-09T22:48:20</value>
+    </completedAt>
+    <duration override="true" type="type:Duration">
+      <value>PT1M28.704S</value>
+    </duration>
   </properties>
   <aggregations>
     <operations override="true">
@@ -101,8 +107,7 @@ recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/
 recommendation BML_STYLE_PREFER_CDATA /Users/pksoftware/workspace-fh/blockml/packages/serializer/blocks/org/blockml/bml/compiler/serializer/capability/EscapeAttr.bml:30 — Use CDATA instead of XML entity escaping in documentation.
 recommendation BML_STYLE_PREFER_CDATA /Users/pksoftware/workspace-fh/blockml/packages/serializer/blocks/org/blockml/bml/compiler/serializer/capability/EscapeText.bml:30 — Use CDATA instead of XML entity escaping in documentation.
 recommendation BML_STYLE_PREFER_MARKDOWN /Users/pksoftware/workspace-fh/blockml/packages/transformer/blocks/org/blockml/bml/transformer/capability/ToolExecutor.bml:16 — Structure long documentation with markdown (headings, lists, or paragraphs).
-Validation succeeded. Tested 761 blocks, 0 with errors, 0 warnings, 7 recommendations.
-</output>
+Validation succeeded. Tested 761 blocks, 0 with errors, 0 warnings, 7 recommendations.</output>
           <completedAt>2026-09-09T22:48:19</completedAt>
         </workflow:ToolOperation>
       </composition>
@@ -121,4 +126,4 @@ Validation succeeded. Tested 761 blocks, 0 with errors, 0 warnings, 7 recommenda
       </properties>
     </Parameters>
   </subBlocks>
-</running:T00039_MyTestTransformation_20260909T224653>
+</succeeded:T00039_MyTestTransformation_20260909T224653>
