@@ -18,8 +18,7 @@ export interface ClaudeCodeAgentOptions {
     verbose?: boolean;
     permissions?: ClaudeTransformPermissions;
 }
-export declare function buildClaudeExecutionPrompt(taskSnippet: string): string;
-export declare function ensureAgentsMarkdown(workspaceRoot: string): string;
+export declare function composeAgentPrompt(metaPrompt: string | undefined, taskSnippet: string): string;
 export declare class ClaudeCodeAgent implements TransformationAgent {
     private readonly command;
     private readonly runProcess;

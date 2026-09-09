@@ -21,10 +21,11 @@
     throws and does not start an agent. Emits the closed instances as a
     BML snippet whose element names are type FQNs (no xmlns prefixes).
     Performs `transformercap:ExecuteTask` in a new isolated agent
-    process: the agent executes `Task.run` on that snippet. Returns
-    agent stdout as the output candidate. The envelope decides whether
-    to persist that text (`captureOutput`) and always collects
-    `changedFiles` from git.
+    process: prepend `AgenticOperation.metaPrompt` (type default, or
+    the instance override; empty: omit) to the snippet. The agent
+    executes `Task.run` on that snippet. Returns agent stdout as the
+    output candidate. The envelope decides whether to persist that
+    text (`captureOutput`) and always collects `changedFiles` from git.
     
     Must not write ModelOperation envelope fields, commit, or write
     files under `_meta/transform/`. Does not write the closed snippet
@@ -39,11 +40,12 @@
   <capabilities>
     <execute override="true" type="cap:Action">
       <documentation>
-        Close the Task, hand the FQN snippet to an isolated agent, and
-        return agent stdout as the output candidate.
+        Close the Task, prepend the operation metaPrompt, hand that
+        prompt to an isolated agent, and return agent stdout as the
+        output candidate.
       </documentation>
       <implementation language="lang:English">
-        <![CDATA[Close the Task instance. Ask the agent to execute Task.run on the closed snippet. Return stdout as the output candidate.]]>
+        <![CDATA[Close the Task instance. Prepend this operation's metaPrompt to the closed snippet. Hand that prompt to the agent. Return stdout as the output candidate.]]>
       </implementation>
     </execute>
   </capabilities>

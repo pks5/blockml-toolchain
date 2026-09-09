@@ -1,5 +1,5 @@
 import { CLAUDE_REFLECT_PERMISSIONS, claudePermissionCliArgs, } from "./claude-permissions.js";
-import { ensureAgentsMarkdown, runClaudeProcess, } from "./claude-code-agent.js";
+import { runClaudeProcess, } from "./claude-code-agent.js";
 const TRACE_CHAR_LIMIT = 24_000;
 export function buildClaudeReflectPrompt(executionFqn, operationIndex, trace) {
     const changed = trace.changedFiles.length > 0
@@ -63,13 +63,10 @@ export class ClaudeReflectAgent {
         this.permissions = options.permissions ?? CLAUDE_REFLECT_PERMISSIONS;
     }
     async reflect(request) {
-        const agents = ensureAgentsMarkdown(request.workspaceRoot);
         const prompt = buildClaudeReflectPrompt(request.executionFqn, request.operationIndex, request.trace);
         const args = [
             "-p",
             prompt,
-            "--append-system-prompt",
-            agents,
             ...claudePermissionCliArgs(this.permissions),
         ];
         if (this.verbose) {

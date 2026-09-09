@@ -5,7 +5,6 @@ import {
   type ClaudeTransformPermissions,
 } from "./claude-permissions.js";
 import {
-  ensureAgentsMarkdown,
   runClaudeProcess,
   type ClaudeProcessRunner,
 } from "./claude-code-agent.js";
@@ -102,7 +101,6 @@ export class ClaudeReflectAgent implements ReflectionAgent {
   }
 
   async reflect(request: ReflectRequest): Promise<ReflectResult> {
-    const agents = ensureAgentsMarkdown(request.workspaceRoot);
     const prompt = buildClaudeReflectPrompt(
       request.executionFqn,
       request.operationIndex,
@@ -111,8 +109,6 @@ export class ClaudeReflectAgent implements ReflectionAgent {
     const args = [
       "-p",
       prompt,
-      "--append-system-prompt",
-      agents,
       ...claudePermissionCliArgs(this.permissions),
     ];
     if (this.verbose) {

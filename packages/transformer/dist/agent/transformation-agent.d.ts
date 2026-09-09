@@ -1,6 +1,8 @@
 export interface AgentExecutionRequest {
     workspaceRoot: string;
     taskSnippet: string;
+    /** AgenticOperation.metaPrompt. Empty: snippet only. */
+    metaPrompt?: string;
 }
 export type AgentExecutionResult = {
     success: true;

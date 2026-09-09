@@ -17,8 +17,10 @@
     # Execute Task
     
     Inner work of `transformercap:AgenticExecutor`. Receive the closed Task
-    BML fragment and the repository. Execute `run` on that Task
-    instance in a new isolated agent process. Look up `Task.run`, the
+    BML fragment, the operation's `metaPrompt`, and the repository.
+    The executor prepends `AgenticOperation.metaPrompt` to the snippet
+    (empty: snippet only) and starts a new isolated agent process.
+    Execute `run` on that Task instance. Look up `Task.run`, the
     concrete `_execute`, and nested Prerequisite / Rule / Criterion
     implementations in the BlockML model (search / inspect). Change BML
     model source so that Task is done. Return agent stdout as the
@@ -27,7 +29,9 @@
     
     The agent does not receive the AgenticOperation or the Running
     ModelTransformation identity. Expressions on the snippet are
-    already literals.
+    already literals. Shared project rules come from the repository
+    instruction files (CLAUDE.md imports AGENTS.md), not from this
+    capability.
     
     - Must not write ModelTransformation metadata (including operations) or any
       file under `_meta/transform/`.

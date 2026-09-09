@@ -7,7 +7,11 @@ import type {
   LiteralValue,
   PropertyDefinition,
 } from "@blockml/bom";
-import { collectBaseTypeChain, type TypeRegistry } from "@blockml/framework";
+import {
+  collectBaseTypeChain,
+  resolveEffectiveMembers,
+  type TypeRegistry,
+} from "@blockml/framework";
 import {
   BOOLEAN_TYPE_FQN,
   DATETIME_TYPE_FQN,
@@ -153,6 +157,51 @@ export function getOperationPropertyLiteral(
 ): unknown | undefined {
   const value = instance.memberValues[name];
   if (value?.kind === "literal") {
+    return value.value;
+  }
+  return undefined;
+}
+
+/**
+ * Instance literal when authored (empty string is a valid override).
+ * Otherwise the effective type default.
+ */
+export function getEffectiveOperationText(
+  instance: BlockInstance,
+  name: string,
+  registry: TypeRegistry,
+): string | undefined {
+  if (Object.hasOwn(instance.memberValues, name)) {
+    const authored = getOperationPropertyLiteral(instance, name);
+    if (typeof authored === "string") {
+      return authored;
+    }
+    if (authored === undefined || authored === null) {
+      return "";
+    }
+    return String(authored);
+  }
+  return getTypePropertyTextDefault(instance.typeFqn, name, registry);
+}
+
+export function getTypePropertyTextDefault(
+  typeFqn: string,
+  name: string,
+  registry: TypeRegistry,
+): string | undefined {
+  const typeDoc = registry.get(typeFqn);
+  if (!typeDoc) {
+    return undefined;
+  }
+  const member = resolveEffectiveMembers(typeDoc.block, registry).find(
+    (entry): entry is PropertyDefinition =>
+      entry.kind === "property" && entry.name === name,
+  );
+  if (!member) {
+    return undefined;
+  }
+  const value = member.value ?? member.values?.[0]?.value;
+  if (value?.kind === "literal" && typeof value.value === "string") {
     return value.value;
   }
   return undefined;

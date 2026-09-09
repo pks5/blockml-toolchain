@@ -1,4 +1,4 @@
-import { collectBaseTypeChain } from "@blockml/framework";
+import { collectBaseTypeChain, resolveEffectiveMembers, } from "@blockml/framework";
 import { BOOLEAN_TYPE_FQN, DATETIME_TYPE_FQN, DURATION_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, AGENTIC_OPERATION_FQN, MODEL_OPERATION_FQN, TOOL_OPERATION_FQN, MODEL_TRANSFORMATION_FQN, PARAMETER_MAPPING_FQN, PROPERTY_IDENTIFIER_FQN, RESULT_MAPPING_FQN, TEXT_TYPE_FQN, UUID_TYPE_FQN, } from "./constants.js";
 export function isModelTransformation(block, registry) {
     if (block.type === MODEL_TRANSFORMATION_FQN || block.baseType === MODEL_TRANSFORMATION_FQN) {
@@ -69,6 +69,38 @@ export function hasOperationProperty(instance, name) {
 export function getOperationPropertyLiteral(instance, name) {
     const value = instance.memberValues[name];
     if (value?.kind === "literal") {
+        return value.value;
+    }
+    return undefined;
+}
+/**
+ * Instance literal when authored (empty string is a valid override).
+ * Otherwise the effective type default.
+ */
+export function getEffectiveOperationText(instance, name, registry) {
+    if (Object.hasOwn(instance.memberValues, name)) {
+        const authored = getOperationPropertyLiteral(instance, name);
+        if (typeof authored === "string") {
+            return authored;
+        }
+        if (authored === undefined || authored === null) {
+            return "";
+        }
+        return String(authored);
+    }
+    return getTypePropertyTextDefault(instance.typeFqn, name, registry);
+}
+export function getTypePropertyTextDefault(typeFqn, name, registry) {
+    const typeDoc = registry.get(typeFqn);
+    if (!typeDoc) {
+        return undefined;
+    }
+    const member = resolveEffectiveMembers(typeDoc.block, registry).find((entry) => entry.kind === "property" && entry.name === name);
+    if (!member) {
+        return undefined;
+    }
+    const value = member.value ?? member.values?.[0]?.value;
+    if (value?.kind === "literal" && typeof value.value === "string") {
         return value.value;
     }
     return undefined;

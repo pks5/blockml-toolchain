@@ -146,6 +146,7 @@ export function pendingExecutionXml(opts: {
   executionId?: string;
   extraRefs?: string;
   operationInstructions?: readonly string[];
+  metaPrompt?: string;
   template?: boolean;
   parameterFields?: readonly string[];
   pendingParameters?: string;
@@ -230,6 +231,10 @@ export function pendingExecutionXml(opts: {
     opts.captureOutput === true
       ? [`          <captureOutput>true</captureOutput>`]
       : [];
+  const metaPrompt =
+    opts.metaPrompt !== undefined
+      ? [`          <metaPrompt>${opts.metaPrompt}</metaPrompt>`]
+      : [];
   const mappings = resultMappingsXml(opts.resultMappings);
   const operations = opts.tool
     ? [
@@ -248,6 +253,7 @@ export function pendingExecutionXml(opts: {
             `        <workflow:AgenticOperation>`,
             `          <status>Pending</status>`,
             ...capture,
+            ...metaPrompt,
             ...(index === instructions.length - 1 ? mappings : []),
             `          <task>`,
             `            <workflow:InstructionTask instructions="${text}" />`,

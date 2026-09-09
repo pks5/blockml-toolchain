@@ -1,13 +1,10 @@
 import { spawn } from "node:child_process";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
 import {
   CLAUDE_EXECUTE_PERMISSIONS,
   claudePermissionCliArgs,
   type ClaudeTransformPermissions,
 } from "./claude-permissions.js";
 import { ClaudeLiveFormatter } from "./claude-stream.js";
-import { DEFAULT_AGENTS_MD } from "./default-agents.js";
 import type {
   AgentExecutionRequest,
   AgentExecutionResult,
@@ -38,36 +35,16 @@ export interface ClaudeCodeAgentOptions {
   permissions?: ClaudeTransformPermissions;
 }
 
-export function buildClaudeExecutionPrompt(taskSnippet: string): string {
-  return [
-    "You are the Execute step of a BlockML transformer pipeline.",
-    "",
-    "This is the closed Task instance to perform. Expressions are already",
-    "resolved to literals. Execute run on this instance. Look up Task.run,",
-    "the concrete _execute, and any nested Prerequisite.require, Rule.apply,",
-    "or Criterion.isSatisfied implementations in the BlockML model",
-    "(search / inspect). Treat those implementations as the program.",
-    "",
-    taskSnippet.trim(),
-    "",
-    "Change BML model source so the Task is done. Change nothing else.",
-    "",
-    "Do not modify the ModelTransformation block, including its ModelOperations.",
-    "Do not write files under any _meta/transform/ directory.",
-    "Do not set changedFiles, output, completedAt, baseCommit, status, or exception,",
-    "or move the execution between pending, running, succeeded, and failed.",
-    "",
-    "Use the BlockML model, installed libraries, Search, validation tooling,",
-    "and repository contents to understand and perform the Task.",
-  ].join("\n");
-}
-
-export function ensureAgentsMarkdown(workspaceRoot: string): string {
-  const path = join(workspaceRoot, "AGENTS.md");
-  if (!existsSync(path)) {
-    writeFileSync(path, DEFAULT_AGENTS_MD, "utf8");
+export function composeAgentPrompt(
+  metaPrompt: string | undefined,
+  taskSnippet: string,
+): string {
+  const snippet = taskSnippet.trim();
+  const meta = metaPrompt?.trim() ?? "";
+  if (!meta) {
+    return snippet;
   }
-  return readFileSync(path, "utf8");
+  return `${meta}\n\n${snippet}`;
 }
 
 export class ClaudeCodeAgent implements TransformationAgent {
@@ -84,13 +61,10 @@ export class ClaudeCodeAgent implements TransformationAgent {
   }
 
   async execute(request: AgentExecutionRequest): Promise<AgentExecutionResult> {
-    const agents = ensureAgentsMarkdown(request.workspaceRoot);
-    const prompt = buildClaudeExecutionPrompt(request.taskSnippet);
+    const prompt = composeAgentPrompt(request.metaPrompt, request.taskSnippet);
     const args = [
       "-p",
       prompt,
-      "--append-system-prompt",
-      agents,
       ...claudePermissionCliArgs(this.permissions),
     ];
     if (this.verbose) {

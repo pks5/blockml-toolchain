@@ -2,7 +2,10 @@ import { bootstrapFullProjectRegistry } from "@blockml/framework";
 import type { TransformationAgent } from "../agent/transformation-agent.js";
 import { closeOperationTask } from "../execution/close-task.js";
 import { TransformError } from "../execution/errors.js";
-import { getOperationInstance } from "../execution/properties.js";
+import {
+  getEffectiveOperationText,
+  getOperationInstance,
+} from "../execution/properties.js";
 import type {
   OperationExecuteRequest,
   OperationExecuteResult,
@@ -13,9 +16,11 @@ export class AgenticExecutor implements OperationExecutor {
   constructor(private readonly agent: TransformationAgent) {}
 
   async execute(request: OperationExecuteRequest): Promise<OperationExecuteResult> {
+    const closed = closeAgenticWork(request);
     const result = await this.agent.execute({
       workspaceRoot: request.workspaceRoot,
-      taskSnippet: closedTaskSnippet(request),
+      taskSnippet: closed.taskSnippet,
+      metaPrompt: closed.metaPrompt,
     });
     if (!result.success) {
       return {
@@ -31,7 +36,10 @@ export class AgenticExecutor implements OperationExecutor {
   }
 }
 
-function closedTaskSnippet(request: OperationExecuteRequest): string {
+function closeAgenticWork(request: OperationExecuteRequest): {
+  taskSnippet: string;
+  metaPrompt: string;
+} {
   const { registry } = bootstrapFullProjectRegistry({
     rootDir: request.workspaceRoot,
   });
@@ -53,5 +61,8 @@ function closedTaskSnippet(request: OperationExecuteRequest): string {
       `Running ModelTransformation has no ModelOperation at index ${request.operationIndex}`,
     );
   }
-  return closeOperationTask(operation, document.block);
+  return {
+    taskSnippet: closeOperationTask(operation, document.block),
+    metaPrompt: getEffectiveOperationText(operation, "metaPrompt", registry) ?? "",
+  };
 }

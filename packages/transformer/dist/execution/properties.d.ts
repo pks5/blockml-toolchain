@@ -13,6 +13,12 @@ export declare function operationHasTask(instance: BlockInstance): boolean;
 export declare function operationHasAggregation(instance: BlockInstance, name: string): boolean;
 export declare function hasOperationProperty(instance: BlockInstance, name: string): boolean;
 export declare function getOperationPropertyLiteral(instance: BlockInstance, name: string): unknown | undefined;
+/**
+ * Instance literal when authored (empty string is a valid override).
+ * Otherwise the effective type default.
+ */
+export declare function getEffectiveOperationText(instance: BlockInstance, name: string, registry: TypeRegistry): string | undefined;
+export declare function getTypePropertyTextDefault(typeFqn: string, name: string, registry: TypeRegistry): string | undefined;
 export declare function getOperationStringList(instance: BlockInstance, name: string): string[] | undefined;
 export declare function getOperationStatus(instance: BlockInstance): string | undefined;
 export declare function allOperationsSucceeded(block: BlockDefinition, registry: TypeRegistry): boolean;

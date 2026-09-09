@@ -77,10 +77,13 @@
             Lookup by the instance type FQN (most specific match).
             Default AgenticExecutor (transformercap:ExecuteTask): close
             the Task instance (all expressions become literals; element
-            names are type FQNs). New isolated agent process receives
-            only that snippet and executes Task.run. Does not receive
-            the AgenticOperation or Running ModelTransformation
-            identity. May change BML model source. Returns output text.
+            names are type FQNs). Prepend AgenticOperation.metaPrompt
+            (type default, or instance override; empty: omit) to that
+            snippet. New isolated agent process receives that prompt
+            and executes Task.run. Does not receive the AgenticOperation
+            or Running ModelTransformation identity. Shared project
+            rules load from CLAUDE.md (@AGENTS.md), not a host-injected
+            meta prompt. May change BML model source. Returns output text.
             Must not write ModelTransformation metadata (including
             operations) or files under _meta/transform/. Does not
             commit; model changes stay uncommitted until Persist.

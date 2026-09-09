@@ -21,7 +21,8 @@
     `exception`) are inherited.
     `task` is required while pending. The host closes the Task instance
     against the ModelTransformation context (every expression becomes a
-    literal) and hands that prefix-free BML fragment to the agent. The
+    literal) and prepends this operation's `metaPrompt` to that
+    prefix-free BML fragment. Empty `metaPrompt`: snippet only. The
     agent interprets `Task.run`; it does not see this envelope. Default
     executor: isolated agent process; output candidate is agent stdout.
   </documentation>
@@ -30,6 +31,17 @@
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="transformercap:AgenticExecutor" relation="SeeAlso" />
   </references>
+  <properties>
+    <metaPrompt type="type:Text">
+      <documentation>
+        Text the executor prepends to the closed Task snippet when
+        starting the agent. Type default frames the snippet as
+        Task.run. Override per operation when a different framing is
+        required. Empty: snippet only.
+      </documentation>
+      <value>Execute Task.run on this closed instance:</value>
+    </metaPrompt>
+  </properties>
   <aggregations>
     <task type="workflow:Task">
       <documentation>

@@ -1,12 +1,9 @@
-import { mkdirSync, readFileSync, rmSync } from "node:fs";
-import { join } from "node:path";
+import { mkdirSync, rmSync } from "node:fs";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
   ClaudeCodeAgent,
-  buildClaudeExecutionPrompt,
-  ensureAgentsMarkdown,
+  composeAgentPrompt,
 } from "../src/agent/claude-code-agent.js";
-import { DEFAULT_AGENTS_MD } from "../src/agent/default-agents.js";
 import { CLAUDE_EXECUTE_PERMISSIONS } from "../src/agent/claude-permissions.js";
 import { fixtureTempDir } from "./fixture.js";
 
@@ -18,6 +15,22 @@ const CLOSED_TASK = [
   "</org.blockml.bml.transformer.workflow.InstructionTask>",
 ].join("\n");
 
+const DEFAULT_META = "Execute Task.run on this closed instance:";
+
+describe("composeAgentPrompt", () => {
+  it("prepends a non-empty metaPrompt to the closed snippet", () => {
+    expect(composeAgentPrompt(DEFAULT_META, CLOSED_TASK)).toBe(
+      `${DEFAULT_META}\n\n${CLOSED_TASK}`,
+    );
+  });
+
+  it("returns only the snippet when metaPrompt is empty", () => {
+    expect(composeAgentPrompt("", CLOSED_TASK)).toBe(CLOSED_TASK);
+    expect(composeAgentPrompt("   ", CLOSED_TASK)).toBe(CLOSED_TASK);
+    expect(composeAgentPrompt(undefined, CLOSED_TASK)).toBe(CLOSED_TASK);
+  });
+});
+
 describe("ClaudeCodeAgent", () => {
   beforeEach(() => {
     rmSync(TMP, { recursive: true, force: true });
@@ -28,7 +41,7 @@ describe("ClaudeCodeAgent", () => {
     rmSync(TMP, { recursive: true, force: true });
   });
 
-  it("writes AGENTS.md when missing and includes the closed Task snippet in the prompt", async () => {
+  it("passes metaPrompt plus the closed Task snippet and no system-prompt injection", async () => {
     let captured: {
       command: string;
       args: string[];
@@ -44,14 +57,16 @@ describe("ClaudeCodeAgent", () => {
     const result = await agent.execute({
       workspaceRoot: TMP,
       taskSnippet: CLOSED_TASK,
+      metaPrompt: DEFAULT_META,
     });
     expect(result).toEqual({ success: true, stdout: "ok", stderr: "" });
-    expect(DEFAULT_AGENTS_MD).toContain("inspect");
-    expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe(DEFAULT_AGENTS_MD);
     expect(captured?.cwd).toBe(TMP);
     expect(captured?.command).toBe("claude");
     expect(captured?.args).toContain("-p");
-    expect(captured?.args.some((arg) => arg.includes(CLOSED_TASK))).toBe(true);
+    expect(captured?.args).not.toContain("--append-system-prompt");
+    expect(captured?.args).not.toContain("--bare");
+    const prompt = captured?.args.find((arg, i) => captured?.args[i - 1] === "-p");
+    expect(prompt).toBe(`${DEFAULT_META}\n\n${CLOSED_TASK}`);
     expect(captured?.args).toContain("--permission-mode");
     expect(captured?.args).toContain("bypassPermissions");
     expect(captured?.args).toContain("--allowedTools");
@@ -65,16 +80,22 @@ describe("ClaudeCodeAgent", () => {
     expect(captured?.args).not.toContain("Bash");
     expect(captured?.args).not.toContain("--verbose");
     expect(captured?.live).toBeUndefined();
-    const prompt = buildClaudeExecutionPrompt(CLOSED_TASK);
-    expect(prompt).toContain(CLOSED_TASK);
-    expect(prompt).toContain("Execute run");
-    expect(prompt).toContain("Task.run");
-    expect(prompt).not.toContain("Task instructions:");
-    expect(prompt).not.toContain("Running ModelOperation");
-    expect(prompt).toContain("Execute step");
-    expect(prompt).toContain("Change BML model source");
-    expect(prompt).toContain("Do not modify the ModelTransformation block");
-    expect(prompt).toContain("_meta/transform/");
+  });
+
+  it("passes only the snippet when metaPrompt is empty", async () => {
+    let prompt: string | undefined;
+    const agent = new ClaudeCodeAgent({
+      runProcess: async (request) => {
+        prompt = request.args.find((arg, i) => request.args[i - 1] === "-p");
+        return { exitCode: 0, stdout: "", stderr: "" };
+      },
+    });
+    await agent.execute({
+      workspaceRoot: TMP,
+      taskSnippet: CLOSED_TASK,
+      metaPrompt: "",
+    });
+    expect(prompt).toBe(CLOSED_TASK);
   });
 
   it("streams a verbose Claude session with stream-json", async () => {
@@ -95,14 +116,6 @@ describe("ClaudeCodeAgent", () => {
     expect(captured?.args).toContain("--output-format");
     expect(captured?.args).toContain("stream-json");
     expect(captured?.args).toContain("--include-partial-messages");
-  });
-
-  it("does not overwrite an existing AGENTS.md", async () => {
-    const existing = "# Custom instructions\n";
-    const { writeFileSync } = await import("node:fs");
-    writeFileSync(join(TMP, "AGENTS.md"), existing);
-    ensureAgentsMarkdown(TMP);
-    expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe(existing);
   });
 
   it("surfaces a non-zero Claude exit as failure", async () => {

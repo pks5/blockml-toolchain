@@ -42,8 +42,7 @@ export type {
 } from "./agent/reflection-agent.js";
 export {
   ClaudeCodeAgent,
-  buildClaudeExecutionPrompt,
-  ensureAgentsMarkdown,
+  composeAgentPrompt,
   runClaudeProcess,
 } from "./agent/claude-code-agent.js";
 export {

@@ -11,7 +11,7 @@ export type { WorktreeTrace } from "./pipeline/worktree-trace.js";
 export type { StageContext, TransformStage, TransformPipeline, PreparedExecution, OperationBoundExecution, ExecutionTrace, ExecutedWork, Reflection, PersistedExecution, } from "./pipeline/types.js";
 export type { TransformationAgent, AgentExecutionRequest, AgentExecutionResult, } from "./agent/transformation-agent.js";
 export type { ReflectionAgent, ReflectRequest, ReflectResult, } from "./agent/reflection-agent.js";
-export { ClaudeCodeAgent, buildClaudeExecutionPrompt, ensureAgentsMarkdown, runClaudeProcess, } from "./agent/claude-code-agent.js";
+export { ClaudeCodeAgent, composeAgentPrompt, runClaudeProcess, } from "./agent/claude-code-agent.js";
 export { ClaudeReflectAgent, buildClaudeReflectPrompt, parseReflectionOutput, } from "./agent/claude-reflect-agent.js";
 export type { ClaudeReflectAgentOptions } from "./agent/claude-reflect-agent.js";
 export { CLAUDE_EXECUTE_PERMISSIONS, CLAUDE_REFLECT_PERMISSIONS, CLAUDE_TRANSFORM_PERMISSIONS, claudePermissionCliArgs, } from "./agent/claude-permissions.js";
