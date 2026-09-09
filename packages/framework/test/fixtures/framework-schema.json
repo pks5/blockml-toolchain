@@ -942,6 +942,82 @@
       }
     },
     {
+      "name": "EvaluateCapability",
+      "tsExport": "evaluateCapability",
+      "fqn": "org.blockml.bml.framework.capability.EvaluateCapability",
+      "inputs": [
+        {
+          "name": "typeFqn",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "capabilityName",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "args",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
+      "name": "ScanTypes",
+      "tsExport": "scanTypes",
+      "fqn": "org.blockml.bml.framework.capability.ScanTypes",
+      "inputs": [
+        {
+          "name": "selectors",
+          "type": "type:Text[]",
+          "required": true
+        },
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "hits",
+        "type": "type:Text[]",
+        "required": true
+      }
+    },
+    {
+      "name": "ScanPackages",
+      "tsExport": "scanPackages",
+      "fqn": "org.blockml.bml.framework.capability.ScanPackages",
+      "inputs": [
+        {
+          "name": "selectors",
+          "type": "type:Text[]",
+          "required": true
+        },
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "hits",
+        "type": "type:Text[]",
+        "required": true
+      }
+    },
+    {
       "name": "ProjectSourceRoots",
       "tsExport": "projectSourceRoots",
       "fqn": "org.blockml.bml.framework.capability.ProjectSourceRoots",

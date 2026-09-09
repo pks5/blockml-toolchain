@@ -10,12 +10,13 @@ import { diagnosticKind, formatCliOutput, pushLines, writeCliOutput, } from "./c
 import { loadConfig } from "./load-config.js";
 import { projectLibraryPackageDirs, projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
 import { runSearch } from "./run-search.js";
+import { runScan } from "./run-scan.js";
 import { runGraph } from "./run-graph.js";
 import { runInspect } from "./run-inspect.js";
 import { runNew } from "./run-new.js";
 import { defaultTransformAgent, runTransform } from "./run-transform.js";
 import { writeOutputFiles } from "./write-output.js";
-import { GRAPH_USAGE, INSPECT_USAGE, SEARCH_USAGE, USAGE, helpFor, } from "./help.js";
+import { GRAPH_USAGE, INSPECT_USAGE, SCAN_USAGE, SEARCH_USAGE, USAGE, helpFor, } from "./help.js";
 function workspaceRoot(from) {
     let dir = resolve(from);
     for (;;) {
@@ -195,6 +196,14 @@ export function parseArgs(argv) {
                 }
                 else if (result.subcommand === "apply" && !result.executionFqn) {
                     result.executionFqn = flag;
+                }
+            }
+            else if (result.command === "scan") {
+                if (!result.subcommand) {
+                    result.subcommand = flag;
+                }
+                else {
+                    result.selectors = result.selectors ? [...result.selectors, flag] : [flag];
                 }
             }
             else if (result.command === "inspect") {
@@ -697,6 +706,18 @@ async function executeCli(argv, cwd, options = {}) {
                 return { code: 2, lines };
             }
             const code = await runGraph(parsed, cwd, config, lines, formatDiagnostic, GRAPH_USAGE);
+            return { code, lines };
+        }
+        if (parsed.command === "scan") {
+            let config;
+            try {
+                config = loadConfig(cwd);
+            }
+            catch (e) {
+                pushLines(lines, e instanceof Error ? e.message : String(e), "error");
+                return { code: 2, lines };
+            }
+            const code = runScan(parsed, cwd, config, lines, SCAN_USAGE);
             return { code, lines };
         }
         if (parsed.command === "inspect") {

@@ -37,6 +37,7 @@
     • resetBootstrapTargets()
     • bootstrapProjectTypeRegistry(options) → BootstrapResult
     • runSearch via blockml search (delegates to @blockml/search)
+    • runScan via blockml scan (delegates to fwcap:ScanTypes / ScanPackages)
     • runGraph via blockml graph (delegates to @blockml/graph)
     • runInspect via blockml inspect (delegates to @blockml/inspect)
     • runNew via blockml new (delegates to @blockml/builder)

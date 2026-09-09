@@ -21,7 +21,7 @@
     Command names and V1 implementation status
   </is>
   <documentation>
-    V1 implements validate, compile, search, graph, inspect, transform, and new. Later: init, watch, activate-config.
+    V1 implements validate, compile, search, scan, graph, inspect, transform, and new. Later: init, watch, activate-config.
   </documentation>
   <properties>
     <validate type="type:Boolean">
@@ -64,6 +64,11 @@
         true — implemented in V1.
       </documentation>
     </inspect>
+    <scan type="type:Boolean">
+      <documentation>
+        true — implemented in V1.
+      </documentation>
+    </scan>
     <watch type="type:Boolean">
       <documentation>
         false — planned.

@@ -40,6 +40,7 @@
     - Lexical only — no `this.min` / `this.max`, no TypeRegistry existence
   </documentation>
   <references>
+    <see type="fwcap:EvaluateCapability" relation="SeeAlso" />
     <see type="fwcap:ResolveEffectiveMembers" relation="SeeAlso" />
     <see type="fwcap:ValidateTypes" relation="SeeAlso" />
   </references>

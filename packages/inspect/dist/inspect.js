@@ -126,6 +126,13 @@ function projectGenericTypes(params, bindings) {
         if (defaultType) {
             entry.defaultType = defaultType;
         }
+        const documentation = firstDocumentation(param.documentations);
+        if (documentation) {
+            entry.documentation = documentation.text;
+            if (documentation.truncated) {
+                entry.documentationTruncated = true;
+            }
+        }
         return entry;
     });
 }

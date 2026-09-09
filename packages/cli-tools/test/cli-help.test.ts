@@ -11,6 +11,7 @@ describe("blockml help pages", () => {
     expect(flag.stderr).toMatch(/Usage: blockml/);
     expect(flag.stderr).toMatch(/Workflow:/);
     expect(flag.stderr).toMatch(/search\s+where something is/);
+    expect(flag.stderr).toMatch(/scan\s+which packages or types match selectors/);
     expect(flag.stderr).toMatch(/inspect\s+give me this Block already resolved/);
     expect(flag.stderr).toMatch(/graph\s+how it connects/);
     expect(flag.stderr).toMatch(/blockml <command> --help/);
@@ -41,6 +42,10 @@ describe("blockml help pages", () => {
     const search = await runCli(["search", "--help"], ROOT);
     expect(search.code).toBe(0);
     expect(search.stderr).toMatch(/When: find FQNs/);
+
+    const scan = await runCli(["scan", "--help"]);
+    expect(scan.code).toBe(0);
+    expect(scan.stderr).toMatch(/When: list packages or types/);
 
     const validate = await runCli(["validate", "--help"], ROOT);
     expect(validate.code).toBe(0);

@@ -29,6 +29,7 @@ export interface ParsedArgs {
     newFqn?: string;
     newBaseType?: string;
     newIs?: string;
+    selectors?: string[];
     help?: boolean;
     origin?: string;
     relation?: string;

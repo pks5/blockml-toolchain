@@ -1,0 +1,66 @@
+<!--Framework Capability — ScanPackages
+  FQN: org.blockml.bml.framework.capability.ScanPackages-->
+<fwcap:ScanPackages xmlns="http://blockml.org/bml"
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwconfig="org.blockml.bml.framework.config"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:fwexpression="org.blockml.bml.framework.expression"
+  xmlns:fwregistry="org.blockml.bml.framework.registry"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
+
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    List known packages matching PackageSelectors
+  </is>
+  <documentation>
+    Parses each token as type:PackageSelector, then keeps known PackageIdentifier
+    prefixes of registry.keys() where any selector.matches. OR across selectors.
+    Sorted. Invalid parse → error message. Matching is Core PackageSelector.matches.
+  </documentation>
+  <references>
+    <see type="fwcap:ScanTypes" relation="SeeAlso" />
+    <see type="fwcap:EvaluateCapability" relation="SeeAlso" />
+    <see type="type:PackageSelector" relation="SeeAlso" />
+  </references>
+  <properties>
+    <selectors type="type:Text[]">
+      <documentation>
+        PackageSelector tokens. (required)
+      </documentation>
+    </selectors>
+    <registry type="fwcap:TypeRegistry">
+      <documentation>
+        registry. TS type: fwcap:TypeRegistry. (required)
+      </documentation>
+    </registry>
+    <hits type="type:Text[]">
+      <documentation>
+        Matching package identifiers when ok. (required)
+      </documentation>
+    </hits>
+    <message type="type:Text">
+      <documentation>
+        parseValue / eval error when not ok. (optional)
+      </documentation>
+    </message>
+  </properties>
+</fwcap:ScanPackages>

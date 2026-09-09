@@ -89,21 +89,56 @@ function isTypeScript(languageFqn) {
     const named = namedPrimitiveFqn(languageFqn);
     return !named.skip && named.fqn === TYPESCRIPT_FQN;
 }
+function splitTopLevelParams(params) {
+    const parts = [];
+    let depth = 0;
+    let current = "";
+    for (const ch of params) {
+        if (ch === "(" || ch === "{" || ch === "[" || ch === "<") {
+            depth += 1;
+        }
+        else if (ch === ")" || ch === "}" || ch === "]" || ch === ">") {
+            depth -= 1;
+        }
+        if (ch === "," && depth === 0) {
+            parts.push(current);
+            current = "";
+        }
+        else {
+            current += ch;
+        }
+    }
+    if (current.trim()) {
+        parts.push(current);
+    }
+    return parts;
+}
+function stripParamTypes(params) {
+    return splitTopLevelParams(params)
+        .map((part) => {
+        const trimmed = part.trim();
+        const name = trimmed.match(/^([A-Za-z_]\w*)/)?.[1];
+        return name ?? trimmed;
+    })
+        .filter(Boolean)
+        .join(", ");
+}
 function toHostJavaScript(source) {
-    return source.trim().replace(/^\(\s*([A-Za-z_]\w*)\s*(?::\s*[^)=]+)?\s*\)\s*(?::\s*[^=]+)?\s*=>/, "($1) =>");
+    const trimmed = source.trim();
+    return trimmed.replace(/^\(([\s\S]*?)\)\s*(?::\s*[^=]+)?\s*=>/, (_all, params) => `(${stripParamTypes(params)}) =>`);
 }
 function compileBody(source) {
     return new Function(`"use strict"; return (${toHostJavaScript(source)});`)();
 }
-function findParseValue(typeFqn, registry) {
+function findCapability(typeFqn, capabilityName, registry) {
     const doc = registry.get(typeFqn);
     if (!doc) {
         return undefined;
     }
-    const member = resolveEffectiveMembers(doc.block, registry).find((m) => m.kind === "capability" && m.name === PARSE_VALUE);
+    const member = resolveEffectiveMembers(doc.block, registry).find((m) => m.kind === "capability" && m.name === capabilityName);
     return member?.kind === "capability" ? member : undefined;
 }
-export function evaluateParseValue(typeFqn, raw, registry) {
+export function evaluateCapability(typeFqn, capabilityName, args, registry) {
     const named = namedPrimitiveFqn(typeFqn);
     if (named.skip || !named.fqn) {
         return skipped;
@@ -111,14 +146,15 @@ export function evaluateParseValue(typeFqn, raw, registry) {
     if (!registry.has(named.fqn)) {
         return skipped;
     }
-    const cap = findParseValue(named.fqn, registry);
+    const cap = findCapability(named.fqn, capabilityName, registry);
     if (!cap || cap.abstract || !cap.implementation) {
         return skipped;
     }
     if (!isTypeScript(cap.implementation.languageFqn)) {
         return skipped;
     }
-    let fn = compiledBodies.get(named.fqn);
+    const cacheKey = `${named.fqn}#${capabilityName}`;
+    let fn = compiledBodies.get(cacheKey);
     if (!fn) {
         try {
             fn = compileBody(cap.implementation.source);
@@ -126,13 +162,16 @@ export function evaluateParseValue(typeFqn, raw, registry) {
         catch {
             return skipped;
         }
-        compiledBodies.set(named.fqn, fn);
+        compiledBodies.set(cacheKey, fn);
     }
     try {
-        return { ok: true, value: fn(raw) };
+        return { ok: true, value: fn(...args) };
     }
     catch (err) {
         return { ok: false, message: err instanceof Error ? err.message : String(err) };
     }
+}
+export function evaluateParseValue(typeFqn, raw, registry) {
+    return evaluateCapability(typeFqn, PARSE_VALUE, [raw], registry);
 }
 //# sourceMappingURL=evaluate-parse-value.js.map

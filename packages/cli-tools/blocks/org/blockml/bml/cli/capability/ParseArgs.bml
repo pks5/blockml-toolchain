@@ -37,8 +37,8 @@
     Error paths print short USAGE, not the help page.
     
     Positional: validate=file; compile=target or file+target; search=query
-    tokens or subcommand index; graph=subcommand then args; inspect=FQN; transform=subcommand then args
-    (apply=execution FQN); new=FQN.
+    tokens or subcommand index; scan=package|type then selector tokens; graph=subcommand then args;
+    inspect=FQN; transform=subcommand then args (apply=execution FQN); new=FQN.
   </documentation>
   <references>
     <see type="cliapi:ParsedArgs" relation="SeeAlso" />

@@ -1,0 +1,47 @@
+<!--CLI Command — ScanCommand
+  FQN: org.blockml.bml.cli.command.ScanCommand-->
+<clicommand:ScanCommand xmlns="http://blockml.org/bml"
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    blockml scan command model
+  </is>
+  <documentation>
+    blockml scan package|type SELECTOR…. Corpus is validate --all via fwcap:ScanPackages / ScanTypes.
+  </documentation>
+  <references>
+    <see type="clidocumentation:ScanCommand" relation="SeeAlso" />
+    <see type="clicap:RunScan" relation="SeeAlso" />
+  </references>
+  <properties>
+    <subcommand type="type:Text">
+      <documentation>
+        package or type. (required)
+      </documentation>
+    </subcommand>
+    <selectors type="type:Text[]">
+      <documentation>
+        PackageSelector or TypeSelector tokens. OR across the list. (required)
+      </documentation>
+    </selectors>
+    <json type="type:Boolean">
+      <documentation>
+        Print string[] as JSON. (optional)
+      </documentation>
+    </json>
+  </properties>
+</clicommand:ScanCommand>

@@ -36,6 +36,7 @@ import {
 import { loadConfig, type BomConfig } from "./load-config.js";
 import { projectLibraryPackageDirs, projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
 import { runSearch } from "./run-search.js";
+import { runScan } from "./run-scan.js";
 import { runGraph } from "./run-graph.js";
 import { runInspect } from "./run-inspect.js";
 import { runNew } from "./run-new.js";
@@ -45,6 +46,7 @@ import type { ReflectionAgent, TransformationAgent } from "@blockml/transformer"
 import {
   GRAPH_USAGE,
   INSPECT_USAGE,
+  SCAN_USAGE,
   SEARCH_USAGE,
   USAGE,
   helpFor,
@@ -92,6 +94,7 @@ export interface ParsedArgs {
   newFqn?: string;
   newBaseType?: string;
   newIs?: string;
+  selectors?: string[];
   help?: boolean;
   origin?: string;
   relation?: string;
@@ -249,6 +252,12 @@ export function parseArgs(argv: string[]): ParsedArgs {
           result.subcommand = flag;
         } else if (result.subcommand === "apply" && !result.executionFqn) {
           result.executionFqn = flag;
+        }
+      } else if (result.command === "scan") {
+        if (!result.subcommand) {
+          result.subcommand = flag;
+        } else {
+          result.selectors = result.selectors ? [...result.selectors, flag] : [flag];
         }
       } else if (result.command === "inspect") {
         if (!result.inspectFqn) {
@@ -956,6 +965,18 @@ async function executeCli(
         return { code: 2, lines };
       }
       const code = await runGraph(parsed, cwd, config, lines, formatDiagnostic, GRAPH_USAGE);
+      return { code, lines };
+    }
+
+    if (parsed.command === "scan") {
+      let config: BomConfig;
+      try {
+        config = loadConfig(cwd);
+      } catch (e) {
+        pushLines(lines, e instanceof Error ? e.message : String(e), "error");
+        return { code: 2, lines };
+      }
+      const code = runScan(parsed, cwd, config, lines, SCAN_USAGE);
       return { code, lines };
     }
 

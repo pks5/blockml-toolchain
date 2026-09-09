@@ -1,0 +1,57 @@
+<!--CLI Capability — RunScan
+  FQN: org.blockml.bml.cli.capability.RunScan-->
+<clicap:RunScan xmlns="http://blockml.org/bml"
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:type="org.blockml.bml.type">
+
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Execute blockml scan command
+  </is>
+  <documentation>
+    # Execute blockml scan command
+    
+    scan package SELECTOR… — scanPackages over the validate --all TypeRegistry.
+    scan type SELECTOR… — scanTypes over the same corpus.
+    
+    Human output: one identifier per line, sorted. --json: string[].
+    Missing subcommand, missing selectors, or invalid selector → exit 2 with short USAGE.
+    --help / -h print scan help page and exit 0.
+  </documentation>
+  <references>
+    <see type="clidocumentation:ScanCommand" relation="SeeAlso" />
+    <see type="clicommand:ScanCommand" relation="SeeAlso" />
+    <see type="fwcap:ScanTypes" relation="SeeAlso" />
+    <see type="fwcap:ScanPackages" relation="SeeAlso" />
+  </references>
+  <properties>
+    <parsed type="cliapi:ParsedArgs">
+      <documentation>
+        Parsed scan args. (required)
+      </documentation>
+    </parsed>
+    <rootDir type="type:Text">
+      <documentation>
+        Project root. (required)
+      </documentation>
+    </rootDir>
+    <code type="type:Integer">
+      <documentation>
+        Exit code 0|2. (required)
+      </documentation>
+    </code>
+  </properties>
+</clicap:RunScan>

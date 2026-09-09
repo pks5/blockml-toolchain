@@ -121,6 +121,9 @@
         <fwcap:GetPropertyNumericValue />
         <fwcap:IsLiteralValue />
         <fwcap:EvaluateParseValue />
+        <fwcap:EvaluateCapability />
+        <fwcap:ScanTypes />
+        <fwcap:ScanPackages />
         <fwdocumentation:Introduction />
         <fwdocumentation:LayerSeparation />
         <fwdocumentation:ArchitectureOverview />

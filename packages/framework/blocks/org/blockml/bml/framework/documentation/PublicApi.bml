@@ -67,6 +67,10 @@
     validateConstraints(document, registry) → Diagnostic[]
     getPropertyNumericValue(property) → number | undefined
     isLiteralValue(value) → boolean
+    evaluateParseValue(typeFqn, raw, registry) → ok+value | skipped | ok:false
+    evaluateCapability(typeFqn, capabilityName, args, registry) → ok+value | skipped | ok:false
+    scanTypes(selectors, registry) → matching type FQNs or parse error
+    scanPackages(selectors, registry) → matching package identifiers or parse error
     
     Types: BootstrapResult, BootstrapTrace, BootstrapOptions, ExpressionNode, ParseExpressionResult, ParseExpressionOutcome
     

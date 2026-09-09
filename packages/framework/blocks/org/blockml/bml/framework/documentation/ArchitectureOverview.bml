@@ -48,6 +48,8 @@
       fwcap:IsLiteralValue
     validate/validate-versions.ts — fwcap:ValidateVersions
     validate/validate-constraints.ts — fwcap:ValidateConstraints
+    validate/evaluate-parse-value.ts — fwcap:EvaluateParseValue, fwcap:EvaluateCapability
+    scan.ts — fwcap:ScanTypes, fwcap:ScanPackages
     
     Internal data-structure types extend framework:FrameworkType.
     Public operations are fwcap:* capabilities.

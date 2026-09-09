@@ -1,0 +1,74 @@
+<!--Framework Capability — EvaluateCapability
+  FQN: org.blockml.bml.framework.capability.EvaluateCapability-->
+<fwcap:EvaluateCapability xmlns="http://blockml.org/bml"
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwconfig="org.blockml.bml.framework.config"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:fwexpression="org.blockml.bml.framework.expression"
+  xmlns:fwregistry="org.blockml.bml.framework.registry"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
+
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Evaluate a named host-evaluable TypeScript Capability
+  </is>
+  <documentation>
+    Host-evaluable Capability on a named primitive: looks up the named member, compiles
+    its TypeScript arrow (parameter and return types stripped), and applies host args.
+    
+    - No member, abstract, non-TypeScript, or type missing from the registry → skipped
+    - A thrown Error → ok:false + message
+    - parseValue is evaluateCapability(typeFqn, parseValue, [raw])
+    - matches is evaluateCapability(typeFqn, matches, [selector, candidate])
+  </documentation>
+  <references>
+    <see type="fwcap:EvaluateParseValue" relation="SeeAlso" />
+    <see type="fwcap:ResolveEffectiveMembers" relation="SeeAlso" />
+  </references>
+  <properties>
+    <typeFqn type="type:Text">
+      <documentation>
+        Declared primitive FQN or type expression. (required)
+      </documentation>
+    </typeFqn>
+    <capabilityName type="type:Text">
+      <documentation>
+        Capability member name. (required)
+      </documentation>
+    </capabilityName>
+    <args type="type:Text">
+      <documentation>
+        Host argument list. (required)
+      </documentation>
+    </args>
+    <registry type="fwcap:TypeRegistry">
+      <documentation>
+        registry. TS type: fwcap:TypeRegistry. (required)
+      </documentation>
+    </registry>
+    <result type="type:Text">
+      <documentation>
+        ok+value, ok+skipped, or ok:false+message. (required)
+      </documentation>
+    </result>
+  </properties>
+</fwcap:EvaluateCapability>

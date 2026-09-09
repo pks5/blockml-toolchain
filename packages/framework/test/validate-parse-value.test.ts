@@ -5,6 +5,7 @@ import { parse } from "@blockml/parser";
 import {
   bootstrapTypeRegistry,
   defaultBootstrapPaths,
+  evaluateCapability,
   evaluateParseValue,
   TypeRegistry,
   validateTypes,
@@ -199,5 +200,60 @@ describe("validateTypes parseValue literals", () => {
     );
     const diagnostics = validateTypes(document, bootstrappedRegistry());
     expect(diagnostics.filter((d) => d.code === "BML_INVALID_VALUE")).toHaveLength(1);
+  });
+});
+
+const TYPE_SELECTOR = "org.blockml.bml.type.TypeSelector";
+const PACKAGE_SELECTOR = "org.blockml.bml.type.PackageSelector";
+
+describe("selector parseValue and matches", () => {
+  it("accepts trailing ** as TypeSelector and rejects it as PackageSelector type name", () => {
+    const registry = bootstrappedRegistry();
+    expect(evaluateParseValue(TYPE_SELECTOR, "org.blockml.bml.core.**", registry)).toEqual({
+      ok: true,
+      value: "org.blockml.bml.core.**",
+    });
+    const pkg = evaluateParseValue(PACKAGE_SELECTOR, "org.blockml.bml.core.**", registry);
+    expect(pkg).toEqual({ ok: true, value: "org.blockml.bml.core.**" });
+  });
+
+  it("rejects type-position Foo**", () => {
+    const registry = bootstrappedRegistry();
+    const result = evaluateParseValue(TYPE_SELECTOR, "org.blockml.bml.core.Foo**", registry);
+    expect(result.ok).toBe(false);
+  });
+
+  it("matches TypeSelector * vs ** vs **.Name", () => {
+    const registry = bootstrappedRegistry();
+    const block = "org.blockml.bml.core.Block";
+    const capability = "org.blockml.bml.core.Capability";
+    const star = evaluateCapability(
+      TYPE_SELECTOR,
+      "matches",
+      ["org.blockml.bml.core.*", block],
+      registry,
+    );
+    const starCap = evaluateCapability(
+      TYPE_SELECTOR,
+      "matches",
+      ["org.blockml.bml.core.*", "org.blockml.bml.core.capability.DoesNotExist"],
+      registry,
+    );
+    const descendant = evaluateCapability(
+      TYPE_SELECTOR,
+      "matches",
+      ["org.blockml.bml.core.**", capability],
+      registry,
+    );
+    const namedChild = evaluateCapability(
+      TYPE_SELECTOR,
+      "matches",
+      ["org.blockml.bml.core.**.Block", block],
+      registry,
+    );
+    expect(star).toEqual({ ok: true, value: true });
+    expect(starCap).toEqual({ ok: true, value: false });
+    expect(descendant).toEqual({ ok: true, value: true });
+    expect(namedChild).toEqual({ ok: true, value: false });
   });
 });

@@ -37,6 +37,7 @@
     
     Discover the model with the CLI, not grep:
       search    where something is (find FQNs)
+      scan      which packages or types match selectors
       inspect   give me this Block already resolved (effective members)
       graph     how it connects (inheritance, uses, used-by)
     Generic grep, find, and file reads remain allowed. They are not the first way into the model.
@@ -49,6 +50,8 @@
       search      Find FQNs. Corpus is validate --all.
                   blockml search <query> [--json] [--limit n]
                   blockml search index [--force]
+      scan        Packages or types matching selectors. Corpus is validate --all.
+                  blockml scan package|type <selector>…
       inspect     Resolved Block JSON (effective members).
                   blockml inspect <fqn> [--depth n]
       graph       Inheritance, uses / used-by, members, paths.
@@ -65,7 +68,7 @@
                   blockml transform apply <execution-fqn> [--library path]
     
     Shared flags: --src dir, --libraries a,b, --json, --help / -h
-    Corpus for search, inspect, and graph is the same as validate --all.
+    Corpus for search, scan, inspect, and graph is the same as validate --all.
     Exit codes: 0 success, 1 diagnostic errors, 2 usage or configuration error.
     
     Run `blockml <command> --help` for flags, defaults, output, and constraints.
@@ -74,6 +77,7 @@
   <references>
     <see type="clidocumentation:Commands" relation="SeeAlso" />
     <see type="clidocumentation:SearchCommand" relation="SeeAlso" />
+    <see type="clidocumentation:ScanCommand" relation="SeeAlso" />
     <see type="clidocumentation:InspectCommand" relation="SeeAlso" />
     <see type="clidocumentation:GraphCommand" relation="SeeAlso" />
     <see type="clicap:ParseArgs" relation="SeeAlso" />

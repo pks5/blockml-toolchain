@@ -1,0 +1,63 @@
+<!--CLI Documentation — ScanCommand
+  FQN: org.blockml.bml.cli.documentation.ScanCommand-->
+<clidocumentation:ScanCommand xmlns="http://blockml.org/bml"
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    blockml scan specification
+  </is>
+  <documentation>
+    <![CDATA[
+    Syntax:
+        blockml scan package <selector>… [--json] [--src dir] [--libraries a,b]
+        blockml scan type <selector>… [--json] [--src dir] [--libraries a,b]
+    
+        Scan uses the same corpus as validate --all (live TypeRegistry).
+        Each token is a PackageSelector or TypeSelector. Multiple selectors are OR.
+        Invalid selector (parseValue) → exit 2.
+        Missing package|type or missing selectors → exit 2 with short USAGE.
+        Human: one identifier per line, sorted. --json: string[].
+        Empty hits: No matches. / [] , exit 0.
+        No score, no --limit, no search or graph index.
+    
+    Printed help:
+    Usage: blockml scan package <selector>… [--json] [--src dir] [--libraries a,b]
+           blockml scan type <selector>… [--json] [--src dir] [--libraries a,b]
+           blockml scan --help
+    
+    When: list packages or types that match Core selectors (not full-text search).
+    
+    Corpus is the same as validate --all. Matching is PackageSelector / TypeSelector
+    parseValue + matches. scan type pkg.** includes types in that package and descendants.
+    scan package pkg.** is descendant packages only (not the starting package).
+    
+    Flags:
+      --json        string[] of matching identifiers
+      --src / --libraries   corpus overrides
+    
+    Human lines: one PackageIdentifier or type FQN per line, sorted.
+    Quote selectors that contain * or ** so the shell does not expand them.
+    
+    Related: search (find FQNs by text), inspect (resolve a found FQN).
+    ]]>
+  </documentation>
+  <references>
+    <see type="clidocumentation:Commands" relation="SeeAlso" />
+    <see type="clicap:RunScan" relation="SeeAlso" />
+  </references>
+</clidocumentation:ScanCommand>

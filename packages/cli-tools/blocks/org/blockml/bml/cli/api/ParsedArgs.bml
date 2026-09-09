@@ -26,12 +26,12 @@
   <properties>
     <command type="type:Text">
       <documentation>
-        validate | compile | search | graph | inspect | transform | new. (optional)
+        validate | compile | search | scan | graph | inspect | transform | new. (optional)
       </documentation>
     </command>
     <subcommand type="type:Text">
       <documentation>
-        Subcommand of command. For transform: apply. For graph: index, neighbors, uses, used-by, ancestors, descendants, members, path, query, schema. (optional)
+        Subcommand of command. For scan: package or type. For transform: apply. For graph: index, neighbors, uses, used-by, ancestors, descendants, members, path, query, schema. (optional)
       </documentation>
     </subcommand>
     <target type="type:Text">
@@ -86,7 +86,7 @@
     </verbose>
     <json type="type:Boolean">
       <documentation>
-        --json: machine-readable output (search, graph; inspect is always JSON). (optional)
+        --json: machine-readable output (search, scan, graph; inspect is always JSON). (optional)
       </documentation>
     </json>
     <force type="type:Boolean">
@@ -159,6 +159,11 @@
         --is for blockml new. (optional)
       </documentation>
     </newIs>
+    <selectors type="type:Text[]">
+      <documentation>
+        Selector tokens for scan package|type. (optional)
+      </documentation>
+    </selectors>
     <help type="type:Boolean">
       <documentation>
         --help / -h: print help page and exit 0. (optional)

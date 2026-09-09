@@ -29,7 +29,7 @@
     @blockml/compiler — compileToOutput, CompileRequest, Target Registry, compile scope resolution (C7).
     CLI builds requests; compiler owns facade semantics.
     
-    @blockml/framework — bootstrapTypeRegistry, TypeRegistry. CLI wraps as bootstrapProjectTypeRegistry.
+    @blockml/framework — bootstrapTypeRegistry, TypeRegistry, scanTypes / scanPackages. CLI wraps as bootstrapProjectTypeRegistry and RunScan.
     
     @blockml/transformer — sequential ModelOperations on a ModelTransformation. CLI wraps as RunTransform and supplies the default AgenticExecutor agent.
     

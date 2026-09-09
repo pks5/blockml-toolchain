@@ -12,6 +12,8 @@ export const USAGE =
   "       blockml graph path <from> <to> [--json] [--depth n]\n" +
   "       blockml graph query <cypher> [--json]\n" +
   "       blockml graph schema [--json]\n" +
+  "       blockml scan package <selector>… [--json] [--src dir] [--libraries a,b]\n" +
+  "       blockml scan type <selector>… [--json] [--src dir] [--libraries a,b]\n" +
   "       blockml inspect <fqn> [--depth n] [--json] [--src dir] [--libraries a,b]\n" +
   "       blockml transform apply <execution-fqn> [--library path] [--verbose] [--parameters json] [--parameter-mappings json]\n" +
   "       blockml new <fqn> [--baseType fqn] [--is text] [--src dir] [--libraries a,b]\n" +
@@ -29,6 +31,11 @@ export const GRAPH_USAGE =
 export const INSPECT_USAGE =
   "Usage: blockml inspect <fqn> [--depth n] [--json] [--src dir] [--libraries a,b]\n" +
   "       blockml inspect --help";
+
+export const SCAN_USAGE =
+  "Usage: blockml scan package <selector>… [--json] [--src dir] [--libraries a,b]\n" +
+  "       blockml scan type <selector>… [--json] [--src dir] [--libraries a,b]\n" +
+  "       blockml scan --help";
 
 export const SEARCH_USAGE =
   "Usage: blockml search <query> [--json] [--limit n] [--src dir] [--libraries a,b]\n" +
@@ -50,6 +57,7 @@ If @blockml/cli is not a project dependency, report that and stop.
 
 Discover the model with the CLI, not grep:
   search    where something is (find FQNs)
+  scan      which packages or types match selectors
   inspect   give me this Block already resolved (effective members)
   graph     how it connects (inheritance, uses, used-by)
 Generic grep, find, and file reads remain allowed. They are not the first way into the model.
@@ -62,6 +70,8 @@ Commands:
   search      Find FQNs. Corpus is validate --all.
               blockml search <query> [--json] [--limit n]
               blockml search index [--force]
+  scan        Packages or types matching selectors. Corpus is validate --all.
+              blockml scan package|type <selector>…
   inspect     Resolved Block JSON (effective members).
               blockml inspect <fqn> [--depth n]
   graph       Inheritance, uses / used-by, members, paths.
@@ -78,7 +88,7 @@ Commands:
               blockml transform apply <execution-fqn> [--library path]
 
 Shared flags: --src dir, --libraries a,b, --json, --help / -h
-Corpus for search, inspect, and graph is the same as validate --all.
+Corpus for search, scan, inspect, and graph is the same as validate --all.
 Exit codes: 0 success, 1 diagnostic errors, 2 usage or configuration error.
 
 Run \`blockml <command> --help\` for flags, defaults, output, and constraints.`;
@@ -103,6 +113,26 @@ Human lines: score, FQN, relative file path.
 Rebuild the index if results look stale or sources have changed.
 
 Related: inspect (resolve a found FQN), graph (how it connects).`;
+
+/** Printed help. SSOT: org.blockml.bml.cli.documentation.ScanCommand */
+export const SCAN_HELP = `Usage: blockml scan package <selector>… [--json] [--src dir] [--libraries a,b]
+       blockml scan type <selector>… [--json] [--src dir] [--libraries a,b]
+       blockml scan --help
+
+When: list packages or types that match Core selectors (not full-text search).
+
+Corpus is the same as validate --all. Matching is PackageSelector / TypeSelector
+parseValue + matches. scan type pkg.** includes types in that package and descendants.
+scan package pkg.** is descendant packages only (not the starting package).
+
+Flags:
+  --json        string[] of matching identifiers
+  --src / --libraries   corpus overrides
+
+Human lines: one PackageIdentifier or type FQN per line, sorted.
+Quote selectors that contain * or ** so the shell does not expand them.
+
+Related: search (find FQNs by text), inspect (resolve a found FQN).`;
 
 /** Printed help. SSOT: org.blockml.bml.cli.documentation.InspectCommand */
 export const INSPECT_HELP = `Usage: blockml inspect <fqn> [--depth n] [--json] [--src dir] [--libraries a,b]
@@ -248,6 +278,8 @@ export function helpFor(command?: string): string {
       return INSPECT_HELP;
     case "search":
       return SEARCH_HELP;
+    case "scan":
+      return SCAN_HELP;
     case "validate":
       return VALIDATE_HELP;
     case "compile":

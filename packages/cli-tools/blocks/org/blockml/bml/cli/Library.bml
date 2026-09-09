@@ -88,6 +88,7 @@
         <clicommand:SearchCommand />
         <clicommand:GraphCommand />
         <clicommand:InspectCommand />
+        <clicommand:ScanCommand />
         <clicommand:TransformCommand />
         <clicommand:TransformApplyCommand />
         <clicommand:NewCommand />
@@ -100,6 +101,7 @@
         <clicap:RunSearch />
         <clicap:RunGraph />
         <clicap:RunInspect />
+        <clicap:RunScan />
         <clicap:RunNew />
         <clicap:RunTransform />
         <clicap:ValidateAgainstXsd />
@@ -124,6 +126,7 @@
         <clidocumentation:SearchCommand />
         <clidocumentation:GraphCommand />
         <clidocumentation:InspectCommand />
+        <clidocumentation:ScanCommand />
         <clidocumentation:NewCommand />
         <clidocumentation:TransformCommand />
         <clidocumentation:Configuration />

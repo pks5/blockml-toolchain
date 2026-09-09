@@ -18,9 +18,9 @@ npx blockml <command>
 
 Do not install or upgrade `@blockml/cli` unless asked. If the CLI is missing, run `npm ci` first. If `@blockml/cli` is not a project dependency, report that and stop.
 
-Run `npx blockml --help` for commands, workflow, and flags. Run `npx blockml <command> --help` before first use of a command (search, inspect, graph, new, validate, compile, transform).
+Run `npx blockml --help` for commands, workflow, and flags. Run `npx blockml <command> --help` before first use of a command (search, scan, inspect, graph, new, validate, compile, transform).
 
-Search answers where something is. Inspect answers: give me this Block already resolved. Graph answers how it connects.
+Search answers where something is. Scan answers which packages or types match selectors. Inspect answers: give me this Block already resolved. Graph answers how it connects.
 
 Generic grep, find, and file reads remain allowed. They are not the first way into the model.
 
