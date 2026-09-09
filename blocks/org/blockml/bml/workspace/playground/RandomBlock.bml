@@ -4,10 +4,8 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:playground="org.blockml.bml.workspace.playground">
-
-  <baseType>
-    core:Documentation
-  </baseType>
+  <baseType>core:Documentation</baseType>
+  
   <is>
     A lending register for the umbrellas kept in a chipped enamel stand by the door of the Kleinschmidt reading room, where borrowers write the weather they expect and return the umbrella with a note on the weather they got
   </is>
