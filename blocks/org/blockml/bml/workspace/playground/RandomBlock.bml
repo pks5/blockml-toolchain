@@ -1,0 +1,52 @@
+<!--Workspace Playground — RandomBlock
+  FQN: org.blockml.bml.workspace.playground.RandomBlock-->
+<playground:RandomBlock xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:playground="org.blockml.bml.workspace.playground">
+
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    A lending register for the umbrellas kept in a chipped enamel stand by the door of the Kleinschmidt reading room, where borrowers write the weather they expect and return the umbrella with a note on the weather they got
+  </is>
+  <documentation>
+    Produced by the "Create Random Block" step of playground:MyTestTransformation
+    during a BlockML workspace transform execution. Every run discards whatever
+    stood here before and writes freshly invented, arbitrary material, so the
+    names, counts, and dates recorded below are neither stable nor authoritative.
+  </documentation>
+  <properties>
+    <title type="type:Text">
+      <value>The Umbrella Register of the Kleinschmidt Reading Room</value>
+    </title>
+    <steward type="type:Text">
+      <value>Kept up by Bruno Halász, the afternoon librarian, who dries the ribs on the radiator and glues the ferrules back on with the same tube of cement he has had since the room reopened</value>
+    </steward>
+    <location type="type:Text">
+      <value>An enamel stand between the coat hooks and the returns trolley, just inside the double doors of the reading room on Fährgasse, where the draught from the street keeps the umbrellas from ever fully drying</value>
+    </location>
+    <practice type="type:Text">
+      <value>The rule is unwritten but firm: take an umbrella only if you sign the register, and only if you write in the left column what weather you are walking out into. When you bring it back you fill the right column with what actually happened. Bruno reads the two columns against each other on slow Tuesdays and reads the funniest mismatches aloud at the winter social, where the borrower whose forecast was most wrong buys the first round of tea. Three of the umbrellas have names inked on the handle by earlier stewards; the black one with the duck head is never lent to anyone under the age of sixty, by a tradition nobody can now explain.</value>
+    </practice>
+    <umbrellasInTheStand type="type:Integer">
+      <value>14</value>
+    </umbrellasInTheStand>
+    <loansRecordedThisYear type="type:Integer">
+      <value>231</value>
+    </loansRecordedThisYear>
+    <umbrellasNeverReturned type="type:Integer">
+      <value>6</value>
+    </umbrellasNeverReturned>
+    <registerFilledPages type="type:Integer">
+      <value>88</value>
+    </registerFilledPages>
+    <recordedAt type="type:DateTime">
+      <value>2026-09-09T14:22:31</value>
+    </recordedAt>
+    <standFirstPutOut type="type:DateTime">
+      <value>1998-03-05T08:15:00</value>
+    </standFirstPutOut>
+  </properties>
+</playground:RandomBlock>

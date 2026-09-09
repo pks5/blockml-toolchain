@@ -45,9 +45,28 @@
   <aggregations>
     <operations override="true">
       <composition>
-        <workflow:AgenticOperation name="Create Random Block" status="Running" captureOutput="true">
+        <workflow:AgenticOperation name="Create Random Block" status="Succeeded" captureOutput="true">
           <startedAt>2026-09-09T22:46:53</startedAt>
           <baseCommit>6a789c77923c77f947212655e55f06716f11f77d</baseCommit>
+          <output>Done. Created `blocks/org/blockml/bml/workspace/playground/RandomBlock.bml`.
+
+**Block:** `org.blockml.bml.workspace.playground.RandomBlock`
+- **name / type:** `RandomBlock` under `org.blockml.bml.workspace.playground` (short name is the root element)
+- **baseType:** `core:Documentation`
+- **is:** one-line description — a lending register for the umbrellas in the Kleinschmidt reading room, where borrowers log the weather they expect vs. the weather they get
+- **documentation:** paragraph noting it was produced by the &quot;Create Random Block&quot; step of `playground:MyTestTransformation` and that each run replaces the prior content with freshly invented material
+- **properties:**
+  - `type:Text` — `title`, `steward`, `location`, `practice`
+  - `type:Integer` — `umbrellasInTheStand` (14), `loansRecordedThisYear` (231), `umbrellasNeverReturned` (6), `registerFilledPages` (88)
+  - `type:DateTime` — `recordedAt` = `2026-09-09T14:22:31` (now), `standFirstPutOut` = `1998-03-05T08:15:00`
+
+Content is entirely new relative to the previous run (a frost-calendar carved door), per the &quot;fresh, arbitrary content each execution&quot; instruction.
+
+**Validation:** `npx blockml validate` → 761 blocks, 0 errors, 0 warnings. `npx blockml inspect` resolves the block with no unresolved refs or cycles. The single `BML_STYLE_PREFER_MARKDOWN` recommendation on line 14 is advisory and matches the prior RandomBlock and several other repo blocks.
+
+No changes to `MyTestTransformation`, `ModelTransformation` metadata, or anything under `_meta/transform/`.
+</output>
+          <completedAt>2026-09-09T22:48:11</completedAt>
           <task>
             <workflow:InstructionTask>
               <instructions>Create or update the block ${ #this.parameters.targetBlock }
@@ -68,6 +87,9 @@ Write only under the playground package. Do not edit
 ModelTransformation metadata or files under _meta/transform/.</instructions>
             </workflow:InstructionTask>
           </task>
+          <changedFiles>
+            <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/RandomBlock.bml" />
+          </changedFiles>
         </workflow:AgenticOperation>
         <workflow:ToolOperation name="Validate" status="Pending" captureOutput="true" command="blockml">
           <args>validate</args>
