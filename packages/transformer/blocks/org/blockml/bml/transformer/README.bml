@@ -50,7 +50,8 @@
     and skip operations. A ModelOperation failure leaves
     `ModelTransformation.exception` empty and aborts remaining
     operations. Prepare requires a clean Git
-    worktree, records `baseCommit`, and commits the running relocation.
+    worktree (nearest enclosing toplevel from cwd; cwd may be a
+    package directory), records `baseCommit`, and commits the running relocation.
     Each ModelOperation commits Running first (recovery boundary), then
     commits model changes together with the operation terminal state.
     Finalize commits the terminal relocation. Transformation intelligence

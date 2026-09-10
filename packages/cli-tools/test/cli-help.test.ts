@@ -64,6 +64,7 @@ describe("blockml help pages", () => {
     const transform = await runCli(["transform", "--help"], ROOT);
     expect(transform.code).toBe(0);
     expect(transform.stderr).toMatch(/available template/);
+    expect(transform.stderr).toMatch(/cwd may be a package directory/);
   });
 
   it("prints short USAGE on unknown command without the workflow block", async () => {

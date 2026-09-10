@@ -53,7 +53,11 @@ export function fixtureLibraryXml(packageFqn = LIBRARY): string {
   ].join("\n");
 }
 
-export function writeProject(dir: string, files: Record<string, string>): void {
+export function writeProject(
+  dir: string,
+  files: Record<string, string>,
+  gitRoot = dir,
+): void {
   mkdirSync(join(dir, "blocks"), { recursive: true });
   writeFileSync(
     join(dir, "package.json"),
@@ -76,7 +80,7 @@ export function writeProject(dir: string, files: Record<string, string>): void {
     mkdirSync(dirname(path), { recursive: true });
     writeFileSync(path, contents);
   }
-  commitFixture(dir);
+  commitFixture(gitRoot);
 }
 
 export function gitHead(dir: string): string {

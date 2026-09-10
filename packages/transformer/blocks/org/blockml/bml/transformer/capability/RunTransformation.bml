@@ -15,7 +15,8 @@
   <documentation>
     # Run Transformation
     
-    Public engine entry. Acquires the worktree lock, then runs Prepare,
+    Public engine entry. Acquires the enclosing Git worktree lock
+    (nearest toplevel walking up from cwd), then runs Prepare,
     each ModelOperation (Running commit, registered executor, Reflect,
     Persist), and Finalize. A failed ModelOperation aborts the rest.
     Target library for `_meta` is `library` (path to Library.bml) or

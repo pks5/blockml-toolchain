@@ -1,5 +1,5 @@
 import { TRANSFORM_PATH } from "../execution/constants.js";
-import { gitStdout, resolveWorkspacePath } from "./git.js";
+import { gitStdout, resolveGitToplevel } from "./git.js";
 export function isTransformLifecyclePath(path) {
     return (path.includes(`/${TRANSFORM_PATH}/`) || path.startsWith(`${TRANSFORM_PATH}/`));
 }
@@ -8,20 +8,17 @@ export function modelChangedFiles(paths) {
 }
 export function collectWorktreeTrace(workspaceRoot) {
     const empty = { diff: "", changedFiles: [] };
-    const toplevel = gitStdout(workspaceRoot, ["rev-parse", "--show-toplevel"]);
+    const toplevel = resolveGitToplevel(workspaceRoot);
     if (toplevel === undefined) {
         return empty;
     }
-    if (resolveWorkspacePath(toplevel.trim()) !== resolveWorkspacePath(workspaceRoot)) {
-        return empty;
-    }
-    const status = gitStdout(workspaceRoot, ["status", "--porcelain"]);
+    const status = gitStdout(toplevel, ["status", "--porcelain"]);
     if (status === undefined) {
         return empty;
     }
     const changedFiles = parsePorcelain(status);
-    const unstaged = gitStdout(workspaceRoot, ["diff"]) ?? "";
-    const staged = gitStdout(workspaceRoot, ["diff", "--cached"]) ?? "";
+    const unstaged = gitStdout(toplevel, ["diff"]) ?? "";
+    const staged = gitStdout(toplevel, ["diff", "--cached"]) ?? "";
     const diff = [unstaged, staged].filter((part) => part.trim().length > 0).join("\n");
     return { diff, changedFiles };
 }

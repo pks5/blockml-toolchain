@@ -269,7 +269,8 @@ Flags:
   --parameters json           JSON value for parameters (object merge when T is StructType)
   --parameter-mappings json   JSON array of ParameterMapping objects; ignores --parameters
 
-Only one transform may run at a time in the same Git worktree.
+Only one transform may run at a time in the same Git worktree
+(nearest enclosing toplevel; cwd may be a package directory).
 The worktree must be clean at start and before each ModelOperation.
 
 Related: validate, inspect.`;

@@ -47,7 +47,8 @@
         ToolOperation requires command,
         createdAt; no executionId or start/finish fields on the
         ModelTransformation), require a
-        clean Git worktree, assign a unique executionId (type:UUID),
+        clean Git worktree (nearest enclosing toplevel from cwd),
+        assign a unique executionId (type:UUID),
         sequence, startedAt, and baseCommit (HEAD),
         set status=Running, relocate to the target library's
         _meta.transform.running, then commit.

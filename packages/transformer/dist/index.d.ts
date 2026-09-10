@@ -8,6 +8,7 @@ export { createNoopPersistStage, createPersistStage } from "./pipeline/persist.j
 export { createFinalizeStage } from "./pipeline/finalize.js";
 export { collectWorktreeTrace } from "./pipeline/worktree-trace.js";
 export type { WorktreeTrace } from "./pipeline/worktree-trace.js";
+export { resolveGitToplevel } from "./pipeline/git.js";
 export type { StageContext, TransformStage, TransformPipeline, PreparedExecution, OperationBoundExecution, ExecutionTrace, ExecutedWork, Reflection, PersistedExecution, } from "./pipeline/types.js";
 export type { TransformationAgent, AgentExecutionRequest, AgentExecutionResult, } from "./agent/transformation-agent.js";
 export type { ReflectionAgent, ReflectRequest, ReflectResult, } from "./agent/reflection-agent.js";

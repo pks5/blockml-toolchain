@@ -20,8 +20,11 @@
        concrete ModelOperation subtypes (AgenticOperation requires a
        Task; ToolOperation requires `command`), and `createdAt` must be set; `executionId` and start/finish
        fields must be absent on the ModelTransformation.
-    2. Require a clean Git worktree (including HEAD). Abort without starting
-       if the worktree is dirty or not a Git toplevel.
+    2. Require a clean Git worktree (including HEAD). The worktree is the
+       nearest enclosing Git toplevel, discovered by walking up from cwd;
+       cwd may be a package directory inside that repo. Abort without
+       starting if the worktree is dirty or cwd is not inside a Git
+       worktree.
     3. Assign a unique `executionId` (`type:UUID`), `sequence`, `startedAt`,
        and `baseCommit` (current HEAD), set `status=Running`.
     4. Relocate or copy into the target library's

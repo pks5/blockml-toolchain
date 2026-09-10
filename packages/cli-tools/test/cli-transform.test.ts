@@ -269,6 +269,59 @@ describe("blockml transform CLI", () => {
     expect(stderr).not.toMatch(/--verbose/);
   });
 
+  it("runs from a package directory inside the git worktree", async () => {
+    const pkg = join(TMP, "packages", "inner");
+    rmSync(TMP, { recursive: true, force: true });
+    mkdirSync(join(pkg, "blocks/com/example/model/_meta/transform/pending"), {
+      recursive: true,
+    });
+    writeFileSync(
+      join(pkg, "package.json"),
+      JSON.stringify({
+        name: "inner",
+        private: true,
+        blockml: { library: "./blocks/com/example/model/Library.bml" },
+      }),
+    );
+    writeFileSync(
+      join(pkg, "blocks/com/example/model/Library.bml"),
+      [
+        `<block xmlns="http://blockml.org/bml"`,
+        ` xmlns:core="org.blockml.bml.core"`,
+        ` xmlns:model="${LIBRARY}">`,
+        `  <name>Library</name>`,
+        `  <type>model:Library</type>`,
+        `  <baseType>core:BlockLibrary</baseType>`,
+        `  <is>fixture library</is>`,
+        `</block>`,
+        ``,
+      ].join("\n"),
+    );
+    writeFileSync(
+      join(pkg, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml"),
+      pendingXml("JokeTest"),
+    );
+    writeFileSync(join(TMP, ".gitignore"), ".blockml/\n");
+    gitOrThrow(["init"]);
+    gitOrThrow(["config", "user.email", "transformer@test"]);
+    gitOrThrow(["config", "user.name", "Transformer Test"]);
+    gitOrThrow(["add", "-A"]);
+    gitOrThrow(["-c", "commit.gpgsign=false", "commit", "-m", "nested package"]);
+    const { code, stderr } = await runCli(
+      ["transform", "apply", `${LIBRARY}._meta.transform.pending.JokeTest`],
+      pkg,
+      {
+        transformAgent: {
+          async execute() {
+            return { success: true };
+          },
+        },
+      },
+    );
+    expect(code, stderr).toBe(0);
+    expect(stderr).toMatch(/ModelTransformation Succeeded/);
+  });
+
   it("returns 2 when cwd has no blockml.library and --library is omitted", async () => {
     writeFileSync(
       join(TMP, "package.json"),

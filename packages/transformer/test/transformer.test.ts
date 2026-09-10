@@ -526,6 +526,29 @@ describe("Transformer lifecycle", () => {
     ).toBe(true);
   });
 
+  it("starts from a package directory inside the git worktree", async () => {
+    const pkg = join(TMP, "packages", "inner");
+    writeProject(
+      pkg,
+      {
+        "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({
+          name: "JokeTest",
+        }),
+      },
+      TMP,
+    );
+    const transformer = new Transformer({
+      workspaceRoot: pkg,
+      agent: successfulAgent(),
+      now: () => FIXED_NOW,
+    });
+    const result = await transformer.run(pendingFqn("JokeTest"));
+    expect(result.success).toBe(true);
+    expect(
+      existsSync(join(pkg, "blocks/com/example/model/_meta/transform/pending/JokeTest.bml")),
+    ).toBe(false);
+  });
+
   it("records HEAD as baseCommit and commits start, execute, and terminal snapshots", async () => {
     writeProject(TMP, {
       "blocks/com/example/model/_meta/transform/pending/JokeTest.bml": pendingExecutionXml({

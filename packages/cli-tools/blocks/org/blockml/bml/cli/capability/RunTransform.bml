@@ -31,7 +31,8 @@
     Target library for `_meta` is --library (path to Library.bml) or,
     when omitted, cwd package.json blockml.library. Missing both → exit 2.
     The source FQN need not live under that library.
-    Acquire an exclusive worktree lock first. If a transform is already
+    Acquire an exclusive lock on the enclosing Git worktree first
+    (nearest toplevel walking up from cwd). If a transform is already
     running in this worktree, exit 2 immediately (no wait). Resolve/config/busy
     → exit 2. After a started execution, Finalize relocates to succeeded
     (exit 0) only when every ModelOperation succeeded and result resolution did

@@ -6,6 +6,7 @@ export { createAgentReflectStage, createNoopReflectStage, createReflectStage, } 
 export { createNoopPersistStage, createPersistStage } from "./pipeline/persist.js";
 export { createFinalizeStage } from "./pipeline/finalize.js";
 export { collectWorktreeTrace } from "./pipeline/worktree-trace.js";
+export { resolveGitToplevel } from "./pipeline/git.js";
 export { ClaudeCodeAgent, composeAgentPrompt, runClaudeProcess, } from "./agent/claude-code-agent.js";
 export { ClaudeReflectAgent, buildClaudeReflectPrompt, parseReflectionOutput, } from "./agent/claude-reflect-agent.js";
 export { CLAUDE_EXECUTE_PERMISSIONS, CLAUDE_REFLECT_PERMISSIONS, CLAUDE_TRANSFORM_PERMISSIONS, claudePermissionCliArgs, } from "./agent/claude-permissions.js";

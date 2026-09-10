@@ -18,6 +18,7 @@ export { createNoopPersistStage, createPersistStage } from "./pipeline/persist.j
 export { createFinalizeStage } from "./pipeline/finalize.js";
 export { collectWorktreeTrace } from "./pipeline/worktree-trace.js";
 export type { WorktreeTrace } from "./pipeline/worktree-trace.js";
+export { resolveGitToplevel } from "./pipeline/git.js";
 export type {
   StageContext,
   TransformStage,

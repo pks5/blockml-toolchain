@@ -2,6 +2,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { lock } from "proper-lockfile";
 import { TransformError } from "../execution/errors.js";
+import { resolveGitToplevel, resolveWorkspacePath } from "../pipeline/git.js";
 export const TRANSFORM_LOCK_SENTINEL = "transform.lock";
 export const TRANSFORM_LOCK_STALE_MS = 30_000;
 export const TRANSFORM_LOCK_UPDATE_MS = 10_000;
@@ -10,7 +11,8 @@ const BUSY_MESSAGE = [
     "Only one transformation may run at a time.",
 ].join("\n");
 export function transformLockPath(workspaceRoot) {
-    return join(workspaceRoot, ".blockml", TRANSFORM_LOCK_SENTINEL);
+    const root = resolveGitToplevel(workspaceRoot) ?? resolveWorkspacePath(workspaceRoot);
+    return join(root, ".blockml", TRANSFORM_LOCK_SENTINEL);
 }
 export async function acquireWorktreeLock(workspaceRoot, executionFqn) {
     const sentinel = transformLockPath(workspaceRoot);

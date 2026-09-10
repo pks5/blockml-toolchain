@@ -2,8 +2,17 @@ import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { afterEach, describe, expect, it } from "vitest";
-import { commitWorktree } from "../src/pipeline/git.js";
-import { fixtureTempDir } from "./fixture.js";
+import {
+  assertWorktreeClean,
+  commitWorktree,
+  resolveGitToplevel,
+  resolveWorkspacePath,
+} from "../src/pipeline/git.js";
+import {
+  fixtureTempDir,
+  gitLogSubjects,
+  writeProject,
+} from "./fixture.js";
 
 const TMP = fixtureTempDir("git-isolation");
 const REPO = join(import.meta.dirname, "..", "..", "..");
@@ -36,5 +45,15 @@ describe("transformer git isolation", () => {
       encoding: "utf8",
     });
     expect(subjects.stdout).not.toContain("transform(isolation): should-not-land");
+  });
+
+  it("uses the enclosing git toplevel when started from a package directory", () => {
+    const pkg = join(TMP, "packages", "inner");
+    writeProject(pkg, { "marker.txt": "nested" }, TMP);
+    expect(resolveGitToplevel(pkg)).toBe(resolveWorkspacePath(TMP));
+    expect(assertWorktreeClean(pkg)).toMatch(/^[0-9a-f]{7,40}$/i);
+    writeFileSync(join(pkg, "extra.txt"), "from-package");
+    expect(commitWorktree(pkg, "transform(nested): from-package")).toBe(true);
+    expect(gitLogSubjects(TMP)).toContain("transform(nested): from-package");
   });
 });

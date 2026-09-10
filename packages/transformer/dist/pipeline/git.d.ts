@@ -4,6 +4,8 @@ export interface GitCommandResult {
     stderr: string;
 }
 export declare function resolveWorkspacePath(path: string): string;
+/** Nearest enclosing Git toplevel walking up from `from`. */
+export declare function resolveGitToplevel(from: string): string | undefined;
 export declare function git(cwd: string, args: string[]): GitCommandResult;
 export declare function gitStdout(cwd: string, args: string[]): string | undefined;
 export declare function assertWorktreeClean(workspaceRoot: string): string;

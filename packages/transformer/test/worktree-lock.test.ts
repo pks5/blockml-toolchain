@@ -130,6 +130,36 @@ describe("worktree transform lock", () => {
     expect(recovered.success).toBe(true);
   });
 
+  it("rejects a second transform from another package in the same worktree", async () => {
+    const pkgA = join(TMP, "packages", "a");
+    const pkgB = join(TMP, "packages", "b");
+    writePending(pkgA, "TaskA", TMP);
+    writePending(pkgB, "TaskB", TMP);
+    expect(transformLockPath(pkgA)).toBe(transformLockPath(TMP));
+    expect(transformLockPath(pkgB)).toBe(transformLockPath(TMP));
+
+    const gate = deferred();
+    const firstStarted = deferred();
+    const first = new Transformer({
+      workspaceRoot: pkgA,
+      agent: hangingAgent(gate.promise, firstStarted.resolve),
+    }).run(pendingFqn("TaskA"));
+    await firstStarted.promise;
+
+    const second = new Transformer({
+      workspaceRoot: pkgB,
+      agent: successfulAgent(),
+    }).run(pendingFqn("TaskB"));
+    await expect(second).rejects.toSatisfy((error: unknown) => {
+      expect(error).toBeInstanceOf(TransformError);
+      expect((error as TransformError).kind).toBe("busy");
+      return true;
+    });
+
+    gate.resolve();
+    await first;
+  });
+
   it("allows concurrent transforms in different worktrees", async () => {
     writePending(TMP_A, "TaskA");
     writePending(TMP_B, "TaskB");
@@ -155,12 +185,16 @@ describe("worktree transform lock", () => {
   }, 15_000);
 });
 
-function writePending(dir: string, name: string): void {
-  writeProject(dir, {
-    [`blocks/com/example/model/_meta/transform/pending/${name}.bml`]: pendingExecutionXml({
-      name,
-    }),
-  });
+function writePending(dir: string, name: string, gitRoot = dir): void {
+  writeProject(
+    dir,
+    {
+      [`blocks/com/example/model/_meta/transform/pending/${name}.bml`]: pendingExecutionXml({
+        name,
+      }),
+    },
+    gitRoot,
+  );
 }
 
 function hangingAgent(

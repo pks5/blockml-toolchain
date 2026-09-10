@@ -1,6 +1,6 @@
 import { spawnSync } from "node:child_process";
-import { realpathSync } from "node:fs";
-import { resolve } from "node:path";
+import { existsSync, realpathSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
 import { TransformError } from "../execution/errors.js";
 export function resolveWorkspacePath(path) {
     try {
@@ -10,8 +10,23 @@ export function resolveWorkspacePath(path) {
         return resolve(path);
     }
 }
+/** Nearest enclosing Git toplevel walking up from `from`. */
+export function resolveGitToplevel(from) {
+    let dir = resolveWorkspacePath(from);
+    for (;;) {
+        if (existsSync(join(dir, ".git"))) {
+            return dir;
+        }
+        const parent = dirname(dir);
+        if (parent === dir) {
+            return undefined;
+        }
+        dir = parent;
+    }
+}
 function gitEnv(cwd) {
-    const root = resolveWorkspacePath(cwd);
+    const start = resolveWorkspacePath(cwd);
+    const root = resolveGitToplevel(start) ?? start;
     const env = { ...process.env };
     delete env.GIT_DIR;
     delete env.GIT_WORK_TREE;
@@ -43,18 +58,15 @@ export function gitStdout(cwd, args) {
     return result.stdout;
 }
 export function assertWorktreeClean(workspaceRoot) {
-    const toplevel = git(workspaceRoot, ["rev-parse", "--show-toplevel"]);
-    if (toplevel.status !== 0) {
+    const toplevel = resolveGitToplevel(workspaceRoot);
+    if (!toplevel) {
         throw new TransformError("resolve", `Workspace is not a Git repository: ${workspaceRoot}`);
     }
-    if (resolveWorkspacePath(toplevel.stdout.trim()) !== resolveWorkspacePath(workspaceRoot)) {
-        throw new TransformError("resolve", `Workspace must be the Git toplevel (${toplevel.stdout.trim()})`);
-    }
-    const head = git(workspaceRoot, ["rev-parse", "HEAD"]);
+    const head = git(toplevel, ["rev-parse", "HEAD"]);
     if (head.status !== 0) {
         throw new TransformError("resolve", "Git HEAD is missing; cannot record baseCommit");
     }
-    const status = git(workspaceRoot, ["status", "--porcelain"]);
+    const status = git(toplevel, ["status", "--porcelain"]);
     if (status.status !== 0) {
         throw new TransformError("resolve", status.stderr.trim() || "git status failed");
     }
