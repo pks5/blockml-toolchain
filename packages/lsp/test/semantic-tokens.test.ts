@@ -143,6 +143,38 @@ describe("semanticHighlightSpans", () => {
     expect(typeAt(SAMPLE, "<type:TextEntity")).toBe("compositionInstance");
   });
 
+  it("colors type-list sugar locals that contain underscores", () => {
+    const src = [
+      "<block>",
+      "  <aggregations>",
+      "    <blocks>",
+      "      <composition>",
+      "        <diag:BML_INVALID_ROOT />",
+      "        <pkg:_Utils />",
+      "        <run:T00001_PoemTest_20260830T232831 />",
+      "      </composition>",
+      "    </blocks>",
+      "  </aggregations>",
+      "</block>",
+    ].join("\n");
+    expect(typeAt(src, "<diag:BML_INVALID_ROOT")).toBe("compositionInstance");
+    expect(typeAt(src, "<pkg:_Utils")).toBe("compositionInstance");
+    expect(typeAt(src, "<run:T00001_PoemTest_20260830T232831")).toBe("compositionInstance");
+  });
+
+  it("colors underscore type-or-name tags as domain types at block level", () => {
+    const src = [
+      "<block>",
+      "  <contracts>",
+      "    <composition>",
+      "      <diag:BML_INVALID_ROOT />",
+      "    </composition>",
+      "  </contracts>",
+      "</block>",
+    ].join("\n");
+    expect(typeAt(src, "<diag:BML_INVALID_ROOT")).toBe("domainType");
+  });
+
   it("keeps classification on a deeply nested stack (no TextMate depth limit)", () => {
     const depth = 24;
     const inner = "<properties><item><composition><theme:Role /></composition></item></properties>";

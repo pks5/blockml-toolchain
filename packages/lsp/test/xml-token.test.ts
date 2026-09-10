@@ -92,6 +92,22 @@ describe("qnameAt", () => {
     expect(qn?.text).toBe("Integer");
   });
 
+  it("covers an unqualified type name that contains underscores", () => {
+    const source = '<see type="BML_INVALID_ROOT">';
+    const token = xmlTokenAt(source, positionAt(source, "BML_INVALID_ROOT"));
+    expect(token?.kind).toBe("attributeValue");
+    const qn = qnameAt(token!, positionAt(source, "BML_INVALID_ROOT"), source);
+    expect(qn?.text).toBe("BML_INVALID_ROOT");
+  });
+
+  it("covers a prefixed type name that contains underscores", () => {
+    const source = "<baseType>diag:BML_INVALID_ROOT</baseType>";
+    const token = xmlTokenAt(source, positionAt(source, "diag:BML_INVALID_ROOT"));
+    expect(token?.kind).toBe("text");
+    const qn = qnameAt(token!, positionAt(source, "diag:BML_INVALID_ROOT"), source);
+    expect(qn?.text).toBe("diag:BML_INVALID_ROOT");
+  });
+
   it("does not match lowercase words in documentation text", () => {
     const token = xmlTokenAt(SAMPLE, positionAt(SAMPLE, "item count"));
     expect(token?.kind).toBe("text");

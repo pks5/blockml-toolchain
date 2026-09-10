@@ -12,6 +12,7 @@
   xmlns:fwcap="org.blockml.bml.framework.capability"
   xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
   xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
   xmlns:serializer="org.blockml.bml.compiler.serializer"
   xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
   xmlns:validator="org.blockml.bml.compiler.validator"
@@ -41,6 +42,12 @@
     • member container/name/field/facet/sub-container
     • domain type, composition instance
     
+    Domain type and composition-instance locals use the same type-or-name rule as
+    parcap:IsDocumentRootLocalName (except legacy block): optional visibility
+    underscores, then an uppercase letter, then letters, digits, or underscores.
+    That includes TypeReferenceEntity empty-child sugar in type lists
+    (diag:BML_INVALID_ROOT, _Utils, T00001_PoemTest_20260830T232831).
+    
     Nested block re-enters L1. Lexical tokens cover attributes, strings, comments,
     interpolation, embed, and punctuation. Returns LSP SemanticTokens.data (5-int groups).
     Used by textDocument/semanticTokens/full.
@@ -48,6 +55,7 @@
   </documentation>
   <references>
     <see type="lspdocumentation:PublicApi" relation="SeeAlso" />
+    <see type="parcap:IsDocumentRootLocalName" relation="SeeAlso" />
   </references>
   <properties>
     <text type="type:Text">

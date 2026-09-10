@@ -184,8 +184,9 @@ const TOKEN_TYPE_INDEX: Record<SemanticTokenType, number> = Object.fromEntries(
   SEMANTIC_TOKEN_TYPES.map((type, index) => [type, index]),
 ) as Record<SemanticTokenType, number>;
 
-function isPascalCase(local: string): boolean {
-  return /^[A-Z][A-Za-z0-9]*$/.test(local);
+/** Type-or-name local: visibility underscores + PascalCase, matching IsDocumentRootLocalName. */
+function isTypeOrNameLocal(local: string): boolean {
+  return local !== "block" && isDocumentRootLocalName(local);
 }
 
 function isNameStart(ch: string | undefined): boolean {
@@ -267,7 +268,7 @@ function bodyOf(parentAncestors: string[]): BodyContext {
         }
         break;
       case "memberSubContainerBody":
-        if (isPascalCase(name)) {
+        if (isTypeOrNameLocal(name)) {
           body = "memberBody";
         } else if (MEMBER_FIELD.has(name) || matchesTag(raw, name, MEMBER_FACET)) {
           body = "declarationBody";
@@ -308,7 +309,7 @@ function classifyElement(
       if (matchesTag(tokenText, local, MEMBER_CONTAINER)) {
         return "memberContainer";
       }
-      if (isPascalCase(local)) {
+      if (isTypeOrNameLocal(local)) {
         return "domainType";
       }
       return "memberName";
@@ -324,7 +325,7 @@ function classifyElement(
       if (matchesTag(tokenText, local, MEMBER_SUBCONTAINER)) {
         return "memberSubContainer";
       }
-      if (isPascalCase(local)) {
+      if (isTypeOrNameLocal(local)) {
         return "domainType";
       }
       return "tag";
@@ -338,12 +339,12 @@ function classifyElement(
       if (matchesTag(tokenText, local, MEMBER_SUBCONTAINER)) {
         return "memberSubContainer";
       }
-      if (isPascalCase(local)) {
+      if (isTypeOrNameLocal(local)) {
         return "compositionInstance";
       }
       return "tag";
     case "declarationBody":
-      if (isPascalCase(local)) {
+      if (isTypeOrNameLocal(local)) {
         return "domainType";
       }
       return "tag";
