@@ -28,16 +28,34 @@
     core:Capability
   </baseType>
   <is>
-    Go-to-definition from a type QName via TypeRegistry
+    Go-to-definition from a type QName or member use via TypeRegistry
   </is>
   <documentation>
-    # Go-to-definition from a type QName via TypeRegistry
+    # Go-to-definition from a type QName or member use via TypeRegistry
     
-    Parse-only XML-token hit-test. Resolvable type QNames (prefix:Local, dotted FQN, or unqualified PascalCase in a type slot via implicit namespace) are jump targets. Returns LocationLink[]: originSelectionRange covers the whole QName; target is registry.get(fqn).block.source with the open document overlaid. Language tags and concrete member tags are not definitions. Unknown FQN, no hit, or no document → null.
+    Parse-only XML-token hit-test. Jump targets:
+    
+    • Type QNames — prefix:Local, dotted FQN, or unqualified type-or-name in a type
+      slot (implicit namespace). originSelectionRange covers the whole QName; target
+      is registry.get(fqn).block.source with the open document overlaid.
+    • Member override — opening tag of a domain member with override="true" jumps
+      to the nearest higher declaration of the same member identity (parent
+      baseType, then grandparent, then a contract on the current block).
+    • Instance member — on a composition Block instance, the attribute name
+      (before =) or the opening tag of a property / aggregation / association /
+      capability child jumps to the nearest declaration on that instance type
+      (the instance type itself, then parent, then grandparent). Closing tags
+      and attribute values are not targets.
+    
+    Language tags are not definitions. Unknown FQN, no inherited member, no hit,
+    or no document → null.
   </documentation>
   <references>
     <see type="lspdocumentation:PublicApi" relation="SeeAlso" />
     <see type="parcap:Parse" relation="SeeAlso" />
+    <see type="fwcap:ResolveEffectiveMembers" relation="SeeAlso" />
+    <see type="fwcap:CollectBaseTypeChain" relation="SeeAlso" />
+    <see type="def:MemberDefinition" relation="SeeAlso" />
   </references>
   <properties>
     <text type="type:Text">

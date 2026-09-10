@@ -10,8 +10,14 @@ export interface XmlToken {
   range: LspRange;
   /** Local name of the enclosing element (prefix stripped). */
   elementLocalName: string;
+  /** Authored enclosing element name, including prefix when present. */
+  elementQName: string;
   /** Local names from root to the enclosing element, inclusive. */
   ancestors: string[];
+  /** Authored ancestor names (prefix:Local or Local), root to enclosing. */
+  ancestorQNames: string[];
+  /** True when this token is a closing tag name. */
+  closing?: boolean;
   /** Set on attribute name/value tokens. */
   attributeName?: string;
 }
@@ -107,7 +113,8 @@ function tokenAt(
   start: number,
   end: number,
   ancestors: string[],
-  extra?: { attributeName?: string },
+  ancestorQNames: string[],
+  extra?: { attributeName?: string; closing?: boolean },
 ): XmlToken {
   const value = text.slice(start, end);
   const token: XmlToken = {
@@ -117,10 +124,15 @@ function tokenAt(
     endOffset: end,
     range: offsetRangeToLsp(text, start, end),
     elementLocalName: ancestors[ancestors.length - 1] ?? "",
+    elementQName: ancestorQNames[ancestorQNames.length - 1] ?? "",
     ancestors: [...ancestors],
+    ancestorQNames: [...ancestorQNames],
   };
   if (extra?.attributeName !== undefined) {
     token.attributeName = extra.attributeName;
+  }
+  if (extra?.closing) {
+    token.closing = true;
   }
   return token;
 }
@@ -128,6 +140,7 @@ function tokenAt(
 function collectTokens(source: string): XmlToken[] {
   const tokens: XmlToken[] = [];
   const stack: string[] = [];
+  const qStack: string[] = [];
   let i = 0;
 
   while (i < source.length) {
@@ -142,7 +155,7 @@ function collectTokens(source: string): XmlToken[] {
       const close = end === -1 ? source.length : end;
       const body = source.slice(start, close);
       if (body.trim() && stack.length > 0) {
-        tokens.push(tokenAt("text", source, start, close, stack));
+        tokens.push(tokenAt("text", source, start, close, stack, qStack));
       }
       i = end === -1 ? source.length : end + 3;
       continue;
@@ -160,9 +173,15 @@ function collectTokens(source: string): XmlToken[] {
       }
       const local = xmlLocalName(name.name);
       const ancestors = stack.length > 0 ? [...stack] : [local];
-      tokens.push(tokenAt("elementName", source, name.start, name.end, ancestors));
+      const ancestorQNames = qStack.length > 0 ? [...qStack] : [name.name];
+      tokens.push(
+        tokenAt("elementName", source, name.start, name.end, ancestors, ancestorQNames, {
+          closing: true,
+        }),
+      );
       if (stack.length > 0) {
         stack.pop();
+        qStack.pop();
       }
       const gt = source.indexOf(">", name.end);
       i = gt === -1 ? source.length : gt + 1;
@@ -176,7 +195,8 @@ function collectTokens(source: string): XmlToken[] {
       }
       const local = xmlLocalName(name.name);
       stack.push(local);
-      tokens.push(tokenAt("elementName", source, name.start, name.end, stack));
+      qStack.push(name.name);
+      tokens.push(tokenAt("elementName", source, name.start, name.end, stack, qStack));
       let j = skipWs(source, name.end);
       let selfClosing = false;
       while (j < source.length) {
@@ -195,7 +215,7 @@ function collectTokens(source: string): XmlToken[] {
           continue;
         }
         tokens.push(
-          tokenAt("attributeName", source, attr.start, attr.end, stack, {
+          tokenAt("attributeName", source, attr.start, attr.end, stack, qStack, {
             attributeName: attr.name,
           }),
         );
@@ -208,7 +228,7 @@ function collectTokens(source: string): XmlToken[] {
             const valueEnd = source.indexOf(quote, valueStart);
             const close = valueEnd === -1 ? source.length : valueEnd;
             tokens.push(
-              tokenAt("attributeValue", source, valueStart, close, stack, {
+              tokenAt("attributeValue", source, valueStart, close, stack, qStack, {
                 attributeName: attr.name,
               }),
             );
@@ -219,6 +239,7 @@ function collectTokens(source: string): XmlToken[] {
       }
       if (selfClosing && stack.length > 0) {
         stack.pop();
+        qStack.pop();
       }
       i = j;
       continue;
@@ -228,7 +249,7 @@ function collectTokens(source: string): XmlToken[] {
     const end = nextTag === -1 ? source.length : nextTag;
     const body = source.slice(i, end);
     if (body.trim() && stack.length > 0) {
-      tokens.push(tokenAt("text", source, i, end, stack));
+      tokens.push(tokenAt("text", source, i, end, stack, qStack));
     }
     i = end;
   }

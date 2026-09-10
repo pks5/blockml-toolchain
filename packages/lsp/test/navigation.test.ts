@@ -2,8 +2,10 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { describe, expect, it } from "vitest";
+import { parse } from "@blockml/parser";
 import { bomLocationToRange, createWorkspace, definitionAt, referencesAt } from "../src/index.js";
 import type { LspLocation } from "../src/index.js";
+import type { WorkspaceState } from "../src/workspace.js";
 import { offsetRangeToLsp } from "../src/xml-token.js";
 
 const ROOT = join(import.meta.dirname, "..", "..", "..");
@@ -22,6 +24,123 @@ const NAV_BML = [
   '    <count type="type:Integer">',
   "      <documentation>item count</documentation>",
   "    </count>",
+  "  </properties>",
+  "</block>",
+].join("\n");
+
+const NAV_NS = [
+  'xmlns="http://blockml.org/bml"',
+  ' xmlns:core="org.blockml.bml.core"',
+  ' xmlns:type="org.blockml.bml.type"',
+  ' xmlns:test="com.blockml.test.navmember"',
+].join("");
+
+const NAV_PARENT_BML = [
+  `<block ${NAV_NS}>`,
+  "  <name>NavParent</name>",
+  "  <type>test:NavParent</type>",
+  "  <baseType>core:Block</baseType>",
+  "  <is>nav parent</is>",
+  "  <properties>",
+  '    <label type="type:Text">',
+  "      <documentation>parent label</documentation>",
+  "    </label>",
+  "  </properties>",
+  "</block>",
+].join("\n");
+
+const NAV_MID_BML = [
+  `<block ${NAV_NS}>`,
+  "  <name>NavMid</name>",
+  "  <type>test:NavMid</type>",
+  "  <baseType>test:NavParent</baseType>",
+  "  <is>nav mid</is>",
+  "  <properties>",
+  '    <label override="true" type="type:Text">',
+  "      <documentation>mid label</documentation>",
+  "    </label>",
+  "  </properties>",
+  "</block>",
+].join("\n");
+
+const NAV_TARGET_PARENT_BML = [
+  `<block ${NAV_NS}>`,
+  "  <name>NavTargetParent</name>",
+  "  <type>test:NavTargetParent</type>",
+  "  <baseType>core:Block</baseType>",
+  "  <is>instance parent</is>",
+  "  <properties>",
+  '    <inheritedProp type="type:Integer" />',
+  "  </properties>",
+  "</block>",
+].join("\n");
+
+const NAV_INNER_BML = [
+  `<block ${NAV_NS}>`,
+  "  <name>NavInner</name>",
+  "  <type>test:NavInner</type>",
+  "  <baseType>core:Block</baseType>",
+  "  <is>nested instance</is>",
+  "  <properties>",
+  '    <someProp type="type:Integer" />',
+  "  </properties>",
+  "</block>",
+].join("\n");
+
+const NAV_TARGET_BML = [
+  `<block ${NAV_NS}>`,
+  "  <name>NavTarget</name>",
+  "  <type>test:NavTarget</type>",
+  "  <baseType>test:NavTargetParent</baseType>",
+  "  <is>composition instance type</is>",
+  "  <properties>",
+  '    <myProp type="type:Integer" />',
+  '    <otherProp type="type:Integer" />',
+  "  </properties>",
+  "  <aggregations>",
+  '    <myAggr type="test:NavInner[]" />',
+  "  </aggregations>",
+  "</block>",
+].join("\n");
+
+const NAV_CHILD_BML = [
+  `<block ${NAV_NS}>`,
+  "  <name>NavChild</name>",
+  "  <type>test:NavChild</type>",
+  "  <baseType>test:NavMid</baseType>",
+  "  <is>nav child</is>",
+  "  <properties>",
+  '    <label override="true" type="type:Text">',
+  "      <documentation>child label</documentation>",
+  "    </label>",
+  "  </properties>",
+  "  <aggregations>",
+  '    <demo type="test:NavTarget[]">',
+  "      <composition>",
+  '        <test:NavTarget myProp="3" inheritedProp="1">',
+  "          <otherProp>6</otherProp>",
+  "          <myAggr>",
+  "            <composition>",
+  '              <test:NavInner someProp="6" />',
+  "            </composition>",
+  "          </myAggr>",
+  "        </test:NavTarget>",
+  "      </composition>",
+  "    </demo>",
+  "  </aggregations>",
+  "</block>",
+].join("\n");
+
+const NAV_SKIP_BML = [
+  `<block ${NAV_NS}>`,
+  "  <name>NavSkip</name>",
+  "  <type>test:NavSkip</type>",
+  "  <baseType>test:NavParent</baseType>",
+  "  <is>skips mid</is>",
+  "  <properties>",
+  '    <label override="true" type="type:Text">',
+  "      <documentation>skip label</documentation>",
+  "    </label>",
   "  </properties>",
   "</block>",
 ].join("\n");
@@ -60,6 +179,29 @@ function rangeOf(text: string, needle: string) {
     throw new Error(`needle not found: ${needle}`);
   }
   return offsetRangeToLsp(text, idx, idx + needle.length);
+}
+
+function registerParsed(workspace: WorkspaceState, text: string, filePath: string): void {
+  const parsed = parse(text, { filePath, continueOnError: true });
+  expect(parsed.document, `parse failed for ${filePath}: ${parsed.diagnostics.map((d) => d.message).join("; ")}`).not.toBeNull();
+  workspace.registry.register(parsed.document!);
+}
+
+function registerNavMemberTypes(workspace: WorkspaceState): string {
+  registerParsed(workspace, NAV_PARENT_BML, "/nav/NavParent.bml");
+  registerParsed(workspace, NAV_MID_BML, "/nav/NavMid.bml");
+  registerParsed(workspace, NAV_TARGET_PARENT_BML, "/nav/NavTargetParent.bml");
+  registerParsed(workspace, NAV_INNER_BML, "/nav/NavInner.bml");
+  registerParsed(workspace, NAV_TARGET_BML, "/nav/NavTarget.bml");
+  registerParsed(workspace, NAV_CHILD_BML, "/nav/NavChild.bml");
+  registerParsed(workspace, NAV_SKIP_BML, "/nav/NavSkip.bml");
+  return NAV_CHILD_BML;
+}
+
+function memberRange(workspace: WorkspaceState, typeFqn: string, name: string) {
+  const member = workspace.registry.get(typeFqn)?.block.members.find((entry) => entry.name === name);
+  expect(member?.source, `${typeFqn}.${name} source`).toBeTruthy();
+  return bomLocationToRange(member!.source!);
 }
 
 function sameLocation(a: LspLocation, b: LspLocation): boolean {
@@ -176,6 +318,77 @@ describe("definitionAt / referencesAt", () => {
     expect(withDecl!.some((loc) => sameLocation(loc, declaration![0]!.target))).toBe(true);
     expect(withoutDecl!.some((loc) => sameLocation(loc, declaration![0]!.target))).toBe(false);
     expect(withoutDecl!.length).toBeGreaterThan(0);
+  });
+
+  it("jumps from an override member tag to the nearest parent declaration", () => {
+    const workspace = createWorkspace(ROOT);
+    const child = registerNavMemberTypes(workspace);
+    const fromTag = definitionAt(child, "/nav/NavChild.bml", positionAt(child, "<label override"), workspace);
+    expect(fromTag).not.toBeNull();
+    expect(fromTag).toHaveLength(1);
+    expect(fromTag![0]!.originSelectionRange).toEqual(rangeOf(child, "label"));
+    expect(fromTag![0]!.target.uri).toBe(pathToFileURL("/nav/NavMid.bml").href);
+    expect(fromTag![0]!.target.range).toEqual(memberRange(workspace, "com.blockml.test.navmember.NavMid", "label"));
+  });
+
+  it("skips a silent parent and jumps to the grandparent override target", () => {
+    const workspace = createWorkspace(ROOT);
+    registerNavMemberTypes(workspace);
+    const fromTag = definitionAt(NAV_SKIP_BML, "/nav/NavSkip.bml", positionAt(NAV_SKIP_BML, "<label override"), workspace);
+    expect(fromTag).not.toBeNull();
+    expect(fromTag![0]!.target.uri).toBe(pathToFileURL("/nav/NavParent.bml").href);
+    expect(fromTag![0]!.target.range).toEqual(
+      memberRange(workspace, "com.blockml.test.navmember.NavParent", "label"),
+    );
+  });
+
+  it("does not jump from a member tag without override", () => {
+    const workspace = createWorkspace(ROOT);
+    registerNavMemberTypes(workspace);
+    expect(definitionAt(NAV_PARENT_BML, "/nav/NavParent.bml", positionAt(NAV_PARENT_BML, "<label "), workspace)).toBeNull();
+  });
+
+  it("jumps from instance attribute names and opening member tags", () => {
+    const workspace = createWorkspace(ROOT);
+    const child = registerNavMemberTypes(workspace);
+    const fromAttr = definitionAt(child, "/nav/NavChild.bml", positionAt(child, "myProp="), workspace);
+    expect(fromAttr).not.toBeNull();
+    expect(fromAttr![0]!.originSelectionRange).toEqual(rangeOf(child, "myProp"));
+    expect(fromAttr![0]!.target.range).toEqual(
+      memberRange(workspace, "com.blockml.test.navmember.NavTarget", "myProp"),
+    );
+
+    const fromChild = definitionAt(child, "/nav/NavChild.bml", positionAt(child, "<otherProp>"), workspace);
+    expect(fromChild).not.toBeNull();
+    expect(fromChild![0]!.originSelectionRange).toEqual(rangeOf(child, "otherProp"));
+    expect(fromChild![0]!.target.range).toEqual(
+      memberRange(workspace, "com.blockml.test.navmember.NavTarget", "otherProp"),
+    );
+
+    const fromAggr = definitionAt(child, "/nav/NavChild.bml", positionAt(child, "<myAggr>"), workspace);
+    expect(fromAggr).not.toBeNull();
+    expect(fromAggr![0]!.target.range).toEqual(
+      memberRange(workspace, "com.blockml.test.navmember.NavTarget", "myAggr"),
+    );
+
+    const fromNested = definitionAt(child, "/nav/NavChild.bml", positionAt(child, "someProp="), workspace);
+    expect(fromNested).not.toBeNull();
+    expect(fromNested![0]!.target.range).toEqual(
+      memberRange(workspace, "com.blockml.test.navmember.NavInner", "someProp"),
+    );
+
+    const fromInherited = definitionAt(child, "/nav/NavChild.bml", positionAt(child, "inheritedProp="), workspace);
+    expect(fromInherited).not.toBeNull();
+    expect(fromInherited![0]!.target.range).toEqual(
+      memberRange(workspace, "com.blockml.test.navmember.NavTargetParent", "inheritedProp"),
+    );
+  });
+
+  it("does not jump from instance attribute values or closing member tags", () => {
+    const workspace = createWorkspace(ROOT);
+    const child = registerNavMemberTypes(workspace);
+    expect(definitionAt(child, "/nav/NavChild.bml", positionAt(child, 'myProp="3"', 8), workspace)).toBeNull();
+    expect(definitionAt(child, "/nav/NavChild.bml", positionAt(child, "</otherProp>"), workspace)).toBeNull();
   });
 
   it("returns null outside the document and for invalid XML", () => {

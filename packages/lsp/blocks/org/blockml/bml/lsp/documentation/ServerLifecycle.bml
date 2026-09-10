@@ -54,10 +54,12 @@
     Urmodell tree. Parse-only — no validator. selectionRange equals range.
     
     onDefinition / onReferences: XML-token hitAt on the in-memory buffer, then
-    TypeRegistry from disk. F12 on type QNames — prefix:Local, dotted FQN, or
-    unqualified PascalCase in a type slot (implicit namespace). LocationLink covers
-    the whole QName. includeDeclaration controls whether the defining block.source
-    is included.
+    TypeRegistry from disk. F12 on type QNames (prefix:Local, dotted FQN, or
+    unqualified type-or-name in a type slot), override="true" member opening
+    tags (nearest inherited declaration), and instance member attribute names
+    or opening tags (nearest declaration on the instance type). LocationLink
+    covers the origin token. includeDeclaration controls whether the defining
+    block.source is included.
     
     onSemanticTokens: semanticTokensFor on the in-memory buffer; XML-stack walk
     classified by FrameworkRoles position (no parser, no TypeRegistry). Nested

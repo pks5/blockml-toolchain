@@ -68,12 +68,14 @@
     Field, capability Method; children in members then subBlocks then
     embeddedBlocks order. selectionRange equals the element range.
     
-    Definition and references share Hover's XML-token hit-test. F12 is only
-    offered on type QNames and returns LocationLink with originSelectionRange
-    covering the whole prefix:Local, dotted FQN, or unqualified PascalCase in a
-    type slot (implicit namespace). Language tags are not definitions. Targets
-    and usages come from the TypeRegistry with the open document overlaid.
-    includeDeclaration defaults true.
+    Definition and references share Hover's XML-token hit-test. F12 is offered
+    on type QNames (prefix:Local, dotted FQN, or unqualified type-or-name in a
+    type slot) and on member uses: override="true" opening tags jump to the
+    nearest inherited or contract declaration; instance attribute names and
+    opening member tags jump to the nearest declaration on the instance type
+    hierarchy. Language tags are not definitions. Targets and usages come from
+    the TypeRegistry with the open document overlaid. includeDeclaration
+    defaults true.
     
     Semantic tokens are an XML-stack walk (no parse()). Element names are classified
     by nesting relative to the nearest document root or nested block, matching
