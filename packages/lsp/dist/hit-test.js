@@ -1,5 +1,5 @@
 import { isDocumentRootLocalName, parse, resolveTypeName, } from "@blockml/parser";
-import { resolveEffectiveMembers } from "@blockml/framework";
+import { collectBaseTypeChain, memberIdentityKey, resolveEffectiveMembers, } from "@blockml/framework";
 import { bomLocationToRange } from "./positions.js";
 import { isXmlnsAttribute, qnameAt, rangeContains, xmlLocalName, xmlTokenAt, } from "./xml-token.js";
 const MEMBER_SECTIONS = new Set(["properties", "aggregations", "associations", "capabilities"]);
@@ -221,6 +221,132 @@ function isDomainMemberTag(token) {
     }
     return isDefinitionParent(parent, token) && !LANGUAGE_ELEMENT_NAMES.has(token.elementLocalName);
 }
+function logicalMemberName(local) {
+    if (local.startsWith("__")) {
+        return local.slice(2);
+    }
+    if (local.startsWith("_")) {
+        return local.slice(1);
+    }
+    return local;
+}
+function isReservedInstanceAttribute(name) {
+    if (!name || isXmlnsAttribute(name)) {
+        return true;
+    }
+    return name.startsWith("bml:") || name.startsWith("xsi:") || xmlLocalName(name) === "bml";
+}
+function localMemberNamed(block, name) {
+    const unnamed = block.members.find((member) => member.name === name && !member.namespace);
+    if (unnamed) {
+        return unnamed;
+    }
+    return block.members.find((member) => member.name === name);
+}
+function contractMemberNamed(block, name, key, registry) {
+    for (const ref of block.contracts ?? []) {
+        const contract = registry.get(ref.value)?.block;
+        if (!contract) {
+            continue;
+        }
+        const found = key
+            ? contract.members.find((member) => memberIdentityKey(member) === key)
+            : localMemberNamed(contract, name);
+        if (found) {
+            return found;
+        }
+    }
+    return undefined;
+}
+function findNearestInheritedMember(block, registry, name, identity) {
+    const key = identity ? memberIdentityKey(identity) : undefined;
+    const chain = collectBaseTypeChain(block, registry);
+    for (let i = chain.length - 2; i >= 0; i--) {
+        const layer = chain[i];
+        const local = key
+            ? layer.members.find((member) => memberIdentityKey(member) === key)
+            : localMemberNamed(layer, name);
+        if (local) {
+            return local;
+        }
+        const fromContract = contractMemberNamed(layer, name, key, registry);
+        if (fromContract) {
+            return fromContract;
+        }
+    }
+    return contractMemberNamed(block, name, key, registry);
+}
+function findNearestMemberOnType(typeFqn, name, registry) {
+    const block = registry.get(typeFqn)?.block;
+    if (!block) {
+        return undefined;
+    }
+    return localMemberNamed(block, name) ?? findNearestInheritedMember(block, registry, name);
+}
+function enclosingInstanceTypeFqn(token, bindings, workspace) {
+    const qnames = token.ancestorQNames;
+    const start = token.kind === "attributeName" ? qnames.length - 1 : qnames.length - 2;
+    for (let i = start; i >= 0; i--) {
+        const raw = qnames[i];
+        if (!raw) {
+            continue;
+        }
+        const local = xmlLocalName(raw);
+        const parent = i > 0 ? xmlLocalName(qnames[i - 1] ?? "") : undefined;
+        if (!isDocumentRootLocalName(local) || local === "block") {
+            continue;
+        }
+        if (parent === "subBlocks" || parent === "embeddedBlocks") {
+            continue;
+        }
+        if (i === 0) {
+            continue;
+        }
+        const fqn = resolveAuthoredTypeRef(raw, bindings, "type");
+        if (fqn && workspace.registry.get(fqn)) {
+            return fqn;
+        }
+    }
+    return undefined;
+}
+function instanceMemberHit(token, bindings, workspace) {
+    if (token.closing) {
+        return null;
+    }
+    if (token.kind === "attributeName") {
+        if (isReservedInstanceAttribute(token.text)) {
+            return null;
+        }
+    }
+    else if (token.kind === "elementName") {
+        if (isDocumentRootLocalName(token.elementLocalName)) {
+            return null;
+        }
+    }
+    else {
+        return null;
+    }
+    const typeFqn = enclosingInstanceTypeFqn(token, bindings, workspace);
+    if (!typeFqn) {
+        return null;
+    }
+    const authored = token.kind === "attributeName" ? xmlLocalName(token.text) : token.elementLocalName;
+    const member = findNearestMemberOnType(typeFqn, logicalMemberName(authored), workspace.registry);
+    if (!member?.source) {
+        return null;
+    }
+    const hit = {
+        kind: "member",
+        member,
+        range: token.range,
+        definitionSource: member.source,
+    };
+    const memberType = memberTypeFqn(member);
+    if (memberType) {
+        hit.typeFqn = memberType;
+    }
+    return hit;
+}
 function lookupLanguageMember(workspace, metaFqn, localName) {
     const meta = workspace.registry.get(metaFqn)?.block;
     if (!meta) {
@@ -305,13 +431,23 @@ export function hitAt(text, filePath, position, workspace) {
             }
         }
     }
-    if (isDomainMemberTag(token)) {
+    const instanceHit = instanceMemberHit(token, bindings, workspace);
+    if (instanceHit) {
+        return instanceHit;
+    }
+    if (isDomainMemberTag(token) && !token.closing) {
         const member = enclosingMember(token, enclosing);
         if (member) {
             const hit = { kind: "member", member, range: token.range };
             const typeFqn = memberTypeFqn(member);
             if (typeFqn) {
                 hit.typeFqn = typeFqn;
+            }
+            if (member.override) {
+                const inherited = findNearestInheritedMember(enclosing, workspace.registry, member.name, member);
+                if (inherited?.source) {
+                    hit.definitionSource = inherited.source;
+                }
             }
             return hit;
         }

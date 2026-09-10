@@ -1,6 +1,6 @@
 {
   "name": "@blockml/bom",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "description": "BlockML BOM (Urmodell) TypeScript contracts — ParseResult, Diagnostic, bomEquals",
   "license": "Apache-2.0",
   "repository": {

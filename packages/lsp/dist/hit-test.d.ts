@@ -1,4 +1,4 @@
-import type { BlockDefinition, MemberDefinition } from "@blockml/bom";
+import type { BlockDefinition, MemberDefinition, SourceLocation } from "@blockml/bom";
 import { type ImplicitNamespaceContext } from "@blockml/parser";
 import { type LspPosition, type LspRange } from "./positions.js";
 import type { WorkspaceState } from "./workspace.js";
@@ -13,6 +13,8 @@ export interface MemberHit {
     member: MemberDefinition;
     range: LspRange;
     typeFqn?: string;
+    /** Nearest inherited or instance-type declaration — F12 target when set. */
+    definitionSource?: SourceLocation;
 }
 export interface LanguageHit {
     kind: "language";

@@ -1,4 +1,4 @@
-const QNAME_PATTERN = /[A-Za-z_][\w-]*:[A-Za-z_][\w.-]*|[A-Za-z_][\w-]*(?:\.[A-Za-z_][\w-]*){2,}|[A-Z][A-Za-z0-9]+/g;
+const QNAME_PATTERN = /[A-Za-z_][\w-]*:[A-Za-z_][\w.-]*|[A-Za-z_][\w-]*(?:\.[A-Za-z_][\w-]*){2,}|(?:_+)?[A-Z][A-Za-z0-9_]*/g;
 export function positionToOffset(text, position) {
     let remaining = position.line;
     let offset = 0;
@@ -65,7 +65,7 @@ function readName(text, i) {
     }
     return { name: text.slice(start, i), start, end: i };
 }
-function tokenAt(kind, text, start, end, ancestors, extra) {
+function tokenAt(kind, text, start, end, ancestors, ancestorQNames, extra) {
     const value = text.slice(start, end);
     const token = {
         kind,
@@ -74,16 +74,22 @@ function tokenAt(kind, text, start, end, ancestors, extra) {
         endOffset: end,
         range: offsetRangeToLsp(text, start, end),
         elementLocalName: ancestors[ancestors.length - 1] ?? "",
+        elementQName: ancestorQNames[ancestorQNames.length - 1] ?? "",
         ancestors: [...ancestors],
+        ancestorQNames: [...ancestorQNames],
     };
     if (extra?.attributeName !== undefined) {
         token.attributeName = extra.attributeName;
+    }
+    if (extra?.closing) {
+        token.closing = true;
     }
     return token;
 }
 function collectTokens(source) {
     const tokens = [];
     const stack = [];
+    const qStack = [];
     let i = 0;
     while (i < source.length) {
         if (source.startsWith("<!--", i)) {
@@ -97,7 +103,7 @@ function collectTokens(source) {
             const close = end === -1 ? source.length : end;
             const body = source.slice(start, close);
             if (body.trim() && stack.length > 0) {
-                tokens.push(tokenAt("text", source, start, close, stack));
+                tokens.push(tokenAt("text", source, start, close, stack, qStack));
             }
             i = end === -1 ? source.length : end + 3;
             continue;
@@ -115,9 +121,13 @@ function collectTokens(source) {
             }
             const local = xmlLocalName(name.name);
             const ancestors = stack.length > 0 ? [...stack] : [local];
-            tokens.push(tokenAt("elementName", source, name.start, name.end, ancestors));
+            const ancestorQNames = qStack.length > 0 ? [...qStack] : [name.name];
+            tokens.push(tokenAt("elementName", source, name.start, name.end, ancestors, ancestorQNames, {
+                closing: true,
+            }));
             if (stack.length > 0) {
                 stack.pop();
+                qStack.pop();
             }
             const gt = source.indexOf(">", name.end);
             i = gt === -1 ? source.length : gt + 1;
@@ -131,7 +141,8 @@ function collectTokens(source) {
             }
             const local = xmlLocalName(name.name);
             stack.push(local);
-            tokens.push(tokenAt("elementName", source, name.start, name.end, stack));
+            qStack.push(name.name);
+            tokens.push(tokenAt("elementName", source, name.start, name.end, stack, qStack));
             let j = skipWs(source, name.end);
             let selfClosing = false;
             while (j < source.length) {
@@ -149,7 +160,7 @@ function collectTokens(source) {
                     j++;
                     continue;
                 }
-                tokens.push(tokenAt("attributeName", source, attr.start, attr.end, stack, {
+                tokens.push(tokenAt("attributeName", source, attr.start, attr.end, stack, qStack, {
                     attributeName: attr.name,
                 }));
                 j = skipWs(source, attr.end);
@@ -160,7 +171,7 @@ function collectTokens(source) {
                         const valueStart = j + 1;
                         const valueEnd = source.indexOf(quote, valueStart);
                         const close = valueEnd === -1 ? source.length : valueEnd;
-                        tokens.push(tokenAt("attributeValue", source, valueStart, close, stack, {
+                        tokens.push(tokenAt("attributeValue", source, valueStart, close, stack, qStack, {
                             attributeName: attr.name,
                         }));
                         j = valueEnd === -1 ? source.length : valueEnd + 1;
@@ -170,6 +181,7 @@ function collectTokens(source) {
             }
             if (selfClosing && stack.length > 0) {
                 stack.pop();
+                qStack.pop();
             }
             i = j;
             continue;
@@ -178,7 +190,7 @@ function collectTokens(source) {
         const end = nextTag === -1 ? source.length : nextTag;
         const body = source.slice(i, end);
         if (body.trim() && stack.length > 0) {
-            tokens.push(tokenAt("text", source, i, end, stack));
+            tokens.push(tokenAt("text", source, i, end, stack, qStack));
         }
         i = end;
     }

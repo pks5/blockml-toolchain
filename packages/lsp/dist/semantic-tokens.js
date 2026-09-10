@@ -150,8 +150,9 @@ const MEMBER_SUBCONTAINER = new Set([
     "implementation",
 ]);
 const TOKEN_TYPE_INDEX = Object.fromEntries(SEMANTIC_TOKEN_TYPES.map((type, index) => [type, index]));
-function isPascalCase(local) {
-    return /^[A-Z][A-Za-z0-9]*$/.test(local);
+/** Type-or-name local: visibility underscores + PascalCase, matching IsDocumentRootLocalName. */
+function isTypeOrNameLocal(local) {
+    return local !== "block" && isDocumentRootLocalName(local);
 }
 function isNameStart(ch) {
     return ch !== undefined && /[A-Za-z_]/.test(ch);
@@ -231,7 +232,7 @@ function bodyOf(parentAncestors) {
                 }
                 break;
             case "memberSubContainerBody":
-                if (isPascalCase(name)) {
+                if (isTypeOrNameLocal(name)) {
                     body = "memberBody";
                 }
                 else if (MEMBER_FIELD.has(name) || matchesTag(raw, name, MEMBER_FACET)) {
@@ -269,7 +270,7 @@ function classifyElement(tokenText, local, body, ancestors) {
             if (matchesTag(tokenText, local, MEMBER_CONTAINER)) {
                 return "memberContainer";
             }
-            if (isPascalCase(local)) {
+            if (isTypeOrNameLocal(local)) {
                 return "domainType";
             }
             return "memberName";
@@ -285,7 +286,7 @@ function classifyElement(tokenText, local, body, ancestors) {
             if (matchesTag(tokenText, local, MEMBER_SUBCONTAINER)) {
                 return "memberSubContainer";
             }
-            if (isPascalCase(local)) {
+            if (isTypeOrNameLocal(local)) {
                 return "domainType";
             }
             return "tag";
@@ -299,12 +300,12 @@ function classifyElement(tokenText, local, body, ancestors) {
             if (matchesTag(tokenText, local, MEMBER_SUBCONTAINER)) {
                 return "memberSubContainer";
             }
-            if (isPascalCase(local)) {
+            if (isTypeOrNameLocal(local)) {
                 return "compositionInstance";
             }
             return "tag";
         case "declarationBody":
-            if (isPascalCase(local)) {
+            if (isTypeOrNameLocal(local)) {
                 return "domainType";
             }
             return "tag";

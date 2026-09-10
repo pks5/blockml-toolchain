@@ -8,8 +8,14 @@ export interface XmlToken {
     range: LspRange;
     /** Local name of the enclosing element (prefix stripped). */
     elementLocalName: string;
+    /** Authored enclosing element name, including prefix when present. */
+    elementQName: string;
     /** Local names from root to the enclosing element, inclusive. */
     ancestors: string[];
+    /** Authored ancestor names (prefix:Local or Local), root to enclosing. */
+    ancestorQNames: string[];
+    /** True when this token is a closing tag name. */
+    closing?: boolean;
     /** Set on attribute name/value tokens. */
     attributeName?: string;
 }

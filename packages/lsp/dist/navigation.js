@@ -18,7 +18,20 @@ function definitionLocation(workspace, fqn) {
 export function definitionAt(text, filePath, position, workspace) {
     const scoped = workspaceForOpenText(workspace, text, filePath);
     const hit = hitAt(text, filePath, position, scoped);
-    if (!hit || hit.kind !== "typeRef") {
+    if (!hit) {
+        return null;
+    }
+    if (hit.kind === "member") {
+        if (!hit.definitionSource) {
+            return null;
+        }
+        const target = locationFromSource(hit.definitionSource);
+        if (!target) {
+            return null;
+        }
+        return [{ originSelectionRange: hit.range, target }];
+    }
+    if (hit.kind !== "typeRef") {
         return null;
     }
     const fqn = navigationFqn(hit);
