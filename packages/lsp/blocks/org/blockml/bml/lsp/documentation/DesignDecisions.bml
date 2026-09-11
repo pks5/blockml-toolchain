@@ -41,6 +41,8 @@
     default blocks). A library blocks tree already under srcDir is not registered twice.
     
     Full text sync + debounced validation — simpler than incremental parse for V1.
+    didClose does not send an empty diagnostic list; last-published diagnostics
+    stay so the client can mark closed files.
     
     continueOnError true on parse and validate — diagnostics survive partial BOM.
     

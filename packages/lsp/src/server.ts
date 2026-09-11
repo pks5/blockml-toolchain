@@ -189,7 +189,6 @@ connection.onDidCloseTextDocument((params: DidCloseTextDocumentParams) => {
     clearTimeout(timer);
     debounceTimers.delete(params.textDocument.uri);
   }
-  connection.sendDiagnostics({ uri: params.textDocument.uri, diagnostics: [] });
 });
 
 function fullDocumentRange(text: string): { start: { line: number; character: number }; end: { line: number; character: number } } {

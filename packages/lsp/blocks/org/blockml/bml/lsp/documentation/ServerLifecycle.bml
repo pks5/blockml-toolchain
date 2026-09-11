@@ -36,7 +36,8 @@
     
     onDidOpenTextDocument: store TextDocument, validate immediately.
     onDidChangeTextDocument: debounce 400ms, re-validate.
-    onDidCloseTextDocument: clear diagnostics.
+    onDidCloseTextDocument: drop the in-memory buffer; keep last-published
+    diagnostics so the client can still mark the closed file.
     
     onInitialized: if the client supports dynamic file watchers, register
     **/*.bml, **/blockml.config.json, **/package.json.

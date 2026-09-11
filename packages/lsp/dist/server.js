@@ -140,7 +140,6 @@ connection.onDidCloseTextDocument((params) => {
         clearTimeout(timer);
         debounceTimers.delete(params.textDocument.uri);
     }
-    connection.sendDiagnostics({ uri: params.textDocument.uri, diagnostics: [] });
 });
 function fullDocumentRange(text) {
     const lines = text.split(/\r?\n/);

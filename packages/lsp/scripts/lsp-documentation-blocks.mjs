@@ -143,7 +143,8 @@ export const documentationBlocks = [
 
     onDidOpenTextDocument: store TextDocument, validate immediately.
     onDidChangeTextDocument: debounce 400ms, re-validate.
-    onDidCloseTextDocument: clear diagnostics.
+    onDidCloseTextDocument: drop the in-memory buffer; keep last-published
+    diagnostics so the client can still mark the closed file.
 
     onInitialized: if the client supports dynamic file watchers, register
     **/*.bml, **/blockml.config.json, **/package.json.
@@ -213,6 +214,8 @@ export const documentationBlocks = [
     default blocks). A library blocks tree already under srcDir is not registered twice.
 
     Full text sync + debounced validation — simpler than incremental parse for V1.
+    didClose does not send an empty diagnostic list; last-published diagnostics
+    stay so the client can mark closed files.
 
     continueOnError true on parse and validate — diagnostics survive partial BOM.
 
