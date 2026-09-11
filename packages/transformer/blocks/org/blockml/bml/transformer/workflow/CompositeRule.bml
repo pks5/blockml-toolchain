@@ -1,0 +1,42 @@
+<!--Transformer Workflow — CompositeRule
+  FQN: org.blockml.bml.transformer.workflow.CompositeRule-->
+<workflow:CompositeRule xmlns="http://blockml.org/bml"
+  xmlns:cap="org.blockml.bml.capability"
+  xmlns:lang="org.blockml.bml.language"
+  xmlns:workflow="org.blockml.bml.transformer.workflow">
+
+  <baseType>
+    workflow:Rule
+  </baseType>
+  <is>
+    A workflow rule composed of child rules
+  </is>
+  <documentation>
+    Rule that groups subRules. apply walks subRules in order and invokes
+    each child's apply. Inherits the Task.run obligation from Rule.
+  </documentation>
+  <references>
+    <see type="workflow:Rule" relation="Extends" />
+    <see type="workflow:CompositeTask" relation="SeeAlso" />
+  </references>
+  <aggregations>
+    <subRules type="workflow:Rule[]">
+      <documentation>
+        Child rules that belong to this composite rule.
+      </documentation>
+    </subRules>
+  </aggregations>
+  <capabilities>
+    <apply override="true" type="cap:Action">
+      <documentation>
+        The composite obligation: invoke apply on each subRule in order.
+      </documentation>
+      <implementation language="lang:PseudoCode">
+        <![CDATA[
+        for each subRule in #this.subRules:
+            subRule.apply()
+        ]]>
+      </implementation>
+    </apply>
+  </capabilities>
+</workflow:CompositeRule>

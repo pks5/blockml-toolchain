@@ -24,6 +24,9 @@
   <abstract>
     true
   </abstract>
+  <references>
+    <see type="workflow:AuthorativeSourceSet" relation="SeeAlso" />
+  </references>
   <aggregations>
     <prerequisites type="workflow:Prerequisite[]">
       <documentation>
@@ -40,6 +43,18 @@
         Acceptance criteria that must hold for this task to be considered successful.
       </documentation>
     </successCriteria>
+    <authorativeSources type="workflow:AuthorativeSourceSet[]">
+      <documentation>
+        Authoritative source sets that apply to this Task. When the
+        Task creates new blocks, purely content and domain-specific
+        information may come only from blocks allowed by these sets.
+        Each set is a whitelist (`includedTypes`) minus a blacklist
+        (`excludedTypes`). Other blocks may be used as structural
+        templates — BlockML syntax, patterns, and similar form — but
+        not as a source of domain content. See
+        `workflow:AuthorativeSourceSet`.
+      </documentation>
+    </authorativeSources>
   </aggregations>
   <capabilities>
     <run type="cap:Action">

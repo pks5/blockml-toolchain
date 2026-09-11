@@ -49,11 +49,13 @@
     </dependencies>
     <blocks override="true">
       <composition>
+        <workflow:CompositeRule />
         <workflow:CompositeTask />
         <workflow:Criterion />
         <workflow:ExecutionException />
         <workflow:ExecutionStatus />
         <workflow:AgenticOperation />
+        <workflow:AuthorativeSourceSet />
         <workflow:InstructionRule />
         <workflow:InstructionTask />
         <workflow:ModelOperation />
@@ -65,6 +67,8 @@
         <workflow:ResultException />
         <workflow:ResultMapping />
         <workflow:Rule />
+        <workflow:Sector />
+        <workflow:SectorModel />
         <workflow:Task />
         <workflow:ToolOperation />
         <transformercap:AgenticExecutor />

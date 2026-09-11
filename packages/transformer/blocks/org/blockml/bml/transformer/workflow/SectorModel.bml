@@ -1,0 +1,45 @@
+<!--Transformer Workflow — SectorModel
+  FQN: org.blockml.bml.transformer.workflow.SectorModel-->
+<workflow:SectorModel xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow">
+
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    A BML model composed of independent sectors
+  </is>
+  <isnot>
+    Not a single ModelTransformation and not a BlockLibrary. The model
+    is the set of sectors; transformations run inside sectors via their
+    tasks.
+  </isnot>
+  <documentation>
+    The whole sector model: a BML model of several autonomous
+    `workflow:Sector` packages. Sectors do not depend on each other.
+    They share only libraries outside all sectors. A sector may read
+    blocks of other sectors.
+
+    Purpose: move arbitrary information from source blocks stepwise
+    into a target model. Each sector contributes the tasks that create
+    its own blocks.
+
+    `sectors` lists the Sector Blocks that designate the packages of
+    this model. Every listed sector must inherit from `workflow:Sector`.
+  </documentation>
+  <references>
+    <see type="workflow:Sector" relation="Defines" />
+    <see type="workflow:Task" relation="SeeAlso" />
+    <see type="workflow:ModelTransformation" relation="ContrastsWith" />
+  </references>
+  <aggregations>
+    <sectors type="workflow:Sector[]">
+      <documentation>
+        The sectors that make up this sector model. Each entry is a
+        Block that inherits from workflow:Sector and thereby designates
+        its package as a sector.
+      </documentation>
+    </sectors>
+  </aggregations>
+</workflow:SectorModel>

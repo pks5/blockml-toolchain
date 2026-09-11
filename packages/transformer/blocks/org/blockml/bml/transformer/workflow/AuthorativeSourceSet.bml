@@ -1,0 +1,56 @@
+<!--Transformer Workflow — AuthorativeSourceSet
+  FQN: org.blockml.bml.transformer.workflow.AuthorativeSourceSet-->
+<workflow:AuthorativeSourceSet xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:type="org.blockml.bml.type">
+
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    A set of authoritative source blocks for a Task
+  </is>
+  <isnot>
+    Not a workflow Rule and not a structural template catalog. Other
+    blocks may still be used for BlockML syntax and patterns; this set
+    constrains domain content only.
+  </isnot>
+  <documentation>
+    Set of authoritative sources that apply to a `workflow:Task`. When
+    the Task creates new blocks, purely content and domain-specific
+    information may come only from blocks that match the whitelist
+    `includedTypes` and do not match the blacklist
+    `excludedTypes`. Other blocks may be used as structural
+    templates — BlockML syntax, patterns, and similar form — but not
+    as a source of domain content.
+
+    Both lists are `type:TypeSelector` values
+    (`type:TypeSelectorEntity`). A concrete type FQN is the most
+    specific selector; wildcards follow TypeSelector matching.
+  </documentation>
+  <references>
+    <see type="workflow:Task" relation="SeeAlso" />
+    <see type="type:TypeSelectorEntity" relation="SeeAlso" />
+    <see type="type:TypeSelector" relation="SeeAlso" />
+    <see type="workflow:Rule" relation="ContrastsWith" />
+  </references>
+  <aggregations>
+    <includedTypes type="type:TypeSelectorEntity[]">
+      <documentation>
+        Whitelist. Type selectors naming the blocks that may be
+        authoritative content sources for the Task. Domain
+        information in newly created blocks may come only from
+        blocks that match at least one selector here and none in
+        excludedTypes.
+      </documentation>
+    </includedTypes>
+    <excludedTypes type="type:TypeSelectorEntity[]">
+      <documentation>
+        Blacklist. Type selectors naming blocks that must not be
+        used as authoritative content sources, even when they also
+        match includedTypes.
+      </documentation>
+    </excludedTypes>
+  </aggregations>
+</workflow:AuthorativeSourceSet>
