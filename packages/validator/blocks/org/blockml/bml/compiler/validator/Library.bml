@@ -6,17 +6,17 @@
   xmlns:bomapi="org.blockml.bml.bom.api"
   xmlns:bomcommon="org.blockml.bml.bom.common"
   xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
+  xmlns:valstyle="org.blockml.bml.compiler.validator.style"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:framework="org.blockml.bml.framework"
   xmlns:fwcap="org.blockml.bml.framework.capability"
   xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
-  xmlns:type="org.blockml.bml.type"
-  xmlns:validator="org.blockml.bml.compiler.validator"
-  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
-  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
-  xmlns:valstyle="org.blockml.bml.compiler.validator.style"
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
+  xmlns:type="org.blockml.bml.type">
 
   <baseType>
     core:BlockLibrary
@@ -70,12 +70,14 @@
         <valstyle:PreferTypeAsTag />
         <valstyle:PreferOmitRedundantType />
         <valstyle:PreferOmitRedundantName />
+        <valstyle:PreferOmitUnusedNamespace />
         <valstyle:CDataWhenEscaping />
         <valstyle:MarkdownStructure />
         <valstyle:EmptyElementSelfClosing />
         <valstyle:TypeAsTag />
         <valstyle:OmitRedundantType />
         <valstyle:OmitRedundantName />
+        <valstyle:OmitUnusedNamespace />
         <valdocumentation:Introduction />
         <valdocumentation:ValidityContract />
         <valdocumentation:LayerSeparation />

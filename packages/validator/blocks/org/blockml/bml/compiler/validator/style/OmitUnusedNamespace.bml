@@ -1,0 +1,47 @@
+<!--Validator Style Rule — OmitUnusedNamespace
+  FQN: org.blockml.bml.compiler.validator.style.OmitUnusedNamespace-->
+<valstyle:OmitUnusedNamespace xmlns="http://blockml.org/bml"
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:valstyle="org.blockml.bml.compiler.validator.style">
+
+  <baseType>
+    valstyle:StyleRule
+  </baseType>
+  <is>
+    Warn on unused root xmlns prefixes
+  </is>
+  <documentation>
+    <![CDATA[
+    Root xmlns:<prefix> declarations that do not address any type or annotation
+    used in the document should be omitted. Default xmlns is exempt. Emitted as
+    BML_STYLE_UNUSED_NAMESPACE (warning).
+    ]]>
+  </documentation>
+  <properties>
+    <code override="true">
+      <value>BML_STYLE_UNUSED_NAMESPACE</value>
+    </code>
+    <severity override="true">
+      <value>warning</value>
+    </severity>
+    <appliesTo override="true">
+      <value>document root xmlns prefix</value>
+    </appliesTo>
+    <message override="true">
+      <value>Remove unused xmlns prefix declarations from the document root.</value>
+    </message>
+  </properties>
+  <aggregations>
+    <check override="true">
+      <composition>
+        <valstyle:PreferOmitUnusedNamespace />
+      </composition>
+    </check>
+  </aggregations>
+</valstyle:OmitUnusedNamespace>

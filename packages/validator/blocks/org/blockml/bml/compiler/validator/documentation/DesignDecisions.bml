@@ -38,6 +38,7 @@
     
     Style catalog (validateStyle): BML StyleRule documents under style/rule/ are the SSOT.
     Interpreters bind to StyleCheck type FQNs. Unknown checks emit BML_STYLE_UNKNOWN_CHECK.
+    Unused root xmlns prefixes emit BML_STYLE_UNUSED_NAMESPACE (warning).
     
     Bootstrap modes: bootstrapPaths (corpus flat scan) or libraryPaths (Library.bml graph).
     validateVersions runs after validateTypes and before validateConstraints.

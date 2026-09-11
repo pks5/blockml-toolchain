@@ -3,11 +3,18 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import type {
   BlockDefinition,
+  BlockInstance,
   BomDocument,
+  CompositionNode,
+  CompositionTemplate,
   Diagnostic,
   DiagnosticSeverity,
   DocumentationReference,
+  MemberDefinition,
   SourceLocation,
+  TypeExpression,
+  TypeReferenceEntityInstance,
+  UnknownXmlNode,
 } from "@blockml/bom";
 
 const MARKDOWN_MIN_LENGTH = 280;
@@ -62,6 +69,13 @@ const FALLBACK_RULES: StyleRuleRecord[] = [
     severity: "warning",
     message: "Omit child name when the element tag already supplies the name.",
     check: "PreferOmitRedundantName",
+  },
+  {
+    name: "OmitUnusedNamespace",
+    code: "BML_STYLE_UNUSED_NAMESPACE",
+    severity: "warning",
+    message: "Remove unused xmlns prefix declarations from the document root.",
+    check: "PreferOmitUnusedNamespace",
   },
 ];
 
@@ -172,6 +186,298 @@ type StyleInterpreter = (
   out: Diagnostic[],
 ) => void;
 
+const BML_ANNOTATION = "org.blockml.bml.annotation.BmlAnnotation";
+const XSI_NS = "http://www.w3.org/2001/XMLSchema-instance";
+
+function addId(used: Set<string>, value?: string): void {
+  const trimmed = value?.trim();
+  if (trimmed) {
+    used.add(trimmed);
+  }
+}
+
+function addEntity(used: Set<string>, entity?: TypeReferenceEntityInstance): void {
+  addId(used, entity?.value);
+  addId(used, entity?.typeFqn);
+}
+
+function addExpr(used: Set<string>, expr?: TypeExpression): void {
+  if (!expr) {
+    return;
+  }
+  switch (expr.kind) {
+    case "named":
+      addId(used, expr.fqn);
+      for (const arg of expr.typeArguments ?? []) {
+        addExpr(used, arg);
+      }
+      break;
+    case "union":
+      for (const alt of expr.alternatives) {
+        addExpr(used, alt);
+      }
+      break;
+    case "grouped":
+      addExpr(used, expr.expression);
+      break;
+    case "anonymousStruct":
+      for (const field of expr.fields) {
+        addExpr(used, field.type);
+      }
+      break;
+    default:
+      break;
+  }
+}
+
+function addUnknown(used: Set<string>, prefixes: Set<string>, nodes?: UnknownXmlNode[]): void {
+  for (const node of nodes ?? []) {
+    if (node.prefix) {
+      prefixes.add(node.prefix);
+    }
+    for (const name of Object.keys(node.attributes)) {
+      const idx = name.indexOf(":");
+      if (idx > 0 && name.slice(0, idx) !== "xmlns") {
+        prefixes.add(name.slice(0, idx));
+      }
+    }
+  }
+}
+
+function addBmlAnnotation(used: Set<string>): void {
+  used.add(BML_ANNOTATION);
+}
+
+function addInstance(used: Set<string>, prefixes: Set<string>, instance: BlockInstance): void {
+  addId(used, instance.typeFqn);
+  if (
+    instance.id !== undefined ||
+    instance.version !== undefined ||
+    instance.bean !== undefined ||
+    instance.scope !== undefined ||
+    instance.generics !== undefined
+  ) {
+    addBmlAnnotation(used);
+  }
+  for (const name of Object.keys(instance.unknownAttributes ?? {})) {
+    const idx = name.indexOf(":");
+    if (idx > 0) {
+      prefixes.add(name.slice(0, idx));
+    }
+  }
+  for (const nested of instance.aggregationCompositions ?? []) {
+    addComposition(used, prefixes, nested.composition);
+  }
+}
+
+function addComposition(
+  used: Set<string>,
+  prefixes: Set<string>,
+  composition?: CompositionTemplate,
+): void {
+  if (!composition) {
+    return;
+  }
+  if (composition.directives?.length || composition.generics) {
+    addBmlAnnotation(used);
+  }
+  for (const child of composition.children) {
+    addCompositionNode(used, prefixes, child);
+  }
+}
+
+function addCompositionNode(
+  used: Set<string>,
+  prefixes: Set<string>,
+  node: CompositionNode,
+): void {
+  if (node.kind === "blockInstance") {
+    if (node.directives?.length) {
+      addBmlAnnotation(used);
+    }
+    addInstance(used, prefixes, node.instance);
+    return;
+  }
+  if (node.directives?.length || node.generics) {
+    addBmlAnnotation(used);
+  }
+  for (const child of node.children) {
+    addCompositionNode(used, prefixes, child);
+  }
+}
+
+function addMember(used: Set<string>, prefixes: Set<string>, member: MemberDefinition): void {
+  addId(used, member.namespace);
+  if (member.generics || member.xmlRendering) {
+    addBmlAnnotation(used);
+  }
+  for (const ref of member.references ?? []) {
+    addId(used, ref.type);
+    addId(used, ref.relationFqn);
+    addId(used, ref.languageFqn);
+  }
+  for (const keyword of member.keywords ?? []) {
+    addId(used, keyword.typeFqn);
+    addId(used, keyword.languageFqn);
+  }
+  for (const prose of member.documentations ?? []) {
+    addId(used, prose.namespace);
+    addId(used, prose.languageFqn);
+  }
+  addUnknown(used, prefixes, member.unknownElements);
+  for (const name of Object.keys(member.unknownAttributes ?? {})) {
+    const idx = name.indexOf(":");
+    if (idx > 0) {
+      prefixes.add(name.slice(0, idx));
+    }
+  }
+  switch (member.kind) {
+    case "property":
+      addId(used, member.typeFqn);
+      addExpr(used, member.type);
+      for (const entry of member.values ?? []) {
+        addId(used, entry.namespace);
+      }
+      for (const group of member.groups ?? []) {
+        addEntity(used, group);
+      }
+      for (const suggestion of member.suggestions ?? []) {
+        addInstance(used, prefixes, suggestion);
+      }
+      break;
+    case "aggregation":
+      addExpr(used, member.type);
+      addComposition(used, prefixes, member.composition);
+      for (const group of member.groups ?? []) {
+        addEntity(used, group);
+      }
+      break;
+    case "association":
+      addExpr(used, member.type);
+      break;
+    case "capability":
+      addId(used, member.typeFqn);
+      addExpr(used, member.inputType);
+      addExpr(used, member.outputType);
+      addId(used, member.implementation?.languageFqn);
+      for (const thrown of member.throws ?? []) {
+        addEntity(used, thrown);
+      }
+      break;
+  }
+  for (const constraint of member.constraints ?? []) {
+    addInstance(used, prefixes, constraint);
+  }
+}
+
+function collectUsedNamespaceTargets(
+  block: BlockDefinition,
+  prefixes: Set<string>,
+  used: Set<string>,
+): void {
+  addId(used, block.type);
+  addId(used, block.baseType);
+  addExpr(used, block.baseTypeExpression);
+  addEntity(used, block.language);
+  addId(used, block.languageFqn);
+  addId(used, block.definitionFqn);
+  if (block.generics || block.xmlRendering) {
+    addBmlAnnotation(used);
+  }
+  for (const contract of block.contracts ?? []) {
+    addEntity(used, contract);
+  }
+  for (const generic of block.genericTypes ?? []) {
+    addId(used, generic.baseType);
+    addId(used, generic.defaultType);
+  }
+  for (const alias of block.aliases ?? []) {
+    addId(used, alias.typeFqn);
+    addId(used, alias.languageFqn);
+  }
+  for (const keyword of block.keywords ?? []) {
+    addId(used, keyword.typeFqn);
+    addId(used, keyword.languageFqn);
+  }
+  for (const prose of block.documentations ?? []) {
+    addId(used, prose.namespace);
+    addId(used, prose.languageFqn);
+  }
+  for (const example of block.examples ?? []) {
+    addId(used, example.namespace);
+    addId(used, example.contentLanguageFqn);
+  }
+  for (const ref of block.references ?? []) {
+    addId(used, ref.type);
+    addId(used, ref.relationFqn);
+    addId(used, ref.languageFqn);
+  }
+  addUnknown(used, prefixes, block.unknownElements);
+  for (const name of Object.keys(block.unknownAttributes ?? {})) {
+    const idx = name.indexOf(":");
+    if (idx > 0) {
+      prefixes.add(name.slice(0, idx));
+    }
+  }
+  for (const member of block.members) {
+    addMember(used, prefixes, member);
+  }
+  for (const composition of block.compositions) {
+    addComposition(used, prefixes, composition);
+  }
+  for (const constraint of block.constraints ?? []) {
+    addInstance(used, prefixes, constraint);
+  }
+  for (const sub of block.subBlocks) {
+    collectUsedNamespaceTargets(sub, prefixes, used);
+  }
+  for (const embedded of block.embeddedBlocks) {
+    collectUsedNamespaceTargets(embedded, prefixes, used);
+  }
+}
+
+function prefixesUsedByTargets(
+  bindings: Record<string, string>,
+  usedIds: Set<string>,
+): Set<string> {
+  const used = new Set<string>();
+  for (const id of usedIds) {
+    let best: string | undefined;
+    let bestLen = -1;
+    for (const [prefix, binding] of Object.entries(bindings)) {
+      if (!prefix) {
+        continue;
+      }
+      if (id === binding || id.startsWith(`${binding}.`)) {
+        if (binding.length > bestLen) {
+          bestLen = binding.length;
+          best = prefix;
+        }
+      }
+    }
+    if (best) {
+      used.add(best);
+    }
+  }
+  return used;
+}
+
+function unusedRootPrefixes(document: BomDocument): string[] {
+  const bindings = document.source.namespaceBindings ?? {};
+  const usedPrefixes = new Set<string>();
+  const usedIds = new Set<string>();
+  collectUsedNamespaceTargets(document.block, usedPrefixes, usedIds);
+  if (document.source.schemaLocation || document.source.noNamespaceSchemaLocation) {
+    usedIds.add(XSI_NS);
+  }
+  for (const prefix of prefixesUsedByTargets(bindings, usedIds)) {
+    usedPrefixes.add(prefix);
+  }
+  return Object.keys(bindings)
+    .filter((prefix) => prefix !== "" && !usedPrefixes.has(prefix))
+    .sort();
+}
+
 function runPreferTypeAsTag(
   rule: StyleRuleRecord,
   block: BlockDefinition,
@@ -250,6 +556,22 @@ function runPreferSelfClosing(
   }
 }
 
+function runPreferOmitUnusedNamespace(
+  rule: StyleRuleRecord,
+  document: BomDocument,
+  out: Diagnostic[],
+): void {
+  const file = document.source.filePath;
+  for (const prefix of unusedRootPrefixes(document)) {
+    out.push({
+      severity: rule.severity,
+      code: rule.code,
+      message: `Unused xmlns prefix '${prefix}'.`,
+      source: loc(file, document.block.source),
+    });
+  }
+}
+
 const INTERPRETERS: Record<string, StyleInterpreter> = {
   PreferCDataWhenNeedsEscape: runPreferCData,
   PreferMarkdownStructure: runPreferMarkdown,
@@ -263,6 +585,10 @@ export function validateStyle(document: BomDocument): Diagnostic[] {
   const file = document.source.filePath;
   const diagnostics: Diagnostic[] = [];
   for (const rule of loadStyleCatalog()) {
+    if (rule.check === "PreferOmitUnusedNamespace") {
+      runPreferOmitUnusedNamespace(rule, document, diagnostics);
+      continue;
+    }
     const run = INTERPRETERS[rule.check];
     if (!run) {
       diagnostics.push({

@@ -32,7 +32,7 @@
     Style codes: BML_STYLE_PREFER_CDATA, BML_STYLE_PREFER_MARKDOWN,
     BML_STYLE_EMPTY_ELEMENT_SELF_CLOSE, BML_STYLE_LEGACY_BLOCK_WRAPPER,
     BML_STYLE_REDUNDANT_TYPE, BML_STYLE_REDUNDANT_NAME,
-    BML_STYLE_UNKNOWN_CHECK.
+    BML_STYLE_UNKNOWN_CHECK, BML_STYLE_UNUSED_NAMESPACE.
     
     Host policy: CLI, IDE, and other orchestrators decide whether error diagnostics
     block serialize, compile, or other downstream steps. The validator package does

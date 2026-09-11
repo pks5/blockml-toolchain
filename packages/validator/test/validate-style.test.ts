@@ -290,4 +290,58 @@ describe("validateStyle catalog", () => {
     expect(result.success).toBe(true);
     expect(result.diagnostics.some((d) => d.code === "BML_STYLE_LEGACY_BLOCK_WRAPPER")).toBe(true);
   });
+
+  it("warns on unused root xmlns prefixes and stays successful", () => {
+    const parsed = parse(
+      [
+        `<test:Sample xmlns="http://blockml.org/bml"`,
+        `  xmlns:core="org.blockml.bml.core"`,
+        `  xmlns:idle="org.blockml.bml.idle"`,
+        `  xmlns:test="com.blockml.test.style">`,
+        `  <baseType>core:Block</baseType>`,
+        `  <is>sample</is>`,
+        `  <version>1.0.0</version>`,
+        `</test:Sample>`,
+      ].join("\n"),
+      { filePath: "style-unused-xmlns.bml" },
+    );
+    expect(parsed.document).not.toBeNull();
+    const diags = validateStyle(parsed.document!);
+    const unused = diags.filter((d) => d.code === "BML_STYLE_UNUSED_NAMESPACE");
+    expect(unused).toHaveLength(1);
+    expect(unused[0]?.severity).toBe("warning");
+    expect(unused[0]?.message).toContain("'idle'");
+
+    const result = validate(parsed.document!);
+    expect(result.success).toBe(true);
+    expect(result.diagnostics.some((d) => d.code === "BML_STYLE_UNUSED_NAMESPACE")).toBe(true);
+  });
+
+  it("does not warn when every xmlns prefix is used", () => {
+    const parsed = parse(preferred(), { filePath: "style-used-xmlns.bml" });
+    expect(
+      validateStyle(parsed.document!).some((d) => d.code === "BML_STYLE_UNUSED_NAMESPACE"),
+    ).toBe(false);
+  });
+
+  it("does not treat the default xmlns as unused", () => {
+    const parsed = parse(
+      [
+        `<block xmlns="http://blockml.org/bml"`,
+        `  xmlns:core="org.blockml.bml.core"`,
+        `  xmlns:test="com.blockml.test.style">`,
+        `  <name>Sample</name>`,
+        `  <type>test:Sample</type>`,
+        `  <baseType>core:Block</baseType>`,
+        `  <is>sample</is>`,
+        `  <version>1.0.0</version>`,
+        `</block>`,
+      ].join("\n"),
+      { filePath: "style-default-xmlns.bml" },
+    );
+    const unused = validateStyle(parsed.document!).filter(
+      (d) => d.code === "BML_STYLE_UNUSED_NAMESPACE",
+    );
+    expect(unused).toEqual([]);
+  });
 });

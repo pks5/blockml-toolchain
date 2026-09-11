@@ -23,8 +23,8 @@
   <documentation>
     Loads StyleRule documents from this package blocks/style/rule/, dispatches each
     check type to a TypeScript interpreter, and returns diagnostics. Does not affect
-    success (warnings and recommendations only). Unknown check types emit
-    BML_STYLE_UNKNOWN_CHECK as info.
+    success (warnings and recommendations only). Unused root xmlns prefixes emit
+    BML_STYLE_UNUSED_NAMESPACE. Unknown check types emit BML_STYLE_UNKNOWN_CHECK as info.
   </documentation>
   <references>
     <see type="valstyle:StyleRule" relation="SeeAlso" />
