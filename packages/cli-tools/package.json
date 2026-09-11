@@ -1,6 +1,6 @@
 {
   "name": "@blockml/cli",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "description": "BlockML CLI — validate, compile, search, graph, inspect, transform, and new BML",
   "license": "Apache-2.0",
   "repository": {
@@ -34,19 +34,19 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@blockml/blockdoc-target": "^0.9.9",
-    "@blockml/fatblock-target": "^0.9.9",
-    "@blockml/xsd-target": "^0.9.9",
-    "@blockml/compiler": "^0.9.9",
+    "@blockml/blockdoc-target": "^0.9.10",
+    "@blockml/fatblock-target": "^0.9.10",
+    "@blockml/xsd-target": "^0.9.10",
+    "@blockml/compiler": "^0.9.10",
     "@blockml/core": "^1.4.0",
-    "@blockml/builder": "^0.9.9",
-    "@blockml/framework": "^0.9.9",
-    "@blockml/parser": "^0.9.9",
-    "@blockml/serializer": "^0.9.9",
-    "@blockml/search": "^0.9.9",
-    "@blockml/graph": "^0.9.9",
-    "@blockml/inspect": "^0.9.9",
-    "@blockml/transformer": "^0.9.9",
+    "@blockml/builder": "^0.9.10",
+    "@blockml/framework": "^0.9.10",
+    "@blockml/parser": "^0.9.10",
+    "@blockml/serializer": "^0.9.10",
+    "@blockml/search": "^0.9.10",
+    "@blockml/graph": "^0.9.10",
+    "@blockml/inspect": "^0.9.10",
+    "@blockml/transformer": "^0.9.10",
     "libxmljs2": "^0.35.0"
   },
   "engines": {

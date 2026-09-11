@@ -1,6 +1,6 @@
 {
   "name": "@blockml/blockdoc-target",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "description": "BlockML BlockDoc render target — browseable HTML documentation",
   "license": "Apache-2.0",
   "repository": {
@@ -32,11 +32,11 @@
     "test": "vitest run packages/blockdoc-target/test"
   },
   "dependencies": {
-    "@blockml/bom": "^0.9.9",
-    "@blockml/compiler": "^0.9.9",
+    "@blockml/bom": "^0.9.10",
+    "@blockml/compiler": "^0.9.10",
     "@blockml/core": "^1.4.0",
-    "@blockml/framework": "^0.9.9",
-    "@blockml/parser": "^0.9.9"
+    "@blockml/framework": "^0.9.10",
+    "@blockml/parser": "^0.9.10"
   },
   "engines": {
     "node": ">=20"
