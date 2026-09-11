@@ -16,7 +16,7 @@
   xmlns:type="org.blockml.bml.type">
 
   <baseType>
-    core:Entity
+    core:Block
   </baseType>
   <is>
     Abstract marker for Inspect projection data-structure blocks

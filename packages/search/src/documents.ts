@@ -28,10 +28,10 @@ export function blockToSearchDocument(
   }
 
   const aliases = (block.aliases ?? [])
-    .map((alias) => alias.name?.trim())
+    .map((alias) => alias.value?.trim())
     .filter((value): value is string => Boolean(value));
   const keywords = (block.keywords ?? [])
-    .map((keyword) => keyword.term?.trim())
+    .map((keyword) => keyword.value?.trim())
     .filter((value): value is string => Boolean(value));
   const documentation = [proseText(block.documentations), proseText(block.summaries)]
     .filter(Boolean)

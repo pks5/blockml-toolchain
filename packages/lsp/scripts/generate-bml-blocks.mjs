@@ -50,7 +50,7 @@ const blocks = [
     is: "Abstract marker for LSP implementation data-structure blocks",
     doc: "Workspace, analysis, and LSP-protocol ValueTypes used as capability payloads (LspPosition, HoverInfo, OutlineSymbol, …).",
     abstract: true,
-    baseType: "core:Entity",
+    baseType: "core:Block",
     refs: ["bom:UrmodellType"],
   },
   {

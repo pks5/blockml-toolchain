@@ -10,6 +10,7 @@ import { resolveBlockReference, resolvePrefix, resolveTypeName, elementSourceLoc
 import { withElementLocation } from "../util/mapping-error.js";
 import { collectBlockGrammarAttributes, collectIdentityOrSectionAttributes, collectMemberGrammarAttributes, isAllowedRootChild, isCharacterDataHost, reportDiagnostic, reportDuplicateComposition, reportDuplicatePropertyValue, reportStandaloneComposition, reportUnexpectedTextChildren, reportUnknownElement, toUnknownXmlNode, } from "./structural.js";
 import { isDocumentRootLocalName, V1_ROOT_ELEMENT } from "../pipeline/root-type.js";
+import { expandPrimitiveEntityValueSugar, isCommaSugarPayload, META_ALIAS, META_KEYWORD, namedTypePayloadFqn, } from "./primitive-entity-sugar.js";
 const MEMBER_SECTIONS = new Set([
     "properties",
     "aggregations",
@@ -128,7 +129,7 @@ function mapBlockDefinition(element, ctx, parentType) {
     const unknownElements = [];
     reportUnexpectedTextChildren(element, ctx);
     for (const child of childElements) {
-        if (!isCharacterDataHost(child)) {
+        if (!isCharacterDataHost(child, ctx)) {
             reportUnexpectedTextChildren(child, ctx);
         }
         const local = elementLocalName(child);
@@ -323,11 +324,10 @@ function mapMemberElement(element, kind, ctx, inAggregationsSection = false) {
             agg.type = parseTypeExpression(typeAttr, ctx.bindings, "type", typeResolveOptions(ctx));
             agg.cardinality = inferCardinality(agg.type) ?? "0..n";
         }
-        const def = getAttribute(element, "default");
-        if (def !== undefined) {
-            agg.default = parseBooleanAttribute(def);
-        }
-        if (aggregationHasCompositionContent(element)) {
+        const payloadFqn = namedTypePayloadFqn(agg.type);
+        const { text: sugarText } = getCharacterData(element);
+        const hasCommaSugar = !!payloadFqn && isCommaSugarPayload(payloadFqn, ctx) && sugarText.trim().length > 0;
+        if (aggregationHasCompositionContent(element) || hasCommaSugar) {
             agg.composition = mapCompositionTemplate(element, name, ctx);
         }
         const compositionEls = elementChildren(element).filter((c) => elementLocalName(c) === "composition");
@@ -381,7 +381,7 @@ function mapMemberElement(element, kind, ctx, inAggregationsSection = false) {
     return finishMember(element, cap, ctx);
 }
 function finishMember(element, member, ctx) {
-    if (member.kind !== "property") {
+    if (member.kind !== "property" && !isCharacterDataHost(element, ctx)) {
         reportUnexpectedTextChildren(element, ctx);
     }
     if (member.kind !== "aggregation") {
@@ -747,19 +747,11 @@ function mapProseEntry(element, ctx) {
 function blockEffectiveLanguage(_ctx) {
     return "org.blockml.bml.language.English";
 }
-const FREE_TEXT_KEYWORD = "org.blockml.bml.meta.FreeTextKeyword";
-const FREE_TEXT_ALIAS = "org.blockml.bml.meta.FreeTextAlias";
-function commaSeparatedTokens(text) {
-    return text
-        .split(",")
-        .map((token) => token.trim())
-        .filter((token) => token.length > 0);
-}
 function mapKeywords(element, ctx) {
     const entries = [];
     const { text } = getCharacterData(element);
-    for (const term of commaSeparatedTokens(text)) {
-        entries.push({ typeFqn: FREE_TEXT_KEYWORD, term });
+    for (const token of expandPrimitiveEntityValueSugar(META_KEYWORD, text)) {
+        entries.push({ typeFqn: token.typeFqn, value: token.value });
     }
     for (const child of elementChildren(element)) {
         const local = elementLocalName(child);
@@ -767,12 +759,12 @@ function mapKeywords(element, ctx) {
         const typeFqn = prefix
             ? `${resolvePrefix(prefix, ctx.bindings)}.${local}`
             : `org.blockml.bml.meta.${local}`;
-        const term = getAttribute(child, "term");
+        const value = getAttribute(child, "value");
         const langAttr = getAttribute(child, "language");
         const weightAttr = getAttribute(child, "weight");
         entries.push({
             typeFqn,
-            ...(term !== undefined ? { term } : {}),
+            ...(value !== undefined ? { value } : {}),
             ...(langAttr !== undefined
                 ? { languageFqn: resolveTypeName(langAttr, ctx.bindings, "language") }
                 : {}),
@@ -784,8 +776,8 @@ function mapKeywords(element, ctx) {
 function mapAliases(element, ctx) {
     const entries = [];
     const { text } = getCharacterData(element);
-    for (const name of commaSeparatedTokens(text)) {
-        entries.push({ typeFqn: FREE_TEXT_ALIAS, name });
+    for (const token of expandPrimitiveEntityValueSugar(META_ALIAS, text)) {
+        entries.push({ typeFqn: token.typeFqn, value: token.value });
     }
     for (const child of elementChildren(element)) {
         const local = elementLocalName(child);
@@ -793,12 +785,12 @@ function mapAliases(element, ctx) {
         const typeFqn = prefix
             ? `${resolvePrefix(prefix, ctx.bindings)}.${local}`
             : `org.blockml.bml.meta.${local}`;
-        const name = getAttribute(child, "name");
+        const value = getAttribute(child, "value");
         const langAttr = getAttribute(child, "language");
         const legacyAttr = getAttribute(child, "legacy");
         entries.push({
             typeFqn,
-            ...(name !== undefined ? { name } : {}),
+            ...(value !== undefined ? { value } : {}),
             ...(langAttr !== undefined
                 ? { languageFqn: resolveTypeName(langAttr, ctx.bindings, "language") }
                 : {}),
@@ -1154,11 +1146,12 @@ function mapCapabilityThrows(element, cap, ctx) {
 export function mapBlock(element, ctx) {
     return mapBlockDefinition(element, ctx);
 }
-export function mapDocumentBlock(element, filePath, source, bindings, diagnostics = [], parseValue) {
+export function mapDocumentBlock(element, filePath, source, bindings, diagnostics = [], parseValue, isCommaSugarPayloadHook) {
     const ctx = createMapContext(filePath, source, bindings, {
         isRoot: true,
         diagnostics,
         ...(parseValue ? { parseValue } : {}),
+        ...(isCommaSugarPayloadHook ? { isCommaSugarPayload: isCommaSugarPayloadHook } : {}),
     });
     return withElementLocation(filePath, source, element, () => mapBlockDefinition(element, ctx));
 }

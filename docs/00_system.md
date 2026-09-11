@@ -232,7 +232,7 @@ The library follows Thymeleaf's `#` utility object naming — plural for utiliti
 node_modules/@blockml/core/
   blocks/
     org/blockml/bml/core/
-      Entity.bml         ← org.blockml.bml.core.Entity
+      PrimitiveEntity.bml ← org.blockml.bml.core.PrimitiveEntity
       Language.bml       ← org.blockml.bml.core.Language
       ProgrammingLanguage.bml ← org.blockml.bml.core.ProgrammingLanguage
     org/blockml/bml/language/

@@ -36,16 +36,16 @@ describe("collectKeywords", () => {
   it("includes aliases and authored keywords", () => {
     const keywords = collectKeywords(
       block({
-        aliases: [{ typeFqn: "org.blockml.bml.core.Alias", name: "ExampleAlpha" }],
+        aliases: [{ typeFqn: "org.blockml.bml.meta.Alias", value: "ExampleAlpha" }],
         keywords: [
-          { typeFqn: "org.blockml.bml.meta.FreeTextKeyword", term: "quickstart" },
+          { typeFqn: "org.blockml.bml.meta.Keyword", value: "quickstart" },
         ],
       }),
     );
     expect(keywords).toContain("ExampleAlpha");
     expect(keywords).toContain("Alias");
     expect(keywords).toContain("quickstart");
-    expect(keywords).toContain("FreeTextKeyword");
+    expect(keywords).toContain("Keyword");
   });
 });
 

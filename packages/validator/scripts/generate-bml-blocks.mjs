@@ -45,7 +45,7 @@ const blocks = [
     is: "Abstract marker for validator implementation data-structure blocks",
     doc: "Reserved for future validator-internal types. Distinct from bom:UrmodellType and core:Capability.",
     abstract: true,
-    baseType: "core:Entity",
+    baseType: "core:Block",
     refs: ["bom:UrmodellType"],
   },
 ];

@@ -29,7 +29,6 @@ const PRIMITIVE_TYPES: Record<string, string> = {
   Decimal: "org.blockml.bml.type.Decimal",
   Text: "org.blockml.bml.type.Text",
   Color: "org.blockml.bml.type.Color",
-  Entity: "org.blockml.bml.core.Entity",
   Block: "org.blockml.bml.core.Block",
   TypeReference: "org.blockml.bml.type.TypeReference",
   TypeReferenceEntity: "org.blockml.bml.type.TypeReferenceEntity",

@@ -121,7 +121,7 @@ function emitBlockField(writer, block, key, ctx, omitTypeChild = false, omitName
                         ? fqnToQName(kw.typeFqn, ctx.bindings)
                         : kw.typeFqn.split(".").pop();
                     const attrs = [
-                        kw.term ? `term="${escapeAttr(kw.term)}"` : "",
+                        kw.value ? `value="${escapeAttr(kw.value)}"` : "",
                         kw.weight !== undefined ? `weight="${kw.weight}"` : "",
                     ]
                         .filter(Boolean)
@@ -180,7 +180,7 @@ function emitBlockField(writer, block, key, ctx, omitTypeChild = false, omitName
                         ? fqnToQName(a.typeFqn, ctx.bindings)
                         : a.typeFqn.split(".").pop();
                     const attrs = [
-                        a.name ? `name="${escapeAttr(a.name)}"` : "",
+                        a.value ? `value="${escapeAttr(a.value)}"` : "",
                         a.legacy ? `legacy="true"` : "",
                     ]
                         .filter(Boolean)
@@ -527,8 +527,6 @@ function emitMember(writer, member, ctx) {
             if (member.type) {
                 attrs.push(`type="${escapeAttr(emitTypeExpression(member.type, ctx.bindings, ctx.useQName))}"`);
             }
-            if (member.default)
-                attrs.push('default="true"');
             const hasComp = !!member.composition;
             const hasBody = hasComp || memberHasCommonBody(member);
             if (!hasBody) {
@@ -655,7 +653,7 @@ function emitMemberCommonChildren(writer, member, ctx) {
                 ? fqnToQName(kw.typeFqn, ctx.bindings)
                 : kw.typeFqn.split(".").pop();
             const attrs = [
-                kw.term ? `term="${escapeAttr(kw.term)}"` : "",
+                kw.value ? `value="${escapeAttr(kw.value)}"` : "",
                 kw.weight !== undefined ? `weight="${kw.weight}"` : "",
             ]
                 .filter(Boolean)

@@ -63,7 +63,7 @@
     Local redeclarations that merge with a member from the baseType chain or from
     contracts[] must set override="true" on every member kind — property, aggregation,
     association, and capability. Filling an inherited aggregation with composition
-    or default="true" is still a merge. Omission → BML_OVERRIDE_REQUIRED.
+    is still a merge. Omission → BML_OVERRIDE_REQUIRED.
     override="true" without a matching inherited or contract member →
     BML_OVERRIDE_WITHOUT_PARENT. Override is not inherited; each layer must set it.
   </documentation>

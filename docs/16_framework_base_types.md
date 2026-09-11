@@ -4,7 +4,7 @@ version: 0.2.0
 
 ## Purpose of this Document
 
-This document specifies how **framework base types** (`org.blockml.bml.core.Block`, `org.blockml.bml.core.Entity`, …) are defined — as **BML files**, not code or YAML. Domain base types (e.g. `com.machineblocks.bml.core.Block`) follow the same pattern in **domain packages** — MachineBlocks material is **out of scope** for this toolchain repo (see `00_system.md` — Zielbild).
+This document specifies how **framework base types** (`org.blockml.bml.core.Block`, `org.blockml.bml.core.PrimitiveEntity`, …) are defined — as **BML files**, not code or YAML. Domain base types (e.g. `com.machineblocks.bml.core.Block`) follow the same pattern in **domain packages** — MachineBlocks material is **out of scope** for this toolchain repo (see `00_system.md` — Zielbild).
 
 For BML block syntax see `02_mbml.md`.
 For MBOM hierarchy see `03_mbom.md` (holding text → MachineBlocks mono-repo).
@@ -205,35 +205,35 @@ Source: `node_modules/@blockml/core/blocks/org/blockml/bml/core/Annotation.bml`
 ### Keyword and Alias branches
 
 ```text
-org.blockml.bml.core.Entity
-  org.blockml.bml.core.Keyword          abstract branch — domain vocabulary + free text
-    org.blockml.bml.meta.FixedKeyword      catalogue base (protected members on definition)
-      org.blockml.bml.meta.FreeTextKeyword   ad-hoc term — widens members to public (shorthand target)
-  org.blockml.bml.core.Alias            abstract branch — domain catalogue + free text
-    org.blockml.bml.meta.FixedAlias        catalogue base (protected members on definition)
-      org.blockml.bml.meta.FreeTextAlias     ad-hoc name — widens members to public (shorthand target)
+org.blockml.bml.core.Block
+  org.blockml.bml.core.PrimitiveEntity(T)   abstract generic — primitive as a Block instance
+    org.blockml.bml.meta.Keyword            instantiable PrimitiveEntity(Text) — search tags
+      org.blockml.bml.meta.FixedKeyword     abstract catalogue freeze (value readOnly)
+    org.blockml.bml.meta.Alias              instantiable PrimitiveEntity(Text) — alternative names
+      org.blockml.bml.meta.FixedAlias       abstract catalogue freeze (value readOnly)
+    org.blockml.bml.type.IntegerEntity …    concrete PrimitiveEntity wrappers
 ```
 
-Domain libraries define concrete blocks extending `FixedKeyword` / `FixedAlias` for controlled vocabulary. `FreeTextKeyword` / `FreeTextAlias` extend the Fixed bases and override protected members as public attributes (`_term` → `term`, `_name` → `name`) via visibility widening. Comma-separated shorthand on `<keywords>` / `<aliases>` expands to **FreeTextKeyword** / **FreeTextAlias** instances only. See `02_mbml.md` — keywords · aliases · Member Visibility — Visibility on override.
+Domain libraries define concrete blocks extending `FixedKeyword` / `FixedAlias` for controlled vocabulary (empty catalogue refs). Ad-hoc tags are `<meta:Keyword value="…" />` / `<meta:Alias value="…" />`. Comma-separated character content on an aggregation whose payload is a **concrete PrimitiveEntity** expands to instances of that payload (`<keywords>a, b</keywords>` → two `meta:Keyword` with `value`). Never instantiates abstract `PrimitiveEntity` or Fixed* catalogue types. Distinct from empty-QName sugar on `TypeReferenceEntity`. See `02_mbml.md` — keywords · aliases.
 
 ### Task guides and diagnostics
 
 ```text
-org.blockml.bml.core.Documentation     abstract — concept docs (org.blockml.bml.documentation.*)
-org.blockml.bml.core.TaskGuide         abstract — procedural tasks (org.blockml.bml.task.*)
-org.blockml.bml.core.Diagnostic        abstract — validator codes (org.blockml.bml.diagnostic.*)
+org.blockml.bml.core.Documentation              abstract — concept docs (org.blockml.bml.documentation.*)
+  org.blockml.bml.documentation.howto.HowTo     procedural how-tos (org.blockml.bml.documentation.howto.*)
+org.blockml.bml.core.Diagnostic                 abstract — validator codes (org.blockml.bml.diagnostic.*)
 ```
 
-Task navigation uses `<references>` with task relations — same mechanism as ReadFirst:
+How-to navigation uses `<references>` with howto relations — same mechanism as ReadFirst:
 
 ```text
-relation=TaskIndex      on README — catalog available tasks
-relation=TaskStep       on TaskGuide — ordered procedure steps
-relation=Prerequisite   on TaskGuide — before starting
-relation=Resolves       on Diagnostic — link to fix TaskGuide
+relation=HowToIndex     on README — catalog available how-tos
+relation=HowToStep      on HowTo — ordered procedure steps
+relation=Prerequisite   on HowTo — before starting
+relation=Resolves       on Diagnostic — link to fix HowTo
 ```
 
-See `02_mbml.md` — Task guides · `doc:TaskGuideModel`.
+See `02_mbml.md` — How-tos · `doc:HowToModel`.
 
 Source: `node_modules/@blockml/core/blocks/org/blockml/bml/core/Definition.bml`
 
@@ -264,7 +264,7 @@ org.blockml.bml.core.Block
 
 ```text
 Properties:    since · status · summary · documentation (Documentation) · abstract · final
-Aggregations:  keywords (core:Keyword[]) · changelog (Change[]) · examples (Example[]) · references (Reference[])
+Aggregations:  keywords (meta:Keyword[]) · changelog (Change[]) · examples (Example[]) · references (Reference[])
 Sub-blocks:    Documentation · Change · Example · Reference   ← inline in StructuralDefinition.bml
 Source:        node_modules/@blockml/core/blocks/org/blockml/bml/definition/StructuralDefinition.bml
 ```
@@ -282,7 +282,7 @@ in child blocks.
 
 `org.blockml.bml.core.Block` declares `language` (NaturalLanguage) — root default English. Library descriptors inherit via BlockLibrary.
 
-`org.blockml.bml.definition.BlockDefinition` declares the shared shape of all Block definition documents: identity (`name`, `type`, `baseType`, `version`), designation (`is`, `isnot`), abstract `definition` (meta-model role selector), `summary` and `keywords` aggregation (`core:Keyword[]`, inherited from StructuralDefinition), `aliases` aggregation (`core:Alias[]`, block-level), `language` (NaturalLanguage element — per-block override), member containers (`properties`, `aggregations`, `associations`, `capabilities`), `subBlocks` (recursive Sub-Block hierarchy), and block-level collections (`genericTypes`, `contracts`). Generic meta-type parameter `B extends org.blockml.bml.core.Block` binds the definition to the Block type it describes.
+`org.blockml.bml.definition.BlockDefinition` declares the shared shape of all Block definition documents: identity (`name`, `type`, `baseType`, `version`), designation (`is`, `isnot`), abstract `definition` (meta-model role selector), `summary` and `keywords` aggregation (`meta:Keyword[]`, inherited from StructuralDefinition), `aliases` aggregation (`meta:Alias[]`, block-level), `language` (NaturalLanguage element — per-block override), member containers (`properties`, `aggregations`, `associations`, `capabilities`), `subBlocks` (recursive Sub-Block hierarchy), and block-level collections (`genericTypes`, `contracts`). Generic meta-type parameter `B extends org.blockml.bml.core.Block` binds the definition to the Block type it describes.
 
 `org.blockml.bml.definition.SubBlockDefinition`, `RootBlockDefinition`, and `EmbeddedBlockDefinition` are **sibling** specializations of `BlockDefinition` that each override `definition` with a tighter TypeReference and default (`SubBlockDefinition` / `RootBlockDefinition` / `EmbeddedBlockDefinition`). `RootBlockDefinition` additionally declares `embeddedBlocks` (`EmbeddedBlockDefinition[]` — virtual files, root-only). `EmbeddedBlockDefinition` has no nested embeds. `subBlocks` is inherited from `BlockDefinition` and may nest to arbitrary depth on roots, embeds, and Sub-Blocks.
 
@@ -290,7 +290,7 @@ in child blocks.
 
 ```text
 FQN             org.blockml.bml.definition.StructuralDefinition.Reference (Sub-Block — not a top-level library export)
-baseType        org.blockml.bml.core.Entity
+baseType        org.blockml.bml.core.Block
 bml:xml         see                — renders as <see> inside <references>
 type            QName (prefix:Name) — Block or Definition type via xmlns prefix; XML type attribute; or Block FQN qualifier with member/instance attribute
 instance        String             — InstanceReference token (myId or FQN::id); XML instance attribute
@@ -307,7 +307,7 @@ context         String (required)  — relationship note; XML text content
 
 Exactly one target kind among `type` (standalone), `instance`, `file`, `url`, `property`, `aggregation`, `association`, and `capability` must be set. Split form: `type=` + one member attribute resolves to a canonical member path — `type` is not stored as a type target. Split form: `type=` + `instance=` resolves to `{FQN}::{id}`. `relation` is optional — omitted → `org.blockml.bml.relation.SeeAlso`. Unqualified names on `relation=` resolve via `org.blockml.bml.relation.*`.
 
-Standard relation blocks (`org.blockml.bml.relation.*`): `SeeAlso` (default when omitted), `ReadFirst`, `ReadNext`, `ThenContinueWith`, `Extends`, `Requires`, `ContrastsWith`, `AuthoringGuide`, `Defines`, `DeepDive`, `TaskIndex`, `TaskStep`, `Prerequisite`, `Resolves`. Abstract bases: `org.blockml.bml.core.Relation` (any target kind); `org.blockml.bml.core.TypeRelation(T)` (only `see type=`, target must satisfy `satisfiesTypeBound(…, T)`, default `T = core:Block`). `ThenContinueWith` is `TypeRelation(core:Bootstrap)`.
+Standard relation blocks (`org.blockml.bml.relation.*`): `SeeAlso` (default when omitted), `ReadFirst`, `ReadNext`, `ThenContinueWith`, `Extends`, `Requires`, `ContrastsWith`, `AuthoringGuide`, `Defines`, `DeepDive`, `HowToIndex`, `HowToStep`, `Prerequisite`, `Resolves`. Abstract bases: `org.blockml.bml.core.Relation` (any target kind); `org.blockml.bml.relation.TypeRelation(T)` (only `see type=`, target must satisfy `satisfiesTypeBound(…, T)`, default `T = core:Block`). `ThenContinueWith` is `TypeRelation(core:Bootstrap)`.
 
 **Design note:** Eight mutually exclusive target attributes instead of one generic `target`. The attribute name encodes the target kind at the read site — `<see type="…">` (`TypeReference`), `<see instance="…">` (`InstanceReference`), `<see property="…">` (`PropertyReference`), `<see aggregation="…">` / `<see association="…">` / `<see capability="…">` (matching MemberReference children), `<see file="…">` (doc), `<see url="…">` (web). Member values are canonical definition paths in the BOM. See `02_mbml.md` — `<references>` — Why separate target attributes.
 
@@ -317,7 +317,7 @@ Authoring: list only targets **relevant to the current definition**; text body d
 
 ```text
 FQN             org.blockml.bml.definition.StructuralDefinition.Change (Sub-Block)
-baseType        org.blockml.bml.core.Entity
+baseType        org.blockml.bml.core.Block
 bml:xml         change             — renders as <change> inside <changelog>
 version         Version (required) — XML version attribute
 language        NaturalLanguage    — optional; prose language override for description text
@@ -328,7 +328,7 @@ description     String (required)  — text body after TrimText (common leading 
 
 ```text
 FQN             org.blockml.bml.definition.StructuralDefinition.Example (Sub-Block)
-baseType        org.blockml.bml.core.Entity
+baseType        org.blockml.bml.core.Block
 bml:xml         example            — renders as <example> inside <examples>
 title           String (required)  — XML title attribute; always in block natural language
 language        Language FQN       — optional; implementation dialect or NaturalLanguage for content
@@ -416,14 +416,14 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/core/Block.bml
      org/blockml/bml/core/Status.bml
      org/blockml/bml/core/Relation.bml
-     org/blockml/bml/core/TypeRelation.bml   ← TypeRelation(T); default T = core:Block; type-target only
+     org/blockml/bml/relation/TypeRelation.bml   ← TypeRelation(T); default T = core:Block; type-target only
      org/blockml/bml/status/Stable.bml · Draft.bml · Stub.bml · Deprecated.bml
-     org/blockml/bml/relation/SeeAlso.bml · ReadFirst.bml · ReadNext.bml · ThenContinueWith.bml · Extends.bml · Requires.bml · ContrastsWith.bml · AuthoringGuide.bml · Defines.bml · DeepDive.bml · TaskIndex.bml · TaskStep.bml · Prerequisite.bml · Resolves.bml
+     org/blockml/bml/relation/SeeAlso.bml · ReadFirst.bml · ReadNext.bml · ThenContinueWith.bml · Extends.bml · Requires.bml · ContrastsWith.bml · AuthoringGuide.bml · Defines.bml · DeepDive.bml · HowToIndex.bml · HowToStep.bml · Prerequisite.bml · Resolves.bml
      # ThenContinueWith = TypeRelation(core:Bootstrap)
-     org/blockml/bml/core/Documentation.bml · TaskGuide.bml · Diagnostic.bml
-     org/blockml/bml/core/Keyword.bml · Alias.bml
-     org/blockml/bml/meta/FixedKeyword.bml · FixedAlias.bml
-     org/blockml/bml/meta/FreeTextKeyword.bml · FreeTextAlias.bml   ← extend Fixed*; widen to public
+     org/blockml/bml/core/Documentation.bml · Diagnostic.bml
+     org/blockml/bml/documentation/howto/HowTo.bml
+     org/blockml/bml/core/PrimitiveEntity.bml
+     org/blockml/bml/meta/Keyword.bml · Alias.bml · FixedKeyword.bml · FixedAlias.bml
      org/blockml/bml/core/ValueType.bml · PrimitiveType.bml · StructType.bml · EnumType.bml · ConstantType.bml · …
      org/blockml/bml/core/Constraint.bml
      org/blockml/bml/constraint/*.bml        ← ValueConstraint, StructuralConstraint, BlockConstraint, Min, …

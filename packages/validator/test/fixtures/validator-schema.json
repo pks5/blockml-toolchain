@@ -5,7 +5,7 @@
       "tsExport": "ValidatorType",
       "pkg": "root",
       "abstract": true,
-      "baseType": "core:Entity"
+      "baseType": "core:Block"
     }
   ],
   "capabilities": [

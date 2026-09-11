@@ -26,7 +26,7 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
   <baseType>
-    core:Entity
+    core:Block
   </baseType>
   <is>
     Abstract marker for framework implementation data-structure blocks

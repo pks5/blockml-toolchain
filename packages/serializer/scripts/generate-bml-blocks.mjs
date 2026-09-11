@@ -81,7 +81,7 @@ const blocks = [
     is: "Abstract marker for serializer implementation data-structure blocks",
     doc: "All org.blockml.bml.compiler.serializer.emit.* and .config.* types extend this marker. Distinct from bom:UrmodellType (parse-result data) and core:Capability (operations).",
     abstract: true,
-    baseType: "core:Entity",
+    baseType: "core:Block",
     refs: ["bom:UrmodellType"],
   },
   {

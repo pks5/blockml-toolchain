@@ -20,7 +20,7 @@
   xmlns:validator="org.blockml.bml.compiler.validator">
 
   <baseType>
-    core:Entity
+    core:Block
   </baseType>
   <is>
     Abstract marker for compiler runtime API and config data-structure blocks

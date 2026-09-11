@@ -5,7 +5,7 @@
       "tsExport": "ParserType",
       "pkg": "root",
       "abstract": true,
-      "baseType": "core:Entity",
+      "baseType": "core:Block",
       "fields": []
     },
     {
@@ -57,6 +57,11 @@
         },
         {
           "name": "parseValue",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "isCommaSugarPayload",
           "type": "type:Text",
           "required": false
         }
@@ -171,6 +176,11 @@
         },
         {
           "name": "parseValue",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "isCommaSugarPayload",
           "type": "type:Text",
           "required": false
         }

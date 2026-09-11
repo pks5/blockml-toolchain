@@ -1056,7 +1056,6 @@ An Aggregation describes an ownership relationship: a Block can contain zero or 
 ```text
 name          — member name (unique within namespace)
 type          — FQN of the child type, optionally with occurrence brackets (see Type Notation below)
-default       — boolean; marks the primary aggregation (tooling / render targets)
 documentation — human-readable description
 since         — optional; semantic version from which this member is available
 changelog     — optional; version history (oldest first)
@@ -1188,9 +1187,9 @@ BML member containers (`<properties>`, `<aggregations>`, `<associations>`, `<cap
 | `com.foo.Bar.properties.width` | PropertyDefinition for `width` |
 | `com.foo.Bar.properties.width.type` | type FQN of the width property |
 
-### Implicit Default Aggregation
+### No default aggregation
 
-When no Aggregations are declared, a domain-specific default Aggregation is created implicitly. BOM Core does not prescribe the name or child type — that is the domain's responsibility.
+There is no default aggregation and no `default="true"` member. Instances must open every aggregation by member name. Bare child Block instances directly under a parent instance are invalid (`doc:CompositionModel`, `doc:MemberAuthoring`).
 
 ### Service Aggregations
 
@@ -1200,12 +1199,11 @@ A service Block provides named, reusable logic — such as data models, math uti
 
 ```text
 org.blockml.bml.core.Block
-  org.blockml.bml.core.Entity              — base for built-in services and utility Sub-Blocks
-    org.blockml.bml.service.*              — built-in expression utilities (#math, #strings, …)
-    org.blockml.bml.service.ModelBlock     — holds data (JSONModel, ODataModel, XMLModel)
+  org.blockml.bml.service.*              — built-in expression utilities (#math, #strings, …)
+  org.blockml.bml.service.ModelBlock     — holds data (JSONModel, ODataModel, XMLModel)
 ```
 
-**`org.blockml.bml.core.Entity`** — abstract base for addressable logic units. Built-in services in `org.blockml.bml.service.*` extend Entity directly.
+**`org.blockml.bml.service.*`** — built-in services inherit `core:Block` directly. There is no `core:Entity` type.
 
 **`org.blockml.bml.service.ModelBlock`** — provides data access via path-based Transformation Capabilities. Specializations: `org.blockml.bml.service.JSONModel`, `org.blockml.bml.service.ODataModel`, `org.blockml.bml.service.XMLModel`.
 
@@ -1939,7 +1937,7 @@ org.blockml.bml.type.FilePathEntity            value (relative .xsd path)
 org.blockml.bml.core.ReadMe                    abstract role marker — human/LLM reading entry
 org.blockml.bml.README                         extends ReadMe — ReadFirst + TaskIndex on references
 org.blockml.bml.core.Bootstrap                 abstract role marker — automation SPOE (empty)
-org.blockml.bml.core.TaskGuide                 abstract — org.blockml.bml.task.* procedural blocks
+org.blockml.bml.documentation.howto.HowTo      Documentation subtype — org.blockml.bml.documentation.howto.*
 org.blockml.bml.core.Diagnostic                abstract — org.blockml.bml.diagnostic.* error codes
 ```
 
@@ -1947,7 +1945,7 @@ org.blockml.bml.core.Diagnostic                abstract — org.blockml.bml.diag
 
 `readMe`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks` are **TypeReferenceEntity** aggregations — each empty QName child expands to a TypeReferenceEntity instance. Optional **`bml:version`** on sugar (or explicit Entity) children is an exact-version assert against the referenced type (`value`) — omitted → TypeRegistry / library context; no match → `BML_UNKNOWN_VERSION`. See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
-`readMe` references a `ReadMe` block (typically `README`) — required human/LLM reading entry. Curated reading order uses `<references>` with `relation=ReadFirst`; available tasks use `relation=TaskIndex`. `bootstrap` is the optional automation SPOE — see `doc:BootstrapModel` and `doc:TaskGuideModel`.
+`readMe` references a `ReadMe` block (typically `README`) — required human/LLM reading entry. Curated reading order uses `<references>` with `relation=ReadFirst`; available how-tos use `relation=HowToIndex`. `bootstrap` is the optional automation SPOE — see `doc:BootstrapModel` and `doc:HowToModel`.
 
 **Concrete Library `<references>`:** at most two `<see>` entries — required `ReadFirst` → the `readMe` target; optional `ThenContinueWith` → the `bootstrap` target when present (after reading, execute the automation SPOE). No other relations on the catalog descriptor.
 `schemas` holds `FilePathEntity` composition children; **`value`** is the relative `.xsd` path from the library package root (directory containing `Library.bml`).

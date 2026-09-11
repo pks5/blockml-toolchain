@@ -30,12 +30,12 @@ export function collectKeywords(block: BlockDefinition): string[] {
   }
   add(block.is);
   for (const alias of block.aliases ?? []) {
-    add(alias.name);
+    add(alias.value);
     const aliasTail = alias.typeFqn.split(".").pop();
     add(aliasTail);
   }
   for (const keyword of block.keywords ?? []) {
-    add(keyword.term);
+    add(keyword.value);
     const keywordTail = keyword.typeFqn.split(".").pop();
     add(keywordTail);
   }

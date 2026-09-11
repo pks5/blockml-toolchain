@@ -8,7 +8,7 @@ This file is the **table of contents** for BML authoring — **transitional Mark
 BlockML Core documentation and definition blocks under `org.blockml.bml.*`
 (`node_modules/@blockml/core/blocks/org/blockml/bml/`). Each node package's `blocks/` folder is the SSOT for that package (`00_system.md` — BlockML node packages). The long-term goal is that all information lives in those packages as BML. Markdown is not an implementation SSOT — see `00_system.md` — Package Implementation Workflow.
 
-Start reading at `org.blockml.bml.README` (`relation=ReadFirst`). Use `relation=TaskIndex` for
+Start reading at `org.blockml.bml.README` (`relation=ReadFirst`). Use `relation=HowToIndex` for
 procedural fixes and `org.blockml.bml.diagnostic.*` for validator codes.
 
 Historical long-form prose and examples (pre–self-description migration) are archived at
@@ -21,8 +21,8 @@ Historical long-form prose and examples (pre–self-description migration) are a
 | Need | Go to |
 |---|---|
 | Mental learning path | `org.blockml.bml.README` |
-| Fix a validator code | `org.blockml.bml.diagnostic.<CODE>` → `relation=Resolves` TaskGuide |
-| Author a new Block | `org.blockml.bml.task.AuthorNewBlock` |
+| Fix a validator code | `org.blockml.bml.diagnostic.<CODE>` → `relation=Resolves` HowTo |
+| Author a new Block | `org.blockml.bml.documentation.howto.AuthorNewBlock` |
 | Formal BOM AST / parser contracts | `12_bom_object_model.md`, `13_bml_to_bom_mapping.md` |
 | Expression EBNF / AST utility contract | `10_expression_language.md` (DeepDive; surface rules in BML) |
 | MachineBlocks domain authoring | `@machineblocks/core` BML (`node_modules/@machineblocks/core/blocks/com/machineblocks/bml`) / `03_mbom.md` — **not** Core language SSOT |
@@ -64,7 +64,7 @@ Historical long-form prose and examples (pre–self-description migration) are a
 |---|---|
 | `is` / `summary` / `documentation` / `references` | `org.blockml.bml.documentation.DocumentationModel` |
 | Library / ReadMe / Bootstrap | `org.blockml.bml.documentation.LibrarySystem` · `BootstrapModel` |
-| TaskGuides · Diagnostics navigation | `org.blockml.bml.documentation.TaskGuideModel` |
+| HowTos · Diagnostics navigation | `org.blockml.bml.documentation.HowToModel` |
 
 ### Members · visibility · overrides
 
@@ -127,18 +127,18 @@ These topics remain outside `org.blockml.bml` language self-description:
 
 ---
 
-## Cluster TaskGuides (quick)
+## Cluster HowTos (quick)
 
 | Task | FQN |
 |---|---|
-| Unknown type | `org.blockml.bml.task.DebugUnknownType` |
-| Visibility | `org.blockml.bml.task.FixVisibilityAccess` |
-| Overrides | `org.blockml.bml.task.FixMemberOverride` |
-| Composition | `org.blockml.bml.task.FixCompositionPlacement` |
-| Type identity | `org.blockml.bml.task.FixTypeIdentity` |
-| Expressions | `org.blockml.bml.task.FixExpressionErrors` |
-| New Block | `org.blockml.bml.task.AuthorNewBlock` |
-| Constraints | `org.blockml.bml.task.AddConstraint` |
+| Unknown type | `org.blockml.bml.documentation.howto.DebugUnknownType` |
+| Visibility | `org.blockml.bml.documentation.howto.FixVisibilityAccess` |
+| Overrides | `org.blockml.bml.documentation.howto.FixMemberOverride` |
+| Composition | `org.blockml.bml.documentation.howto.FixCompositionPlacement` |
+| Type identity | `org.blockml.bml.documentation.howto.FixTypeIdentity` |
+| Expressions | `org.blockml.bml.documentation.howto.FixExpressionErrors` |
+| New Block | `org.blockml.bml.documentation.howto.AuthorNewBlock` |
+| Constraints | `org.blockml.bml.documentation.howto.AddConstraint` |
 
 ---
 

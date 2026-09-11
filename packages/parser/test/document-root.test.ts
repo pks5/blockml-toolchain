@@ -224,7 +224,7 @@ describe("nested definition wrappers", () => {
       "  <is>sample</is>",
       "  <subBlocks>",
       "    <_Utils>",
-      "      <baseType>core:Entity</baseType>",
+      "      <baseType>core:Block</baseType>",
       "      <is>helpers</is>",
       "    </_Utils>",
       "  </subBlocks>",

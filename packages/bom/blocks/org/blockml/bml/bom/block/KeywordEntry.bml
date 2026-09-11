@@ -21,10 +21,10 @@
     bom:UrmodellType
   </baseType>
   <is>
-    Keyword Entity instance in BOM
+    Keyword PrimitiveEntity instance in BOM
   </is>
   <documentation>
-    Keyword Entity instance in BOM
+    Keyword PrimitiveEntity instance in BOM
   </documentation>
   <properties>
     <typeFqn type="type:Text">
@@ -32,11 +32,11 @@
         typeFqn (required). TS type: type:Text.
       </documentation>
     </typeFqn>
-    <term type="type:Text">
+    <value type="type:Text">
       <documentation>
-        term (optional). TS type: type:Text.
+        value (optional). TS type: type:Text.
       </documentation>
-    </term>
+    </value>
     <languageFqn type="type:Text">
       <documentation>
         languageFqn (optional). TS type: type:Text.

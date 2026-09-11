@@ -19,7 +19,7 @@ describe("authoredEmptyElementForm on see references", () => {
   it("records paired vs self-closing empty see tags", () => {
     const source = sample(`  <references>
     <see type="core:Block" relation="SeeAlso"></see>
-    <see type="core:Entity" relation="SeeAlso" />
+    <see type="core:Exception" relation="SeeAlso" />
   </references>`);
     const result = parse(source, { filePath: "see-form.bml" });
     expect(result.document).not.toBeNull();

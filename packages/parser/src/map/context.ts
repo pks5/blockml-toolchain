@@ -10,6 +10,8 @@ export interface MapContext {
   isEmbedded: boolean;
   diagnostics: Diagnostic[];
   parseValue?: ParseValueHook;
+  /** Domain PrimitiveEntity payloads beyond the Core well-known comma-sugar set. */
+  isCommaSugarPayload?: (fqn: string) => boolean;
 }
 
 export function createMapContext(
@@ -23,6 +25,7 @@ export function createMapContext(
     isEmbedded?: boolean;
     diagnostics?: Diagnostic[];
     parseValue?: ParseValueHook;
+    isCommaSugarPayload?: (fqn: string) => boolean;
   } = {},
 ): MapContext {
   const ctx: MapContext = {
@@ -39,6 +42,9 @@ export function createMapContext(
   }
   if (options.parseValue !== undefined) {
     ctx.parseValue = options.parseValue;
+  }
+  if (options.isCommaSugarPayload !== undefined) {
+    ctx.isCommaSugarPayload = options.isCommaSugarPayload;
   }
   return ctx;
 }

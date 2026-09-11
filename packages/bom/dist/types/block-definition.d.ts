@@ -60,7 +60,7 @@ export interface BlockDefinition {
     is?: string;
     /** Short prose expansions (i18n + optional QName facets). */
     summaries?: DocumentationProseEntry[];
-    /** Optional search/discovery tags — core.Keyword Entity instances. */
+    /** Optional search/discovery tags — meta.Keyword PrimitiveEntity instances. */
     keywords?: KeywordEntry[];
     /** Natural language for documentation prose — TypeReferenceEntity instance. */
     language?: TypeReferenceEntityInstance;
@@ -70,7 +70,7 @@ export interface BlockDefinition {
     documentations?: DocumentationProseEntry[];
     /** What this Block is not — required when confusion risk exists. */
     isNot?: string;
-    /** Alternative names for this Block type — core.Alias Entity instances. */
+    /** Alternative names for this Block type — meta.Alias PrimitiveEntity instances. */
     aliases?: AliasEntry[];
     /** Semantic version from which this definition is available. */
     since?: string;
@@ -131,7 +131,7 @@ export interface BlockDefinition {
 }
 export interface KeywordEntry {
     typeFqn: string;
-    term?: string;
+    value?: string;
     languageFqn?: string;
     weight?: number;
     source?: SourceLocation;
@@ -145,7 +145,7 @@ export interface DocumentationProseEntry {
 }
 export interface AliasEntry {
     typeFqn: string;
-    name?: string;
+    value?: string;
     languageFqn?: string;
     legacy?: boolean;
     source?: SourceLocation;

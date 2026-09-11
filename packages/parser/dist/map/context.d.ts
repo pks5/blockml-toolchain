@@ -9,6 +9,8 @@ export interface MapContext {
     isEmbedded: boolean;
     diagnostics: Diagnostic[];
     parseValue?: ParseValueHook;
+    /** Domain PrimitiveEntity payloads beyond the Core well-known comma-sugar set. */
+    isCommaSugarPayload?: (fqn: string) => boolean;
 }
 export declare function createMapContext(filePath: string, source: string, bindings: Record<string, string>, options?: {
     subBlockIndex?: Map<string, string>;
@@ -17,5 +19,6 @@ export declare function createMapContext(filePath: string, source: string, bindi
     isEmbedded?: boolean;
     diagnostics?: Diagnostic[];
     parseValue?: ParseValueHook;
+    isCommaSugarPayload?: (fqn: string) => boolean;
 }): MapContext;
 //# sourceMappingURL=context.d.ts.map

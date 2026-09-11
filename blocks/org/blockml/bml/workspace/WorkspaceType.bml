@@ -9,7 +9,7 @@
   xmlns:wsdocumentation="org.blockml.bml.workspace.documentation">
 
   <baseType>
-    core:Entity
+    core:Block
   </baseType>
   <is>
     Abstract marker for workspace hub documentation blocks

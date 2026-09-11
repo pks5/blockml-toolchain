@@ -27,7 +27,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **Different rules** | Validator applies branch-specific rules via `baseType` chain |
 | **Interpretation** | Renderers map type → target syntax (SCAD, React, Python, …) |
 | **09_mbom_properties.yml** | Pointer stub only — not type/param SSOT |
-| **Block metadata** | Every `<block>` carries required `<is>`, required `<documentation>`, conditional `<summary>` (when documentation is long), conditional `<isnot>` (when confusion risk exists), optional `<keywords>` (`core:Keyword[]`), optional `<aliases>` (`core:Alias[]`); optional `<since>`, `<changelog>`, `<examples>`, `<references>` — see `02_mbml.md` |
+| **Block metadata** | Every `<block>` carries required `<is>`, required `<documentation>`, conditional `<summary>` (when documentation is long), conditional `<isnot>` (when confusion risk exists), optional `<keywords>` (`meta:Keyword[]`), optional `<aliases>` (`meta:Alias[]`); optional `<since>`, `<changelog>`, `<examples>`, `<references>` — see `02_mbml.md` |
 | **Strict type/value separation** | ValueTypes never store data — Properties own all concrete values |
 | **Four ValueType kinds** | PrimitiveType · StructType · EnumType · ConstantType — four sibling branches under ValueType |
 | **Struct property access** | Named access only (`size.x`) — no numeric index on StructType members; positional function calls use FunctionMapping — see `22_function_mapping.md` |
@@ -202,7 +202,8 @@ org.blockml.bml.core.Block                         abstract root · omits baseTy
   │     │     L : NaturalLanguage (default English) — optional content/text language
   │     └── org.blockml.bml.language.MarkupLanguage(L)        XML · JSON · YML · Markdown · BML
   │           L : NaturalLanguage (default English) — optional content/text language
-  ├── org.blockml.bml.core.Entity                general entities — built-in services, domain blocks
+  ├── org.blockml.bml.core.PrimitiveEntity        primitive value as a Block instance
+  ├── org.blockml.bml.core.Exception              capability throws
   ├── com.machineblocks.bml.core.Block             domain base
   └── … user and domain Blocks
 ```
@@ -285,13 +286,14 @@ Internally the compiler may represent definitions as plain data (`BlockDefinitio
 
 ### Flat hierarchy under Block
 
-`org.blockml.bml.core.ComposableBlock` is **removed**. All framework and domain Blocks extend `org.blockml.bml.core.Block` directly (or via intermediate branches like `ValueType`, `Entity`, `com.machineblocks.bml.core.Block`):
+`org.blockml.bml.core.ComposableBlock` is **removed**. All framework and domain Blocks extend `org.blockml.bml.core.Block` directly (or via intermediate branches like `ValueType`, `PrimitiveEntity`, `com.machineblocks.bml.core.Block`). Root blocks in `org.blockml.bml.core` inherit `core:Block` directly.
 
 ```text
 org.blockml.bml.core.Block           root · declares no members · bml:id / bml:version on composition instances
-org.blockml.bml.core.Entity          baseType: Block · built-in services · utility Sub-Blocks
-com.machineblocks.bml.core.Block     baseType: Entity · _presets · basePresets
-com.machineblocks.bml.core.CompositeBlock baseType: Block · _parts (default)
+org.blockml.bml.core.PrimitiveEntity baseType: Block · primitive value as instance
+org.blockml.bml.core.Exception       baseType: Block · capability throws
+com.machineblocks.bml.core.Block     baseType: Block · _presets · basePresets
+com.machineblocks.bml.core.CompositeBlock baseType: Block · _parts
 org.blockml.bml.core.ValueType         baseType: Block · primitives · structs · enums
 org.blockml.bml.core.Language          baseType: Block (meta — no extra members in V1)
 org.blockml.bml.language.ProgrammingLanguage(L) baseType: Language · L : NaturalLanguage (default English)
@@ -299,8 +301,8 @@ org.blockml.bml.language.MarkupLanguage(L)      baseType: Language · L : Natura
 ```
 
 ```text
-com.machineblocks.bml.core.Block     baseType: org.blockml.bml.core.Entity
-org.blockml.bml.service.Math         baseType: org.blockml.bml.core.Entity
+com.machineblocks.bml.core.Block     baseType: org.blockml.bml.core.Block
+org.blockml.bml.service.Math         baseType: org.blockml.bml.core.Block
 com.machineblocks.bml.type.SizeXYZ    baseType: StructType → … → ValueType → Block
 org.blockml.bml.language.OpenSCAD    baseType: ProgrammingLanguage → Language → Block
 ```
@@ -787,7 +789,7 @@ See `02_mbml.md` — § Aggregations · `13_bml_to_bom_mapping.md` — TypeRefer
 
 ```xml
 <type>foo:MyBlock</type>
-<baseType>core:Entity</baseType>
+<baseType>core:Block</baseType>
 
 <!-- generic application on baseType -->
 <baseType>core:PrimitiveEntity(type:Integer)</baseType>
@@ -1035,10 +1037,10 @@ and the configured constant value.
 
 EnumType is a **dedicated ValueType branch** under `org.blockml.bml.core.ValueType` — a sibling of PrimitiveType, StructType, and ConstantType. It is not a StructType.
 
-An EnumType defines a **closed set of named members**. The branch declares a default aggregation for enum members:
+An EnumType defines a **closed set of named members**. The branch declares a `values` aggregation for enum members (opened by name — no default aggregation):
 
 ```xml
-<aggregation name="values" type="bml:Self[]" default="true"/>
+<values type="(bml:Self)[]">
 ```
 
 Enum members are **Block instances** in composition under `values` — no special enum syntax:

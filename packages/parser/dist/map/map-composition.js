@@ -1,5 +1,7 @@
 import { parseDirectives, parseBmlMeta, parseGenericsBinding, isGenericsDirectiveElement, } from "./directives.js";
 import { parseMemberValue } from "./member-value.js";
+import { parseTypeExpression } from "./type-expression.js";
+import { isCommaSugarPayload, namedTypePayloadFqn, primitiveEntitySugarNodes, } from "./primitive-entity-sugar.js";
 import { elementChildren, elementLocalName, elementPrefix, getAttribute, getCharacterData, isElement, xmlTriviaFromElement, } from "../util/xml.js";
 import { resolveBlockReference, resolvePrefix, resolveTypeName, TYPE_REFERENCE_ENTITY, elementSourceLoc, } from "../util/qname.js";
 import { parseVisibilityFromName } from "../util/visibility.js";
@@ -57,11 +59,30 @@ export function mapCompositionTemplate(element, aggregationName, ctx) {
     const children = compositionEl
         ? mapCompositionChildren(compositionEl, ctx)
         : mapCompositionChildren(element, ctx);
+    const typeAttr = getAttribute(element, "type");
+    let sugar = [];
+    if (typeAttr) {
+        try {
+            const payload = namedTypePayloadFqn(parseTypeExpression(typeAttr, ctx.bindings, "type", {
+                subBlockIndex: ctx.subBlockIndex,
+                ...(ctx.parentBlockType ? { currentTypeFqn: ctx.parentBlockType } : {}),
+            }));
+            if (payload && isCommaSugarPayload(payload, ctx)) {
+                const { text } = getCharacterData(element);
+                if (text.trim()) {
+                    sugar = primitiveEntitySugarNodes(payload, text, ctx, loc);
+                }
+            }
+        }
+        catch {
+            // invalid type expression — composition mapping continues without sugar
+        }
+    }
     return {
         aggregationName,
         ...(directives.length > 0 ? { directives } : {}),
         ...(generics ? { generics } : {}),
-        children,
+        children: [...sugar, ...children],
         source: loc,
     };
 }
@@ -137,7 +158,7 @@ export function mapBlockInstanceNode(element, ctx) {
         if (isGenericsDirectiveElement(child)) {
             continue;
         }
-        if (!instanceMemberIsAggregationFill(child)) {
+        if (!instanceMemberIsAggregationFill(child, ctx)) {
             continue;
         }
         for (const compositionEl of elementChildren(child).filter((c) => elementLocalName(c) === "composition")) {
@@ -159,7 +180,7 @@ export function mapBlockInstanceNode(element, ctx) {
         if (isGenericsDirectiveElement(child)) {
             continue;
         }
-        if (instanceMemberIsAggregationFill(child)) {
+        if (instanceMemberIsAggregationFill(child, ctx)) {
             continue;
         }
         const { text } = getCharacterData(child);
@@ -239,7 +260,27 @@ function collapseMemberOccurrences(occurrences, ctx, loc) {
         ...(first.authoredPlacement ? { authoredPlacement: first.authoredPlacement } : {}),
     };
 }
-function instanceMemberIsAggregationFill(element) {
+function instanceMemberIsAggregationFill(element, ctx) {
+    if (ctx) {
+        const typeAttr = getAttribute(element, "type");
+        if (typeAttr) {
+            try {
+                const payload = namedTypePayloadFqn(parseTypeExpression(typeAttr, ctx.bindings, "type", {
+                    subBlockIndex: ctx.subBlockIndex,
+                    ...(ctx.parentBlockType ? { currentTypeFqn: ctx.parentBlockType } : {}),
+                }));
+                if (payload && isCommaSugarPayload(payload, ctx)) {
+                    const { text } = getCharacterData(element);
+                    if (text.trim()) {
+                        return true;
+                    }
+                }
+            }
+            catch {
+                // fall through to child-element detection
+            }
+        }
+    }
     return elementChildren(element).some((c) => {
         const local = elementLocalName(c);
         return local === "composition" || local === "container" || !RESERVED.has(local);

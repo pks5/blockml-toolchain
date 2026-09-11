@@ -22,7 +22,7 @@
   xmlns:bomcap="org.blockml.bml.bom.capability">
 
   <baseType>
-    core:Entity
+    core:Block
   </baseType>
   <is>
     Abstract marker for serializer implementation data-structure blocks

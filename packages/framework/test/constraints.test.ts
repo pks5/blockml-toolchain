@@ -180,8 +180,8 @@ describe("validateConstraints — core library ValuePresent slots", () => {
     const fqns = [
       "org.blockml.bml.meta.FixedAlias",
       "org.blockml.bml.meta.FixedKeyword",
-      "org.blockml.bml.meta.FreeTextAlias",
-      "org.blockml.bml.meta.FreeTextKeyword",
+      "org.blockml.bml.meta.Alias",
+      "org.blockml.bml.meta.Keyword",
       "org.blockml.bml.type.Boolean",
       "org.blockml.bml.type.Constant",
     ];

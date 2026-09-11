@@ -75,7 +75,7 @@ const blocks = [
     is: "Abstract marker for parser implementation data-structure blocks",
     doc: "All org.blockml.bml.compiler.parser.map.* and .config.* types extend this marker. Distinct from bom:UrmodellType (parse-result data) and core:Capability (operations).",
     abstract: true,
-    baseType: "core:Entity",
+    baseType: "core:Block",
     refs: ["bom:UrmodellType"],
   },
   {
@@ -94,6 +94,7 @@ const blocks = [
       { name: "isEmbedded", type: "type:Boolean", required: true },
       { name: "diagnostics", type: "bomcommon:Diagnostic[]", required: true, doc: "Shared map-time diagnostics; structural errors append here without aborting." },
       { name: "parseValue", type: "type:Text", doc: "Optional host parseValue hook from ParseOptions." },
+      { name: "isCommaSugarPayload", type: "type:Text", doc: "Domain PrimitiveEntity payloads beyond the Core well-known comma-sugar set." },
     ],
   },
   {
@@ -151,6 +152,7 @@ const blocks = [
       { name: "isEmbedded", type: "type:Boolean" },
       { name: "diagnostics", type: "bomcommon:Diagnostic[]" },
       { name: "parseValue", type: "type:Text", doc: "Optional host parseValue hook from ParseOptions." },
+      { name: "isCommaSugarPayload", type: "type:Text", doc: "Domain PrimitiveEntity payloads beyond the Core well-known comma-sugar set." },
     ],
   },
   {

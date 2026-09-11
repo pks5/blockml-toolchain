@@ -5,7 +5,7 @@
       "tsExport": "UrmodellType",
       "pkg": "root",
       "abstract": true,
-      "baseType": "core:Entity",
+      "baseType": "core:Block",
       "fields": []
     },
     {
@@ -739,7 +739,7 @@
           "required": true
         },
         {
-          "name": "term",
+          "name": "value",
           "type": "type:Text",
           "required": false
         },
@@ -807,7 +807,7 @@
           "required": true
         },
         {
-          "name": "name",
+          "name": "value",
           "type": "type:Text",
           "required": false
         },
@@ -1422,11 +1422,6 @@
         {
           "name": "cardinality",
           "type": "type:Text",
-          "required": false
-        },
-        {
-          "name": "default",
-          "type": "type:Boolean",
           "required": false
         },
         {

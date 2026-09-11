@@ -21,10 +21,10 @@
     bom:UrmodellType
   </baseType>
   <is>
-    Alias Entity instance in BOM
+    Alias PrimitiveEntity instance in BOM
   </is>
   <documentation>
-    Alias Entity instance in BOM
+    Alias PrimitiveEntity instance in BOM
   </documentation>
   <properties>
     <typeFqn type="type:Text">
@@ -32,11 +32,11 @@
         typeFqn (required). TS type: type:Text.
       </documentation>
     </typeFqn>
-    <name type="type:Text">
+    <value type="type:Text">
       <documentation>
-        name (optional). TS type: type:Text.
+        value (optional). TS type: type:Text.
       </documentation>
-    </name>
+    </value>
     <languageFqn type="type:Text">
       <documentation>
         languageFqn (optional). TS type: type:Text.

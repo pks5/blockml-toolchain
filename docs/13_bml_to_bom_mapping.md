@@ -673,12 +673,12 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
                                            { namespace: "" | resolved QName NS, text, languageFqn }
   <summary language="…">                 → languageFqn from attribute; else effective Block/Library language
   <scad:summary>…</scad:summary>         → namespace from xmlns:scad (facet — not i18n)
-<keywords>                                   → keywords[] KeywordEntry; shorthand → FreeTextKeyword only
-  <meta:FreeTextKeyword term="…" />          → { typeFqn: FreeTextKeyword, term, languageFqn?, weight? }
+<keywords>                                   → keywords[] KeywordEntry; comma sugar → meta:Keyword
+  <meta:Keyword value="…" />                 → { typeFqn: Keyword, value, languageFqn?, weight? }
   <domain:Inheritance />                     → { typeFqn: domain keyword block }  (example)
 <isnot>…</isnot>                                 → block.isnot (trimmed text); block definitions only
-<aliases>                                    → aliases[] AliasEntry; shorthand → FreeTextAlias only
-  <meta:FreeTextAlias name="…" />            → { typeFqn: FreeTextAlias, name, languageFqn?, legacy? }
+<aliases>                                    → aliases[] AliasEntry; comma sugar → meta:Alias
+  <meta:Alias value="…" />                   → { typeFqn: Alias, value, languageFqn?, legacy? }
 <language>…</language>                       → block.languageFqn (NaturalLanguage FQN)
 <documentation language="…">…</documentation> → documentations[] DocumentationProseEntry
                                            { namespace: "" | resolved QName NS, text, languageFqn }
@@ -1123,7 +1123,6 @@ Qualified `{BlockFQN}::{id}` references (e.g. in `basePresets`) validate against
 ```text
 <aggregations>
   <_parts type="…">                        → AggregationDefinition (+ typeFqn, cardinality from multiplicity)
-    default="true"                           → AggregationDefinition.default (boolean; at most one per Block)
     visibility="public"                      → AggregationDefinition.visibility (controls instance ID reachability)
     <composition>                            → AggregationDefinition.composition (CompositionTemplate)
       …children…

@@ -119,22 +119,6 @@ describe("validateTypes member override", () => {
     expect(diagnostics.some((d) => d.code === "BML_OVERRIDE_REQUIRED")).toBe(true);
   });
 
-  it("requires override when an aggregation is redeclared with default", () => {
-    const document = parseSample(
-      [
-        "  <aggregations>",
-        '    <items default="true" />',
-        "  </aggregations>",
-      ].join("\n"),
-      "aggregation-default-override-required.bml",
-    );
-    const diagnostics = validateTypes(
-      document,
-      registryWithParent([aggregation("items")]),
-    );
-    expect(diagnostics.some((d) => d.code === "BML_OVERRIDE_REQUIRED")).toBe(true);
-  });
-
   it("accepts an aggregation composition fill with override", () => {
     const document = parseSample(
       [

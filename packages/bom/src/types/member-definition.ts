@@ -87,7 +87,6 @@ export interface AggregationDefinition extends MemberDefinitionBase {
   type?: TypeExpression;
   /** Omitted when not authored (inherited aggregation fill sites). */
   cardinality?: "0..1" | "0..n" | "1..1" | "1..n";
-  default?: boolean;
   /** Nested composition filling this aggregation — instance aggregations only. */
   composition?: CompositionTemplate;
   /** Member group TypeReferenceEntity instances. */

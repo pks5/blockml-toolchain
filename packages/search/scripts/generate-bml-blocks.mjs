@@ -42,7 +42,7 @@ const blocks = [
     is: "Abstract marker for Search implementation data-structure blocks",
     doc: "SearchDocument, SearchResult, and related ValueTypes used as capability payloads.",
     abstract: true,
-    baseType: "core:Entity",
+    baseType: "core:Block",
     refs: ["bom:UrmodellType"],
   },
   {

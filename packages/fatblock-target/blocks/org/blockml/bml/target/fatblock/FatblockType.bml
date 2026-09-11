@@ -17,7 +17,7 @@
   xmlns:type="org.blockml.bml.type">
 
   <baseType>
-    core:Entity
+    core:Block
   </baseType>
   <is>
     Abstract marker for FatBlock implementation data-structure blocks

@@ -43,11 +43,6 @@
         "0..1" | "0..n" | "1..1" | "1..n". (optional)
       </documentation>
     </cardinality>
-    <default type="type:Boolean">
-      <documentation>
-        default (optional). TS type: type:Boolean.
-      </documentation>
-    </default>
     <composition type="bomcomp:CompositionTemplate">
       <documentation>
         composition (optional). TS type: bomcomp:CompositionTemplate.

@@ -24,7 +24,7 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
   <baseType>
-    core:Entity
+    core:Block
   </baseType>
   <is>
     Abstract marker for LSP implementation data-structure blocks

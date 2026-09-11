@@ -14,7 +14,7 @@
     An executable workflow task
   </is>
   <isnot>
-    Not an authoring TaskGuide (org.blockml.bml.core.TaskGuide / org.blockml.bml.task.*).
+    Not an authoring HowTo (org.blockml.bml.documentation.howto.HowTo / org.blockml.bml.documentation.howto.*).
   </isnot>
   <documentation>
     Abstract workflow unit. Callers invoke run. Concrete subtypes override protected

@@ -63,5 +63,10 @@
         Optional host parseValue hook from ParseOptions. (optional)
       </documentation>
     </parseValue>
+    <isCommaSugarPayload type="type:Text">
+      <documentation>
+        Domain PrimitiveEntity payloads beyond the Core well-known comma-sugar set. (optional)
+      </documentation>
+    </isCommaSugarPayload>
   </properties>
 </parmap:MapContextOptions>

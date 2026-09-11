@@ -1,6 +1,8 @@
 import { XMLSerializer } from "@xmldom/xmldom";
 import { attributeValueLoc, elementSourceLoc } from "../util/qname.js";
-import { elementLocalName, elementPrefix, isCData, isTextNode } from "../util/xml.js";
+import { elementLocalName, elementPrefix, getAttribute, isCData, isTextNode } from "../util/xml.js";
+import { parseTypeExpression } from "./type-expression.js";
+import { isCommaSugarPayload, namedTypePayloadFqn } from "./primitive-entity-sugar.js";
 const MEMBER_SECTIONS = new Set([
     "properties",
     "aggregations",
@@ -75,7 +77,6 @@ const MEMBER_ALLOWED_ATTR_LOCALS = new Set([
     "abstract",
     "final",
     "override",
-    "default",
     "value",
     "inputType",
     "outputType",
@@ -239,8 +240,27 @@ const CHARACTER_DATA_HOSTS = new Set([
     "keywords",
     "aliases",
 ]);
-export const isCharacterDataHost = (element) => {
-    return CHARACTER_DATA_HOSTS.has(elementLocalName(element));
+export const isCharacterDataHost = (element, ctx) => {
+    if (CHARACTER_DATA_HOSTS.has(elementLocalName(element))) {
+        return true;
+    }
+    if (!ctx) {
+        return false;
+    }
+    const typeAttr = getAttribute(element, "type");
+    if (!typeAttr) {
+        return false;
+    }
+    try {
+        const payload = namedTypePayloadFqn(parseTypeExpression(typeAttr, ctx.bindings, "type", {
+            subBlockIndex: ctx.subBlockIndex,
+            ...(ctx.parentBlockType ? { currentTypeFqn: ctx.parentBlockType } : {}),
+        }));
+        return payload !== undefined && isCommaSugarPayload(payload, ctx);
+    }
+    catch {
+        return false;
+    }
 };
 function advanceOverText(data, from, to, line, column) {
     let i = from;

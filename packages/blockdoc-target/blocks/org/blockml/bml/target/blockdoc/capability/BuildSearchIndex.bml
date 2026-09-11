@@ -32,7 +32,7 @@
     
     BD24: for each selected FQN that becomes a block page, emit SearchIndexEntry
     with site-root href from FqnToHtmlPath. Keywords = name, type, FQN segments, is, aliases,
-    authored KeywordEntry term / typeFqn tail. AssembleSite writes search-index.json and inlines
+    authored KeywordEntry value / typeFqn tail. AssembleSite writes search-index.json and inlines
     the same entries into search.js.
   </documentation>
   <references>

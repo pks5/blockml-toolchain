@@ -80,8 +80,8 @@ describe("search documents from BOM", () => {
       {
         name: "Foo",
         type: "com.example.Foo",
-        aliases: [{ typeFqn: "org.blockml.bml.meta.FreeTextAlias", name: "Widget" }],
-        keywords: [{ typeFqn: "org.blockml.bml.meta.FreeTextKeyword", term: "gadget" }],
+        aliases: [{ typeFqn: "org.blockml.bml.meta.Alias", value: "Widget" }],
+        keywords: [{ typeFqn: "org.blockml.bml.meta.Keyword", value: "gadget" }],
         documentations: [
           { namespace: "", text: "long prose about widgets", languageFqn: "org.blockml.bml.language.English" },
         ],
