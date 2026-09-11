@@ -1,17 +1,10 @@
 <!--CLI Capability — RunCompileFatBlock
   FQN: org.blockml.bml.cli.capability.RunCompileFatBlock-->
 <clicap:RunCompileFatBlock xmlns="http://blockml.org/bml"
-  xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
-  xmlns:cli="org.blockml.bml.cli"
   xmlns:cliapi="org.blockml.bml.cli.api"
   xmlns:clicap="org.blockml.bml.cli.capability"
-  xmlns:clicommand="org.blockml.bml.cli.command"
-  xmlns:cliconfig="org.blockml.bml.cli.config"
   xmlns:clidocumentation="org.blockml.bml.cli.documentation"
-  xmlns:runtime="org.blockml.bml.compiler.runtime"
-  xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type">
 
   <baseType>

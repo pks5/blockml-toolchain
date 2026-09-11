@@ -3,16 +3,11 @@
 <builder:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
-  xmlns:bomapi="org.blockml.bml.bom.api"
-  xmlns:bomcommon="org.blockml.bml.bom.common"
-  xmlns:bomdoc="org.blockml.bml.bom.document"
   xmlns:builder="org.blockml.bml.builder"
   xmlns:buildercap="org.blockml.bml.builder.capability"
   xmlns:builderdocumentation="org.blockml.bml.builder.documentation"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
-  xmlns:framework="org.blockml.bml.framework"
-  xmlns:type="org.blockml.bml.type">
+  xmlns:framework="org.blockml.bml.framework">
 
   <baseType>
     core:BlockLibrary

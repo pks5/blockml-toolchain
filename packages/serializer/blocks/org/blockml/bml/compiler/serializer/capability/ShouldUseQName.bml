@@ -1,25 +1,9 @@
 <!--Serializer Capability — ShouldUseQName
   FQN: org.blockml.bml.compiler.serializer.capability.ShouldUseQName-->
 <sercap:ShouldUseQName xmlns="http://blockml.org/bml"
-  xmlns:blockml="org.blockml.bml"
-  xmlns:bom="org.blockml.bml.bom"
-  xmlns:bomapi="org.blockml.bml.bom.api"
-  xmlns:bomblock="org.blockml.bml.bom.block"
-  xmlns:bomcommon="org.blockml.bml.bom.common"
-  xmlns:bomcomp="org.blockml.bml.bom.composition"
-  xmlns:bomdoc="org.blockml.bml.bom.document"
-  xmlns:bomtype="org.blockml.bml.bom.type"
-  xmlns:bomvalue="org.blockml.bml.bom.value"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
-  xmlns:serializer="org.blockml.bml.compiler.serializer"
   xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
-  xmlns:serconfig="org.blockml.bml.compiler.serializer.config"
-  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
-  xmlns:seremit="org.blockml.bml.compiler.serializer.emit"
-  xmlns:type="org.blockml.bml.type"
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
-  xmlns:bomcap="org.blockml.bml.bom.capability">
+  xmlns:type="org.blockml.bml.type">
 
   <baseType>
     core:Capability

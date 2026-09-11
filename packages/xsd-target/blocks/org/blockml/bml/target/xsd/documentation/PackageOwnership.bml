@@ -1,20 +1,9 @@
 <!--XSD Documentation — PackageOwnership
   FQN: org.blockml.bml.target.xsd.documentation.PackageOwnership-->
 <xsddocumentation:PackageOwnership xmlns="http://blockml.org/bml"
-  xmlns:blockml="org.blockml.bml"
-  xmlns:bom="org.blockml.bml.bom"
-  xmlns:bomblock="org.blockml.bml.bom.block"
-  xmlns:bomcommon="org.blockml.bml.bom.common"
   xmlns:cli="org.blockml.bml.cli"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
-  xmlns:xsd="org.blockml.bml.target.xsd"
-  xmlns:xsdapi="org.blockml.bml.target.xsd.api"
-  xmlns:xsdcap="org.blockml.bml.target.xsd.capability"
-  xmlns:xsdconfig="org.blockml.bml.target.xsd.config"
-  xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
-  xmlns:type="org.blockml.bml.type"
-  xmlns:doc="org.blockml.bml.documentation">
+  xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation">
 
   <baseType>
     core:Documentation

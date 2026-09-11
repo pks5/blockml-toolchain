@@ -1,7 +1,6 @@
 <!--Workspace available transform — TravelPostcardTemplate
   FQN: org.blockml.bml.workspace._meta.transform.available.TravelPostcardTemplate-->
 <available:TravelPostcardTemplate xmlns="http://blockml.org/bml"
-  xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type"
   xmlns:available="org.blockml.bml.workspace._meta.transform.available">

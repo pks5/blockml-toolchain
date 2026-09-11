@@ -2,15 +2,20 @@
 /**
  * One-shot generator for BOM Urmodell BML blocks.
  * Output under blocks/ is the SSOT; this script is a migration aid only.
+ * Unused xmlns / xsi:schemaLocation are stripped on write (doc:DocumentFormat).
  */
-import { writeFileSync, mkdirSync, rmSync } from "node:fs";
+import { writeFileSync as writeRaw, mkdirSync, rmSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { bindWriteFileSync } from "../../../scripts/bml-xmlns.mjs";
 import { documentationBlocks } from "./bom-documentation-blocks.mjs";
+
+const writeFileSync = bindWriteFileSync(writeRaw);
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const blocksRoot = join(__dirname, "../blocks/org/blockml/bml/bom");
 
+// Catalog; bindWriteFileSync keeps only prefixes used as QNames in that file.
 const XMLNS = `  xmlns="http://blockml.org/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd

@@ -1,18 +1,7 @@
 <!--Inspect — InspectedBlock
   FQN: org.blockml.bml.inspect.InspectedBlock-->
 <inspect:InspectedBlock xmlns="http://blockml.org/bml"
-  xmlns:blockml="org.blockml.bml"
-  xmlns:bom="org.blockml.bml.bom"
-  xmlns:bomapi="org.blockml.bml.bom.api"
-  xmlns:bomcommon="org.blockml.bml.bom.common"
-  xmlns:bomdoc="org.blockml.bml.bom.document"
-  xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
-  xmlns:framework="org.blockml.bml.framework"
-  xmlns:fwcap="org.blockml.bml.framework.capability"
   xmlns:inspect="org.blockml.bml.inspect"
-  xmlns:inspectcap="org.blockml.bml.inspect.capability"
-  xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation"
   xmlns:type="org.blockml.bml.type">
 
   <baseType>

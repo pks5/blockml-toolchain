@@ -2,11 +2,15 @@
 /**
  * One-shot generator for Framework BML blocks.
  * Output under blocks/ is the SSOT; this script is a migration aid only.
+ * Unused xmlns / xsi:schemaLocation are stripped on write (doc:DocumentFormat).
  */
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync as writeRaw, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { bindWriteFileSync } from "../../../scripts/bml-xmlns.mjs";
 import { documentationBlocks } from "./framework-documentation-blocks.mjs";
+
+const writeFileSync = bindWriteFileSync(writeRaw);
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const blocksRoot = join(__dirname, "../blocks/org/blockml/bml/framework");
@@ -52,6 +56,7 @@ const FRAMEWORK_DIAGNOSTIC_CODES = [
   "BML_VISIBILITY_PRIVATE_OVERRIDE",
 ];
 
+// Catalog; bindWriteFileSync keeps only prefixes used as QNames in that file.
 const XMLNS = `  xmlns="http://blockml.org/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd

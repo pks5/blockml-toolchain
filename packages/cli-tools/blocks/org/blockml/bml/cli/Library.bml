@@ -3,7 +3,6 @@
 <cli:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
   xmlns:cli="org.blockml.bml.cli"
   xmlns:cliapi="org.blockml.bml.cli.api"
   xmlns:clicap="org.blockml.bml.cli.capability"
@@ -16,8 +15,7 @@
   xmlns:graph="org.blockml.bml.graph"
   xmlns:inspect="org.blockml.bml.inspect"
   xmlns:search="org.blockml.bml.search"
-  xmlns:transformer="org.blockml.bml.transformer"
-  xmlns:type="org.blockml.bml.type">
+  xmlns:transformer="org.blockml.bml.transformer">
 
   <baseType>
     core:BlockLibrary

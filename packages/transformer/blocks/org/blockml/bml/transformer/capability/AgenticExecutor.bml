@@ -2,7 +2,6 @@
   FQN: org.blockml.bml.transformer.capability.AgenticExecutor-->
 <transformercap:AgenticExecutor xmlns="http://blockml.org/bml"
   xmlns:cap="org.blockml.bml.capability"
-  xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:workflow="org.blockml.bml.transformer.workflow">

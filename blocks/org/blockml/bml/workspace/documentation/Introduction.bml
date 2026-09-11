@@ -1,17 +1,8 @@
 <!--Workspace Documentation — Introduction
   FQN: org.blockml.bml.workspace.documentation.Introduction-->
 <wsdocumentation:Introduction xmlns="http://blockml.org/bml"
-  xmlns:blockml="org.blockml.bml"
-  xmlns:bom="org.blockml.bml.bom"
-  xmlns:cli="org.blockml.bml.cli"
-  xmlns:runtime="org.blockml.bml.compiler.runtime"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
-  xmlns:framework="org.blockml.bml.framework"
-  xmlns:type="org.blockml.bml.type"
-  xmlns:workspace="org.blockml.bml.workspace"
-  xmlns:wsdocumentation="org.blockml.bml.workspace.documentation"
-  xmlns:doc="org.blockml.bml.documentation">
+  xmlns:wsdocumentation="org.blockml.bml.workspace.documentation">
 
   <baseType>
     core:Documentation

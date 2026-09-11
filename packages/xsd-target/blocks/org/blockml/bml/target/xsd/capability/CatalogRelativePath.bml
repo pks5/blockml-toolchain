@@ -1,17 +1,8 @@
 <!--XSD Capability — CatalogRelativePath
   FQN: org.blockml.bml.target.xsd.capability.CatalogRelativePath-->
 <xsdcap:CatalogRelativePath xmlns="http://blockml.org/bml"
-  xmlns:blockml="org.blockml.bml"
-  xmlns:bom="org.blockml.bml.bom"
-  xmlns:bomblock="org.blockml.bml.bom.block"
-  xmlns:bomcommon="org.blockml.bml.bom.common"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
-  xmlns:xsd="org.blockml.bml.target.xsd"
-  xmlns:xsdapi="org.blockml.bml.target.xsd.api"
   xmlns:xsdcap="org.blockml.bml.target.xsd.capability"
-  xmlns:xsdconfig="org.blockml.bml.target.xsd.config"
-  xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
   xmlns:type="org.blockml.bml.type">
 
   <baseType>

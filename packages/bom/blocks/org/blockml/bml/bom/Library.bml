@@ -13,10 +13,7 @@
   xmlns:bommember="org.blockml.bml.bom.member"
   xmlns:bomtype="org.blockml.bml.bom.type"
   xmlns:bomvalue="org.blockml.bml.bom.value"
-  xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
-  xmlns:type="org.blockml.bml.type"
-  xmlns:cap="org.blockml.bml.capability">
+  xmlns:core="org.blockml.bml.core">
 
   <baseType>
     core:BlockLibrary

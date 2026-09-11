@@ -1,12 +1,8 @@
 <!--Workspace — WorkspaceType
   FQN: org.blockml.bml.workspace.WorkspaceType-->
 <workspace:WorkspaceType xmlns="http://blockml.org/bml"
-  xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
-  xmlns:type="org.blockml.bml.type"
-  xmlns:workspace="org.blockml.bml.workspace"
-  xmlns:wsdocumentation="org.blockml.bml.workspace.documentation">
+  xmlns:workspace="org.blockml.bml.workspace">
 
   <baseType>
     core:Block

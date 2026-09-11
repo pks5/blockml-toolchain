@@ -1,20 +1,7 @@
 <!--BOM Urmodell — GroupedTypeExpression
   FQN: org.blockml.bml.bom.type.GroupedTypeExpression-->
 <bomtype:GroupedTypeExpression xmlns="http://blockml.org/bml"
-  xmlns:blockml="org.blockml.bml"
-  xmlns:bom="org.blockml.bml.bom"
-  xmlns:bomapi="org.blockml.bml.bom.api"
-  xmlns:bomblock="org.blockml.bml.bom.block"
-  xmlns:bomcap="org.blockml.bml.bom.capability"
-  xmlns:bomcommon="org.blockml.bml.bom.common"
-  xmlns:bomcomp="org.blockml.bml.bom.composition"
-  xmlns:bomdoc="org.blockml.bml.bom.document"
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
-  xmlns:bommember="org.blockml.bml.bom.member"
   xmlns:bomtype="org.blockml.bml.bom.type"
-  xmlns:bomvalue="org.blockml.bml.bom.value"
-  xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
   <baseType>

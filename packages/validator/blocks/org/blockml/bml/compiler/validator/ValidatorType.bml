@@ -1,20 +1,9 @@
 <!--Validator — ValidatorType
   FQN: org.blockml.bml.compiler.validator.ValidatorType-->
 <validator:ValidatorType xmlns="http://blockml.org/bml"
-  xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
-  xmlns:bomapi="org.blockml.bml.bom.api"
-  xmlns:bomcommon="org.blockml.bml.bom.common"
-  xmlns:bomdoc="org.blockml.bml.bom.document"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
-  xmlns:framework="org.blockml.bml.framework"
-  xmlns:fwcap="org.blockml.bml.framework.capability"
-  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
-  xmlns:type="org.blockml.bml.type"
-  xmlns:validator="org.blockml.bml.compiler.validator"
-  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
-  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
+  xmlns:validator="org.blockml.bml.compiler.validator">
 
   <baseType>
     core:Block

@@ -1,7 +1,6 @@
 <!--Transformer Workflow — InstructionTask
   FQN: org.blockml.bml.transformer.workflow.InstructionTask-->
 <workflow:InstructionTask xmlns="http://blockml.org/bml"
-  xmlns:core="org.blockml.bml.core"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:lang="org.blockml.bml.language"
   xmlns:workflow="org.blockml.bml.transformer.workflow"

@@ -3,12 +3,7 @@
 <runtime:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
-  xmlns:bomapi="org.blockml.bml.bom.api"
-  xmlns:bomcommon="org.blockml.bml.bom.common"
-  xmlns:bomdoc="org.blockml.bml.bom.document"
-  xmlns:cli="org.blockml.bml.cli"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
   xmlns:framework="org.blockml.bml.framework"
   xmlns:parser="org.blockml.bml.compiler.parser"
   xmlns:runtime="org.blockml.bml.compiler.runtime"
@@ -16,7 +11,6 @@
   xmlns:runcap="org.blockml.bml.compiler.runtime.capability"
   xmlns:runconfig="org.blockml.bml.compiler.runtime.config"
   xmlns:rundocumentation="org.blockml.bml.compiler.runtime.documentation"
-  xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
   <baseType>

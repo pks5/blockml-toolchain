@@ -1,11 +1,9 @@
 <!--Transformer Workflow — CompositeTask
   FQN: org.blockml.bml.transformer.workflow.CompositeTask-->
 <workflow:CompositeTask xmlns="http://blockml.org/bml"
-  xmlns:core="org.blockml.bml.core"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:lang="org.blockml.bml.language"
-  xmlns:workflow="org.blockml.bml.transformer.workflow"
-  xmlns:type="org.blockml.bml.type">
+  xmlns:workflow="org.blockml.bml.transformer.workflow">
 
   <baseType>
     workflow:Task

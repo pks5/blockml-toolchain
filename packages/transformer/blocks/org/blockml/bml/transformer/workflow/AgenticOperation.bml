@@ -1,7 +1,6 @@
 <!--Transformer Workflow — AgenticOperation
   FQN: org.blockml.bml.transformer.workflow.AgenticOperation-->
 <workflow:AgenticOperation xmlns="http://blockml.org/bml"
-  xmlns:core="org.blockml.bml.core"
   xmlns:transformercap="org.blockml.bml.transformer.capability"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type">

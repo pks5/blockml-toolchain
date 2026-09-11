@@ -1,13 +1,8 @@
 <!--Workspace Documentation — LinkingRules
   FQN: org.blockml.bml.workspace.documentation.LinkingRules-->
 <wsdocumentation:LinkingRules xmlns="http://blockml.org/bml"
-  xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
-  xmlns:type="org.blockml.bml.type"
-  xmlns:workspace="org.blockml.bml.workspace"
-  xmlns:wsdocumentation="org.blockml.bml.workspace.documentation"
-  xmlns:doc="org.blockml.bml.documentation">
+  xmlns:wsdocumentation="org.blockml.bml.workspace.documentation">
 
   <baseType>
     core:Documentation

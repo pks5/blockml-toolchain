@@ -1,17 +1,10 @@
 <!--Validator Capability — ValidateStyle
   FQN: org.blockml.bml.compiler.validator.capability.ValidateStyle-->
 <valcap:ValidateStyle xmlns="http://blockml.org/bml"
-  xmlns:blockml="org.blockml.bml"
-  xmlns:bom="org.blockml.bml.bom"
-  xmlns:bomapi="org.blockml.bml.bom.api"
   xmlns:bomcommon="org.blockml.bml.bom.common"
   xmlns:bomdoc="org.blockml.bml.bom.document"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
-  xmlns:type="org.blockml.bml.type"
-  xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:valcap="org.blockml.bml.compiler.validator.capability"
-  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:valstyle="org.blockml.bml.compiler.validator.style">
 
   <baseType>

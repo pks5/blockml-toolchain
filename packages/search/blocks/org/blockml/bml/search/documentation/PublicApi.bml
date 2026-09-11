@@ -1,20 +1,9 @@
 <!--Search Documentation — PublicApi
   FQN: org.blockml.bml.search.documentation.PublicApi-->
 <searchdocumentation:PublicApi xmlns="http://blockml.org/bml"
-  xmlns:blockml="org.blockml.bml"
-  xmlns:bom="org.blockml.bml.bom"
-  xmlns:bomapi="org.blockml.bml.bom.api"
-  xmlns:bomcommon="org.blockml.bml.bom.common"
-  xmlns:bomdoc="org.blockml.bml.bom.document"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
-  xmlns:framework="org.blockml.bml.framework"
-  xmlns:fwcap="org.blockml.bml.framework.capability"
-  xmlns:search="org.blockml.bml.search"
   xmlns:searchcap="org.blockml.bml.search.capability"
-  xmlns:searchdocumentation="org.blockml.bml.search.documentation"
-  xmlns:type="org.blockml.bml.type"
-  xmlns:doc="org.blockml.bml.documentation">
+  xmlns:searchdocumentation="org.blockml.bml.search.documentation">
 
   <baseType>
     core:Documentation

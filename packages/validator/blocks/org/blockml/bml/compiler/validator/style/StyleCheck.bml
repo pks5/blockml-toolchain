@@ -1,10 +1,6 @@
 <!--Validator Style — StyleCheck
   FQN: org.blockml.bml.compiler.validator.style.StyleCheck-->
 <valstyle:StyleCheck xmlns="http://blockml.org/bml"
-  xmlns:blockml="org.blockml.bml"
-  xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
-  xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:valstyle="org.blockml.bml.compiler.validator.style">
 

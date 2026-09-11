@@ -1,13 +1,6 @@
 <!--Validator Style Rule — CDataWhenEscaping
   FQN: org.blockml.bml.compiler.validator.style.CDataWhenEscaping-->
 <valstyle:CDataWhenEscaping xmlns="http://blockml.org/bml"
-  xmlns:blockml="org.blockml.bml"
-  xmlns:bom="org.blockml.bml.bom"
-  xmlns:bomcommon="org.blockml.bml.bom.common"
-  xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
-  xmlns:type="org.blockml.bml.type"
-  xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:valstyle="org.blockml.bml.compiler.validator.style">
 
   <baseType>

@@ -1,7 +1,6 @@
 <!--BlockML Workspace — README
   FQN: org.blockml.bml.workspace.README-->
 <workspace:README xmlns="http://blockml.org/bml"
-  xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:cli="org.blockml.bml.cli"
   xmlns:parser="org.blockml.bml.compiler.parser"
@@ -9,12 +8,10 @@
   xmlns:serializer="org.blockml.bml.compiler.serializer"
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
   xmlns:framework="org.blockml.bml.framework"
   xmlns:blockdoc="org.blockml.bml.target.blockdoc"
   xmlns:fatblock="org.blockml.bml.target.fatblock"
   xmlns:xsd="org.blockml.bml.target.xsd"
-  xmlns:type="org.blockml.bml.type"
   xmlns:workspace="org.blockml.bml.workspace"
   xmlns:wsdocumentation="org.blockml.bml.workspace.documentation">
 

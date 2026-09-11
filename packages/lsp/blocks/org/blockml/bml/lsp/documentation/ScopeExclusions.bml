@@ -1,28 +1,8 @@
 <!--LSP Documentation — ScopeExclusions
   FQN: org.blockml.bml.lsp.documentation.ScopeExclusions-->
 <lspdocumentation:ScopeExclusions xmlns="http://blockml.org/bml"
-  xmlns:blockml="org.blockml.bml"
-  xmlns:bom="org.blockml.bml.bom"
-  xmlns:bomapi="org.blockml.bml.bom.api"
-  xmlns:bomcommon="org.blockml.bml.bom.common"
-  xmlns:bomdoc="org.blockml.bml.bom.document"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
-  xmlns:framework="org.blockml.bml.framework"
-  xmlns:fwcap="org.blockml.bml.framework.capability"
-  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
-  xmlns:parser="org.blockml.bml.compiler.parser"
-  xmlns:serializer="org.blockml.bml.compiler.serializer"
-  xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
-  xmlns:validator="org.blockml.bml.compiler.validator"
-  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
-  xmlns:type="org.blockml.bml.type"
-  xmlns:lsp="org.blockml.bml.lsp"
-  xmlns:lspcap="org.blockml.bml.lsp.capability"
-  xmlns:lspdocumentation="org.blockml.bml.lsp.documentation"
-  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
-  xmlns:doc="org.blockml.bml.documentation">
+  xmlns:lspdocumentation="org.blockml.bml.lsp.documentation">
 
   <baseType>
     core:Documentation
