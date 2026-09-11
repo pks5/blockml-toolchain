@@ -30,7 +30,7 @@
     The BlockML monorepo workspace library catalog
   </is>
   <version>
-    0.9.8
+    0.9.9
   </version>
   <documentation>
     Documentation and SSOT hub for the BlockML toolchain monorepo. Links package

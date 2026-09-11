@@ -22,7 +22,7 @@
     The XSD schema render target library catalog
   </is>
   <version>
-    0.9.8
+    0.9.9
   </version>
   <documentation>
     Canonical XSD specification for BlockML — registry name xsd, bml.xsd particles,

@@ -1,6 +1,6 @@
 {
   "name": "@blockml/fatblock-target",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "description": "BlockML FatBlock render target — portable .bml folder bundles",
   "license": "Apache-2.0",
   "repository": {
@@ -32,12 +32,12 @@
     "test": "vitest run packages/fatblock-target/test"
   },
   "dependencies": {
-    "@blockml/bom": "^0.9.8",
-    "@blockml/compiler": "^0.9.8",
+    "@blockml/bom": "^0.9.9",
+    "@blockml/compiler": "^0.9.9",
     "@blockml/core": "^1.4.0",
-    "@blockml/framework": "^0.9.8",
-    "@blockml/parser": "^0.9.8",
-    "@blockml/serializer": "^0.9.8"
+    "@blockml/framework": "^0.9.9",
+    "@blockml/parser": "^0.9.9",
+    "@blockml/serializer": "^0.9.9"
   },
   "engines": {
     "node": ">=20"

@@ -66,17 +66,35 @@ describe("roundtrip T1 — Framework", () => {
 describe("roundtrip T2 — Domain", () => {
   const files = [
     corpusPath([
-      "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/core/NativeBlock.bml",
-    ]),
-    corpusPath([
-      "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/core/CompositeBlock.bml",
-    ]),
-    corpusPath([
       "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/core/Set.bml",
     ]),
   ];
 
   it.each(files)("%s", (file) => roundtrip(file));
+});
+
+describe("roundtrip T2 — Domain stale default aggregation", () => {
+  const files = [
+    corpusPath([
+      "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/core/NativeBlock.bml",
+    ]),
+    corpusPath([
+      "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/core/CompositeBlock.bml",
+    ]),
+  ];
+
+  it.each(files)("rejects default=true on aggregations: %s", (filePath) => {
+    const source = readFileSync(filePath, "utf8");
+    const first = parse(source, { filePath, continueOnError: true });
+    expect(first.document).not.toBeNull();
+    expect(
+      first.diagnostics.some(
+        (d) => d.code === "BML_UNKNOWN_ATTRIBUTE" && d.message === "Unknown attribute: default",
+      ),
+      JSON.stringify(first.diagnostics),
+    ).toBe(true);
+    expect(first.success).toBe(false);
+  });
 });
 
 describe("roundtrip T3 — Real-world", () => {
