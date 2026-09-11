@@ -69,10 +69,12 @@ export const SEMANTIC_TOKEN_SCOPES = {
     commentPunctuation: "punctuation.definition.comment.bml",
     attributeSeparator: "punctuation.separator.key-value.bml",
 };
+export const SEMANTIC_TOKEN_MODIFIERS = ["unnecessary"];
 export const SEMANTIC_TOKEN_LEGEND = {
     tokenTypes: [...SEMANTIC_TOKEN_TYPES],
-    tokenModifiers: [],
+    tokenModifiers: [...SEMANTIC_TOKEN_MODIFIERS],
 };
+const UNNECESSARY_BIT = 1 << SEMANTIC_TOKEN_MODIFIERS.indexOf("unnecessary");
 const BLOCK_DECLARATION = new Set([
     "name",
     "type",
@@ -176,6 +178,133 @@ function readName(text, i) {
         i++;
     }
     return { name: text.slice(start, i), start, end: i };
+}
+function namePrefix(name) {
+    const idx = name.indexOf(":");
+    return idx > 0 ? name.slice(0, idx) : undefined;
+}
+function xmlnsDeclaredPrefix(attrName) {
+    return attrName.startsWith("xmlns:") ? attrName.slice("xmlns:".length) : undefined;
+}
+function addQNamePrefixes(chunk, used) {
+    const re = /[A-Za-z_][\w.-]*:[A-Za-z_]/g;
+    let match;
+    while ((match = re.exec(chunk))) {
+        const prefix = match[0].slice(0, match[0].lastIndexOf(":"));
+        if (prefix !== "xmlns") {
+            used.add(prefix);
+        }
+    }
+}
+/** Root xmlns:<prefix> bindings whose prefix is never used as a QName in this document. */
+export function unusedRootNamespacePrefixes(text) {
+    const declared = new Set();
+    const used = new Set();
+    let i = 0;
+    let seenRoot = false;
+    while (i < text.length) {
+        if (text.startsWith("<!--", i)) {
+            const close = text.indexOf("-->", i + 4);
+            i = close === -1 ? text.length : close + 3;
+            continue;
+        }
+        if (text.startsWith("<![CDATA[", i)) {
+            const start = i + 9;
+            const end = text.indexOf("]]>", start);
+            const close = end === -1 ? text.length : end;
+            addQNamePrefixes(text.slice(start, close), used);
+            i = end === -1 ? text.length : end + 3;
+            continue;
+        }
+        if (text.startsWith("<?", i)) {
+            const end = text.indexOf("?>", i + 2);
+            i = end === -1 ? text.length : end + 2;
+            continue;
+        }
+        if (text.startsWith("<!", i)) {
+            const end = text.indexOf(">", i + 2);
+            i = end === -1 ? text.length : end + 1;
+            continue;
+        }
+        if (text.startsWith("<$", i)) {
+            const end = text.indexOf("$>", i + 2);
+            i = end === -1 ? text.length : end + 2;
+            continue;
+        }
+        if (text[i] === "<") {
+            const isClose = text.startsWith("</", i);
+            const name = readName(text, i + (isClose ? 2 : 1));
+            if (!name) {
+                i++;
+                continue;
+            }
+            const prefix = namePrefix(name.name);
+            if (prefix) {
+                used.add(prefix);
+            }
+            const onRoot = !seenRoot && !isClose;
+            if (onRoot) {
+                seenRoot = true;
+            }
+            let j = skipWs(text, name.end);
+            while (j < text.length) {
+                if (text.startsWith("/>", j)) {
+                    j += 2;
+                    break;
+                }
+                if (text[j] === ">") {
+                    j++;
+                    break;
+                }
+                const attr = readName(text, j);
+                if (!attr) {
+                    j++;
+                    continue;
+                }
+                const declaredPrefix = xmlnsDeclaredPrefix(attr.name);
+                if (onRoot && declaredPrefix !== undefined) {
+                    declared.add(declaredPrefix);
+                }
+                else {
+                    const attrPrefix = namePrefix(attr.name);
+                    if (attrPrefix && attrPrefix !== "xmlns") {
+                        used.add(attrPrefix);
+                    }
+                }
+                j = skipWs(text, attr.end);
+                if (text[j] === "=") {
+                    j = skipWs(text, j + 1);
+                    const quote = text[j];
+                    if (quote === '"' || quote === "'") {
+                        const valueStart = j + 1;
+                        const valueEnd = text.indexOf(quote, valueStart);
+                        const close = valueEnd === -1 ? text.length : valueEnd;
+                        if (declaredPrefix === undefined) {
+                            addQNamePrefixes(text.slice(valueStart, close), used);
+                        }
+                        j = valueEnd === -1 ? text.length : valueEnd + 1;
+                    }
+                }
+                j = skipWs(text, j);
+            }
+            i = j;
+            continue;
+        }
+        const nextTag = text.indexOf("<", i);
+        const end = nextTag === -1 ? text.length : nextTag;
+        addQNamePrefixes(text.slice(i, end), used);
+        if (nextTag === -1) {
+            break;
+        }
+        i = nextTag;
+    }
+    const unused = new Set();
+    for (const prefix of declared) {
+        if (!used.has(prefix)) {
+            unused.add(prefix);
+        }
+    }
+    return unused;
 }
 function matchesTag(tokenText, local, tags) {
     if (tags.has(tokenText) || tags.has(local)) {
@@ -311,9 +440,9 @@ function classifyElement(tokenText, local, body, ancestors) {
             return "tag";
     }
 }
-function pushSpan(spans, type, start, end) {
+function pushSpan(spans, type, start, end, unnecessary = false) {
     if (end > start) {
-        spans.push({ type, startOffset: start, endOffset: end });
+        spans.push({ type, startOffset: start, endOffset: end, ...(unnecessary ? { unnecessary: true } : {}) });
     }
 }
 function findSpecial(text, from, until) {
@@ -333,16 +462,16 @@ function findSpecial(text, from, until) {
     const end = close === -1 || close >= until ? until : close + 2;
     return { start: embed, end, type: "embed" };
 }
-function emitQuoted(spans, text, valueStart, valueEnd, stringType) {
+function emitQuoted(spans, text, valueStart, valueEnd, stringType, unnecessary = false) {
     let pos = valueStart;
     while (pos < valueEnd) {
         const special = findSpecial(text, pos, valueEnd);
         if (!special) {
-            pushSpan(spans, stringType, pos, valueEnd);
+            pushSpan(spans, stringType, pos, valueEnd, unnecessary);
             return;
         }
-        pushSpan(spans, stringType, pos, special.start);
-        pushSpan(spans, special.type, special.start, special.end);
+        pushSpan(spans, stringType, pos, special.start, unnecessary);
+        pushSpan(spans, special.type, special.start, special.end, unnecessary);
         pos = special.end;
     }
 }
@@ -360,6 +489,7 @@ function emitTextSpecials(spans, text, start, end) {
 export function semanticHighlightSpans(text) {
     const spans = [];
     const stack = [];
+    const unusedPrefixes = unusedRootNamespacePrefixes(text);
     let i = 0;
     while (i < text.length) {
         if (text.startsWith("<!--", i)) {
@@ -457,10 +587,14 @@ export function semanticHighlightSpans(text) {
                     j++;
                     continue;
                 }
-                pushSpan(spans, "attribute", attr.start, attr.end);
+                const declaredPrefix = xmlnsDeclaredPrefix(attr.name);
+                const unusedNs = stack.length === 1 &&
+                    declaredPrefix !== undefined &&
+                    unusedPrefixes.has(declaredPrefix);
+                pushSpan(spans, "attribute", attr.start, attr.end, unusedNs);
                 j = skipWs(text, attr.end);
                 if (text[j] === "=") {
-                    pushSpan(spans, "attributeSeparator", j, j + 1);
+                    pushSpan(spans, "attributeSeparator", j, j + 1, unusedNs);
                     j = skipWs(text, j + 1);
                     const quote = text[j];
                     if (quote === '"' || quote === "'") {
@@ -468,10 +602,10 @@ export function semanticHighlightSpans(text) {
                         const valueEnd = text.indexOf(quote, valueStart);
                         const close = valueEnd === -1 ? text.length : valueEnd;
                         const stringType = quote === '"' ? "stringDouble" : "stringSingle";
-                        pushSpan(spans, stringType, j, j + 1);
-                        emitQuoted(spans, text, valueStart, close, stringType);
+                        pushSpan(spans, stringType, j, j + 1, unusedNs);
+                        emitQuoted(spans, text, valueStart, close, stringType, unusedNs);
                         if (valueEnd !== -1) {
-                            pushSpan(spans, stringType, valueEnd, valueEnd + 1);
+                            pushSpan(spans, stringType, valueEnd, valueEnd + 1, unusedNs);
                             j = valueEnd + 1;
                         }
                         else {
@@ -512,6 +646,7 @@ export function semanticTokensFor(text) {
     const pieces = [];
     for (const span of spans) {
         const typeIndex = TOKEN_TYPE_INDEX[span.type];
+        const modifiers = span.unnecessary ? UNNECESSARY_BIT : 0;
         let offset = span.startOffset;
         while (offset < span.endOffset) {
             const pos = offsetToPosition(text, offset);
@@ -524,6 +659,7 @@ export function semanticTokensFor(text) {
                     character: pos.character,
                     length,
                     type: typeIndex,
+                    modifiers,
                 });
             }
             if (nl === -1 || nl >= span.endOffset) {
@@ -539,7 +675,7 @@ export function semanticTokensFor(text) {
     for (const piece of pieces) {
         const deltaLine = piece.line - prevLine;
         const deltaStart = deltaLine === 0 ? piece.character - prevChar : piece.character;
-        data.push(deltaLine, deltaStart, piece.length, piece.type, 0);
+        data.push(deltaLine, deltaStart, piece.length, piece.type, piece.modifiers);
         prevLine = piece.line;
         prevChar = piece.character;
     }

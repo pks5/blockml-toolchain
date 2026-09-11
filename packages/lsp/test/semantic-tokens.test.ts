@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
+  SEMANTIC_TOKEN_LEGEND,
+  SEMANTIC_TOKEN_MODIFIERS,
   SEMANTIC_TOKEN_SCOPES,
   SEMANTIC_TOKEN_TYPES,
   semanticHighlightSpans,
   semanticTokensFor,
+  unusedRootNamespacePrefixes,
   type HighlightSpan,
   type SemanticTokenType,
 } from "../src/semantic-tokens.js";
@@ -222,6 +225,45 @@ describe("semanticHighlightSpans", () => {
     expect(types).toContain("interpolation");
     expect(types).toContain("root");
   });
+
+  it("marks unused root xmlns prefixes unnecessary and keeps used ones live", () => {
+    const src = [
+      '<test:HoverMe xmlns="http://blockml.org/bml"',
+      ' xmlns:core="org.blockml.bml.core"',
+      ' xmlns:unused="org.blockml.bml.unused"',
+      ' xmlns:type="org.blockml.bml.type"',
+      ' xmlns:test="com.blockml.test.hover">',
+      "  <!-- unused:Ghost only in a comment -->",
+      "  <type>core:Block</type>",
+      '  <count type="type:Integer" />',
+      "</test:HoverMe>",
+    ].join("\n");
+    expect([...unusedRootNamespacePrefixes(src)].sort()).toEqual(["unused"]);
+    const unusedAttr = nameSpan(src, "xmlns:unused=");
+    expect(unusedAttr.type).toBe("attribute");
+    expect(unusedAttr.unnecessary).toBe(true);
+    const unusedValue = nameSpan(src, '"org.blockml.bml.unused"');
+    expect(unusedValue.type).toBe("stringDouble");
+    expect(unusedValue.unnecessary).toBe(true);
+    expect(nameSpan(src, "xmlns:core=").unnecessary).toBeUndefined();
+    expect(nameSpan(src, "xmlns:type=").unnecessary).toBeUndefined();
+    expect(nameSpan(src, "xmlns:test=").unnecessary).toBeUndefined();
+    expect(nameSpan(src, 'xmlns="http').unnecessary).toBeUndefined();
+  });
+
+  it("counts prefixed attributes and does not treat comments as uses", () => {
+    const src = [
+      '<block xmlns="http://blockml.org/bml"',
+      ' xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"',
+      ' xmlns:idle="org.blockml.bml.idle">',
+      "  <!-- idle:Never -->",
+      '  <role bml:id="roleRoot" />',
+      "</block>",
+    ].join("\n");
+    expect([...unusedRootNamespacePrefixes(src)].sort()).toEqual(["idle"]);
+    expect(nameSpan(src, "xmlns:bml=").unnecessary).toBeUndefined();
+    expect(nameSpan(src, "xmlns:idle=").unnecessary).toBe(true);
+  });
 });
 
 describe("semanticTokensFor", () => {
@@ -230,5 +272,22 @@ describe("semanticTokensFor", () => {
     expect(data.length).toBeGreaterThan(0);
     expect(data.length % 5).toBe(0);
     expect(data.every((n) => Number.isInteger(n) && n >= 0)).toBe(true);
+  });
+
+  it("encodes the unnecessary modifier on unused root xmlns spans", () => {
+    expect(SEMANTIC_TOKEN_LEGEND.tokenModifiers).toEqual([...SEMANTIC_TOKEN_MODIFIERS]);
+    const src = [
+      '<block xmlns="http://blockml.org/bml"',
+      ' xmlns:idle="org.blockml.bml.idle">',
+      "  <name>Idle</name>",
+      "</block>",
+    ].join("\n");
+    const { data } = semanticTokensFor(src);
+    const modifiers = [];
+    for (let i = 4; i < data.length; i += 5) {
+      modifiers.push(data[i]);
+    }
+    expect(modifiers.some((bit) => bit === 1)).toBe(true);
+    expect(modifiers.some((bit) => bit === 0)).toBe(true);
   });
 });

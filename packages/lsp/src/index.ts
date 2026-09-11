@@ -17,6 +17,7 @@ export {
 export {
   semanticTokensFor,
   SEMANTIC_TOKEN_LEGEND,
+  SEMANTIC_TOKEN_MODIFIERS,
   SEMANTIC_TOKEN_SCOPES,
   SEMANTIC_TOKEN_TYPES,
   type SemanticTokensResult,

@@ -49,8 +49,15 @@
     (diag:BML_INVALID_ROOT, _Utils, T00001_PoemTest_20260830T232831).
     
     Nested block re-enters L1. Lexical tokens cover attributes, strings, comments,
-    interpolation, embed, and punctuation. Returns LSP SemanticTokens.data (5-int groups).
-    Used by textDocument/semanticTokens/full.
+    interpolation, embed, and punctuation.
+    
+    Unused root xmlns:&lt;prefix&gt; declarations get the standard LSP modifier unnecessary
+    so clients can fade / desaturate them. A prefix is used when it appears as an element
+    or attribute QName (including the root tag) or as a type QName in text or attribute
+    values. The default xmlns is never unused. Comments do not count as uses. The
+    declaration itself is not a use. Legend tokenModifiers is [unnecessary].
+    
+    Returns LSP SemanticTokens.data (5-int groups). Used by textDocument/semanticTokens/full.
     ]]>
   </documentation>
   <references>

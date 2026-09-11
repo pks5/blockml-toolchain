@@ -68,7 +68,8 @@ export const documentationBlocks = [
 
     Semantic tokens: textDocument/semanticTokens/full → semanticTokensFor → XML-stack
     walk classified by FrameworkRoles position (no parse()). Document root or nested
-    block re-enters L1 (doc:DocumentFormat).
+    block re-enters L1 (doc:DocumentFormat). Unused root xmlns prefixes set the
+    unnecessary modifier.
 
     Workspace bootstrap reads blockml.config.json (srcDir, libraries) inline — no @blockml/cli dependency.
     Corpus-first: always scan srcDir. Seed = package.json blockml.library then config.libraries
@@ -167,7 +168,8 @@ export const documentationBlocks = [
 
     onSemanticTokens: semanticTokensFor on the in-memory buffer; XML-stack walk
     classified by FrameworkRoles position (no parser, no TypeRegistry). Nested
-    block re-enters L1. Legend token types map to *.bml TextMate scopes in the client.
+    block re-enters L1. Unused root xmlns prefixes set the unnecessary modifier.
+    Legend token types map to *.bml TextMate scopes in the client.
 
     Bootstrap errors (BML_LIBRARY_*) published once per workspace on each document until fixed.`,
     refs: [
@@ -248,8 +250,11 @@ export const documentationBlocks = [
     Semantic tokens are an XML-stack walk (no parse()). Element names are classified
     by nesting relative to the nearest document root or nested block, matching
     org.blockml.bml.vscode.theme.FrameworkRoles — same local name, different color
-    by position. Nested block re-enters block-body rules. Clients map the
-    legend types to *.bml TextMate scopes; theming stays in the IDE package.`,
+    by position. Nested block re-enters block-body rules. Unused xmlns:<prefix> on
+    the document root (prefix never used as a QName in tags, attributes, or text)
+    keep their lexical types and set the unnecessary modifier. Clients map the
+    legend types to *.bml TextMate scopes; theming of the unused fade stays in the
+    IDE package.`,
     refs: [
       { type: "lspdocumentation:PublicApi", relation: "ReadNext" },
     ],

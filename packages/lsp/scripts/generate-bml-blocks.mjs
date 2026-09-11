@@ -291,8 +291,15 @@ const capabilities = [
     • domain type, composition instance
 
     Nested block re-enters L1. Lexical tokens cover attributes, strings, comments,
-    interpolation, embed, and punctuation. Returns LSP SemanticTokens.data (5-int groups).
-    Used by textDocument/semanticTokens/full.`,
+    interpolation, embed, and punctuation.
+
+    Unused root xmlns:<prefix> declarations get the standard LSP modifier unnecessary
+    so clients can fade / desaturate them. A prefix is used when it appears as an element
+    or attribute QName (including the root tag) or as a type QName in text or attribute
+    values. The default xmlns is never unused. Comments do not count as uses. The
+    declaration itself is not a use. Legend tokenModifiers is [unnecessary].
+
+    Returns LSP SemanticTokens.data (5-int groups). Used by textDocument/semanticTokens/full.`,
     tsExport: "semanticTokensFor",
     inputs: [
       { name: "text", type: "type:Text", required: true },

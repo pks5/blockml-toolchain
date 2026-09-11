@@ -1,7 +1,7 @@
 export { hoverAt, type HoverInfo, type MarkupContent, } from "./hover.js";
 export { definitionAt, referencesAt, type LspLocation, type LspLocationLink, } from "./navigation.js";
 export { documentSymbols, SymbolKind, type OutlineSymbol, } from "./outline.js";
-export { semanticTokensFor, SEMANTIC_TOKEN_LEGEND, SEMANTIC_TOKEN_SCOPES, SEMANTIC_TOKEN_TYPES, type SemanticTokensResult, } from "./semantic-tokens.js";
+export { semanticTokensFor, SEMANTIC_TOKEN_LEGEND, SEMANTIC_TOKEN_MODIFIERS, SEMANTIC_TOKEN_SCOPES, SEMANTIC_TOKEN_TYPES, type SemanticTokensResult, } from "./semantic-tokens.js";
 export { analyzeDocument, formatDocument, type AnalysisResult, type FormatDocumentOptions, } from "./language-service.js";
 export { bomLocationToRange, bomSeverityToLsp, diagnosticToLsp, } from "./positions.js";
 export { createWorkspace, invalidateWorkspace, loadBomConfig, type BomConfig, type WorkspaceState, } from "./workspace.js";

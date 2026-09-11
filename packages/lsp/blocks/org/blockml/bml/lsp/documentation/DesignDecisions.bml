@@ -80,8 +80,11 @@
     Semantic tokens are an XML-stack walk (no parse()). Element names are classified
     by nesting relative to the nearest document root or nested block, matching
     org.blockml.bml.vscode.theme.FrameworkRoles — same local name, different color
-    by position. Nested block re-enters block-body rules. Clients map the
-    legend types to *.bml TextMate scopes; theming stays in the IDE package.
+    by position. Nested block re-enters block-body rules. Unused xmlns:&lt;prefix&gt; on
+    the document root (prefix never used as a QName in tags, attributes, or text)
+    keep their lexical types and set the unnecessary modifier. Clients map the
+    legend types to *.bml TextMate scopes; theming of the unused fade stays in the
+    IDE package.
   </documentation>
   <references>
     <see type="lspdocumentation:PublicApi" relation="ReadNext" />

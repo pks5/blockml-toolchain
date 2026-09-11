@@ -50,7 +50,8 @@
     
     Semantic tokens: textDocument/semanticTokens/full → semanticTokensFor → XML-stack
     walk classified by FrameworkRoles position (no parse()). Document root or nested
-    block re-enters L1 (doc:DocumentFormat).
+    block re-enters L1 (doc:DocumentFormat). Unused root xmlns prefixes set the
+    unnecessary modifier.
     
     Workspace bootstrap reads blockml.config.json (srcDir, libraries) inline — no @blockml/cli dependency.
     Corpus-first: always scan srcDir. Seed = package.json blockml.library then config.libraries
