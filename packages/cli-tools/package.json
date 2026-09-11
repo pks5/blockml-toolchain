@@ -38,7 +38,7 @@
     "@blockml/fatblock-target": "^0.9.8",
     "@blockml/xsd-target": "^0.9.8",
     "@blockml/compiler": "^0.9.8",
-    "@blockml/core": "^1.3.2",
+    "@blockml/core": "^1.4.0",
     "@blockml/builder": "^0.9.8",
     "@blockml/framework": "^0.9.8",
     "@blockml/parser": "^0.9.8",
