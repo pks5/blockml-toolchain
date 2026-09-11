@@ -242,7 +242,7 @@ export const documentationBlocks = [
     • BML_UNKNOWN_BASE_TYPE — baseType FQN not in TypeRegistry (at baseTypeSource)
     • BML_UNKNOWN_CONTRACT — contracts[] FQN not in TypeRegistry
     • BML_UNKNOWN_TYPE — named type FQN not in TypeRegistry and not a well-known primitive (member types at typeSource; instance typeFqn on the instance)
-    • BML_TYPE_BOUND_NOT_SATISFIED — capability throws[] type is not core:Exception (baseType chain or direct contracts[])
+    • BML_TYPE_BOUND_NOT_SATISFIED — TypeReference(B) / TypeReferenceEntity(B) value fails bound B (capability throws[] defaults to core:Exception). Same code when a domain-Block aggregation composition child is not assignable to the effective payload type (plain Block[] — not *ReferenceEntity QName sugar)
     • BML_MEMBER_COLLISION — duplicate member identity in effective set
     • BML_OVERRIDE_WITHOUT_PARENT — override without resolvable base member
     • BML_OVERRIDE_REQUIRED — override on non-overridable member

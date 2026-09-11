@@ -159,6 +159,48 @@ function packageIsKnown(pkg: string, registry: TypeRegistry): boolean {
   return registry.keys().some((fqn) => fqn.startsWith(prefix));
 }
 
+function formatTypeExpression(expr: TypeExpression): string {
+  switch (expr.kind) {
+    case "named":
+      return expr.fqn;
+    case "union":
+      return expr.alternatives.map(formatTypeExpression).join(" | ");
+    case "grouped":
+      return `(${formatTypeExpression(expr.expression)})`;
+    default:
+      return namedTypeFqn(expr) ?? "unknown";
+  }
+}
+
+function isReferenceEntityAggregation(
+  classified: ClassifiedDeclaredType | undefined,
+): classified is Extract<ClassifiedDeclaredType, { role: "reference" }> & { isEntity: true } {
+  return classified?.role === "reference" && classified.isEntity === true;
+}
+
+function childSatisfiesAggregationPayload(
+  childFqn: string,
+  payload: TypeExpression,
+  registry: TypeRegistry,
+): boolean {
+  if (payload.kind === "union") {
+    return payload.alternatives.some((alt) =>
+      childSatisfiesAggregationPayload(childFqn, alt, registry),
+    );
+  }
+  if (payload.kind === "grouped") {
+    return childSatisfiesAggregationPayload(childFqn, payload.expression, registry);
+  }
+  const named = namedTypeFqn(payload);
+  if (!named) {
+    return true;
+  }
+  if (!registry.has(childFqn) || !registry.has(named)) {
+    return true;
+  }
+  return satisfiesTypeBound(childFqn, named, registry);
+}
+
 function reportUnknownType(
   fqn: string,
   ctx: CheckCtx,
@@ -464,10 +506,11 @@ function walkInstance(instance: BlockInstance, ctx: CheckCtx): void {
 
   for (const agg of instance.aggregationCompositions ?? []) {
     const member = members.find((m) => m.kind === "aggregation" && m.name === agg.aggregationName);
-    const classified = member && member.kind === "aggregation"
-      ? classifyDeclaredType(member.type, ctx.registry)
+    const payloadType = member && member.kind === "aggregation" ? member.type : undefined;
+    const classified = payloadType
+      ? classifyDeclaredType(payloadType, ctx.registry)
       : undefined;
-    walkCompositionNodes(agg.composition.children, ctx, classified);
+    walkCompositionNodes(agg.composition.children, ctx, classified, payloadType);
   }
 }
 
@@ -475,10 +518,11 @@ function walkCompositionNodes(
   nodes: CompositionNode[],
   ctx: CheckCtx,
   aggregationDeclared?: ClassifiedDeclaredType,
+  payloadType?: TypeExpression,
 ): void {
   for (const child of nodes) {
     if (child.kind === "blockInstance") {
-      if (aggregationDeclared?.role === "reference" && aggregationDeclared.isEntity) {
+      if (isReferenceEntityAggregation(aggregationDeclared)) {
         if (aggregationDeclared.kind === "type") {
           checkTypeFqn(
             child.instance.typeFqn,
@@ -497,10 +541,22 @@ function walkCompositionNodes(
             child.instance.source ?? child.source,
           );
         }
+      } else if (payloadType) {
+        const childFqn = child.instance.typeFqn;
+        if (!childSatisfiesAggregationPayload(childFqn, payloadType, ctx.registry)) {
+          ctx.diagnostics.push(
+            diag(
+              "BML_TYPE_BOUND_NOT_SATISFIED",
+              `Type ${childFqn} does not satisfy bound ${formatTypeExpression(payloadType)}`,
+              ctx.file,
+              child.instance.source ?? child.source,
+            ),
+          );
+        }
       }
       walkInstance(child.instance, ctx);
     } else {
-      walkCompositionNodes(child.children, ctx, aggregationDeclared);
+      walkCompositionNodes(child.children, ctx, aggregationDeclared, payloadType);
     }
   }
 }
@@ -562,8 +618,17 @@ function walkBlockDefinition(block: BlockDefinition, ctx: CheckCtx): void {
     checkMemberTypes(member, ctx);
   }
 
+  const effective = resolveEffectiveMembers(block, ctx.registry);
   for (const template of block.compositions) {
-    walkCompositionNodes(template.children, ctx);
+    const member = effective.find(
+      (candidate) =>
+        candidate.kind === "aggregation" && candidate.name === template.aggregationName,
+    );
+    const payloadType = member && member.kind === "aggregation" ? member.type : undefined;
+    const classified = payloadType
+      ? classifyDeclaredType(payloadType, ctx.registry)
+      : undefined;
+    walkCompositionNodes(template.children, ctx, classified, payloadType);
   }
 
   for (const sub of block.subBlocks) {

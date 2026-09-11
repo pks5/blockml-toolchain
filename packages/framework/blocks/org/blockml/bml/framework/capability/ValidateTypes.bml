@@ -66,6 +66,14 @@
     is still a merge. Omission → BML_OVERRIDE_REQUIRED.
     override="true" without a matching inherited or contract member →
     BML_OVERRIDE_WITHOUT_PARENT. Override is not inherited; each layer must set it.
+    
+    Composition children of a domain-Block aggregation must be instances of the
+    effective payload type (or a subtype / direct contract implementor via
+    satisfiesTypeBound). The payload is the effective aggregation type after
+    inheritance — an override may omit type and still bind. TypeReferenceEntity
+    and other *ReferenceEntity aggregations keep QName sugar: the child element
+    names the referenced type, and the existing bound check applies to that FQN.
+    A child that is not assignable → BML_TYPE_BOUND_NOT_SATISFIED.
   </documentation>
   <references>
     <see type="fwcap:ResolveEffectiveMembers" relation="SeeAlso" />

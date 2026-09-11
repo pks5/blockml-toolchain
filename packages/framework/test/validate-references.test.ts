@@ -443,6 +443,157 @@ describe("validateTypes type-driven reference walk", () => {
     ).toBe(false);
   });
 
+  it("reports BML_TYPE_BOUND_NOT_SATISFIED when a composition child is not the aggregation payload", () => {
+    const { source, document } = parseSample(
+      [
+        "  <aggregations>",
+        '    <sources type="test:SourceSet[]">',
+        "      <composition>",
+        "        <test:OtherChild />",
+        "      </composition>",
+        "    </sources>",
+        "  </aggregations>",
+      ].join("\n"),
+      "agg-child-wrong-type.bml",
+    );
+    const registry = new TypeRegistry();
+    registerCore(registry);
+    registry.register(
+      typeDoc(
+        stub("SourceSet", "com.blockml.test.refs.SourceSet", {
+          baseType: "org.blockml.bml.core.Block",
+        }),
+      ),
+    );
+    registry.register(
+      typeDoc(
+        stub("OtherChild", "com.blockml.test.refs.OtherChild", {
+          baseType: "org.blockml.bml.core.Block",
+        }),
+      ),
+    );
+    const diagnostics = validateTypes(document, registry);
+    const diag = diagnostics.find((d) => d.code === "BML_TYPE_BOUND_NOT_SATISFIED");
+    expect(diag).toBeDefined();
+    expect(diag!.message).toContain("com.blockml.test.refs.OtherChild");
+    expect(diag!.message).toContain("com.blockml.test.refs.SourceSet");
+    expect(diag!.source.line).toBe(lineOf(source, "<test:OtherChild />"));
+  });
+
+  it("accepts a subtype as a domain-Block aggregation child", () => {
+    const { document } = parseSample(
+      [
+        "  <aggregations>",
+        '    <sources type="test:SourceSet[]">',
+        "      <composition>",
+        "        <test:SourceSetSub />",
+        "      </composition>",
+        "    </sources>",
+        "  </aggregations>",
+      ].join("\n"),
+      "agg-child-subtype.bml",
+    );
+    const registry = new TypeRegistry();
+    registerCore(registry);
+    registry.register(
+      typeDoc(
+        stub("SourceSet", "com.blockml.test.refs.SourceSet", {
+          baseType: "org.blockml.bml.core.Block",
+        }),
+      ),
+    );
+    registry.register(
+      typeDoc(
+        stub("SourceSetSub", "com.blockml.test.refs.SourceSetSub", {
+          baseType: "com.blockml.test.refs.SourceSet",
+        }),
+      ),
+    );
+    const diagnostics = validateTypes(document, registry);
+    expect(diagnostics.some((d) => d.code === "BML_TYPE_BOUND_NOT_SATISFIED")).toBe(false);
+  });
+
+  it("keeps TypeReferenceEntity QName sugar off the instance-type check", () => {
+    const { document } = parseSample(
+      [
+        "  <aggregations>",
+        '    <blocks type="type:TypeReferenceEntity(core:Block)[]">',
+        "      <composition>",
+        "        <core:Block />",
+        "      </composition>",
+        "    </blocks>",
+        "  </aggregations>",
+      ].join("\n"),
+      "agg-child-type-ref-sugar.bml",
+    );
+    const registry = new TypeRegistry();
+    registerCore(registry);
+    const diagnostics = validateTypes(document, registry);
+    expect(
+      diagnostics.some(
+        (d) =>
+          d.code === "BML_TYPE_BOUND_NOT_SATISFIED" &&
+          d.message.includes("org.blockml.bml.core.Block") &&
+          d.message.includes("TypeReferenceEntity"),
+      ),
+    ).toBe(false);
+  });
+
+  it("uses the inherited aggregation type when an override fills composition", () => {
+    const { document } = parseSample(
+      [
+        "  <aggregations>",
+        '    <sources override="true">',
+        "      <composition>",
+        "        <test:OtherChild />",
+        "      </composition>",
+        "    </sources>",
+        "  </aggregations>",
+      ].join("\n"),
+      "agg-child-inherited-type.bml",
+    );
+    const registry = new TypeRegistry();
+    registerCore(registry);
+    registry.register(
+      typeDoc(
+        stub("SourceSet", "com.blockml.test.refs.SourceSet", {
+          baseType: "org.blockml.bml.core.Block",
+        }),
+      ),
+    );
+    registry.register(
+      typeDoc(
+        stub("OtherChild", "com.blockml.test.refs.OtherChild", {
+          baseType: "org.blockml.bml.core.Block",
+        }),
+      ),
+    );
+    registry.register(
+      typeDoc(
+        stub("Parent", "com.blockml.test.refs.Parent", {
+          baseType: "org.blockml.bml.core.Block",
+          members: [
+            {
+              kind: "aggregation",
+              name: "sources",
+              type: {
+                kind: "named",
+                fqn: "com.blockml.test.refs.SourceSet",
+                multiplicity: { min: 0, max: "*" },
+              },
+            },
+          ],
+        }),
+      ),
+    );
+    document.block.baseType = "com.blockml.test.refs.Parent";
+    const diagnostics = validateTypes(document, registry);
+    const diag = diagnostics.find((d) => d.code === "BML_TYPE_BOUND_NOT_SATISFIED");
+    expect(diag).toBeDefined();
+    expect(diag!.message).toContain("com.blockml.test.refs.OtherChild");
+    expect(diag!.message).toContain("com.blockml.test.refs.SourceSet");
+  });
+
   it("does not treat a Text literal containing :: as an instance reference", () => {
     const { document } = parseSample(
       [
