@@ -1,0 +1,32 @@
+<!--LSP test fixture library
+  FQN: org.blockml.bml.lsptest.Library-->
+<lsptest:Library xmlns="http://blockml.org/bml"
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:lsptest="org.blockml.bml.lsptest">
+
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    Fixture library for workspace analysis tests
+  </is>
+  <version>
+    0.0.1
+  </version>
+  <language>
+    <blockml:language.English />
+  </language>
+  <aggregations>
+    <dependencies override="true">
+      <composition>
+        <blockml:Library />
+      </composition>
+    </dependencies>
+    <blocks override="true">
+      <composition>
+        <lsptest:Good />
+      </composition>
+    </blocks>
+  </aggregations>
+</lsptest:Library>

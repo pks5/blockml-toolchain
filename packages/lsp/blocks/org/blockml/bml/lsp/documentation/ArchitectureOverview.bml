@@ -36,6 +36,11 @@
     → parse + validate with workspace TypeRegistry overlaid by the open document
     → Diagnostic[] mapped to LSP ranges (positions.ts)
     
+    Closed files: idle analyzeWorkspace after bootstrap and file-watch refresh
+    → validate registry documents in the project-source set (no re-parse)
+    → parse-only for project .bml that never entered the TypeRegistry
+    → publishDiagnostics per URI; open buffers are skipped (analyzeDocument owns them).
+    
     Format: onDocumentFormatting → formatDocument → parse + serialize → TextEdit.
     
     Hover: onHover → hoverAt → parse (no validator) → XML token at cursor

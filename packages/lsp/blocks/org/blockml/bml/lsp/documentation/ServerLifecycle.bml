@@ -35,15 +35,19 @@
     createWorkspace(rootDir).
     
     onDidOpenTextDocument: store TextDocument, validate immediately.
-    onDidChangeTextDocument: debounce 400ms, re-validate.
+    onDidChangeTextDocument: debounce 400ms, re-validate. If an idle workspace
+    pass is pending or running, cancel it and reschedule after 1500ms.
     onDidCloseTextDocument: drop the in-memory buffer; keep last-published
     diagnostics so the client can still mark the closed file.
     
-    onInitialized: if the client supports dynamic file watchers, register
+    onInitialized: schedule idle analyzeWorkspace (1500ms) for project sources.
+    If the client supports dynamic file watchers, register
     **/*.bml, **/blockml.config.json, **/package.json.
     onDidChangeWatchedFiles: debounce 400ms, invalidateWorkspace, re-bootstrap,
-    re-validate all open documents. node_modules paths are ignored.
-    Refresh uses the disk snapshot — unsaved buffers are not overlaid into the registry.
+    re-validate all open documents, then schedule idle analyzeWorkspace.
+    node_modules paths are ignored. Workspace pass yields every few files and
+    skips URIs that have an open buffer. Refresh uses the disk snapshot —
+    unsaved buffers are not overlaid into the registry.
     
     onDocumentFormatting: formatDocument on the in-memory buffer; one full-document
     TextEdit, empty list if unchanged, or none if parse cannot produce a document.

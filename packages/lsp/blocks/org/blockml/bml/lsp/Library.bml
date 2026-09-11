@@ -66,6 +66,7 @@
         <lsp:LspType />
         <lsp:WorkspaceState />
         <lsp:AnalysisResult />
+        <lsp:WorkspaceAnalysisResult />
         <lsp:LspPosition />
         <lsp:LspRange />
         <lsp:MarkupContent />
@@ -75,6 +76,7 @@
         <lsp:LspLocationLink />
         <lsp:SemanticTokensResult />
         <lspcap:AnalyzeDocument />
+        <lspcap:AnalyzeWorkspace />
         <lspcap:FormatDocument />
         <lspcap:HoverAt />
         <lspcap:DocumentSymbols />

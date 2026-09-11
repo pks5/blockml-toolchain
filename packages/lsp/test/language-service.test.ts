@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { parse } from "@blockml/parser";
-import { analyzeDocument, createWorkspace, diagnosticToLsp } from "../src/index.js";
+import { analyzeDocument, analyzeWorkspace, createWorkspace, diagnosticToLsp } from "../src/index.js";
 
 const ROOT = join(import.meta.dirname, "..", "..", "..");
 
@@ -98,5 +98,33 @@ describe("analyzeDocument", () => {
     const result = analyzeDocument(buffer, "/proj/blocks/OverlayMe.bml", workspace);
     expect(result.document?.block.is).toBe("buffer");
     expect(workspace.registry.get("com.blockml.test.overlay.OverlayMe")?.block.is).toBe("disk");
+  });
+});
+
+describe("analyzeWorkspace", () => {
+  const fixtureRoot = join(import.meta.dirname, "fixtures/workspace-scan");
+
+  it("validates project sources and parse-only files that never entered the registry", () => {
+    const workspace = createWorkspace(fixtureRoot);
+    const result = analyzeWorkspace(workspace);
+    const files = result.filePaths.map((p) => p.replaceAll("\\", "/"));
+
+    expect(files.some((p) => p.endsWith("/lsptest/Good.bml"))).toBe(true);
+    expect(files.some((p) => p.endsWith("/lsptest/BrokenValidate.bml"))).toBe(true);
+    expect(files.some((p) => p.endsWith("/lsptest/BrokenParse.bml"))).toBe(true);
+    expect(files.every((p) => !p.split("/").includes("node_modules"))).toBe(true);
+
+    expect(
+      result.diagnostics.some(
+        (d) =>
+          d.source.file.replaceAll("\\", "/").endsWith("/lsptest/BrokenValidate.bml") &&
+          (d.code === "BML_UNKNOWN_TYPE" || d.code === "BML_UNKNOWN_NAMESPACE_PREFIX"),
+      ),
+    ).toBe(true);
+    expect(
+      result.diagnostics.some((d) =>
+        d.source.file.replaceAll("\\", "/").endsWith("/lsptest/BrokenParse.bml"),
+      ),
+    ).toBe(true);
   });
 });

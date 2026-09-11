@@ -82,6 +82,18 @@ const blocks = [
   {
     pkg: "",
     prefix: "lsp",
+    name: "WorkspaceAnalysisResult",
+    is: "Project-source validate outcome for closed-file diagnostics",
+    doc: "Returned by analyzeWorkspace(). filePaths is the project-source set (same as blockml validate without --all). diagnostics are grouped by source.file in the server.",
+    baseType: "lsp:LspType",
+    fields: [
+      { name: "filePaths", type: "type:Text[]", required: true, doc: "Absolute project-source .bml paths included in the pass." },
+      { name: "diagnostics", type: "bomcommon:Diagnostic[]", required: true, doc: "Validate diagnostics for registry documents; parse diagnostics for files that never entered the TypeRegistry." },
+    ],
+  },
+  {
+    pkg: "",
+    prefix: "lsp",
     name: "LspPosition",
     is: "LSP 0-based text position",
     doc: "BML type gap: stands for TypeScript LspPosition (packages/lsp/src/positions.ts). Core has no LSP protocol ValueType.",
@@ -200,6 +212,24 @@ const capabilities = [
   {
     pkg: "capability",
     prefix: "lspcap",
+    name: "AnalyzeWorkspace",
+    is: "Validate project-source BML for workspace diagnostics",
+    doc: `Editor-neutral workspace pass. Same file set as blockml validate without --all.
+
+    • srcDir plus local packages/*
+    • Registry documents: validate, no re-parse
+    • Unregistered project .bml: parse-only
+    • No open-buffer overlay; cached registry stays disk-only`,
+    tsExport: "analyzeWorkspace",
+    inputs: [
+      { name: "workspace", type: "lsp:WorkspaceState", required: true },
+    ],
+    output: { name: "result", type: "lsp:WorkspaceAnalysisResult", required: true },
+    refs: ["lspdocumentation:PublicApi", "valcap:Validate", "parcap:Parse"],
+  },
+  {
+    pkg: "capability",
+    prefix: "lspcap",
     name: "FormatDocument",
     is: "Parse then serialize a BML document to canonical XML",
     doc: "Editor-neutral format: parse(text) then serialize(). Returns null if parse cannot produce a document.",
@@ -312,7 +342,7 @@ const capabilities = [
     prefix: "lspcap",
     name: "StartLanguageServer",
     is: "stdio LSP server entry (bin blockml-lsp)",
-    doc: "packages/lsp/dist/server.js — document sync, publishDiagnostics, textDocument/formatting, textDocument/hover, textDocument/documentSymbol, textDocument/definition, textDocument/references, and textDocument/semanticTokens/full.",
+    doc: "packages/lsp/dist/server.js — document sync, publishDiagnostics (open buffers and idle project-source workspace pass), textDocument/formatting, textDocument/hover, textDocument/documentSymbol, textDocument/definition, textDocument/references, and textDocument/semanticTokens/full.",
     tsExport: "startLanguageServer",
     refs: ["lspdocumentation:ServerLifecycle"],
   },

@@ -30,7 +30,7 @@
     stdio LSP server entry (bin blockml-lsp)
   </is>
   <documentation>
-    packages/lsp/dist/server.js — document sync, publishDiagnostics, textDocument/formatting, textDocument/hover, textDocument/documentSymbol, textDocument/definition, textDocument/references, and textDocument/semanticTokens/full.
+    packages/lsp/dist/server.js — document sync, publishDiagnostics (open buffers and idle project-source workspace pass), textDocument/formatting, textDocument/hover, textDocument/documentSymbol, textDocument/definition, textDocument/references, and textDocument/semanticTokens/full.
   </documentation>
   <references>
     <see type="lspdocumentation:ServerLifecycle" relation="SeeAlso" />

@@ -1,0 +1,7 @@
+{
+  "name": "@blockml/lsp-workspace-scan-fixture",
+  "private": true,
+  "blockml": {
+    "library": "./blocks/org/blockml/bml/lsptest/Library.bml"
+  }
+}

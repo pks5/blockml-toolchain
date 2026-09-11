@@ -1,0 +1,31 @@
+<!--LSP — WorkspaceAnalysisResult
+  FQN: org.blockml.bml.lsp.WorkspaceAnalysisResult-->
+<lsp:WorkspaceAnalysisResult xmlns="http://blockml.org/bml"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:lsp="org.blockml.bml.lsp"
+  xmlns:type="org.blockml.bml.type">
+
+  <baseType>
+    lsp:LspType
+  </baseType>
+  <is>
+    Project-source validate outcome for closed-file diagnostics
+  </is>
+  <documentation>
+    Returned by analyzeWorkspace(). filePaths is the project-source set (same as
+    blockml validate without --all). diagnostics are grouped by source.file in the server.
+  </documentation>
+  <properties>
+    <filePaths type="type:Text[]">
+      <documentation>
+        Absolute project-source .bml paths included in the pass. (required)
+      </documentation>
+    </filePaths>
+    <diagnostics type="bomcommon:Diagnostic[]">
+      <documentation>
+        Validate diagnostics for registry documents; parse diagnostics for files
+        that never entered the TypeRegistry. (required)
+      </documentation>
+    </diagnostics>
+  </properties>
+</lsp:WorkspaceAnalysisResult>

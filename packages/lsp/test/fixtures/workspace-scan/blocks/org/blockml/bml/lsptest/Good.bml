@@ -1,0 +1,13 @@
+<!--LSP test fixture — Good
+  FQN: org.blockml.bml.lsptest.Good-->
+<lsptest:Good xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:lsptest="org.blockml.bml.lsptest">
+
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    Valid fixture block
+  </is>
+</lsptest:Good>

@@ -1,0 +1,16 @@
+<!--LSP test fixture — BrokenValidate
+  FQN: org.blockml.bml.lsptest.BrokenValidate-->
+<lsptest:BrokenValidate xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:lsptest="org.blockml.bml.lsptest">
+
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    Invalid fixture block for workspace validate
+  </is>
+  <properties>
+    <count type="lsptest:NoSuchType" />
+  </properties>
+</lsptest:BrokenValidate>

@@ -24,9 +24,11 @@ export {
 } from "./semantic-tokens.js";
 export {
   analyzeDocument,
+  analyzeWorkspace,
   formatDocument,
   type AnalysisResult,
   type FormatDocumentOptions,
+  type WorkspaceAnalysisResult,
 } from "./language-service.js";
 export {
   bomLocationToRange,

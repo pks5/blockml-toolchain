@@ -32,6 +32,7 @@
   </is>
   <documentation>
     analyzeDocument(text, filePath, workspace): AnalysisResult
+    analyzeWorkspace(workspace): WorkspaceAnalysisResult
     formatDocument(text, options?): string | null
     hoverAt(text, filePath, position, workspace): HoverInfo | null
     documentSymbols(text, filePath): OutlineSymbol[] | null
@@ -49,6 +50,7 @@
   </documentation>
   <references>
     <see type="lspcap:AnalyzeDocument" relation="Defines" />
+    <see type="lspcap:AnalyzeWorkspace" relation="Defines" />
     <see type="lspcap:FormatDocument" relation="Defines" />
     <see type="lspcap:HoverAt" relation="Defines" />
     <see type="lspcap:DocumentSymbols" relation="Defines" />

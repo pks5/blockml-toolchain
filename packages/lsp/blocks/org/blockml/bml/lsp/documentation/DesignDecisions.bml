@@ -43,6 +43,11 @@
     Full text sync + debounced validation — simpler than incremental parse for V1.
     didClose does not send an empty diagnostic list; last-published diagnostics
     stay so the client can mark closed files.
+    Idle analyzeWorkspace (1500ms after bootstrap or file-watch refresh) publishes
+    project-source diagnostics for closed files — same set as blockml validate
+    without --all. Registry documents are not re-parsed. Open buffers stay on
+    analyzeDocument. A keystroke cancels an in-flight pass and reschedules only
+    if that pass was still pending.
     
     continueOnError true on parse and validate — diagnostics survive partial BOM.
     

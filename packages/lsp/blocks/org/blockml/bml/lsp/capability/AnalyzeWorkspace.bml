@@ -1,0 +1,42 @@
+<!--LSP Capability — AnalyzeWorkspace
+  FQN: org.blockml.bml.lsp.capability.AnalyzeWorkspace-->
+<lspcap:AnalyzeWorkspace xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
+  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
+  xmlns:lsp="org.blockml.bml.lsp"
+  xmlns:lspcap="org.blockml.bml.lsp.capability"
+  xmlns:lspdocumentation="org.blockml.bml.lsp.documentation">
+
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Validate project-source BML for workspace diagnostics
+  </is>
+  <documentation>
+    Editor-neutral workspace pass. Same file set as blockml validate without --all.
+
+    • srcDir plus local packages/*
+    • Registry documents: validate, no re-parse
+    • Unregistered project .bml: parse-only
+    • No open-buffer overlay; cached registry stays disk-only
+  </documentation>
+  <references>
+    <see type="lspdocumentation:PublicApi" relation="SeeAlso" />
+    <see type="valcap:Validate" relation="SeeAlso" />
+    <see type="parcap:Parse" relation="SeeAlso" />
+  </references>
+  <properties>
+    <workspace type="lsp:WorkspaceState">
+      <documentation>
+        workspace. TS type: lsp:WorkspaceState. (required)
+      </documentation>
+    </workspace>
+    <result type="lsp:WorkspaceAnalysisResult">
+      <documentation>
+        result. TS type: lsp:WorkspaceAnalysisResult. (required)
+      </documentation>
+    </result>
+  </properties>
+</lspcap:AnalyzeWorkspace>

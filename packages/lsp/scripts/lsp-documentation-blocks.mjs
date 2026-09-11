@@ -54,6 +54,11 @@ export const documentationBlocks = [
     → parse + validate with workspace TypeRegistry overlaid by the open document
     → Diagnostic[] mapped to LSP ranges (positions.ts)
 
+    Closed files: idle analyzeWorkspace after bootstrap and file-watch refresh
+    → validate registry documents in the project-source set (no re-parse)
+    → parse-only for project .bml that never entered the TypeRegistry
+    → publishDiagnostics per URI; open buffers are skipped (analyzeDocument owns them).
+
     Format: onDocumentFormatting → formatDocument → parse + serialize → TextEdit.
 
     Hover: onHover → hoverAt → parse (no validator) → XML token at cursor
@@ -88,6 +93,7 @@ export const documentationBlocks = [
     • textDocument/didOpen, didChange, didClose
     • textDocumentSync Full
     • publishDiagnostics (parse + validate)
+    • idle workspace publishDiagnostics for project sources (closed files)
     • workspace/didChangeWatchedFiles (TypeRegistry refresh)
     • textDocument/formatting (parse → serialize)
     • textDocument/hover (XML-token hit-test + TypeRegistry)
@@ -95,7 +101,7 @@ export const documentationBlocks = [
     • textDocument/definition and textDocument/references (hit-test + TypeRegistry)
     • textDocument/semanticTokens/full (position-based FrameworkRoles highlight)
     • blockml-lsp stdio binary
-    • analyzeDocument, formatDocument, hoverAt, documentSymbols, definitionAt, referencesAt, and semanticTokensFor public API for tests and non-LSP hosts
+    • analyzeDocument, analyzeWorkspace, formatDocument, hoverAt, documentSymbols, definitionAt, referencesAt, and semanticTokensFor public API for tests and non-LSP hosts
 
     Out of scope V1:
     • Completion
@@ -110,6 +116,7 @@ export const documentationBlocks = [
     name: "PublicApi",
     is: "Exported API from packages/lsp/src/index.ts",
     doc: `    analyzeDocument(text, filePath, workspace): AnalysisResult
+    analyzeWorkspace(workspace): WorkspaceAnalysisResult
     formatDocument(text, options?): string | null
     hoverAt(text, filePath, position, workspace): HoverInfo | null
     documentSymbols(text, filePath): OutlineSymbol[] | null
@@ -126,6 +133,7 @@ export const documentationBlocks = [
     Server entry (not exported from index): packages/lsp/dist/server.js via bin blockml-lsp.`,
     refs: [
       { type: "lspcap:AnalyzeDocument", relation: "Defines" },
+      { type: "lspcap:AnalyzeWorkspace", relation: "Defines" },
       { type: "lspcap:FormatDocument", relation: "Defines" },
       { type: "lspcap:HoverAt", relation: "Defines" },
       { type: "lspcap:DocumentSymbols", relation: "Defines" },
@@ -142,15 +150,19 @@ export const documentationBlocks = [
     createWorkspace(rootDir).
 
     onDidOpenTextDocument: store TextDocument, validate immediately.
-    onDidChangeTextDocument: debounce 400ms, re-validate.
+    onDidChangeTextDocument: debounce 400ms, re-validate. If an idle workspace
+    pass is pending or running, cancel it and reschedule after 1500ms.
     onDidCloseTextDocument: drop the in-memory buffer; keep last-published
     diagnostics so the client can still mark the closed file.
 
-    onInitialized: if the client supports dynamic file watchers, register
+    onInitialized: schedule idle analyzeWorkspace (1500ms) for project sources.
+    If the client supports dynamic file watchers, register
     **/*.bml, **/blockml.config.json, **/package.json.
     onDidChangeWatchedFiles: debounce 400ms, invalidateWorkspace, re-bootstrap,
-    re-validate all open documents. node_modules paths are ignored.
-    Refresh uses the disk snapshot — unsaved buffers are not overlaid into the registry.
+    re-validate all open documents, then schedule idle analyzeWorkspace.
+    node_modules paths are ignored. Workspace pass yields every few files and
+    skips URIs that have an open buffer. Refresh uses the disk snapshot —
+    unsaved buffers are not overlaid into the registry.
 
     onDocumentFormatting: formatDocument on the in-memory buffer; one full-document
     TextEdit, empty list if unchanged, or none if parse cannot produce a document.
@@ -216,6 +228,11 @@ export const documentationBlocks = [
     Full text sync + debounced validation — simpler than incremental parse for V1.
     didClose does not send an empty diagnostic list; last-published diagnostics
     stay so the client can mark closed files.
+    Idle analyzeWorkspace (1500ms after bootstrap or file-watch refresh) publishes
+    project-source diagnostics for closed files — same set as blockml validate
+    without --all. Registry documents are not re-parsed. Open buffers stay on
+    analyzeDocument. A keystroke cancels an in-flight pass and reschedules only
+    if that pass was still pending.
 
     continueOnError true on parse and validate — diagnostics survive partial BOM.
 

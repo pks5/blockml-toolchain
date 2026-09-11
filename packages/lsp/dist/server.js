@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-import { fileURLToPath } from "node:url";
+import { pathToFileURL, fileURLToPath } from "node:url";
+import { resolve } from "node:path";
 import { createConnection, ProposedFeatures, TextDocumentSyncKind, } from "vscode-languageserver/node.js";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import { hoverAt } from "./hover.js";
-import { analyzeDocument, formatDocument } from "./language-service.js";
+import { analyzeDocument, analyzeProjectWorkspaceFile, formatDocument, listProjectWorkspaceFiles, } from "./language-service.js";
 import { definitionAt, referencesAt } from "./navigation.js";
 import { documentSymbols } from "./outline.js";
 import { SEMANTIC_TOKEN_LEGEND, semanticTokensFor } from "./semantic-tokens.js";
@@ -13,11 +14,34 @@ const connection = createConnection(ProposedFeatures.all);
 const documents = new Map();
 const debounceTimers = new Map();
 const DEBOUNCE_MS = 400;
+const WORKSPACE_DIAGNOSTICS_MS = 1500;
+const WORKSPACE_YIELD_EVERY = 6;
 let workspaceRoot;
 let watchFilesSupported = false;
 let workspaceRefreshTimer;
+let workspaceDiagnosticsTimer;
+let workspaceScanGeneration = 0;
+let workspaceScanRunning = false;
+const publishedWorkspaceUris = new Set();
 function uriToFilePath(uri) {
     return fileURLToPath(uri);
+}
+function filePathToUri(filePath) {
+    return pathToFileURL(resolve(filePath)).href;
+}
+function isOpenFile(filePath) {
+    const abs = resolve(filePath);
+    for (const doc of documents.values()) {
+        try {
+            if (resolve(uriToFilePath(doc.uri)) === abs) {
+                return true;
+            }
+        }
+        catch {
+            continue;
+        }
+    }
+    return false;
 }
 function resolveWorkspaceRoot(params) {
     if (params.workspaceFolders?.length) {
@@ -71,7 +95,76 @@ function scheduleWorkspaceRefresh() {
         for (const doc of documents.values()) {
             publishForDocument(doc);
         }
+        scheduleWorkspaceDiagnostics();
     }, DEBOUNCE_MS);
+}
+function scheduleWorkspaceDiagnostics() {
+    if (!workspaceRoot) {
+        return;
+    }
+    if (workspaceDiagnosticsTimer) {
+        clearTimeout(workspaceDiagnosticsTimer);
+    }
+    workspaceDiagnosticsTimer = setTimeout(() => {
+        workspaceDiagnosticsTimer = undefined;
+        void publishWorkspaceDiagnostics();
+    }, WORKSPACE_DIAGNOSTICS_MS);
+}
+function pauseWorkspaceScanForEdit() {
+    const pending = workspaceDiagnosticsTimer !== undefined || workspaceScanRunning;
+    if (!pending) {
+        return;
+    }
+    workspaceScanGeneration += 1;
+    workspaceScanRunning = false;
+    scheduleWorkspaceDiagnostics();
+}
+async function publishWorkspaceDiagnostics() {
+    if (!workspaceRoot) {
+        return;
+    }
+    const generation = ++workspaceScanGeneration;
+    workspaceScanRunning = true;
+    const workspace = createWorkspace(workspaceRoot);
+    const filePaths = listProjectWorkspaceFiles(workspace);
+    const nextUris = new Set();
+    for (let i = 0; i < filePaths.length; i++) {
+        if (generation !== workspaceScanGeneration) {
+            return;
+        }
+        if (i > 0 && i % WORKSPACE_YIELD_EVERY === 0) {
+            await new Promise((resolveYield) => {
+                setImmediate(resolveYield);
+            });
+            if (generation !== workspaceScanGeneration) {
+                return;
+            }
+        }
+        const filePath = filePaths[i];
+        const uri = filePathToUri(filePath);
+        nextUris.add(uri);
+        if (isOpenFile(filePath)) {
+            continue;
+        }
+        const diagnostics = analyzeProjectWorkspaceFile(workspace, filePath);
+        connection.sendDiagnostics({
+            uri,
+            diagnostics: diagnostics.map((d) => diagnosticToLsp(d)),
+        });
+    }
+    if (generation !== workspaceScanGeneration) {
+        return;
+    }
+    for (const uri of publishedWorkspaceUris) {
+        if (!nextUris.has(uri) && !documents.has(uri)) {
+            connection.sendDiagnostics({ uri, diagnostics: [] });
+        }
+    }
+    publishedWorkspaceUris.clear();
+    for (const uri of nextUris) {
+        publishedWorkspaceUris.add(uri);
+    }
+    workspaceScanRunning = false;
 }
 function clientSupportsFileWatchers(params) {
     return params.capabilities?.workspace?.didChangeWatchedFiles?.dynamicRegistration === true;
@@ -100,6 +193,7 @@ connection.onInitialize((params) => {
 });
 connection.onInitialized(() => {
     connection.console.log("BlockML language server initialized");
+    scheduleWorkspaceDiagnostics();
     if (!watchFilesSupported) {
         connection.console.log("Client does not support dynamic file watchers; workspace refresh disabled");
         return;
@@ -131,6 +225,7 @@ connection.onDidChangeTextDocument((params) => {
     }
     const updated = TextDocument.update(doc, params.contentChanges, params.textDocument.version);
     documents.set(params.textDocument.uri, updated);
+    pauseWorkspaceScanForEdit();
     scheduleValidation(updated);
 });
 connection.onDidCloseTextDocument((params) => {
