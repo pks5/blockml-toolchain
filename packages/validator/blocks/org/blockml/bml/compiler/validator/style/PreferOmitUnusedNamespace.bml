@@ -17,8 +17,16 @@
   <documentation>
     <![CDATA[
     Matches a document-root xmlns:<prefix> binding whose prefix is never used as a
-    type QName, annotation namespace, or xsi schemaLocation host. The default xmlns is
-    never unused. Style warning only — does not fail ValidateResult.success.
+    type QName, annotation namespace, or xsi schemaLocation host.
+
+    The default xmlns is never unused. Implicit documentation language (default
+    English) and see relation= local names (SeeAlso, ReadNext, …) do not count —
+    they resolve to org.blockml.bml.language / org.blockml.bml.relation without an
+    authored QName. An ancestor package prefix such as blockml (org.blockml.bml)
+    is used only when a type or language element is actually written with that
+    prefix.
+
+    Style warning only — does not fail ValidateResult.success.
     ]]>
   </documentation>
 </valstyle:PreferOmitUnusedNamespace>

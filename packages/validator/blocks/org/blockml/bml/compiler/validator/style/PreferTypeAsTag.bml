@@ -1,15 +1,17 @@
-<!--
-  Validator Style Check — PreferTypeAsTag
-  FQN: org.blockml.bml.compiler.validator.style.PreferTypeAsTag
--->
-<style:PreferTypeAsTag
-  xmlns="http://blockml.org/bml"
-  xmlns:style="org.blockml.bml.compiler.validator.style">
+<!--Validator Style Check — PreferTypeAsTag
+  FQN: org.blockml.bml.compiler.validator.style.PreferTypeAsTag-->
+<valstyle:PreferTypeAsTag xmlns="http://blockml.org/bml"
+  xmlns:valstyle="org.blockml.bml.compiler.validator.style">
 
-  <is>Warn when a definition still uses the legacy block wrapper</is>
-
-  <documentation>Matches a BlockDefinition whose wrapperForm is block — the legacy
+  <baseType>
+    valstyle:StyleCheck
+  </baseType>
+  <is>
+    Warn when a definition still uses the legacy block wrapper
+  </is>
+  <documentation>
+    Matches a BlockDefinition whose wrapperForm is block — the legacy
     definition wrapper. Preferred form uses the type (root / embed) or name
-    (Sub-Block) as the element tag (doc:DocumentFormat).</documentation>
-
-</style:PreferTypeAsTag>
+    (Sub-Block) as the element tag (doc:DocumentFormat).
+  </documentation>
+</valstyle:PreferTypeAsTag>

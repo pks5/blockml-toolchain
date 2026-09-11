@@ -313,7 +313,6 @@ function addMember(used: Set<string>, prefixes: Set<string>, member: MemberDefin
   }
   for (const ref of member.references ?? []) {
     addId(used, ref.type);
-    addId(used, ref.relationFqn);
     addId(used, ref.languageFqn);
   }
   for (const keyword of member.keywords ?? []) {
@@ -322,7 +321,6 @@ function addMember(used: Set<string>, prefixes: Set<string>, member: MemberDefin
   }
   for (const prose of member.documentations ?? []) {
     addId(used, prose.namespace);
-    addId(used, prose.languageFqn);
   }
   addUnknown(used, prefixes, member.unknownElements);
   for (const name of Object.keys(member.unknownAttributes ?? {})) {
@@ -401,7 +399,6 @@ function collectUsedNamespaceTargets(
   }
   for (const prose of block.documentations ?? []) {
     addId(used, prose.namespace);
-    addId(used, prose.languageFqn);
   }
   for (const example of block.examples ?? []) {
     addId(used, example.namespace);
@@ -409,7 +406,6 @@ function collectUsedNamespaceTargets(
   }
   for (const ref of block.references ?? []) {
     addId(used, ref.type);
-    addId(used, ref.relationFqn);
     addId(used, ref.languageFqn);
   }
   addUnknown(used, prefixes, block.unknownElements);

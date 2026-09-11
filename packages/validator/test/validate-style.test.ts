@@ -324,6 +324,55 @@ describe("validateStyle catalog", () => {
     ).toBe(false);
   });
 
+  it("does not treat implicit see relation or default documentation language as prefix use", () => {
+    const parsed = parse(
+      [
+        `<test:Sample xmlns="http://blockml.org/bml"`,
+        `  xmlns:blockml="org.blockml.bml"`,
+        `  xmlns:core="org.blockml.bml.core"`,
+        `  xmlns:test="com.blockml.test.style">`,
+        `  <baseType>core:Block</baseType>`,
+        `  <is>sample</is>`,
+        `  <version>1.0.0</version>`,
+        `  <documentation>A short note.</documentation>`,
+        `  <references>`,
+        `    <see type="core:Block" relation="SeeAlso" />`,
+        `  </references>`,
+        `</test:Sample>`,
+      ].join("\n"),
+      { filePath: "style-implicit-blockml-xmlns.bml" },
+    );
+    expect(parsed.document).not.toBeNull();
+    const unused = validateStyle(parsed.document!).filter(
+      (d) => d.code === "BML_STYLE_UNUSED_NAMESPACE",
+    );
+    expect(unused.map((d) => d.message)).toEqual(["Unused xmlns prefix 'blockml'."]);
+  });
+
+  it("keeps blockml used when a language element is written with that prefix", () => {
+    const parsed = parse(
+      [
+        `<test:Sample xmlns="http://blockml.org/bml"`,
+        `  xmlns:blockml="org.blockml.bml"`,
+        `  xmlns:core="org.blockml.bml.core"`,
+        `  xmlns:test="com.blockml.test.style">`,
+        `  <baseType>core:Block</baseType>`,
+        `  <is>sample</is>`,
+        `  <version>1.0.0</version>`,
+        `  <language>`,
+        `    <blockml:language.English />`,
+        `  </language>`,
+        `</test:Sample>`,
+      ].join("\n"),
+      { filePath: "style-blockml-language-used.bml" },
+    );
+    expect(parsed.document).not.toBeNull();
+    const unused = validateStyle(parsed.document!).filter(
+      (d) => d.code === "BML_STYLE_UNUSED_NAMESPACE",
+    );
+    expect(unused.some((d) => d.message.includes("'blockml'"))).toBe(false);
+  });
+
   it("does not treat the default xmlns as unused", () => {
     const parsed = parse(
       [

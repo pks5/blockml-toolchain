@@ -1,15 +1,17 @@
-<!--
-  Validator Style Check — PreferOmitRedundantType
-  FQN: org.blockml.bml.compiler.validator.style.PreferOmitRedundantType
--->
-<style:PreferOmitRedundantType
-  xmlns="http://blockml.org/bml"
-  xmlns:style="org.blockml.bml.compiler.validator.style">
+<!--Validator Style Check — PreferOmitRedundantType
+  FQN: org.blockml.bml.compiler.validator.style.PreferOmitRedundantType-->
+<valstyle:PreferOmitRedundantType xmlns="http://blockml.org/bml"
+  xmlns:valstyle="org.blockml.bml.compiler.validator.style">
 
-  <is>Warn when a preferred-form Block still declares a type child</is>
-
-  <documentation>Matches any preferred-form definition (root, Sub-Block, or embed)
+  <baseType>
+    valstyle:StyleCheck
+  </baseType>
+  <is>
+    Warn when a preferred-form Block still declares a type child
+  </is>
+  <documentation>
+    Matches any preferred-form definition (root, Sub-Block, or embed)
     that still authors a child type element. The tag already supplies the
-    type, or the Sub-Block type is derived (doc:DocumentFormat).</documentation>
-
-</style:PreferOmitRedundantType>
+    type, or the Sub-Block type is derived (doc:DocumentFormat).
+  </documentation>
+</valstyle:PreferOmitRedundantType>
