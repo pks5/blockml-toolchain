@@ -82,6 +82,105 @@ describe("validateInstances type and member completeness", () => {
     expect(diag!.message).toMatch(/mystery/);
   });
 
+  it("reports unknown empty instance child elements", () => {
+    const child = parseBlock(
+      [
+        '<block xmlns="http://blockml.org/bml"',
+        ' xmlns:core="org.blockml.bml.core"',
+        ' xmlns:type="org.blockml.bml.type"',
+        ' xmlns:test="com.blockml.test.inst">',
+        "  <type>test:Child</type>",
+        "  <baseType>core:Block</baseType>",
+        "  <is>child</is>",
+        "  <properties>",
+        '    <label type="type:Text" />',
+        "  </properties>",
+        "</block>",
+      ].join("\n"),
+      "child-empty.bml",
+    );
+    const host = parseBlock(
+      [
+        '<block xmlns="http://blockml.org/bml"',
+        ' xmlns:core="org.blockml.bml.core"',
+        ' xmlns:type="org.blockml.bml.type"',
+        ' xmlns:test="com.blockml.test.inst">',
+        "  <type>test:Host</type>",
+        "  <baseType>core:Block</baseType>",
+        "  <is>host</is>",
+        "  <aggregations>",
+        "    <children>",
+        "      <composition>",
+        "        <test:Child>",
+        "          <test>",
+        "          </test>",
+        "        </test:Child>",
+        "      </composition>",
+        "    </children>",
+        "  </aggregations>",
+        "</block>",
+      ].join("\n"),
+      "unknown-empty-member.bml",
+    );
+    const registry = new TypeRegistry();
+    registry.register(child);
+    registry.register(host);
+    const diagnostics = validateInstances(host, registry);
+    const diag = diagnostics.find((d) => d.code === "BML_UNKNOWN_PROPERTY");
+    expect(diag).toBeDefined();
+    expect(diag!.message).toMatch(/test/);
+  });
+
+  it("reports unknown instance aggregation fills", () => {
+    const child = parseBlock(
+      [
+        '<block xmlns="http://blockml.org/bml"',
+        ' xmlns:core="org.blockml.bml.core"',
+        ' xmlns:type="org.blockml.bml.type"',
+        ' xmlns:test="com.blockml.test.inst">',
+        "  <type>test:Child</type>",
+        "  <baseType>core:Block</baseType>",
+        "  <is>child</is>",
+        "  <properties>",
+        '    <label type="type:Text" />',
+        "  </properties>",
+        "</block>",
+      ].join("\n"),
+      "child-agg.bml",
+    );
+    const host = parseBlock(
+      [
+        '<block xmlns="http://blockml.org/bml"',
+        ' xmlns:core="org.blockml.bml.core"',
+        ' xmlns:type="org.blockml.bml.type"',
+        ' xmlns:test="com.blockml.test.inst">',
+        "  <type>test:Host</type>",
+        "  <baseType>core:Block</baseType>",
+        "  <is>host</is>",
+        "  <aggregations>",
+        "    <children>",
+        "      <composition>",
+        "        <test:Child>",
+        "          <test>",
+        "            <test:Child />",
+        "          </test>",
+        "        </test:Child>",
+        "      </composition>",
+        "    </children>",
+        "  </aggregations>",
+        "</block>",
+      ].join("\n"),
+      "unknown-aggregation-fill.bml",
+    );
+    const registry = new TypeRegistry();
+    registry.register(child);
+    registry.register(host);
+    const diagnostics = validateInstances(host, registry);
+    const diag = diagnostics.find((d) => d.code === "BML_UNKNOWN_PROPERTY");
+    expect(diag).toBeDefined();
+    expect(diag!.message).toMatch(/test/);
+  });
+
   it("accepts unqualified composition tags that name the enclosing block", () => {
     const host = parseBlock(
       [

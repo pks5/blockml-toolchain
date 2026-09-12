@@ -13,7 +13,9 @@
     Instance member rules against TypeRegistry
   </is>
   <documentation>
-    Instance member rules against TypeRegistry
+    Instance member rules against TypeRegistry. Authored memberValues keys
+    and aggregationCompositions names must exist on the instance type
+    (BML_UNKNOWN_PROPERTY).
   </documentation>
   <properties>
     <document type="bomdoc:BomDocument">

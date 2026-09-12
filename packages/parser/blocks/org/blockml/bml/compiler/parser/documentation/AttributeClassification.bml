@@ -26,7 +26,7 @@
     
     Rule 3 — Grammar vs instance:
     • On definition/grammar nodes, remaining attributes are closed. Unknown → BML_UNKNOWN_ATTRIBUTE (structural error); preserved as unknownAttributes.
-    • On block instances, remaining attributes → memberValues[name] (camelCase); ${ expr } → ExpressionValue { raw } (B4). Unknown members are a validator error.
+    • On block instances, remaining attributes → memberValues[name] (camelCase); ${ expr } → ExpressionValue { raw } (B4). Remaining child elements → memberValues (including empty) or aggregationCompositions. Unknown members are a validator error.
     
     Serialize side of Rule 1 (B25 re-emit) → @blockml/serializer.
   </documentation>

@@ -16,10 +16,15 @@
     Map composition child node to BlockInstanceNode.
     
     Instance property and association values: attributes and child elements
-    become memberValues. Repeated same-name elements merge into a list
+    become memberValues. Empty or whitespace-only child elements are stored
+    as empty memberValues — do not drop them. Unknown names are a validator
+    error (BML_UNKNOWN_PROPERTY). Repeated same-name elements merge into a list
     (verbose collection form). Compact JSON-like [ … ] in one attribute or
     element stays one list value. Mixing those forms, or attribute plus
     element for the same member, is BML_MIXED_MEMBER_VALUE.
+    Child elements that contain instances are aggregation fills
+    (aggregationCompositions); unknown aggregation names are the same
+    validator error.
   </documentation>
   <properties>
     <element type="parmap:XmlDomNode">

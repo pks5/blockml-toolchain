@@ -267,7 +267,7 @@ export function mapBlockInstanceNode(
     }
     const { text } = getCharacterData(child);
     const val = parseMemberValue(
-      text || getAttribute(child, "value"),
+      text || getAttribute(child, "value") || "",
       typeFqn,
       ctx.filePath,
       loc.line,

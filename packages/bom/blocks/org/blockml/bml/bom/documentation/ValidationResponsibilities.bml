@@ -19,6 +19,7 @@
     cross-instance refs to explicit authored id; qualified FQN::id on public aggregations;
     bml:each explicit id; Sub-Block qualified/FQN refs; generic param ≠ block/sub-block names;
     visibility rules; no duplicate visibility-prefix variants; expression types match;
+    instance memberValues and aggregation fills name members that exist on the type;
     preset properties exist; property value cycles; basePresets resolve without cycles;
     contracts merge order; validateConstraints after resolveEffectiveMembers;
     readOnly enforcement (BML_READONLY_MEMBER_WRITE); library blocks/deps resolve;

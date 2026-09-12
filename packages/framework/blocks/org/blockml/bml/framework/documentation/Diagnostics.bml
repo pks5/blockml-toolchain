@@ -41,7 +41,8 @@
     
     validateInstances:
     • BML_UNKNOWN_TYPE — composition instance typeFqn not in TypeRegistry
-    • BML_UNKNOWN_PROPERTY — instance memberValues key not in effective members (error)
+    • BML_UNKNOWN_PROPERTY — instance memberValues key or aggregationCompositions
+      name not in effective members (error)
     
     validateGenerics:
     • BML_OPEN_GENERIC_INSTANCE — aggregated domain Block instance still has open genericTypes without bml:generics (not TypeReferenceEntity sugar)

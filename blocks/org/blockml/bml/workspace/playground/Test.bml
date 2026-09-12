@@ -1,0 +1,28 @@
+<!--Workspace — WorkspaceType
+  FQN: org.blockml.bml.workspace.WorkspaceType-->
+<playground:Test xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workspace="org.blockml.bml.workspace"
+  xmlns:playground="org.blockml.bml.workspace.playground">
+
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    Abstract marker for workspace hub documentation blocks
+  </is>
+  <documentation>
+    Marker for org.blockml.bml.workspace.* hub types. This library is documentation-only; it does not export capabilities or runtime APIs.
+  </documentation>
+  <aggregations>
+    <test type="core:Block[]"> 
+        <composition>
+            <core:Block>
+                <test>
+                    
+                </test>
+            </core:Block>
+        </composition>
+    </test>
+  </aggregations>
+</playground:Test>

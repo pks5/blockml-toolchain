@@ -70,6 +70,19 @@ function validateInstanceSemantics(
       );
     }
   }
+  for (const agg of instance.aggregationCompositions ?? []) {
+    if (!names.has(agg.aggregationName)) {
+      diagnostics.push(
+        diag(
+          "BML_UNKNOWN_PROPERTY",
+          `Unknown property: ${agg.aggregationName} on ${instance.typeFqn}`,
+          file,
+          agg.composition.source?.line ?? instance.source?.line,
+          agg.composition.source?.column ?? instance.source?.column,
+        ),
+      );
+    }
+  }
 }
 
 function validateInstanceRefs(

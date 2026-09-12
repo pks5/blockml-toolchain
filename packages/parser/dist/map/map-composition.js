@@ -184,7 +184,7 @@ export function mapBlockInstanceNode(element, ctx) {
             continue;
         }
         const { text } = getCharacterData(child);
-        const val = parseMemberValue(text || getAttribute(child, "value"), typeFqn, ctx.filePath, loc.line, loc.column, "element", ctx);
+        const val = parseMemberValue(text || getAttribute(child, "value") || "", typeFqn, ctx.filePath, loc.line, loc.column, "element", ctx);
         if (val) {
             pushMemberOccurrence(memberOccurrences, childLocal, val);
         }

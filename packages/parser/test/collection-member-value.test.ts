@@ -142,4 +142,29 @@ describe("collection instance member values", () => {
     expect(result.diagnostics.some((d) => d.code === "BML_MIXED_MEMBER_VALUE")).toBe(true);
   });
 
+  it("keeps an empty instance child element as an empty memberValue", () => {
+    const { instance } = firstInstance(
+      sample(
+        [
+          "  <aggregations>",
+          "    <children>",
+          "      <composition>",
+          "        <test:Child>",
+          "          <labels>",
+          "          </labels>",
+          "        </test:Child>",
+          "      </composition>",
+          "    </children>",
+          "  </aggregations>",
+        ].join("\n"),
+      ),
+      "empty-element.bml",
+    );
+    expect(instance?.memberValues.labels).toMatchObject({
+      kind: "literal",
+      value: "",
+      authoredPlacement: "element",
+    });
+  });
+
 });

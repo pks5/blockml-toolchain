@@ -35,6 +35,9 @@
     Formatting whitespace is ignored (B13). Character-data hosts keep text
     (name, is, documentation, value, property host text, …).
     Block instances: extra attributes stay in memberValues for semantic checking.
+    Extra child elements stay in memberValues (empty included) or
+    aggregationCompositions — never dropped — so the validator can reject
+    unknown member names (BML_UNKNOWN_PROPERTY).
   </documentation>
   <references>
     <see type="pardocumentation:XmlCommentsParse" relation="ReadNext" />
