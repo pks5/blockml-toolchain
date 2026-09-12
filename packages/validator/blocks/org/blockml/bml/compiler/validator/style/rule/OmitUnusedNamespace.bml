@@ -9,8 +9,10 @@
   <baseType>style:StyleRule</baseType>
   <is>Warn on unused root xmlns prefixes</is>
 
-  <documentation>Root xmlns prefix declarations that do not address any type or
-    annotation used in the document should be omitted.</documentation>
+  <documentation>Root xmlns prefix declarations that do not address any authored
+    type QName or annotation used in the document should be omitted. A nested
+    type-level binding is unused when the type is written with a parent package
+    prefix (ann:BmlAnnotation does not use xmlns:bml).</documentation>
 
   <properties>
     <code override="true">

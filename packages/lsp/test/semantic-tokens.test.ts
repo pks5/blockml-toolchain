@@ -251,6 +251,22 @@ describe("semanticHighlightSpans", () => {
     expect(nameSpan(src, 'xmlns="http').unnecessary).toBeUndefined();
   });
 
+  it("does not treat a nested type-level xmlns as a use of ann:BmlAnnotation", () => {
+    const src = [
+      '<blockml:Library xmlns="http://blockml.org/bml"',
+      ' xmlns:blockml="org.blockml.bml"',
+      ' xmlns:ann="org.blockml.bml.annotation"',
+      ' xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"',
+      ' xmlns:core="org.blockml.bml.core">',
+      "  <baseType>core:BlockLibrary</baseType>",
+      "  <ann:BmlAnnotation />",
+      "</blockml:Library>",
+    ].join("\n");
+    expect([...unusedRootNamespacePrefixes(src)].sort()).toEqual(["bml"]);
+    expect(nameSpan(src, "xmlns:ann=").unnecessary).toBeUndefined();
+    expect(nameSpan(src, "xmlns:bml=").unnecessary).toBe(true);
+  });
+
   it("counts prefixed attributes and does not treat comments as uses", () => {
     const src = [
       '<block xmlns="http://blockml.org/bml"',

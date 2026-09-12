@@ -373,6 +373,66 @@ describe("validateStyle catalog", () => {
     expect(unused.some((d) => d.message.includes("'blockml'"))).toBe(false);
   });
 
+  it("credits ann:BmlAnnotation to ann, not the nested bml type binding", () => {
+    const parsed = parse(
+      [
+        `<blockml:Library xmlns="http://blockml.org/bml"`,
+        `  xmlns:blockml="org.blockml.bml"`,
+        `  xmlns:ann="org.blockml.bml.annotation"`,
+        `  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"`,
+        `  xmlns:core="org.blockml.bml.core">`,
+        `  <baseType>core:BlockLibrary</baseType>`,
+        `  <is>catalog</is>`,
+        `  <version>1.0.0</version>`,
+        `  <aggregations>`,
+        `    <blocks override="true">`,
+        `      <composition>`,
+        `        <core:Block />`,
+        `        <ann:BmlAnnotation />`,
+        `      </composition>`,
+        `    </blocks>`,
+        `  </aggregations>`,
+        `</blockml:Library>`,
+      ].join("\n"),
+      { filePath: "style-ann-not-bml-xmlns.bml" },
+    );
+    expect(parsed.document).not.toBeNull();
+    const unused = validateStyle(parsed.document!).filter(
+      (d) => d.code === "BML_STYLE_UNUSED_NAMESPACE",
+    );
+    expect(unused.map((d) => d.message)).toEqual(["Unused xmlns prefix 'bml'."]);
+  });
+
+  it("keeps bml used when a bml:* attribute is authored beside ann:BmlAnnotation", () => {
+    const parsed = parse(
+      [
+        `<blockml:Library xmlns="http://blockml.org/bml"`,
+        `  xmlns:blockml="org.blockml.bml"`,
+        `  xmlns:ann="org.blockml.bml.annotation"`,
+        `  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"`,
+        `  xmlns:core="org.blockml.bml.core">`,
+        `  <baseType>core:BlockLibrary</baseType>`,
+        `  <is>catalog</is>`,
+        `  <version>1.0.0</version>`,
+        `  <aggregations>`,
+        `    <blocks override="true">`,
+        `      <composition>`,
+        `        <core:Block bml:version="1.0.0" />`,
+        `        <ann:BmlAnnotation />`,
+        `      </composition>`,
+        `    </blocks>`,
+        `  </aggregations>`,
+        `</blockml:Library>`,
+      ].join("\n"),
+      { filePath: "style-ann-and-bml-xmlns.bml" },
+    );
+    expect(parsed.document).not.toBeNull();
+    const unused = validateStyle(parsed.document!).filter(
+      (d) => d.code === "BML_STYLE_UNUSED_NAMESPACE",
+    );
+    expect(unused).toEqual([]);
+  });
+
   it("does not treat the default xmlns as unused", () => {
     const parsed = parse(
       [

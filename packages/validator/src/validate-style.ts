@@ -244,12 +244,23 @@ function addUnknown(used: Set<string>, prefixes: Set<string>, nodes?: UnknownXml
   }
 }
 
-function addBmlAnnotation(used: Set<string>): void {
-  used.add(BML_ANNOTATION);
+type NamespaceUse = {
+  prefixes: Set<string>;
+  used: Set<string>;
+  bindings: Record<string, string>;
+};
+
+function addBmlAnnotation(ns: NamespaceUse): void {
+  ns.used.add(BML_ANNOTATION);
+  for (const [prefix, binding] of Object.entries(ns.bindings)) {
+    if (prefix && binding === BML_ANNOTATION) {
+      ns.prefixes.add(prefix);
+    }
+  }
 }
 
-function addInstance(used: Set<string>, prefixes: Set<string>, instance: BlockInstance): void {
-  addId(used, instance.typeFqn);
+function addInstance(ns: NamespaceUse, instance: BlockInstance): void {
+  addId(ns.used, instance.typeFqn);
   if (
     instance.id !== undefined ||
     instance.version !== undefined ||
@@ -257,178 +268,166 @@ function addInstance(used: Set<string>, prefixes: Set<string>, instance: BlockIn
     instance.scope !== undefined ||
     instance.generics !== undefined
   ) {
-    addBmlAnnotation(used);
+    addBmlAnnotation(ns);
   }
   for (const name of Object.keys(instance.unknownAttributes ?? {})) {
     const idx = name.indexOf(":");
     if (idx > 0) {
-      prefixes.add(name.slice(0, idx));
+      ns.prefixes.add(name.slice(0, idx));
     }
   }
   for (const nested of instance.aggregationCompositions ?? []) {
-    addComposition(used, prefixes, nested.composition);
+    addComposition(ns, nested.composition);
   }
 }
 
-function addComposition(
-  used: Set<string>,
-  prefixes: Set<string>,
-  composition?: CompositionTemplate,
-): void {
+function addComposition(ns: NamespaceUse, composition?: CompositionTemplate): void {
   if (!composition) {
     return;
   }
   if (composition.directives?.length || composition.generics) {
-    addBmlAnnotation(used);
+    addBmlAnnotation(ns);
   }
   for (const child of composition.children) {
-    addCompositionNode(used, prefixes, child);
+    addCompositionNode(ns, child);
   }
 }
 
-function addCompositionNode(
-  used: Set<string>,
-  prefixes: Set<string>,
-  node: CompositionNode,
-): void {
+function addCompositionNode(ns: NamespaceUse, node: CompositionNode): void {
   if (node.kind === "blockInstance") {
     if (node.directives?.length) {
-      addBmlAnnotation(used);
+      addBmlAnnotation(ns);
     }
-    addInstance(used, prefixes, node.instance);
+    addInstance(ns, node.instance);
     return;
   }
   if (node.directives?.length || node.generics) {
-    addBmlAnnotation(used);
+    addBmlAnnotation(ns);
   }
   for (const child of node.children) {
-    addCompositionNode(used, prefixes, child);
+    addCompositionNode(ns, child);
   }
 }
 
-function addMember(used: Set<string>, prefixes: Set<string>, member: MemberDefinition): void {
-  addId(used, member.namespace);
+function addMember(ns: NamespaceUse, member: MemberDefinition): void {
+  addId(ns.used, member.namespace);
   if (member.generics || member.xmlRendering) {
-    addBmlAnnotation(used);
+    addBmlAnnotation(ns);
   }
   for (const ref of member.references ?? []) {
-    addId(used, ref.type);
-    addId(used, ref.languageFqn);
+    addId(ns.used, ref.type);
+    addId(ns.used, ref.languageFqn);
   }
   for (const keyword of member.keywords ?? []) {
-    addId(used, keyword.typeFqn);
-    addId(used, keyword.languageFqn);
+    addId(ns.used, keyword.typeFqn);
+    addId(ns.used, keyword.languageFqn);
   }
   for (const prose of member.documentations ?? []) {
-    addId(used, prose.namespace);
+    addId(ns.used, prose.namespace);
   }
-  addUnknown(used, prefixes, member.unknownElements);
+  addUnknown(ns.used, ns.prefixes, member.unknownElements);
   for (const name of Object.keys(member.unknownAttributes ?? {})) {
     const idx = name.indexOf(":");
     if (idx > 0) {
-      prefixes.add(name.slice(0, idx));
+      ns.prefixes.add(name.slice(0, idx));
     }
   }
   switch (member.kind) {
     case "property":
-      addId(used, member.typeFqn);
-      addExpr(used, member.type);
+      addId(ns.used, member.typeFqn);
+      addExpr(ns.used, member.type);
       for (const entry of member.values ?? []) {
-        addId(used, entry.namespace);
+        addId(ns.used, entry.namespace);
       }
       for (const group of member.groups ?? []) {
-        addEntity(used, group);
+        addEntity(ns.used, group);
       }
       for (const suggestion of member.suggestions ?? []) {
-        addInstance(used, prefixes, suggestion);
+        addInstance(ns, suggestion);
       }
       break;
     case "aggregation":
-      addExpr(used, member.type);
-      addComposition(used, prefixes, member.composition);
+      addExpr(ns.used, member.type);
+      addComposition(ns, member.composition);
       for (const group of member.groups ?? []) {
-        addEntity(used, group);
+        addEntity(ns.used, group);
       }
       break;
     case "association":
-      addExpr(used, member.type);
+      addExpr(ns.used, member.type);
       break;
     case "capability":
-      addId(used, member.typeFqn);
-      addExpr(used, member.inputType);
-      addExpr(used, member.outputType);
-      addId(used, member.implementation?.languageFqn);
+      addId(ns.used, member.typeFqn);
+      addExpr(ns.used, member.inputType);
+      addExpr(ns.used, member.outputType);
+      addId(ns.used, member.implementation?.languageFqn);
       for (const thrown of member.throws ?? []) {
-        addEntity(used, thrown);
+        addEntity(ns.used, thrown);
       }
       break;
   }
   for (const constraint of member.constraints ?? []) {
-    addInstance(used, prefixes, constraint);
+    addInstance(ns, constraint);
   }
 }
 
-function collectUsedNamespaceTargets(
-  block: BlockDefinition,
-  prefixes: Set<string>,
-  used: Set<string>,
-): void {
-  addId(used, block.type);
-  addId(used, block.baseType);
-  addExpr(used, block.baseTypeExpression);
-  addEntity(used, block.language);
-  addId(used, block.languageFqn);
-  addId(used, block.definitionFqn);
+function collectUsedNamespaceTargets(block: BlockDefinition, ns: NamespaceUse): void {
+  addId(ns.used, block.type);
+  addId(ns.used, block.baseType);
+  addExpr(ns.used, block.baseTypeExpression);
+  addEntity(ns.used, block.language);
+  addId(ns.used, block.languageFqn);
+  addId(ns.used, block.definitionFqn);
   if (block.generics || block.xmlRendering) {
-    addBmlAnnotation(used);
+    addBmlAnnotation(ns);
   }
   for (const contract of block.contracts ?? []) {
-    addEntity(used, contract);
+    addEntity(ns.used, contract);
   }
   for (const generic of block.genericTypes ?? []) {
-    addId(used, generic.baseType);
-    addId(used, generic.defaultType);
+    addId(ns.used, generic.baseType);
+    addId(ns.used, generic.defaultType);
   }
   for (const alias of block.aliases ?? []) {
-    addId(used, alias.typeFqn);
-    addId(used, alias.languageFqn);
+    addId(ns.used, alias.typeFqn);
+    addId(ns.used, alias.languageFqn);
   }
   for (const keyword of block.keywords ?? []) {
-    addId(used, keyword.typeFqn);
-    addId(used, keyword.languageFqn);
+    addId(ns.used, keyword.typeFqn);
+    addId(ns.used, keyword.languageFqn);
   }
   for (const prose of block.documentations ?? []) {
-    addId(used, prose.namespace);
+    addId(ns.used, prose.namespace);
   }
   for (const example of block.examples ?? []) {
-    addId(used, example.namespace);
-    addId(used, example.contentLanguageFqn);
+    addId(ns.used, example.namespace);
+    addId(ns.used, example.contentLanguageFqn);
   }
   for (const ref of block.references ?? []) {
-    addId(used, ref.type);
-    addId(used, ref.languageFqn);
+    addId(ns.used, ref.type);
+    addId(ns.used, ref.languageFqn);
   }
-  addUnknown(used, prefixes, block.unknownElements);
+  addUnknown(ns.used, ns.prefixes, block.unknownElements);
   for (const name of Object.keys(block.unknownAttributes ?? {})) {
     const idx = name.indexOf(":");
     if (idx > 0) {
-      prefixes.add(name.slice(0, idx));
+      ns.prefixes.add(name.slice(0, idx));
     }
   }
   for (const member of block.members) {
-    addMember(used, prefixes, member);
+    addMember(ns, member);
   }
   for (const composition of block.compositions) {
-    addComposition(used, prefixes, composition);
+    addComposition(ns, composition);
   }
   for (const constraint of block.constraints ?? []) {
-    addInstance(used, prefixes, constraint);
+    addInstance(ns, constraint);
   }
   for (const sub of block.subBlocks) {
-    collectUsedNamespaceTargets(sub, prefixes, used);
+    collectUsedNamespaceTargets(sub, ns);
   }
   for (const embedded of block.embeddedBlocks) {
-    collectUsedNamespaceTargets(embedded, prefixes, used);
+    collectUsedNamespaceTargets(embedded, ns);
   }
 }
 
@@ -438,21 +437,37 @@ function prefixesUsedByTargets(
 ): Set<string> {
   const used = new Set<string>();
   for (const id of usedIds) {
-    let best: string | undefined;
-    let bestLen = -1;
+    const idx = id.indexOf(":");
+    if (idx > 0 && !id.includes("://")) {
+      const authored = id.slice(0, idx);
+      if (authored !== "xmlns" && bindings[authored]) {
+        used.add(authored);
+      }
+    }
+    const packageHits: { prefix: string; binding: string }[] = [];
+    const exactHits: string[] = [];
     for (const [prefix, binding] of Object.entries(bindings)) {
       if (!prefix) {
         continue;
       }
-      if (id === binding || id.startsWith(`${binding}.`)) {
-        if (binding.length > bestLen) {
-          bestLen = binding.length;
-          best = prefix;
-        }
+      if (id.startsWith(`${binding}.`)) {
+        packageHits.push({ prefix, binding });
+      } else if (id === binding) {
+        exactHits.push(prefix);
       }
     }
-    if (best) {
-      used.add(best);
+    if (packageHits.length > 0) {
+      let best = packageHits[0]!;
+      for (const hit of packageHits) {
+        if (hit.binding.length > best.binding.length) {
+          best = hit;
+        }
+      }
+      used.add(best.prefix);
+      continue;
+    }
+    for (const prefix of exactHits) {
+      used.add(prefix);
     }
   }
   return used;
@@ -460,17 +475,20 @@ function prefixesUsedByTargets(
 
 function unusedRootPrefixes(document: BomDocument): string[] {
   const bindings = document.source.namespaceBindings ?? {};
-  const usedPrefixes = new Set<string>();
-  const usedIds = new Set<string>();
-  collectUsedNamespaceTargets(document.block, usedPrefixes, usedIds);
+  const ns: NamespaceUse = {
+    prefixes: new Set<string>(),
+    used: new Set<string>(),
+    bindings,
+  };
+  collectUsedNamespaceTargets(document.block, ns);
   if (document.source.schemaLocation || document.source.noNamespaceSchemaLocation) {
-    usedIds.add(XSI_NS);
+    ns.used.add(XSI_NS);
   }
-  for (const prefix of prefixesUsedByTargets(bindings, usedIds)) {
-    usedPrefixes.add(prefix);
+  for (const prefix of prefixesUsedByTargets(bindings, ns.used)) {
+    ns.prefixes.add(prefix);
   }
   return Object.keys(bindings)
-    .filter((prefix) => prefix !== "" && !usedPrefixes.has(prefix))
+    .filter((prefix) => prefix !== "" && !ns.prefixes.has(prefix))
     .sort();
 }
 

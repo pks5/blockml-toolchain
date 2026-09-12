@@ -21,6 +21,13 @@
     is used only when a type or language element is actually written with that
     prefix.
 
+    Nested bindings must not steal credit. xmlns:ann="org.blockml.bml.annotation"
+    plus xmlns:bml="org.blockml.bml.annotation.BmlAnnotation" is the usual pair:
+    <ann:BmlAnnotation /> uses ann (package + local name), not bml. A type-level
+    xmlns is used only for that prefix as a QName (bml:version, bml:id, …) or when
+    a bml:* field was parsed off the attribute. Resolving a parent-prefix QName to
+    the same FQN is not a use of the nested prefix.
+
     Style warning only — does not fail ValidateResult.success.
     ]]>
   </documentation>
