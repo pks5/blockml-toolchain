@@ -141,6 +141,12 @@ function loc(file: string, source?: SourceLocation): SourceLocation {
   return source ?? { file, line: 1, column: 1 };
 }
 
+/** Start of an element only — editor warnings must not span the whole block body. */
+function startTagOnly(file: string, source?: SourceLocation): SourceLocation {
+  const full = loc(file, source);
+  return { file: full.file, line: full.line, column: full.column };
+}
+
 function styleDiag(
   rule: StyleRuleRecord,
   file: string,
@@ -500,7 +506,7 @@ function runPreferTypeAsTag(
   out: Diagnostic[],
 ): void {
   if (block.wrapperForm === "block") {
-    out.push(styleDiag(rule, file, block.source));
+    out.push(styleDiag(rule, file, startTagOnly(file, block.source)));
   }
 }
 
@@ -524,7 +530,7 @@ function runPreferOmitRedundantName(
   out: Diagnostic[],
 ): void {
   if (block.wrapperForm === "type" && block.authoredNameChild) {
-    out.push(styleDiag(rule, file, block.source));
+    out.push(styleDiag(rule, file, startTagOnly(file, block.source)));
   }
 }
 
@@ -581,7 +587,7 @@ function runPreferOmitUnusedNamespace(
       severity: rule.severity,
       code: rule.code,
       message: `Unused xmlns prefix '${prefix}'.`,
-      source: loc(file, document.block.source),
+      source: startTagOnly(file, document.block.source),
     });
   }
 }

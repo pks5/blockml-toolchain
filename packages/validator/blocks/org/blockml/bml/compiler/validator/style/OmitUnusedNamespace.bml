@@ -15,7 +15,7 @@
     QName or annotation used in the document should be omitted. Default xmlns is
     exempt. A nested type-level binding (bml → BmlAnnotation) is unused when the
     type is written with a parent package prefix (ann:BmlAnnotation). Emitted as
-    BML_STYLE_UNUSED_NAMESPACE (warning).
+    BML_STYLE_UNUSED_NAMESPACE (warning) at the document-root start tag.
     ]]>
   </documentation>
   <properties>

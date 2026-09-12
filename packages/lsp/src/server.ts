@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { readFileSync } from "node:fs";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 import {
@@ -190,9 +191,15 @@ async function publishWorkspaceDiagnostics(): Promise<void> {
       continue;
     }
     const diagnostics = analyzeProjectWorkspaceFile(workspace, filePath);
+    let text: string | undefined;
+    try {
+      text = readFileSync(filePath, "utf8");
+    } catch {
+      text = undefined;
+    }
     connection.sendDiagnostics({
       uri,
-      diagnostics: diagnostics.map((d) => diagnosticToLsp(d)),
+      diagnostics: diagnostics.map((d) => diagnosticToLsp(d, text)),
     });
   }
 

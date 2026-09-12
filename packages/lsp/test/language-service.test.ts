@@ -32,6 +32,27 @@ describe("analyzeDocument", () => {
     ).toBe(true);
   });
 
+  it("marks unused namespace warnings on the root tag only", () => {
+    const text = [
+      '<test:Sample xmlns="http://blockml.org/bml"',
+      ' xmlns:core="org.blockml.bml.core"',
+      ' xmlns:idle="org.blockml.bml.idle"',
+      ' xmlns:test="com.blockml.test.lsp">',
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "  <version>1.0.0</version>",
+      "</test:Sample>",
+    ].join("\n");
+    const workspace = createWorkspace(ROOT);
+    const result = analyzeDocument(text, "unused-xmlns.bml", workspace);
+    const diag = result.diagnostics.find((d) => d.code === "BML_STYLE_UNUSED_NAMESPACE");
+    expect(diag).toBeDefined();
+    expect(diag!.severity).toBe("warning");
+    const lsp = diagnosticToLsp(diag!, text);
+    expect(lsp.range.start).toEqual({ line: 0, character: 0 });
+    expect(lsp.range.end).toEqual({ line: 0, character: "<test:Sample".length });
+  });
+
   it("places unknown prefix diagnostics on the property line", () => {
     const text = [
       '<block xmlns="http://blockml.org/bml"',

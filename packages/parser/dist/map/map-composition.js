@@ -45,7 +45,18 @@ const METADATA_ELEMENTS = new Set([
     "subTypes",
     "languages",
 ]);
-const RESERVED = new Set([...MEMBER_SECTIONS, ...METADATA_ELEMENTS, "composition", "implementation", "throws", "value", "groups", "suggestions"]);
+/**
+ * Parse-syntax wrappers that are never instance member fills.
+ * BlockDefinition metadata names (aliases, keywords, references, …) are
+ * definition-context only — on instances they bind the member of that local name.
+ */
+const INSTANCE_STRUCTURE = new Set([
+    ...MEMBER_SECTIONS,
+    "composition",
+    "implementation",
+    "throws",
+    "value",
+]);
 export function mapCompositionTemplate(element, aggregationName, ctx) {
     const loc = elementSourceLoc(ctx.filePath, ctx.source, element);
     const compositionEls = elementChildren(element).filter((c) => elementLocalName(c) === "composition");
@@ -152,7 +163,7 @@ export function mapBlockInstanceNode(element, ctx) {
     const aggregationCompositions = [];
     for (const child of elementChildren(element)) {
         const childLocal = elementLocalName(child);
-        if (childLocal === "composition" || RESERVED.has(childLocal)) {
+        if (childLocal === "composition" || INSTANCE_STRUCTURE.has(childLocal)) {
             continue;
         }
         if (isGenericsDirectiveElement(child)) {
@@ -174,7 +185,7 @@ export function mapBlockInstanceNode(element, ctx) {
         if (childLocal === "composition") {
             continue;
         }
-        if (RESERVED.has(childLocal)) {
+        if (INSTANCE_STRUCTURE.has(childLocal)) {
             continue;
         }
         if (isGenericsDirectiveElement(child)) {
@@ -283,7 +294,7 @@ function instanceMemberIsAggregationFill(element, ctx) {
     }
     return elementChildren(element).some((c) => {
         const local = elementLocalName(c);
-        return local === "composition" || local === "container" || !RESERVED.has(local);
+        return local === "composition" || local === "container" || !INSTANCE_STRUCTURE.has(local);
     });
 }
 export function isTypeReferenceEntitySugar(element, ctx) {

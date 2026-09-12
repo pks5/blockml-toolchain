@@ -311,6 +311,10 @@ describe("validateStyle catalog", () => {
     expect(unused).toHaveLength(1);
     expect(unused[0]?.severity).toBe("warning");
     expect(unused[0]?.message).toContain("'idle'");
+    expect(unused[0]?.source.line).toBe(1);
+    expect(unused[0]?.source.column).toBe(1);
+    expect(unused[0]?.source.endLine).toBeUndefined();
+    expect(unused[0]?.source.endColumn).toBeUndefined();
 
     const result = validate(parsed.document!);
     expect(result.success).toBe(true);

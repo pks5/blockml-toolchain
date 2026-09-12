@@ -129,6 +129,7 @@ export const documentationBlocks = [
     bomLocationToRange(loc, documentText?): LSP Range
     bomSeverityToLsp(severity): LSP DiagnosticSeverity
     diagnosticToLsp(diagnostic, documentText?): LSP Diagnostic
+    (warnings that start on an opening tag and span the element shrink to the tag name)
 
     Server entry (not exported from index): packages/lsp/dist/server.js via bin blockml-lsp.`,
     refs: [
@@ -274,7 +275,16 @@ export const documentationBlocks = [
     the document root (prefix never used as a QName in tags, attributes, or text)
     keep their lexical types and set the unnecessary modifier. Clients map the
     legend types to *.bml TextMate scopes; theming of the unused fade stays in the
-    IDE package.`,
+    IDE package.
+
+    publishDiagnostics ranges: errors keep the BOM source span (precise token or
+    element). Warnings that start on an opening tag and whose span covers attributes
+    or the element body shrink to that opening tag name only — the same discreet
+    mark recommendations use — so a block-level warning (unused root xmlns, legacy
+    wrapper) does not yellow-underline the whole file. Targeted warning starts
+    (attribute, child, text) stay on that token. Recommendations and info keep
+    their authored span. diagnosticToLsp applies this when document text is
+    provided (open buffers and the idle workspace pass).`,
     refs: [
       { type: "lspdocumentation:PublicApi", relation: "ReadNext" },
     ],

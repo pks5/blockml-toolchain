@@ -12,7 +12,8 @@
   <documentation>Root xmlns prefix declarations that do not address any authored
     type QName or annotation used in the document should be omitted. A nested
     type-level binding is unused when the type is written with a parent package
-    prefix (ann:BmlAnnotation does not use xmlns:bml).</documentation>
+    prefix (ann:BmlAnnotation does not use xmlns:bml). The diagnostic source is
+    the document-root start tag, not the full block span.</documentation>
 
   <properties>
     <code override="true">

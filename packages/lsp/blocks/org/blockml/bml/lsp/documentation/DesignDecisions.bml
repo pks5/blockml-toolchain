@@ -72,6 +72,15 @@
     keep their lexical types and set the unnecessary modifier. Clients map the
     legend types to *.bml TextMate scopes; theming of the unused fade stays in the
     IDE package.
+    
+    publishDiagnostics ranges: errors keep the BOM source span (precise token or
+    element). Warnings that start on an opening tag and whose span covers attributes
+    or the element body shrink to that opening tag name only — the same discreet
+    mark recommendations use — so a block-level warning (unused root xmlns, legacy
+    wrapper) does not yellow-underline the whole file. Targeted warning starts
+    (attribute, child, text) stay on that token. Recommendations and info keep
+    their authored span. diagnosticToLsp applies this when document text is
+    provided (open buffers and the idle workspace pass).
   </documentation>
   <references>
     <see type="lspdocumentation:PublicApi" relation="ReadNext" />

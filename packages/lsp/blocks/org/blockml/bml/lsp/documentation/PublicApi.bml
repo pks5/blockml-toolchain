@@ -26,6 +26,7 @@
     bomLocationToRange(loc, documentText?): LSP Range
     bomSeverityToLsp(severity): LSP DiagnosticSeverity
     diagnosticToLsp(diagnostic, documentText?): LSP Diagnostic
+    (warnings that start on an opening tag and span the element shrink to the tag name)
     
     Server entry (not exported from index): packages/lsp/dist/server.js via bin blockml-lsp.
   </documentation>

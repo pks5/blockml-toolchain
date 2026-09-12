@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { readFileSync } from "node:fs";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 import { createConnection, ProposedFeatures, TextDocumentSyncKind, } from "vscode-languageserver/node.js";
@@ -147,9 +148,16 @@ async function publishWorkspaceDiagnostics() {
             continue;
         }
         const diagnostics = analyzeProjectWorkspaceFile(workspace, filePath);
+        let text;
+        try {
+            text = readFileSync(filePath, "utf8");
+        }
+        catch {
+            text = undefined;
+        }
         connection.sendDiagnostics({
             uri,
-            diagnostics: diagnostics.map((d) => diagnosticToLsp(d)),
+            diagnostics: diagnostics.map((d) => diagnosticToLsp(d, text)),
         });
     }
     if (generation !== workspaceScanGeneration) {

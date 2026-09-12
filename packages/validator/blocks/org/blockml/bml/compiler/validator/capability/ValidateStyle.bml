@@ -17,7 +17,8 @@
     Loads StyleRule documents from this package blocks/style/rule/, dispatches each
     check type to a TypeScript interpreter, and returns diagnostics. Does not affect
     success (warnings and recommendations only). Unused root xmlns prefixes emit
-    BML_STYLE_UNUSED_NAMESPACE. Authored QNames count; a nested type-level xmlns
+    BML_STYLE_UNUSED_NAMESPACE at the document-root start tag (not the whole
+    block span). Authored QNames count; a nested type-level xmlns
     is not used just because a parent-prefix QName resolves to that type.
     Implicit documentation language and see relation=
     local names do not count as prefix use. Unknown check types emit
