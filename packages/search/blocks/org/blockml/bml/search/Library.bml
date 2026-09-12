@@ -16,7 +16,7 @@
     The BlockML Search package library catalog
   </is>
   <version>
-    0.9.10
+    0.9.11
   </version>
   <documentation>
     Canonical search specification for BlockML — local full-text search over the

@@ -1,6 +1,6 @@
 {
   "name": "@blockml/builder",
-  "version": "0.9.10",
+  "version": "0.9.11",
   "description": "BlockML BomBuilder — writable authoring session for BML blocks",
   "license": "Apache-2.0",
   "repository": {
@@ -32,13 +32,13 @@
     "test": "vitest run packages/builder/test"
   },
   "dependencies": {
-    "@blockml/bom": "^0.9.10",
+    "@blockml/bom": "^0.9.11",
     "@blockml/core": "^1.4.1",
-    "@blockml/framework": "^0.9.10"
+    "@blockml/framework": "^0.9.11"
   },
   "devDependencies": {
-    "@blockml/parser": "^0.9.10",
-    "@blockml/serializer": "^0.9.10"
+    "@blockml/parser": "^0.9.11",
+    "@blockml/serializer": "^0.9.11"
   },
   "engines": {
     "node": ">=20"

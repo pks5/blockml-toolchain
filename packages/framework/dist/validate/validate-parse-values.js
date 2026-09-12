@@ -27,6 +27,18 @@ function isUnion(expr) {
     }
     return false;
 }
+function isAnonymousStruct(expr) {
+    if (!expr) {
+        return false;
+    }
+    if (expr.kind === "anonymousStruct") {
+        return true;
+    }
+    if (expr.kind === "grouped") {
+        return isAnonymousStruct(expr.expression);
+    }
+    return false;
+}
 function hasMultiplicity(expr, fallbackFqn) {
     if (expr) {
         if (expr.kind === "named" || expr.kind === "grouped") {
@@ -56,16 +68,20 @@ function checkLiteral(val, type, typeFqn, ctx, loc) {
     if (!val || val.kind !== "literal") {
         return;
     }
-    if (isUnion(type) || type?.kind === "anonymousStruct") {
+    if (isUnion(type)) {
         return;
     }
     const named = namedTypeFqn(type, typeFqn);
-    if (!named) {
+    const anonymous = isAnonymousStruct(type);
+    if (!named && !anonymous) {
         return;
     }
     const list = hasMultiplicity(type, typeFqn);
     if (!list && Array.isArray(val.value)) {
         ctx.diagnostics.push(diag("BML_INVALID_VALUE", "collection value on a non-list type", ctx.file, loc));
+        return;
+    }
+    if (anonymous || !named) {
         return;
     }
     const items = Array.isArray(val.value) ? val.value : [val.value];
