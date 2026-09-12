@@ -178,6 +178,39 @@ describe("validateTypes parseValue literals", () => {
     ).toBe(true);
   });
 
+  it("reports BML_INVALID_VALUE for a JSON array on an anonymous StructType", () => {
+    const document = parseSample(
+      '    <size type="{ x: type:Integer, y: type:Integer }" value="[4, 2]" />',
+      "anon-struct-array.bml",
+    );
+    const diagnostics = validateTypes(document, bootstrappedRegistry());
+    expect(
+      diagnostics.some((d) => d.message === "collection value on a non-list type"),
+    ).toBe(true);
+  });
+
+  it("accepts a named object literal on an anonymous StructType", () => {
+    const document = parseSample(
+      '    <size type="{ x: type:Integer, y: type:Integer }" value="{ x: 4, y: 2 }" />',
+      "anon-struct-object.bml",
+    );
+    const diagnostics = validateTypes(document, bootstrappedRegistry());
+    expect(
+      diagnostics.filter((d) => d.message === "collection value on a non-list type"),
+    ).toEqual([]);
+  });
+
+  it("accepts a JSON array on a list of anonymous StructType", () => {
+    const document = parseSample(
+      '    <sizes type="{ x: type:Integer, y: type:Integer }[]" value="[{ x: 4, y: 2 }]" />',
+      "anon-struct-list.bml",
+    );
+    const diagnostics = validateTypes(document, bootstrappedRegistry());
+    expect(
+      diagnostics.filter((d) => d.message === "collection value on a non-list type"),
+    ).toEqual([]);
+  });
+
   it("reports BML_INVALID_VALUE for a JSON list on a scalar Text property", () => {
     const document = parseSample(
       `    <label type="type:Text" value="['Hello', 'Good Bye']" />`,

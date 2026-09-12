@@ -54,6 +54,19 @@ function isUnion(expr: TypeExpression | undefined): boolean {
   return false;
 }
 
+function isAnonymousStruct(expr: TypeExpression | undefined): boolean {
+  if (!expr) {
+    return false;
+  }
+  if (expr.kind === "anonymousStruct") {
+    return true;
+  }
+  if (expr.kind === "grouped") {
+    return isAnonymousStruct(expr.expression);
+  }
+  return false;
+}
+
 function hasMultiplicity(expr: TypeExpression | undefined, fallbackFqn?: string): boolean {
   if (expr) {
     if (expr.kind === "named" || expr.kind === "grouped") {
@@ -97,11 +110,12 @@ function checkLiteral(
   if (!val || val.kind !== "literal") {
     return;
   }
-  if (isUnion(type) || type?.kind === "anonymousStruct") {
+  if (isUnion(type)) {
     return;
   }
   const named = namedTypeFqn(type, typeFqn);
-  if (!named) {
+  const anonymous = isAnonymousStruct(type);
+  if (!named && !anonymous) {
     return;
   }
   const list = hasMultiplicity(type, typeFqn);
@@ -114,6 +128,9 @@ function checkLiteral(
         loc,
       ),
     );
+    return;
+  }
+  if (anonymous || !named) {
     return;
   }
   const items = Array.isArray(val.value) ? val.value : [val.value];

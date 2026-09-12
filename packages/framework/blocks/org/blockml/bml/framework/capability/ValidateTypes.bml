@@ -37,9 +37,10 @@
     scad:value) so each facet can be parseValue-checked in its own language.
     Failure → BML_INVALID_VALUE. Existence stays on the reference walk.
     A JSON-like `[…]` payload is a list only when the declared type has `[]`
-    multiplicity. On any non-list type — including StructType — it is
-    BML_INVALID_VALUE (collection on a non-list type). Struct values are named
-    field mappings, not positional arrays.
+    multiplicity. On any non-list type — including named and anonymous
+    StructType — it is BML_INVALID_VALUE (collection on a non-list type).
+    Struct values are named field mappings, not positional arrays. Unions
+    are not collection-checked here (an alternative may itself be a list).
     
     Local redeclarations that merge with a member from the baseType chain or from
     contracts[] must set override="true" on every member kind — property, aggregation,
