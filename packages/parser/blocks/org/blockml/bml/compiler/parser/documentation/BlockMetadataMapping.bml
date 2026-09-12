@@ -25,6 +25,12 @@
     language, genericTypes, contracts, properties, aggregations, associations,
     capabilities, subBlocks, embeddedBlocks
     
+    Definition-context only. aliases (meta:Alias[]) is Block-level type-name
+    metadata on a definition wrapper — not an instance member fill. On a Block
+    instance the same local name binds the instance type's member
+    (parcap:MapBlockInstanceNode). The parser must not classify instance
+    &lt;aliases&gt; as this field.
+    
     • xmlRendering (bml:xml metadata) stored on BlockDefinition — NOT in directives[] (B23/D3)
     • authoredPlacement stored for dual element|attribute forms (D9)
     • authoredCharacterDataForm for text vs CDATA (D8)

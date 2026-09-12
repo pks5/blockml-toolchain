@@ -25,6 +25,14 @@
     Child elements that contain instances are aggregation fills
     (aggregationCompositions); unknown aggregation names are the same
     validator error.
+    
+    Bind by member local name first. A Block instance has no BlockDefinition
+    metadata slots — aliases, keywords, references, and the other definition
+    Gerüst names are not reserved here. Prefix and an aggregations wrapper do
+    not change the local name. BlockDefinition.aliases (meta:Alias[]) is
+    definition-context only (pardocumentation:BlockMetadataMapping).
+    On instances, skip only parse-syntax wrappers (composition, value,
+    member-section containers, capability implementation/throws).
   </documentation>
   <properties>
     <element type="parmap:XmlDomNode">

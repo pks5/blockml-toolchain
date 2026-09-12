@@ -37,7 +37,9 @@
     Block instances: extra attributes stay in memberValues for semantic checking.
     Extra child elements stay in memberValues (empty included) or
     aggregationCompositions — never dropped — so the validator can reject
-    unknown member names (BML_UNKNOWN_PROPERTY).
+    unknown member names (BML_UNKNOWN_PROPERTY). Definition-metadata local
+    names (aliases, keywords, references, …) are instance members here, not
+    Gerüst tags.
   </documentation>
   <references>
     <see type="pardocumentation:XmlCommentsParse" relation="ReadNext" />

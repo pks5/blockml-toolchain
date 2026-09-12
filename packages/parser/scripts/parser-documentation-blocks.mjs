@@ -216,7 +216,12 @@ export const documentationBlocks = [
     Non-whitespace text on element-only grammar nodes → BML_UNEXPECTED_TEXT.
     Formatting whitespace is ignored (B13). Character-data hosts keep text
     (name, is, documentation, value, property host text, …).
-    Block instances: extra attributes stay in memberValues for semantic checking.`,
+    Block instances: extra attributes stay in memberValues for semantic checking.
+    Extra child elements stay in memberValues (empty included) or
+    aggregationCompositions — never dropped — so the validator can reject
+    unknown member names (BML_UNKNOWN_PROPERTY). Definition-metadata local
+    names (aliases, keywords, references, …) are instance members here, not
+    Gerüst tags.`,
     refs: [
       { type: "pardocumentation:XmlCommentsParse", relation: "ReadNext" },
       { type: "valdocumentation:ValidityContract", relation: "SeeAlso" },
@@ -270,6 +275,12 @@ export const documentationBlocks = [
     language, genericTypes, contracts, properties, aggregations, associations,
     capabilities, subBlocks, embeddedBlocks
 
+    Definition-context only. aliases (meta:Alias[]) is Block-level type-name
+    metadata on a definition wrapper — not an instance member fill. On a Block
+    instance the same local name binds the instance type's member
+    (parcap:MapBlockInstanceNode). The parser must not classify instance
+    <aliases> as this field.
+
     • xmlRendering (bml:xml metadata) stored on BlockDefinition — NOT in directives[] (B23/D3)
     • authoredPlacement stored for dual element|attribute forms (D9)
     • authoredCharacterDataForm for text vs CDATA (D8)
@@ -308,10 +319,12 @@ export const documentationBlocks = [
       or inside an aggregation that is already nested in a composition). Extra
       copies → BML_DUPLICATE_COMPOSITION. Misplaced → BML_STANDALONE_COMPOSITION.
       Wrapper inside a composition instance aggregation → BML_NESTED_COMPOSITION
-      (children still mapped). On Block instances, aggregations are filled by
+      (children still mapped).       On Block instances, aggregations are filled by
       member name with children as direct descendants — no <composition> wrapper.
-      Sugar without a <composition> wrapper (instances as direct children) stays
-      allowed on definitions.
+      Member local names are bound first: aliases, keywords, references, and
+      other BlockDefinition Gerüst names are not reserved on instances
+      (parcap:MapBlockInstanceNode). Sugar without a <composition> wrapper
+      (instances as direct children) stays allowed on definitions.
     • Constraints/suggestions → BlockInstance[] in document order
     • Capability <throws> → TypeReferenceEntityInstance[] (empty-QName sugar or
       explicit type:TypeReferenceEntity); bound B = core:Exception

@@ -108,6 +108,90 @@ describe("keyword and alias shorthand", () => {
     ]);
   });
 
+  it("binds instance aliases as the member, not BlockDefinition.aliases", () => {
+    const source = sample(
+      [
+        "  <aliases>Sub-Block</aliases>",
+        "  <aggregations>",
+        "    <children>",
+        "      <composition>",
+        "        <test:Child>",
+        "          <aliases>",
+        '            <type:TextEntity value="en" />',
+        "          </aliases>",
+        "        </test:Child>",
+        "      </composition>",
+        "    </children>",
+        "  </aggregations>",
+      ].join("\n"),
+    );
+    const result = parse(source, { filePath: "instance-aliases.bml", continueOnError: true });
+    expect(result.document).not.toBeNull();
+    expect(result.document!.block.aliases).toEqual([
+      { typeFqn: ALIAS, value: "Sub-Block" },
+    ]);
+    const children = result.document!.block.members.find((m) => m.name === "children");
+    expect(children?.kind).toBe("aggregation");
+    if (children?.kind !== "aggregation") {
+      return;
+    }
+    const child = children.composition?.children[0];
+    expect(child?.kind).toBe("blockInstance");
+    if (child?.kind !== "blockInstance") {
+      return;
+    }
+    const aliases = child.instance.aggregationCompositions?.find(
+      (a) => a.aggregationName === "aliases",
+    );
+    expect(aliases).toBeDefined();
+    const first = aliases?.composition.children[0];
+    expect(first?.kind).toBe("blockInstance");
+    if (first?.kind !== "blockInstance") {
+      return;
+    }
+    expect(first.instance.typeFqn).toBe("org.blockml.bml.type.TextEntity");
+    const value = first.instance.memberValues.value;
+    expect(value && value.kind === "literal" ? value.value : undefined).toBe("en");
+    const serialized = serialize(result.document!);
+    expect(serialized.text).toMatch(/<test:Child>[\s\S]*<aliases>\s*<type:TextEntity/);
+    expect(serialized.text).toContain('value="Sub-Block"');
+  });
+
+  it("binds prefixed instance aliases by local name", () => {
+    const source = sample(
+      [
+        "  <aggregations>",
+        "    <children>",
+        "      <composition>",
+        "        <test:Child>",
+        "          <test:aliases>",
+        '            <type:TextEntity value="de" />',
+        "          </test:aliases>",
+        "        </test:Child>",
+        "      </composition>",
+        "    </children>",
+        "  </aggregations>",
+      ].join("\n"),
+    );
+    const result = parse(source, { filePath: "prefixed-instance-aliases.bml", continueOnError: true });
+    expect(result.document).not.toBeNull();
+    expect(result.document!.block.aliases).toBeUndefined();
+    const children = result.document!.block.members.find((m) => m.name === "children");
+    expect(children?.kind).toBe("aggregation");
+    if (children?.kind !== "aggregation") {
+      return;
+    }
+    const child = children.composition?.children[0];
+    expect(child?.kind).toBe("blockInstance");
+    if (child?.kind !== "blockInstance") {
+      return;
+    }
+    const aliases = child.instance.aggregationCompositions?.find(
+      (a) => a.aggregationName === "aliases",
+    );
+    expect(aliases?.composition.children[0]?.kind).toBe("blockInstance");
+  });
+
   it("serializes keyword sugar as long-form children", () => {
     const source = sample(
       "  <keywords>inheritance, nesting, FQN derivation</keywords>",

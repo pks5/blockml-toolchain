@@ -37,10 +37,12 @@
       or inside an aggregation that is already nested in a composition). Extra
       copies → BML_DUPLICATE_COMPOSITION. Misplaced → BML_STANDALONE_COMPOSITION.
       Wrapper inside a composition instance aggregation → BML_NESTED_COMPOSITION
-      (children still mapped). On Block instances, aggregations are filled by
+      (children still mapped).       On Block instances, aggregations are filled by
       member name with children as direct descendants — no <composition> wrapper.
-      Sugar without a <composition> wrapper (instances as direct children) stays
-      allowed on definitions.
+      Member local names are bound first: aliases, keywords, references, and
+      other BlockDefinition Gerüst names are not reserved on instances
+      (parcap:MapBlockInstanceNode). Sugar without a <composition> wrapper
+      (instances as direct children) stays allowed on definitions.
     • Constraints/suggestions → BlockInstance[] in document order
     • Capability <throws> → TypeReferenceEntityInstance[] (empty-QName sugar or
       explicit type:TypeReferenceEntity); bound B = core:Exception
