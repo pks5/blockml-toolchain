@@ -16,6 +16,7 @@
     exempt. A nested type-level binding (bml → BmlAnnotation) is unused when the
     type is written with a parent package prefix (ann:BmlAnnotation). Emitted as
     BML_STYLE_UNUSED_NAMESPACE (warning) at the document-root start tag.
+    QName-bearing property and instance values count as uses.
     ]]>
   </documentation>
   <properties>

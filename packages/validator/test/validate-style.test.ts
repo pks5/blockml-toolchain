@@ -437,6 +437,134 @@ describe("validateStyle catalog", () => {
     expect(unused).toEqual([]);
   });
 
+  it("keeps a prefix used as a TypeIdentifier property value", () => {
+    const parsed = parse(
+      [
+        `<test:Sample xmlns="http://blockml.org/bml"`,
+        `  xmlns:core="org.blockml.bml.core"`,
+        `  xmlns:type="org.blockml.bml.type"`,
+        `  xmlns:test="com.blockml.test.style">`,
+        `  <baseType>core:Block</baseType>`,
+        `  <is>sample</is>`,
+        `  <version>1.0.0</version>`,
+        `  <properties>`,
+        `    <minted type="type:TypeIdentifier">`,
+        `      <value>core:Block</value>`,
+        `    </minted>`,
+        `  </properties>`,
+        `</test:Sample>`,
+      ].join("\n"),
+      { filePath: "style-type-identifier-property.bml" },
+    );
+    expect(parsed.document).not.toBeNull();
+    const unused = validateStyle(parsed.document!).filter(
+      (d) => d.code === "BML_STYLE_UNUSED_NAMESPACE",
+    );
+    expect(unused).toEqual([]);
+  });
+
+  it("keeps a prefix used as a TypeReference property value", () => {
+    const parsed = parse(
+      [
+        `<test:Sample xmlns="http://blockml.org/bml"`,
+        `  xmlns:core="org.blockml.bml.core"`,
+        `  xmlns:type="org.blockml.bml.type"`,
+        `  xmlns:test="com.blockml.test.style">`,
+        `  <baseType>core:Block</baseType>`,
+        `  <is>sample</is>`,
+        `  <version>1.0.0</version>`,
+        `  <properties>`,
+        `    <target type="type:TypeReference">`,
+        `      <value>core:Documentation</value>`,
+        `    </target>`,
+        `  </properties>`,
+        `</test:Sample>`,
+      ].join("\n"),
+      { filePath: "style-type-reference-property.bml" },
+    );
+    expect(parsed.document).not.toBeNull();
+    const unused = validateStyle(parsed.document!).filter(
+      (d) => d.code === "BML_STYLE_UNUSED_NAMESPACE",
+    );
+    expect(unused).toEqual([]);
+  });
+
+  it("keeps nested prefixes inside a TypeReference TypeExpression value", () => {
+    const parsed = parse(
+      [
+        `<test:Sample xmlns="http://blockml.org/bml"`,
+        `  xmlns:core="org.blockml.bml.core"`,
+        `  xmlns:type="org.blockml.bml.type"`,
+        `  xmlns:test="com.blockml.test.style">`,
+        `  <baseType>core:Block</baseType>`,
+        `  <is>sample</is>`,
+        `  <version>1.0.0</version>`,
+        `  <properties>`,
+        `    <target type="type:TypeReference">`,
+        `      <value>type:TypeReference(core:Block)</value>`,
+        `    </target>`,
+        `  </properties>`,
+        `</test:Sample>`,
+      ].join("\n"),
+      { filePath: "style-type-reference-nested.bml" },
+    );
+    expect(parsed.document).not.toBeNull();
+    const unused = validateStyle(parsed.document!).filter(
+      (d) => d.code === "BML_STYLE_UNUSED_NAMESPACE",
+    );
+    expect(unused).toEqual([]);
+  });
+
+  it("keeps a prefix used as a TypeSelectorEntity instance value", () => {
+    const parsed = parse(
+      [
+        `<test:Sample xmlns="http://blockml.org/bml"`,
+        `  xmlns:core="org.blockml.bml.core"`,
+        `  xmlns:type="org.blockml.bml.type"`,
+        `  xmlns:test="com.blockml.test.style">`,
+        `  <baseType>core:Block</baseType>`,
+        `  <is>sample</is>`,
+        `  <version>1.0.0</version>`,
+        `  <aggregations>`,
+        `    <includedTypes type="type:TypeSelectorEntity[]">`,
+        `      <composition>`,
+        `        <type:TypeSelectorEntity value="core:Block" />`,
+        `      </composition>`,
+        `    </includedTypes>`,
+        `  </aggregations>`,
+        `</test:Sample>`,
+      ].join("\n"),
+      { filePath: "style-type-selector-entity.bml" },
+    );
+    expect(parsed.document).not.toBeNull();
+    const unused = validateStyle(parsed.document!).filter(
+      (d) => d.code === "BML_STYLE_UNUSED_NAMESPACE",
+    );
+    expect(unused).toEqual([]);
+  });
+
+  it("does not treat a QName mentioned only in documentation prose as prefix use", () => {
+    const parsed = parse(
+      [
+        `<test:Sample xmlns="http://blockml.org/bml"`,
+        `  xmlns:core="org.blockml.bml.core"`,
+        `  xmlns:idle="org.blockml.bml.idle"`,
+        `  xmlns:test="com.blockml.test.style">`,
+        `  <baseType>core:Block</baseType>`,
+        `  <is>sample</is>`,
+        `  <version>1.0.0</version>`,
+        `  <documentation>See idle:Unused as an example of unused prefix.</documentation>`,
+        `</test:Sample>`,
+      ].join("\n"),
+      { filePath: "style-qname-in-docs.bml" },
+    );
+    expect(parsed.document).not.toBeNull();
+    const unused = validateStyle(parsed.document!).filter(
+      (d) => d.code === "BML_STYLE_UNUSED_NAMESPACE",
+    );
+    expect(unused.map((d) => d.message)).toEqual(["Unused xmlns prefix 'idle'."]);
+  });
+
   it("does not treat the default xmlns as unused", () => {
     const parsed = parse(
       [

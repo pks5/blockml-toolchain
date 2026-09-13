@@ -11,15 +11,24 @@
   </is>
   <documentation>
     <![CDATA[
-    Matches a document-root xmlns:<prefix> binding whose prefix is never used as a
-    type QName, annotation namespace, or xsi schemaLocation host.
+    Matches a document-root xmlns:<prefix> binding whose prefix is never used
+    anywhere a QName may be authored: element or attribute prefixes, type
+    expressions (baseType, member type, generics, unions, instance
+    configuration), annotation namespaces, xsi schemaLocation, and
+    QName-bearing values.
+
+    QName-bearing values include TypeIdentifier / TypeReference / TypeSelector
+    property values, TypeReferenceEntity and sibling *IdentifierEntity /
+    *SelectorEntity values, and instance member values. A TypeExpression may
+    use several prefixes (type:TypeReference(core:Block) uses both type and
+    core).
 
     The default xmlns is never unused. Implicit documentation language (default
     English) and see relation= local names (SeeAlso, ReadNext, …) do not count —
     they resolve to org.blockml.bml.language / org.blockml.bml.relation without an
     authored QName. An ancestor package prefix such as blockml (org.blockml.bml)
     is used only when a type or language element is actually written with that
-    prefix.
+    prefix. Documentation prose does not count.
 
     Nested bindings must not steal credit. xmlns:ann="org.blockml.bml.annotation"
     plus xmlns:bml="org.blockml.bml.annotation.BmlAnnotation" is the usual pair:

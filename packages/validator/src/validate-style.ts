@@ -9,8 +9,11 @@ import type {
   CompositionTemplate,
   Diagnostic,
   DiagnosticSeverity,
+  DocumentationProseEntry,
   DocumentationReference,
+  InstanceConfiguration,
   MemberDefinition,
+  MemberValue,
   SourceLocation,
   TypeExpression,
   TypeReferenceEntityInstance,
@@ -195,6 +198,12 @@ type StyleInterpreter = (
 const BML_ANNOTATION = "org.blockml.bml.annotation.BmlAnnotation";
 const XSI_NS = "http://www.w3.org/2001/XMLSchema-instance";
 
+type NamespaceUse = {
+  prefixes: Set<string>;
+  used: Set<string>;
+  bindings: Record<string, string>;
+};
+
 function addId(used: Set<string>, value?: string): void {
   const trimmed = value?.trim();
   if (trimmed) {
@@ -202,37 +211,118 @@ function addId(used: Set<string>, value?: string): void {
   }
 }
 
-function addEntity(used: Set<string>, entity?: TypeReferenceEntityInstance): void {
-  addId(used, entity?.value);
-  addId(used, entity?.typeFqn);
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function addExpr(used: Set<string>, expr?: TypeExpression): void {
+/** Authored QName prefixes inside a TypeExpression or identifier string. */
+function addQNameText(ns: NamespaceUse, text?: string): void {
+  const trimmed = text?.trim();
+  if (!trimmed) {
+    return;
+  }
+  addId(ns.used, trimmed);
+  for (const prefix of Object.keys(ns.bindings)) {
+    if (!prefix || ns.prefixes.has(prefix)) {
+      continue;
+    }
+    const re = new RegExp(
+      `(?:^|[^A-Za-z0-9_])${escapeRegExp(prefix)}:(?!//)[A-Za-z_*]`,
+    );
+    if (re.test(trimmed)) {
+      ns.prefixes.add(prefix);
+    }
+  }
+}
+
+function addLiteralData(ns: NamespaceUse, data: unknown): void {
+  if (typeof data === "string") {
+    addQNameText(ns, data);
+    return;
+  }
+  if (Array.isArray(data)) {
+    for (const item of data) {
+      addLiteralData(ns, item);
+    }
+    return;
+  }
+  if (data && typeof data === "object") {
+    for (const value of Object.values(data as Record<string, unknown>)) {
+      addLiteralData(ns, value);
+    }
+  }
+}
+
+function addMemberValue(ns: NamespaceUse, value?: MemberValue): void {
+  if (!value) {
+    return;
+  }
+  switch (value.kind) {
+    case "literal":
+      addLiteralData(ns, value.value);
+      break;
+    case "expression":
+    case "interpolated":
+      addQNameText(ns, value.raw);
+      break;
+    case "address":
+      addQNameText(ns, value.address.raw);
+      break;
+    default:
+      break;
+  }
+}
+
+function addInstanceConfig(ns: NamespaceUse, config?: InstanceConfiguration): void {
+  if (!config) {
+    return;
+  }
+  for (const value of Object.values(config.named ?? {})) {
+    addMemberValue(ns, value);
+  }
+  for (const value of config.positional ?? []) {
+    addMemberValue(ns, value);
+  }
+}
+
+function addEntity(ns: NamespaceUse, entity?: TypeReferenceEntityInstance): void {
+  addQNameText(ns, entity?.value);
+  addId(ns.used, entity?.typeFqn);
+}
+
+function addExpr(ns: NamespaceUse, expr?: TypeExpression): void {
   if (!expr) {
     return;
   }
   switch (expr.kind) {
     case "named":
-      addId(used, expr.fqn);
+      addId(ns.used, expr.fqn);
       for (const arg of expr.typeArguments ?? []) {
-        addExpr(used, arg);
+        addExpr(ns, arg);
       }
+      addInstanceConfig(ns, expr.instanceConfiguration);
       break;
     case "union":
       for (const alt of expr.alternatives) {
-        addExpr(used, alt);
+        addExpr(ns, alt);
       }
       break;
     case "grouped":
-      addExpr(used, expr.expression);
+      addExpr(ns, expr.expression);
       break;
     case "anonymousStruct":
       for (const field of expr.fields) {
-        addExpr(used, field.type);
+        addExpr(ns, field.type);
       }
       break;
     default:
       break;
+  }
+}
+
+function addProse(ns: NamespaceUse, entries?: DocumentationProseEntry[]): void {
+  for (const prose of entries ?? []) {
+    addId(ns.used, prose.namespace);
   }
 }
 
@@ -249,12 +339,6 @@ function addUnknown(used: Set<string>, prefixes: Set<string>, nodes?: UnknownXml
     }
   }
 }
-
-type NamespaceUse = {
-  prefixes: Set<string>;
-  used: Set<string>;
-  bindings: Record<string, string>;
-};
 
 function addBmlAnnotation(ns: NamespaceUse): void {
   ns.used.add(BML_ANNOTATION);
@@ -275,6 +359,20 @@ function addInstance(ns: NamespaceUse, instance: BlockInstance): void {
     instance.generics !== undefined
   ) {
     addBmlAnnotation(ns);
+  }
+  addMemberValue(ns, instance.id);
+  addMemberValue(ns, instance.version);
+  addMemberValue(ns, instance.bean);
+  addQNameText(ns, instance.basePresets);
+  addId(ns.used, instance.namespace);
+  for (const value of Object.values(instance.memberValues)) {
+    addMemberValue(ns, value);
+  }
+  if (instance.generics) {
+    addQNameText(ns, instance.generics.raw);
+    for (const arg of instance.generics.arguments ?? []) {
+      addExpr(ns, arg);
+    }
   }
   for (const name of Object.keys(instance.unknownAttributes ?? {})) {
     const idx = name.indexOf(":");
@@ -320,16 +418,25 @@ function addMember(ns: NamespaceUse, member: MemberDefinition): void {
   if (member.generics || member.xmlRendering) {
     addBmlAnnotation(ns);
   }
+  if (member.generics) {
+    addQNameText(ns, member.generics.raw);
+    for (const arg of member.generics.arguments ?? []) {
+      addExpr(ns, arg);
+    }
+  }
   for (const ref of member.references ?? []) {
-    addId(ns.used, ref.type);
+    addQNameText(ns, ref.type);
     addId(ns.used, ref.languageFqn);
   }
   for (const keyword of member.keywords ?? []) {
     addId(ns.used, keyword.typeFqn);
     addId(ns.used, keyword.languageFqn);
   }
-  for (const prose of member.documentations ?? []) {
-    addId(ns.used, prose.namespace);
+  addProse(ns, member.summaries);
+  addProse(ns, member.documentations);
+  for (const example of member.examples ?? []) {
+    addId(ns.used, example.namespace);
+    addId(ns.used, example.contentLanguageFqn);
   }
   addUnknown(ns.used, ns.prefixes, member.unknownElements);
   for (const name of Object.keys(member.unknownAttributes ?? {})) {
@@ -341,34 +448,36 @@ function addMember(ns: NamespaceUse, member: MemberDefinition): void {
   switch (member.kind) {
     case "property":
       addId(ns.used, member.typeFqn);
-      addExpr(ns.used, member.type);
+      addExpr(ns, member.type);
       for (const entry of member.values ?? []) {
         addId(ns.used, entry.namespace);
+        addMemberValue(ns, entry.value);
       }
+      addMemberValue(ns, member.value);
       for (const group of member.groups ?? []) {
-        addEntity(ns.used, group);
+        addEntity(ns, group);
       }
       for (const suggestion of member.suggestions ?? []) {
         addInstance(ns, suggestion);
       }
       break;
     case "aggregation":
-      addExpr(ns.used, member.type);
+      addExpr(ns, member.type);
       addComposition(ns, member.composition);
       for (const group of member.groups ?? []) {
-        addEntity(ns.used, group);
+        addEntity(ns, group);
       }
       break;
     case "association":
-      addExpr(ns.used, member.type);
+      addExpr(ns, member.type);
       break;
     case "capability":
       addId(ns.used, member.typeFqn);
-      addExpr(ns.used, member.inputType);
-      addExpr(ns.used, member.outputType);
+      addExpr(ns, member.inputType);
+      addExpr(ns, member.outputType);
       addId(ns.used, member.implementation?.languageFqn);
       for (const thrown of member.throws ?? []) {
-        addEntity(ns.used, thrown);
+        addEntity(ns, thrown);
       }
       break;
   }
@@ -380,19 +489,25 @@ function addMember(ns: NamespaceUse, member: MemberDefinition): void {
 function collectUsedNamespaceTargets(block: BlockDefinition, ns: NamespaceUse): void {
   addId(ns.used, block.type);
   addId(ns.used, block.baseType);
-  addExpr(ns.used, block.baseTypeExpression);
-  addEntity(ns.used, block.language);
+  addExpr(ns, block.baseTypeExpression);
+  addEntity(ns, block.language);
   addId(ns.used, block.languageFqn);
   addId(ns.used, block.definitionFqn);
   if (block.generics || block.xmlRendering) {
     addBmlAnnotation(ns);
   }
+  if (block.generics) {
+    addQNameText(ns, block.generics.raw);
+    for (const arg of block.generics.arguments ?? []) {
+      addExpr(ns, arg);
+    }
+  }
   for (const contract of block.contracts ?? []) {
-    addEntity(ns.used, contract);
+    addEntity(ns, contract);
   }
   for (const generic of block.genericTypes ?? []) {
-    addId(ns.used, generic.baseType);
-    addId(ns.used, generic.defaultType);
+    addQNameText(ns, generic.baseType);
+    addQNameText(ns, generic.defaultType);
   }
   for (const alias of block.aliases ?? []) {
     addId(ns.used, alias.typeFqn);
@@ -402,15 +517,14 @@ function collectUsedNamespaceTargets(block: BlockDefinition, ns: NamespaceUse): 
     addId(ns.used, keyword.typeFqn);
     addId(ns.used, keyword.languageFqn);
   }
-  for (const prose of block.documentations ?? []) {
-    addId(ns.used, prose.namespace);
-  }
+  addProse(ns, block.summaries);
+  addProse(ns, block.documentations);
   for (const example of block.examples ?? []) {
     addId(ns.used, example.namespace);
     addId(ns.used, example.contentLanguageFqn);
   }
   for (const ref of block.references ?? []) {
-    addId(ns.used, ref.type);
+    addQNameText(ns, ref.type);
     addId(ns.used, ref.languageFqn);
   }
   addUnknown(ns.used, ns.prefixes, block.unknownElements);
