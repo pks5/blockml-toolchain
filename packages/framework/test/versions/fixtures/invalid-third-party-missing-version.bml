@@ -1,0 +1,12 @@
+<!--Version test — third-party library block missing version-->
+<mbcore:SetLike xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:mbcore="com.machineblocks.bml.core">
+
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    Third-party namespace block without version
+  </is>
+</mbcore:SetLike>

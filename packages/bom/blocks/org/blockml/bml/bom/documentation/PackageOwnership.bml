@@ -34,6 +34,7 @@
     
     @blockml/compiler — Target Registry facade.
     
-    @machineblocks/core — domain BML; extends TypeRegistry bootstrap.
+    Third-party BlockML libraries (npm packages that declare blockml.library) join
+    TypeRegistry bootstrap through the same discovery path as any other library.
   </documentation>
 </bomdocumentation:PackageOwnership>

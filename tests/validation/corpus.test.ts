@@ -22,7 +22,6 @@ const STRICT_CORPUS_FILES = [
   corpusPath([
     "node_modules/@blockml/core/blocks/org/blockml/bml/definition/MemberDefinition.bml",
   ]),
-  corpusPath(["node_modules/@machineblocks/core/blocks/com/machineblocks/bml/core/Set.bml"]),
 ];
 
 /** Published @machineblocks/core still authors default="true" on aggregations.

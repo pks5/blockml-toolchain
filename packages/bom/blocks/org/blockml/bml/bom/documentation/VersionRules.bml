@@ -18,6 +18,7 @@
     External refs: bml:version omitted → registry context; present → exact assert (BML_UNKNOWN_VERSION).
     Library catalog sugar (readMe, bootstrap, dependencies, blocks): same bml:version rules.
     
-    Framework convention: version only on Library.bml for org.blockml.bml.* / com.machineblocks.bml.*
+    Framework convention: version only on Library.bml for org.blockml.bml.*.
+    Third-party libraries use the same effectiveBlockVersion rule; no namespace is exempted.
   </documentation>
 </bomdocumentation:VersionRules>

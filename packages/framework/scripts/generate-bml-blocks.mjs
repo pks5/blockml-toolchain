@@ -500,7 +500,7 @@ const capabilities = [
     prefix: "fwcap",
     name: "ValidateVersions",
     is: "Minimal effectiveBlockVersion and bml:version assert checks",
-    doc: "BML_MISSING_VERSION on standalone root blocks outside framework library convention. BML_UNKNOWN_VERSION when bml:version pin does not match a registered block version.",
+    doc: "BML_MISSING_VERSION on standalone root blocks outside the org.blockml.bml.* library convention. Third-party libraries are not exempted by namespace. BML_UNKNOWN_VERSION when bml:version pin does not match a registered block version.",
     tsExport: "validateVersions",
     inputs: [
       { name: "document", type: "bomdoc:BomDocument", required: true },

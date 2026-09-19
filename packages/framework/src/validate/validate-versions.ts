@@ -18,9 +18,7 @@ function diag(
 }
 
 function isFrameworkConventionBlock(typeFqn: string): boolean {
-  return (
-    typeFqn.startsWith("org.blockml.bml.") || typeFqn.startsWith("com.machineblocks.bml.")
-  );
+  return typeFqn.startsWith("org.blockml.bml.");
 }
 
 function requiresExplicitVersion(block: BlockDefinition): boolean {

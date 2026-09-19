@@ -28,6 +28,16 @@ describe("validateVersions", () => {
     expect(diagnostics.some((d) => d.code === "BML_MISSING_VERSION")).toBe(true);
   });
 
+  it("reports BML_MISSING_VERSION for third-party library namespace without version", () => {
+    const file = join(FIXTURES, "invalid-third-party-missing-version.bml");
+    const parsed = parse(readFileSync(file, "utf8"), { filePath: file });
+    expect(parsed.document).not.toBeNull();
+    const registry = new TypeRegistry();
+    registry.register(parsed.document!);
+    const diagnostics = validateVersions(parsed.document!, registry);
+    expect(diagnostics.some((d) => d.code === "BML_MISSING_VERSION")).toBe(true);
+  });
+
   it("reports BML_UNKNOWN_VERSION for mismatched bml:version pin", () => {
     const targetFile = join(FIXTURES, "valid-versioned-target.bml");
     const consumerFile = join(FIXTURES, "invalid-version-pin.bml");

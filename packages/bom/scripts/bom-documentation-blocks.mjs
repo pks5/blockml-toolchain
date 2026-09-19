@@ -153,7 +153,8 @@ export const documentationBlocks = [
 
     @blockml/compiler — Target Registry facade.
 
-    @machineblocks/core — domain BML; extends TypeRegistry bootstrap.`,
+    Third-party BlockML libraries (npm packages that declare blockml.library) join
+    TypeRegistry bootstrap through the same discovery path as any other library.`,
   },
   {
     name: "PublicApi",
@@ -297,7 +298,8 @@ export const documentationBlocks = [
     External refs: bml:version omitted → registry context; present → exact assert (BML_UNKNOWN_VERSION).
     Library catalog sugar (readMe, bootstrap, dependencies, blocks): same bml:version rules.
 
-    Framework convention: version only on Library.bml for org.blockml.bml.* / com.machineblocks.bml.*`,
+    Framework convention: version only on Library.bml for org.blockml.bml.*.
+    Third-party libraries use the same effectiveBlockVersion rule; no namespace is exempted.`,
   },
   {
     name: "ValidationResponsibilities",
@@ -372,8 +374,8 @@ export const documentationBlocks = [
     Framework base types (BML) → @blockml/core, 16_framework_base_types.md
     ValueType / Language BML → 17_type_system_bml.md
     Dev setup → 15_dev_setup.md
-    MBOM native params → NativeBlock.bml + com.machineblocks.bml.type.*
-    MBOM → SCAD → 04_types.md, 05_scad_renderer.md
+    Domain native params and product type catalogs — owning domain library
+    Domain render mappings — owning domain target
     ManagedObject / synthetic accessors → 08_managed_object.md
     Built-in #math / #strings → @blockml/core services
 

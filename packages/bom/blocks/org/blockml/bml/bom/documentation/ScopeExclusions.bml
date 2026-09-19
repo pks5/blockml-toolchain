@@ -19,8 +19,8 @@
     Framework base types (BML) → @blockml/core, 16_framework_base_types.md
     ValueType / Language BML → 17_type_system_bml.md
     Dev setup → 15_dev_setup.md
-    MBOM native params → NativeBlock.bml + com.machineblocks.bml.type.*
-    MBOM → SCAD → 04_types.md, 05_scad_renderer.md
+    Domain native params and product type catalogs — owning domain library
+    Domain render mappings — owning domain target
     ManagedObject / synthetic accessors → 08_managed_object.md
     Built-in #math / #strings → @blockml/core services
     

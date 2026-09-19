@@ -2,7 +2,7 @@ function diag(code, message, file, line = 1, column = 1) {
     return { severity: "error", code, message, source: { file, line, column } };
 }
 function isFrameworkConventionBlock(typeFqn) {
-    return (typeFqn.startsWith("org.blockml.bml.") || typeFqn.startsWith("com.machineblocks.bml."));
+    return typeFqn.startsWith("org.blockml.bml.");
 }
 function requiresExplicitVersion(block) {
     if (!block.type || block.version) {

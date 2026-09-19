@@ -21,7 +21,7 @@ xmlns="http://blockml.org/bml"
 After the default xmlns, declare every `xmlns:<prefix>="<package.fqn>"` binding:
 
 1. **BlockML packages** (`org.blockml.*`) first
-2. **Domain packages** next — one group per domain root (e.g. all `com.machineblocks.*`, then any other domain)
+2. **Foreign packages** next — one group per domain root (e.g. all `com.example.*`, then any other domain)
 
 Within each group, sort by package FQN (hierarchical / alphabetical).
 
@@ -29,7 +29,7 @@ Within each group, sort by package FQN (hierarchical / alphabetical).
 <!-- ❌ BAD — package groups interleaved -->
 <playground:MyLatestStory
   xmlns="http://blockml.org/bml"
-  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:extype="com.example.bml.type"
   xmlns:core="org.blockml.bml.core"
   xmlns:playground="org.blockml.bml.workspace.playground">
 
@@ -38,7 +38,7 @@ Within each group, sort by package FQN (hierarchical / alphabetical).
   xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:playground="org.blockml.bml.workspace.playground"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:extype="com.example.bml.type">
 
   <name>MyLatestStory</name>
 ```

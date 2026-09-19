@@ -11,7 +11,7 @@ alwaysApply: false
 Every BML definition must reside under the owning domain's `bml` package:
 
 ```text
-<domain>.bml.*     e.g. org.blockml.bml.* · com.machineblocks.bml.*
+<domain>.bml.*     e.g. org.blockml.bml.* · com.example.bml.*
 ```
 
 No Block, Library, Type, Language, Service, Capability, or other BlockML definition may exist outside `<domain>.bml.*`. Physical paths mirror FQNs: `blocks/org/blockml/bml/core/Block.bml` → `org.blockml.bml.core.Block`.
@@ -44,7 +44,8 @@ effectiveBlockVersion =
   else error → BML_MISSING_VERSION
 ```
 
-- **Framework blocks** (`org.blockml.bml.*`, `com.machineblocks.bml.*`): version only on `Library.bml`
+- **Framework blocks** (`org.blockml.bml.*`): version only on `Library.bml`
+- Third-party libraries use the same effectiveBlockVersion rule; no other namespace is exempted
 - **Block in library** with own `<version>`: must be `>= library.version`
 - **Standalone block**: `<version>` mandatory
 

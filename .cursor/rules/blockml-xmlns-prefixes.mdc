@@ -1,12 +1,12 @@
 ---
-description: Canonical xmlns prefixes — short = BlockML, mb* = MachineBlocks domain
+description: Canonical xmlns prefixes — short = BlockML; do not steal those aliases
 globs: "**/*.bml"
 alwaysApply: false
 ---
 
 # BlockML xmlns prefix convention
 
-**Rule of thumb:** short prefix = BlockML. Domain mirrors use a domain token (`mb` for MachineBlocks).
+**Rule of thumb:** short prefix = BlockML. Foreign domains use a domain token, not BlockML aliases.
 
 If you read `core:`, `type:`, `unit:`, or `lang:` it is always `org.blockml.bml.*` — no lookup.
 
@@ -26,28 +26,18 @@ If you read `core:`, `type:`, `unit:`, or `lang:` it is always `org.blockml.bml.
 
 Do **not** use legacy `bcore` / `btype`.
 
-## MachineBlocks domain (`com.machineblocks.bml.*`)
-
-| Prefix | Package |
-|--------|---------|
-| `mb` | `com.machineblocks.bml` |
-| `mbcore` | `com.machineblocks.bml.core` |
-| `mbtype` | `com.machineblocks.bml.type` |
-| `mbunit` | `com.machineblocks.bml.unit` |
-| `mbann` | `com.machineblocks.bml.annotation` |
-| `scad` | `…annotation.ScadAnnotation` |
-| `bricks` / `cal` / `examples` | collective packages |
+Third-party libraries bind their own prefixes. They must not reuse BlockML aliases (`core`, `type`, `unit`, `lang`, …).
 
 ```xml
 <!-- ❌ BAD — steals BlockML aliases -->
-xmlns:core="com.machineblocks.bml.core"
-xmlns:type="com.machineblocks.bml.type"
+xmlns:core="com.example.bml.core"
+xmlns:type="com.example.bml.type"
 
 <!-- ✅ GOOD -->
 xmlns:core="org.blockml.bml.core"
 xmlns:type="org.blockml.bml.type"
-xmlns:mbcore="com.machineblocks.bml.core"
-xmlns:mbtype="com.machineblocks.bml.type"
+xmlns:excore="com.example.bml.core"
+xmlns:extype="com.example.bml.type"
 ```
 
-See also `blockml-xmlns-ordering.mdc` (attribute order) and `docs/02_mbml.md` — § XML prefix convention.
+See also `blockml-xmlns-ordering.mdc` (attribute order).
