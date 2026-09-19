@@ -14,7 +14,7 @@
     Parser produces BomDocument. Validator (@blockml/validator + @blockml/framework) checks:
     
     Member namespace uniqueness; baseType in TypeRegistry; property values inline deep copies;
-    resolveEffectiveMembers for expression refs; effective version (BML_MISSING_VERSION);
+    resolveEffectiveMembers for expression refs; effective version (own | library | unversioned);
     library block.version >= library.version; bml:version asserts (BML_UNKNOWN_VERSION);
     cross-instance refs to explicit authored id; qualified FQN::id on public aggregations;
     bml:each explicit id; Sub-Block qualified/FQN refs; generic param ≠ block/sub-block names;

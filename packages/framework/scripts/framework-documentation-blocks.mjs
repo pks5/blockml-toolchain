@@ -264,8 +264,7 @@ export const documentationBlocks = [
     • BML_GENERIC_CONSTRAINT_VIOLATION — argument fails parameter baseType via satisfiesTypeBound
 
     validateVersions:
-    • BML_MISSING_VERSION — standalone root block missing effective version (no owning Library)
-    • BML_UNKNOWN_VERSION — bml:version pin does not match registered block version
+    • BML_UNKNOWN_VERSION — bml:version pin does not match the effective version, or pins an unversioned type
 
     validateConstraints:
     • BML_CONSTRAINT_VIOLATION — constraint predicate failed

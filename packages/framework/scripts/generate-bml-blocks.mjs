@@ -37,7 +37,6 @@ const FRAMEWORK_DIAGNOSTIC_CODES = [
   "BML_MEMBER_COLLISION",
   "BML_MISSING_GENERIC_TYPE_ARGUMENT",
   "BML_MISSING_ID",
-  "BML_MISSING_VERSION",
   "BML_NESTED_EMBEDDED_BLOCKS",
   "BML_OPEN_GENERIC_INSTANCE",
   "BML_OVERRIDE_REQUIRED",
@@ -499,7 +498,7 @@ const capabilities = [
     prefix: "fwcap",
     name: "ValidateVersions",
     is: "Minimal effectiveBlockVersion and bml:version assert checks",
-    doc: "BML_MISSING_VERSION on standalone root blocks with no owning Library. Membership is the nearest Library.bml at the same package level or above (search stops one level below the source folder). Third-party libraries are not exempted by namespace. BML_UNKNOWN_VERSION when bml:version pin does not match a registered block version.",
+    doc: "effectiveBlockVersion = own version | owning Library.version | unversioned. Library members inherit the Library version. Standalone blocks without a version are unversioned (no error). BML_UNKNOWN_VERSION when a bml:version pin does not match the effective version, or pins an unversioned type. Third-party libraries are not exempted by namespace.",
     tsExport: "validateVersions",
     inputs: [
       { name: "document", type: "bomdoc:BomDocument", required: true },

@@ -2,15 +2,12 @@ import { findOwningLibraryDocument } from "../registry/library-membership.js";
 function diag(code, message, file, line = 1, column = 1) {
     return { severity: "error", code, message, source: { file, line, column } };
 }
-function requiresExplicitVersion(block, registry, file) {
-    if (!block.type || block.version) {
-        return false;
+function effectiveBlockVersion(block, registry, file) {
+    if (block.version) {
+        return block.version;
     }
     const owning = findOwningLibraryDocument(registry, block.type, file);
-    if (owning?.block.version) {
-        return false;
-    }
-    return true;
+    return owning?.block.version;
 }
 function literalString(val) {
     if (!val || val.kind !== "literal") {
@@ -28,8 +25,13 @@ function checkVersionPin(instance, registry, file, diagnostics) {
         diagnostics.push(diag("BML_UNKNOWN_VERSION", `Unknown type for version pin: ${instance.typeFqn}@${pin}`, file, instance.source?.line, instance.source?.column));
         return;
     }
-    if (doc.block.version && doc.block.version !== pin) {
-        diagnostics.push(diag("BML_UNKNOWN_VERSION", `Version pin ${pin} does not match ${instance.typeFqn} (${doc.block.version})`, file, instance.source?.line, instance.source?.column));
+    const effective = effectiveBlockVersion(doc.block, registry, doc.source.filePath);
+    if (!effective) {
+        diagnostics.push(diag("BML_UNKNOWN_VERSION", `bml:version is not allowed on unversioned type ${instance.typeFqn}`, file, instance.source?.line, instance.source?.column));
+        return;
+    }
+    if (effective !== pin) {
+        diagnostics.push(diag("BML_UNKNOWN_VERSION", `Version pin ${pin} does not match ${instance.typeFqn} (${effective})`, file, instance.source?.line, instance.source?.column));
     }
 }
 function walkCompositionInstances(block, registry, file, diagnostics) {
@@ -47,13 +49,10 @@ function walkCompositionInstances(block, registry, file, diagnostics) {
         walkNodes(template.children);
     }
 }
-function validateBlockVersions(block, registry, file, diagnostics, isDocumentRoot) {
-    if (isDocumentRoot && requiresExplicitVersion(block, registry, file)) {
-        diagnostics.push(diag("BML_MISSING_VERSION", `Missing version on block ${block.type}`, file, block.source?.line, block.source?.column));
-    }
+function validateBlockVersions(block, registry, file, diagnostics) {
     walkCompositionInstances(block, registry, file, diagnostics);
     for (const sub of block.subBlocks) {
-        validateBlockVersions(sub, registry, file, diagnostics, false);
+        validateBlockVersions(sub, registry, file, diagnostics);
     }
 }
 export function validateVersions(document, registry) {
@@ -62,7 +61,7 @@ export function validateVersions(document, registry) {
     if (document.block.type && !registry.has(document.block.type)) {
         registry.register(document);
     }
-    validateBlockVersions(document.block, registry, file, diagnostics, true);
+    validateBlockVersions(document.block, registry, file, diagnostics);
     return diagnostics;
 }
 //# sourceMappingURL=validate-versions.js.map

@@ -123,7 +123,7 @@ export const documentationBlocks = [
     Visibility (B14): logical name in BOM; emit _/__ from visibility.
 
     Instance version: bml:version optional exact assert on external refs (BML_UNKNOWN_VERSION).
-    Definition version: effectiveBlockVersion = own version | library.version | error.
+    Definition version: effectiveBlockVersion = own version | library.version | unversioned.
     Instance id: bml:id only on BlockInstance.id; no auto-ID in BomDocument; bml:each requires id.
 
     Property values: deep copy only — never linked. FQN::id cross-instance refs only on associations.`,
@@ -291,14 +291,14 @@ export const documentationBlocks = [
   {
     name: "VersionRules",
     is: "Effective block version and instance version asserts",
-    doc: `Definition effectiveBlockVersion = own version | owning library.version (nearest Library.bml at the same package level or above; search stops one level below the source folder) | BML_MISSING_VERSION.
+    doc: `Definition effectiveBlockVersion = own version | owning library.version (nearest Library.bml at the same package level or above; search stops one level below the source folder) | unversioned.
     Block in library: version >= library.version when both declared.
 
     Same-document Sub-Block refs: bml:version not allowed as resolution hint.
-    External refs: bml:version omitted → registry context; present → exact assert (BML_UNKNOWN_VERSION).
+    External refs: bml:version omitted → registry context; present → exact assert against the effective version (BML_UNKNOWN_VERSION if the pin does not match or the type is unversioned).
     Library catalog sugar (readMe, bootstrap, dependencies): same bml:version rules.
 
-    Version may live only on Library.bml; members inherit it. Standalone blocks (no owning Library) require their own version.
+    Version may live only on Library.bml; members inherit it. Standalone blocks (no owning Library) may omit version; they are unversioned (no error).
     Third-party libraries use the same effectiveBlockVersion rule; no namespace is exempted.`,
   },
   {
@@ -307,7 +307,7 @@ export const documentationBlocks = [
     doc: `Parser produces BomDocument. Validator (@blockml/validator + @blockml/framework) checks:
 
     Member namespace uniqueness; baseType in TypeRegistry; property values inline deep copies;
-    resolveEffectiveMembers for expression refs; effective version (BML_MISSING_VERSION);
+    resolveEffectiveMembers for expression refs; effective version (own | library | unversioned);
     library block.version >= library.version; bml:version asserts (BML_UNKNOWN_VERSION);
     cross-instance refs to explicit authored id; qualified FQN::id on public aggregations;
     bml:each explicit id; Sub-Block qualified/FQN refs; generic param ≠ block/sub-block names;

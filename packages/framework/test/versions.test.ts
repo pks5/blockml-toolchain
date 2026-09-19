@@ -7,52 +7,81 @@ import { TypeRegistry } from "../src/registry/type-registry.js";
 
 const FIXTURES = join(import.meta.dirname, "versions", "fixtures");
 
+function parseFile(name: string) {
+  const file = join(FIXTURES, name);
+  const parsed = parse(readFileSync(file, "utf8"), { filePath: file });
+  expect(parsed.document).not.toBeNull();
+  return parsed.document!;
+}
+
 describe("validateVersions", () => {
   it("passes for library member without explicit version", () => {
-    const libraryFile = join(FIXTURES, "valid-owning-library.bml");
-    const file = join(FIXTURES, "valid-framework-block.bml");
-    const library = parse(readFileSync(libraryFile, "utf8"), { filePath: libraryFile });
-    const parsed = parse(readFileSync(file, "utf8"), { filePath: file });
-    expect(library.document).not.toBeNull();
-    expect(parsed.document).not.toBeNull();
+    const library = parseFile("valid-owning-library.bml");
+    const parsed = parseFile("valid-framework-block.bml");
     const registry = new TypeRegistry();
-    registry.register(library.document!);
-    registry.register(parsed.document!);
-    const diagnostics = validateVersions(parsed.document!, registry);
+    registry.register(library);
+    registry.register(parsed);
+    const diagnostics = validateVersions(parsed, registry);
     expect(diagnostics.filter((d) => d.severity === "error")).toEqual([]);
   });
 
-  it("reports BML_MISSING_VERSION for standalone domain block without version", () => {
-    const file = join(FIXTURES, "invalid-missing-version.bml");
-    const parsed = parse(readFileSync(file, "utf8"), { filePath: file });
-    expect(parsed.document).not.toBeNull();
+  it("allows a standalone block without version", () => {
+    const parsed = parseFile("invalid-missing-version.bml");
     const registry = new TypeRegistry();
-    registry.register(parsed.document!);
-    const diagnostics = validateVersions(parsed.document!, registry);
-    expect(diagnostics.some((d) => d.code === "BML_MISSING_VERSION")).toBe(true);
+    registry.register(parsed);
+    const diagnostics = validateVersions(parsed, registry);
+    expect(diagnostics.filter((d) => d.severity === "error")).toEqual([]);
   });
 
-  it("reports BML_MISSING_VERSION for third-party library namespace without version", () => {
-    const file = join(FIXTURES, "invalid-third-party-missing-version.bml");
-    const parsed = parse(readFileSync(file, "utf8"), { filePath: file });
-    expect(parsed.document).not.toBeNull();
+  it("allows a third-party namespace block without version", () => {
+    const parsed = parseFile("invalid-third-party-missing-version.bml");
     const registry = new TypeRegistry();
-    registry.register(parsed.document!);
-    const diagnostics = validateVersions(parsed.document!, registry);
-    expect(diagnostics.some((d) => d.code === "BML_MISSING_VERSION")).toBe(true);
+    registry.register(parsed);
+    const diagnostics = validateVersions(parsed, registry);
+    expect(diagnostics.filter((d) => d.severity === "error")).toEqual([]);
   });
 
   it("reports BML_UNKNOWN_VERSION for mismatched bml:version pin", () => {
-    const targetFile = join(FIXTURES, "valid-versioned-target.bml");
-    const consumerFile = join(FIXTURES, "invalid-version-pin.bml");
-    const target = parse(readFileSync(targetFile, "utf8"), { filePath: targetFile });
-    const consumer = parse(readFileSync(consumerFile, "utf8"), { filePath: consumerFile });
-    expect(target.document).not.toBeNull();
-    expect(consumer.document).not.toBeNull();
+    const target = parseFile("valid-versioned-target.bml");
+    const consumer = parseFile("invalid-version-pin.bml");
     const registry = new TypeRegistry();
-    registry.register(target.document!);
-    registry.register(consumer.document!);
-    const diagnostics = validateVersions(consumer.document!, registry);
+    registry.register(target);
+    registry.register(consumer);
+    const diagnostics = validateVersions(consumer, registry);
+    expect(diagnostics.some((d) => d.code === "BML_UNKNOWN_VERSION")).toBe(true);
+  });
+
+  it("reports BML_UNKNOWN_VERSION when bml:version pins an unversioned type", () => {
+    const target = parseFile("invalid-missing-version.bml");
+    const consumer = parseFile("invalid-unversioned-pin.bml");
+    const registry = new TypeRegistry();
+    registry.register(target);
+    registry.register(consumer);
+    const diagnostics = validateVersions(consumer, registry);
+    expect(diagnostics.some((d) => d.code === "BML_UNKNOWN_VERSION")).toBe(true);
+  });
+
+  it("accepts bml:version matching the inherited library version", () => {
+    const library = parseFile("valid-owning-library.bml");
+    const member = parseFile("valid-framework-block.bml");
+    const consumer = parseFile("valid-inherited-version-pin.bml");
+    const registry = new TypeRegistry();
+    registry.register(library);
+    registry.register(member);
+    registry.register(consumer);
+    const diagnostics = validateVersions(consumer, registry);
+    expect(diagnostics.filter((d) => d.severity === "error")).toEqual([]);
+  });
+
+  it("reports BML_UNKNOWN_VERSION when the pin does not match the inherited library version", () => {
+    const library = parseFile("valid-owning-library.bml");
+    const member = parseFile("valid-framework-block.bml");
+    const consumer = parseFile("invalid-inherited-version-pin.bml");
+    const registry = new TypeRegistry();
+    registry.register(library);
+    registry.register(member);
+    registry.register(consumer);
+    const diagnostics = validateVersions(consumer, registry);
     expect(diagnostics.some((d) => d.code === "BML_UNKNOWN_VERSION")).toBe(true);
   });
 });

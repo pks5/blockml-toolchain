@@ -18,19 +18,16 @@ function diag(
   return { severity: "error", code, message, source: { file, line, column } };
 }
 
-function requiresExplicitVersion(
+function effectiveBlockVersion(
   block: BlockDefinition,
   registry: TypeRegistry,
-  file: string,
-): boolean {
-  if (!block.type || block.version) {
-    return false;
+  file: string | undefined,
+): string | undefined {
+  if (block.version) {
+    return block.version;
   }
   const owning = findOwningLibraryDocument(registry, block.type, file);
-  if (owning?.block.version) {
-    return false;
-  }
-  return true;
+  return owning?.block.version;
 }
 
 function literalString(val: MemberValue | undefined): string | undefined {
@@ -63,11 +60,24 @@ function checkVersionPin(
     );
     return;
   }
-  if (doc.block.version && doc.block.version !== pin) {
+  const effective = effectiveBlockVersion(doc.block, registry, doc.source.filePath);
+  if (!effective) {
     diagnostics.push(
       diag(
         "BML_UNKNOWN_VERSION",
-        `Version pin ${pin} does not match ${instance.typeFqn} (${doc.block.version})`,
+        `bml:version is not allowed on unversioned type ${instance.typeFqn}`,
+        file,
+        instance.source?.line,
+        instance.source?.column,
+      ),
+    );
+    return;
+  }
+  if (effective !== pin) {
+    diagnostics.push(
+      diag(
+        "BML_UNKNOWN_VERSION",
+        `Version pin ${pin} does not match ${instance.typeFqn} (${effective})`,
         file,
         instance.source?.line,
         instance.source?.column,
@@ -101,24 +111,11 @@ function validateBlockVersions(
   registry: TypeRegistry,
   file: string,
   diagnostics: Diagnostic[],
-  isDocumentRoot: boolean,
 ): void {
-  if (isDocumentRoot && requiresExplicitVersion(block, registry, file)) {
-    diagnostics.push(
-      diag(
-        "BML_MISSING_VERSION",
-        `Missing version on block ${block.type}`,
-        file,
-        block.source?.line,
-        block.source?.column,
-      ),
-    );
-  }
-
   walkCompositionInstances(block, registry, file, diagnostics);
 
   for (const sub of block.subBlocks) {
-    validateBlockVersions(sub, registry, file, diagnostics, false);
+    validateBlockVersions(sub, registry, file, diagnostics);
   }
 }
 
@@ -133,6 +130,6 @@ export function validateVersions(
     registry.register(document);
   }
 
-  validateBlockVersions(document.block, registry, file, diagnostics, true);
+  validateBlockVersions(document.block, registry, file, diagnostics);
   return diagnostics;
 }

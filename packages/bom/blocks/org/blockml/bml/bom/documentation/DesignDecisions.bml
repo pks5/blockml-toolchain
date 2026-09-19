@@ -38,7 +38,7 @@
     Visibility (B14): logical name in BOM; emit _/__ from visibility.
     
     Instance version: bml:version optional exact assert on external refs (BML_UNKNOWN_VERSION).
-    Definition version: effectiveBlockVersion = own version | library.version | error.
+    Definition version: effectiveBlockVersion = own version | library.version | unversioned.
     Instance id: bml:id only on BlockInstance.id; no auto-ID in BomDocument; bml:each requires id.
     
     Property values: deep copy only — never linked. FQN::id cross-instance refs only on associations.

@@ -1,0 +1,20 @@
+<!--Version test — composition with bml:version on an unversioned type-->
+<example:UnversionedPinConsumer xmlns="http://blockml.org/bml"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:example="com.example.demo">
+
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    Pins bml:version on a standalone unversioned block
+  </is>
+  <aggregations>
+    <target type="core:Block[]">
+      <composition>
+        <example:StandaloneWidget bml:version="1.0.0" />
+      </composition>
+    </target>
+  </aggregations>
+</example:UnversionedPinConsumer>

@@ -39,21 +39,22 @@ Typical:  inner dependencies → outer Library
 effectiveBlockVersion =
   own <version>       if present
   else library.version if a nearest Library.bml owns the block
-  else error → BML_MISSING_VERSION
+  else unversioned
 ```
 
 - **Framework blocks** (`org.blockml.bml.*`): version only on `Library.bml`
 - Third-party libraries use the same effectiveBlockVersion rule; no other namespace is exempted
 - **Block in library** with own `<version>`: must be `>= library.version`
-- **Standalone block**: `<version>` mandatory
+- **Standalone block**: `<version>` optional; omitted means unversioned
+- `bml:version` on a reference to an unversioned type → `BML_UNKNOWN_VERSION`
 
 ## Instance references (`bml:version`)
 
 - **Optional** on external references and Library TypeReferenceEntity sugar (`dependencies`,
   `subLibraries`, `readFirst`, `bootstrap`, `language`) — omitted = resolve from
   TypeRegistry / library context
-- **Present** = exact-version assert against the **referenced** type (`value` for sugar) →
-  `BML_UNKNOWN_VERSION` if no match
+- **Present** = exact-version assert against the **referenced** type's effective version (`value` for sugar) →
+  `BML_UNKNOWN_VERSION` if no match or the type is unversioned
 - Example dependency pin: `<blockml:Library bml:version="3.0.0" />`
 - Authored `blocks` lists (if present on BlockLibrary) are ignored for membership
 

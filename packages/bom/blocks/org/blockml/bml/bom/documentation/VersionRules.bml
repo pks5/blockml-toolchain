@@ -11,14 +11,23 @@
     Effective block version and instance version asserts
   </is>
   <documentation>
-    Definition effectiveBlockVersion = own version | owning library.version (nearest Library.bml at the same package level or above; search stops one level below the source folder) | BML_MISSING_VERSION.
-    Block in library: version >= library.version when both declared.
+    <![CDATA[
+    # Effective block version
+    
+    effectiveBlockVersion = own version | owning library.version (nearest Library.bml at the same
+    package level or above; search stops one level below the source folder) | unversioned.
+    
+    - Library members inherit the Library version. Own version, when present, must be >= library.version.
+    - Standalone blocks (no owning Library) may omit version; they are unversioned (no error).
+    - `bml:version` on a reference to an unversioned type is `BML_UNKNOWN_VERSION`.
     
     Same-document Sub-Block refs: bml:version not allowed as resolution hint.
-    External refs: bml:version omitted → registry context; present → exact assert (BML_UNKNOWN_VERSION).
+    External refs: omitted → registry context; present → exact assert against the effective version
+    (`BML_UNKNOWN_VERSION` if the pin does not match or the type is unversioned).
     Library catalog sugar (readMe, bootstrap, dependencies): same bml:version rules.
     
-    Version may live only on Library.bml; members inherit it. Standalone blocks (no owning Library) require their own version.
+    Version may live only on Library.bml; members inherit it.
     Third-party libraries use the same effectiveBlockVersion rule; no namespace is exempted.
+    ]]>
   </documentation>
 </bomdocumentation:VersionRules>

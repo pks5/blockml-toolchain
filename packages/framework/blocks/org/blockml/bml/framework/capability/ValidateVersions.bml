@@ -17,11 +17,13 @@
     <![CDATA[
     # Effective block version
     
-    - `BML_MISSING_VERSION` on standalone root blocks with no owning Library
-    - Membership is the nearest Library.bml at the same package level or above
-      (search stops one level below the source folder)
+    - effectiveBlockVersion = own version | owning Library.version | unversioned
+    - Library members inherit the Library version (nearest Library.bml at the same
+      package level or above; search stops one level below the source folder)
+    - Standalone blocks without a version are unversioned (no error)
+    - `BML_UNKNOWN_VERSION` when a `bml:version` pin does not match the effective
+      version, or pins an unversioned type
     - Third-party libraries are not exempted by namespace
-    - `BML_UNKNOWN_VERSION` when a `bml:version` pin does not match a registered block version
     ]]>
   </documentation>
   <references>

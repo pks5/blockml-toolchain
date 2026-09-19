@@ -1,0 +1,20 @@
+<!--Version test — pin mismatching inherited library version-->
+<test:InheritedVersionPinMismatch xmlns="http://blockml.org/bml"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:test="org.blockml.bml.test.version">
+
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    Pins the wrong version on a library member without own version
+  </is>
+  <aggregations>
+    <target type="core:Block[]">
+      <composition>
+        <test:FrameworkLike bml:version="9.9.9" />
+      </composition>
+    </target>
+  </aggregations>
+</test:InheritedVersionPinMismatch>
