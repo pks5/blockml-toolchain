@@ -488,9 +488,6 @@ ${XMLNS}>
 `;
 }
 
-function catalogEntry(b) {
-  return `        <${typeRef(b)} />`;
-}
 
 function capabilityTsExport(c) {
   return c.tsExport ?? c.name.charAt(0).toLowerCase() + c.name.slice(1);
@@ -514,15 +511,6 @@ for (const d of documentationBlocks) {
   writeFileSync(join(docDir, `${d.name}.bml`), renderDocBlock(d));
 }
 
-const libraryBlocks = [
-  "      <composition>",
-  ...blocks.map(catalogEntry),
-  ...capabilities.map(catalogEntry),
-  ...documentationBlocks.map(
-    (d) => `        <lspdocumentation:${d.name} />`,
-  ),
-  "      </composition>",
-].join("\n");
 
 const library = `<!--
   BlockML LSP Library Descriptor
@@ -539,7 +527,7 @@ ${XMLNS}>
   <documentation>
     Canonical LSP specification for BlockML IDE integration — editor-agnostic language
     service and stdio server. TypeScript in packages/lsp/src/ implements this library.
-    Membership is defined exclusively by this blocks list.
+    Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
 
   <version>0.7.1</version>
@@ -570,9 +558,6 @@ ${XMLNS}>
         <framework:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-${libraryBlocks}
-    </blocks>
   </aggregations>
 
 </block>

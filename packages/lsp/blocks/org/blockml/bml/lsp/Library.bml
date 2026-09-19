@@ -8,9 +8,7 @@
   xmlns:parser="org.blockml.bml.compiler.parser"
   xmlns:serializer="org.blockml.bml.compiler.serializer"
   xmlns:validator="org.blockml.bml.compiler.validator"
-  xmlns:lsp="org.blockml.bml.lsp"
-  xmlns:lspcap="org.blockml.bml.lsp.capability"
-  xmlns:lspdocumentation="org.blockml.bml.lsp.documentation">
+  xmlns:lsp="org.blockml.bml.lsp">
 
   <baseType>
     core:BlockLibrary
@@ -24,7 +22,7 @@
   <documentation>
     Canonical LSP specification for BlockML IDE integration — editor-agnostic language
     service and stdio server. TypeScript in packages/lsp/src/ implements this library.
-    Membership is defined exclusively by this blocks list.
+    Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
   <language>
     <blockml:language.English />
@@ -50,39 +48,5 @@
         <framework:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-      <composition>
-        <lsp:LspType />
-        <lsp:WorkspaceState />
-        <lsp:AnalysisResult />
-        <lsp:WorkspaceAnalysisResult />
-        <lsp:LspPosition />
-        <lsp:LspRange />
-        <lsp:MarkupContent />
-        <lsp:HoverInfo />
-        <lsp:OutlineSymbol />
-        <lsp:LspLocation />
-        <lsp:LspLocationLink />
-        <lsp:SemanticTokensResult />
-        <lspcap:AnalyzeDocument />
-        <lspcap:AnalyzeWorkspace />
-        <lspcap:FormatDocument />
-        <lspcap:HoverAt />
-        <lspcap:DocumentSymbols />
-        <lspcap:DefinitionAt />
-        <lspcap:ReferencesAt />
-        <lspcap:SemanticTokensFor />
-        <lspcap:StartLanguageServer />
-        <lspdocumentation:Introduction />
-        <lspdocumentation:LayerSeparation />
-        <lspdocumentation:ArchitectureOverview />
-        <lspdocumentation:V1Scope />
-        <lspdocumentation:PublicApi />
-        <lspdocumentation:ServerLifecycle />
-        <lspdocumentation:PackageOwnership />
-        <lspdocumentation:ScopeExclusions />
-        <lspdocumentation:DesignDecisions />
-      </composition>
-    </blocks>
   </aggregations>
 </lsp:Library>

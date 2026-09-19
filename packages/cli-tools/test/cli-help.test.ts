@@ -59,7 +59,7 @@ describe("blockml help pages", () => {
 
     const created = await runCli(["new", "--help"], ROOT);
     expect(created.code).toBe(0);
-    expect(created.stderr).toMatch(/owning Library catalog/);
+    expect(created.stderr).toMatch(/owning Library package/);
 
     const transform = await runCli(["transform", "--help"], ROOT);
     expect(transform.code).toBe(0);

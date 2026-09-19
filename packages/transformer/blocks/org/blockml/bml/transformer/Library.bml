@@ -3,10 +3,7 @@
 <transformer:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
-  xmlns:transformer="org.blockml.bml.transformer"
-  xmlns:transformercap="org.blockml.bml.transformer.capability"
-  xmlns:transformerdocumentation="org.blockml.bml.transformer.documentation"
-  xmlns:workflow="org.blockml.bml.transformer.workflow">
+  xmlns:transformer="org.blockml.bml.transformer">
 
   <baseType>
     core:BlockLibrary
@@ -20,8 +17,9 @@
   <documentation>
     Canonical transformer specification for BlockML — sequential
     ModelOperations over ModelTransformation. TypeScript in
-    packages/transformer/src/ implements this library. Membership is defined
-    exclusively by this blocks list.
+    packages/transformer/src/ implements this library. Membership is the nearest
+    Library.bml at the same package level or above; search stops one level below
+    the source folder.
   </documentation>
   <references>
     <see type="transformer:README" relation="ReadFirst">
@@ -47,41 +45,5 @@
         <blockml:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-      <composition>
-        <workflow:CompositeRule />
-        <workflow:CompositeTask />
-        <workflow:Criterion />
-        <workflow:ExecutionException />
-        <workflow:ExecutionStatus />
-        <workflow:AgenticOperation />
-        <workflow:AuthorativeSourceSet />
-        <workflow:InstructionRule />
-        <workflow:InstructionTask />
-        <workflow:ModelOperation />
-        <workflow:ModelTransformation />
-        <workflow:Prerequisite />
-        <workflow:ParameterMapping />
-        <workflow:ParametersException />
-        <workflow:PrerequisiteNotMetException />
-        <workflow:ResultException />
-        <workflow:ResultMapping />
-        <workflow:Rule />
-        <workflow:Sector />
-        <workflow:SectorModel />
-        <workflow:Task />
-        <workflow:ToolOperation />
-        <transformercap:AgenticExecutor />
-        <transformercap:ExecuteTask />
-        <transformercap:FinalizeExecution />
-        <transformercap:OperationExecutor />
-        <transformercap:PersistExecution />
-        <transformercap:PrepareExecution />
-        <transformercap:ReflectOnExecution />
-        <transformercap:RunTransformation />
-        <transformercap:ToolExecutor />
-        <transformerdocumentation:ArchitectureOverview />
-      </composition>
-    </blocks>
   </aggregations>
 </transformer:Library>

@@ -55,7 +55,7 @@ describe("blockml init CLI", () => {
     expect(library).toMatch(/<version>\s*0\.1\.0\s*<\/version>/);
     expect(library).toMatch(/<acme:README\s*\/>/);
     expect(library).toMatch(/<blockml:Library\s*\/>/);
-    expect(library).toMatch(/<blocks\b/);
+    expect(library).not.toMatch(/<blocks\b/);
 
     const readme = readFileSync(join(TMP, "blocks/com/acme/bml/README.bml"), "utf8");
     expect(readme).toMatch(/<acme:README\b/);

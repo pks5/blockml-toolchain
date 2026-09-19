@@ -18,8 +18,7 @@
   xmlns:fatblock="org.blockml.bml.target.fatblock"
   xmlns:xsd="org.blockml.bml.target.xsd"
   xmlns:transformer="org.blockml.bml.transformer"
-  xmlns:workspace="org.blockml.bml.workspace"
-  xmlns:wsdocumentation="org.blockml.bml.workspace.documentation">
+  xmlns:workspace="org.blockml.bml.workspace">
 
   <baseType>
     core:BlockLibrary
@@ -32,8 +31,7 @@
   </version>
   <documentation>
     Documentation and SSOT hub for the BlockML toolchain monorepo. Links package
-    BML libraries (workspace → packages only). Membership is defined exclusively
-    by this blocks list. Package libraries must not depend back on this library.
+    BML libraries (workspace → packages only). Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder. Package libraries must not depend back on this library.
   </documentation>
   <language>
     <blockml:language.English />
@@ -69,15 +67,5 @@
         <xsd:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-      <composition>
-        <workspace:WorkspaceType />
-        <wsdocumentation:Introduction />
-        <wsdocumentation:PackageMap />
-        <wsdocumentation:ArchitectureOverview />
-        <wsdocumentation:ReadingOrder />
-        <wsdocumentation:LinkingRules />
-      </composition>
-    </blocks>
   </aggregations>
 </workspace:Library>

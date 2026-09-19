@@ -512,9 +512,6 @@ ${XMLNS}>
 `;
 }
 
-function catalogEntry(b) {
-  return `        <${typeRef(b)} />`;
-}
 
 // BlockEmitOrder gets literal entries injected at render time
 const blockEmitOrderBlock = blocks.find((b) => b.name === "BlockEmitOrder");
@@ -559,17 +556,6 @@ for (const d of documentationBlocks) {
   writeFileSync(join(docDir, `${d.name}.bml`), renderDocBlock(d));
 }
 
-// Library catalog
-const libraryBlocks = [
-  "      <composition>",
-  ...blocks.map(catalogEntry),
-  ...capabilities.map(catalogEntry),
-  ...documentationBlocks.map(
-    (d) => `        <serdocumentation:${d.name} />`,
-  ),
-  "      </composition>",
-].join("\n");
-
 const library = `<!--
   BlockML Serializer Library Descriptor
   FQN: org.blockml.bml.compiler.serializer.Library
@@ -586,7 +572,7 @@ ${XMLNS}>
     Canonical serializer specification for BlockML — emit rules (B12–B25), emit architecture,
     and serialize() contract. TypeScript in packages/serializer/src/ implements this library.
     Input/output Urmodell types live in org.blockml.bml.bom.* (@blockml/bom).
-    Membership is defined exclusively by this blocks list.
+    Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
 
   <version>0.7.1</version>
@@ -613,9 +599,6 @@ ${XMLNS}>
         <bom:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-${libraryBlocks}
-    </blocks>
   </aggregations>
 
 </block>

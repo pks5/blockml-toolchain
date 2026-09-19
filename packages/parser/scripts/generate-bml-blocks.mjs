@@ -884,9 +884,6 @@ ${XMLNS}>
 `;
 }
 
-function catalogEntry(b) {
-  return `        <${typeRef(b)} />`;
-}
 
 // Generate blocks
 for (const b of blocks) {
@@ -907,15 +904,6 @@ for (const d of documentationBlocks) {
   writeFileSync(join(docDir, `${d.name}.bml`), renderDocBlock(d));
 }
 
-const libraryBlocks = [
-  "      <composition>",
-  ...blocks.map(catalogEntry),
-  ...capabilities.map(catalogEntry),
-  ...documentationBlocks.map(
-    (d) => `        <pardocumentation:${d.name} />`,
-  ),
-  "      </composition>",
-].join("\n");
 
 const library = `<!--
   BlockML Parser Library Descriptor
@@ -933,7 +921,7 @@ ${XMLNS}>
     Canonical parser specification for BlockML — BML → BOM mapping algorithm,
     Stage 1 pipeline [1]–[5], and parse() contract. TypeScript in packages/parser/src/
     implements this library. Input/output Urmodell types live in org.blockml.bml.bom.*
-    (@blockml/bom). Membership is defined exclusively by this blocks list.
+    (@blockml/bom). Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
 
   <version>0.7.1</version>
@@ -960,9 +948,6 @@ ${XMLNS}>
         <bom:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-${libraryBlocks}
-    </blocks>
   </aggregations>
 
 </block>

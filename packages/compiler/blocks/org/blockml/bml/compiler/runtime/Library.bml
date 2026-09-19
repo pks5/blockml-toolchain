@@ -7,10 +7,6 @@
   xmlns:framework="org.blockml.bml.framework"
   xmlns:parser="org.blockml.bml.compiler.parser"
   xmlns:runtime="org.blockml.bml.compiler.runtime"
-  xmlns:runapi="org.blockml.bml.compiler.runtime.api"
-  xmlns:runcap="org.blockml.bml.compiler.runtime.capability"
-  xmlns:runconfig="org.blockml.bml.compiler.runtime.config"
-  xmlns:rundocumentation="org.blockml.bml.compiler.runtime.documentation"
   xmlns:validator="org.blockml.bml.compiler.validator">
 
   <baseType>
@@ -25,7 +21,7 @@
   <documentation>
     Canonical compiler runtime specification for BlockML — compileToOutput, Target
     Registry, compile scope, RenderContext (C1–C7). TypeScript in packages/compiler/src/
-    implements this library. Membership is defined exclusively by this blocks list.
+    implements this library. Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
   <language>
     <blockml:language.English />
@@ -50,53 +46,5 @@
         <validator:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-      <composition>
-        <runtime:RuntimeType />
-        <runapi:CompileScopeKind />
-        <runapi:CompileInput />
-        <runapi:CompileScope />
-        <runapi:CompileRequest />
-        <runapi:CompileOptions />
-        <runapi:CompileBomOptions />
-        <runapi:CompilerResult />
-        <runapi:ValidateRegistryResult />
-        <runapi:RenderOutputFile />
-        <runapi:RenderOutput />
-        <runapi:RenderSession />
-        <runapi:RenderContext />
-        <runapi:RenderTarget />
-        <runapi:ScopeConfigHints />
-        <runapi:ResolvedScope />
-        <runconfig:RuntimeConstants />
-        <runcap:CompileToOutput />
-        <runcap:CompileBmlToOutput />
-        <runcap:CompileBomToOutput />
-        <runcap:RegisterTarget />
-        <runcap:GetTarget />
-        <runcap:ClearTargets />
-        <runcap:RegisteredTargetNames />
-        <runcap:ResolveScope />
-        <runcap:ScopeAccepts />
-        <runcap:CompileBmlToBom />
-        <runcap:ValidateRegistryDocuments />
-        <runcap:BuildRenderSession />
-        <runcap:CreateRenderContext />
-        <rundocumentation:Introduction />
-        <rundocumentation:LayerSeparation />
-        <rundocumentation:ArchitectureOverview />
-        <rundocumentation:V1Scope />
-        <rundocumentation:PublicApi />
-        <rundocumentation:CompileIO />
-        <rundocumentation:CompileScopeRules />
-        <rundocumentation:TargetRegistry />
-        <rundocumentation:RenderContextRules />
-        <rundocumentation:ExternalTargetContract />
-        <rundocumentation:Diagnostics />
-        <rundocumentation:DesignDecisions />
-        <rundocumentation:PackageOwnership />
-        <rundocumentation:ScopeExclusions />
-      </composition>
-    </blocks>
   </aggregations>
 </runtime:Library>

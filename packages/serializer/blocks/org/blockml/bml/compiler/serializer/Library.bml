@@ -4,11 +4,7 @@
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:core="org.blockml.bml.core"
-  xmlns:serializer="org.blockml.bml.compiler.serializer"
-  xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
-  xmlns:serconfig="org.blockml.bml.compiler.serializer.config"
-  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
-  xmlns:seremit="org.blockml.bml.compiler.serializer.emit">
+  xmlns:serializer="org.blockml.bml.compiler.serializer">
 
   <baseType>
     core:BlockLibrary
@@ -27,7 +23,7 @@
     
     Input/output Urmodell types live in org.blockml.bml.bom.* (@blockml/bom).
     
-    Membership is defined exclusively by this blocks list.
+    Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
   <language>
     <blockml:language.English />
@@ -49,48 +45,5 @@
         <bom:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-      <composition>
-        <serializer:SerializerType />
-        <seremit:EmitContext />
-        <seremit:XmlWriter />
-        <serconfig:BlockEmitOrder />
-        <serconfig:SerializerConstants />
-        <sercap:Serialize />
-        <sercap:CreateEmitContext />
-        <sercap:EmitBlockDefinition />
-        <sercap:EmitRootStartTag />
-        <sercap:EmitTypeExpression />
-        <sercap:EmitCompositionTemplate />
-        <sercap:EmitCompositionNode />
-        <sercap:EmitBlockInstance />
-        <sercap:EmitConstraintInstances />
-        <sercap:EmitTypeReferenceEntity />
-        <sercap:HasBmlSemanticQNameBindings />
-        <sercap:FqnToQName />
-        <sercap:QnameToParts />
-        <sercap:VisibilityPrefix />
-        <sercap:EscapeAttr />
-        <sercap:EscapeText />
-        <sercap:NeedsCData />
-        <sercap:EmitCharacterData />
-        <sercap:FormatBoolean />
-        <sercap:FormatMemberValue />
-        <sercap:ShouldUseQName />
-        <serdocumentation:Introduction />
-        <serdocumentation:LayerSeparation />
-        <serdocumentation:ArchitectureOverview />
-        <serdocumentation:V1Scope />
-        <serdocumentation:PublicApi />
-        <serdocumentation:EmitOrder />
-        <serdocumentation:EmitRules />
-        <serdocumentation:XmlCommentsEmit />
-        <serdocumentation:RoundtripContract />
-        <serdocumentation:DesignDecisions />
-        <serdocumentation:Diagnostics />
-        <serdocumentation:PackageOwnership />
-        <serdocumentation:ScopeExclusions />
-      </composition>
-    </blocks>
   </aggregations>
 </serializer:Library>

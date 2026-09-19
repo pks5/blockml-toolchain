@@ -6,6 +6,7 @@ import type {
   MemberValue,
 } from "@blockml/bom";
 import type { TypeRegistry } from "../registry/type-registry.js";
+import { findOwningLibraryDocument } from "../registry/library-membership.js";
 
 function diag(
   code: string,
@@ -17,15 +18,16 @@ function diag(
   return { severity: "error", code, message, source: { file, line, column } };
 }
 
-function isFrameworkConventionBlock(typeFqn: string): boolean {
-  return typeFqn.startsWith("org.blockml.bml.");
-}
-
-function requiresExplicitVersion(block: BlockDefinition): boolean {
+function requiresExplicitVersion(
+  block: BlockDefinition,
+  registry: TypeRegistry,
+  file: string,
+): boolean {
   if (!block.type || block.version) {
     return false;
   }
-  if (isFrameworkConventionBlock(block.type)) {
+  const owning = findOwningLibraryDocument(registry, block.type, file);
+  if (owning?.block.version) {
     return false;
   }
   return true;
@@ -101,7 +103,7 @@ function validateBlockVersions(
   diagnostics: Diagnostic[],
   isDocumentRoot: boolean,
 ): void {
-  if (isDocumentRoot && requiresExplicitVersion(block)) {
+  if (isDocumentRoot && requiresExplicitVersion(block, registry, file)) {
     diagnostics.push(
       diag(
         "BML_MISSING_VERSION",

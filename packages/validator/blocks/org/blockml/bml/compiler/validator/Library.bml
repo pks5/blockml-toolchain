@@ -4,9 +4,6 @@
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:validator="org.blockml.bml.compiler.validator"
-  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
-  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
-  xmlns:valstyle="org.blockml.bml.compiler.validator.style"
   xmlns:core="org.blockml.bml.core"
   xmlns:framework="org.blockml.bml.framework">
 
@@ -26,7 +23,7 @@
     on BomDocument using @blockml/framework utilities, plus the style catalog
     (org.blockml.bml.compiler.validator.style.*). TypeScript in packages/validator/src/
     implements this library. Urmodell and API types live in org.blockml.bml.bom.*
-    (@blockml/bom). Membership is defined exclusively by this blocks list.
+    (@blockml/bom). Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
   <language>
     <blockml:language.English />
@@ -49,37 +46,5 @@
         <framework:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-      <composition>
-        <validator:ValidatorType />
-        <valcap:Validate />
-        <valcap:ValidateStyle />
-        <valstyle:StyleRule />
-        <valstyle:StyleCheck />
-        <valstyle:PreferCDataWhenNeedsEscape />
-        <valstyle:PreferMarkdownStructure />
-        <valstyle:PreferEmptyElementSelfClosing />
-        <valstyle:PreferTypeAsTag />
-        <valstyle:PreferOmitRedundantType />
-        <valstyle:PreferOmitRedundantName />
-        <valstyle:PreferOmitUnusedNamespace />
-        <valstyle:CDataWhenEscaping />
-        <valstyle:MarkdownStructure />
-        <valstyle:EmptyElementSelfClosing />
-        <valstyle:TypeAsTag />
-        <valstyle:OmitRedundantType />
-        <valstyle:OmitRedundantName />
-        <valstyle:OmitUnusedNamespace />
-        <valdocumentation:Introduction />
-        <valdocumentation:ValidityContract />
-        <valdocumentation:LayerSeparation />
-        <valdocumentation:ValidationPipeline />
-        <valdocumentation:PublicApi />
-        <valdocumentation:Diagnostics />
-        <valdocumentation:PackageOwnership />
-        <valdocumentation:ScopeExclusions />
-        <valdocumentation:DesignDecisions />
-      </composition>
-    </blocks>
   </aggregations>
 </validator:Library>

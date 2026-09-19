@@ -135,8 +135,7 @@ export function createWorkspace(rootDir: string): WorkspaceState {
   const bootstrap = bootstrapTypeRegistry(bootstrapOptions);
   const bootstrapDiagnostics = bootstrap.diagnostics.filter(
     (d) =>
-      d.code === "BML_LIBRARY_RESOLVE_ERROR" ||
-      d.code === "BML_LIBRARY_NESTING_VIOLATION",
+      d.code === "BML_LIBRARY_RESOLVE_ERROR",
   );
 
   const state: WorkspaceState = {

@@ -14,7 +14,15 @@
     Minimal effectiveBlockVersion and bml:version assert checks
   </is>
   <documentation>
-    BML_MISSING_VERSION on standalone root blocks outside the org.blockml.bml.* library convention. Third-party libraries are not exempted by namespace. BML_UNKNOWN_VERSION when bml:version pin does not match a registered block version.
+    <![CDATA[
+    # Effective block version
+    
+    - `BML_MISSING_VERSION` on standalone root blocks with no owning Library
+    - Membership is the nearest Library.bml at the same package level or above
+      (search stops one level below the source folder)
+    - Third-party libraries are not exempted by namespace
+    - `BML_UNKNOWN_VERSION` when a `bml:version` pin does not match a registered block version
+    ]]>
   </documentation>
   <references>
     <see type="bomdocumentation:VersionRules" relation="SeeAlso" />

@@ -93,8 +93,7 @@ export function createWorkspace(rootDir) {
         bootstrapOptions.libraryPaths = libraries;
     }
     const bootstrap = bootstrapTypeRegistry(bootstrapOptions);
-    const bootstrapDiagnostics = bootstrap.diagnostics.filter((d) => d.code === "BML_LIBRARY_RESOLVE_ERROR" ||
-        d.code === "BML_LIBRARY_NESTING_VIOLATION");
+    const bootstrapDiagnostics = bootstrap.diagnostics.filter((d) => d.code === "BML_LIBRARY_RESOLVE_ERROR");
     const state = {
         rootDir: absRoot,
         config,

@@ -23,10 +23,5 @@
         <blockml:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-      <composition>
-        <lsptest:Good />
-      </composition>
-    </blocks>
   </aggregations>
 </lsptest:Library>

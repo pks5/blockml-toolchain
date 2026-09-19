@@ -112,7 +112,7 @@ function createLibrary(packageFqn, destPath) {
         type: `${packageFqn}.Library`,
         baseType: BLOCK_LIBRARY_BASE,
         is: `The ${packageFqn} project library catalog`,
-        documentation: `Project library for ${packageFqn}. Membership is defined exclusively by this blocks list.`,
+        documentation: `Project library for ${packageFqn}. Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.`,
         version: DEFAULT_LIBRARY_VERSION,
         filePath: destPath,
     })
@@ -127,12 +127,7 @@ function createLibrary(packageFqn, destPath) {
         typeFqn: BLOCK_LIBRARY_BASE,
         override: true,
     })
-        .addCompositionChild("dependencies", CORE_LIBRARY_FQN)
-        .addAggregation({
-        name: "blocks",
-        typeFqn: "org.blockml.bml.core.Block",
-        override: true,
-    });
+        .addCompositionChild("dependencies", CORE_LIBRARY_FQN);
 }
 function createReadme(packageFqn, destPath) {
     return BomBuilder.create({

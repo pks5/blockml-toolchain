@@ -29,10 +29,6 @@ function libraryXml(): string {
     "        <blockml:Library />",
     "      </composition>",
     "    </dependencies>",
-    "    <blocks>",
-    "      <composition>",
-    "      </composition>",
-    "    </blocks>",
     "  </aggregations>",
     "</block>",
     "",
@@ -105,7 +101,7 @@ describe("blockml new CLI", () => {
     rmSync(TMP, { recursive: true, force: true });
   });
 
-  it("creates a block file and updates the Library catalog", async () => {
+  it("creates a block file under the owning Library", async () => {
     const { code, stderr } = await runCli(
       ["new", "com.example.Foo", "--is", "A foo block"],
       TMP,
@@ -122,7 +118,7 @@ describe("blockml new CLI", () => {
     expect(created).toContain("com.example");
     expect(created).toContain("A foo block");
     const library = readFileSync(join(TMP, "blocks/com/example/Library.bml"), "utf8");
-    expect(library).toMatch(/<example:Foo\s*\/>/);
+    expect(library).not.toMatch(/<example:Foo\s*\/>/);
   });
 
   it("refuses to overwrite an existing file", async () => {

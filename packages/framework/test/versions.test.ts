@@ -8,11 +8,15 @@ import { TypeRegistry } from "../src/registry/type-registry.js";
 const FIXTURES = join(import.meta.dirname, "versions", "fixtures");
 
 describe("validateVersions", () => {
-  it("passes for framework block without explicit version", () => {
+  it("passes for library member without explicit version", () => {
+    const libraryFile = join(FIXTURES, "valid-owning-library.bml");
     const file = join(FIXTURES, "valid-framework-block.bml");
+    const library = parse(readFileSync(libraryFile, "utf8"), { filePath: libraryFile });
     const parsed = parse(readFileSync(file, "utf8"), { filePath: file });
+    expect(library.document).not.toBeNull();
     expect(parsed.document).not.toBeNull();
     const registry = new TypeRegistry();
+    registry.register(library.document!);
     registry.register(parsed.document!);
     const diagnostics = validateVersions(parsed.document!, registry);
     expect(diagnostics.filter((d) => d.severity === "error")).toEqual([]);

@@ -35,7 +35,7 @@
     • Scan uses fwcap:ScanTypes / ScanPackages over the validate --all TypeRegistry
     • Graph uses @blockml/graph over the validate --all corpus
     • Inspect uses @blockml/inspect over the validate --all corpus
-    • New uses @blockml/builder; writes .bml and updates Library.blocks
+    • New uses @blockml/builder; writes .bml under the owning Library (membership by location)
     • Init uses @blockml/builder; writes Library + README, merges package.json, copies AGENTS.md; no TypeRegistry
     
     V1 not implemented (documented in ScopeExclusions):

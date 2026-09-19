@@ -5,9 +5,7 @@
   xmlns:bom="org.blockml.bml.bom"
   xmlns:core="org.blockml.bml.core"
   xmlns:framework="org.blockml.bml.framework"
-  xmlns:inspect="org.blockml.bml.inspect"
-  xmlns:inspectcap="org.blockml.bml.inspect.capability"
-  xmlns:inspectdocumentation="org.blockml.bml.inspect.documentation">
+  xmlns:inspect="org.blockml.bml.inspect">
 
   <baseType>
     core:BlockLibrary
@@ -21,7 +19,7 @@
   <documentation>
     Canonical inspect-view specification for BlockML — ephemeral JSON projection
     of a Block from the validate --all TypeRegistry. TypeScript in packages/inspect/src/
-    implements this library. Membership is defined exclusively by this blocks list.
+    implements this library. Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
   <language>
     <blockml:language.English />
@@ -44,32 +42,5 @@
         <framework:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-      <composition>
-        <inspect:InspectType />
-        <inspect:InspectTypeRef />
-        <inspect:InspectedMember />
-        <inspect:InspectedProperty />
-        <inspect:InspectedAggregation />
-        <inspect:InspectedAssociation />
-        <inspect:InspectedCapability />
-        <inspect:InspectedInstance />
-        <inspect:InspectedImplementation />
-        <inspect:InspectedGenericType />
-        <inspect:InspectedReference />
-        <inspect:InspectedBlock />
-        <inspect:InspectResult />
-        <inspect:InspectOptions />
-        <inspectcap:InspectBlock />
-        <inspectdocumentation:Introduction />
-        <inspectdocumentation:LayerSeparation />
-        <inspectdocumentation:ArchitectureOverview />
-        <inspectdocumentation:V1Scope />
-        <inspectdocumentation:PublicApi />
-        <inspectdocumentation:DesignDecisions />
-        <inspectdocumentation:PackageOwnership />
-        <inspectdocumentation:ScopeExclusions />
-      </composition>
-    </blocks>
   </aggregations>
 </inspect:Library>

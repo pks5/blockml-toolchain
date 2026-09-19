@@ -291,14 +291,14 @@ export const documentationBlocks = [
   {
     name: "VersionRules",
     is: "Effective block version and instance version asserts",
-    doc: `Definition effectiveBlockVersion = own version | library.version (if exported) | BML_MISSING_VERSION.
+    doc: `Definition effectiveBlockVersion = own version | owning library.version (nearest Library.bml at the same package level or above; search stops one level below the source folder) | BML_MISSING_VERSION.
     Block in library: version >= library.version when both declared.
 
     Same-document Sub-Block refs: bml:version not allowed as resolution hint.
     External refs: bml:version omitted → registry context; present → exact assert (BML_UNKNOWN_VERSION).
-    Library catalog sugar (readMe, bootstrap, dependencies, blocks): same bml:version rules.
+    Library catalog sugar (readMe, bootstrap, dependencies): same bml:version rules.
 
-    Framework convention: version only on Library.bml for org.blockml.bml.*.
+    Version may live only on Library.bml; members inherit it. Standalone blocks (no owning Library) require their own version.
     Third-party libraries use the same effectiveBlockVersion rule; no namespace is exempted.`,
   },
   {
@@ -314,8 +314,8 @@ export const documentationBlocks = [
     visibility rules; no duplicate visibility-prefix variants; expression types match;
     preset properties exist; property value cycles; basePresets resolve without cycles;
     contracts merge order; validateConstraints after resolveEffectiveMembers;
-    readOnly enforcement (BML_READONLY_MEMBER_WRITE); library blocks/deps resolve;
-    no outer library re-export from inner library (BML_LIBRARY_NESTING_VIOLATION).
+    readOnly enforcement (BML_READONLY_MEMBER_WRITE); library deps resolve.
+    Nested libraries are allowed: the nearest Library.bml owns the block.
 
     Validator does NOT expand directives, assign auto-IDs, or interpret aggregations.`,
     refs: [{ type: "bomdocumentation:RelatedDiagnostics", relation: "SeeAlso" }],
@@ -330,7 +330,7 @@ export const documentationBlocks = [
     BML_CONSTRAINT_*, BML_MISSING_IS, BML_MISSING_DOCUMENTATION, BML_MISSING_ISNOT,
     BML_MISSING_SUMMARY, BML_DUPLICATE_*, BML_INVALID_SINCE_VERSION, BML_CHANGELOG_VERSION_ORDER,
     BML_EXAMPLE_*, BML_UNKNOWN_NATURAL_LANGUAGE, BML_MISSING_VERSION, BML_UNKNOWN_VERSION,
-    BML_VERSION_BELOW_LIBRARY, BML_VERSION_MINOR_DRIFT, BML_LIBRARY_NESTING_VIOLATION,
+    BML_VERSION_BELOW_LIBRARY, BML_VERSION_MINOR_DRIFT,
     BML_MISSING_ID, BML_UNRESOLVABLE_INSTANCE_REF, BML_UNEXPORTED_INSTANCE_REF,
     BML_NON_STATIC_INSTANCE_REF, BML_DUPLICATE_MEMBER_*, BML_INVALID_PROPERTY_TYPE,
     BML_UNKNOWN_TYPE, BML_INVALID_DEFINITION_BRANCH, BML_INVALID_TYPE_REFERENCE,

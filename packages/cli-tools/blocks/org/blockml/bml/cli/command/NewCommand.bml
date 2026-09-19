@@ -14,7 +14,7 @@
     blockml new command model
   </is>
   <documentation>
-    blockml new FQN [--baseType FQN] [--is text]. Creates a type-as-root .bml file via @blockml/builder (no xsi/schemaLocation) and adds the Block to the owning Library catalog.
+    blockml new FQN [--baseType FQN] [--is text]. Creates a type-as-root .bml file via @blockml/builder (no xsi/schemaLocation) under the owning Library package. Membership is by location, not a catalog list.
   </documentation>
   <references>
     <see type="clidocumentation:NewCommand" relation="SeeAlso" />

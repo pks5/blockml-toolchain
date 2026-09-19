@@ -14,7 +14,7 @@
     Entry: bdcap:Render (BlockDocTarget.render) → ResolveOptions → AssembleSite.
     
     Assembly stages:
-    1. Collect registry FQNs; optionally FilterExportedFqns (Library.blocks)
+    1. Collect registry FQNs; optionally FilterExportedFqns (location-based library membership)
     2. CollectRootFqns (shortest FQN per source file) for indexes
     3. Emit RenderBlockPage per FQN (find nested types via subBlocks DFS)
     4. Emit All Blocks listing (all-blocks.html, or perLibrary {prefix}/all-blocks.html)

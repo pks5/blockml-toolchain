@@ -22,8 +22,8 @@
     instance memberValues and aggregation fills name members that exist on the type;
     preset properties exist; property value cycles; basePresets resolve without cycles;
     contracts merge order; validateConstraints after resolveEffectiveMembers;
-    readOnly enforcement (BML_READONLY_MEMBER_WRITE); library blocks/deps resolve;
-    no outer library re-export from inner library (BML_LIBRARY_NESTING_VIOLATION).
+    readOnly enforcement (BML_READONLY_MEMBER_WRITE); library deps resolve.
+    Nested libraries are allowed: the nearest Library.bml owns the block.
     
     Validator does NOT expand directives, assign auto-IDs, or interpret aggregations.
   </documentation>

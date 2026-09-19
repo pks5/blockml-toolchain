@@ -754,6 +754,28 @@
       }
     },
     {
+      "name": "LocateOwningLibrary",
+      "tsExport": "locateOwningLibrary",
+      "fqn": "org.blockml.bml.framework.capability.LocateOwningLibrary",
+      "inputs": [
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        },
+        {
+          "name": "fqn",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "libraryFqn",
+        "type": "type:Text",
+        "doc": "Owning library type FQN, or undefined."
+      }
+    },
+    {
       "name": "ValidateEmbeddedBlocks",
       "tsExport": "validateEmbeddedBlocks",
       "fqn": "org.blockml.bml.framework.capability.ValidateEmbeddedBlocks",
@@ -1141,7 +1163,6 @@
     "BML_GENERICS_ARGUMENT_MISMATCH",
     "BML_GENERICS_DIRECTIVE_NOT_ALLOWED",
     "BML_INVALID_VALUE",
-    "BML_LIBRARY_NESTING_VIOLATION",
     "BML_LIBRARY_RESOLVE_ERROR",
     "BML_MEMBER_COLLISION",
     "BML_MISSING_GENERIC_TYPE_ARGUMENT",

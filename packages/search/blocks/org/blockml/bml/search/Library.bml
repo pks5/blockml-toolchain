@@ -5,9 +5,7 @@
   xmlns:bom="org.blockml.bml.bom"
   xmlns:core="org.blockml.bml.core"
   xmlns:framework="org.blockml.bml.framework"
-  xmlns:search="org.blockml.bml.search"
-  xmlns:searchcap="org.blockml.bml.search.capability"
-  xmlns:searchdocumentation="org.blockml.bml.search.documentation">
+  xmlns:search="org.blockml.bml.search">
 
   <baseType>
     core:BlockLibrary
@@ -21,7 +19,7 @@
   <documentation>
     Canonical search specification for BlockML — local full-text search over the
     validate --all BML corpus. TypeScript in packages/search/src/ implements this library.
-    Membership is defined exclusively by this blocks list.
+    Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
   <language>
     <blockml:language.English />
@@ -44,30 +42,5 @@
         <framework:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-      <composition>
-        <search:SearchType />
-        <search:SearchDocument />
-        <search:SearchResult />
-        <search:SearchIndexOptions />
-        <search:SearchOptions />
-        <search:BuildIndexResult />
-        <search:IndexStatus />
-        <searchcap:BuildIndex />
-        <searchcap:Search />
-        <searchcap:RebuildIndex />
-        <searchcap:LoadIndex />
-        <searchcap:SaveIndex />
-        <searchcap:GetIndexStatus />
-        <searchcap:OpenIndex />
-        <searchdocumentation:Introduction />
-        <searchdocumentation:LayerSeparation />
-        <searchdocumentation:ArchitectureOverview />
-        <searchdocumentation:V1Scope />
-        <searchdocumentation:PublicApi />
-        <searchdocumentation:PackageOwnership />
-        <searchdocumentation:ScopeExclusions />
-      </composition>
-    </blocks>
   </aggregations>
 </search:Library>

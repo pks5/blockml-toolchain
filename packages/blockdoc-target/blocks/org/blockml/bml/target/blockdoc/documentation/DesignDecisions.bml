@@ -25,7 +25,7 @@
     - BD10 EscapeHtml.
     - BD11 CollectRootFqns = shortest per file.
     - BD12 package prefix ancestor set for indexes.
-    - BD13 export filter via Library.blocks aggregation.
+    - BD13 export filter via location-based library membership.
     - BD14 member-value summary limit 5.
     - BD15 type-link policy (named+known only).
     - BD16 sub-block simple-name resolve.

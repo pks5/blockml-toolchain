@@ -1,5 +1,5 @@
 export interface XsdOptions {
-    /** when false, only Library.blocks exports inform extra particles; unused for V1 emit */
+    /** when false, only location-based library members inform extra particles; unused for V1 emit */
     includeNonExported?: boolean;
     /** when false, skip types.xsd / service.xsd and their catalog entries */
     emitDomainSchemas?: boolean;

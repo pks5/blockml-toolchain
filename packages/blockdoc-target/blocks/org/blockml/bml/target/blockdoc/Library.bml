@@ -4,14 +4,7 @@
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:core="org.blockml.bml.core"
-  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
-  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
-  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
-  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
-  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
-  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
-  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
-  xmlns:bdrender="org.blockml.bml.target.blockdoc.render">
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc">
 
   <baseType>
     core:BlockLibrary
@@ -29,7 +22,7 @@
     path/link/page/site rules (BD1–BD28). TypeScript in packages/blockdoc-target/src/
     implements this library. Urmodell input types live in org.blockml.bml.bom.* (@blockml/bom).
     
-    Membership is defined exclusively by this blocks list.
+    Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
   <language>
     <blockml:language.English />
@@ -51,58 +44,5 @@
         <bom:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-      <composition>
-        <blockdoc:BlockdocType />
-        <bdapi:SiteMode />
-        <bdapi:OutLayout />
-        <bdapi:BlockDocOptions />
-        <bdapi:BlockDocRenderOutput />
-        <bdapi:SearchIndexEntry />
-        <bdapi:SearchIndex />
-        <bdconfig:BlockDocConstants />
-        <bdconfig:PageSectionOrder />
-        <bdpath:FqnHtmlPath />
-        <bdpage:BlockPage />
-        <bdpage:SiteIndexPage />
-        <bdpage:PackageIndexPage />
-        <bdrender:DocMarkup />
-        <bdcap:Render />
-        <bdcap:ResolveOptions />
-        <bdcap:FqnToHtmlPath />
-        <bdcap:RelativeHref />
-        <bdcap:EscapeHtml />
-        <bdcap:CollectRootFqns />
-        <bdcap:CollectPackagePrefixes />
-        <bdcap:FirstInterestingPackagePrefix />
-        <bdcap:FilterExportedFqns />
-        <bdcap:RenderTypeExpression />
-        <bdcap:ResolveSubBlockType />
-        <bdcap:ResolveInheritedMemberType />
-        <bdcap:RenderMemberSections />
-        <bdcap:CollectCompositionGroups />
-        <bdcap:RenderComposition />
-        <bdcap:RenderDottedPackagePath />
-        <bdcap:RenderBlockPage />
-        <bdcap:RenderSiteIndex />
-        <bdcap:RenderPackageIndex />
-        <bdcap:BuildSearchIndex />
-        <bdcap:RenderToolbar />
-        <bdcap:AssembleSite />
-        <bddocumentation:Introduction />
-        <bddocumentation:LayerSeparation />
-        <bddocumentation:ArchitectureOverview />
-        <bddocumentation:V1Scope />
-        <bddocumentation:PublicApi />
-        <bddocumentation:PathAndLayout />
-        <bddocumentation:TypeLinkRules />
-        <bddocumentation:MemberAndCompositionRules />
-        <bddocumentation:PageChrome />
-        <bddocumentation:SiteAssembly />
-        <bddocumentation:DesignDecisions />
-        <bddocumentation:PackageOwnership />
-        <bddocumentation:ScopeExclusions />
-      </composition>
-    </blocks>
   </aggregations>
 </blockdoc:Library>

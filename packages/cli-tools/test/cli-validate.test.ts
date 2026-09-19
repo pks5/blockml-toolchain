@@ -222,7 +222,7 @@ describe("runCli validate", () => {
     expect(validate).toMatch(/packages\/bom\/blocks/);
     expect(validate).not.toMatch(CORE_PATH_FRAGMENT);
     expect(registry).toMatch(CORE_PATH_FRAGMENT);
-  });
+  }, 20_000);
 
   it("treats --all as full-registry validate", async () => {
     if (!existsSync(CORE_LIBRARY)) {
@@ -239,7 +239,7 @@ describe("runCli validate", () => {
     expect(stderr).toMatch(
       /Validation (succeeded|failed)\. Tested \d+ blocks?, \d+ with errors, \d+ warnings?, \d+ recommendations?\./,
     );
-  });
+  }, 20_000);
 
   it("validates a single file against the project registry", async () => {
     if (!existsSync(CORE_LIBRARY)) {

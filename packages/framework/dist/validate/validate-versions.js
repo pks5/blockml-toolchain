@@ -1,14 +1,13 @@
+import { findOwningLibraryDocument } from "../registry/library-membership.js";
 function diag(code, message, file, line = 1, column = 1) {
     return { severity: "error", code, message, source: { file, line, column } };
 }
-function isFrameworkConventionBlock(typeFqn) {
-    return typeFqn.startsWith("org.blockml.bml.");
-}
-function requiresExplicitVersion(block) {
+function requiresExplicitVersion(block, registry, file) {
     if (!block.type || block.version) {
         return false;
     }
-    if (isFrameworkConventionBlock(block.type)) {
+    const owning = findOwningLibraryDocument(registry, block.type, file);
+    if (owning?.block.version) {
         return false;
     }
     return true;
@@ -49,7 +48,7 @@ function walkCompositionInstances(block, registry, file, diagnostics) {
     }
 }
 function validateBlockVersions(block, registry, file, diagnostics, isDocumentRoot) {
-    if (isDocumentRoot && requiresExplicitVersion(block)) {
+    if (isDocumentRoot && requiresExplicitVersion(block, registry, file)) {
         diagnostics.push(diag("BML_MISSING_VERSION", `Missing version on block ${block.type}`, file, block.source?.line, block.source?.column));
     }
     walkCompositionInstances(block, registry, file, diagnostics);

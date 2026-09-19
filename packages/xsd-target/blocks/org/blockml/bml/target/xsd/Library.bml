@@ -4,11 +4,7 @@
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:core="org.blockml.bml.core"
-  xmlns:xsd="org.blockml.bml.target.xsd"
-  xmlns:xsdapi="org.blockml.bml.target.xsd.api"
-  xmlns:xsdcap="org.blockml.bml.target.xsd.capability"
-  xmlns:xsdconfig="org.blockml.bml.target.xsd.config"
-  xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation">
+  xmlns:xsd="org.blockml.bml.target.xsd">
 
   <baseType>
     core:BlockLibrary
@@ -22,8 +18,9 @@
   <documentation>
     Canonical XSD specification for BlockML — registry name xsd, bml.xsd particles,
     domain vocabularies, catalog.xml (XSD1–XSD18). TypeScript in
-    packages/xsd-target/src/ implements this library. Membership is defined
-    exclusively by this blocks list.
+    packages/xsd-target/src/ implements this library. Membership is the nearest
+    Library.bml at the same package level or above; search stops one level below
+    the source folder.
   </documentation>
   <language>
     <blockml:language.English />
@@ -45,37 +42,5 @@
         <bom:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-      <composition>
-        <xsd:XsdType />
-        <xsdapi:XsdOptions />
-        <xsdapi:XsdRenderOutput />
-        <xsdapi:CatalogEntry />
-        <xsdconfig:XsdConstants />
-        <xsdconfig:DefaultXsdOptions />
-        <xsdcap:ResolveOptions />
-        <xsdcap:Render />
-        <xsdcap:EmitBlockXsd />
-        <xsdcap:MemberPrefersElement />
-        <xsdcap:ExtraElementNames />
-        <xsdcap:EmitTypesXsd />
-        <xsdcap:EmitServiceXsd />
-        <xsdcap:VocabularyElements />
-        <xsdcap:EmitCatalogXml />
-        <xsdcap:CatalogRelativePath />
-        <xsddocumentation:Introduction />
-        <xsddocumentation:LayerSeparation />
-        <xsddocumentation:ArchitectureOverview />
-        <xsddocumentation:V1Scope />
-        <xsddocumentation:PublicApi />
-        <xsddocumentation:ParticleMappingRules />
-        <xsddocumentation:DomainVocabularyRules />
-        <xsddocumentation:CatalogAndOutputLayout />
-        <xsddocumentation:Diagnostics />
-        <xsddocumentation:DesignDecisions />
-        <xsddocumentation:PackageOwnership />
-        <xsddocumentation:ScopeExclusions />
-      </composition>
-    </blocks>
   </aggregations>
 </xsd:Library>

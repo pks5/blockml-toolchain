@@ -4,11 +4,7 @@
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:core="org.blockml.bml.core"
-  xmlns:parser="org.blockml.bml.compiler.parser"
-  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
-  xmlns:parconfig="org.blockml.bml.compiler.parser.config"
-  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
-  xmlns:parmap="org.blockml.bml.compiler.parser.map">
+  xmlns:parser="org.blockml.bml.compiler.parser">
 
   <baseType>
     core:BlockLibrary
@@ -25,7 +21,7 @@
     Canonical parser specification for BlockML — BML → BOM mapping algorithm,
     Stage 1 pipeline [1]–[5], and parse() contract. TypeScript in packages/parser/src/
     implements this library. Input/output Urmodell types live in org.blockml.bml.bom.*
-    (@blockml/bom). Membership is defined exclusively by this blocks list.
+    (@blockml/bom). Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
   <language>
     <blockml:language.English />
@@ -47,93 +43,5 @@
         <bom:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-      <composition>
-        <parser:ParserType />
-        <parmap:MapContext />
-        <parmap:XmlDomNode />
-        <parmap:QNameParts />
-        <parmap:VisibilityParse />
-        <parmap:BmlMeta />
-        <parmap:MapContextOptions />
-        <parmap:CharacterData />
-        <parconfig:ParserConstants />
-        <parconfig:MapTimeDiagnosticCodes />
-        <parcap:Parse />
-        <parcap:DetectFormat />
-        <parcap:ParseXmlDom />
-        <parcap:GetParseErrors />
-        <parcap:DocumentElement />
-        <parcap:AssertBlockRoot />
-        <parcap:IsDocumentRootLocalName />
-        <parcap:ExtractNamespaceBindings />
-        <parcap:MergeSourceInfo />
-        <parcap:CreateMapContext />
-        <parcap:MapDocumentBlock />
-        <parcap:MapBlock />
-        <parcap:MapCompositionTemplate />
-        <parcap:MapBlockInstanceNode />
-        <parcap:IsTypeReferenceEntitySugar />
-        <parcap:MapTypeReferenceEntityInstance />
-        <parcap:BuildSubBlockIndex />
-        <parcap:ParseTypeExpression />
-        <parcap:ParseGenericArgumentList />
-        <parcap:InferCardinality />
-        <parcap:TypeExpressionToString />
-        <parcap:ParseMemberValue />
-        <parcap:ContainsUnescapedInterpolation />
-        <parcap:ExpressionFromRaw />
-        <parcap:ParseDirectives />
-        <parcap:ParseGenericsBinding />
-        <parcap:ParseBmlMeta />
-        <parcap:ParseVisibilityFromName />
-        <parcap:VisibilityPrefix />
-        <parcap:NormalizeBooleanValue />
-        <parcap:IsBooleanLiteral />
-        <parcap:ParseBooleanAttribute />
-        <parcap:SplitQName />
-        <parcap:ResolvePrefix />
-        <parcap:ResolveBlockReference />
-        <parcap:ResolveTypeName />
-        <parcap:HasBmlSemanticQNameBindings />
-        <parcap:FqnToQName />
-        <parcap:SourceLoc />
-        <parcap:ElementSourceLoc />
-        <parcap:ElementStartTagIsSelfClosing />
-        <parcap:IsElement />
-        <parcap:IsComment />
-        <parcap:IsTextNode />
-        <parcap:IsCData />
-        <parcap:ElementChildren />
-        <parcap:ElementLocalName />
-        <parcap:ElementPrefix />
-        <parcap:GetAttribute />
-        <parcap:GetCharacterData />
-        <parcap:CollectLeadingComments />
-        <parcap:CollectTrailingComments />
-        <parcap:XmlTriviaFromElement />
-        <parcap:TrimText />
-        <pardocumentation:Introduction />
-        <pardocumentation:LayerSeparation />
-        <pardocumentation:ArchitectureOverview />
-        <pardocumentation:V1Scope />
-        <pardocumentation:PublicApi />
-        <pardocumentation:MappingPrinciples />
-        <pardocumentation:MemberMappingOrder />
-        <pardocumentation:AttributeClassification />
-        <pardocumentation:StructuralGrammar />
-        <pardocumentation:XmlCommentsParse />
-        <pardocumentation:TypeDescriptorParsing />
-        <pardocumentation:BlockMetadataMapping />
-        <pardocumentation:MemberMapping />
-        <pardocumentation:ExpressionCapture />
-        <pardocumentation:SingleFileScope />
-        <pardocumentation:DesignDecisions />
-        <pardocumentation:RoundtripContract />
-        <pardocumentation:Diagnostics />
-        <pardocumentation:PackageOwnership />
-        <pardocumentation:ScopeExclusions />
-      </composition>
-    </blocks>
   </aggregations>
 </parser:Library>

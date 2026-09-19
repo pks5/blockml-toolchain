@@ -69,7 +69,7 @@ Commands:
               blockml graph uses|used-by|neighbors|ancestors|descendants|members <fqn>
               blockml graph path <from> <to>
               blockml graph query <cypher> | schema | index
-  new         Create a Block .bml and export it from the owning Library.
+  new         Create a Block .bml under the owning Library.
               blockml new <fqn> [--baseType FQN] [--is text]
   init        Scaffold a BlockML project (Library, package.json, AGENTS.md).
               blockml init <package-fqn> [--src dir] [--install]
@@ -247,7 +247,7 @@ Related: validate.`;
 export const NEW_HELP = `Usage: blockml new <fqn> [--baseType fqn] [--is text] [--src dir] [--libraries a,b]
        blockml new --help
 
-When: create a new Block. Writes a .bml file and adds it to the owning Library catalog.
+When: create a new Block. Writes a .bml file under the owning Library package.
 
 Defaults: --baseType org.blockml.bml.core.Block; --is is the short name.
 Does not overwrite an existing file.

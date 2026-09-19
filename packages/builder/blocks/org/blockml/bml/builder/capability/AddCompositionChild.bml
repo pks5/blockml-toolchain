@@ -13,7 +13,7 @@
     Append a composition instance under a named aggregation
   </is>
   <documentation>
-    Used to add a Library.blocks catalog export. Creates the composition
+    Appends a composition instance under a named aggregation. Creates the composition
     wrapper when missing. Skips when typeFqn is already a child. Ensures xmlns
     for the child package.
   </documentation>

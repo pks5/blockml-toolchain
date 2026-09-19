@@ -3,7 +3,7 @@ export interface BlockDocOptions {
     siteMode?: "merged" | "perLibrary";
     /** URL path layout under outDir — default: "fqn" */
     outLayout?: "fqn" | "package";
-    /** when false, only Library.blocks exports; when true, all .bml under roots */
+    /** when false, only location-based library members; when true, all .bml under roots */
     includeNonExported?: boolean;
 }
 export declare const DEFAULT_BLOCKDOC_OPTIONS: Required<BlockDocOptions>;

@@ -54,6 +54,7 @@ const TS_CAPABILITY_EXPORTS = [
   "rootFqns",
   "getExportedFqns",
   "peekLibraryTypeFqn",
+  "locateOwningLibrary",
   "getPropertyNumericValue",
   "isLiteralValue",
   "evaluateParseValue",
@@ -99,18 +100,6 @@ function parseBmlProperties(content: string): { name: string; required: boolean 
     props.push({ name, required: body.includes("(required)") });
   }
   return props;
-}
-
-function parseLibraryCatalog(): Set<string> {
-  const library = readFileSync(join(blocksRoot, "Library.bml"), "utf8");
-  const catalog = new Set<string>();
-  const blocksSection = library.match(/<blocks(?:\s[^>]*)?>([\s\S]*?)<\/blocks>/)?.[1] ?? library;
-  const compRegex = /<(?:[\w]+:)?(\w+)\s*\/>/g;
-  let m;
-  while ((m = compRegex.exec(blocksSection)) !== null) {
-    catalog.add(m[1]);
-  }
-  return catalog;
 }
 
 function parseTsInterfaceFields(filePath: string, interfaceName: string): Map<string, boolean> {
@@ -204,17 +193,19 @@ describe("Framework BML ↔ TS parity", () => {
     }
   });
 
-  it("Library.bml catalog includes all blocks", () => {
-    const catalog = parseLibraryCatalog();
+  it("every schema block, capability, and documentation file exists on disk", () => {
+    const bmlNames = new Set(
+      walkBmlFiles(blocksRoot).map((f) => f.split("/").pop()!.replace(".bml", "")),
+    );
     for (const b of schema.blocks) {
       if (b.abstract) continue;
-      expect(catalog.has(b.tsExport), `Library.bml missing ${b.tsExport}`).toBe(true);
+      expect(bmlNames.has(b.tsExport), `missing BML file for ${b.tsExport}`).toBe(true);
     }
     for (const c of schema.capabilities) {
-      expect(catalog.has(c.name), `Library.bml missing capability ${c.name}`).toBe(true);
+      expect(bmlNames.has(c.name), `missing capability BML for ${c.name}`).toBe(true);
     }
     for (const name of EXPECTED_DOC_BLOCKS) {
-      expect(catalog.has(name), `Library.bml missing documentation ${name}`).toBe(true);
+      expect(bmlNames.has(name), `missing documentation BML for ${name}`).toBe(true);
     }
   });
 

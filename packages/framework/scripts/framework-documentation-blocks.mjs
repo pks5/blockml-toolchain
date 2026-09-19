@@ -126,8 +126,9 @@ export const documentationBlocks = [
     library — when options.libraryPaths is set, resolves each Library.bml dependency graph
     (dependencies, subLibraries) in order, then registers blocks from each library blocks root
     except trees already covered by options.paths (srcDir / corpus). Missing Library path →
-    BML_LIBRARY_RESOLVE_ERROR. Outer re-export of inner-only block →
-    BML_LIBRARY_NESTING_VIOLATION (minimal check). Duplicate files of the same type FQN
+    BML_LIBRARY_RESOLVE_ERROR. Membership is location-based: nearest Library.bml at the same
+    package level or above (search stops one level below the source folder; nested libraries
+    win). Duplicate files of the same type FQN
     are resolved by source priority: workspace (not node_modules) wins over npm;
     same-origin last write wins.
 
@@ -263,7 +264,7 @@ export const documentationBlocks = [
     • BML_GENERIC_CONSTRAINT_VIOLATION — argument fails parameter baseType via satisfiesTypeBound
 
     validateVersions:
-    • BML_MISSING_VERSION — standalone root block missing effective version (non-framework convention)
+    • BML_MISSING_VERSION — standalone root block missing effective version (no owning Library)
     • BML_UNKNOWN_VERSION — bml:version pin does not match registered block version
 
     validateConstraints:
@@ -274,7 +275,6 @@ export const documentationBlocks = [
     bootstrap:
     • BML_BOOTSTRAP_READ_ERROR — file read failure during corpus walk (warning)
     • BML_LIBRARY_RESOLVE_ERROR — Library.bml path or dependency could not be resolved
-    • BML_LIBRARY_NESTING_VIOLATION — outer library re-exports inner-only block
 
     Diagnostic type: org.blockml.bml.bom.common.Diagnostic.`,
     refs: [

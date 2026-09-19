@@ -33,7 +33,6 @@ const FRAMEWORK_DIAGNOSTIC_CODES = [
   "BML_GENERICS_ARGUMENT_MISMATCH",
   "BML_GENERICS_DIRECTIVE_NOT_ALLOWED",
   "BML_INVALID_VALUE",
-  "BML_LIBRARY_NESTING_VIOLATION",
   "BML_LIBRARY_RESOLVE_ERROR",
   "BML_MEMBER_COLLISION",
   "BML_MISSING_GENERIC_TYPE_ARGUMENT",
@@ -500,7 +499,7 @@ const capabilities = [
     prefix: "fwcap",
     name: "ValidateVersions",
     is: "Minimal effectiveBlockVersion and bml:version assert checks",
-    doc: "BML_MISSING_VERSION on standalone root blocks outside the org.blockml.bml.* library convention. Third-party libraries are not exempted by namespace. BML_UNKNOWN_VERSION when bml:version pin does not match a registered block version.",
+    doc: "BML_MISSING_VERSION on standalone root blocks with no owning Library. Membership is the nearest Library.bml at the same package level or above (search stops one level below the source folder). Third-party libraries are not exempted by namespace. BML_UNKNOWN_VERSION when bml:version pin does not match a registered block version.",
     tsExport: "validateVersions",
     inputs: [
       { name: "document", type: "bomdoc:BomDocument", required: true },
@@ -532,6 +531,7 @@ const capabilities = [
     prefix: "fwcap",
     name: "GetExportedFqns",
     is: "Exported block FQNs for a library path from BootstrapResult",
+    doc: "Location-based members of the Library (nearest Library.bml walking up from each file). Not the authored blocks aggregation.",
     tsExport: "getExportedFqns",
     inputs: [
       { name: "libraryPath", type: "type:Text", required: true },
@@ -550,6 +550,20 @@ const capabilities = [
     inputs: [{ name: "libraryPath", type: "type:Text", required: true }],
     output: { name: "typeFqn", type: "type:Text", doc: "Library type FQN, or undefined." },
     refs: ["fwcap:ResolveLibrarySeeds"],
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "LocateOwningLibrary",
+    is: "Nearest Library for a block FQN by package prefix",
+    doc: "Walks FQN package prefixes looking for {package}.Library in the TypeRegistry. First (most specific) match wins. Used by blockml new for destination path and by validateVersions when no file-path owner is available.",
+    tsExport: "locateOwningLibrary",
+    inputs: [
+      { name: "registry", type: "fwcap:TypeRegistry", required: true },
+      { name: "fqn", type: "type:Text", required: true },
+    ],
+    output: { name: "libraryFqn", type: "type:Text", doc: "Owning library type FQN, or undefined." },
+    refs: ["fwcap:GetExportedFqns"],
   },
   {
     pkg: "capability",
@@ -890,9 +904,6 @@ ${XMLNS}>
 `;
 }
 
-function catalogEntry(b) {
-  return `        <${typeRef(b)} />`;
-}
 
 function capabilityTsExport(c) {
   return c.tsExport ?? c.name.charAt(0).toLowerCase() + c.name.slice(1);
@@ -919,17 +930,6 @@ for (const d of documentationBlocks) {
   writeFileSync(join(docDir, `${d.name}.bml`), renderDocBlock(d));
 }
 
-// Library catalog
-const libraryBlocks = [
-  "      <composition>",
-  ...blocks.map(catalogEntry),
-  ...capabilities.map(catalogEntry),
-  ...documentationBlocks.map(
-    (d) => `        <fwdocumentation:${d.name} />`,
-  ),
-  "      </composition>",
-].join("\n");
-
 const library = `<!--
   BlockML Framework Library Descriptor
   FQN: org.blockml.bml.framework.Library
@@ -947,7 +947,7 @@ ${XMLNS}>
     bootstrap, fork/resolve, parseExpression, validateTypes/validateConstraints.
     TypeScript in packages/framework/src/ implements this library.
     Urmodell types live in org.blockml.bml.bom.* (@blockml/bom).
-    Membership is defined exclusively by this blocks list.
+    Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
 
   <version>0.7.1</version>
@@ -975,9 +975,6 @@ ${XMLNS}>
         <parser:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-${libraryBlocks}
-    </blocks>
   </aggregations>
 
 </block>

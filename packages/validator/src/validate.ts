@@ -26,8 +26,7 @@ function libraryBootstrapDiagnostics(
   }
   return bootstrap.diagnostics.filter(
     (d) =>
-      d.code === "BML_LIBRARY_RESOLVE_ERROR" ||
-      d.code === "BML_LIBRARY_NESTING_VIOLATION",
+      d.code === "BML_LIBRARY_RESOLVE_ERROR",
   );
 }
 

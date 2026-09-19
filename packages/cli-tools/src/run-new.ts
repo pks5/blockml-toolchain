@@ -1,12 +1,12 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { BomBuilder, DEFAULT_BASE_TYPE, shortNameOfFqn } from "@blockml/builder";
-import type { TypeRegistry } from "@blockml/framework";
-import { bootstrapFullProjectRegistry } from "@blockml/framework";
-import { parse } from "@blockml/parser";
+import { bootstrapFullProjectRegistry, locateOwningLibrary } from "@blockml/framework";
 import { serialize } from "@blockml/serializer";
 import { pushLines, type CliOutputLine } from "./cli-style.js";
 import type { BomConfig } from "./load-config.js";
+
+export { locateOwningLibrary } from "@blockml/framework";
 
 export interface NewCliArgs {
   newFqn?: string;
@@ -21,25 +21,6 @@ const FQN_SEGMENT = /^[A-Za-z_][A-Za-z0-9_]*$/;
 export function isValidBlockFqn(fqn: string): boolean {
   const parts = fqn.split(".");
   return parts.length >= 2 && parts.every((part) => FQN_SEGMENT.test(part));
-}
-
-export function locateOwningLibrary(
-  registry: TypeRegistry,
-  fqn: string,
-): { libraryFqn: string; libraryFile: string; packageFqn: string } | undefined {
-  const parts = fqn.split(".");
-  parts.pop();
-  while (parts.length > 0) {
-    const packageFqn = parts.join(".");
-    const libraryFqn = `${packageFqn}.Library`;
-    const doc = registry.get(libraryFqn);
-    const libraryFile = doc?.source.filePath;
-    if (libraryFile && !libraryFile.startsWith("<")) {
-      return { libraryFqn, libraryFile, packageFqn };
-    }
-    parts.pop();
-  }
-  return undefined;
 }
 
 export function destinationPathForNew(
@@ -126,48 +107,5 @@ export function runNew(
   mkdirSync(dirname(destPath), { recursive: true });
   writeFileSync(destPath, emitted.text, "utf8");
   pushLines(lines, `Created ${displayPath(destPath, rootDir)}`, "info");
-
-  if (!owning) {
-    pushLines(lines, "No owning Library found; catalog was not updated.", "info");
-    return 0;
-  }
-
-  const librarySource = readFileSync(owning.libraryFile, "utf8");
-  const parsedLibrary = parse(librarySource, {
-    filePath: owning.libraryFile,
-    continueOnError: true,
-  });
-  if (!parsedLibrary.document) {
-    pushLines(
-      lines,
-      `Created the Block but could not parse Library ${owning.libraryFqn}.`,
-      "error",
-    );
-    return 1;
-  }
-  try {
-    const updated = BomBuilder.edit(parsedLibrary.document)
-      .addCompositionChild("blocks", fqn)
-      .seal();
-    const libraryXml = serialize(updated);
-    if (!libraryXml.success || libraryXml.text === null) {
-      pushLines(lines, `Failed to serialize Library ${owning.libraryFqn}`, "error");
-      return 1;
-    }
-    writeFileSync(owning.libraryFile, libraryXml.text, "utf8");
-    pushLines(
-      lines,
-      `Updated catalog ${displayPath(owning.libraryFile, rootDir)}`,
-      "info",
-    );
-  } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
-    pushLines(
-      lines,
-      `Created the Block but could not update Library catalog: ${message}`,
-      "error",
-    );
-    return 1;
-  }
   return 0;
 }

@@ -348,9 +348,6 @@ ${XMLNS}>
 `;
 }
 
-function catalogEntry(b) {
-  return `        <${typeRef(b)} />`;
-}
 
 for (const b of blocks) {
   const dir = b.pkg ? join(blocksRoot, b.pkg) : blocksRoot;
@@ -370,13 +367,6 @@ for (const d of documentationBlocks) {
   writeFileSync(join(docDir, `${d.name}.bml`), renderDocBlock(d));
 }
 
-const libraryBlocks = [
-  "      <composition>",
-  ...blocks.map(catalogEntry),
-  ...capabilities.map(catalogEntry),
-  ...documentationBlocks.map((d) => `        <searchdocumentation:${d.name} />`),
-  "      </composition>",
-].join("\n");
 
 const library = `<!--
   BlockML Search Library Descriptor
@@ -393,7 +383,7 @@ ${XMLNS}>
   <documentation>
     Canonical search specification for BlockML — local full-text search over the
     validate --all BML corpus. TypeScript in packages/search/src/ implements this library.
-    Membership is defined exclusively by this blocks list.
+    Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
 
   <version>0.8.0</version>
@@ -421,9 +411,6 @@ ${XMLNS}>
         <framework:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-${libraryBlocks}
-    </blocks>
   </aggregations>
 
 </block>

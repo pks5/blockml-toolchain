@@ -33,7 +33,7 @@
     </outLayout>
     <includeNonExported type="type:Boolean">
       <documentation>
-        when false, only Library.blocks exports; when true, all registry FQNs. Default true. (optional)
+        when false, only location-based library members; when true, all registry FQNs. Default true. (optional)
       </documentation>
     </includeNonExported>
   </properties>

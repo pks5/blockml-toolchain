@@ -22,17 +22,15 @@ No Block, Library, Type, Language, Service, Capability, or other BlockML definit
 - Framework base type — **not** exported via any Library `blocks`
 - Concrete libraries: `<name>Library</name>`, filename **`Library.bml`**, `baseType="bcore:BlockLibrary"`
 - FQN = `{package}.Library` from the file's package path
-- **Membership is defined only by `Library.bml` `blocks`** — not by directories
-- Catalog members (`description`, `language`, `readFirst`, `bootstrap`, `dependencies`, `subLibraries`, `schemas`, `blocks`) are **public** and **`readOnly`** — inspectable from foreign Blocks; authored only on the Library definition
+- **Membership is location-based** — a Block belongs to the nearest `Library.bml` at the same package level or above. Search stops one level below the source folder (`srcDir`). Nested libraries are allowed; the first Library found walking up wins.
+- Catalog members (`description`, `language`, `readMe`, `bootstrap`, `dependencies`, `subLibraries`, `schemas`) are **public** and **`readOnly`**. Authored `blocks` lists are not membership SSOT.
 
 ## Nested libraries
 
-Multiple `Library.bml` files may exist at different package levels (e.g. `org.blockml.bml.Library` + `org.blockml.bml.compiler.Library`).
+Multiple `Library.bml` files may exist at different package levels (e.g. `org.blockml.bml.Library` + `org.blockml.bml.compiler.Library`). The nearest Library walking up from a Block owns it.
 
 ```text
 Typical:  inner dependencies → outer Library
-Forbidden: outer blocks → Block exported by inner Library
-Error:    BML_LIBRARY_NESTING_VIOLATION
 ```
 
 ## Effective block version
@@ -40,7 +38,7 @@ Error:    BML_LIBRARY_NESTING_VIOLATION
 ```text
 effectiveBlockVersion =
   own <version>       if present
-  else library.version if exported via Library blocks
+  else library.version if a nearest Library.bml owns the block
   else error → BML_MISSING_VERSION
 ```
 
@@ -52,11 +50,12 @@ effectiveBlockVersion =
 ## Instance references (`bml:version`)
 
 - **Optional** on external references and Library TypeReferenceEntity sugar (`dependencies`,
-  `subLibraries`, `blocks`, `readFirst`, `bootstrap`, `language`) — omitted = resolve from
+  `subLibraries`, `readFirst`, `bootstrap`, `language`) — omitted = resolve from
   TypeRegistry / library context
 - **Present** = exact-version assert against the **referenced** type (`value` for sugar) →
   `BML_UNKNOWN_VERSION` if no match
 - Example dependency pin: `<blockml:Library bml:version="3.0.0" />`
+- Authored `blocks` lists (if present on BlockLibrary) are ignored for membership
 
 ## Library file pattern
 
@@ -67,7 +66,4 @@ effectiveBlockVersion =
 <dependencies>
   <composition><blockml:Library bml:version="3.0.0" /></composition>
 </dependencies>
-<blocks>
-  <composition><bcore:Block /></composition>   <!-- export blocks, NOT BlockLibrary -->
-</blocks>
 ```

@@ -4,8 +4,6 @@
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
   xmlns:builder="org.blockml.bml.builder"
-  xmlns:buildercap="org.blockml.bml.builder.capability"
-  xmlns:builderdocumentation="org.blockml.bml.builder.documentation"
   xmlns:core="org.blockml.bml.core"
   xmlns:framework="org.blockml.bml.framework">
 
@@ -21,7 +19,7 @@
   <documentation>
     Canonical BomBuilder specification for BlockML — writable authoring session
     that create/edit/seal BomDocument graphs. TypeScript in packages/builder/src/
-    implements this library. Membership is defined exclusively by this blocks list.
+    implements this library. Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
   <language>
     <blockml:language.English />
@@ -44,30 +42,5 @@
         <framework:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-      <composition>
-        <builder:BuilderType />
-        <builder:BomBuilder />
-        <builder:CreateBlockOptions />
-        <builder:AddPropertyOptions />
-        <builder:AddAggregationOptions />
-        <buildercap:Create />
-        <buildercap:Edit />
-        <buildercap:Seal />
-        <buildercap:QuerySelector />
-        <buildercap:AddProperty />
-        <buildercap:AddAggregation />
-        <buildercap:AddCompositionChild />
-        <buildercap:SetMemberValue />
-        <buildercap:EnsureNamespaceBinding />
-        <builderdocumentation:Introduction />
-        <builderdocumentation:LayerSeparation />
-        <builderdocumentation:ArchitectureOverview />
-        <builderdocumentation:V1Scope />
-        <builderdocumentation:PublicApi />
-        <builderdocumentation:PackageOwnership />
-        <builderdocumentation:ScopeExclusions />
-      </composition>
-    </blocks>
   </aggregations>
 </builder:Library>

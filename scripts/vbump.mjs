@@ -2,7 +2,7 @@
 /**
  * Synchronously bump versions of all @blockml/* workspace packages and BML libraries.
  *
- * Updates workspace package.json files, their BML Library.bml catalogs,
+ * Updates workspace package.json files, their BML Library.bml versions,
  * the workspace Library, and package-lock.json (via npm install, unless --dry-run).
  *
  * Usage:

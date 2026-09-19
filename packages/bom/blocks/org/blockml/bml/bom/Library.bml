@@ -3,16 +3,6 @@
 <bom:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bom="org.blockml.bml.bom"
-  xmlns:bomapi="org.blockml.bml.bom.api"
-  xmlns:bomblock="org.blockml.bml.bom.block"
-  xmlns:bomcap="org.blockml.bml.bom.capability"
-  xmlns:bomcommon="org.blockml.bml.bom.common"
-  xmlns:bomcomp="org.blockml.bml.bom.composition"
-  xmlns:bomdoc="org.blockml.bml.bom.document"
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
-  xmlns:bommember="org.blockml.bml.bom.member"
-  xmlns:bomtype="org.blockml.bml.bom.type"
-  xmlns:bomvalue="org.blockml.bml.bom.value"
   xmlns:core="org.blockml.bml.core">
 
   <baseType>
@@ -32,7 +22,7 @@
     
     Distinct from org.blockml.bml.definition.* (BML meta-model in @blockml/core).
     
-    Membership is defined exclusively by this blocks list.
+    Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
   <language>
     <blockml:language.English />
@@ -53,102 +43,5 @@
         <blockml:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-      <composition>
-        <bom:UrmodellType />
-        <bomcommon:SourceLocation />
-        <bomcommon:SourceInfo />
-        <bomcommon:XmlTrivia />
-        <bomcommon:UnknownXmlNode />
-        <bomcommon:MemberSectionName />
-        <bomcommon:MetadataElementTrivia />
-        <bomcommon:XmlNodeKind />
-        <bomcommon:CharacterDataForm />
-        <bomcommon:EmptyElementForm />
-        <bomcommon:XmlRenderingBlock />
-        <bomcommon:XmlRenderingMember />
-        <bomcommon:DiagnosticSeverity />
-        <bomcommon:Diagnostic />
-        <bomcommon:HostValue />
-        <bomvalue:Address />
-        <bomvalue:MemberValue />
-        <bomvalue:LiteralValue />
-        <bomvalue:ExpressionValue />
-        <bomvalue:InterpolatedTextValue />
-        <bomvalue:AddressValue />
-        <bomtype:Multiplicity />
-        <bomtype:InstanceConfiguration />
-        <bomtype:TypeExpression />
-        <bomtype:TypeDescriptor />
-        <bomtype:NamedTypeReference />
-        <bomtype:UnionTypeExpression />
-        <bomtype:GroupedTypeExpression />
-        <bomtype:GenericParameterReference />
-        <bomtype:SelfTypeReference />
-        <bomtype:StructField />
-        <bomtype:AnonymousStructType />
-        <bomblock:TypeReferenceEntityInstance />
-        <bomblock:GenericType />
-        <bomblock:KeywordEntry />
-        <bomblock:DocumentationProseEntry />
-        <bomblock:AliasEntry />
-        <bomblock:ChangelogEntry />
-        <bomblock:DocumentationExample />
-        <bomblock:DocumentationReference />
-        <bomblock:BlockDefinition />
-        <bommember:ConstrainableDefinition />
-        <bommember:MemberDefinitionBase />
-        <bommember:MemberDefinition />
-        <bommember:PropertyValueEntry />
-        <bommember:PropertyDefinition />
-        <bommember:AggregationDefinition />
-        <bommember:AssociationDefinition />
-        <bommember:EmbeddedExpression />
-        <bommember:ImplementationBlock />
-        <bommember:CapabilityDefinition />
-        <bomcomp:WithBinding />
-        <bomcomp:GenericsBinding />
-        <bomcomp:DirectiveAttribute />
-        <bomcomp:EachDirective />
-        <bomcomp:IfDirective />
-        <bomcomp:UnlessDirective />
-        <bomcomp:WithDirective />
-        <bomcomp:BlockInstance />
-        <bomcomp:CompositionTemplate />
-        <bomcomp:InstanceAggregationComposition />
-        <bomcomp:CompositionNode />
-        <bomcomp:BlockInstanceNode />
-        <bomcomp:VirtualContainerNode />
-        <bomdoc:BomDocument />
-        <bomapi:ParseOptions />
-        <bomapi:SerializeOptions />
-        <bomapi:ParseResult />
-        <bomapi:SerializeResult />
-        <bomapi:TypeRegistryReader />
-        <bomapi:ValidateResult />
-        <bomapi:ValidateOptions />
-        <bomcap:StripProvenance />
-        <bomcap:BomEquals />
-        <bomdocumentation:Introduction />
-        <bomdocumentation:LayerSeparation />
-        <bomdocumentation:ArchitectureOverview />
-        <bomdocumentation:AbstractionPrinciple />
-        <bomdocumentation:AuthoredSurfaceTable />
-        <bomdocumentation:DesignDecisions />
-        <bomdocumentation:PackageOwnership />
-        <bomdocumentation:PublicApi />
-        <bomdocumentation:XmlComments />
-        <bomdocumentation:SubBlockAndEmbeddedBlocks />
-        <bomdocumentation:TypeExpressionsOverview />
-        <bomdocumentation:MemberValueSemantics />
-        <bomdocumentation:CompositionDirectives />
-        <bomdocumentation:InstanceIdRules />
-        <bomdocumentation:VersionRules />
-        <bomdocumentation:ValidationResponsibilities />
-        <bomdocumentation:RelatedDiagnostics />
-        <bomdocumentation:CalibratorExample />
-        <bomdocumentation:ScopeExclusions />
-      </composition>
-    </blocks>
   </aggregations>
 </bom:Library>

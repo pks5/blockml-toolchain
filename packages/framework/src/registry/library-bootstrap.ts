@@ -3,6 +3,8 @@ import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import type { BlockDefinition, BlockInstance, BomDocument, Diagnostic } from "@blockml/bom";
 import { parse } from "@blockml/parser";
 import { isNodeModulesPath } from "./package-paths.js";
+import { collectLocationExports } from "./library-membership.js";
+import { rootFqnByFilePath } from "./root-fqn.js";
 import { TypeRegistry } from "./type-registry.js";
 
 function collectBmlFiles(dir: string, out: string[] = []): string[] {
@@ -112,14 +114,6 @@ function indexLibraryFiles(searchRoots: string[]): Map<string, string[]> {
   return index;
 }
 
-function exportedBlockFqns(libraryBlock: BlockDefinition): Set<string> {
-  const fqns = new Set<string>();
-  for (const inst of aggregationInstances(libraryBlock, "blocks")) {
-    fqns.add(inst.typeFqn);
-  }
-  return fqns;
-}
-
 /** Root type FQN of a Library.bml, or undefined if the file cannot be parsed. */
 export function peekLibraryTypeFqn(libraryPath: string): string | undefined {
   const abs = resolve(libraryPath);
@@ -153,25 +147,6 @@ function resolveDepCandidate(
   return [...candidates].sort(preferWorkspaceLibrary)[0];
 }
 
-function transitiveNestedPaths(
-  outerPath: string,
-  subLibraryEdges: Map<string, string[]>,
-): string[] {
-  const nested: string[] = [];
-  const seen = new Set<string>([outerPath]);
-  const stack = [...(subLibraryEdges.get(outerPath) ?? [])];
-  while (stack.length > 0) {
-    const inner = stack.pop()!;
-    if (seen.has(inner)) {
-      continue;
-    }
-    seen.add(inner);
-    nested.push(inner);
-    stack.push(...(subLibraryEdges.get(inner) ?? []));
-  }
-  return nested;
-}
-
 function resolveLibraryGraph(
   seedPaths: string[],
   searchRoots: string[],
@@ -179,7 +154,6 @@ function resolveLibraryGraph(
   diagnostics: Diagnostic[],
 ): {
   orderedPaths: string[];
-  exportsByLibrary: Map<string, Set<string>>;
   subLibraryEdges: Map<string, string[]>;
   libTypeByPath: Map<string, string>;
 } {
@@ -187,7 +161,6 @@ function resolveLibraryGraph(
   const ordered: string[] = [];
   const visited = new Set<string>();
   const visitedTypes = new Set<string>();
-  const exportsByLibrary = new Map<string, Set<string>>();
   const subLibraryEdges = new Map<string, string[]>();
   const libTypeByPath = new Map<string, string>();
 
@@ -246,7 +219,6 @@ function resolveLibraryGraph(
       indexed.push(abs);
       libraryIndex.set(libType, indexed);
     }
-    exportsByLibrary.set(abs, exportedBlockFqns(parsed.document.block));
     libTypeByPath.set(abs, libType);
 
     const nestedPaths: string[] = [];
@@ -287,39 +259,7 @@ function resolveLibraryGraph(
     visit(seed);
   }
 
-  return { orderedPaths: ordered, exportsByLibrary, subLibraryEdges, libTypeByPath };
-}
-
-function checkNestingViolations(
-  exportsByLibrary: Map<string, Set<string>>,
-  subLibraryEdges: Map<string, string[]>,
-  libTypeByPath: Map<string, string>,
-  diagnostics: Diagnostic[],
-): void {
-  for (const outerPath of exportsByLibrary.keys()) {
-    const outerExports = exportsByLibrary.get(outerPath)!;
-    const outerType = libTypeByPath.get(outerPath);
-    for (const innerPath of transitiveNestedPaths(outerPath, subLibraryEdges)) {
-      const innerExports = exportsByLibrary.get(innerPath);
-      if (!innerExports) {
-        continue;
-      }
-      const innerType = libTypeByPath.get(innerPath);
-      if (outerType !== undefined && outerType === innerType) {
-        continue;
-      }
-      for (const fqn of outerExports) {
-        if (innerExports.has(fqn)) {
-          diagnostics.push({
-            severity: "error",
-            code: "BML_LIBRARY_NESTING_VIOLATION",
-            message: `Library ${outerPath} re-exports block ${fqn} also exported by nested library ${innerPath}`,
-            source: { file: outerPath, line: 1, column: 1 },
-          });
-        }
-      }
-    }
-  }
+  return { orderedPaths: ordered, subLibraryEdges, libTypeByPath };
 }
 
 function registerFiles(
@@ -371,9 +311,12 @@ export function bootstrapFromLibraryPaths(
 } {
   const registry = new TypeRegistry();
   const diagnostics: Diagnostic[] = [];
-  const { orderedPaths, exportsByLibrary, subLibraryEdges, libTypeByPath } =
-    resolveLibraryGraph(libraryPaths, searchRoots, rootDir, diagnostics);
-  checkNestingViolations(exportsByLibrary, subLibraryEdges, libTypeByPath, diagnostics);
+  const { orderedPaths } = resolveLibraryGraph(
+    libraryPaths,
+    searchRoots,
+    rootDir,
+    diagnostics,
+  );
 
   const absCovered = coveredRoots.map((root) => resolve(rootDir, root));
   const seenFiles = new Set<string>();
@@ -390,6 +333,19 @@ export function bootstrapFromLibraryPaths(
   }
 
   registerFiles(registry, [...seenFiles], diagnostics);
+
+  const locationFiles: { filePath: string; typeFqn: string }[] = [];
+  for (const [filePath, typeFqn] of rootFqnByFilePath(registry)) {
+    locationFiles.push({ filePath, typeFqn });
+  }
+  const exportsByLibrary = collectLocationExports(locationFiles);
+  for (const libraryPath of orderedPaths) {
+    const abs = canonicalPath(libraryPath);
+    if (!exportsByLibrary.has(abs)) {
+      exportsByLibrary.set(abs, new Set());
+    }
+  }
+
   return {
     registry,
     diagnostics,

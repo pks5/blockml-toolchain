@@ -13,7 +13,7 @@
   </is>
   <documentation>
     FQN selection: TypeRegistry.keys(), sorted unique. includeNonExported=false → FilterExportedFqns
-    from Library aggregation "blocks" (re-parse libraryPaths). When session.corpusRoots is set (corpus
+    from location-based library membership (GetExportedFqns / bootstrap exportsByLibrary). When session.corpusRoots is set (corpus
     compile, including CLI default project-library scan), keep only FQNs whose source.filePath lies
     under those roots.
     

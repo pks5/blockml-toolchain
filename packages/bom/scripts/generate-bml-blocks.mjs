@@ -1075,9 +1075,6 @@ ${XMLNS}>
 `;
 }
 
-function catalogEntry(b) {
-  return `        <${typeRef(b)} />`;
-}
 
 // Generate Urmodell block files
 for (const b of blocks) {
@@ -1101,16 +1098,6 @@ try {
   /* ignore */
 }
 
-// Library catalog
-const libraryBlocks = [
-  "      <composition>",
-  ...blocks.map(catalogEntry),
-  ...documentationBlocks.map(
-    (d) => `        <bomdocumentation:${d.name} />`,
-  ),
-  "      </composition>",
-].join("\n");
-
 const library = `<!--
   BlockML BOM Library Descriptor
   FQN: org.blockml.bml.bom.Library
@@ -1128,7 +1115,7 @@ ${XMLNS}
     Canonical BOM object model (Urmodell) for BlockML — TypeScript contracts in packages/bom/src/
     implement this library. Consumed by parser, serializer, validator, compiler, and LSP.
     Distinct from org.blockml.bml.definition.* (BML meta-model in @blockml/core).
-    Membership is defined exclusively by this blocks list.
+    Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
 
   <version>0.7.1</version>
@@ -1154,9 +1141,6 @@ ${XMLNS}
         <blockml:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-${libraryBlocks}
-    </blocks>
   </aggregations>
 
 </block>

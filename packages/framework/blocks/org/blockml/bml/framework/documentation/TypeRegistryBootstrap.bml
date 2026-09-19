@@ -20,9 +20,9 @@
     library — when options.libraryPaths is set, resolves each Library.bml dependency graph
     (dependencies, subLibraries) in order, then registers blocks from each library blocks root
     except trees already covered by options.paths (srcDir / corpus). Missing Library path →
-    BML_LIBRARY_RESOLVE_ERROR. Outer re-export of a block listed in a nested inner library's
-    blocks (via subLibraries, including transitive nested inners) →
-    BML_LIBRARY_NESTING_VIOLATION. Duplicate files of the same type FQN are resolved by
+    BML_LIBRARY_RESOLVE_ERROR. Membership is location-based: the nearest Library.bml at the
+    same package level or above owns a block (search stops one level below the source folder;
+    nested libraries win). Duplicate files of the same type FQN are resolved by
     source priority: a path not under node_modules (workspace / project sources) wins over
     an npm copy; same-origin last write wins. The losing file is not compared and is not kept.
     

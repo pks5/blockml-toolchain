@@ -5,11 +5,6 @@
   xmlns:bom="org.blockml.bml.bom"
   xmlns:core="org.blockml.bml.core"
   xmlns:framework="org.blockml.bml.framework"
-  xmlns:fwcap="org.blockml.bml.framework.capability"
-  xmlns:fwconfig="org.blockml.bml.framework.config"
-  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
-  xmlns:fwexpression="org.blockml.bml.framework.expression"
-  xmlns:fwregistry="org.blockml.bml.framework.registry"
   xmlns:parser="org.blockml.bml.compiler.parser">
 
   <baseType>
@@ -31,7 +26,7 @@
     
     Urmodell types live in org.blockml.bml.bom.* (@blockml/bom).
     
-    Membership is defined exclusively by this blocks list.
+    Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
   <language>
     <blockml:language.English />
@@ -54,75 +49,5 @@
         <parser:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-      <composition>
-        <framework:FrameworkType />
-        <fwregistry:BootstrapResult />
-        <fwregistry:BootstrapTrace />
-        <fwexpression:ExpressionNode />
-        <fwexpression:LiteralExpressionNode />
-        <fwexpression:ArrayExpressionNode />
-        <fwexpression:ObjectExpressionEntry />
-        <fwexpression:ObjectExpressionNode />
-        <fwexpression:PropertyExpressionNode />
-        <fwexpression:CallExpressionNode />
-        <fwexpression:BinaryExpressionNode />
-        <fwexpression:InterpolatedStringNode />
-        <fwexpression:ParseExpressionResult />
-        <fwexpression:ParseExpressionError />
-        <fwexpression:ParseExpressionOutcome />
-        <fwregistry:BootstrapOptions />
-        <fwconfig:FrameworkDiagnosticCodes />
-        <fwcap:TypeRegistry />
-        <fwcap:BootstrapTypeRegistry />
-        <fwcap:BootstrapFullProjectRegistry />
-        <fwcap:DefaultBootstrapPaths />
-        <fwcap:ResolveLibrarySeeds />
-        <fwcap:ProjectSourceRoots />
-        <fwcap:ProjectLibraryPackageRoots />
-        <fwcap:ProjectLibraryPackageDirs />
-        <fwcap:RegistryFilesUnderRoots />
-        <fwcap:ForkBom />
-        <fwcap:ResolveContracts />
-        <fwcap:ResolveEffectiveMembers />
-        <fwcap:CollectBaseTypeChain />
-        <fwcap:MemberIdentityKey />
-        <fwcap:FindLocalMember />
-        <fwcap:ParseExpression />
-        <fwcap:ParseInterpolatedText />
-        <fwcap:EvaluateExpression />
-        <fwcap:EvaluateInterpolatedText />
-        <fwcap:ValidateTypes />
-        <fwcap:ValidateConstraints />
-        <fwcap:ValidateVersions />
-        <fwcap:RootFqnByFilePath />
-        <fwcap:RootFqns />
-        <fwcap:GetExportedFqns />
-        <fwcap:PeekLibraryTypeFqn />
-        <fwcap:ValidateEmbeddedBlocks />
-        <fwcap:ValidateInstances />
-        <fwcap:ValidateGenerics />
-        <fwcap:ValidatePresets />
-        <fwcap:ValidateVisibility />
-        <fwcap:ValidateReadOnly />
-        <fwcap:GetPropertyNumericValue />
-        <fwcap:IsLiteralValue />
-        <fwcap:EvaluateParseValue />
-        <fwcap:EvaluateCapability />
-        <fwcap:ScanTypes />
-        <fwcap:ScanPackages />
-        <fwdocumentation:Introduction />
-        <fwdocumentation:LayerSeparation />
-        <fwdocumentation:ArchitectureOverview />
-        <fwdocumentation:PublicApi />
-        <fwdocumentation:TypeRegistryBootstrap />
-        <fwdocumentation:EffectiveMembers />
-        <fwdocumentation:ExpressionParsing />
-        <fwdocumentation:ConstraintValidation />
-        <fwdocumentation:Diagnostics />
-        <fwdocumentation:PackageOwnership />
-        <fwdocumentation:ScopeExclusions />
-      </composition>
-    </blocks>
   </aggregations>
 </framework:Library>

@@ -16,8 +16,8 @@
     1. Workspace → packages only. org.blockml.bml.workspace.Library may list package
        libraries in dependencies. Package Library.bml files must never depend on
        org.blockml.bml.workspace.Library.
-    2. No re-export. This hub does not put package blocks in its own blocks list.
-       Package membership stays exclusive to each package Library.
+    2. No re-export. Package membership is location-based (nearest Library.bml).
+       This hub does not own package blocks.
     3. Package SSOT. Each @blockml/* package owns its BML under packages/*/blocks/
        and points at it via package.json blockml.library.
     4. Hub SSOT. The root package.json blockml.library points at this workspace

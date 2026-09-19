@@ -5,8 +5,7 @@ function libraryBootstrapDiagnostics(bootstrap, options) {
     if (!options.libraryPaths?.length) {
         return [];
     }
-    return bootstrap.diagnostics.filter((d) => d.code === "BML_LIBRARY_RESOLVE_ERROR" ||
-        d.code === "BML_LIBRARY_NESTING_VIOLATION");
+    return bootstrap.diagnostics.filter((d) => d.code === "BML_LIBRARY_RESOLVE_ERROR");
 }
 export function validate(document, options = {}) {
     const continueOnError = options.continueOnError !== false;

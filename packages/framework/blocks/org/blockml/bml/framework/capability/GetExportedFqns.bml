@@ -13,7 +13,8 @@
     Exported block FQNs for a library path from BootstrapResult
   </is>
   <documentation>
-    Exported block FQNs for a library path from BootstrapResult
+    Location-based members of the Library (nearest Library.bml walking up from
+    each file). Not an authored blocks aggregation.
   </documentation>
   <properties>
     <libraryPath type="type:Text">

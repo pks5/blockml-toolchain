@@ -197,9 +197,6 @@ ${XMLNS}>
 `;
 }
 
-function catalogEntry(b) {
-  return `        <${typeRef(b)} />`;
-}
 
 function capabilityTsExport(c) {
   return c.tsExport ?? c.name.charAt(0).toLowerCase() + c.name.slice(1);
@@ -223,15 +220,6 @@ for (const d of documentationBlocks) {
   writeFileSync(join(docDir, `${d.name}.bml`), renderDocBlock(d));
 }
 
-const libraryBlocks = [
-  "      <composition>",
-  ...blocks.map(catalogEntry),
-  ...capabilities.map(catalogEntry),
-  ...documentationBlocks.map(
-    (d) => `        <valdocumentation:${d.name} />`,
-  ),
-  "      </composition>",
-].join("\n");
 
 const library = `<!--
   BlockML Validator Library Descriptor
@@ -251,7 +239,7 @@ ${XMLNS}
     Canonical validator specification for BlockML Stage-2 — validate() orchestration
     on BomDocument using @blockml/framework utilities. TypeScript in packages/validator/src/
     implements this library. Urmodell and API types live in org.blockml.bml.bom.*
-    (@blockml/bom). Membership is defined exclusively by this blocks list.
+    (@blockml/bom). Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
 
   <version>0.7.1</version>
@@ -279,9 +267,6 @@ ${XMLNS}
         <framework:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-${libraryBlocks}
-    </blocks>
   </aggregations>
 
 </block>

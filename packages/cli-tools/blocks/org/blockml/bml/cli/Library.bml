@@ -4,11 +4,6 @@
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:cli="org.blockml.bml.cli"
-  xmlns:cliapi="org.blockml.bml.cli.api"
-  xmlns:clicap="org.blockml.bml.cli.capability"
-  xmlns:clicommand="org.blockml.bml.cli.command"
-  xmlns:cliconfig="org.blockml.bml.cli.config"
-  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
   xmlns:runtime="org.blockml.bml.compiler.runtime"
   xmlns:framework="org.blockml.bml.framework"
   xmlns:builder="org.blockml.bml.builder"
@@ -39,7 +34,7 @@
     Builder lives in org.blockml.bml.builder.* (@blockml/builder).
     Transformation lives in org.blockml.bml.transformer.* (@blockml/transformer).
     
-    Membership is defined exclusively by this blocks list.
+    Membership is the nearest Library.bml at the same package level or above; search stops one level below the source folder.
   </documentation>
   <language>
     <blockml:language.English />
@@ -67,79 +62,5 @@
         <transformer:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-      <composition>
-        <cli:CliType />
-        <cliapi:BomConfig />
-        <cliapi:ParsedArgs />
-        <cliapi:CliResult />
-        <cliapi:WriteOutputOptions />
-        <cliapi:CliBootstrapOptions />
-        <cliconfig:CliConstants />
-        <cliconfig:ExitCodes />
-        <cliconfig:DefaultBomConfig />
-        <cliconfig:CompileTargetMatrix />
-        <cliconfig:CommandRegistry />
-        <cliconfig:CliColorScheme />
-        <clicommand:ValidateCommand />
-        <clicommand:CompileCommand />
-        <clicommand:SearchCommand />
-        <clicommand:GraphCommand />
-        <clicommand:InspectCommand />
-        <clicommand:ScanCommand />
-        <clicommand:TransformCommand />
-        <clicommand:TransformApplyCommand />
-        <clicommand:NewCommand />
-        <clicommand:InitCommand />
-        <clicap:LoadConfig />
-        <clicap:ParseArgs />
-        <clicap:FormatDiagnostic />
-        <clicap:WriteCliOutput />
-        <clicap:RunCli />
-        <clicap:RunValidate />
-        <clicap:RunSearch />
-        <clicap:RunGraph />
-        <clicap:RunInspect />
-        <clicap:RunScan />
-        <clicap:RunNew />
-        <clicap:RunInit />
-        <clicap:RunTransform />
-        <clicap:ValidateAgainstXsd />
-        <clicap:RunCompile />
-        <clicap:RunCompileFatBlock />
-        <clicap:BootstrapTargets />
-        <clicap:RegisterTargetFactory />
-        <clicap:BootstrapProjectTypeRegistry />
-        <clicap:WriteOutputFiles />
-        <clicap:DefaultOutDir />
-        <clicap:WorkspaceRoot />
-        <clidocumentation:Introduction />
-        <clidocumentation:LayerSeparation />
-        <clidocumentation:ArchitectureOverview />
-        <clidocumentation:V1Scope />
-        <clidocumentation:PublicApi />
-        <clidocumentation:RuntimeBootstrap />
-        <clidocumentation:Commands />
-        <clidocumentation:Help />
-        <clidocumentation:CompileCommand />
-        <clidocumentation:ValidateCommand />
-        <clidocumentation:SearchCommand />
-        <clidocumentation:GraphCommand />
-        <clidocumentation:InspectCommand />
-        <clidocumentation:ScanCommand />
-        <clidocumentation:NewCommand />
-        <clidocumentation:InitCommand />
-        <clidocumentation:TransformCommand />
-        <clidocumentation:Configuration />
-        <clidocumentation:TargetBootstrap />
-        <clidocumentation:TargetCliMatrix />
-        <clidocumentation:ExitCodesAndDiagnostics />
-        <clidocumentation:DualCliModel />
-        <clidocumentation:Installation />
-        <clidocumentation:DesignDecisions />
-        <clidocumentation:PackageOwnership />
-        <clidocumentation:ScopeExclusions />
-      </composition>
-    </blocks>
   </aggregations>
 </cli:Library>

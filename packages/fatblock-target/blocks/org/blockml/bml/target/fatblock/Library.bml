@@ -5,10 +5,6 @@
   xmlns:bom="org.blockml.bml.bom"
   xmlns:core="org.blockml.bml.core"
   xmlns:fatblock="org.blockml.bml.target.fatblock"
-  xmlns:fbapi="org.blockml.bml.target.fatblock.api"
-  xmlns:fbcap="org.blockml.bml.target.fatblock.capability"
-  xmlns:fbconfig="org.blockml.bml.target.fatblock.config"
-  xmlns:fbdocumentation="org.blockml.bml.target.fatblock.documentation"
   xmlns:serializer="org.blockml.bml.compiler.serializer">
 
   <baseType>
@@ -25,8 +21,9 @@
     
     Canonical FatBlock specification for BlockML — registry name fatblock, folder-pool
     candidates, embed assembly, namespace merge, {hostFqn}.fat.bml (FB1–FB20). TypeScript in
-    packages/fatblock-target/src/ implements this library. Membership is defined
-    exclusively by this blocks list.
+    packages/fatblock-target/src/ implements this library. Membership is the nearest
+    Library.bml at the same package level or above; search stops one level below
+    the source folder.
   </documentation>
   <language>
     <blockml:language.English />
@@ -49,40 +46,5 @@
         <serializer:Library />
       </composition>
     </dependencies>
-    <blocks override="true">
-      <composition>
-        <fatblock:FatblockType />
-        <fbapi:FatBlockOptions />
-        <fbapi:FatBlockRenderOutput />
-        <fbapi:AssembleFatDocumentResult />
-        <fbconfig:FatBlockConstants />
-        <fbconfig:DefaultFatBlockOptions />
-        <fbcap:ResolveOptions />
-        <fbcap:ValidateRequest />
-        <fbcap:Render />
-        <fbcap:RootFqnsByFilePath />
-        <fbcap:CollectCandidateFqns />
-        <fbcap:MatchesIncludePattern />
-        <fbcap:FilterByIncludes />
-        <fbcap:CloneBlockDefinition />
-        <fbcap:MergeNamespaceBindings />
-        <fbcap:AssembleFatDocument />
-        <fbcap:SerializeFatDocument />
-        <fbcap:FatOutputBasename />
-        <fbdocumentation:Introduction />
-        <fbdocumentation:LayerSeparation />
-        <fbdocumentation:ArchitectureOverview />
-        <fbdocumentation:V1Scope />
-        <fbdocumentation:PublicApi />
-        <fbdocumentation:CandidateCollection />
-        <fbdocumentation:EmbedAssemblyRules />
-        <fbdocumentation:NamespaceMergeRules />
-        <fbdocumentation:OutputLayout />
-        <fbdocumentation:Diagnostics />
-        <fbdocumentation:DesignDecisions />
-        <fbdocumentation:PackageOwnership />
-        <fbdocumentation:ScopeExclusions />
-      </composition>
-    </blocks>
   </aggregations>
 </fatblock:Library>

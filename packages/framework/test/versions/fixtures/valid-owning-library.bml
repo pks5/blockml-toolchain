@@ -1,0 +1,15 @@
+<!--Version test — owning library with version-->
+<ver:Library xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:ver="org.blockml.bml.test.version">
+
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    Owning library for version fixtures
+  </is>
+  <version>
+    1.0.0
+  </version>
+</ver:Library>

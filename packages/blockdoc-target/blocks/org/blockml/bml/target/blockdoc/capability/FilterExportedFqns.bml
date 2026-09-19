@@ -10,10 +10,11 @@
     core:Capability
   </baseType>
   <is>
-    Optionally restrict FQNs to Library.blocks exports
+    Optionally restrict FQNs to location-based library members
   </is>
   <documentation>
-    BD13: when includeNonExported=false and libraryPaths present, re-parse each Library, read aggregation named blocks, collect blockInstance.typeFqn; keep only those FQNs.
+    BD13: when includeNonExported=false and libraryPaths present, keep FQNs that
+    belong to those libraries by location (nearest Library.bml walking up; GetExportedFqns).
   </documentation>
   <references>
     <see type="bddocumentation:SiteAssembly" relation="SeeAlso" />

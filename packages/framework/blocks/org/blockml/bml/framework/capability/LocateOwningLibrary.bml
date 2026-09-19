@@ -1,0 +1,49 @@
+<!--Framework Capability — LocateOwningLibrary
+  FQN: org.blockml.bml.framework.capability.LocateOwningLibrary-->
+<fwcap:LocateOwningLibrary xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:type="org.blockml.bml.type">
+
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Nearest Library for a block FQN by package prefix
+  </is>
+  <documentation>
+    Walks FQN package prefixes looking for {package}.Library in the TypeRegistry.
+    First (most specific) match wins. Used by blockml new for destination path and by
+    validateVersions when no file-path owner is available.
+  </documentation>
+  <references>
+    <see type="fwcap:GetExportedFqns" relation="SeeAlso" />
+  </references>
+  <properties>
+    <registry type="fwcap:TypeRegistry">
+      <documentation>
+        registry. TS type: fwcap:TypeRegistry. (required)
+      </documentation>
+    </registry>
+    <fqn type="type:Text">
+      <documentation>
+        Block type FQN. (required)
+      </documentation>
+    </fqn>
+    <libraryFqn type="type:Text">
+      <documentation>
+        Owning library type FQN. (optional)
+      </documentation>
+    </libraryFqn>
+    <libraryFile type="type:Text">
+      <documentation>
+        Owning Library.bml path. (optional)
+      </documentation>
+    </libraryFile>
+    <packageFqn type="type:Text">
+      <documentation>
+        Package prefix of the owning library. (optional)
+      </documentation>
+    </packageFqn>
+  </properties>
+</fwcap:LocateOwningLibrary>

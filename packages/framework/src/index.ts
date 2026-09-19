@@ -17,6 +17,7 @@ export {
 export { rootFqnByFilePath, rootFqns } from "./registry/root-fqn.js";
 export { getExportedFqns } from "./registry/library-exports.js";
 export { peekLibraryTypeFqn } from "./registry/library-bootstrap.js";
+export { locateOwningLibrary } from "./registry/library-membership.js";
 export { forkBom } from "./fork/fork-bom.js";
 export {
   resolveEffectiveMembers,
