@@ -50,6 +50,8 @@
                   blockml graph query <cypher> | schema | index
       new         Create a Block .bml and export it from the owning Library.
                   blockml new <fqn> [--baseType FQN] [--is text]
+      init        Scaffold a BlockML project (Library, package.json, AGENTS.md).
+                  blockml init <package-fqn> [--src dir] [--install]
       validate    Parser + semantic check. Default: project sources, not npm.
                   blockml validate [--all] [<file>]
       compile     Render derived output for a registered target.
@@ -70,6 +72,8 @@
     <see type="clidocumentation:ScanCommand" relation="SeeAlso" />
     <see type="clidocumentation:InspectCommand" relation="SeeAlso" />
     <see type="clidocumentation:GraphCommand" relation="SeeAlso" />
+    <see type="clidocumentation:NewCommand" relation="SeeAlso" />
+    <see type="clidocumentation:InitCommand" relation="SeeAlso" />
     <see type="clicap:ParseArgs" relation="SeeAlso" />
     <see type="clicap:RunCli" relation="SeeAlso" />
   </references>

@@ -40,6 +40,7 @@ import { runScan } from "./run-scan.js";
 import { runGraph } from "./run-graph.js";
 import { runInspect } from "./run-inspect.js";
 import { runNew } from "./run-new.js";
+import { runInit } from "./run-init.js";
 import { defaultTransformAgent, runTransform } from "./run-transform.js";
 import { writeOutputFiles } from "./write-output.js";
 import type { ReflectionAgent, TransformationAgent } from "@blockml/transformer";
@@ -94,6 +95,8 @@ export interface ParsedArgs {
   newFqn?: string;
   newBaseType?: string;
   newIs?: string;
+  initFqn?: string;
+  install?: boolean;
   selectors?: string[];
   help?: boolean;
   origin?: string;
@@ -192,6 +195,8 @@ export function parseArgs(argv: string[]): ParsedArgs {
       if (value) {
         result.newIs = value;
       }
+    } else if (flag === "--install") {
+      result.install = true;
     } else if (flag === "--help" || flag === "-h") {
       result.help = true;
     } else if (flag === "--origin") {
@@ -266,6 +271,10 @@ export function parseArgs(argv: string[]): ParsedArgs {
       } else if (result.command === "new") {
         if (!result.newFqn) {
           result.newFqn = flag;
+        }
+      } else if (result.command === "init") {
+        if (!result.initFqn) {
+          result.initFqn = flag;
         }
       } else if (!result.target) {
         result.target = flag;
@@ -1028,6 +1037,11 @@ async function executeCli(
         return { code: 2, lines };
       }
       const code = runNew(parsed, cwd, config, lines, USAGE);
+      return { code, lines };
+    }
+
+    if (parsed.command === "init") {
+      const code = runInit(parsed, cwd, lines, USAGE);
       return { code, lines };
     }
 

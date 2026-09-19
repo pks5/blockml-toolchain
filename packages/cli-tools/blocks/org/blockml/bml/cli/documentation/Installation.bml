@@ -19,6 +19,11 @@
     blockml bin points to packages/cli-tools/dist/cli.js.
     Requires Node.js 20+.
     
+    Consumer project (empty or existing npm repo):
+    npx @blockml/cli init com.acme.bml
+    npm install
+    npx blockml validate
+    
     Domain users: install @machineblocks/cli from MachineBlocks mono-repo instead.
   </documentation>
   <references>

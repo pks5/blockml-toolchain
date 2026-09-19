@@ -21,5 +21,10 @@
         Element type FQN. (required)
       </documentation>
     </typeFqn>
+    <override type="type:Boolean">
+      <documentation>
+        Mark the aggregation as an override of an inherited member. (optional)
+      </documentation>
+    </override>
   </properties>
 </builder:AddAggregationOptions>

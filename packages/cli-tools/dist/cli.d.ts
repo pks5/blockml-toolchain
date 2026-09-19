@@ -29,6 +29,8 @@ export interface ParsedArgs {
     newFqn?: string;
     newBaseType?: string;
     newIs?: string;
+    initFqn?: string;
+    install?: boolean;
     selectors?: string[];
     help?: boolean;
     origin?: string;

@@ -20,8 +20,9 @@
     • inspect — compact JSON inspect view of a Block FQN from the TypeRegistry (effective members, optional depth)
     • transform — parent command; apply executes a ModelTransformation via @blockml/transformer
     • new — create a Block .bml file via @blockml/builder and export it from the owning Library
+    • init — scaffold a BlockML project (package.json, Library + README, AGENTS.md)
     
-    Planned commands (not V1): init, watch, activate-config.
+    Planned commands (not V1): watch, activate-config.
     See cliconfig:CommandRegistry for implementation flags.
     Printed operator help: clidocumentation:Help (root) and each command documentation Printed help section.
   </documentation>

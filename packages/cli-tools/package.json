@@ -1,7 +1,7 @@
 {
   "name": "@blockml/cli",
   "version": "0.9.11",
-  "description": "BlockML CLI — validate, compile, search, graph, inspect, transform, and new BML",
+  "description": "BlockML CLI — validate, compile, search, graph, inspect, transform, new, and init BML",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -27,7 +27,8 @@
   },
   "files": [
     "dist",
-    "blocks"
+    "blocks",
+    "templates"
   ],
   "scripts": {
     "build": "tsc --build",

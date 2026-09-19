@@ -14,7 +14,7 @@
     <![CDATA[
     In scope V1:
     • BomBuilder.create / edit / seal
-    • Identity setters (name, type, baseType, is, documentation, filePath)
+    • Identity setters (name, type, baseType, is, version, documentation, filePath)
     • ensureNamespaceBinding
     • addProperty, addAggregation, addCompositionChild, setMemberValue
     • querySelector for properties.<name> and aggregations.<name>

@@ -30,7 +30,7 @@
     capability (CLI operations).
     
     Not in this library: domain SCAD CLI, thumbnails, incremental cache, planned commands
-    (init, watch, activate-config).
+    (watch, activate-config).
   </documentation>
   <references>
     <see type="clidocumentation:Introduction" relation="ReadFirst" />

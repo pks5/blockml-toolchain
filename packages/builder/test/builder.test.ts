@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { parse } from "@blockml/parser";
 import { serialize } from "@blockml/serializer";
-import { BomBuilder } from "../src/index.js";
+import { BomBuilder, prefixForPackage } from "../src/index.js";
 
 describe("BomBuilder", () => {
   it("create → seal → serialize → parse roundtrips identity and a property", () => {
@@ -122,6 +122,27 @@ describe("BomBuilder", () => {
     expect(session.querySelector("properties.width")?.name).toBe("width");
     expect(session.querySelector("aggregations.blocks")?.kind).toBe("aggregation");
     expect(session.querySelector("properties.missing")).toBeUndefined();
+  });
+
+  it("setVersion writes a definition version", () => {
+    const sealed = BomBuilder.create({
+      type: "com.example.Library",
+      baseType: "org.blockml.bml.core.BlockLibrary",
+      is: "lib",
+      version: "0.1.0",
+    }).seal();
+    expect(sealed.block.version).toBe("0.1.0");
+    const xml = serialize(sealed);
+    expect(xml.text).toMatch(/<version>\s*0\.1\.0\s*<\/version>/);
+    const edited = BomBuilder.edit(sealed).setVersion("0.2.0").seal();
+    expect(edited.block.version).toBe("0.2.0");
+  });
+
+  it("prefixForPackage uses the parent segment for domain .bml roots", () => {
+    expect(prefixForPackage("com.acme.bml", {})).toBe("acme");
+    expect(prefixForPackage("com.acme.bml.app", {})).toBe("app");
+    expect(prefixForPackage("org.blockml.bml", {})).toBe("blockml");
+    expect(prefixForPackage("org.blockml.bml.core", {})).toBe("core");
   });
 
   it("setMemberValue updates a declared property", () => {

@@ -17,7 +17,7 @@
   <properties>
     <command type="type:Text">
       <documentation>
-        validate | compile | search | scan | graph | inspect | transform | new. (optional)
+        validate | compile | search | scan | graph | inspect | transform | new | init. (optional)
       </documentation>
     </command>
     <subcommand type="type:Text">
@@ -150,6 +150,16 @@
         --is for blockml new. (optional)
       </documentation>
     </newIs>
+    <initFqn type="type:Text">
+      <documentation>
+        Package FQN for blockml init. (optional)
+      </documentation>
+    </initFqn>
+    <install type="type:Boolean">
+      <documentation>
+        --install: run npm install after blockml init writes files. (optional)
+      </documentation>
+    </install>
     <selectors type="type:Text[]">
       <documentation>
         Selector tokens for scan package|type. (optional)

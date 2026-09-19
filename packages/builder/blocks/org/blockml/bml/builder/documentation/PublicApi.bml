@@ -18,7 +18,7 @@
     • BomBuilder.create(options) → BomBuilder
     • BomBuilder.edit(document) → BomBuilder
     • session.seal() → BomDocument
-    • session.setName / setType / setBaseType / setIs / setDocumentation / setFilePath
+    • session.setName / setType / setBaseType / setIs / setVersion / setDocumentation / setFilePath
     • session.ensureNamespaceBinding(prefix, namespace)
     • session.addProperty(options) / addAggregation(options)
     • session.addCompositionChild(aggregationName, typeFqn)

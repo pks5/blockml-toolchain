@@ -9,6 +9,7 @@ export declare class BomBuilder {
     setType(fqn: string): this;
     setBaseType(fqn: string): this;
     setIs(text: string): this;
+    setVersion(version: string): this;
     setDocumentation(text: string): this;
     setFilePath(filePath: string): this;
     ensureNamespaceBinding(prefix: string, namespace: string): this;

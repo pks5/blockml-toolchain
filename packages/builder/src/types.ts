@@ -9,6 +9,8 @@ export interface CreateBlockOptions {
   is?: string;
   /** Optional documentation prose. */
   documentation?: string;
+  /** Optional definition version. */
+  version?: string;
   /** SourceInfo.filePath. */
   filePath?: string;
 }
@@ -22,4 +24,5 @@ export interface AddPropertyOptions {
 export interface AddAggregationOptions {
   name: string;
   typeFqn: string;
+  override?: boolean;
 }

@@ -26,18 +26,20 @@
     • blockml inspect FQN [--depth n] [--json] [--src] [--libraries]
     • blockml transform apply EXECUTION-FQN [--library] [--verbose]
     • blockml new FQN [--baseType FQN] [--is text]
+    • blockml init PACKAGE-FQN [--src dir] [--install]
     • Targets: blockdoc (default), xsd, fatblock; custom via registerTargetFactory or targetPackages
     • Config: targets[], targetPackages, targetOptions, defaultTarget
-    • Flags: --out, --src, --libraries, --library (transform apply target Library.bml), --include (fatblock), --per-package (fatblock), --all, --verbose (validate, transform), --json (search, scan, graph, inspect), --limit (search), --force (search/graph index), --depth (graph, inspect), --baseType (new), --is (new)
+    • Flags: --out, --src, --libraries, --library (transform apply target Library.bml), --include (fatblock), --per-package (fatblock), --all, --verbose (validate, transform), --json (search, scan, graph, inspect), --limit (search), --force (search/graph index), --depth (graph, inspect), --baseType (new), --is (new), --install (init)
     • Validate uses parse + @blockml/validator only; XSD is compile xsd, not a validate step
     • Search uses @blockml/search over the validate --all corpus
     • Scan uses fwcap:ScanTypes / ScanPackages over the validate --all TypeRegistry
     • Graph uses @blockml/graph over the validate --all corpus
     • Inspect uses @blockml/inspect over the validate --all corpus
     • New uses @blockml/builder; writes .bml and updates Library.blocks
+    • Init uses @blockml/builder; writes Library + README, merges package.json, copies AGENTS.md; no TypeRegistry
     
     V1 not implemented (documented in ScopeExclusions):
-    init, watch, activate-config,
+    watch, activate-config,
     incremental .bom-cache, thumbnails, OpenSCAD resolver, bom-cli.config.json renaming.
   </documentation>
   <references>

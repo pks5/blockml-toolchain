@@ -12,7 +12,7 @@
   </is>
   <documentation>
     Not V1 in this package (may exist in MD vision only):
-    • init, watch, activate-config commands
+    • watch, activate-config commands
     • bom-cli.config.json command renaming
     • Incremental build cache .bom-cache/ (C5)
     • Thumbnail generation OpenSCAD+Sharp (C6)

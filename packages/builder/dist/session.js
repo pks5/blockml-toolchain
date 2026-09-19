@@ -68,6 +68,10 @@ export class BomBuilder {
                 },
             ];
         }
+        const version = options.version?.trim();
+        if (version) {
+            block.version = version;
+        }
         return new BomBuilder({
             kind: "block",
             source,
@@ -93,6 +97,10 @@ export class BomBuilder {
     }
     setIs(text) {
         this.document.block.is = text;
+        return this;
+    }
+    setVersion(version) {
+        this.document.block.version = version.trim();
         return this;
     }
     setDocumentation(text) {
@@ -153,6 +161,9 @@ export class BomBuilder {
             type: { kind: "named", fqn: options.typeFqn },
             authoredInAggregationsSection: true,
         };
+        if (options.override) {
+            aggregation.override = true;
+        }
         this.document.block.members.push(aggregation);
         return this;
     }

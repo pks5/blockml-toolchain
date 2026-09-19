@@ -14,6 +14,7 @@ import { runScan } from "./run-scan.js";
 import { runGraph } from "./run-graph.js";
 import { runInspect } from "./run-inspect.js";
 import { runNew } from "./run-new.js";
+import { runInit } from "./run-init.js";
 import { defaultTransformAgent, runTransform } from "./run-transform.js";
 import { writeOutputFiles } from "./write-output.js";
 import { GRAPH_USAGE, INSPECT_USAGE, SCAN_USAGE, SEARCH_USAGE, USAGE, helpFor, } from "./help.js";
@@ -123,6 +124,9 @@ export function parseArgs(argv) {
                 result.newIs = value;
             }
         }
+        else if (flag === "--install") {
+            result.install = true;
+        }
         else if (flag === "--help" || flag === "-h") {
             result.help = true;
         }
@@ -214,6 +218,11 @@ export function parseArgs(argv) {
             else if (result.command === "new") {
                 if (!result.newFqn) {
                     result.newFqn = flag;
+                }
+            }
+            else if (result.command === "init") {
+                if (!result.initFqn) {
+                    result.initFqn = flag;
                 }
             }
             else if (!result.target) {
@@ -758,6 +767,10 @@ async function executeCli(argv, cwd, options = {}) {
                 return { code: 2, lines };
             }
             const code = runNew(parsed, cwd, config, lines, USAGE);
+            return { code, lines };
+        }
+        if (parsed.command === "init") {
+            const code = runInit(parsed, cwd, lines, USAGE);
             return { code, lines };
         }
         if (parsed.command !== "compile") {

@@ -32,6 +32,7 @@
     • runGraph via blockml graph (delegates to @blockml/graph)
     • runInspect via blockml inspect (delegates to @blockml/inspect)
     • runNew via blockml new (delegates to @blockml/builder)
+    • runInit via blockml init (delegates to @blockml/builder; no TypeRegistry)
     • runTransform via blockml transform apply (delegates to @blockml/transformer)
     • writeOutputFiles(output, outDir, rootDir?, options?) → WriteOutputResult
     • loadTargetFromPackage / resolveTargetPackage / isBuiltinTarget (plugin loader)

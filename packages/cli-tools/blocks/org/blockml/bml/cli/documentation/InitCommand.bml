@@ -1,0 +1,50 @@
+<!--CLI Documentation — InitCommand
+  FQN: org.blockml.bml.cli.documentation.InitCommand-->
+<clidocumentation:InitCommand xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    blockml init specification
+  </is>
+  <documentation>
+    <![CDATA[
+    Syntax:
+        blockml init PACKAGE-FQN [--src dir] [--install]
+    
+        PACKAGE-FQN is a package identifier under <domain>.bml.* (e.g. com.acme.bml
+        or com.acme.bml.app), not ….Library. Creates or merges package.json, writes
+        Library.bml + README.bml via BomBuilder (type-as-root, no xsi/schemaLocation),
+        and copies AGENTS.md + CLAUDE.md when missing. Does not load the TypeRegistry
+        or blockml.config.json. Does not overwrite existing BML or agent files.
+        Same library path already present → exit 0. Conflicting blockml.library → exit 2.
+        Missing or invalid FQN → exit 2. --install runs npm install; default is skip.
+    
+    Printed help:
+    Usage: blockml init <package-fqn> [--src dir] [--install]
+           blockml init --help
+    
+    When: turn a directory into a BlockML project. Writes a project Library, README,
+    package.json blockml.library pointer, and universal AGENTS.md / CLAUDE.md.
+    
+    PACKAGE-FQN must contain a bml segment. Does not overwrite existing files.
+    Does not run npm install unless --install is passed.
+    
+    Bootstrap a new repo with npx @blockml/cli init <package-fqn>.
+    Afterward use npx blockml.
+    
+    Related: new, validate.
+    ]]>
+  </documentation>
+  <references>
+    <see type="clidocumentation:Commands" relation="SeeAlso" />
+    <see type="clidocumentation:NewCommand" relation="SeeAlso" />
+    <see type="clicap:RunInit" relation="SeeAlso" />
+    <see type="doc:DocumentFormat" relation="SeeAlso" />
+  </references>
+</clidocumentation:InitCommand>

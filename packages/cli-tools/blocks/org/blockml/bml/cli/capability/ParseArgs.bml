@@ -24,14 +24,14 @@
     --library (transform apply path to the target Library.bml; distinct
     from --libraries), --parameters (transform apply JSON value),
     --parameter-mappings (transform apply JSON array of ParameterMapping
-    objects), --baseType and --is (new),
+    objects), --baseType and --is (new), --install (init),
     --help / -h (print help page, exit 0). The token help as command or graph subcommand is the same.
     Root help is clidocumentation:Help. Command help is the Printed help section of that command documentation.
     Error paths print short USAGE, not the help page.
     
     Positional: validate=file; compile=target or file+target; search=query
     tokens or subcommand index; scan=package|type then selector tokens; graph=subcommand then args;
-    inspect=FQN; transform=subcommand then args (apply=execution FQN); new=FQN.
+    inspect=FQN; transform=subcommand then args (apply=execution FQN); new=FQN; init=PACKAGE-FQN.
   </documentation>
   <references>
     <see type="cliapi:ParsedArgs" relation="SeeAlso" />

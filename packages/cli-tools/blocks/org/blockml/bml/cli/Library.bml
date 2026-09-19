@@ -90,6 +90,7 @@
         <clicommand:TransformCommand />
         <clicommand:TransformApplyCommand />
         <clicommand:NewCommand />
+        <clicommand:InitCommand />
         <clicap:LoadConfig />
         <clicap:ParseArgs />
         <clicap:FormatDiagnostic />
@@ -101,6 +102,7 @@
         <clicap:RunInspect />
         <clicap:RunScan />
         <clicap:RunNew />
+        <clicap:RunInit />
         <clicap:RunTransform />
         <clicap:ValidateAgainstXsd />
         <clicap:RunCompile />
@@ -126,6 +128,7 @@
         <clidocumentation:InspectCommand />
         <clidocumentation:ScanCommand />
         <clidocumentation:NewCommand />
+        <clidocumentation:InitCommand />
         <clidocumentation:TransformCommand />
         <clidocumentation:Configuration />
         <clidocumentation:TargetBootstrap />

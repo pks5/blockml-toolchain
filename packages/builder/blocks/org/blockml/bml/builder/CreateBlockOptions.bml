@@ -13,6 +13,7 @@
   <documentation>
     type is the root FQN. name defaults to the last FQN segment.
     baseType defaults to org.blockml.bml.core.Block. is defaults to name.
+    version is optional definition version (required later for Library.bml).
     filePath is stored on SourceInfo for later serialize.
   </documentation>
   <properties>
@@ -41,6 +42,11 @@
         Optional documentation prose. TS field: documentation. (optional)
       </documentation>
     </documentationText>
+    <version type="type:Text">
+      <documentation>
+        Optional definition version on the created Block. (optional)
+      </documentation>
+    </version>
     <filePath type="type:Text">
       <documentation>
         SourceInfo.filePath. (optional)

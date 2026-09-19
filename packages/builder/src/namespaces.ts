@@ -51,8 +51,10 @@ export function prefixForPackage(
     }
   }
   const known = KNOWN_PACKAGE_PREFIXES[pkg];
-  const last = pkg.split(".").pop()?.toLowerCase() || "ns";
-  const preferred = known ?? last;
+  const segments = pkg.split(".");
+  const last = segments[segments.length - 1]?.toLowerCase() || "ns";
+  const parent = segments[segments.length - 2]?.toLowerCase();
+  const preferred = known ?? (last === "bml" && parent ? parent : last);
   if (!bindings[preferred] || bindings[preferred] === pkg) {
     return preferred;
   }

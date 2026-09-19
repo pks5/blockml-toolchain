@@ -17,6 +17,7 @@ export const USAGE =
   "       blockml inspect <fqn> [--depth n] [--json] [--src dir] [--libraries a,b]\n" +
   "       blockml transform apply <execution-fqn> [--library path] [--verbose] [--parameters json] [--parameter-mappings json]\n" +
   "       blockml new <fqn> [--baseType fqn] [--is text] [--src dir] [--libraries a,b]\n" +
+  "       blockml init <package-fqn> [--src dir] [--install]\n" +
   "       blockml --help";
 
 export const GRAPH_USAGE =
@@ -80,6 +81,8 @@ Commands:
               blockml graph query <cypher> | schema | index
   new         Create a Block .bml and export it from the owning Library.
               blockml new <fqn> [--baseType FQN] [--is text]
+  init        Scaffold a BlockML project (Library, package.json, AGENTS.md).
+              blockml init <package-fqn> [--src dir] [--install]
   validate    Parser + semantic check. Default: project sources, not npm.
               blockml validate [--all] [<file>]
   compile     Render derived output for a registered target.
@@ -269,6 +272,21 @@ Prefer existing Blocks over new duplicates.
 
 Related: inspect, validate.`;
 
+/** Printed help. SSOT: org.blockml.bml.cli.documentation.InitCommand */
+export const INIT_HELP = `Usage: blockml init <package-fqn> [--src dir] [--install]
+       blockml init --help
+
+When: turn a directory into a BlockML project. Writes a project Library, README,
+package.json blockml.library pointer, and universal AGENTS.md / CLAUDE.md.
+
+PACKAGE-FQN must contain a bml segment. Does not overwrite existing files.
+Does not run npm install unless --install is passed.
+
+Bootstrap a new repo with npx @blockml/cli init <package-fqn>.
+Afterward use npx blockml.
+
+Related: new, validate.`;
+
 /** Printed help. SSOT: org.blockml.bml.cli.documentation.TransformCommand */
 export const TRANSFORM_HELP = `Usage: blockml transform apply <execution-fqn> [--library path] [--verbose] [--parameters json] [--parameter-mappings json]
        blockml transform --help
@@ -309,6 +327,8 @@ export function helpFor(command?: string): string {
       return COMPILE_HELP;
     case "new":
       return NEW_HELP;
+    case "init":
+      return INIT_HELP;
     case "transform":
       return TRANSFORM_HELP;
     default:
