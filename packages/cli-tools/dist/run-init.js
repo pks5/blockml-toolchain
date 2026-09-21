@@ -36,7 +36,7 @@ function readCliPackageJson() {
     const pkg = JSON.parse(readFileSync(join(CLI_PACKAGE_ROOT, "package.json"), "utf8"));
     return {
         version: pkg.version ?? "0.0.0",
-        coreRange: pkg.dependencies?.["@blockml/core"] ?? "^1.4.1",
+        coreRange: pkg.dependencies?.["@blockml/core"] ?? "^1.4.2",
     };
 }
 function writeSerialized(builder, destPath, lines, rootDir) {

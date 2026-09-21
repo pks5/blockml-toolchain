@@ -51,7 +51,7 @@ function readCliPackageJson(): { version: string; coreRange: string } {
   };
   return {
     version: pkg.version ?? "0.0.0",
-    coreRange: pkg.dependencies?.["@blockml/core"] ?? "^1.4.1",
+    coreRange: pkg.dependencies?.["@blockml/core"] ?? "^1.4.2",
   };
 }
 
