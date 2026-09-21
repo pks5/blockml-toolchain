@@ -20,10 +20,10 @@ describe("parseArgs init", () => {
 });
 
 describe("package FQN", () => {
-  it("accepts domain.bml packages and rejects Library or missing bml", () => {
+  it("accepts dotted packages and rejects Library", () => {
     expect(isValidPackageFqn("com.acme.bml")).toBe(true);
     expect(isValidPackageFqn("com.acme.bml.app")).toBe(true);
-    expect(isValidPackageFqn("com.acme")).toBe(false);
+    expect(isValidPackageFqn("com.acme")).toBe(true);
     expect(isValidPackageFqn("com.acme.bml.Library")).toBe(false);
     expect(isValidPackageFqn("Library")).toBe(false);
   });
@@ -121,17 +121,25 @@ describe("blockml init CLI", () => {
     expect(stderr).toMatch(/blockml\.library already points/);
   });
 
+  it("scaffolds a package FQN without a bml segment", async () => {
+    const { code, stderr } = await runCli(["init", "com.acme"], TMP);
+    expect(code, stderr).toBe(0);
+    expect(JSON.parse(readFileSync(join(TMP, "package.json"), "utf8")).blockml.library).toBe(
+      "./blocks/com/acme/Library.bml",
+    );
+    const library = readFileSync(join(TMP, "blocks/com/acme/Library.bml"), "utf8");
+    expect(library).toMatch(/<acme:Library\b/);
+    expect(library).toContain("com.acme");
+  });
+
   it("rejects a missing or invalid package FQN", async () => {
     const missing = await runCli(["init"], TMP);
     expect(missing.code).toBe(2);
     expect(missing.stderr).toMatch(/Specify a package FQN/);
 
-    const outside = await runCli(["init", "com.acme"], TMP);
-    expect(outside.code).toBe(2);
-    expect(outside.stderr).toMatch(/Invalid package FQN/);
-
     const libraryName = await runCli(["init", "com.acme.bml.Library"], TMP);
     expect(libraryName.code).toBe(2);
+    expect(libraryName.stderr).toMatch(/Invalid package FQN/);
   });
 
   it("keeps the AGENTS.md template identical to the repo root file", () => {

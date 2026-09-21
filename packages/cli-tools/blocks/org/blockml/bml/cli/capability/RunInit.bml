@@ -18,8 +18,8 @@
   <documentation>
     # Execute blockml init command
     
-    Validates PACKAGE-FQN (dotted identifiers, contains a bml segment, last
-    segment is not Library). Creates or merges package.json: blockml.library,
+    Validates PACKAGE-FQN (dotted identifiers, last segment is not Library).
+    A bml segment after the domain is recommended, not required. Creates or merges package.json: blockml.library,
     devDependencies.@blockml/cli, dependencies.@blockml/core. Writes Library.bml
     and README.bml with BomBuilder.create (type-as-root, no xsi/schemaLocation)
     when missing. Copies AGENTS.md from the CLI templates directory and writes

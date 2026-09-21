@@ -261,7 +261,9 @@ export const INIT_HELP = `Usage: blockml init <package-fqn> [--src dir] [--insta
 When: turn a directory into a BlockML project. Writes a project Library, README,
 package.json blockml.library pointer, and universal AGENTS.md / CLAUDE.md.
 
-PACKAGE-FQN must contain a bml segment. Does not overwrite existing files.
+PACKAGE-FQN is a dotted package identifier (not …Library). A bml segment after
+the domain is recommended to distinguish BML FQNs from companion FQNs.
+Does not overwrite existing files.
 Does not run npm install unless --install is passed.
 
 Bootstrap a new repo with npx @blockml/cli init <package-fqn>.

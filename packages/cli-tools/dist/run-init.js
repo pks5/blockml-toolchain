@@ -20,7 +20,7 @@ export function isValidPackageFqn(fqn) {
     if (parts[parts.length - 1] === "Library") {
         return false;
     }
-    return parts.includes("bml");
+    return true;
 }
 function displayPath(file, rootDir) {
     const rel = relative(rootDir, file);

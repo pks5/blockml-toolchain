@@ -17,8 +17,10 @@
     Syntax:
         blockml init PACKAGE-FQN [--src dir] [--install]
     
-        PACKAGE-FQN is a package identifier under <domain>.bml.* (e.g. com.acme.bml
-        or com.acme.bml.app), not ….Library. Creates or merges package.json, writes
+        PACKAGE-FQN is a dotted package identifier (e.g. com.acme.bml,
+        com.acme.bml.app, or com.acme), not ….Library. A `bml` segment after
+        the domain is recommended so BML FQNs stay distinct from companion
+        FQNs. Creates or merges package.json, writes
         Library.bml + README.bml via BomBuilder (type-as-root, no xsi/schemaLocation),
         and copies AGENTS.md + CLAUDE.md when missing. Does not load the TypeRegistry
         or blockml.config.json. Does not overwrite existing BML or agent files.
@@ -32,7 +34,9 @@
     When: turn a directory into a BlockML project. Writes a project Library, README,
     package.json blockml.library pointer, and universal AGENTS.md / CLAUDE.md.
     
-    PACKAGE-FQN must contain a bml segment. Does not overwrite existing files.
+    PACKAGE-FQN is a dotted package identifier (not …Library). A bml segment after
+    the domain is recommended to distinguish BML FQNs from companion FQNs.
+    Does not overwrite existing files.
     Does not run npm install unless --install is passed.
     
     Bootstrap a new repo with npx @blockml/cli init <package-fqn>.

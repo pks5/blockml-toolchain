@@ -6,15 +6,15 @@ alwaysApply: false
 
 # BlockML Libraries & Versioning
 
-## Mandatory BML namespace
+## Recommended BML namespace
 
-Every BML definition must reside under the owning domain's `bml` package:
+Prefer a `bml` package segment after the domain so BML FQNs stay distinct from companion FQNs:
 
 ```text
 <domain>.bml.*     e.g. org.blockml.bml.* · com.example.bml.*
 ```
 
-No Block, Library, Type, Language, Service, Capability, or other BlockML definition may exist outside `<domain>.bml.*`. Physical paths mirror FQNs: `blocks/org/blockml/bml/core/Block.bml` → `org.blockml.bml.core.Block`.
+This is a recommendation, not a requirement. Physical paths still mirror FQNs: `blocks/org/blockml/bml/core/Block.bml` → `org.blockml.bml.core.Block`.
 
 ## Library structure
 

@@ -23,7 +23,8 @@
   <properties>
     <initPackageFqn type="type:Text">
       <documentation>
-        Package FQN to initialize (must contain a bml segment; not …Library). (required)
+        Package FQN to initialize (dotted identifier, not …Library). A bml
+        segment after the domain is recommended. (required)
       </documentation>
     </initPackageFqn>
     <install type="type:Boolean">
