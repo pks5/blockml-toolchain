@@ -43,6 +43,8 @@ const EXPECTED_API_BLOCKS = [
   "CliResult",
   "WriteOutputOptions",
   "CliBootstrapOptions",
+  "InitProjectOptions",
+  "InitProjectResult",
 ];
 
 const EXPECTED_CAPABILITIES = [
@@ -57,7 +59,7 @@ const EXPECTED_CAPABILITIES = [
   "RunInspect",
   "RunScan",
   "RunNew",
-  "RunInit",
+  "InitProject",
   "RunTransform",
   "ValidateAgainstXsd",
   "RunCompile",
@@ -136,6 +138,7 @@ describe("CLI BML library", () => {
   it("public TS surface matches modeled CLI API", () => {
     const index = readFileSync(join(pkgRoot, "src/index.ts"), "utf8");
     expect(index).toContain("runCli");
+    expect(index).toContain("initProject");
     expect(index).toContain("parseArgs");
     expect(index).toContain("loadConfig");
     expect(index).toContain("bootstrapTargets");

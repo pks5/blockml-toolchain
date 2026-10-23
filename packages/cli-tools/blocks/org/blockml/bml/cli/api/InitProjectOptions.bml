@@ -1,0 +1,41 @@
+<!--CLI API — InitProjectOptions
+  FQN: org.blockml.bml.cli.api.InitProjectOptions-->
+<cliapi:InitProjectOptions xmlns="http://blockml.org/bml"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:type="org.blockml.bml.type">
+
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    Options for initProject
+  </is>
+  <documentation>
+    Direct scaffold entry. Does not load the TypeRegistry or blockml.config.json.
+    Does not print CLI usage text.
+  </documentation>
+  <properties>
+    <packageFqn type="type:Text">
+      <documentation>
+        Package FQN to initialize (dotted identifier, not …Library). A bml
+        segment after the domain is recommended. (required)
+      </documentation>
+    </packageFqn>
+    <rootDir type="type:Text">
+      <documentation>
+        Project root to write into. (required)
+      </documentation>
+    </rootDir>
+    <srcDir type="type:Text">
+      <documentation>
+        Source folder under rootDir. Default blocks. (optional)
+      </documentation>
+    </srcDir>
+    <install type="type:Boolean">
+      <documentation>
+        When true, run npm install in rootDir after writes. Default false. (optional)
+      </documentation>
+    </install>
+  </properties>
+</cliapi:InitProjectOptions>

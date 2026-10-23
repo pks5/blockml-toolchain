@@ -1,0 +1,31 @@
+<!--CLI API — InitProjectResult
+  FQN: org.blockml.bml.cli.api.InitProjectResult-->
+<cliapi:InitProjectResult xmlns="http://blockml.org/bml"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:type="org.blockml.bml.type">
+
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    Exit code and messages from initProject
+  </is>
+  <documentation>
+    code 0 success, 1 write or npm install failure, 2 configuration error
+    (missing FQN, invalid FQN, conflicting blockml.library, unreadable package.json).
+  </documentation>
+  <properties>
+    <code type="type:Integer">
+      <documentation>
+        Exit code 0|1|2. (required)
+      </documentation>
+    </code>
+    <lines type="type:Text">
+      <documentation>
+        Structured lines with kind and uncolored text. Same messages the
+        scaffold used to push into the CLI buffer. Does not include USAGE. (required)
+      </documentation>
+    </lines>
+  </properties>
+</cliapi:InitProjectResult>

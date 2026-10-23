@@ -34,6 +34,7 @@
     • run-graph.ts → RunGraph
     • run-inspect.ts → RunInspect
     • run-new.ts → RunNew
+    • run-init.ts → InitProject, api/InitProjectOptions, api/InitProjectResult
     • run-transform.ts → RunTransform
     • write-output.ts → WriteOutputFiles
   </documentation>

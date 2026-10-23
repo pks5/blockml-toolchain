@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { parse } from "@blockml/parser";
 import { parseArgs, runCli } from "../src/cli.js";
+import { initProject } from "../src/index.js";
 import { isValidPackageFqn } from "../src/run-init.js";
 
 const TMP = join(import.meta.dirname, ".tmp-cli-init");
@@ -26,6 +27,36 @@ describe("package FQN", () => {
     expect(isValidPackageFqn("com.acme")).toBe(true);
     expect(isValidPackageFqn("com.acme.bml.Library")).toBe(false);
     expect(isValidPackageFqn("Library")).toBe(false);
+  });
+});
+
+describe("initProject", () => {
+  beforeEach(() => {
+    rmSync(TMP, { recursive: true, force: true });
+    mkdirSync(TMP, { recursive: true });
+  });
+
+  afterEach(() => {
+    rmSync(TMP, { recursive: true, force: true });
+  });
+
+  it("returns code and lines without CLI usage", () => {
+    const result = initProject({
+      packageFqn: "com.example.bml",
+      rootDir: TMP,
+    });
+    expect(result.code).toBe(0);
+    const text = result.lines.map((line) => line.text).join("\n");
+    expect(text).toMatch(/Created .*package\.json/);
+    expect(text).toMatch(/Created .*Library\.bml/);
+    expect(text).toMatch(/Next: npm install && npx blockml validate/);
+    expect(text).not.toMatch(/Usage:/);
+    expect(result.lines.every((line) => line.kind === "info" || line.kind === "error")).toBe(true);
+
+    const missing = initProject({ packageFqn: "  ", rootDir: TMP });
+    expect(missing.code).toBe(2);
+    expect(missing.lines.map((line) => line.text).join("\n")).toBe("Specify a package FQN.");
+    expect(missing.lines[0]?.kind).toBe("error");
   });
 });
 
@@ -136,6 +167,7 @@ describe("blockml init CLI", () => {
     const missing = await runCli(["init"], TMP);
     expect(missing.code).toBe(2);
     expect(missing.stderr).toMatch(/Specify a package FQN/);
+    expect(missing.stderr).toMatch(/blockml init <package-fqn>/);
 
     const libraryName = await runCli(["init", "com.acme.bml.Library"], TMP);
     expect(libraryName.code).toBe(2);

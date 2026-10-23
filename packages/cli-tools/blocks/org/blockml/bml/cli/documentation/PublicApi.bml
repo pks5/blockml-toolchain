@@ -32,7 +32,8 @@
     • runGraph via blockml graph (delegates to @blockml/graph)
     • runInspect via blockml inspect (delegates to @blockml/inspect)
     • runNew via blockml new (delegates to @blockml/builder)
-    • runInit via blockml init (delegates to @blockml/builder; no TypeRegistry)
+    • initProject({ packageFqn, rootDir, srcDir?, install? }) → { code, lines }
+      (clicap:InitProject; no TypeRegistry; blockml init parses flags, calls it, prints lines)
     • runTransform via blockml transform apply (delegates to @blockml/transformer)
     • writeOutputFiles(output, outDir, rootDir?, options?) → WriteOutputResult
     • loadTargetFromPackage / resolveTargetPackage / isBuiltinTarget (plugin loader)
@@ -41,14 +42,18 @@
     CLI21 realpath so node_modules/.bin/blockml symlink matches).
     
     BML counterparts: clicap:RunCli, ParseArgs, LoadConfig, BootstrapTargets,
-    RegisterTargetFactory, BootstrapProjectTypeRegistry, WriteOutputFiles,
+    RegisterTargetFactory, BootstrapProjectTypeRegistry, InitProject,
+    InitProjectOptions, InitProjectResult, WriteOutputFiles,
     WriteCliOutput, FormatDiagnostic.
     ]]>
   </documentation>
   <references>
     <see type="clidocumentation:RuntimeBootstrap" relation="ReadNext" />
     <see type="clicap:RunCli" relation="Defines" />
+    <see type="clicap:InitProject" relation="Defines" />
     <see type="cliapi:BomConfig" relation="Defines" />
+    <see type="cliapi:InitProjectOptions" relation="Defines" />
+    <see type="cliapi:InitProjectResult" relation="Defines" />
     <see type="cliapi:ParsedArgs" relation="Defines" />
   </references>
 </clidocumentation:PublicApi>

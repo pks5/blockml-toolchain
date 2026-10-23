@@ -20,7 +20,9 @@
         PACKAGE-FQN is a dotted package identifier (e.g. com.acme.bml,
         com.acme.bml.app, or com.acme), not ….Library. A `bml` segment after
         the domain is recommended so BML FQNs stay distinct from companion
-        FQNs. Creates or merges package.json, writes
+        FQNs. The command parses flags, calls clicap:InitProject, and prints
+        its lines. When the package FQN is missing, it also prints the short
+        USAGE. InitProject does not emit USAGE. Creates or merges package.json, writes
         Library.bml + README.bml via BomBuilder (type-as-root, no xsi/schemaLocation),
         and copies AGENTS.md + CLAUDE.md when missing. Does not load the TypeRegistry
         or blockml.config.json. Does not overwrite existing BML or agent files.
@@ -48,7 +50,7 @@
   <references>
     <see type="clidocumentation:Commands" relation="SeeAlso" />
     <see type="clidocumentation:NewCommand" relation="SeeAlso" />
-    <see type="clicap:RunInit" relation="SeeAlso" />
+    <see type="clicap:InitProject" relation="SeeAlso" />
     <see type="doc:DocumentFormat" relation="SeeAlso" />
   </references>
 </clidocumentation:InitCommand>

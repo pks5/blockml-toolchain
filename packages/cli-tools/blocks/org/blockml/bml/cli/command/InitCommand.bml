@@ -14,11 +14,11 @@
     blockml init command model
   </is>
   <documentation>
-    blockml init PACKAGE-FQN [--src dir] [--install]. Scaffolds a BlockML project: package.json merge, Library + README, AGENTS.md + CLAUDE.md. Does not load the TypeRegistry.
+    blockml init PACKAGE-FQN [--src dir] [--install]. Parses flags, calls InitProject, and prints its lines. When the package FQN is missing, also prints the short USAGE. Scaffold writes stay in InitProject. Does not load the TypeRegistry.
   </documentation>
   <references>
     <see type="clidocumentation:InitCommand" relation="SeeAlso" />
-    <see type="clicap:RunInit" relation="SeeAlso" />
+    <see type="clicap:InitProject" relation="SeeAlso" />
   </references>
   <properties>
     <initPackageFqn type="type:Text">
@@ -27,6 +27,11 @@
         segment after the domain is recommended. (required)
       </documentation>
     </initPackageFqn>
+    <srcDir type="type:Text">
+      <documentation>
+        --src: source folder under the project root. Default blocks. (optional)
+      </documentation>
+    </srcDir>
     <install type="type:Boolean">
       <documentation>
         --install: run npm install after writing files. Default false. (optional)

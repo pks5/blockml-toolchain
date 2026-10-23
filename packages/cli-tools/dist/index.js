@@ -3,6 +3,7 @@ export { bootstrapTargets, builtinTargetNames, getTargetCliHints, getTargetFacto
 export { bootstrapProjectTypeRegistry } from "./bootstrap-type-registry.js";
 export { writeOutputFiles } from "./write-output.js";
 export { parseArgs, runCli, formatDiagnostic } from "./cli.js";
+export { initProject, } from "./run-init.js";
 export { writeCliOutput, } from "./cli-style.js";
 export { collectRegistryFilePaths, parseCatalogUriEntries, resolveBmlSchemaPath, validateFilesAgainstXsd, } from "./xsd-validate.js";
 export { isBuiltinTarget, loadTargetFromPackage, resolveTargetPackage, } from "./load-target-plugin.js";

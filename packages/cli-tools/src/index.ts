@@ -12,6 +12,11 @@ export { bootstrapProjectTypeRegistry } from "./bootstrap-type-registry.js";
 export { writeOutputFiles, type WriteOutputOptions, type WriteOutputResult } from "./write-output.js";
 export { parseArgs, runCli, formatDiagnostic, type ParsedArgs, type CliRunOptions } from "./cli.js";
 export {
+  initProject,
+  type InitProjectOptions,
+  type InitProjectResult,
+} from "./run-init.js";
+export {
   writeCliOutput,
   type CliOutputLine,
   type CliStreamKind,

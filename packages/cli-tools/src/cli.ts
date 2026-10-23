@@ -40,7 +40,7 @@ import { runScan } from "./run-scan.js";
 import { runGraph } from "./run-graph.js";
 import { runInspect } from "./run-inspect.js";
 import { runNew } from "./run-new.js";
-import { runInit } from "./run-init.js";
+import { initProject } from "./run-init.js";
 import { defaultTransformAgent, runTransform } from "./run-transform.js";
 import { writeOutputFiles } from "./write-output.js";
 import type { ReflectionAgent, TransformationAgent } from "@blockml/transformer";
@@ -1041,8 +1041,17 @@ async function executeCli(
     }
 
     if (parsed.command === "init") {
-      const code = runInit(parsed, cwd, lines, USAGE);
-      return { code, lines };
+      const result = initProject({
+        packageFqn: parsed.initFqn ?? "",
+        rootDir: cwd,
+        ...(parsed.srcDir !== undefined ? { srcDir: parsed.srcDir } : {}),
+        install: parsed.install === true,
+      });
+      lines.push(...result.lines);
+      if (!parsed.initFqn?.trim()) {
+        pushLines(lines, USAGE, "info");
+      }
+      return { code: result.code, lines };
     }
 
     if (parsed.command !== "compile") {

@@ -161,58 +161,59 @@ function copyIfMissing(destPath, sourcePath, contents, rootDir, lines) {
     pushLines(lines, `Created ${displayPath(destPath, rootDir)}`, "info");
     return 0;
 }
-export function runInit(parsed, rootDir, lines, usage) {
-    const packageFqn = parsed.initFqn?.trim();
+export function initProject(options) {
+    const lines = [];
+    const rootDir = options.rootDir;
+    const packageFqn = options.packageFqn?.trim();
     if (!packageFqn) {
         pushLines(lines, "Specify a package FQN.", "error");
-        pushLines(lines, usage, "info");
-        return 2;
+        return { code: 2, lines };
     }
     if (!isValidPackageFqn(packageFqn)) {
         pushLines(lines, `Invalid package FQN: ${packageFqn}`, "error");
-        return 2;
+        return { code: 2, lines };
     }
-    const srcDir = parsed.srcDir?.trim() || "blocks";
+    const srcDir = options.srcDir?.trim() || "blocks";
     const libraryRel = libraryPointer(srcDir, packageFqn);
     const libraryPath = join(rootDir, srcDir, ...packageFqn.split("."), "Library.bml");
     const readmePath = join(rootDir, srcDir, ...packageFqn.split("."), "README.bml");
     const pkgCode = mergePackageJson(rootDir, libraryRel, lines);
     if (pkgCode !== 0) {
-        return pkgCode;
+        return { code: pkgCode, lines };
     }
     if (existsSync(libraryPath)) {
         pushLines(lines, `Skipped existing ${displayPath(libraryPath, rootDir)}`, "info");
     }
     else if (!writeSerialized(createLibrary(packageFqn, libraryPath), libraryPath, lines, rootDir)) {
-        return 1;
+        return { code: 1, lines };
     }
     if (existsSync(readmePath)) {
         pushLines(lines, `Skipped existing ${displayPath(readmePath, rootDir)}`, "info");
     }
     else if (!writeSerialized(createReadme(packageFqn, readmePath), readmePath, lines, rootDir)) {
-        return 1;
+        return { code: 1, lines };
     }
     const agentsCode = copyIfMissing(join(rootDir, "AGENTS.md"), AGENTS_TEMPLATE, undefined, rootDir, lines);
     if (agentsCode !== 0) {
-        return agentsCode;
+        return { code: agentsCode, lines };
     }
     const claudeCode = copyIfMissing(join(rootDir, "CLAUDE.md"), undefined, "@AGENTS.md\n", rootDir, lines);
     if (claudeCode !== 0) {
-        return claudeCode;
+        return { code: claudeCode, lines };
     }
-    if (parsed.install === true) {
+    if (options.install === true) {
         const result = spawnSync("npm", ["install"], {
             cwd: rootDir,
             stdio: "inherit",
         });
         if (result.status !== 0) {
             pushLines(lines, "npm install failed.", "error");
-            return 1;
+            return { code: 1, lines };
         }
     }
     else {
         pushLines(lines, "Next: npm install && npx blockml validate", "info");
     }
-    return 0;
+    return { code: 0, lines };
 }
 //# sourceMappingURL=run-init.js.map

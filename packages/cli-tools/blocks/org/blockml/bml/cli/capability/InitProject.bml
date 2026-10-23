@@ -1,0 +1,55 @@
+<!--CLI Capability — InitProject
+  FQN: org.blockml.bml.cli.capability.InitProject-->
+<clicap:InitProject xmlns="http://blockml.org/bml"
+  xmlns:buildercap="org.blockml.bml.builder.capability"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:core="org.blockml.bml.core">
+
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Scaffold a BlockML project from package FQN and root
+  </is>
+  <documentation>
+    # Scaffold a BlockML project from package FQN and root
+    
+    Public entry initProject(options) → { code, lines }. blockml init parses
+    flags, calls this capability, and prints lines. When the package FQN is
+    missing, the command also prints the short USAGE. This capability does not.
+    
+    Validates packageFqn (dotted identifiers, last segment is not Library).
+    A bml segment after the domain is recommended, not required. Creates or merges package.json: blockml.library,
+    devDependencies.@blockml/cli, dependencies.@blockml/core. Writes Library.bml
+    and README.bml with BomBuilder.create (type-as-root, no xsi/schemaLocation)
+    when missing. Copies AGENTS.md from the CLI templates directory and writes
+    CLAUDE.md (@AGENTS.md) when missing. Does not load the TypeRegistry or
+    blockml.config.json. Does not overwrite existing BML or agent files.
+    
+    srcDir defaults to blocks. install defaults to false. Same library path
+    already present → code 0. Conflicting blockml.library → code 2. Missing or
+    invalid FQN → code 2. install true runs npm install in rootDir after writes.
+  </documentation>
+  <references>
+    <see type="cliapi:InitProjectOptions" relation="SeeAlso" />
+    <see type="cliapi:InitProjectResult" relation="SeeAlso" />
+    <see type="clidocumentation:InitCommand" relation="SeeAlso" />
+    <see type="clicommand:InitCommand" relation="SeeAlso" />
+    <see type="buildercap:Create" relation="SeeAlso" />
+  </references>
+  <properties>
+    <options type="cliapi:InitProjectOptions">
+      <documentation>
+        packageFqn, rootDir, optional srcDir and install. (required)
+      </documentation>
+    </options>
+    <result type="cliapi:InitProjectResult">
+      <documentation>
+        Exit code and structured lines. (required)
+      </documentation>
+    </result>
+  </properties>
+</clicap:InitProject>
