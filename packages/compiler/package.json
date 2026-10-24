@@ -1,6 +1,6 @@
 {
   "name": "@blockml/compiler",
-  "version": "0.9.13",
+  "version": "0.9.14",
   "description": "BlockML compiler — facade, target registry, render pipeline",
   "license": "Apache-2.0",
   "repository": {
@@ -32,11 +32,11 @@
     "test": "vitest run packages/compiler/test"
   },
   "dependencies": {
-    "@blockml/bom": "^0.9.13",
+    "@blockml/bom": "^0.9.14",
     "@blockml/core": "^1.4.5",
-    "@blockml/framework": "^0.9.13",
-    "@blockml/parser": "^0.9.13",
-    "@blockml/validator": "^0.9.13"
+    "@blockml/framework": "^0.9.14",
+    "@blockml/parser": "^0.9.14",
+    "@blockml/validator": "^0.9.14"
   },
   "engines": {
     "node": ">=20"

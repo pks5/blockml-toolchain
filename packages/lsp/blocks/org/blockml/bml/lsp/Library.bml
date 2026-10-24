@@ -17,7 +17,7 @@
     The BlockML Language Server package library catalog
   </is>
   <version>
-    0.9.13
+    0.9.14
   </version>
   <documentation>
     Canonical LSP specification for BlockML IDE integration — editor-agnostic language
