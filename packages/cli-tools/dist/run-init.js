@@ -193,7 +193,8 @@ export function initProject(options) {
     else if (!writeSerialized(createReadme(packageFqn, readmePath), readmePath, lines, rootDir)) {
         return { code: 1, lines };
     }
-    if (options.install === true) {
+    const skipInstall = options.noInstall === true;
+    if (!skipInstall) {
         const result = spawnSync("npm", ["install"], {
             cwd: rootDir,
             stdio: "inherit",
@@ -209,21 +210,18 @@ export function initProject(options) {
         pushLines(lines, `Skipped existing ${displayPath(agentsPath, rootDir)}`, "info");
         agentsReady = true;
     }
-    else {
+    else if (!skipInstall) {
         const generated = generateAgentsMd({ rootDir, srcDir });
+        lines.push(...generated.lines);
         if (generated.sectionCount > 0) {
-            lines.push(...generated.lines);
             agentsReady = true;
-        }
-        else if (options.install === true) {
-            lines.push(...generated.lines);
         }
     }
     const claudeCode = copyIfMissing(join(rootDir, "CLAUDE.md"), undefined, "@AGENTS.md\n", rootDir, lines);
     if (claudeCode !== 0) {
         return { code: claudeCode, lines };
     }
-    if (options.install !== true) {
+    if (skipInstall) {
         pushLines(lines, agentsReady
             ? "Next: npm install && npx blockml validate"
             : "Next: npm install && npx blockml agents-md generate", "info");

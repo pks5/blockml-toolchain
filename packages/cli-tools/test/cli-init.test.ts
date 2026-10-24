@@ -1,21 +1,32 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { parse } from "@blockml/parser";
 import { parseArgs, runCli } from "../src/cli.js";
 import { initProject } from "../src/index.js";
 import { isValidPackageFqn } from "../src/run-init.js";
 
+const spawnSyncMock = vi.hoisted(() => vi.fn(() => ({ status: 0 })));
+
+vi.mock("node:child_process", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("node:child_process")>();
+  return { ...actual, spawnSync: spawnSyncMock };
+});
+
 const TMP = join(tmpdir(), "blockml-cli-init-test");
 
 describe("parseArgs init", () => {
-  it("maps package FQN and --install", () => {
-    const parsed = parseArgs(["init", "com.acme.bml", "--install", "--src", "blocks"]);
+  it("maps package FQN and --no-install", () => {
+    const parsed = parseArgs(["init", "com.acme.bml", "--no-install", "--src", "blocks"]);
     expect(parsed.command).toBe("init");
     expect(parsed.initFqn).toBe("com.acme.bml");
-    expect(parsed.install).toBe(true);
+    expect(parsed.noInstall).toBe(true);
     expect(parsed.srcDir).toBe("blocks");
+
+    const defaults = parseArgs(["init", "com.acme.bml"]);
+    expect(defaults.noInstall).toBeUndefined();
+    expect(parseArgs(["init", "com.acme.bml", "--install"]).noInstall).toBeUndefined();
   });
 });
 
@@ -31,6 +42,8 @@ describe("package FQN", () => {
 
 describe("initProject", () => {
   beforeEach(() => {
+    spawnSyncMock.mockReset();
+    spawnSyncMock.mockReturnValue({ status: 0 });
     rmSync(TMP, { recursive: true, force: true });
     mkdirSync(TMP, { recursive: true });
   });
@@ -43,12 +56,14 @@ describe("initProject", () => {
     const result = initProject({
       packageFqn: "com.example.bml",
       rootDir: TMP,
+      noInstall: true,
     });
     expect(result.code).toBe(0);
     const text = result.lines.map((line) => line.text).join("\n");
     expect(text).toMatch(/Created .*package\.json/);
     expect(text).toMatch(/Created .*Library\.bml/);
     expect(text).toMatch(/Next: npm install && npx blockml agents-md generate/);
+    expect(spawnSyncMock).not.toHaveBeenCalled();
     expect(text).not.toMatch(/Usage:/);
     expect(result.lines.every((line) => line.kind === "info" || line.kind === "error")).toBe(true);
 
@@ -61,6 +76,8 @@ describe("initProject", () => {
 
 describe("blockml init CLI", () => {
   beforeEach(() => {
+    spawnSyncMock.mockReset();
+    spawnSyncMock.mockReturnValue({ status: 0 });
     rmSync(TMP, { recursive: true, force: true });
     mkdirSync(TMP, { recursive: true });
   });
@@ -70,7 +87,7 @@ describe("blockml init CLI", () => {
   });
 
   it("scaffolds an empty directory", async () => {
-    const { code, stderr } = await runCli(["init", "com.acme.bml"], TMP);
+    const { code, stderr } = await runCli(["init", "com.acme.bml", "--no-install"], TMP);
     expect(code, stderr).toBe(0);
     const pkg = JSON.parse(readFileSync(join(TMP, "package.json"), "utf8"));
     expect(pkg.blockml.library).toBe("./blocks/com/acme/bml/Library.bml");
@@ -92,6 +109,7 @@ describe("blockml init CLI", () => {
     expect(readme).toContain("org.blockml.bml.core");
 
     expect(existsSync(join(TMP, "AGENTS.md"))).toBe(false);
+    expect(spawnSyncMock).not.toHaveBeenCalled();
     expect(stderr).toMatch(/Next: npm install && npx blockml agents-md generate/);
     expect(readFileSync(join(TMP, "CLAUDE.md"), "utf8")).toBe("@AGENTS.md\n");
 
@@ -117,7 +135,7 @@ describe("blockml init CLI", () => {
         2,
       ),
     );
-    const { code, stderr } = await runCli(["init", "com.acme.bml"], TMP);
+    const { code, stderr } = await runCli(["init", "com.acme.bml", "--no-install"], TMP);
     expect(code, stderr).toBe(0);
     const pkg = JSON.parse(readFileSync(join(TMP, "package.json"), "utf8"));
     expect(pkg.name).toBe("existing-app");
@@ -127,10 +145,10 @@ describe("blockml init CLI", () => {
   });
 
   it("is idempotent on a second run", async () => {
-    await runCli(["init", "com.acme.bml"], TMP);
+    await runCli(["init", "com.acme.bml", "--no-install"], TMP);
     const firstLibrary = readFileSync(join(TMP, "blocks/com/acme/bml/Library.bml"), "utf8");
     writeFileSync(join(TMP, "AGENTS.md"), "custom agents\n");
-    const { code, stderr } = await runCli(["init", "com.acme.bml"], TMP);
+    const { code, stderr } = await runCli(["init", "com.acme.bml", "--no-install"], TMP);
     expect(code, stderr).toBe(0);
     expect(stderr).toMatch(/Skipped existing/);
     expect(readFileSync(join(TMP, "blocks/com/acme/bml/Library.bml"), "utf8")).toBe(firstLibrary);
@@ -145,13 +163,13 @@ describe("blockml init CLI", () => {
         blockml: { library: "./other/Library.bml" },
       }),
     );
-    const { code, stderr } = await runCli(["init", "com.acme.bml"], TMP);
+    const { code, stderr } = await runCli(["init", "com.acme.bml", "--no-install"], TMP);
     expect(code).toBe(2);
     expect(stderr).toMatch(/blockml\.library already points/);
   });
 
   it("scaffolds a package FQN without a bml segment", async () => {
-    const { code, stderr } = await runCli(["init", "com.acme"], TMP);
+    const { code, stderr } = await runCli(["init", "com.acme", "--no-install"], TMP);
     expect(code, stderr).toBe(0);
     expect(JSON.parse(readFileSync(join(TMP, "package.json"), "utf8")).blockml.library).toBe(
       "./blocks/com/acme/Library.bml",
@@ -184,15 +202,52 @@ describe("blockml init CLI", () => {
     );
     const first = await runCli(["init", "com.acme.bml"], TMP);
     expect(first.code, first.stderr).toBe(0);
+    expect(spawnSyncMock).toHaveBeenCalledWith(
+      "npm",
+      ["install"],
+      expect.objectContaining({ cwd: TMP, stdio: "inherit" }),
+    );
     expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe("# FromDev\n\nfrom dev\n");
     expect(first.stderr).toMatch(/Created AGENTS.md/);
-    expect(first.stderr).toMatch(/Next: npm install && npx blockml validate/);
+    expect(first.stderr).not.toMatch(/Next:/);
 
     writeFileSync(join(TMP, "AGENTS.md"), "custom agents\n");
     const second = await runCli(["init", "com.acme.bml"], TMP);
     expect(second.code, second.stderr).toBe(0);
     expect(second.stderr).toMatch(/Skipped existing/);
     expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe("custom agents\n");
+  });
+
+  it("skips npm install and AGENTS.md generation with --no-install", async () => {
+    writeInstructionPackage(join(TMP, "node_modules/dev-lib"), {
+      title: "FromDev",
+      content: "from dev",
+    });
+    writeFileSync(
+      join(TMP, "package.json"),
+      JSON.stringify({ name: "existing-app", devDependencies: { "dev-lib": "1.0.0" } }),
+    );
+    const { code, stderr } = await runCli(["init", "com.acme.bml", "--no-install"], TMP);
+    expect(code, stderr).toBe(0);
+    expect(spawnSyncMock).not.toHaveBeenCalled();
+    expect(existsSync(join(TMP, "AGENTS.md"))).toBe(false);
+    expect(stderr).toMatch(/Next: npm install && npx blockml agents-md generate/);
+  });
+
+  it("stops before AGENTS.md generation when npm install fails", async () => {
+    writeInstructionPackage(join(TMP, "node_modules/dev-lib"), {
+      title: "FromDev",
+      content: "from dev",
+    });
+    writeFileSync(
+      join(TMP, "package.json"),
+      JSON.stringify({ name: "existing-app", devDependencies: { "dev-lib": "1.0.0" } }),
+    );
+    spawnSyncMock.mockReturnValueOnce({ status: 1 });
+    const { code, stderr } = await runCli(["init", "com.acme.bml"], TMP);
+    expect(code).toBe(1);
+    expect(stderr).toMatch(/npm install failed/);
+    expect(existsSync(join(TMP, "AGENTS.md"))).toBe(false);
   });
 });
 

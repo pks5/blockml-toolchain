@@ -32,9 +32,10 @@
     • runGraph via blockml graph (delegates to @blockml/graph)
     • runInspect via blockml inspect (delegates to @blockml/inspect)
     • runNew via blockml new (delegates to @blockml/builder)
-    • initProject({ packageFqn, rootDir, srcDir?, install? }) → { code, lines }
+    • initProject({ packageFqn, rootDir, srcDir?, noInstall? }) → { code, lines }
       (clicap:InitProject; blockml init parses flags, calls it, prints lines;
-      generates AGENTS.md via GenerateAgentsMd when the file is missing)
+      runs npm install, then generates AGENTS.md via GenerateAgentsMd when the
+      file is missing, unless noInstall)
     • generateAgentsMd({ rootDir, srcDir? }) → { code, lines, sectionCount }
       (clicap:GenerateAgentsMd; blockml agents-md generate)
     • runTransform via blockml transform apply (delegates to @blockml/transformer)

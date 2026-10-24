@@ -14,7 +14,7 @@
     blockml init command model
   </is>
   <documentation>
-    blockml init PACKAGE-FQN [--src dir] [--install]. Parses flags, calls InitProject, and prints its lines. When the package FQN is missing, also prints the short USAGE. Scaffold writes and AGENTS.md generation stay in InitProject.
+    blockml init PACKAGE-FQN [--src dir] [--no-install]. Parses flags, calls InitProject, and prints its lines. When the package FQN is missing, also prints the short USAGE. Scaffold writes, npm install, and AGENTS.md generation stay in InitProject.
   </documentation>
   <references>
     <see type="clidocumentation:InitCommand" relation="SeeAlso" />
@@ -32,10 +32,10 @@
         --src: source folder under the project root. Default blocks. (optional)
       </documentation>
     </srcDir>
-    <install type="type:Boolean">
+    <noInstall type="type:Boolean">
       <documentation>
-        --install: run npm install after package.json, Library, and README, and before AGENTS.md generation. Default false. (optional)
+        --no-install: skip npm install and AGENTS.md generation. Default false, so both run. (optional)
       </documentation>
-    </install>
+    </noInstall>
   </properties>
 </clicommand:InitCommand>

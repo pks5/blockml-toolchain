@@ -20,7 +20,8 @@
     Public entry generateAgentsMd({ rootDir, srcDir? }) → { code, lines, sectionCount }.
     sectionCount is the number of sections plus rules.
     blockml agents-md generate parses flags, calls this capability, and prints lines.
-    blockml init calls it when AGENTS.md is missing.
+    blockml init calls it after npm install when AGENTS.md is missing.
+    --no-install skips that call.
 
     Corpus is the project source folder plus the blocks roots of direct
     dependencies and devDependencies. A dependency counts when its package.json

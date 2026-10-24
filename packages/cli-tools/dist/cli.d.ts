@@ -30,7 +30,7 @@ export interface ParsedArgs {
     newBaseType?: string;
     newIs?: string;
     initFqn?: string;
-    install?: boolean;
+    noInstall?: boolean;
     selectors?: string[];
     help?: boolean;
     origin?: string;

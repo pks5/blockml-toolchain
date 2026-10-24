@@ -16,7 +16,7 @@ export const USAGE = "Usage: blockml compile <target> [--out dir] [--src dir] [-
     "       blockml inspect <fqn> [--depth n] [--json] [--src dir] [--libraries a,b]\n" +
     "       blockml transform apply <execution-fqn> [--library path] [--verbose] [--parameters json] [--parameter-mappings json]\n" +
     "       blockml new <fqn> [--baseType fqn] [--is text] [--src dir] [--libraries a,b]\n" +
-    "       blockml init <package-fqn> [--src dir] [--install]\n" +
+    "       blockml init <package-fqn> [--src dir] [--no-install]\n" +
     "       blockml agents-md generate [--src dir]\n" +
     "       blockml --help";
 export const GRAPH_USAGE = "Usage: blockml graph index [--force] [--src dir] [--libraries a,b]\n" +
@@ -73,7 +73,7 @@ Commands:
   new         Create a Block .bml under the owning Library.
               blockml new <fqn> [--baseType FQN] [--is text]
   init        Scaffold a BlockML project (Library, package.json, AGENTS.md).
-              blockml init <package-fqn> [--src dir] [--install]
+              blockml init <package-fqn> [--src dir] [--no-install]
   agents-md   Rewrite AGENTS.md from AgentInstructions blocks.
               blockml agents-md generate [--src dir]
   validate    Parser + semantic check. Default: project sources, not npm.
@@ -258,7 +258,7 @@ Prefer existing Blocks over new duplicates.
 
 Related: inspect, validate.`;
 /** Printed help. SSOT: org.blockml.bml.cli.documentation.InitCommand */
-export const INIT_HELP = `Usage: blockml init <package-fqn> [--src dir] [--install]
+export const INIT_HELP = `Usage: blockml init <package-fqn> [--src dir] [--no-install]
        blockml init --help
 
 When: turn a directory into a BlockML project. Writes a project Library, README,
@@ -267,8 +267,8 @@ package.json blockml.library pointer, and AGENTS.md / CLAUDE.md.
 PACKAGE-FQN is a dotted package identifier (not …Library). A bml segment after
 the domain is recommended to distinguish BML FQNs from companion FQNs.
 Does not overwrite existing files.
-Does not run npm install unless --install is passed.
---install runs npm install before AGENTS.md is generated.
+Runs npm install, then generates AGENTS.md, unless --no-install is passed.
+--no-install skips npm install and AGENTS.md generation.
 AGENTS.md is generated from AgentInstructions blocks when the file is missing.
 When none are found, the file is left unwritten.
 

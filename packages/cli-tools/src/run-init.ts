@@ -12,8 +12,8 @@ export interface InitProjectOptions {
   rootDir: string;
   /** Source folder under rootDir. Default "blocks". */
   srcDir?: string;
-  /** Run npm install after writes. Default false. */
-  install?: boolean;
+  /** Skip npm install and AGENTS.md generation. Default false, so both run. */
+  noInstall?: boolean;
 }
 
 export interface InitProjectResult {
@@ -251,7 +251,8 @@ export function initProject(options: InitProjectOptions): InitProjectResult {
     return { code: 1, lines };
   }
 
-  if (options.install === true) {
+  const skipInstall = options.noInstall === true;
+  if (!skipInstall) {
     const result = spawnSync("npm", ["install"], {
       cwd: rootDir,
       stdio: "inherit",
@@ -267,13 +268,11 @@ export function initProject(options: InitProjectOptions): InitProjectResult {
   if (existsSync(agentsPath)) {
     pushLines(lines, `Skipped existing ${displayPath(agentsPath, rootDir)}`, "info");
     agentsReady = true;
-  } else {
+  } else if (!skipInstall) {
     const generated = generateAgentsMd({ rootDir, srcDir });
+    lines.push(...generated.lines);
     if (generated.sectionCount > 0) {
-      lines.push(...generated.lines);
       agentsReady = true;
-    } else if (options.install === true) {
-      lines.push(...generated.lines);
     }
   }
 
@@ -288,7 +287,7 @@ export function initProject(options: InitProjectOptions): InitProjectResult {
     return { code: claudeCode, lines };
   }
 
-  if (options.install !== true) {
+  if (skipInstall) {
     pushLines(
       lines,
       agentsReady

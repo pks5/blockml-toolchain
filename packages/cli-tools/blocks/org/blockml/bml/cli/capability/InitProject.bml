@@ -25,16 +25,17 @@
     A bml segment after the domain is recommended, not required. Creates or merges package.json: blockml.library,
     devDependencies.@blockml/cli, dependencies.@blockml/core. Writes Library.bml
     and README.bml with BomBuilder.create (type-as-root, no xsi/schemaLocation)
-    when missing. When AGENTS.md is missing, calls GenerateAgentsMd for that
-    root and srcDir. Writes CLAUDE.md (@AGENTS.md) when missing. Does not
-    overwrite existing BML or agent files. Does not load blockml.config.json.
+    when missing. Unless noInstall, runs npm install in rootDir, then calls
+    GenerateAgentsMd when AGENTS.md is missing. Writes CLAUDE.md (@AGENTS.md)
+    when missing. Does not overwrite existing BML or agent files. Does not
+    load blockml.config.json.
     
-    srcDir defaults to blocks. install defaults to false. Same library path
-    already present → code 0. Conflicting blockml.library → code 2. Missing or
-    invalid FQN → code 2. install true runs npm install in rootDir after
-    package.json, Library, and README, and before AGENTS.md generation.
-    When install is false and GenerateAgentsMd finds no sections or rules, AGENTS.md
-    is left unwritten and the next line tells the user to run npm install,
+    srcDir defaults to blocks. noInstall defaults to false, so npm install and
+    AGENTS.md generation run. Same library path already present → code 0.
+    Conflicting blockml.library → code 2. Missing or invalid FQN → code 2.
+    npm install runs after package.json, Library, and README, and before
+    AGENTS.md generation. noInstall skips both. When noInstall is true and
+    AGENTS.md is missing, the next line tells the user to run npm install,
     then npx blockml agents-md generate.
   </documentation>
   <references>
@@ -48,7 +49,7 @@
   <properties>
     <options type="cliapi:InitProjectOptions">
       <documentation>
-        packageFqn, rootDir, optional srcDir and install. (required)
+        packageFqn, rootDir, optional srcDir and noInstall. (required)
       </documentation>
     </options>
     <result type="cliapi:InitProjectResult">

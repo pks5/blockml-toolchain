@@ -21,8 +21,9 @@
     
     Consumer project (empty or existing npm repo):
     npx @blockml/cli init com.acme.bml
-    npm install
     npx blockml validate
+    
+    init runs npm install and generates AGENTS.md unless --no-install is passed.
     
     Domain users: install @machineblocks/cli from MachineBlocks mono-repo instead.
   </documentation>

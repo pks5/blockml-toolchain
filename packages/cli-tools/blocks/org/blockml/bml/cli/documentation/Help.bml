@@ -51,7 +51,7 @@
       new         Create a Block .bml under the owning Library.
                   blockml new <fqn> [--baseType FQN] [--is text]
       init        Scaffold a BlockML project (Library, package.json, AGENTS.md).
-                  blockml init <package-fqn> [--src dir] [--install]
+                  blockml init <package-fqn> [--src dir] [--no-install]
       agents-md   Rewrite AGENTS.md from AgentInstructions blocks.
                   blockml agents-md generate [--src dir]
       validate    Parser + semantic check. Default: project sources, not npm.

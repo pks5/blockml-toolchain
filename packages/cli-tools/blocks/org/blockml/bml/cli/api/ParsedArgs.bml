@@ -155,11 +155,11 @@
         Package FQN for blockml init. (optional)
       </documentation>
     </initFqn>
-    <install type="type:Boolean">
+    <noInstall type="type:Boolean">
       <documentation>
-        --install: run npm install after package.json, Library, and README, and before AGENTS.md generation. (optional)
+        --no-install: skip npm install and AGENTS.md generation. Default false, so both run. (optional)
       </documentation>
-    </install>
+    </noInstall>
     <selectors type="type:Text[]">
       <documentation>
         Selector tokens for scan package|type. (optional)

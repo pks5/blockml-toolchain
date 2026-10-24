@@ -26,18 +26,18 @@
     • blockml inspect FQN [--depth n] [--json] [--src] [--libraries]
     • blockml transform apply EXECUTION-FQN [--library] [--verbose]
     • blockml new FQN [--baseType FQN] [--is text]
-    • blockml init PACKAGE-FQN [--src dir] [--install]
+    • blockml init PACKAGE-FQN [--src dir] [--no-install]
     • blockml agents-md generate [--src dir]
     • Targets: blockdoc (default), xsd, fatblock; custom via registerTargetFactory or targetPackages
     • Config: targets[], targetPackages, targetOptions, defaultTarget
-    • Flags: --out, --src, --libraries, --library (transform apply target Library.bml), --include (fatblock), --per-package (fatblock), --all, --verbose (validate, transform), --json (search, scan, graph, inspect), --limit (search), --force (search/graph index), --depth (graph, inspect), --baseType (new), --is (new), --install (init)
+    • Flags: --out, --src, --libraries, --library (transform apply target Library.bml), --include (fatblock), --per-package (fatblock), --all, --verbose (validate, transform), --json (search, scan, graph, inspect), --limit (search), --force (search/graph index), --depth (graph, inspect), --baseType (new), --is (new), --no-install (init)
     • Validate uses parse + @blockml/validator only; XSD is compile xsd, not a validate step
     • Search uses @blockml/search over the validate --all corpus
     • Scan uses fwcap:ScanTypes / ScanPackages over the validate --all TypeRegistry
     • Graph uses @blockml/graph over the validate --all corpus
     • Inspect uses @blockml/inspect over the validate --all corpus
     • New uses @blockml/builder; writes .bml under the owning Library (membership by location)
-    • Init uses @blockml/builder; writes Library + README, merges package.json; generates AGENTS.md via GenerateAgentsMd when the file is missing
+    • Init uses @blockml/builder; writes Library + README, merges package.json; runs npm install and generates AGENTS.md via GenerateAgentsMd when the file is missing, unless --no-install
     • agents-md generate rewrites AGENTS.md from AgentInstructions in the project source folder and direct dependencies / devDependencies
     
     V1 not implemented (documented in ScopeExclusions):

@@ -32,10 +32,10 @@
         Source folder under rootDir. Default blocks. (optional)
       </documentation>
     </srcDir>
-    <install type="type:Boolean">
+    <noInstall type="type:Boolean">
       <documentation>
-        When true, run npm install in rootDir after writes. Default false. (optional)
+        When true, skip npm install and AGENTS.md generation. Default false, so both run. (optional)
       </documentation>
-    </install>
+    </noInstall>
   </properties>
 </cliapi:InitProjectOptions>

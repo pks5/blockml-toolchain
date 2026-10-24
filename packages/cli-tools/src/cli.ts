@@ -98,7 +98,7 @@ export interface ParsedArgs {
   newBaseType?: string;
   newIs?: string;
   initFqn?: string;
-  install?: boolean;
+  noInstall?: boolean;
   selectors?: string[];
   help?: boolean;
   origin?: string;
@@ -197,8 +197,8 @@ export function parseArgs(argv: string[]): ParsedArgs {
       if (value) {
         result.newIs = value;
       }
-    } else if (flag === "--install") {
-      result.install = true;
+    } else if (flag === "--no-install") {
+      result.noInstall = true;
     } else if (flag === "--help" || flag === "-h") {
       result.help = true;
     } else if (flag === "--origin") {
@@ -1051,7 +1051,7 @@ async function executeCli(
         packageFqn: parsed.initFqn ?? "",
         rootDir: cwd,
         ...(parsed.srcDir !== undefined ? { srcDir: parsed.srcDir } : {}),
-        install: parsed.install === true,
+        noInstall: parsed.noInstall === true,
       });
       lines.push(...result.lines);
       if (!parsed.initFqn?.trim()) {

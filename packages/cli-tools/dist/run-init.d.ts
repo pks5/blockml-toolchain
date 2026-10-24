@@ -4,8 +4,8 @@ export interface InitProjectOptions {
     rootDir: string;
     /** Source folder under rootDir. Default "blocks". */
     srcDir?: string;
-    /** Run npm install after writes. Default false. */
-    install?: boolean;
+    /** Skip npm install and AGENTS.md generation. Default false, so both run. */
+    noInstall?: boolean;
 }
 export interface InitProjectResult {
     code: number;

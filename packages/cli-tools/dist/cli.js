@@ -125,8 +125,8 @@ export function parseArgs(argv) {
                 result.newIs = value;
             }
         }
-        else if (flag === "--install") {
-            result.install = true;
+        else if (flag === "--no-install") {
+            result.noInstall = true;
         }
         else if (flag === "--help" || flag === "-h") {
             result.help = true;
@@ -780,7 +780,7 @@ async function executeCli(argv, cwd, options = {}) {
                 packageFqn: parsed.initFqn ?? "",
                 rootDir: cwd,
                 ...(parsed.srcDir !== undefined ? { srcDir: parsed.srcDir } : {}),
-                install: parsed.install === true,
+                noInstall: parsed.noInstall === true,
             });
             lines.push(...result.lines);
             if (!parsed.initFqn?.trim()) {
