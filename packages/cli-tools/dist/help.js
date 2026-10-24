@@ -17,6 +17,7 @@ export const USAGE = "Usage: blockml compile <target> [--out dir] [--src dir] [-
     "       blockml transform apply <execution-fqn> [--library path] [--verbose] [--parameters json] [--parameter-mappings json]\n" +
     "       blockml new <fqn> [--baseType fqn] [--is text] [--src dir] [--libraries a,b]\n" +
     "       blockml init <package-fqn> [--src dir] [--install]\n" +
+    "       blockml agents-md generate [--src dir]\n" +
     "       blockml --help";
 export const GRAPH_USAGE = "Usage: blockml graph index [--force] [--src dir] [--libraries a,b]\n" +
     "       blockml graph neighbors|uses|used-by <fqn> [--json] [--depth n] [--origin o] [--relation r] [--limit n]\n" +
@@ -73,6 +74,8 @@ Commands:
               blockml new <fqn> [--baseType FQN] [--is text]
   init        Scaffold a BlockML project (Library, package.json, AGENTS.md).
               blockml init <package-fqn> [--src dir] [--install]
+  agents-md   Rewrite AGENTS.md from AgentInstructions blocks.
+              blockml agents-md generate [--src dir]
   validate    Parser + semantic check. Default: project sources, not npm.
               blockml validate [--all] [<file>]
   compile     Render derived output for a registered target.
@@ -259,17 +262,43 @@ export const INIT_HELP = `Usage: blockml init <package-fqn> [--src dir] [--insta
        blockml init --help
 
 When: turn a directory into a BlockML project. Writes a project Library, README,
-package.json blockml.library pointer, and universal AGENTS.md / CLAUDE.md.
+package.json blockml.library pointer, and AGENTS.md / CLAUDE.md.
 
 PACKAGE-FQN is a dotted package identifier (not …Library). A bml segment after
 the domain is recommended to distinguish BML FQNs from companion FQNs.
 Does not overwrite existing files.
 Does not run npm install unless --install is passed.
+--install runs npm install before AGENTS.md is generated.
+AGENTS.md is generated from AgentInstructions blocks when the file is missing.
+When none are found, the file is left unwritten.
 
 Bootstrap a new repo with npx @blockml/cli init <package-fqn>.
 Afterward use npx blockml.
 
-Related: new, validate.`;
+Related: agents-md, new, validate.`;
+/** Printed help. SSOT: org.blockml.bml.cli.documentation.AgentsMdCommand */
+export const AGENTS_MD_HELP = `Usage: blockml agents-md generate [--src dir]
+       blockml agents-md --help
+
+When: rewrite AGENTS.md from AgentInstructions blocks.
+
+Searches the project source folder and the blocks roots of direct
+dependencies and devDependencies. A dependency counts when it declares
+blockml.library or has blockml.config.json. Does not follow transitive
+or optional dependencies. Does not use the validate --all corpus.
+
+Sorts AgentInstructions by order ascending, then FQN, once for sections
+and again for rules. Sections come first. Children of one block stay in
+document order. Every heading is level 1. Rules are a list under # Rules.
+
+--src dir     project source folder (default: blockml.config.json srcDir, else blocks)
+
+Overwrites AGENTS.md when at least one section or rule is found.
+No AgentInstructions content → exit 1; an existing AGENTS.md is left unchanged.
+
+Related: init, validate.`;
+export const AGENTS_MD_USAGE = `Usage: blockml agents-md generate [--src dir]
+       blockml agents-md --help`;
 /** Printed help. SSOT: org.blockml.bml.cli.documentation.TransformCommand */
 export const TRANSFORM_HELP = `Usage: blockml transform apply <execution-fqn> [--library path] [--verbose] [--parameters json] [--parameter-mappings json]
        blockml transform --help
@@ -311,6 +340,8 @@ export function helpFor(command) {
             return NEW_HELP;
         case "init":
             return INIT_HELP;
+        case "agents-md":
+            return AGENTS_MD_HELP;
         case "transform":
             return TRANSFORM_HELP;
         default:

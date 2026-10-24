@@ -31,7 +31,8 @@
     
     Positional: validate=file; compile=target or file+target; search=query
     tokens or subcommand index; scan=package|type then selector tokens; graph=subcommand then args;
-    inspect=FQN; transform=subcommand then args (apply=execution FQN); new=FQN; init=PACKAGE-FQN.
+    inspect=FQN; transform=subcommand then args (apply=execution FQN); new=FQN; init=PACKAGE-FQN;
+    agents-md=subcommand (generate).
   </documentation>
   <references>
     <see type="cliapi:ParsedArgs" relation="SeeAlso" />

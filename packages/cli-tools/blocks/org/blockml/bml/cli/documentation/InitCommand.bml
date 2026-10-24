@@ -24,33 +24,40 @@
         its lines. When the package FQN is missing, it also prints the short
         USAGE. InitProject does not emit USAGE. Creates or merges package.json, writes
         Library.bml + README.bml via BomBuilder (type-as-root, no xsi/schemaLocation),
-        and copies AGENTS.md + CLAUDE.md when missing. Does not load the TypeRegistry
-        or blockml.config.json. Does not overwrite existing BML or agent files.
+        and generates AGENTS.md via GenerateAgentsMd when missing. Writes CLAUDE.md
+        (@AGENTS.md) when missing. Does not load blockml.config.json.
+        Does not overwrite existing BML or agent files.
         Same library path already present → exit 0. Conflicting blockml.library → exit 2.
-        Missing or invalid FQN → exit 2. --install runs npm install; default is skip.
+        Missing or invalid FQN → exit 2. --install runs npm install before AGENTS.md
+        generation; default is skip. No sections or rules and no --install leaves AGENTS.md
+        unwritten.
     
     Printed help:
     Usage: blockml init <package-fqn> [--src dir] [--install]
            blockml init --help
     
     When: turn a directory into a BlockML project. Writes a project Library, README,
-    package.json blockml.library pointer, and universal AGENTS.md / CLAUDE.md.
+    package.json blockml.library pointer, and AGENTS.md / CLAUDE.md.
     
     PACKAGE-FQN is a dotted package identifier (not …Library). A bml segment after
     the domain is recommended to distinguish BML FQNs from companion FQNs.
     Does not overwrite existing files.
     Does not run npm install unless --install is passed.
+    --install runs npm install before AGENTS.md is generated.
+    AGENTS.md is generated from AgentInstructions blocks when the file is missing.
+    When none are found, the file is left unwritten.
     
     Bootstrap a new repo with npx @blockml/cli init <package-fqn>.
     Afterward use npx blockml.
     
-    Related: new, validate.
+    Related: agents-md, new, validate.
     ]]>
   </documentation>
   <references>
     <see type="clidocumentation:Commands" relation="SeeAlso" />
     <see type="clidocumentation:NewCommand" relation="SeeAlso" />
     <see type="clicap:InitProject" relation="SeeAlso" />
+    <see type="clicap:GenerateAgentsMd" relation="SeeAlso" />
     <see type="doc:DocumentFormat" relation="SeeAlso" />
   </references>
 </clidocumentation:InitCommand>

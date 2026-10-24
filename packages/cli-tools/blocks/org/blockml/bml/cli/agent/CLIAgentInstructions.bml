@@ -1,0 +1,73 @@
+<!--BlockML CLI — repository agent instructions
+  FQN: org.blockml.bml.cli.agent.CLIAgentInstructions-->
+<agent:CLIAgentInstructions xmlns="http://blockml.org/bml"
+  xmlns:agent="org.blockml.bml.cli.agent"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:core="org.blockml.bml.core">
+  <baseType>
+    core:AgentInstructions
+  </baseType>
+  <is>
+    The AGENTS.md instructions of the BlockML CLI
+  </is>
+  <documentation>
+    Concrete AgentInstructions for the BlockML CLI. Its sections describe tools
+    and operational workflows; its rules cover repository and tool usage.
+    The AGENTS.md renderer composes these with instructions from other libraries.
+  </documentation>
+  <references>
+    <see type="core:AgentInstructions" relation="Extends">
+      Abstract fragment of a generated AGENTS.md.
+    </see>
+  </references>
+  <properties>
+    <order override="true">
+      <value>100</value>
+    </order>
+  </properties>
+  <aggregations>
+    <sections override="true">
+      <composition>
+        <core:AgentInstructions.Section bml:id="tools" title="Tools">
+          <content><![CDATA[Use the project-local CLI:
+
+```bash
+npx blockml <command>
+```
+
+Do not install or upgrade `@blockml/cli` unless asked. If the CLI is missing, run `npm ci` or `npm install`. If `@blockml/cli` is not a project dependency, report that and stop.
+
+Run `npx blockml --help` for commands, workflow, and flags. Run `npx blockml <command> --help` before first use of a command (search, scan, inspect, graph, new, init, validate, compile, transform).
+
+Search answers where something is. Scan answers which packages or types match selectors (set membership, not full-text search; quote `*` / `**`). Inspect answers: give me this Block already resolved. Graph answers how it connects.
+
+Generic grep, find, and file reads remain allowed. They are not the first way into the model.
+]]></content>
+        </core:AgentInstructions.Section>
+        <core:AgentInstructions.Section bml:id="workflow" title="Workflow">
+          <content><![CDATA[```text
+task → search or scan → FQNs → inspect (graph if structure) → targeted BML read → smallest BML edit → validate
+ → update companions to match (compile and/or edit)
+```
+
+If syntax is unclear: inspect the type Block, then similar existing BML, then change. Do not guess.
+
+Treat in-BML documentation as searchable knowledge. After dependency changes, rebuild `search index` if results look incomplete.
+
+Leave the model valid: run `npx blockml validate` after edits. Do not finish with a red model unless the user asked for an incomplete change.
+]]></content>
+        </core:AgentInstructions.Section>
+      </composition>
+    </sections>
+    <rules override="true">
+      <composition>
+        <core:AgentInstructions.Rule bml:id="doNotEditNodeModules">
+          <content><![CDATA[Do not edit `node_modules`.]]></content>
+        </core:AgentInstructions.Rule>
+        <core:AgentInstructions.Rule bml:id="doNotRewriteGitState">
+          <content><![CDATA[Do not commit, push, reset, or rewrite user git state unless asked.]]></content>
+        </core:AgentInstructions.Rule>
+      </composition>
+    </rules>
+  </aggregations>
+</agent:CLIAgentInstructions>

@@ -157,7 +157,7 @@
     </initFqn>
     <install type="type:Boolean">
       <documentation>
-        --install: run npm install after blockml init writes files. (optional)
+        --install: run npm install after package.json, Library, and README, and before AGENTS.md generation. (optional)
       </documentation>
     </install>
     <selectors type="type:Text[]">

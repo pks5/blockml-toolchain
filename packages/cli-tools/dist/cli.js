@@ -15,9 +15,10 @@ import { runGraph } from "./run-graph.js";
 import { runInspect } from "./run-inspect.js";
 import { runNew } from "./run-new.js";
 import { initProject } from "./run-init.js";
+import { generateAgentsMd } from "./run-agents-md.js";
 import { defaultTransformAgent, runTransform } from "./run-transform.js";
 import { writeOutputFiles } from "./write-output.js";
-import { GRAPH_USAGE, INSPECT_USAGE, SCAN_USAGE, SEARCH_USAGE, USAGE, helpFor, } from "./help.js";
+import { AGENTS_MD_USAGE, GRAPH_USAGE, INSPECT_USAGE, SCAN_USAGE, SEARCH_USAGE, USAGE, helpFor, } from "./help.js";
 function workspaceRoot(from) {
     let dir = resolve(from);
     for (;;) {
@@ -223,6 +224,11 @@ export function parseArgs(argv) {
             else if (result.command === "init") {
                 if (!result.initFqn) {
                     result.initFqn = flag;
+                }
+            }
+            else if (result.command === "agents-md") {
+                if (!result.subcommand) {
+                    result.subcommand = flag;
                 }
             }
             else if (!result.target) {
@@ -780,6 +786,28 @@ async function executeCli(argv, cwd, options = {}) {
             if (!parsed.initFqn?.trim()) {
                 pushLines(lines, USAGE, "info");
             }
+            return { code: result.code, lines };
+        }
+        if (parsed.command === "agents-md") {
+            if (parsed.subcommand !== "generate") {
+                pushLines(lines, AGENTS_MD_USAGE, "info");
+                return { code: 2, lines };
+            }
+            let srcDir = parsed.srcDir;
+            if (srcDir === undefined) {
+                try {
+                    srcDir = loadConfig(cwd).srcDir;
+                }
+                catch (e) {
+                    pushLines(lines, e instanceof Error ? e.message : String(e), "error");
+                    return { code: 2, lines };
+                }
+            }
+            const result = generateAgentsMd({
+                rootDir: cwd,
+                ...(srcDir !== undefined ? { srcDir } : {}),
+            });
+            lines.push(...result.lines);
             return { code: result.code, lines };
         }
         if (parsed.command !== "compile") {

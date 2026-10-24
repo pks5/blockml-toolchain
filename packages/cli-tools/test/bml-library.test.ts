@@ -168,6 +168,6 @@ describe("CLI BML library", () => {
     const pkg = JSON.parse(readFileSync(join(pkgRoot, "package.json"), "utf8"));
     expect(pkg.blockml?.library).toBe("./blocks/org/blockml/bml/cli/Library.bml");
     expect(pkg.files).toContain("blocks");
-    expect(pkg.files).toContain("templates");
+    expect(pkg.files).not.toContain("templates");
   });
 });

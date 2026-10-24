@@ -4,6 +4,7 @@ export { bootstrapProjectTypeRegistry } from "./bootstrap-type-registry.js";
 export { writeOutputFiles, type WriteOutputOptions, type WriteOutputResult } from "./write-output.js";
 export { parseArgs, runCli, formatDiagnostic, type ParsedArgs, type CliRunOptions } from "./cli.js";
 export { initProject, type InitProjectOptions, type InitProjectResult, } from "./run-init.js";
+export { generateAgentsMd, renderAgentsMarkdown, type AgentsSection, type GenerateAgentsMdOptions, type GenerateAgentsMdResult, } from "./run-agents-md.js";
 export { writeCliOutput, type CliOutputLine, type CliStreamKind, } from "./cli-style.js";
 export { collectRegistryFilePaths, parseCatalogUriEntries, resolveBmlSchemaPath, validateFilesAgainstXsd, } from "./xsd-validate.js";
 export { isBuiltinTarget, loadTargetFromPackage, resolveTargetPackage, } from "./load-target-plugin.js";

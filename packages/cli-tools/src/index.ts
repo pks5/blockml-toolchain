@@ -17,6 +17,13 @@ export {
   type InitProjectResult,
 } from "./run-init.js";
 export {
+  generateAgentsMd,
+  renderAgentsMarkdown,
+  type AgentsSection,
+  type GenerateAgentsMdOptions,
+  type GenerateAgentsMdResult,
+} from "./run-agents-md.js";
+export {
   writeCliOutput,
   type CliOutputLine,
   type CliStreamKind,

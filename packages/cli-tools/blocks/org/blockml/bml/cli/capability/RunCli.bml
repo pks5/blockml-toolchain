@@ -16,7 +16,7 @@
   <documentation>
     # Public CLI entry: argv + cwd to exit code and stderr
     
-    CLI18: validate command to RunValidate; compile to RunCompile; search to RunSearch; graph to RunGraph; inspect to RunInspect; transform apply to RunTransform; new to RunNew; init parses flags, calls InitProject, and prints lines (short USAGE when the package FQN is missing); unknown command or transform subcommand exit 2 with short USAGE.
+    CLI18: validate command to RunValidate; compile to RunCompile; search to RunSearch; graph to RunGraph; inspect to RunInspect; transform apply to RunTransform; new to RunNew; init parses flags, calls InitProject, and prints lines (short USAGE when the package FQN is missing); agents-md generate calls GenerateAgentsMd; unknown command, transform subcommand, or agents-md subcommand exit 2 with short USAGE.
     --help / -h / help print the help page (clidocumentation:Help, or the command Printed help) and exit 0. Help does not load config or the TypeRegistry.
     
     Uncaught throws → Internal CLI error: message, exit 2 (application error, not BML diagnostics).
@@ -36,6 +36,7 @@
     <see type="clicap:RunTransform" relation="SeeAlso" />
     <see type="clicap:RunNew" relation="SeeAlso" />
     <see type="clicap:InitProject" relation="SeeAlso" />
+    <see type="clicap:GenerateAgentsMd" relation="SeeAlso" />
     <see type="clicap:WriteCliOutput" relation="SeeAlso" />
   </references>
   <properties>

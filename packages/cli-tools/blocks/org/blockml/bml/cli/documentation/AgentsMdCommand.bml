@@ -1,0 +1,71 @@
+<!--CLI Documentation — AgentsMdCommand
+  FQN: org.blockml.bml.cli.documentation.AgentsMdCommand-->
+<clidocumentation:AgentsMdCommand xmlns="http://blockml.org/bml"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:core="org.blockml.bml.core">
+
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    blockml agents-md specification
+  </is>
+  <documentation>
+    <![CDATA[
+    Syntax:
+        blockml agents-md generate [--src dir]
+
+        agents-md is a parent command. V1 defines generate only.
+        The command parses flags, calls clicap:GenerateAgentsMd, and prints its lines.
+        A missing or unknown subcommand prints the short USAGE and exits 2.
+
+        Corpus: the project source folder (--src, else blockml.config.json srcDir,
+        else blocks) plus blocks roots of direct dependencies and devDependencies.
+        A dependency is included when package.json declares blockml.library or
+        the package has blockml.config.json. Packages are resolved as
+        node_modules/<name> from the project root upward. optionalDependencies
+        and transitive dependencies are skipped. Library dependencies are not
+        followed. This is not the validate --all corpus.
+
+        Included blocks descend from org.blockml.bml.core.AgentInstructions and
+        are not that type. sections and rules are separate streams. Each stream
+        sorts by order ascending (default 1000), then FQN ascending. Children
+        of one aggregation stay in document order. Every section is emitted
+        before any rule.
+
+        Every heading is level 1. The rules heading is the aggregation name
+        with an initial capital (Rules). Each rule is a markdown list item.
+        Output is <root>/AGENTS.md.
+        At least one section or rule overwrites the file and exits 0.
+        Neither → exit 1; an existing AGENTS.md is left unchanged.
+
+    Printed help:
+    Usage: blockml agents-md generate [--src dir]
+           blockml agents-md --help
+
+    When: rewrite AGENTS.md from AgentInstructions blocks.
+
+    Searches the project source folder and the blocks roots of direct
+    dependencies and devDependencies. A dependency counts when it declares
+    blockml.library or has blockml.config.json. Does not follow transitive
+    or optional dependencies. Does not use the validate --all corpus.
+
+    Sorts AgentInstructions by order ascending, then FQN, once for sections
+    and again for rules. Sections come first. Children of one block stay in
+    document order. Every heading is level 1. Rules are a list under # Rules.
+
+    --src dir     project source folder (default: blockml.config.json srcDir, else blocks)
+
+    Overwrites AGENTS.md when at least one section or rule is found.
+    No AgentInstructions content → exit 1; an existing AGENTS.md is left unchanged.
+
+    Related: init, validate.
+    ]]>
+  </documentation>
+  <references>
+    <see type="clidocumentation:Commands" relation="SeeAlso" />
+    <see type="clidocumentation:InitCommand" relation="SeeAlso" />
+    <see type="clicap:GenerateAgentsMd" relation="SeeAlso" />
+  </references>
+</clidocumentation:AgentsMdCommand>

@@ -27,6 +27,7 @@
     • blockml transform apply EXECUTION-FQN [--library] [--verbose]
     • blockml new FQN [--baseType FQN] [--is text]
     • blockml init PACKAGE-FQN [--src dir] [--install]
+    • blockml agents-md generate [--src dir]
     • Targets: blockdoc (default), xsd, fatblock; custom via registerTargetFactory or targetPackages
     • Config: targets[], targetPackages, targetOptions, defaultTarget
     • Flags: --out, --src, --libraries, --library (transform apply target Library.bml), --include (fatblock), --per-package (fatblock), --all, --verbose (validate, transform), --json (search, scan, graph, inspect), --limit (search), --force (search/graph index), --depth (graph, inspect), --baseType (new), --is (new), --install (init)
@@ -36,7 +37,8 @@
     • Graph uses @blockml/graph over the validate --all corpus
     • Inspect uses @blockml/inspect over the validate --all corpus
     • New uses @blockml/builder; writes .bml under the owning Library (membership by location)
-    • Init uses @blockml/builder; writes Library + README, merges package.json, copies AGENTS.md; no TypeRegistry
+    • Init uses @blockml/builder; writes Library + README, merges package.json; generates AGENTS.md via GenerateAgentsMd when the file is missing
+    • agents-md generate rewrites AGENTS.md from AgentInstructions in the project source folder and direct dependencies / devDependencies
     
     V1 not implemented (documented in ScopeExclusions):
     watch, activate-config,

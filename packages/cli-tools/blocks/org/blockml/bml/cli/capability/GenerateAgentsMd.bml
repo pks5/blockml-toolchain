@@ -1,0 +1,65 @@
+<!--CLI Capability — GenerateAgentsMd
+  FQN: org.blockml.bml.cli.capability.GenerateAgentsMd-->
+<clicap:GenerateAgentsMd xmlns="http://blockml.org/bml"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type">
+
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Rewrite AGENTS.md from AgentInstructions blocks
+  </is>
+  <documentation>
+    <![CDATA[
+    # Rewrite AGENTS.md from AgentInstructions blocks
+
+    Public entry generateAgentsMd({ rootDir, srcDir? }) → { code, lines, sectionCount }.
+    sectionCount is the number of sections plus rules.
+    blockml agents-md generate parses flags, calls this capability, and prints lines.
+    blockml init calls it when AGENTS.md is missing.
+
+    Corpus is the project source folder plus the blocks roots of direct
+    dependencies and devDependencies. A dependency counts when its package.json
+    declares blockml.library or it has blockml.config.json. Resolution is
+    node_modules/<name> from the project root upward. optionalDependencies
+    and transitive dependencies are not searched. This is not the validate --all
+    corpus and does not follow Library dependencies.
+
+    A block is included when its baseType chain contains
+    org.blockml.bml.core.AgentInstructions and the block is not that type.
+    order is the authored integer, otherwise the inherited property default
+    (1000). sections and rules are two streams. Each stream sorts blocks by
+    order ascending, then FQN ascending. Children of one aggregation stay in
+    document order. Every section is emitted before any rule.
+
+    Every section heading is level 1. Body text is the section content with
+    trailing whitespace removed. rules then become one level-1 heading taken
+    from the aggregation name (rules → Rules). Each rule is a markdown list
+    item. The file is <root>/AGENTS.md.
+
+    At least one section or rule → overwrite AGENTS.md, code 0.
+    Neither → code 1, and an existing AGENTS.md stays unchanged.
+    ]]>
+  </documentation>
+  <references>
+    <see type="clidocumentation:AgentsMdCommand" relation="SeeAlso" />
+    <see type="clicommand:AgentsMdCommand" relation="SeeAlso" />
+    <see type="clicap:InitProject" relation="SeeAlso" />
+  </references>
+  <properties>
+    <rootDir type="type:Text">
+      <documentation>
+        Project root. package.json and AGENTS.md live here. (required)
+      </documentation>
+    </rootDir>
+    <srcDir type="type:Text">
+      <documentation>
+        Project source folder. Default blocks. (optional)
+      </documentation>
+    </srcDir>
+  </properties>
+</clicap:GenerateAgentsMd>

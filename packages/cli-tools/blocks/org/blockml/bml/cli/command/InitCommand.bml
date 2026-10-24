@@ -14,7 +14,7 @@
     blockml init command model
   </is>
   <documentation>
-    blockml init PACKAGE-FQN [--src dir] [--install]. Parses flags, calls InitProject, and prints its lines. When the package FQN is missing, also prints the short USAGE. Scaffold writes stay in InitProject. Does not load the TypeRegistry.
+    blockml init PACKAGE-FQN [--src dir] [--install]. Parses flags, calls InitProject, and prints its lines. When the package FQN is missing, also prints the short USAGE. Scaffold writes and AGENTS.md generation stay in InitProject.
   </documentation>
   <references>
     <see type="clidocumentation:InitCommand" relation="SeeAlso" />
@@ -34,7 +34,7 @@
     </srcDir>
     <install type="type:Boolean">
       <documentation>
-        --install: run npm install after writing files. Default false. (optional)
+        --install: run npm install after package.json, Library, and README, and before AGENTS.md generation. Default false. (optional)
       </documentation>
     </install>
   </properties>

@@ -74,6 +74,7 @@ task → search or scan → FQNs → inspect (graph if structure)
 | `graph uses\|used-by\|neighbors\|ancestors\|descendants\|members <fqn>` | How a Block connects. Also `path`, `query`, `schema`, `index`. |
 | `new <fqn>` | Create a Block `.bml` under the owning Library. |
 | `init <package-fqn>` | Scaffold a BlockML project (Library, `package.json`, `AGENTS.md`). |
+| `agents-md generate` | Rewrite `AGENTS.md` from AgentInstructions blocks. |
 | `validate` | Parser and semantic check. Default: project sources, not npm. |
 | `compile blockdoc\|xsd\|fatblock` | Render a registered target. |
 | `transform apply <execution-fqn>` | Run a model transformation. |

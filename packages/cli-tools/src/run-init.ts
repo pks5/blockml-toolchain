@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { BomBuilder } from "@blockml/builder";
 import { serialize } from "@blockml/serializer";
 import { pushLines, type CliOutputLine } from "./cli-style.js";
+import { generateAgentsMd } from "./run-agents-md.js";
 
 export interface InitProjectOptions {
   packageFqn: string;
@@ -22,7 +23,6 @@ export interface InitProjectResult {
 
 const FQN_SEGMENT = /^[A-Za-z_][A-Za-z0-9_]*$/;
 const CLI_PACKAGE_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const AGENTS_TEMPLATE = join(CLI_PACKAGE_ROOT, "templates", "AGENTS.md");
 const CORE_LIBRARY_FQN = "org.blockml.bml.Library";
 const BLOCK_LIBRARY_BASE = "org.blockml.bml.core.BlockLibrary";
 const README_BASE = "org.blockml.bml.core.ReadMe";
@@ -251,16 +251,32 @@ export function initProject(options: InitProjectOptions): InitProjectResult {
     return { code: 1, lines };
   }
 
-  const agentsCode = copyIfMissing(
-    join(rootDir, "AGENTS.md"),
-    AGENTS_TEMPLATE,
-    undefined,
-    rootDir,
-    lines,
-  );
-  if (agentsCode !== 0) {
-    return { code: agentsCode, lines };
+  if (options.install === true) {
+    const result = spawnSync("npm", ["install"], {
+      cwd: rootDir,
+      stdio: "inherit",
+    });
+    if (result.status !== 0) {
+      pushLines(lines, "npm install failed.", "error");
+      return { code: 1, lines };
+    }
   }
+
+  const agentsPath = join(rootDir, "AGENTS.md");
+  let agentsReady = false;
+  if (existsSync(agentsPath)) {
+    pushLines(lines, `Skipped existing ${displayPath(agentsPath, rootDir)}`, "info");
+    agentsReady = true;
+  } else {
+    const generated = generateAgentsMd({ rootDir, srcDir });
+    if (generated.sectionCount > 0) {
+      lines.push(...generated.lines);
+      agentsReady = true;
+    } else if (options.install === true) {
+      lines.push(...generated.lines);
+    }
+  }
+
   const claudeCode = copyIfMissing(
     join(rootDir, "CLAUDE.md"),
     undefined,
@@ -272,17 +288,14 @@ export function initProject(options: InitProjectOptions): InitProjectResult {
     return { code: claudeCode, lines };
   }
 
-  if (options.install === true) {
-    const result = spawnSync("npm", ["install"], {
-      cwd: rootDir,
-      stdio: "inherit",
-    });
-    if (result.status !== 0) {
-      pushLines(lines, "npm install failed.", "error");
-      return { code: 1, lines };
-    }
-  } else {
-    pushLines(lines, "Next: npm install && npx blockml validate", "info");
+  if (options.install !== true) {
+    pushLines(
+      lines,
+      agentsReady
+        ? "Next: npm install && npx blockml validate"
+        : "Next: npm install && npx blockml agents-md generate",
+      "info",
+    );
   }
   return { code: 0, lines };
 }

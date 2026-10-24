@@ -1,14 +1,13 @@
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { parse } from "@blockml/parser";
 import { parseArgs, runCli } from "../src/cli.js";
 import { initProject } from "../src/index.js";
 import { isValidPackageFqn } from "../src/run-init.js";
 
-const TMP = join(import.meta.dirname, ".tmp-cli-init");
-const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
+const TMP = join(tmpdir(), "blockml-cli-init-test");
 
 describe("parseArgs init", () => {
   it("maps package FQN and --install", () => {
@@ -49,7 +48,7 @@ describe("initProject", () => {
     const text = result.lines.map((line) => line.text).join("\n");
     expect(text).toMatch(/Created .*package\.json/);
     expect(text).toMatch(/Created .*Library\.bml/);
-    expect(text).toMatch(/Next: npm install && npx blockml validate/);
+    expect(text).toMatch(/Next: npm install && npx blockml agents-md generate/);
     expect(text).not.toMatch(/Usage:/);
     expect(result.lines.every((line) => line.kind === "info" || line.kind === "error")).toBe(true);
 
@@ -92,9 +91,8 @@ describe("blockml init CLI", () => {
     expect(readme).toMatch(/<acme:README\b/);
     expect(readme).toContain("org.blockml.bml.core");
 
-    expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe(
-      readFileSync(join(REPO_ROOT, "AGENTS.md"), "utf8"),
-    );
+    expect(existsSync(join(TMP, "AGENTS.md"))).toBe(false);
+    expect(stderr).toMatch(/Next: npm install && npx blockml agents-md generate/);
     expect(readFileSync(join(TMP, "CLAUDE.md"), "utf8")).toBe("@AGENTS.md\n");
 
     for (const file of [
@@ -174,12 +172,94 @@ describe("blockml init CLI", () => {
     expect(libraryName.stderr).toMatch(/Invalid package FQN/);
   });
 
-  it("keeps the AGENTS.md template identical to the repo root file", () => {
-    const root = readFileSync(join(REPO_ROOT, "AGENTS.md"), "utf8");
-    const template = readFileSync(
-      join(REPO_ROOT, "packages/cli-tools/templates/AGENTS.md"),
-      "utf8",
+  it("generates AGENTS.md from a direct devDependency and keeps an existing file", async () => {
+    writeInstructionPackage(join(TMP, "node_modules/dev-lib"), {
+      title: "FromDev",
+      content: "from dev",
+      order: 100,
+    });
+    writeFileSync(
+      join(TMP, "package.json"),
+      JSON.stringify({ name: "existing-app", devDependencies: { "dev-lib": "1.0.0" } }),
     );
-    expect(template).toBe(root);
+    const first = await runCli(["init", "com.acme.bml"], TMP);
+    expect(first.code, first.stderr).toBe(0);
+    expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe("# FromDev\n\nfrom dev\n");
+    expect(first.stderr).toMatch(/Created AGENTS.md/);
+    expect(first.stderr).toMatch(/Next: npm install && npx blockml validate/);
+
+    writeFileSync(join(TMP, "AGENTS.md"), "custom agents\n");
+    const second = await runCli(["init", "com.acme.bml"], TMP);
+    expect(second.code, second.stderr).toBe(0);
+    expect(second.stderr).toMatch(/Skipped existing/);
+    expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe("custom agents\n");
   });
 });
+
+function writeInstructionPackage(
+  packageDir: string,
+  section: { title: string; content: string; order?: number },
+): void {
+  mkdirSync(join(packageDir, "blocks/org/blockml/bml/core"), { recursive: true });
+  mkdirSync(join(packageDir, "blocks/com/example/bml"), { recursive: true });
+  writeFileSync(
+    join(packageDir, "package.json"),
+    JSON.stringify({
+      name: "dev-lib",
+      blockml: { library: "./blocks/com/example/bml/Library.bml" },
+    }),
+  );
+  writeFileSync(join(packageDir, "blocks/org/blockml/bml/core/AgentInstructions.bml"), AGENT_BASE);
+  const order =
+    section.order === undefined
+      ? ""
+      : `<properties>\n    <order type="type:Integer" override="true"><value>${section.order}</value></order>\n  </properties>\n`;
+  writeFileSync(
+    join(packageDir, "blocks/com/example/bml/DevInstructions.bml"),
+    `<ex:DevInstructions xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:ex="com.example.bml"
+  xmlns:type="org.blockml.bml.type">
+
+  <baseType>core:AgentInstructions</baseType>
+  <is>Dev instructions</is>
+  ${order}  <aggregations>
+    <sections override="true">
+      <composition>
+        <core:AgentInstructions.Section title="${section.title}">
+          <content>${section.content}</content>
+        </core:AgentInstructions.Section>
+      </composition>
+    </sections>
+  </aggregations>
+</ex:DevInstructions>
+`,
+  );
+}
+
+const AGENT_BASE = `<core:AgentInstructions xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type">
+
+  <baseType>core:Block</baseType>
+  <is>A part of a generated AGENTS.md</is>
+  <properties>
+    <order type="type:Integer">
+      <value>1000</value>
+    </order>
+  </properties>
+  <aggregations>
+    <sections type="core:AgentInstructions.Section[]" />
+  </aggregations>
+  <subBlocks>
+    <Section>
+      <baseType>core:Block</baseType>
+      <is>A section of Agent Instructions</is>
+      <properties>
+        <title type="type:Text" />
+        <content type="type:Text" />
+      </properties>
+    </Section>
+  </subBlocks>
+</core:AgentInstructions>
+`;
