@@ -266,11 +266,14 @@ package.json blockml.library pointer, and AGENTS.md / CLAUDE.md.
 
 PACKAGE-FQN is a dotted package identifier (not …Library). A bml segment after
 the domain is recommended to distinguish BML FQNs from companion FQNs.
-Does not overwrite existing files.
+Preflight runs before any write and checks conditions.
+A project is BlockML when package.json has a blockml key. Then AGENTS.md
+stays, and agents-md generate overwrites it after npm install.
+Otherwise an existing AGENTS.md is renamed to AGENTS.md.pre-blockml.
+Does not overwrite existing BML files or CLAUDE.md.
 Runs npm install, then generates AGENTS.md, unless --no-install is passed.
---no-install skips npm install and AGENTS.md generation.
-AGENTS.md is generated from AgentInstructions blocks when the file is missing.
-When none are found, the file is left unwritten.
+--no-install skips npm install and AGENTS.md generation. It does not skip preflight.
+When no AgentInstructions content is found, AGENTS.md is left unwritten.
 
 Bootstrap a new repo with npx @blockml/cli init <package-fqn>.
 Afterward use npx blockml.

@@ -153,6 +153,7 @@ describe("blockml init CLI", () => {
     expect(stderr).toMatch(/Skipped existing/);
     expect(readFileSync(join(TMP, "blocks/com/acme/bml/Library.bml"), "utf8")).toBe(firstLibrary);
     expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe("custom agents\n");
+    expect(existsSync(join(TMP, "AGENTS.md.pre-blockml"))).toBe(false);
   });
 
   it("rejects a conflicting blockml.library", async () => {
@@ -190,7 +191,7 @@ describe("blockml init CLI", () => {
     expect(libraryName.stderr).toMatch(/Invalid package FQN/);
   });
 
-  it("generates AGENTS.md from a direct devDependency and keeps an existing file", async () => {
+  it("generates AGENTS.md from a direct devDependency and rewrites it on a later init", async () => {
     writeInstructionPackage(join(TMP, "node_modules/dev-lib"), {
       title: "FromDev",
       content: "from dev",
@@ -214,8 +215,96 @@ describe("blockml init CLI", () => {
     writeFileSync(join(TMP, "AGENTS.md"), "custom agents\n");
     const second = await runCli(["init", "com.acme.bml"], TMP);
     expect(second.code, second.stderr).toBe(0);
-    expect(second.stderr).toMatch(/Skipped existing/);
-    expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe("custom agents\n");
+    expect(second.stderr).toMatch(/Updated AGENTS.md/);
+    expect(second.stderr).not.toMatch(/pre-blockml/);
+    expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe("# FromDev\n\nfrom dev\n");
+    expect(existsSync(join(TMP, "AGENTS.md.pre-blockml"))).toBe(false);
+  });
+
+  it("renames a foreign AGENTS.md before any scaffold write", async () => {
+    writeFileSync(join(TMP, "package.json"), JSON.stringify({ name: "existing-app" }, null, 2));
+    writeFileSync(join(TMP, "AGENTS.md"), "hand written\n");
+    const { code, stderr } = await runCli(["init", "com.acme.bml", "--no-install"], TMP);
+    expect(code, stderr).toBe(0);
+    expect(stderr).toMatch(/Renamed AGENTS.md to AGENTS.md.pre-blockml/);
+    expect(readFileSync(join(TMP, "AGENTS.md.pre-blockml"), "utf8")).toBe("hand written\n");
+    expect(existsSync(join(TMP, "AGENTS.md"))).toBe(false);
+    expect(JSON.parse(readFileSync(join(TMP, "package.json"), "utf8")).blockml.library).toBe(
+      "./blocks/com/acme/bml/Library.bml",
+    );
+  });
+
+  it("keeps the foreign AGENTS.md and generates a new one", async () => {
+    writeInstructionPackage(join(TMP, "node_modules/dev-lib"), {
+      title: "FromDev",
+      content: "from dev",
+    });
+    writeFileSync(
+      join(TMP, "package.json"),
+      JSON.stringify({ name: "existing-app", devDependencies: { "dev-lib": "1.0.0" } }),
+    );
+    writeFileSync(join(TMP, "AGENTS.md"), "hand written\n");
+    const { code, stderr } = await runCli(["init", "com.acme.bml"], TMP);
+    expect(code, stderr).toBe(0);
+    expect(stderr).toMatch(/Renamed AGENTS.md to AGENTS.md.pre-blockml/);
+    expect(stderr).toMatch(/Created AGENTS.md/);
+    expect(readFileSync(join(TMP, "AGENTS.md.pre-blockml"), "utf8")).toBe("hand written\n");
+    expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe("# FromDev\n\nfrom dev\n");
+  });
+
+  it("overwrites AGENTS.md when package.json already has a blockml key", async () => {
+    writeInstructionPackage(join(TMP, "node_modules/dev-lib"), {
+      title: "FromDev",
+      content: "from dev",
+    });
+    writeFileSync(
+      join(TMP, "package.json"),
+      JSON.stringify({
+        name: "existing-app",
+        blockml: {},
+        devDependencies: { "dev-lib": "1.0.0" },
+      }),
+    );
+    writeFileSync(join(TMP, "AGENTS.md"), "custom agents\n");
+    const { code, stderr } = await runCli(["init", "com.acme.bml"], TMP);
+    expect(code, stderr).toBe(0);
+    expect(stderr).toMatch(/Updated AGENTS.md/);
+    expect(stderr).not.toMatch(/pre-blockml/);
+    expect(existsSync(join(TMP, "AGENTS.md.pre-blockml"))).toBe(false);
+    expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe("# FromDev\n\nfrom dev\n");
+  });
+
+  it("stops before any write when AGENTS.md.pre-blockml already exists", async () => {
+    const pkg = `${JSON.stringify({ name: "existing-app" }, null, 2)}\n`;
+    writeFileSync(join(TMP, "package.json"), pkg);
+    writeFileSync(join(TMP, "AGENTS.md"), "current\n");
+    writeFileSync(join(TMP, "AGENTS.md.pre-blockml"), "older\n");
+    const { code, stderr } = await runCli(["init", "com.acme.bml", "--no-install"], TMP);
+    expect(code).toBe(2);
+    expect(stderr).toMatch(/AGENTS.md\.pre-blockml already exists/);
+    expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe("current\n");
+    expect(readFileSync(join(TMP, "AGENTS.md.pre-blockml"), "utf8")).toBe("older\n");
+    expect(readFileSync(join(TMP, "package.json"), "utf8")).toBe(pkg);
+    expect(existsSync(join(TMP, "blocks/com/acme/bml/Library.bml"))).toBe(false);
+  });
+
+  it("does not rename AGENTS.md when package.json cannot be parsed", async () => {
+    writeFileSync(join(TMP, "package.json"), "{");
+    writeFileSync(join(TMP, "AGENTS.md"), "keep\n");
+    const { code, stderr } = await runCli(["init", "com.acme.bml", "--no-install"], TMP);
+    expect(code).toBe(2);
+    expect(stderr).toMatch(/Could not parse package.json/);
+    expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe("keep\n");
+    expect(existsSync(join(TMP, "AGENTS.md.pre-blockml"))).toBe(false);
+    expect(readFileSync(join(TMP, "package.json"), "utf8")).toBe("{");
+  });
+
+  it("does not rename AGENTS.md when the package FQN is invalid", async () => {
+    writeFileSync(join(TMP, "AGENTS.md"), "keep\n");
+    const { code } = await runCli(["init", "com.acme.bml.Library"], TMP);
+    expect(code).toBe(2);
+    expect(readFileSync(join(TMP, "AGENTS.md"), "utf8")).toBe("keep\n");
+    expect(existsSync(join(TMP, "AGENTS.md.pre-blockml"))).toBe(false);
   });
 
   it("skips npm install and AGENTS.md generation with --no-install", async () => {

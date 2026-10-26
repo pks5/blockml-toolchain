@@ -14,7 +14,7 @@
     blockml init command model
   </is>
   <documentation>
-    blockml init PACKAGE-FQN [--src dir] [--no-install]. Parses flags, calls InitProject, and prints its lines. When the package FQN is missing, also prints the short USAGE. Scaffold writes, npm install, and AGENTS.md generation stay in InitProject.
+    blockml init PACKAGE-FQN [--src dir] [--no-install]. Parses flags, calls InitProject, and prints its lines. When the package FQN is missing, also prints the short USAGE. Preflight, scaffold writes, npm install, and AGENTS.md generation stay in InitProject.
   </documentation>
   <references>
     <see type="clidocumentation:InitCommand" relation="SeeAlso" />

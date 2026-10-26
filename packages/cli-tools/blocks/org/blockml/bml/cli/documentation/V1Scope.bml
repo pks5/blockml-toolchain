@@ -37,7 +37,7 @@
     • Graph uses @blockml/graph over the validate --all corpus
     • Inspect uses @blockml/inspect over the validate --all corpus
     • New uses @blockml/builder; writes .bml under the owning Library (membership by location)
-    • Init uses @blockml/builder; writes Library + README, merges package.json; runs npm install and generates AGENTS.md via GenerateAgentsMd when the file is missing, unless --no-install
+    • Init uses @blockml/builder; preflight runs before any write and renames a foreign AGENTS.md to AGENTS.md.pre-blockml when package.json has no blockml key; writes Library + README, merges package.json; runs npm install and generates AGENTS.md via GenerateAgentsMd unless --no-install
     • agents-md generate rewrites AGENTS.md from AgentInstructions in the project source folder and direct dependencies / devDependencies
     
     V1 not implemented (documented in ScopeExclusions):

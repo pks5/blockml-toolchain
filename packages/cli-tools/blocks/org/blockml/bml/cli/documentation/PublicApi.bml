@@ -34,8 +34,10 @@
     • runNew via blockml new (delegates to @blockml/builder)
     • initProject({ packageFqn, rootDir, srcDir?, noInstall? }) → { code, lines }
       (clicap:InitProject; blockml init parses flags, calls it, prints lines;
-      runs npm install, then generates AGENTS.md via GenerateAgentsMd when the
-      file is missing, unless noInstall)
+      runs preflight before any write, then npm install, then generates
+      AGENTS.md via GenerateAgentsMd unless noInstall. Preflight renames a
+      foreign AGENTS.md to AGENTS.md.pre-blockml when package.json has no
+      blockml key)
     • generateAgentsMd({ rootDir, srcDir? }) → { code, lines, sectionCount }
       (clicap:GenerateAgentsMd; blockml agents-md generate)
     • runTransform via blockml transform apply (delegates to @blockml/transformer)

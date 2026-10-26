@@ -22,16 +22,28 @@
         the domain is recommended so BML FQNs stay distinct from companion
         FQNs. The command parses flags, calls clicap:InitProject, and prints
         its lines. When the package FQN is missing, it also prints the short
-        USAGE. InitProject does not emit USAGE. Creates or merges package.json, writes
+        USAGE. InitProject does not emit USAGE. Missing or invalid FQN → exit 2
+        before preflight, and writes nothing.
+
+        Preflight is a general section. It runs before any write. --no-install
+        does not skip it. A project is BlockML when package.json has a blockml
+        key. An unreadable package.json fails preflight with exit 2.
+        When the key is present, AGENTS.md stays and agents-md generate
+        overwrites it later. When the key is absent, an existing AGENTS.md is
+        renamed to AGENTS.md.pre-blockml. If that backup already exists,
+        preflight exits 2 and writes nothing.
+
+        Creates or merges package.json, writes
         Library.bml + README.bml via BomBuilder (type-as-root, no xsi/schemaLocation),
-        runs npm install, then generates AGENTS.md via GenerateAgentsMd when missing.
+        runs npm install, then generates AGENTS.md via GenerateAgentsMd.
         Writes CLAUDE.md (@AGENTS.md) when missing. Does not load blockml.config.json.
-        Does not overwrite existing BML or agent files.
+        Does not overwrite existing BML files or CLAUDE.md. AGENTS.md is a
+        generated artifact.
         Same library path already present → exit 0. Conflicting blockml.library → exit 2.
-        Missing or invalid FQN → exit 2. Default runs npm install before AGENTS.md
-        generation. --no-install skips both. No sections or rules leaves AGENTS.md
-        unwritten. When --no-install is set and AGENTS.md is missing, the next line
-        tells the user to run npm install, then npx blockml agents-md generate.
+        Default runs npm install before AGENTS.md generation. --no-install skips
+        both. No sections or rules leaves AGENTS.md unwritten. When --no-install
+        is set and AGENTS.md is missing, the next line tells the user to run
+        npm install, then npx blockml agents-md generate.
     
     Printed help:
     Usage: blockml init <package-fqn> [--src dir] [--no-install]
@@ -42,11 +54,14 @@
     
     PACKAGE-FQN is a dotted package identifier (not …Library). A bml segment after
     the domain is recommended to distinguish BML FQNs from companion FQNs.
-    Does not overwrite existing files.
+    Preflight runs before any write and checks conditions.
+    A project is BlockML when package.json has a blockml key. Then AGENTS.md
+    stays, and agents-md generate overwrites it after npm install.
+    Otherwise an existing AGENTS.md is renamed to AGENTS.md.pre-blockml.
+    Does not overwrite existing BML files or CLAUDE.md.
     Runs npm install, then generates AGENTS.md, unless --no-install is passed.
-    --no-install skips npm install and AGENTS.md generation.
-    AGENTS.md is generated from AgentInstructions blocks when the file is missing.
-    When none are found, the file is left unwritten.
+    --no-install skips npm install and AGENTS.md generation. It does not skip preflight.
+    When no AgentInstructions content is found, AGENTS.md is left unwritten.
     
     Bootstrap a new repo with npx @blockml/cli init <package-fqn>.
     Afterward use npx blockml.

@@ -22,14 +22,34 @@
     missing, the command also prints the short USAGE. This capability does not.
     
     Validates packageFqn (dotted identifiers, last segment is not Library).
-    A bml segment after the domain is recommended, not required. Creates or merges package.json: blockml.library,
+    A bml segment after the domain is recommended, not required. An invalid
+    or missing FQN returns code 2 before preflight and writes nothing.
+
+    Preflight is a general section. It runs after argument validation and
+    before any write, including package.json, BML, npm install, and AGENTS.md
+    generation. noInstall does not skip it. It checks conditions in order and
+    stops on the first failure. No scaffold file is written until every
+    condition passes.
+
+    Condition: a project is BlockML when package.json has a blockml key.
+    A missing package.json is not BlockML. An unreadable package.json fails
+    preflight with code 2 and writes nothing, including no rename.
+    When the key is present, AGENTS.md stays in place. GenerateAgentsMd
+    overwrites it later, after npm install, unless noInstall.
+    When the key is absent and AGENTS.md exists, preflight renames it to
+    AGENTS.md.pre-blockml so the foreign file is kept. A missing AGENTS.md
+    needs no rename. When AGENTS.md.pre-blockml already exists, preflight
+    fails with code 2 and writes nothing. A failed rename returns code 1.
+
+    Creates or merges package.json: blockml.library,
     devDependencies.@blockml/cli, dependencies.@blockml/core. Writes Library.bml
     and README.bml with BomBuilder.create (type-as-root, no xsi/schemaLocation)
     when missing. Unless noInstall, runs npm install in rootDir, then calls
-    GenerateAgentsMd when AGENTS.md is missing. Writes CLAUDE.md (@AGENTS.md)
-    when missing. Does not overwrite existing BML or agent files. Does not
-    load blockml.config.json.
-    
+    GenerateAgentsMd. That call overwrites AGENTS.md when it finds at least
+    one section or rule. Writes CLAUDE.md (@AGENTS.md) when missing. Does not
+    overwrite existing BML files or CLAUDE.md. AGENTS.md is a generated
+    artifact. Does not load blockml.config.json.
+
     srcDir defaults to blocks. noInstall defaults to false, so npm install and
     AGENTS.md generation run. Same library path already present → code 0.
     Conflicting blockml.library → code 2. Missing or invalid FQN → code 2.

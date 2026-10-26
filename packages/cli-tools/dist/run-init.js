@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { BomBuilder } from "@blockml/builder";
@@ -161,6 +161,70 @@ function copyIfMissing(destPath, sourcePath, contents, rootDir, lines) {
     pushLines(lines, `Created ${displayPath(destPath, rootDir)}`, "info");
     return 0;
 }
+const AGENTS_FILE = "AGENTS.md";
+const AGENTS_PRE_BLOCKML = "AGENTS.md.pre-blockml";
+/** Runs before any init write. noInstall does not skip this. */
+const preflightConditions = [preserveForeignAgentsMd];
+function preflight(rootDir, lines) {
+    for (const condition of preflightConditions) {
+        const code = condition(rootDir, lines);
+        if (code !== 0) {
+            return code;
+        }
+    }
+    return 0;
+}
+function preserveForeignAgentsMd(rootDir, lines) {
+    const blockmlProject = readIsBlockmlProject(rootDir, lines);
+    if (blockmlProject === "invalid") {
+        return 2;
+    }
+    if (blockmlProject === "yes") {
+        return 0;
+    }
+    const agentsPath = join(rootDir, AGENTS_FILE);
+    if (!existsSync(agentsPath)) {
+        return 0;
+    }
+    const backupPath = join(rootDir, AGENTS_PRE_BLOCKML);
+    if (existsSync(backupPath)) {
+        pushLines(lines, `${AGENTS_PRE_BLOCKML} already exists.`, "error");
+        return 2;
+    }
+    try {
+        renameSync(agentsPath, backupPath);
+    }
+    catch {
+        pushLines(lines, `Could not rename ${AGENTS_FILE} to ${AGENTS_PRE_BLOCKML}.`, "error");
+        return 1;
+    }
+    pushLines(lines, `Renamed ${displayPath(agentsPath, rootDir)} to ${displayPath(backupPath, rootDir)}`, "info");
+    return 0;
+}
+function readIsBlockmlProject(rootDir, lines) {
+    const pkgPath = join(rootDir, "package.json");
+    if (!existsSync(pkgPath)) {
+        return "no";
+    }
+    let pkg;
+    try {
+        pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
+    }
+    catch {
+        pushLines(lines, "Could not parse package.json.", "error");
+        return "invalid";
+    }
+    if (hasBlockmlKey(pkg)) {
+        return "yes";
+    }
+    return "no";
+}
+function hasBlockmlKey(pkg) {
+    return (pkg !== null &&
+        typeof pkg === "object" &&
+        !Array.isArray(pkg) &&
+        Object.prototype.hasOwnProperty.call(pkg, "blockml"));
+}
 export function initProject(options) {
     const lines = [];
     const rootDir = options.rootDir;
@@ -172,6 +236,10 @@ export function initProject(options) {
     if (!isValidPackageFqn(packageFqn)) {
         pushLines(lines, `Invalid package FQN: ${packageFqn}`, "error");
         return { code: 2, lines };
+    }
+    const preflightCode = preflight(rootDir, lines);
+    if (preflightCode !== 0) {
+        return { code: preflightCode, lines };
     }
     const srcDir = options.srcDir?.trim() || "blocks";
     const libraryRel = libraryPointer(srcDir, packageFqn);
@@ -204,19 +272,12 @@ export function initProject(options) {
             return { code: 1, lines };
         }
     }
-    const agentsPath = join(rootDir, "AGENTS.md");
-    let agentsReady = false;
-    if (existsSync(agentsPath)) {
-        pushLines(lines, `Skipped existing ${displayPath(agentsPath, rootDir)}`, "info");
-        agentsReady = true;
-    }
-    else if (!skipInstall) {
+    const agentsPath = join(rootDir, AGENTS_FILE);
+    if (!skipInstall) {
         const generated = generateAgentsMd({ rootDir, srcDir });
         lines.push(...generated.lines);
-        if (generated.sectionCount > 0) {
-            agentsReady = true;
-        }
     }
+    const agentsReady = existsSync(agentsPath);
     const claudeCode = copyIfMissing(join(rootDir, "CLAUDE.md"), undefined, "@AGENTS.md\n", rootDir, lines);
     if (claudeCode !== 0) {
         return { code: claudeCode, lines };
