@@ -14,7 +14,7 @@
     The BlockML Graph package library catalog
   </is>
   <version>
-    0.9.15
+    0.9.16
   </version>
   <documentation>
     Canonical graph specification for BlockML — local authored structural graph
