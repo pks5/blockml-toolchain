@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@blockml/bom": "^0.9.15",
-    "@blockml/core": "^1.4.5",
+    "@blockml/core": "^1.4.6",
     "@xmldom/xmldom": "^0.9.8"
   },
   "engines": {
