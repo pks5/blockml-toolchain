@@ -16,7 +16,7 @@
     The BlockML compiler runtime package library catalog
   </is>
   <version>
-    0.9.18
+    0.9.19
   </version>
   <documentation>
     Canonical compiler runtime specification for BlockML — compileToOutput, Target
