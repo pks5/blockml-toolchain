@@ -14,7 +14,7 @@
     The BlockML Inspect package library catalog
   </is>
   <version>
-    0.9.17
+    0.9.18
   </version>
   <documentation>
     Canonical inspect-view specification for BlockML — ephemeral JSON projection

@@ -1,6 +1,6 @@
 {
   "name": "@blockml/lsp",
-  "version": "0.9.17",
+  "version": "0.9.18",
   "description": "BlockML language server — diagnostics via parser and validator",
   "license": "Apache-2.0",
   "repository": {
@@ -35,12 +35,12 @@
     "test": "vitest run packages/lsp/test"
   },
   "dependencies": {
-    "@blockml/bom": "^0.9.17",
+    "@blockml/bom": "^0.9.18",
     "@blockml/core": "^1.4.6",
-    "@blockml/framework": "^0.9.17",
-    "@blockml/parser": "^0.9.17",
-    "@blockml/serializer": "^0.9.17",
-    "@blockml/validator": "^0.9.17",
+    "@blockml/framework": "^0.9.18",
+    "@blockml/parser": "^0.9.18",
+    "@blockml/serializer": "^0.9.18",
+    "@blockml/validator": "^0.9.18",
     "vscode-languageserver": "^9.0.1",
     "vscode-languageserver-textdocument": "^1.0.12"
   },
