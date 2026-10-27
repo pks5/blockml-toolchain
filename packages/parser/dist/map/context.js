@@ -14,6 +14,9 @@ export function createMapContext(filePath, source, bindings, options = {}) {
     if (options.parseValue !== undefined) {
         ctx.parseValue = options.parseValue;
     }
+    if (options.resolveMemberType !== undefined) {
+        ctx.resolveMemberType = options.resolveMemberType;
+    }
     if (options.isCommaSugarPayload !== undefined) {
         ctx.isCommaSugarPayload = options.isCommaSugarPayload;
     }

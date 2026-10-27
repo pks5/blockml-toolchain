@@ -201,7 +201,7 @@ function mapBlockDefinition(element, ctx, parentType) {
             isRoot: false,
             isEmbedded: false,
             diagnostics: ctx.diagnostics,
-            ...(ctx.parseValue ? { parseValue: ctx.parseValue } : {}),
+            ...hostHookOptions(ctx),
         });
         const sb = mapBlockDefinition(sbEl, sbCtx, block.type);
         if (!sb.type) {
@@ -217,7 +217,7 @@ function mapBlockDefinition(element, ctx, parentType) {
             isRoot: false,
             isEmbedded: true,
             diagnostics: ctx.diagnostics,
-            ...(ctx.parseValue ? { parseValue: ctx.parseValue } : {}),
+            ...hostHookOptions(ctx),
         });
         block.embeddedBlocks.push(mapBlockDefinition(ebEl, ebCtx));
     }
@@ -1146,11 +1146,18 @@ function mapCapabilityThrows(element, cap, ctx) {
 export function mapBlock(element, ctx) {
     return mapBlockDefinition(element, ctx);
 }
-export function mapDocumentBlock(element, filePath, source, bindings, diagnostics = [], parseValue, isCommaSugarPayloadHook) {
+function hostHookOptions(ctx) {
+    return {
+        ...(ctx.parseValue ? { parseValue: ctx.parseValue } : {}),
+        ...(ctx.resolveMemberType ? { resolveMemberType: ctx.resolveMemberType } : {}),
+    };
+}
+export function mapDocumentBlock(element, filePath, source, bindings, diagnostics = [], parseValue, isCommaSugarPayloadHook, resolveMemberType) {
     const ctx = createMapContext(filePath, source, bindings, {
         isRoot: true,
         diagnostics,
         ...(parseValue ? { parseValue } : {}),
+        ...(resolveMemberType ? { resolveMemberType } : {}),
         ...(isCommaSugarPayloadHook ? { isCommaSugarPayload: isCommaSugarPayloadHook } : {}),
     });
     return withElementLocation(filePath, source, element, () => mapBlockDefinition(element, ctx));

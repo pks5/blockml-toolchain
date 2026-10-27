@@ -5,6 +5,8 @@ import { isNodeModulesPath } from "./package-paths.js";
 import { collectLocationExports } from "./library-membership.js";
 import { rootFqnByFilePath } from "./root-fqn.js";
 import { TypeRegistry } from "./type-registry.js";
+import { evaluateParseValue } from "../validate/evaluate-parse-value.js";
+import { normalizeParsedMemberValues, resolveInstanceMemberType, } from "../validate/member-literals.js";
 function collectBmlFiles(dir, out = []) {
     let entries;
     try {
@@ -279,6 +281,7 @@ export function bootstrapFromLibraryPaths(libraryPaths, searchRoots, rootDir, co
         }
     }
     registerFiles(registry, [...seenFiles], diagnostics);
+    reparseMemberValues(registry);
     const locationFiles = [];
     for (const [filePath, typeFqn] of rootFqnByFilePath(registry)) {
         locationFiles.push({ filePath, typeFqn });
@@ -310,6 +313,7 @@ export function bootstrapFromCorpusPaths(paths, rootDir) {
         }
     }
     registerFiles(registry, [...files], diagnostics);
+    reparseMemberValues(registry);
     return { registry, diagnostics };
 }
 export function findLibraryFileForType(typeFqn, searchRoots) {
@@ -323,5 +327,67 @@ export function parseLibraryDocument(libraryPath) {
     const source = readFileSync(libraryPath, "utf8");
     const parsed = parse(source, { filePath: libraryPath, continueOnError: true });
     return parsed.document;
+}
+function heuristicScalar(raw) {
+    const trimmed = raw.trim();
+    const lower = trimmed.toLowerCase();
+    if (lower === "true") {
+        return true;
+    }
+    if (lower === "false") {
+        return false;
+    }
+    if (/^-?\d+(\.\d+)?$/.test(trimmed)) {
+        return Number(trimmed);
+    }
+    return undefined;
+}
+/**
+ * First pass tokenizes without a registry. Re-parse once every type is registered
+ * so instance literals use the member type's parseValue, not the block FQN.
+ * A type FQN that is not in the registry still uses the Boolean/number heuristic.
+ * Diagnostics stay from the first pass; validate reports value errors.
+ */
+function reparseMemberValues(registry) {
+    const files = new Set();
+    for (const fqn of registry.keys()) {
+        const filePath = registry.get(fqn)?.source?.filePath;
+        if (filePath && existsSync(filePath)) {
+            files.add(filePath);
+        }
+    }
+    const parseValue = (typeFqn, raw) => {
+        const result = evaluateParseValue(typeFqn, raw, registry);
+        // A declared type that is not loaded has no parseValue to skip to. Keep the
+        // Boolean/number heuristic so inherited scalars such as sequence stay numbers.
+        if (result.ok && !("value" in result) && !registry.has(typeFqn)) {
+            const guessed = heuristicScalar(raw);
+            if (guessed !== undefined) {
+                return { ok: true, value: guessed };
+            }
+        }
+        return result;
+    };
+    const resolveMemberType = (ownerTypeFqn, memberName) => resolveInstanceMemberType(ownerTypeFqn, memberName, registry);
+    for (const filePath of files) {
+        let source;
+        try {
+            source = readFileSync(filePath, "utf8");
+        }
+        catch {
+            continue;
+        }
+        const result = parse(source, {
+            filePath,
+            continueOnError: true,
+            parseValue,
+            resolveMemberType,
+        });
+        if (!result.document?.block.type) {
+            continue;
+        }
+        normalizeParsedMemberValues(result.document, registry);
+        registry.register(result.document);
+    }
 }
 //# sourceMappingURL=library-bootstrap.js.map

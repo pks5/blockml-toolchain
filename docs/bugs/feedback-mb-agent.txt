@@ -1,0 +1,87 @@
+Die Validierung war durchgehend grün. Alle harten Abbrüche kamen erst bei `machineblocks compile`. Der Render-Target prüft Regeln, die `validate` nicht kennt, und bei einem Fehler schreibt er keine Datei.
+
+## 1. `bml:with`, `bml:each` und `bml:if` werden nicht aufgelöst
+
+`BML_DIRECTIVE_DEFERRED`: der Compiler bricht ab, sobald eine dieser Direktiven im Block steht. `Connector.bml` und `Cross.bml` in `@machineblocks/core` benutzen `bml:with`. Sie sind mit diesem Target nicht kompilierbar.
+
+**Workaround:** keine Direktiven. Abgeleitete Werte stehen als Literale in Properties.
+
+**Fix:** Direktiven vor dem Rendern expandieren, oder die Bibliotheksbeispiele auf das beschränken, was dieses Target wirklich emittiert.
+
+## 2. Ausdrücke an NativeBlock-Parametern sind verboten
+
+`BML_LEAF_VALUE_UNSUPPORTED`: `Parameter size must be a property reference or a literal.`
+
+In `composite.js` (`childExpression`) darf ein Parameter nur `${ name }` oder ein Literal sein. `${ {x: size.x, y: arm, z: size.z} }` und `#math.min(...)` scheitern.
+
+Ein Ausdruck in `<value>` validiert, wird aber nicht nach SCAD übersetzt. `customizerLines` und `propertyGetters` übernehmen nur serialisierbare Literale. Der Modulaufruf referenziert die Property trotzdem, das erzeugte SCAD hätte eine undefinierte Variable.
+
+**Workaround:** jede Größe und jeder Offset ist ein Literal (`{x:6,y:2,z:3}`, `{x:1,y:1,z:3}`).
+
+**Fix:** Property-Ausdrücke in SCAD-Ausdrücke senken, oder den Compile mit einer klaren Diagnose ablehnen, bevor eine undefinierte Variable entsteht.
+
+## 3. Ein einzelnes NativeBlock ist ein Leaf ohne Modul
+
+Genau ein `NativeBlock`-Kind geht durch `renderLeafFile`. Null Kinder ergeben `MB_EMPTY_BLOCK`. Ab zwei Kindern entsteht ein Modul `mb__<fqn>`.
+
+Am Leaf muss jeder Parameter `${ property }` sein, und die Property braucht ein serialisierbares Literal. `studType="Solid"` direkt am Kind scheitert mit `NativeBlock parameter studType must be a ${ property } reference`.
+
+Ein Set ruft `mb__com__acme__scad__test__bricks__Plate()` auf. Ein Leaf definiert dieses Modul nicht.
+
+**Workaround:** die Platte ist zwei 2×2-Hälften, damit sie ein Modul bekommt. Jeder Native-Parameter ist ein Property-Verweis.
+
+**Fix:** Leaves ebenfalls als Modul emittieren, oder Sets dürfen Leaves anders einbinden. Die Leaf-Regel sollte in der Authoring-Doku stehen, nicht nur in `LeafOptimization.bml`.
+
+## 4. Boolesche Attribute werden zu Strings
+
+`pillars="true"` am Kind wurde zu `["pillars", "true"]`. Die Bibliothek vergleicht mit dem Bool `true`.
+
+Ursache in `parseMemberValue`: ist `ctx.parseValue` gesetzt und das Ergebnis hat kein `value` (skipped), wird der Rohstring gespeichert. Die Boolean- und Zahlen-Erkennung darunter läuft nicht mehr.
+
+Bei einer Property ist `typeFqn` der deklarierte Typ (`Boolean`), `parseValue` liefert `true`. Bei einem Instanz-Attribut ist `typeFqn` der Block (`NativeBlock`). Der hat kein `parseValue`, also bleibt `"true"`.
+
+**Workaround:** Boolesche Werte nur als Properties mit `<value>true</value>` und am Kind als `${ pillars }`.
+
+**Fix:** Instanz-Attribute mit dem Typ des Members parsen, nicht mit dem Block-Typ. Wenn `parseValue` skipped ist, die bestehende Boolean- und Zahlen-Erkennung weiterlaufen lassen.
+
+## 5. Enums: Member-Id und SCAD-Token fallen auseinander
+
+`MBEnum` speichert die Member-Id (`Solid`, `Pin`, `YNeg`). `scad:value` (`solid`, `pin`, `y-`) soll der Renderer nachschlagen. `serializeLiteral` schreibt den autorierten String unverändert.
+
+Die SCAD-Bibliothek vergleicht exakt mit `solid`, `pin`, `standard`, `axle`, `none`, `y`, `z+`, `y-`. `Solid` würde bei Studs in den Hollow-Zweig fallen, weil nur `"solid"` massiv ist.
+
+`EnumType` hat kein `parseValue`, das die Id prüft. `solid` validiert deshalb, obwohl die Doku die Member-Id verlangt. Dieselbe Lücke steht in `composite.js`: Groove- und Tongue-Sonderfälle erwarten den String `groove` bzw. das Bool `true`, nicht die Id `Groove`.
+
+**Workaround:** in `<value>` die SCAD-Tokens stehen, nicht die Member-Ids.
+
+**Fix:** beim Serialisieren `scad:value` der Enum-Member nachschlagen und unbekannte Tokens in `validate` ablehnen.
+
+## 6. Nur vier Wertarten kommen in SCAD an
+
+`serializeLiteral` kann Bool, Zahl, String und `{x,y,z}` als Zahlen. Damit fallen Slope (`FaceMapXY`), `baseWallGaps` (`WallGap[]`), Bevel, Stud-Padding und selektive Gitter weg. Ein Composite mit solchen Literalen bricht mit `Parameter … cannot be serialized` ab. Als Property-Verweis entsteht wieder eine undefinierte Variable, weil der Customizer den Wert auslässt und der Aufruf ihn trotzdem übergibt.
+
+**Workaround:** keine dieser Strukturen. Der Turm hat Gitter, Text und Löcher nur über Strings, Zahlen und Bools.
+
+**Fix:** Structs und Listen serialisieren, oder nicht serialisierbare Properties aus dem `settings`-Array herausnehmen und den Compile ablehnen.
+
+## 7. Set-Platzierung
+
+`placementOf` in `set-file.js` verlangt `bml:id` und ein **Literal** `size` auf der Instanz. Die Default-`size` des Typs zählt nicht. Sonst `SET_PART_INCOMPLETE`. `offset` ohne serialisierbares Literal wird still `[0, 0, 0]`.
+
+Die Instanz-Module rufen nur `Plate()` auf. Die Offsets in `STEPS` gehen in `mb_set_bounding_box`, nicht in ein `translate`. Öffnet man `BenchSet.scad`, liegen alle vier Steine auf demselben Ursprung. Die Reihenfolge der Steps stimmt.
+
+**Workaround:** `size` und `offset` an jeder Platzierung wiederholt. Die Geometrie steht in den einzelnen Stein-Dateien.
+
+**Fix:** fehlende `size` vom Typ-Default übernehmen. Offsets aus `STEPS` auf die Instanz-Module anwenden.
+
+## 8. Scaffold ohne `bml`-Namespace
+
+`blockml new` legt den `bml`-Namespace nicht an. `bml:id` ohne `xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"` ist `BML_MALFORMED_XML` (`prefix is non-null and namespace is null`). Composite und Set brauchen diese Id.
+
+**Workaround:** Namespace von Hand ergänzt.
+
+**Fix:** `blockml new` für MachineBlocks den Annotation-Namespace und ein Minimalkorsett mit `_parts` mitgeben.
+
+---
+
+Die Reihenfolge, die das Authoring am stärksten freischaltet: Enum-`scad:value` beim Emit, Bool/Zahl an Instanz-Attributen typgerecht parsen, dann Ausdrücke entweder senken oder hart ablehnen, und Sets die Platzierung wirklich anwenden. Die Beispiele `Cross` und `Connector` sind dafür der richtige Regressionstest. Sie kompilieren mit dem aktuellen Target nicht.

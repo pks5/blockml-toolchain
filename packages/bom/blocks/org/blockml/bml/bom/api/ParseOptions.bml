@@ -28,9 +28,16 @@
     <parseValue type="type:Text">
       <documentation>
         Optional host hook (typeFqn, raw) → { ok, value } | { ok, skipped } | { ok: false, message }.
-        Injected after TypeRegistry bootstrap (e.g. compileBmlToBom). Absent during library bootstrap.
+        Injected once a TypeRegistry exists (compileBmlToBom and the bootstrap re-parse).
         (optional)
       </documentation>
     </parseValue>
+    <resolveMemberType type="type:Text">
+      <documentation>
+        Optional host hook (ownerTypeFqn, memberName) → declared property type FQN.
+        Instance attribute and element values are parsed with that type. Absent → the
+        instance block FQN. (optional)
+      </documentation>
+    </resolveMemberType>
   </properties>
 </bomapi:ParseOptions>

@@ -113,6 +113,7 @@ describe("blockml new CLI", () => {
     expect(created).toMatch(/<\/example:Foo>/);
     expect(created).not.toContain("xsi:schemaLocation");
     expect(created).not.toContain("xmlns:xsi");
+    expect(created).toContain('xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"');
     expect(created).not.toMatch(/<type>/);
     expect(created).toContain("Foo");
     expect(created).toContain("com.example");

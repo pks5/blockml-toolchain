@@ -1,9 +1,16 @@
-import { describe, expect, it, beforeEach } from "vitest";
+import { describe, expect, it, beforeEach, beforeAll } from "vitest";
+import { join } from "node:path";
 import type { BomDocument } from "@blockml/bom";
-import { TypeRegistry } from "@blockml/framework";
+import { parse } from "@blockml/parser";
+import {
+  bootstrapTypeRegistry,
+  defaultBootstrapPaths,
+  TypeRegistry,
+} from "@blockml/framework";
 import {
   clearTargets,
   compileBomToOutput,
+  compileBmlToBom,
   compileToOutput,
   registerTarget,
   resolveScope,
@@ -299,5 +306,80 @@ describe("validateRegistryDocuments", () => {
     const none = validateRegistryDocuments(registry, []);
     expect(none.blocksTested).toBe(0);
     expect(none.diagnostics).toEqual([]);
+  });
+});
+
+const BOOL = "org.blockml.bml.type.Boolean";
+const TEXT = "org.blockml.bml.type.Text";
+const INT = "org.blockml.bml.type.Integer";
+const NS = "com.blockml.test.members";
+
+describe("compileBmlToBom instance scalars", () => {
+  let registry: TypeRegistry;
+
+  beforeAll(() => {
+    const root = join(import.meta.dirname, "..", "..", "..");
+    registry = bootstrapTypeRegistry(defaultBootstrapPaths(root), root).registry;
+    const brick = [
+      `<test:Brick xmlns="http://blockml.org/bml"`,
+      ` xmlns:core="org.blockml.bml.core"`,
+      ` xmlns:type="org.blockml.bml.type"`,
+      ` xmlns:test="${NS}">`,
+      `  <baseType>core:Block</baseType>`,
+      `  <is>brick</is>`,
+      `  <properties>`,
+      `    <pillars type="type:Boolean" />`,
+      `    <label type="type:Text" />`,
+      `    <count type="type:Integer" />`,
+      `  </properties>`,
+      `</test:Brick>`,
+    ].join("\n");
+    const parsed = parse(brick, { filePath: "Brick.bml", continueOnError: true });
+    expect(parsed.document).not.toBeNull();
+    registry.register(parsed.document!);
+  });
+
+  it("stores boolean and number attributes as host values and leaves text text", () => {
+    const source = [
+      `<test:Use xmlns="http://blockml.org/bml"`,
+      ` xmlns:core="org.blockml.bml.core"`,
+      ` xmlns:test="${NS}">`,
+      `  <baseType>core:Block</baseType>`,
+      `  <is>use</is>`,
+      `  <aggregations>`,
+      `    <parts type="test:Brick">`,
+      `      <composition>`,
+      `        <test:Brick pillars="true" label="true" count="2" />`,
+      `      </composition>`,
+      `    </parts>`,
+      `  </aggregations>`,
+      `</test:Use>`,
+    ].join("\n");
+    const result = compileBmlToBom(
+      { source, filePath: "Use.bml" },
+      { typeRegistry: registry },
+    );
+    const errors = result.diagnostics.filter((d) => d.severity === "error");
+    expect(errors, errors.map((d) => `${d.code} ${d.message}`).join("\n")).toEqual([]);
+    const child = result.output?.block.compositions[0]?.children[0];
+    expect(child?.kind).toBe("blockInstance");
+    if (child?.kind !== "blockInstance") {
+      return;
+    }
+    expect(child.instance.memberValues.pillars).toMatchObject({
+      kind: "literal",
+      value: true,
+      typeFqn: BOOL,
+    });
+    expect(child.instance.memberValues.label).toMatchObject({
+      kind: "literal",
+      value: "true",
+      typeFqn: TEXT,
+    });
+    expect(child.instance.memberValues.count).toMatchObject({
+      kind: "literal",
+      value: 2,
+      typeFqn: INT,
+    });
   });
 });

@@ -1,0 +1,38 @@
+<!--Framework Capability — NormalizeParsedMemberValues
+  FQN: org.blockml.bml.framework.capability.NormalizeParsedMemberValues-->
+<fwcap:NormalizeParsedMemberValues xmlns="http://blockml.org/bml"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:fwcap="org.blockml.bml.framework.capability">
+
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Store instance scalars and enum ids after parse
+  </is>
+  <documentation>
+    After parse, overlay the document on the registry and rewrite literals.
+    
+    - Instance property literals are re-parsed with the member type so a skipped
+      block-FQN parseValue does not leave an authored string
+    - EnumType tokens `EnumFqn::id` are stored as the member id
+    - Types declared in the same file are visible via the overlay
+  </documentation>
+  <references>
+    <see type="fwcap:ResolveInstanceMemberType" relation="SeeAlso" />
+    <see type="fwcap:EvaluateParseValue" relation="SeeAlso" />
+  </references>
+  <properties>
+    <document type="bomdoc:BomDocument">
+      <documentation>
+        Parsed document. Mutated in place. (required)
+      </documentation>
+    </document>
+    <registry type="fwcap:TypeRegistry">
+      <documentation>
+        registry. TS type: fwcap:TypeRegistry. (required)
+      </documentation>
+    </registry>
+  </properties>
+</fwcap:NormalizeParsedMemberValues>

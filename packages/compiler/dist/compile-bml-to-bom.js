@@ -1,11 +1,12 @@
 import { parse } from "@blockml/parser";
 import { validate } from "@blockml/validator";
-import { evaluateParseValue } from "@blockml/framework";
+import { evaluateParseValue, normalizeParsedMemberValues, resolveInstanceMemberType } from "@blockml/framework";
 export function compileBmlToBom(input, options = {}) {
     const parseOptions = { filePath: input.filePath };
     if (options.typeRegistry) {
         const registry = options.typeRegistry;
         parseOptions.parseValue = (fqn, raw) => evaluateParseValue(fqn, raw, registry);
+        parseOptions.resolveMemberType = (owner, name) => resolveInstanceMemberType(owner, name, registry);
     }
     const parseResult = parse(input.source, parseOptions);
     const diagnostics = [...parseResult.diagnostics];
@@ -15,6 +16,9 @@ export function compileBmlToBom(input, options = {}) {
             diagnostics,
             success: diagnostics.some((d) => d.severity === "error") ? false : !parseResult.success,
         };
+    }
+    if (options.typeRegistry) {
+        normalizeParsedMemberValues(parseResult.document, options.typeRegistry);
     }
     const validateOptions = { continueOnError: true };
     if (options.typeRegistry) {

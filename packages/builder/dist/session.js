@@ -42,6 +42,7 @@ export class BomBuilder {
         };
         bindPackage(bindings, packageOfFqn(type));
         bindPackage(bindings, packageOfFqn(baseType));
+        bindPackage(bindings, "org.blockml.bml.annotation.BmlAnnotation");
         const source = {
             filePath: options.filePath ?? "",
             format: "xml",

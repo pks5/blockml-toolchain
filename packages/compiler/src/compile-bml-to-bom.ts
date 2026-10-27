@@ -1,7 +1,7 @@
 import type { BomDocument, Diagnostic, ParseOptions } from "@blockml/bom";
 import { parse } from "@blockml/parser";
 import { validate } from "@blockml/validator";
-import { evaluateParseValue, type TypeRegistry } from "@blockml/framework";
+import { evaluateParseValue, normalizeParsedMemberValues, resolveInstanceMemberType, type TypeRegistry } from "@blockml/framework";
 import type { CompileInput, CompileOptions, CompilerResult, ValidateRegistryResult } from "./types.js";
 
 export function compileBmlToBom(
@@ -12,6 +12,8 @@ export function compileBmlToBom(
   if (options.typeRegistry) {
     const registry = options.typeRegistry;
     parseOptions.parseValue = (fqn, raw) => evaluateParseValue(fqn, raw, registry);
+    parseOptions.resolveMemberType = (owner, name) =>
+      resolveInstanceMemberType(owner, name, registry);
   }
   const parseResult = parse(input.source, parseOptions);
   const diagnostics: Diagnostic[] = [...parseResult.diagnostics];
@@ -22,6 +24,10 @@ export function compileBmlToBom(
       diagnostics,
       success: diagnostics.some((d) => d.severity === "error") ? false : !parseResult.success,
     };
+  }
+
+  if (options.typeRegistry) {
+    normalizeParsedMemberValues(parseResult.document, options.typeRegistry);
   }
 
   const validateOptions: Parameters<typeof validate>[1] = { continueOnError: true };

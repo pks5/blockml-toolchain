@@ -46,6 +46,11 @@
         Optional host parseValue hook from ParseOptions. (optional)
       </documentation>
     </parseValue>
+    <resolveMemberType type="type:Text">
+      <documentation>
+        Optional host hook (ownerTypeFqn, memberName) → property type FQN. (optional)
+      </documentation>
+    </resolveMemberType>
     <isCommaSugarPayload type="type:Text">
       <documentation>
         Domain PrimitiveEntity payloads beyond the Core well-known comma-sugar set. (optional)

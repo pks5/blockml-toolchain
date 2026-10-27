@@ -1,5 +1,6 @@
 import { resolveEffectiveMembers } from "../resolve/resolve-effective-members.js";
 import { evaluateParseValue } from "./evaluate-parse-value.js";
+import { canonicalEnumId, enumMemberIds } from "./member-literals.js";
 import { namedTypeFqn, TYPE_REFERENCE } from "./reference-kinds.js";
 function diag(code, message, file, loc) {
     const source = {
@@ -59,6 +60,13 @@ function rawFromUnknown(value) {
     return undefined;
 }
 function checkRaw(typeFqn, raw, ctx, loc) {
+    const ids = enumMemberIds(typeFqn, ctx.registry);
+    if (ids) {
+        if (!canonicalEnumId(typeFqn, raw, ids)) {
+            ctx.diagnostics.push(diag("BML_UNKNOWN_ENUM_VALUE", `Unknown enum member "${raw}" for ${typeFqn}`, ctx.file, loc));
+        }
+        return;
+    }
     const result = evaluateParseValue(typeFqn, raw, ctx.registry);
     if (!result.ok) {
         ctx.diagnostics.push(diag("BML_INVALID_VALUE", result.message, ctx.file, loc));

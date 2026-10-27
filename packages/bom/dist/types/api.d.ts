@@ -24,6 +24,11 @@ export type ParseValueResult = {
     message: string;
 };
 export type ParseValueHook = (typeFqn: string, raw: string) => ParseValueResult;
+/**
+ * Owner block FQN + member local name → declared property type FQN.
+ * Return undefined when the member type is unknown; the parser then keeps the block FQN.
+ */
+export type ResolveMemberTypeHook = (ownerTypeFqn: string, memberName: string) => string | undefined;
 export interface ParseOptions {
     /** default: "<memory>" — written to BomDocument.source.filePath */
     filePath?: string;
@@ -31,9 +36,14 @@ export interface ParseOptions {
     continueOnError?: boolean;
     /**
      * Optional host hook for PrimitiveType.parseValue.
-     * Injected after TypeRegistry bootstrap; omitted during library bootstrap.
+     * Injected once a TypeRegistry exists (compileBmlToBom, bootstrap re-parse).
      */
     parseValue?: ParseValueHook;
+    /**
+     * Optional host hook: instance attribute/element values are parsed with this
+     * member type instead of the instance block FQN.
+     */
+    resolveMemberType?: ResolveMemberTypeHook;
 }
 export interface SerializeOptions {
     /** default 2 — pretty-print spaces (B13); 0 = compact */

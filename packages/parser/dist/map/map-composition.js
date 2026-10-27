@@ -130,6 +130,10 @@ function mapCompositionChildren(compositionEl, ctx) {
     }
     return nodes;
 }
+function instanceValueType(ownerTypeFqn, memberName, ctx) {
+    const resolved = ctx.resolveMemberType?.(ownerTypeFqn, memberName)?.trim();
+    return resolved || ownerTypeFqn;
+}
 export function mapBlockInstanceNode(element, ctx) {
     const local = elementLocalName(element);
     const prefix = elementPrefix(element);
@@ -154,7 +158,7 @@ export function mapBlockInstanceNode(element, ctx) {
             if (["id", "version", "bean", "scope"].includes(attrLocal) && attrName.startsWith("bml:")) {
                 continue;
             }
-            const val = parseMemberValue(attr.value, typeFqn, ctx.filePath, loc.line, loc.column, "attribute", ctx);
+            const val = parseMemberValue(attr.value, instanceValueType(typeFqn, attrLocal, ctx), ctx.filePath, loc.line, loc.column, "attribute", ctx);
             if (val) {
                 pushMemberOccurrence(memberOccurrences, attrLocal, val);
             }
@@ -195,7 +199,7 @@ export function mapBlockInstanceNode(element, ctx) {
             continue;
         }
         const { text } = getCharacterData(child);
-        const val = parseMemberValue(text || getAttribute(child, "value") || "", typeFqn, ctx.filePath, loc.line, loc.column, "element", ctx);
+        const val = parseMemberValue(text || getAttribute(child, "value") || "", instanceValueType(typeFqn, childLocal, ctx), ctx.filePath, loc.line, loc.column, "element", ctx);
         if (val) {
             pushMemberOccurrence(memberOccurrences, childLocal, val);
         }

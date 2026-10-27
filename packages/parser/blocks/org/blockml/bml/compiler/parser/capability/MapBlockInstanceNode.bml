@@ -33,6 +33,10 @@
     definition-context only (pardocumentation:BlockMetadataMapping).
     On instances, skip only parse-syntax wrappers (composition, value,
     member-section containers, capability implementation/throws).
+    
+    When ctx.resolveMemberType returns a property type, attribute and child-element
+    values are parsed with that type. Otherwise the instance block FQN is used.
+    A skipped parseValue keeps the authored string — no Boolean or number guess.
   </documentation>
   <properties>
     <element type="parmap:XmlDomNode">

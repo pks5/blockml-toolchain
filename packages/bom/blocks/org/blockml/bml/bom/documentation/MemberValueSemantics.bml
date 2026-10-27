@@ -19,7 +19,8 @@
     Space-separated association tokens are not a value form.
     
     EnumType tokens (Standard, FQN::id) are resolution keys — BOM stores id + typeFqn only.
-    Struct/primitive literals stay inline in authored form — not normalized at parse time.
+    Primitive scalars are the host value from parseValue of the declared member type.
+    Struct and list literals stay structural — not rewritten into Block instances.
     
     LiteralValue: kind literal, opaque value, typeFqn, optional authoredPlacement (D9).
     ExpressionValue: kind expression, raw ${} text only in BOM; AST via parseExpression().

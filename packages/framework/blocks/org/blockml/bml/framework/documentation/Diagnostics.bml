@@ -38,7 +38,10 @@
       Prefixed values (scad:value and other Annotation FQNs) are not validated today.
       TODO: a matching prefixed type (scad:type for scad:value) so each facet can be
       checked in its target language. Message is the thrown Error text. Expressions,
-      interpolation, unions, StructType, and EnumType are skipped.
+      interpolation, unions, and StructType are skipped.
+      EnumType tokens are checked against values by member id (the id, or
+      EnumTypeFQN::id). Unknown tokens → BML_UNKNOWN_ENUM_VALUE. Membership is not
+      PrimitiveType.parseValue.
     
     validateInstances:
     • BML_UNKNOWN_TYPE — composition instance typeFqn not in TypeRegistry

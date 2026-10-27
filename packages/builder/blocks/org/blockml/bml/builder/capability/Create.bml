@@ -16,7 +16,8 @@
     # Start a BomBuilder session from scratch
     
     `BomBuilder.create(options)` builds a draft BlockDefinition with xmlns bindings
-    for the BML URI, the block package, and the baseType package.
+    for the BML URI, the block package, the baseType package, and
+    xmlns:bml (org.blockml.bml.annotation.BmlAnnotation) so bml:id is a bound prefix.
     
     - Sets `SourceInfo.rootForm` to `type` (doc:DocumentFormat preferred form)
     - Omits `xmlns:xsi` and `xsi:schemaLocation` unless the caller adds them later

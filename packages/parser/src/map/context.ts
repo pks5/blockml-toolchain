@@ -1,4 +1,4 @@
-import type { Diagnostic, ParseValueHook } from "@blockml/bom";
+import type { Diagnostic, ParseValueHook, ResolveMemberTypeHook } from "@blockml/bom";
 
 export interface MapContext {
   filePath: string;
@@ -10,6 +10,8 @@ export interface MapContext {
   isEmbedded: boolean;
   diagnostics: Diagnostic[];
   parseValue?: ParseValueHook;
+  /** Instance member local name → declared property type. Absent → block FQN. */
+  resolveMemberType?: ResolveMemberTypeHook;
   /** Domain PrimitiveEntity payloads beyond the Core well-known comma-sugar set. */
   isCommaSugarPayload?: (fqn: string) => boolean;
 }
@@ -25,6 +27,7 @@ export function createMapContext(
     isEmbedded?: boolean;
     diagnostics?: Diagnostic[];
     parseValue?: ParseValueHook;
+    resolveMemberType?: ResolveMemberTypeHook;
     isCommaSugarPayload?: (fqn: string) => boolean;
   } = {},
 ): MapContext {
@@ -42,6 +45,9 @@ export function createMapContext(
   }
   if (options.parseValue !== undefined) {
     ctx.parseValue = options.parseValue;
+  }
+  if (options.resolveMemberType !== undefined) {
+    ctx.resolveMemberType = options.resolveMemberType;
   }
   if (options.isCommaSugarPayload !== undefined) {
     ctx.isCommaSugarPayload = options.isCommaSugarPayload;

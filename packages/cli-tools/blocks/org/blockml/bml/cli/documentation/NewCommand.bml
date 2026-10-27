@@ -19,7 +19,9 @@
     
         Defaults: --baseType org.blockml.bml.core.Block; --is is the short name.
         Creates one .bml file via BomBuilder in the preferred type-as-root form
-        (doc:DocumentFormat) without xmlns:xsi / xsi:schemaLocation, under the
+        (doc:DocumentFormat) without xmlns:xsi / xsi:schemaLocation. Always binds
+        xmlns:bml to org.blockml.bml.annotation.BmlAnnotation so a later bml:id
+        is well-formed XML. Written under the
         owning Library package (nearest Library.bml walking up the FQN). Membership
         is by location — the catalog is not edited.
         Does not overwrite an existing file.

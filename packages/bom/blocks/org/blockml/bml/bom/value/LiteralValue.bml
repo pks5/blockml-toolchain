@@ -11,7 +11,7 @@
     Authored literal member value
   </is>
   <documentation>
-    value field is a primitive union approximation of TS unknown — MUST NOT be normalized at parse time (lossless roundtrip). Objects/arrays remain a BML type gap.
+    value field stores the PrimitiveType.parseValue host value for scalars. Struct and list payloads stay structural (lossless JSON form). Objects/arrays remain a BML type gap.
   </documentation>
   <properties>
     <kind type="type:Text">

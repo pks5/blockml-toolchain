@@ -110,7 +110,16 @@ export function parse(source: string, options: ParseOptions = {}): ParseResult {
 
   let block;
   try {
-    block = mapDocumentBlock(root, filePath, source, bindings, diagnostics, options.parseValue);
+    block = mapDocumentBlock(
+      root,
+      filePath,
+      source,
+      bindings,
+      diagnostics,
+      options.parseValue,
+      undefined,
+      options.resolveMemberType,
+    );
   } catch (e) {
     if (e instanceof MappingError) {
       diagnostics.push(diagnosticAt(e.code, e.message, e.source));

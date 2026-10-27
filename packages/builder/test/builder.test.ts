@@ -28,6 +28,9 @@ describe("BomBuilder", () => {
     expect(sealed.source.schemaLocation).toBeUndefined();
     expect(sealed.source.rootForm).toBe("type");
     expect(sealed.source.namespaceBindings?.core).toBe("org.blockml.bml.core");
+    expect(sealed.source.namespaceBindings?.bml).toBe(
+      "org.blockml.bml.annotation.BmlAnnotation",
+    );
     expect(sealed.source.namespaceBindings?.widget).toBe("com.example.widget");
 
     const xml = serialize(sealed);

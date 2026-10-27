@@ -55,7 +55,9 @@ export function parseMemberValue(raw, typeFqn, file, line = 1, column = 1, place
     if (looksLikeJson) {
         return literal(parseJsonLike(trimmed), typeFqn, placement);
     }
-    if (ctx?.parseValue) {
+    // An omitted type (inherited property value, empty type FQN) is not a skip:
+    // the hook has no member type to call, so the Boolean/number heuristic remains.
+    if (ctx?.parseValue && typeFqn.trim()) {
         const result = ctx.parseValue(typeFqn, trimmed);
         if (!result.ok) {
             ctx.diagnostics.push({

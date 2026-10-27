@@ -964,6 +964,55 @@
       }
     },
     {
+      "name": "ResolveInstanceMemberType",
+      "tsExport": "resolveInstanceMemberType",
+      "fqn": "org.blockml.bml.framework.capability.ResolveInstanceMemberType",
+      "inputs": [
+        {
+          "name": "ownerTypeFqn",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "memberName",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "type:Text",
+        "required": false
+      }
+    },
+    {
+      "name": "NormalizeParsedMemberValues",
+      "tsExport": "normalizeParsedMemberValues",
+      "fqn": "org.blockml.bml.framework.capability.NormalizeParsedMemberValues",
+      "inputs": [
+        {
+          "name": "document",
+          "type": "bomdoc:BomDocument",
+          "required": true
+        },
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "type:Text",
+        "required": false
+      }
+    },
+    {
       "name": "EvaluateCapability",
       "tsExport": "evaluateCapability",
       "fqn": "org.blockml.bml.framework.capability.EvaluateCapability",
@@ -1178,6 +1227,7 @@
     "BML_UNRESOLVABLE_INSTANCE_REF",
     "BML_UNKNOWN_BASE_TYPE",
     "BML_UNKNOWN_CONTRACT",
+    "BML_UNKNOWN_ENUM_VALUE",
     "BML_UNKNOWN_TYPE",
     "BML_UNKNOWN_PROPERTY",
     "BML_UNKNOWN_VERSION",

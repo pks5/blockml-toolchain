@@ -61,6 +61,11 @@
           "required": false
         },
         {
+          "name": "resolveMemberType",
+          "type": "type:Text",
+          "required": false
+        },
+        {
           "name": "isCommaSugarPayload",
           "type": "type:Text",
           "required": false
@@ -176,6 +181,11 @@
         },
         {
           "name": "parseValue",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "resolveMemberType",
           "type": "type:Text",
           "required": false
         },

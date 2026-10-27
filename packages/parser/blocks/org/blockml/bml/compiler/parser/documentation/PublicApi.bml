@@ -19,10 +19,13 @@
     ParseOptions (owned by @blockml/bom):
     • filePath — default "<memory>"; written to BomDocument.source.filePath
     • continueOnError — default true; keep mapping after errors when possible
-    • parseValue — optional host hook for PrimitiveType.parseValue (injected after
-      registry bootstrap). When set, scalar member values use the hook only;
-      Boolean/number heuristics run only during bootstrap (no hook). Expression
-      and interpolation classification always run.
+    • parseValue — optional host hook for PrimitiveType.parseValue. Set once a
+      TypeRegistry exists (compileBmlToBom and the bootstrap re-parse). When set,
+      scalar member values use the hook only; Boolean/number heuristics run only
+      when the hook is absent. Expression and interpolation classification always run.
+    • resolveMemberType — optional host hook (ownerTypeFqn, memberName) → property
+      type FQN. Instance attribute and element values are parsed with that type
+      instead of the instance block FQN.
     
     ParseResult (owned by @blockml/bom):
     • document — BomDocument | null (null on hard fail)

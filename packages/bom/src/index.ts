@@ -86,6 +86,7 @@ export type {
   ParseOptions,
   ParseValueResult,
   ParseValueHook,
+  ResolveMemberTypeHook,
   SerializeOptions,
   ValidateResult,
   ValidateOptions,

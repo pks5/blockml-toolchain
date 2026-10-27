@@ -36,9 +36,11 @@
     Without `ctx.parseValue` (library bootstrap): Boolean and number heuristics
     (Text / Integer / Boolean / TypeIdentifier) remain.
     
-    With the host hook: scalars go through parseValue only. Success stores the
-    host value. Failure keeps the authored string and reports BML_INVALID_VALUE.
-    Skip keeps the authored string — no Boolean/number coercion.
+    With the host hook and a type FQN: scalars go through parseValue only.
+    Success stores the host value. Failure keeps the authored string and reports
+    BML_INVALID_VALUE. Skip keeps the authored string — no Boolean/number coercion.
+    An empty type FQN (inherited property value with no local type attribute)
+    does not call the hook; the Boolean and number heuristics still apply.
   </documentation>
   <references>
     <see type="pardocumentation:ExpressionCapture" relation="SeeAlso" />

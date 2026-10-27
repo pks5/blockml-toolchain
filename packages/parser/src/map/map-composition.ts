@@ -190,6 +190,11 @@ function mapCompositionChildren(
   return nodes;
 }
 
+function instanceValueType(ownerTypeFqn: string, memberName: string, ctx: MapContext): string {
+  const resolved = ctx.resolveMemberType?.(ownerTypeFqn, memberName)?.trim();
+  return resolved || ownerTypeFqn;
+}
+
 export function mapBlockInstanceNode(
   element: Element,
   ctx: MapContext,
@@ -226,7 +231,7 @@ export function mapBlockInstanceNode(
       }
       const val = parseMemberValue(
         attr.value,
-        typeFqn,
+        instanceValueType(typeFqn, attrLocal, ctx),
         ctx.filePath,
         loc.line,
         loc.column,
@@ -279,7 +284,7 @@ export function mapBlockInstanceNode(
     const { text } = getCharacterData(child);
     const val = parseMemberValue(
       text || getAttribute(child, "value") || "",
-      typeFqn,
+      instanceValueType(typeFqn, childLocal, ctx),
       ctx.filePath,
       loc.line,
       loc.column,

@@ -1,0 +1,48 @@
+<!--Framework Capability — ResolveInstanceMemberType
+  FQN: org.blockml.bml.framework.capability.ResolveInstanceMemberType-->
+<fwcap:ResolveInstanceMemberType xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:type="org.blockml.bml.type">
+
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Declared property type of an instance member
+  </is>
+  <documentation>
+    Owner block FQN plus member local name → property type FQN.
+    
+    - Uses the effective property whose name matches the member
+    - Returns nothing when the owner is missing, the member is not a property,
+      or the type is not in the TypeRegistry (generic parameters stay unresolved)
+    - The parser passes this FQN to parseValue instead of the instance block FQN
+  </documentation>
+  <references>
+    <see type="fwcap:ResolveEffectiveMembers" relation="SeeAlso" />
+    <see type="fwcap:EvaluateParseValue" relation="SeeAlso" />
+  </references>
+  <properties>
+    <ownerTypeFqn type="type:Text">
+      <documentation>
+        Instance block FQN. (required)
+      </documentation>
+    </ownerTypeFqn>
+    <memberName type="type:Text">
+      <documentation>
+        Member local name. (required)
+      </documentation>
+    </memberName>
+    <registry type="fwcap:TypeRegistry">
+      <documentation>
+        registry. TS type: fwcap:TypeRegistry. (required)
+      </documentation>
+    </registry>
+    <result type="type:Text">
+      <documentation>
+        Property type FQN, or absent when unresolved. (optional)
+      </documentation>
+    </result>
+  </properties>
+</fwcap:ResolveInstanceMemberType>

@@ -93,6 +93,15 @@ describe("parseMemberValue host hook", () => {
     expect(ctx.diagnostics).toEqual([]);
   });
 
+  it("keeps number and boolean heuristics when the type FQN is empty", () => {
+    const ctx = createMapContext("t.bml", "", {}, { diagnostics: [] });
+    ctx.parseValue = () => ({ ok: true, skipped: true });
+    const numberVal = parseMemberValue("7", "", "t.bml", 1, 1, undefined, ctx);
+    const boolVal = parseMemberValue("true", "", "t.bml", 1, 1, undefined, ctx);
+    expect(numberVal).toMatchObject({ kind: "literal", value: 7 });
+    expect(boolVal).toMatchObject({ kind: "literal", value: true });
+  });
+
   it("keeps authored text when the hook skips — no boolean or number heuristic", () => {
     const ctx = createMapContext("t.bml", "", {}, { diagnostics: [] });
     ctx.parseValue = () => ({ ok: true, skipped: true });

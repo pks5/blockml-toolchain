@@ -15,6 +15,7 @@ export type { ExpressionNode, InterpolatedStringNode, ParseExpressionResult, Par
 export { validateTypes, getPropertyNumericValue, isLiteralValue, } from "./validate/validate-types.js";
 export { evaluateCapability, evaluateParseValue } from "./validate/evaluate-parse-value.js";
 export type { EvaluateCapabilityResult, EvaluateParseValueResult, } from "./validate/evaluate-parse-value.js";
+export { normalizeParsedMemberValues, resolveInstanceMemberType, } from "./validate/member-literals.js";
 export { scanPackages, scanTypes } from "./scan.js";
 export type { ScanResult } from "./scan.js";
 export { validateVersions } from "./validate/validate-versions.js";

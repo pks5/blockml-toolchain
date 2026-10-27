@@ -71,7 +71,7 @@ export function parse(source, options = {}) {
     const bindings = sourceInfo.namespaceBindings ?? {};
     let block;
     try {
-        block = mapDocumentBlock(root, filePath, source, bindings, diagnostics, options.parseValue);
+        block = mapDocumentBlock(root, filePath, source, bindings, diagnostics, options.parseValue, undefined, options.resolveMemberType);
     }
     catch (e) {
         if (e instanceof MappingError) {

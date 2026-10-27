@@ -3,8 +3,8 @@ export type MemberValue = LiteralValue | ExpressionValue | InterpolatedTextValue
 export interface LiteralValue {
     kind: "literal";
     /**
-     * Authored value exactly as in BML — preserved for lossless round-trip.
-     * MUST NOT be normalized at parse/validate time.
+     * Scalar host value from PrimitiveType.parseValue of the declared member type.
+     * Struct and list payloads stay in authored JSON form.
      */
     value: unknown;
     typeFqn: string;

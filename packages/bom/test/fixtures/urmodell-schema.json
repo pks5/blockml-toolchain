@@ -1978,6 +1978,11 @@
           "name": "parseValue",
           "type": "type:Text",
           "required": false
+        },
+        {
+          "name": "resolveMemberType",
+          "type": "type:Text",
+          "required": false
         }
       ]
     },
