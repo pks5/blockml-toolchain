@@ -1,14 +1,33 @@
 export const INTERPOLATION_NOT_ALLOWED = "not allowed in interpolated text";
 const ALLOWED_CALL = /^#(math|strings)\./;
-export function restrictedExpressionError(node) {
+const EXPRESSION_BINARY = new Set([
+    "+",
+    "-",
+    "*",
+    "/",
+    "<",
+    ">",
+    "<=",
+    ">=",
+    "==",
+    "!=",
+]);
+function binaryAllowed(operator, profile) {
+    if (profile === "expression") {
+        return EXPRESSION_BINARY.has(operator);
+    }
+    return operator === "+";
+}
+export function restrictedExpressionError(node, profile = "interpolation") {
     switch (node.kind) {
         case "literal":
             return undefined;
         case "binary":
-            if (node.operator !== "+") {
+            if (!binaryAllowed(node.operator, profile)) {
                 return INTERPOLATION_NOT_ALLOWED;
             }
-            return (restrictedExpressionError(node.left) ?? restrictedExpressionError(node.right));
+            return (restrictedExpressionError(node.left, profile) ??
+                restrictedExpressionError(node.right, profile));
         case "property": {
             const head = propertyPathHead(node.path);
             if (head.startsWith("@")) {
@@ -21,7 +40,7 @@ export function restrictedExpressionError(node) {
                 return INTERPOLATION_NOT_ALLOWED;
             }
             for (const arg of node.args) {
-                const err = restrictedExpressionError(arg);
+                const err = restrictedExpressionError(arg, profile);
                 if (err) {
                     return err;
                 }
@@ -30,7 +49,7 @@ export function restrictedExpressionError(node) {
         }
         case "array":
             for (const el of node.elements) {
-                const err = restrictedExpressionError(el);
+                const err = restrictedExpressionError(el, profile);
                 if (err) {
                     return err;
                 }
@@ -38,7 +57,7 @@ export function restrictedExpressionError(node) {
             return undefined;
         case "object":
             for (const el of Object.values(node.entries)) {
-                const err = restrictedExpressionError(el);
+                const err = restrictedExpressionError(el, profile);
                 if (err) {
                     return err;
                 }
@@ -46,7 +65,7 @@ export function restrictedExpressionError(node) {
             return undefined;
         case "interpolated":
             for (const part of node.parts) {
-                const err = restrictedExpressionError(part);
+                const err = restrictedExpressionError(part, profile);
                 if (err) {
                     return err;
                 }

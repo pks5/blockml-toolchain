@@ -4,6 +4,72 @@ import { collectUnknownBmlAttributes, reportDiagnostic } from "./structural.js";
 import { parseGenericArgumentList, } from "./type-expression.js";
 import { attributeValueLoc, elementSourceLoc } from "../util/qname.js";
 const BML_NS = "http://blockml.org/bml";
+function splitBindingList(input) {
+    const parts = [];
+    let start = 0;
+    let paren = 0;
+    let bracket = 0;
+    let brace = 0;
+    let quote = null;
+    for (let i = 0; i < input.length; i++) {
+        const ch = input[i];
+        if (quote) {
+            if (ch === "\\" && i + 1 < input.length) {
+                i++;
+                continue;
+            }
+            if (ch === quote) {
+                quote = null;
+            }
+            continue;
+        }
+        if (ch === "'" || ch === '"') {
+            quote = ch;
+            continue;
+        }
+        if (ch === "$" && input[i + 1] === "{") {
+            brace++;
+            i++;
+            continue;
+        }
+        if (ch === "(") {
+            paren++;
+            continue;
+        }
+        if (ch === ")") {
+            if (paren > 0) {
+                paren--;
+            }
+            continue;
+        }
+        if (ch === "[") {
+            bracket++;
+            continue;
+        }
+        if (ch === "]") {
+            if (bracket > 0) {
+                bracket--;
+            }
+            continue;
+        }
+        if (ch === "{") {
+            brace++;
+            continue;
+        }
+        if (ch === "}") {
+            if (brace > 0) {
+                brace--;
+            }
+            continue;
+        }
+        if (ch === "," && paren === 0 && bracket === 0 && brace === 0) {
+            parts.push(input.slice(start, i));
+            start = i + 1;
+        }
+    }
+    parts.push(input.slice(start));
+    return parts;
+}
 function bmlAttr(element, local) {
     return (getAttribute(element, `bml:${local}`) ??
         getAttribute(element, `${BML_NS}:${local}`));
@@ -95,7 +161,7 @@ export function parseDirectives(element, loc, ctx) {
     }
     const withAttr = bmlAttr(element, "with");
     if (withAttr !== undefined) {
-        const bindings = withAttr.split(",").map((part) => {
+        const bindings = splitBindingList(withAttr).map((part) => {
             const eq = part.indexOf("=");
             const name = (eq === -1 ? part : part.slice(0, eq)).trim();
             const valueRaw = eq === -1 ? "" : part.slice(eq + 1).trim();

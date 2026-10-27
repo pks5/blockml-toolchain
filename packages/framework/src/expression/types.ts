@@ -7,9 +7,21 @@ export type ExpressionNode =
   | BinaryExpressionNode
   | InterpolatedStringNode;
 
+export type BinaryOperator =
+  | "+"
+  | "-"
+  | "*"
+  | "/"
+  | "<"
+  | ">"
+  | "<="
+  | ">="
+  | "=="
+  | "!=";
+
 export interface BinaryExpressionNode {
   kind: "binary";
-  operator: "+" | "-" | "*" | "/";
+  operator: BinaryOperator;
   left: ExpressionNode;
   right: ExpressionNode;
 }

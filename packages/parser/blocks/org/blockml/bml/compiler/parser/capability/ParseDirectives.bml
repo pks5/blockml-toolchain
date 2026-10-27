@@ -16,6 +16,10 @@
   <documentation>
     Parse bml:each/if/unless/with directive attributes.
     bml:generics is composition meta (ParseGenericsBinding), not a flow-control directive.
+
+    bml:with bindings split on commas at the top level of the binding list.
+    Commas inside (), [], {}, quotes, and ${ } stay in the value. Each value
+    then goes through expressionFromRaw. The expression is not evaluated here.
   </documentation>
   <references>
     <see type="pardocumentation:AttributeClassification" relation="SeeAlso" />

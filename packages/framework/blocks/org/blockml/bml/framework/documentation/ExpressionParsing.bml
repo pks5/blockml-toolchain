@@ -12,6 +12,7 @@
     parseExpression AST — no Urmodell writeback (B4)
   </is>
   <documentation>
+    <![CDATA[
     parseExpression(source) parses expression text into an ExpressionNode AST.
     parseInterpolatedText(source) scans Text for unescaped ${} holes (restricted
     profile). `\${` is a literal `${`; `\\${` is one `\` plus a hole (odd/even
@@ -20,15 +21,21 @@
     Returns ParseExpressionOutcome: { ok: true, result } | { ok: false, error }.
     Empty expression text → BML_EXPRESSION_PARSE_ERROR (write `\${ }` for literal
     delimiter characters).
-    
+
     Parser stores ExpressionValue.raw / InterpolatedTextValue.raw only (B4).
     validateTypes re-parses at validation time and emits BML_EXPRESSION_PARSE_ERROR
     or BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION on failure.
-    
+
     AST node kinds: literal, array, object, property, call, binary, interpolated.
+    Binary operators, lowest precedence last, left-associative: * / then + -
+    then < > <= >= == !=. >= <= == != are each one operator. No &&, ||, or !.
+    A comparison is an expression: a whole ${ } value, and bml:if, bml:unless,
+    bml:with, bml:each. Interpolated text still allows only + among binary
+    operators (BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION).
     Optional resultTypeFqn on ParseExpressionResult for typed expression metadata.
-    
+
     Expression AST is a Stage-2 utility — never written back to Urmodell member values.
+    ]]>
   </documentation>
   <references>
     <see type="fwdocumentation:ConstraintValidation" relation="ReadNext" />

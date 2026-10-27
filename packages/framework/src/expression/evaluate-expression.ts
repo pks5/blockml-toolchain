@@ -3,7 +3,7 @@ import {
   INTERPOLATION_NOT_ALLOWED,
   restrictedExpressionError,
 } from "./restricted.js";
-import type { ExpressionNode } from "./types.js";
+import type { BinaryOperator, ExpressionNode } from "./types.js";
 
 export type ExpressionScope = Record<string, unknown>;
 
@@ -58,6 +58,71 @@ function stringifyValue(value: unknown): string {
   return JSON.stringify(value);
 }
 
+function asNumber(value: unknown): number {
+  if (typeof value === "number") {
+    return value;
+  }
+  if (typeof value === "boolean") {
+    return value ? 1 : 0;
+  }
+  return Number(value);
+}
+
+function relational(left: unknown, right: unknown): number {
+  if (typeof left === "number" && typeof right === "number") {
+    if (Number.isNaN(left) || Number.isNaN(right)) {
+      return Number.NaN;
+    }
+    return left < right ? -1 : left > right ? 1 : 0;
+  }
+  if (typeof left === "string" && typeof right === "string") {
+    return left < right ? -1 : left > right ? 1 : 0;
+  }
+  const ln = asNumber(left);
+  const rn = asNumber(right);
+  if (!Number.isNaN(ln) && !Number.isNaN(rn)) {
+    return ln < rn ? -1 : ln > rn ? 1 : 0;
+  }
+  const ls = stringifyValue(left);
+  const rs = stringifyValue(right);
+  return ls < rs ? -1 : ls > rs ? 1 : 0;
+}
+
+function applyBinary(operator: BinaryOperator, left: unknown, right: unknown): unknown {
+  switch (operator) {
+    case "+":
+      if (typeof left === "number" && typeof right === "number") {
+        return left + right;
+      }
+      return stringifyValue(left) + stringifyValue(right);
+    case "-":
+      return asNumber(left) - asNumber(right);
+    case "*":
+      return asNumber(left) * asNumber(right);
+    case "/":
+      return asNumber(left) / asNumber(right);
+    case "<":
+      return relational(left, right) < 0;
+    case ">":
+      return relational(left, right) > 0;
+    case "<=":
+      return relational(left, right) <= 0;
+    case ">=":
+      return relational(left, right) >= 0;
+    case "==":
+      return left === right;
+    case "!=":
+      return left !== right;
+    default: {
+      const unreachable: never = operator;
+      throw new ExpressionEvaluationError(
+        "BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION",
+        `${INTERPOLATION_NOT_ALLOWED}: ${String(unreachable)}`,
+      );
+    }
+  }
+}
+
 function evalBuiltin(callee: string, args: unknown[]): unknown {
   switch (callee) {
     case "#strings.concat":
@@ -94,7 +159,7 @@ export function evaluateExpression(
   node: ExpressionNode,
   scope: ExpressionScope,
 ): unknown {
-  const restricted = restrictedExpressionError(node);
+  const restricted = restrictedExpressionError(node, "expression");
   if (restricted) {
     throw new ExpressionEvaluationError(
       "BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION",
@@ -106,20 +171,12 @@ export function evaluateExpression(
       return node.value;
     case "property":
       return lookupPath(scope, node.path);
-    case "binary": {
-      const left = evaluateExpression(node.left, scope);
-      const right = evaluateExpression(node.right, scope);
-      if (node.operator === "+") {
-        if (typeof left === "number" && typeof right === "number") {
-          return left + right;
-        }
-        return stringifyValue(left) + stringifyValue(right);
-      }
-      throw new ExpressionEvaluationError(
-        "BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION",
-        INTERPOLATION_NOT_ALLOWED,
+    case "binary":
+      return applyBinary(
+        node.operator,
+        evaluateExpression(node.left, scope),
+        evaluateExpression(node.right, scope),
       );
-    }
     case "call":
       return evalBuiltin(
         node.callee,

@@ -11,7 +11,9 @@
     Binary operator expression AST node
   </is>
   <documentation>
-    kind: binary. operator: + | - | * | /. left/right: ExpressionNode.
+    <![CDATA[kind: binary. operator: + | - | * | / | < | > | <= | >= | == | !=.
+    left/right: ExpressionNode. Precedence, left-associative: * / then + - then
+    comparisons. >= <= == != are each one operator. No &&, ||, or !.]]>
   </documentation>
   <properties>
     <kind type="type:Text">

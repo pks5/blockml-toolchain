@@ -165,8 +165,31 @@ function parseAdditive(input, i) {
     }
     return { node, next: i };
 }
+function readComparison(input, i) {
+    const two = input.slice(i, i + 2);
+    if (two === "<=" || two === ">=" || two === "==" || two === "!=") {
+        return { op: two, next: i + 2 };
+    }
+    const one = input[i];
+    if (one === "<" || one === ">") {
+        return { op: one, next: i + 1 };
+    }
+    return null;
+}
+function parseComparison(input, i) {
+    let { node, next } = parseAdditive(input, i);
+    i = skipWs(input, next);
+    let op = readComparison(input, i);
+    while (op) {
+        const right = parseAdditive(input, op.next);
+        node = { kind: "binary", operator: op.op, left: node, right: right.node };
+        i = skipWs(input, right.next);
+        op = readComparison(input, i);
+    }
+    return { node, next: i };
+}
 function parseExpressionInternal(input, i) {
-    return parseAdditive(input, i);
+    return parseComparison(input, i);
 }
 export function parseExpression(raw) {
     const trimmed = raw.trim();
