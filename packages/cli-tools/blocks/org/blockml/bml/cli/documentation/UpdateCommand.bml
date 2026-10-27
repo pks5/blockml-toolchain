@@ -1,0 +1,69 @@
+<!--CLI Documentation — UpdateCommand
+  FQN: org.blockml.bml.cli.documentation.UpdateCommand-->
+<clidocumentation:UpdateCommand xmlns="http://blockml.org/bml"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:core="org.blockml.bml.core">
+
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    blockml update specification
+  </is>
+  <documentation>
+    <![CDATA[
+    Syntax:
+        blockml update [--no-install]
+
+        The command parses flags, calls clicap:UpdateProject, and prints its
+        lines. An unexpected positional argument exits 2 and also prints the
+        short USAGE. UpdateProject does not emit USAGE.
+
+        A project is BlockML when package.json has a blockml key. A missing
+        package.json, a package.json without that key, or an unreadable
+        package.json exits 2 and writes nothing.
+
+        Rewrites @blockml/cli and @blockml/core to the versions of this CLI,
+        then runs npm install. @blockml/cli becomes ^ plus this CLI's version.
+        @blockml/core becomes the range this CLI depends on. A missing
+        @blockml/cli is added under devDependencies. A missing @blockml/core
+        is added under dependencies. An entry that already lives in another
+        dependency field is updated there. A specifier that contains ":"
+        (workspace:, file:, npm:, git, http, …) stays as authored.
+        Writes package.json only. BML files, AGENTS.md, and CLAUDE.md stay
+        as they are. --no-install skips npm install. Ranges that already
+        match exit 0. npm install still runs in that case unless --no-install.
+
+    Printed help:
+    Usage: blockml update [--no-install]
+           blockml update --help
+
+    When: point an existing BlockML project at the versions of this CLI.
+
+    Rewrites @blockml/cli and @blockml/core in package.json, then runs npm install.
+    A project is BlockML when package.json has a blockml key. Otherwise exit 2
+    and nothing is written.
+
+    @blockml/cli becomes ^<this CLI version>. @blockml/core becomes the range this
+    CLI depends on. A missing @blockml/cli is added in devDependencies. A missing
+    @blockml/core is added in dependencies. An entry that already lives in another
+    dependency field is updated there. A specifier that contains ":" (workspace:,
+    file:, npm:, git, http, …) stays as authored.
+
+    Writes package.json only. BML files, AGENTS.md, and CLAUDE.md stay as they are.
+    --no-install skips npm install. Ranges that already match exit 0.
+    npm install still runs in that case unless --no-install.
+
+    Run with npx @blockml/cli update so the invoked CLI is the version source.
+
+    Related: init.
+    ]]>
+  </documentation>
+  <references>
+    <see type="clidocumentation:Commands" relation="SeeAlso" />
+    <see type="clidocumentation:InitCommand" relation="SeeAlso" />
+    <see type="clicap:UpdateProject" relation="SeeAlso" />
+    <see type="clicap:InitProject" relation="SeeAlso" />
+  </references>
+</clidocumentation:UpdateCommand>

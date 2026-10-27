@@ -1,0 +1,30 @@
+<!--CLI Command — UpdateCommand
+  FQN: org.blockml.bml.cli.command.UpdateCommand-->
+<clicommand:UpdateCommand xmlns="http://blockml.org/bml"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    blockml update command model
+  </is>
+  <documentation>
+    blockml update [--no-install]. Parses flags, calls UpdateProject, and prints its lines. An unexpected positional argument also prints the short USAGE. Version rewrite and npm install stay in UpdateProject.
+  </documentation>
+  <references>
+    <see type="clidocumentation:UpdateCommand" relation="SeeAlso" />
+    <see type="clicap:UpdateProject" relation="SeeAlso" />
+  </references>
+  <properties>
+    <noInstall type="type:Boolean">
+      <documentation>
+        --no-install: skip npm install. Default false, so npm install runs. (optional)
+      </documentation>
+    </noInstall>
+  </properties>
+</clicommand:UpdateCommand>

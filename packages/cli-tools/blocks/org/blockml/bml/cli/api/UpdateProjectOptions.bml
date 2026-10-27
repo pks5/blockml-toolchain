@@ -1,0 +1,30 @@
+<!--CLI API — UpdateProjectOptions
+  FQN: org.blockml.bml.cli.api.UpdateProjectOptions-->
+<cliapi:UpdateProjectOptions xmlns="http://blockml.org/bml"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:type="org.blockml.bml.type">
+
+  <baseType>
+    cli:CliType
+  </baseType>
+  <is>
+    Options for updateProject
+  </is>
+  <documentation>
+    Direct update entry. Does not load the TypeRegistry or blockml.config.json.
+    Does not print CLI usage text.
+  </documentation>
+  <properties>
+    <rootDir type="type:Text">
+      <documentation>
+        Project root whose package.json is updated. (required)
+      </documentation>
+    </rootDir>
+    <noInstall type="type:Boolean">
+      <documentation>
+        When true, skip npm install. Default false, so npm install runs. (optional)
+      </documentation>
+    </noInstall>
+  </properties>
+</cliapi:UpdateProjectOptions>

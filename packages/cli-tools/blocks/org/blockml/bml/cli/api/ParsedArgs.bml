@@ -17,7 +17,7 @@
   <properties>
     <command type="type:Text">
       <documentation>
-        validate | compile | search | scan | graph | inspect | transform | new | init. (optional)
+        validate | compile | search | scan | graph | inspect | transform | new | init | update. (optional)
       </documentation>
     </command>
     <subcommand type="type:Text">
@@ -157,7 +157,7 @@
     </initFqn>
     <noInstall type="type:Boolean">
       <documentation>
-        --no-install: skip npm install and AGENTS.md generation. Default false, so both run. (optional)
+        --no-install: init skips npm install and AGENTS.md generation; update skips npm install. Default false. (optional)
       </documentation>
     </noInstall>
     <selectors type="type:Text[]">

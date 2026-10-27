@@ -17,6 +17,11 @@ export {
   type InitProjectResult,
 } from "./run-init.js";
 export {
+  updateProject,
+  type UpdateProjectOptions,
+  type UpdateProjectResult,
+} from "./run-update.js";
+export {
   generateAgentsMd,
   renderAgentsMarkdown,
   type AgentsSection,

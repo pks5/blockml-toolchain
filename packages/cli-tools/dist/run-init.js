@@ -32,7 +32,7 @@ function posixJoin(...parts) {
 function libraryPointer(srcDir, packageFqn) {
     return `./${posixJoin(srcDir, ...packageFqn.split("."), "Library.bml")}`;
 }
-function readCliPackageJson() {
+export function readCliPackageJson() {
     const pkg = JSON.parse(readFileSync(join(CLI_PACKAGE_ROOT, "package.json"), "utf8"));
     return {
         version: pkg.version ?? "0.0.0",

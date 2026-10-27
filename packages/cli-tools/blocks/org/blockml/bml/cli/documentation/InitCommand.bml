@@ -66,7 +66,7 @@
     Bootstrap a new repo with npx @blockml/cli init <package-fqn>.
     Afterward use npx blockml.
     
-    Related: agents-md, new, validate.
+    Related: update, agents-md, new, validate.
     ]]>
   </documentation>
   <references>

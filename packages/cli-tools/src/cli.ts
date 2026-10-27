@@ -41,6 +41,7 @@ import { runGraph } from "./run-graph.js";
 import { runInspect } from "./run-inspect.js";
 import { runNew } from "./run-new.js";
 import { initProject } from "./run-init.js";
+import { updateProject } from "./run-update.js";
 import { generateAgentsMd } from "./run-agents-md.js";
 import { defaultTransformAgent, runTransform } from "./run-transform.js";
 import { writeOutputFiles } from "./write-output.js";
@@ -1057,6 +1058,20 @@ async function executeCli(
       if (!parsed.initFqn?.trim()) {
         pushLines(lines, USAGE, "info");
       }
+      return { code: result.code, lines };
+    }
+
+    if (parsed.command === "update") {
+      if (parsed.target) {
+        pushLines(lines, `Unexpected argument: ${parsed.target}`, "error");
+        pushLines(lines, USAGE, "info");
+        return { code: 2, lines };
+      }
+      const result = updateProject({
+        rootDir: cwd,
+        noInstall: parsed.noInstall === true,
+      });
+      lines.push(...result.lines);
       return { code: result.code, lines };
     }
 

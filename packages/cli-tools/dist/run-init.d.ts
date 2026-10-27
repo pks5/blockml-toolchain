@@ -12,5 +12,9 @@ export interface InitProjectResult {
     lines: CliOutputLine[];
 }
 export declare function isValidPackageFqn(fqn: string): boolean;
+export declare function readCliPackageJson(): {
+    version: string;
+    coreRange: string;
+};
 export declare function initProject(options: InitProjectOptions): InitProjectResult;
 //# sourceMappingURL=run-init.d.ts.map

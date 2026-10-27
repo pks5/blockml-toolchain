@@ -1,0 +1,63 @@
+<!--CLI Capability — UpdateProject
+  FQN: org.blockml.bml.cli.capability.UpdateProject-->
+<clicap:UpdateProject xmlns="http://blockml.org/bml"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:core="org.blockml.bml.core">
+
+  <baseType>
+    core:Capability
+  </baseType>
+  <is>
+    Point an existing BlockML project at this CLI's versions
+  </is>
+  <documentation>
+    # Point an existing BlockML project at this CLI's versions
+
+    Public entry updateProject(options) → { code, lines }. blockml update parses
+    flags, calls this capability, and prints lines. An unexpected positional
+    argument is rejected by the command, which also prints the short USAGE.
+    This capability does not.
+
+    A project is BlockML when package.json has a blockml key. A missing
+    package.json, a package.json without that key, or an unreadable
+    package.json returns code 2 and writes nothing.
+
+    Version source is this CLI's own package.json, the same source init uses
+    when it first adds the pins. @blockml/cli is ^ plus this CLI's version.
+    @blockml/core is the range this CLI declares in dependencies.
+
+    Each pin is updated in the dependency field that already holds it
+    (dependencies, devDependencies, peerDependencies, optionalDependencies).
+    A missing @blockml/cli is added to devDependencies. A missing @blockml/core
+    is added to dependencies. A specifier that contains ":" (workspace:, file:,
+    npm:, git, http, and the like) stays as authored. When every registry range
+    already matches, package.json is left byte for byte and the result is code 0.
+
+    Unless noInstall, runs npm install in rootDir after a successful rewrite.
+    npm install still runs when the ranges were already current. noInstall
+    skips that install. Writes package.json only. Leaves BML files, AGENTS.md,
+    and CLAUDE.md unchanged. Does not load blockml.config.json.
+  </documentation>
+  <references>
+    <see type="cliapi:UpdateProjectOptions" relation="SeeAlso" />
+    <see type="cliapi:UpdateProjectResult" relation="SeeAlso" />
+    <see type="clidocumentation:UpdateCommand" relation="SeeAlso" />
+    <see type="clicommand:UpdateCommand" relation="SeeAlso" />
+    <see type="clicap:InitProject" relation="SeeAlso" />
+  </references>
+  <properties>
+    <options type="cliapi:UpdateProjectOptions">
+      <documentation>
+        rootDir, optional noInstall. (required)
+      </documentation>
+    </options>
+    <result type="cliapi:UpdateProjectResult">
+      <documentation>
+        Exit code and structured lines. (required)
+      </documentation>
+    </result>
+  </properties>
+</clicap:UpdateProject>

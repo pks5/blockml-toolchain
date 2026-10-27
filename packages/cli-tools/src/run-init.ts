@@ -52,7 +52,7 @@ function libraryPointer(srcDir: string, packageFqn: string): string {
   return `./${posixJoin(srcDir, ...packageFqn.split("."), "Library.bml")}`;
 }
 
-function readCliPackageJson(): { version: string; coreRange: string } {
+export function readCliPackageJson(): { version: string; coreRange: string } {
   const pkg = JSON.parse(readFileSync(join(CLI_PACKAGE_ROOT, "package.json"), "utf8")) as {
     version?: string;
     dependencies?: Record<string, string>;

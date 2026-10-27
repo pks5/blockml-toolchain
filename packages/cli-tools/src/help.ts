@@ -18,6 +18,7 @@ export const USAGE =
   "       blockml transform apply <execution-fqn> [--library path] [--verbose] [--parameters json] [--parameter-mappings json]\n" +
   "       blockml new <fqn> [--baseType fqn] [--is text] [--src dir] [--libraries a,b]\n" +
   "       blockml init <package-fqn> [--src dir] [--no-install]\n" +
+  "       blockml update [--no-install]\n" +
   "       blockml agents-md generate [--src dir]\n" +
   "       blockml --help";
 
@@ -84,6 +85,8 @@ Commands:
               blockml new <fqn> [--baseType FQN] [--is text]
   init        Scaffold a BlockML project (Library, package.json, AGENTS.md).
               blockml init <package-fqn> [--src dir] [--no-install]
+  update      Point @blockml/cli and @blockml/core at this CLI's versions.
+              blockml update [--no-install]
   agents-md   Rewrite AGENTS.md from AgentInstructions blocks.
               blockml agents-md generate [--src dir]
   validate    Parser + semantic check. Default: project sources, not npm.
@@ -296,7 +299,31 @@ When no AgentInstructions content is found, AGENTS.md is left unwritten.
 Bootstrap a new repo with npx @blockml/cli init <package-fqn>.
 Afterward use npx blockml.
 
-Related: agents-md, new, validate.`;
+Related: update, agents-md, new, validate.`;
+
+/** Printed help. SSOT: org.blockml.bml.cli.documentation.UpdateCommand */
+export const UPDATE_HELP = `Usage: blockml update [--no-install]
+       blockml update --help
+
+When: point an existing BlockML project at the versions of this CLI.
+
+Rewrites @blockml/cli and @blockml/core in package.json, then runs npm install.
+A project is BlockML when package.json has a blockml key. Otherwise exit 2
+and nothing is written.
+
+@blockml/cli becomes ^<this CLI version>. @blockml/core becomes the range this
+CLI depends on. A missing @blockml/cli is added in devDependencies. A missing
+@blockml/core is added in dependencies. An entry that already lives in another
+dependency field is updated there. A specifier that contains ":" (workspace:,
+file:, npm:, git, http, …) stays as authored.
+
+Writes package.json only. BML files, AGENTS.md, and CLAUDE.md stay as they are.
+--no-install skips npm install. Ranges that already match exit 0.
+npm install still runs in that case unless --no-install.
+
+Run with npx @blockml/cli update so the invoked CLI is the version source.
+
+Related: init.`;
 
 /** Printed help. SSOT: org.blockml.bml.cli.documentation.AgentsMdCommand */
 export const AGENTS_MD_HELP = `Usage: blockml agents-md generate [--src dir]
@@ -365,6 +392,8 @@ export function helpFor(command?: string): string {
       return NEW_HELP;
     case "init":
       return INIT_HELP;
+    case "update":
+      return UPDATE_HELP;
     case "agents-md":
       return AGENTS_MD_HELP;
     case "transform":

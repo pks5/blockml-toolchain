@@ -52,6 +52,8 @@
                   blockml new <fqn> [--baseType FQN] [--is text]
       init        Scaffold a BlockML project (Library, package.json, AGENTS.md).
                   blockml init <package-fqn> [--src dir] [--no-install]
+      update      Point @blockml/cli and @blockml/core at this CLI's versions.
+                  blockml update [--no-install]
       agents-md   Rewrite AGENTS.md from AgentInstructions blocks.
                   blockml agents-md generate [--src dir]
       validate    Parser + semantic check. Default: project sources, not npm.
@@ -76,6 +78,7 @@
     <see type="clidocumentation:GraphCommand" relation="SeeAlso" />
     <see type="clidocumentation:NewCommand" relation="SeeAlso" />
     <see type="clidocumentation:InitCommand" relation="SeeAlso" />
+    <see type="clidocumentation:UpdateCommand" relation="SeeAlso" />
     <see type="clidocumentation:AgentsMdCommand" relation="SeeAlso" />
     <see type="clicap:ParseArgs" relation="SeeAlso" />
     <see type="clicap:RunCli" relation="SeeAlso" />

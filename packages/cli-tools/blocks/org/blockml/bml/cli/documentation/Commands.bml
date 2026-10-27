@@ -21,6 +21,7 @@
     • transform — parent command; apply executes a ModelTransformation via @blockml/transformer
     • new — create a Block .bml file via @blockml/builder under the owning Library
     • init — scaffold a BlockML project (package.json, Library + README, AGENTS.md)
+    • update — rewrite @blockml/cli and @blockml/core in an existing project to this CLI's versions
     • agents-md — parent command; generate rewrites AGENTS.md from AgentInstructions blocks
     
     Planned commands (not V1): watch, activate-config.

@@ -38,6 +38,10 @@
       AGENTS.md via GenerateAgentsMd unless noInstall. Preflight renames a
       foreign AGENTS.md to AGENTS.md.pre-blockml when package.json has no
       blockml key)
+    • updateProject({ rootDir, noInstall? }) → { code, lines }
+      (clicap:UpdateProject; blockml update parses flags, calls it, prints lines;
+      rewrites @blockml/cli and @blockml/core to this CLI's versions, then
+      npm install unless noInstall. Requires a blockml key. Writes package.json only)
     • generateAgentsMd({ rootDir, srcDir? }) → { code, lines, sectionCount }
       (clicap:GenerateAgentsMd; blockml agents-md generate)
     • runTransform via blockml transform apply (delegates to @blockml/transformer)
@@ -49,7 +53,8 @@
     
     BML counterparts: clicap:RunCli, ParseArgs, LoadConfig, BootstrapTargets,
     RegisterTargetFactory, BootstrapProjectTypeRegistry, InitProject, GenerateAgentsMd,
-    InitProjectOptions, InitProjectResult, WriteOutputFiles,
+    InitProjectOptions, InitProjectResult, UpdateProject, UpdateProjectOptions,
+    UpdateProjectResult, WriteOutputFiles,
     WriteCliOutput, FormatDiagnostic.
     ]]>
   </documentation>
@@ -57,9 +62,12 @@
     <see type="clidocumentation:RuntimeBootstrap" relation="ReadNext" />
     <see type="clicap:RunCli" relation="Defines" />
     <see type="clicap:InitProject" relation="Defines" />
+    <see type="clicap:UpdateProject" relation="Defines" />
     <see type="cliapi:BomConfig" relation="Defines" />
     <see type="cliapi:InitProjectOptions" relation="Defines" />
     <see type="cliapi:InitProjectResult" relation="Defines" />
+    <see type="cliapi:UpdateProjectOptions" relation="Defines" />
+    <see type="cliapi:UpdateProjectResult" relation="Defines" />
     <see type="cliapi:ParsedArgs" relation="Defines" />
   </references>
 </clidocumentation:PublicApi>
